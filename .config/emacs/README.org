@@ -8970,43 +8970,6 @@ I got this from [[https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-h
    (("p" void/kill-emacs-processes "favorites"))))
 #+end_src
 
-** buffer management
-:PROPERTIES:
-:ID:       68cf786d-0b21-40df-9e70-eb546710d61e
-:END:
-
-Buffers can easily grow unwieldy and out of control. For too long my buffer list has had.
-Some of my references: [[https://emacs-fu.blogspot.com/2010/03/cleaning-up-buffers-automatically.html][emacs-fu]], [[https://www.reddit.com/r/emacs/comments/5d414w/how_do_i_keep_my_buffers_list_clean/][emacs-reddit]].
-
-*** midnight
-:PROPERTIES:
-:ID:       68657704-7efc-4d69-9137-8068f21a769c
-:END:
-
-There's a package called midnight in emacs that has some cleaning buffer
-functionality. Only beef I have with this package is that it is geared towards
-being cleaning buffers at midnight, but I'd like them to be cleaned at many
-different times. However, it is not difficult to get around this.
-
-#+begin_src emacs-lisp
-(use-feature! midnight
-  :commands clean-buffer-list)
-#+end_src
-
-*** tempbuff
-:PROPERTIES:
-:ID:       92623b8e-787b-48d9-9b4f-b928abca0471
-:END:
-
-[[https://www.emacswiki.org/emacs/TempbufMode][This package]] provides a minor mode that kills buffers after it has been
-determined that it is no longer useful. It is determined whether its not useful
-based on whether functions have been called in it and whether it is visible.
-
-#+begin_src emacs-lisp
-(use-package! tempbuf
-  :hook (find-file-hooks . turn-on-tempbuf-mode))
-#+end_src
-
 ** help and documentation
 :PROPERTIES:
 :ID:       3c01c053-fe6f-4a7a-92a5-6d4de7caac0a
