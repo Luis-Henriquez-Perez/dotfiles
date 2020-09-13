@@ -3414,6 +3414,7 @@ This version lets you choose different variants.
 #+begin_src emacs-lisp
 (defun selectrum/switch-buffer ()
   (interactive)
+  (require 'f)
   (let* ((selectrum-should-sort-p nil)
          (other-buffers (->> (buffer-list)
                              (-remove-item (current-buffer))
