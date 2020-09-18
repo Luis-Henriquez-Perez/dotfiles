@@ -3321,10 +3321,9 @@ This package manages remembering recently selected candidates.
 
 #+begin_src emacs-lisp
 (use-package! prescient
+  :hook (selectrum-mode-hook . prescient-persist-mode)
   :setq
-  (prescient-save-file . (concat VOID:DATA-DIR "prescient-save-file"))
-  :init
-  (after! selectrum (prescient-persist-mode)))
+  (prescient-save-file . (concat VOID:DATA-DIR "prescient-save-file")))
 
 (use-package! selectrum-prescient
   :hook selectrum-mode-hook
