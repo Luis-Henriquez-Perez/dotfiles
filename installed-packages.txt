@@ -2,6 +2,7 @@ alsa-utils-openrc
 aspell-en
 autoconf
 automake
+awesome
 base
 bison
 clojure
@@ -12,6 +13,7 @@ firejail
 flex
 gifsicle
 gnuplot
+gpaste
 groff
 grub
 iceweasel-noscript
@@ -25,7 +27,7 @@ mpv
 msmtp
 mu
 neovim
-nyxt-browser
+notmuch
 paperkey
 pass
 patch
@@ -37,13 +39,15 @@ ripgrep
 rsync
 sbcl
 scrot
+stumpwm
 texlive-bin
 ttf-anonymous-pro
 ttf-inconsolata
 ttf-jetbrains-mono
+ttf-roboto-mono
 udev-init-scripts
-vim
 w3m
+wget
 wkhtmltopdf
 xorg-xinit
 yadm
