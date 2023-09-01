@@ -33,7 +33,7 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
   (add-hook 'emacs-startup-hook #'emacs-startup-hook&restore-file-name-handler-alist))
 
 ;; Put the base directory into the `load-path', making sure it's at the front.
-;; (push (expand-file-name "base" user-emacs-directory) load-path)
+(push (expand-file-name "base" user-emacs-directory) load-path)
 
 ;; Add the base directory to the load-path.
 (let (font)
@@ -555,18 +555,13 @@ end-of-buffer signals; pass the rest to the default handler."
 
 ;; If there are any incomplete queues, complete them and restart emacs.
 (if-let ((queues (reverse elpaca--queues))
-	 ((mapc #'elpaca--maybe-reset-queue queues))
-	 (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+	     ((mapc #'elpaca--maybe-reset-queue queues))
+	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
     (progn (elpaca-process-queues)
-	   (add-hook 'elpaca-after-init-hook #'restart-emacs))
+	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 
-(require 'seq)
-
 (require 'anaphora)
-
-(require 'dash)
-(require 'dash-functional)
 
 (require 'shut-up)
 
@@ -590,6 +585,7 @@ end-of-buffer signals; pass the rest to the default handler."
 
 (require 's)
 
+(require 'oo-base-utils)
 (require 'oo-block-macro)
 
 (defun oo-defun-components (arglist)
