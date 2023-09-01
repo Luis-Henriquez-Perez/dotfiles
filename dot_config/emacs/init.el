@@ -1,0 +1,2681 @@
+;; -*- lexical-binding: t -*-
+
+;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very big
+;; number, essentially disables garbage collection.  The garbage collection is later
+;; reset to a reasonable value.
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; [[helpvar:void-debug-p][oo-debug]] is snatched from [[https://github.com/hlissner/doom-emacs][Doom's]] [[https://github.com/hlissner/doom-emacs/blob/develop/core/core.el][doom-debug-mode]].  The point of this variable is
+;; to serve as an indicator of whether the current Emacs instance is run for
+;; debugging.  When Emacs is set up for debugging it prints out many messages about
+;; what its doing via [[hfn:void-log][oo-log]].
+(defvar oo-debug-p (or (getenv "DEBUG") init-file-debug)
+  "When non-nil print debug messages.
+The --debug-init flag and setting the DEBUG envar will enable this at startup.")
+
+;; It's useful to store directories which I reference frequently in variables and
+;; functions.  This way I can reference the full path.  Certain directories are
+;; important; and I end up referencing them alot.  One of these is my
+;; cache directory.
+(defvar oo-cache-dir (concat user-emacs-directory "cache/")
+  "Directory containing files used for caching information.")
+
+;; Suppress file handlers operations at startup. The value of `file-name-handler-alist' is
+;; consulted on each call to `require' and `load'. Here I disable it (set it to nil) and schedule it
+;; to be re-enabled after startup. I got this from centaur emacs.
+(when (not (or (daemonp) noninteractive init-file-debug))
+  (defvar original-file-name-handler-alist file-name-handler-alist)
+  (setq file-name-handler-alist nil)
+
+  (defun emacs-startup-hook&restore-file-name-handler-alist ()
+    (setq file-name-handler-alist original-file-name-handler-alist)
+    (makunbound 'original-file-name-handler-alist))
+  (add-hook 'emacs-startup-hook #'emacs-startup-hook&restore-file-name-handler-alist))
+
+;; Put the base directory into the `load-path', making sure it's at the front.
+(push (expand-file-name "base" user-emacs-directory) load-path)
+
+;; Add the base directory to the load-path.
+(let (font)
+  (setq font (or (font-spec :name "Iosevka Comfy Wide"
+			                :weight 'normal
+			                :slant 'normal
+			                :size 15)
+	             (font-spec :name "SpaceMono Nerd Font"
+			                :weight 'normal
+			                :slant 'normal
+			                :size 15)
+		         (font-spec :name "iMWritingMono Nerd Font Mono"
+			                :weight 'normal
+			                :slant 'normal
+			                :size 15)))
+  (set-face-attribute 'default nil :font font))
+
+;; Not =cl= which is depreciated.  Loading =cl= instead of =cl-lib= will create an annoying warning message
+;; during startup that says package cl is depreciated.
+;; https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it
+(require 'cl-lib)
+
+;; Stop creating the `auto-save-list-directory'.
+;; https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created
+(setq auto-save-list-file-prefix nil)
+
+(setq auto-save-default nil)
+(auto-save-mode -1)
+
+;; Essentially, I am telling all Emacs functions that prompt the user for a =yes=
+;; or =no= to instead allow me to type =y= or =p=.
+(advice-add #'yes-or-no-p :override #'y-or-n-p)
+
+;; Don't create lockfiles.
+(setq create-lockfiles nil)
+
+;; When emacs starts up, the default modeline will show up.  Rendering this default
+;; modeline at startup does slightly slow down emacs (insignificant on it's own but these things add
+;; up).  So I disable it.
+(setq-default mode-line-format nil)
+
+;; I got this from [[https://www.masteringemacs.org/article/disabling-prompts-emacs][this-post]].
+;; Every time you try to kill a buffer with a live process, Emacs will ask you if you're sure you
+;; want to kill it.
+(setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
+
+;; This is taken from =centaur-emacs=.  By default [[][]] is non-nil; when enabled
+;; the auto-mode-alist is traversed twice.  This double traversal can be expensive
+;; and it seems unnecessary.
+(setq auto-mode-case-fold nil)
+
+;; During startup emacs renders several messages.  The messages may be important so
+;; we don't want to get rid of them altogether.  This code prevents these message
+;; from flashing on the screen.  However they are still logged to the =*messages*=
+;; buffer.
+(when (and (display-graphic-p) oo-normal-startup)
+  (setq-default inhibit-redisplay t)
+  (setq-default inhibit-message t)
+  (defun reset-inhibit-vars ()
+    (setq-default inhibit-redisplay nil)
+    (setq-default inhibit-message nil)
+    (redraw-frame))
+  (add-hook 'window-setup-hook #'reset-inhibit-vars)
+  (define-advice startup--load-user-init-file (:after (&rest _) reset-inhibit-vars)
+    (and init-file-had-error (reset-inhibit-vars))))
+
+;; Don't suggest keybindings for me.
+;; When you select a command from the minibuffer that already has a keybinding emacs will try to
+;; prompt you saying that you could have invoked said keybinding instead.  I don't need this.
+
+;; See [[https://stackoverflow.com/questions/19781529/how-to-disable-emacs-messages-like-you-can-run-the-command-x-with-y][this stackoverflow post]].  After invoking [[][execute-extended-command]] on a
+;; command that has an existing keybinding, or something that could be abbreviated,
+;; emacs will suggest a shorter way.
+(setq suggest-key-bindings nil)
+
+;; Don't enable local variables by default.
+;; When installing packages with =quelpa=, I was prompted whether I wanted to apply
+;; file local variables.  I'm guessing =straight.el= and =elpaca= disable this.
+(setq enable-local-variables nil)
+
+;; Follow links without asking me.
+(setq vc-follow-symlinks t)
+(setq vc-follow-link t)
+
+;; Downloading themes with elpaca is safe.  I don't make a habit of grabbing random
+;; themes from wierd places online and evaluating them.
+(setq custom-safe-themes t)
+
+;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
+;; interface is intended for people that don't know elisp.  For me it's completely
+;; unnecessary.  Every variable I customize is in my emacs config.
+(setq custom-file null-device)
+
+(setq disabled-command-function nil)
+
+;; By default the cursor blinks.  The point is so that it is easier to find on the
+;; screen.  Usually, however, I have no trouble finding it so I disable it.
+(blink-cursor-mode -1)
+
+;; By default Emacs actually deletes files.  By setting this to t, you tell Emacs to move a file to
+;; trash instead of actually deleting it.  This is better because if you accidentally delete a file or
+;; discover you can still just go get your file from the trash.
+(setq delete-by-moving-to-trash t)
+
+;; With this enabled, I can invoke the minibuffer while still being in the
+;; minibuffer.  At the very least this is useful so that I can inspect which keys
+;; are bound in the minibuffer.
+(setq enable-recursive-minibuffers t)
+
+;; Note that the following comment is taken from noctuid's config: "Recenter the
+;; point if it goes greater than 20 lines past what is visible the default, 0, is
+;; kind of annoying because it recenters even if you just go one line down from
+;; the window bottom, but a higher value is nice to automatically recenter after
+;; any bigger jump."
+(setq scroll-conservatively 20)
+
+;; By default Emacs displays [[][this startup screen]] at startup.  No thanks! I
+;; think these variables are all aliases for eachother.
+(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
+
+(setq redisplay-skip-fontification-on-input t)
+
+;; https://github.com/hlissner/doom-emacs/blob/01aadd8900be45f912124d9d815d8790f540d38c/core/core.el#L177
+(setq idle-update-delay 1)
+
+;; Don't make backup files.
+(setq make-backup-files nil)
+
+;; But if I decide to make them later put them in the trash.
+(setq backup-directory-alist '((".*" . "~/.Trash")))
+
+;; Don't display my keystrokes as I type.
+;; If I want this I'll get it with which-key.
+(setq echo-keystrokes 0)
+
+;; "Several linux programs require a newline at the end of a file, such as
+;; chrontab"--this is more or less what noctuid said and I'll take his word for
+;; it.
+(setq require-final-newline t)
+
+(setq-default tab-width 4)
+
+;; This improve startup time because packages enabled for emacs-lisp-mode are not
+;; loaded immediately.
+(setq initial-major-mode 'fundamental-mode)
+
+;; Don't display advertisement for the gnu system. They made the process of disabling this more
+;; difficult.
+(advice-add #'display-startup-echo-area-message :around #'ignore)
+
+;; Don't display any documentation--or any message at all--in the =*scratch*= buffer.
+(setq initial-scratch-message nil)
+
+;; Use spaces by default; not tabs.
+(setq-default indent-tabs-mode nil)
+
+;; This variable controls whether emacs makes a sound when certain events happen
+;; such as invoking a binding that doesn't have anything bound to it or trying
+;; to exceed the end of the buffer--things like that.  Personally, I don't want
+;; such beeping.  Setting this variable to nil still result in beeping, emacs
+;; just uses its default function.  Instead, to be disabled it must
+;; be set to [[][ignore]].
+(setq ring-bell-function #'ignore)
+
+;; Whenever the cursor hits the beginning or end of the buffer, emacs signals in error in the
+;; Message buffer; same thing when you're trying to edit a read-only buffer.
+(defun oo-command-error-function (data context caller)
+  "Ignore the buffer-read-only, beginning-of-buffer,
+end-of-buffer signals; pass the rest to the default handler."
+  (unless (memq (car data) '(buffer-read-only beginning-of-buffer end-of-buffer))
+    (command-error-default-function data context caller)))
+
+(setq command-error-function #'oo-command-error-function)
+
+(defvar elpaca-installer-version 0.5)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order `(elpaca
+	      :repo "https://github.com/progfolio/elpaca.git"
+	      :ref "9478158"
+	      :files (:defaults (:exclude "extensions"))
+	      :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+	(if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+		 ((zerop (call-process "git" nil buffer t "clone"
+				       (plist-get order :repo) repo)))
+		 ((zerop (call-process "git" nil buffer t "checkout"
+				       (plist-get order :ref))))
+		 (emacs (concat invocation-directory invocation-name))
+		 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+				       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+		 ((require 'elpaca))
+		 ((elpaca-generate-autoloads "elpaca" repo)))
+	    (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+	  (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+
+(defun oo-prefer-depth-1 (_) '(:depth 1))
+(add-hook 'elpaca-order-functions #'oo-prefer-depth-1)
+
+(elpaca (elpaca :repo "https://github.com/progfolio/elpaca.git"
+                :branch "master"
+                :ref "9478158"
+                :files (:defaults (:exclude "extensions"))
+                :build (:not elpaca--activate-package)))
+
+(elpaca (dogears :fetcher github :repo "alphapapa/dogears.el" :files (:defaults (:exclude "helm-dogears.el"))))
+
+(elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :local-repo "captain" :branch "externals/captain" :ref "364ee98"))
+
+(elpaca (lambda-themes :repo "Lambda-Emacs/lambda-themes" :branch "main" :fetcher github :ref "7342250"))
+
+(elpaca (consult :repo "minad/consult" :fetcher github :branch "main" :ref "fae9b50"))
+
+(elpaca (textsize :repo "WJCFerguson/textsize" :fetcher github :branch "master" :ref "df91392"))
+
+(elpaca (on :host github :repo "ajgrf/on.el" :branch "master" :ref "3cf623e"))
+
+(elpaca (ligature :fetcher github :repo "mickeynp/ligature.el" :ref "3d14604"))
+
+(elpaca (log4e :repo "aki2o/log4e" :fetcher github :ref "7df0c1f"))
+
+(elpaca (org :local-repo "org" :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git" :ref "f731d45"))
+
+(elpaca (refine :repo "Wilfred/refine" :fetcher github :ref "d72fa50"))
+
+(elpaca (ace-window :repo "abo-abo/ace-window" :fetcher github :ref "c7cb315"))
+
+(elpaca (aggressive-fill-paragraph :fetcher github :repo "davidshepherd7/aggressive-fill-paragraph-mode" :ref "4a620e6"))
+
+(elpaca (aggressive-indent :repo "Malabarba/aggressive-indent-mode" :fetcher github :ref "b0ec004"))
+
+(elpaca (all-the-icons :repo "domtronn/all-the-icons.el" :fetcher github :ref "be99987"))
+
+(elpaca (all-the-icons-completion :repo "iyefrat/all-the-icons-completion" :fetcher github :ref "286e2c0"))
+
+(elpaca (anaphora :repo "rolandwalker/anaphora" :fetcher github :ref "3b2da3f"))
+
+(elpaca (async :repo "jwiegley/emacs-async" :fetcher github :ref "9a8cd0c"))
+
+(elpaca (auth-source-pass :fetcher github :repo "DamienCassou/auth-source-pass" :ref "aa7f171"))
+
+(elpaca (auto-capitalize :fetcher github :repo "emacsmirror/auto-capitalize" :ref "0ee14c7"))
+
+(elpaca (avy :repo "abo-abo/avy" :fetcher github :ref "e92cb37"))
+
+(elpaca (buffer-expose :host github :repo "clemera/buffer-expose" :fetcher github :ref "c4a1c74"))
+
+(elpaca (centered-cursor-mode :fetcher github :repo "andre-r/centered-cursor-mode.el" :ref "ebaeb80"))
+
+(elpaca (centered-window :fetcher github :repo "anler/centered-window-mode" :old-names (centered-window-mode) :ref "80965f6"))
+
+(elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref "a59c41d"))
+
+(elpaca (counsel :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+
+(elpaca (dash :fetcher github :repo "magnars/dash.el" :ref "7a9c937"))
+
+(elpaca (dash-functional :fetcher github :repo "magnars/dash.el" :ref "7a9c937"))
+
+(elpaca (dashboard :fetcher github :repo "emacs-dashboard/emacs-dashboard" :ref "36c8da4"))
+
+(elpaca (decide :fetcher github :repo "lifelike/decide-mode" :ref "668fa55"))
+
+(elpaca (default-text-scale :fetcher github :repo "purcell/default-text-scale" :ref "bfc0987"))
+
+(elpaca (dirvish :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+
+(elpaca (dirvish-collapse :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+
+(elpaca (dirvish-icons :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+
+(elpaca (dirvish-media :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+
+(elpaca (dirvish-subtree :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+
+(elpaca (doct :repo "progfolio/doct" :fetcher github :ref "15974ad"))
+
+(elpaca (edit-indirect :fetcher github :repo "Fanael/edit-indirect" :ref "bdc8f54"))
+
+(elpaca (ednc :repo "sinic/ednc" :fetcher github :ref "d1a3c37"))
+
+(elpaca (elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b"))
+
+(elpaca (elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf"))
+
+(elpaca (elfeed-score :fetcher github :repo "sp1ff/elfeed-score" :ref "5fff415"))
+
+(elpaca (elisp-demos :fetcher github :repo "xuchunyang/elisp-demos" :ref "ed9578d"))
+
+(elpaca (elisp-refs :repo "Wilfred/elisp-refs" :branch "master" :fetcher github :ref "bf3cca8"))
+
+(elpaca (ellocate :fetcher github :repo "walseb/ellocate" :ref "8140508"))
+
+(elpaca (embark :repo "oantolin/embark" :fetcher github :ref "5d0459d"))
+
+(elpaca (emms :fetcher github :url "https://git.savannah.gnu.org/git/emms.git" :repo "emacsmirror/emms" :ref "5c3226b"))
+
+(elpaca (eros :fetcher github :repo "xiongtx/eros" :ref "dd89102"))
+
+(elpaca (eshell-up :fetcher github :repo "peterwvj/eshell-up" :ref "9c100ba"))
+
+(elpaca (eshell-z :fetcher github :repo "xuchunyang/eshell-z" :ref "337cb24"))
+
+(elpaca (evil :repo "emacs-evil/evil" :fetcher github :ref "cc9d688"))
+
+(elpaca (evil-cleverparens :fetcher github :repo "luxbock/evil-cleverparens" :ref "8c45879"))
+
+(elpaca (evil-easymotion :repo "PythonNut/evil-easymotion" :fetcher github :ref "f96c2ed"))
+
+(elpaca (evil-goggles :repo "edkolev/evil-goggles" :fetcher github :ref "08a2205"))
+
+(elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
+
+(elpaca (evil-surround :repo "emacs-evil/evil-surround" :fetcher github :old-names (surround) :ref "346d4d8"))
+
+(elpaca (expand-region :repo "magnars/expand-region.el" :fetcher github :ref "ea6b4cb"))
+
+(elpaca (exwm :branch "master" :host github :repo "ch11ng/exwm" :fetcher github :ref "b62d5e7"))
+
+(elpaca (exwm-edit :repo "agzam/exwm-edit" :fetcher github :ref "2fd9426"))
+
+(elpaca (exwm-firefox-core :fetcher github :repo "walseb/exwm-firefox-core" :ref "e2fe2a8"))
+
+(elpaca (exwm-firefox-evil :fetcher github :repo "walseb/exwm-firefox-evil" :ref "14643ee"))
+
+(elpaca (exwm-float :fetcher gitlab :repo "mtekman/exwm-float.el" :ref "eb1b60b"))
+
+(elpaca (f :fetcher github :repo "rejeep/f.el" :ref "1814209"))
+
+(elpaca (fennel-mode :fetcher sourcehut :repo "technomancy/fennel-mode" :ref "da958db"))
+
+(elpaca (figlet :fetcher github :repo "jpkotta/figlet" :ref "19a3878"))
+
+(elpaca (frame-cmds :fetcher github :repo "emacsmirror/frame-cmds" :ref "b803354"))
+
+(elpaca (frame-fns :fetcher github :repo "emacsmirror/frame-fns" :ref "b675ee5"))
+
+(elpaca (gcmh :repo "koral/gcmh" :fetcher gitlab :ref "0089f9c"))
+
+(elpaca (git-auto-commit-mode :fetcher github :repo "ryuslash/git-auto-commit-mode" :ref "a6b6e0f"))
+
+(elpaca (git-commit :fetcher github :repo "magit/magit" :old-names (git-commit-mode) :ref "86eec7b"))
+
+(elpaca (git-gutter+ :fetcher github :repo "nonsequitur/git-gutter-plus" :ref "b772699"))
+
+(elpaca (goto-chg :repo "emacs-evil/goto-chg" :fetcher github :ref "2af6121"))
+
+(elpaca (grugru :repo "ROCKTAKEY/grugru" :fetcher github :ref "92e588e"))
+
+(elpaca (helm :repo "emacs-helm/helm" :fetcher github :ref "8de5444"))
+
+(elpaca (helm-core :repo "emacs-helm/helm" :fetcher github :ref "8de5444"))
+
+(elpaca (helm-system-packages :repo "emacs-helm/helm-system-packages" :fetcher github :ref "e93f4ae"))
+
+(elpaca (helpful :repo "Wilfred/helpful" :branch "master" :fetcher github :ref "6f8991a"))
+
+(elpaca (hide-mode-line :repo "hlissner/emacs-hide-mode-line" :fetcher github :ref "8888882"))
+
+(elpaca (highlight-quoted :fetcher github :repo "Fanael/highlight-quoted" :ref "2410347"))
+
+(elpaca (ht :fetcher github :repo "Wilfred/ht.el" :ref "2850301"))
+
+(elpaca (hydra :repo "abo-abo/hydra" :fetcher github :ref "2d55378"))
+
+(elpaca (ialign :fetcher github :repo "mkcms/interactive-align" :ref "bc4d30d"))
+
+(elpaca (idle-require :fetcher github :repo "nschum/idle-require.el" :ref "33592bb"))
+
+(elpaca (iedit :repo "victorhge/iedit" :fetcher github :ref "27c6186"))
+
+(elpaca (ivy :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+
+(elpaca (key-chord :fetcher github :repo "emacsorphanage/key-chord" :ref "7f7fd7c"))
+
+(elpaca (lispy :repo "abo-abo/lispy" :fetcher github :ref "1ad128b"))
+
+(elpaca (lispyville :fetcher github :repo "noctuid/lispyville" :ref "0f13f26"))
+
+(elpaca (loopy :fetcher github :repo "okamsn/loopy" :ref "31dc58f"))
+
+(elpaca (lv :repo "abo-abo/hydra" :fetcher github :ref "2d55378"))
+
+(elpaca (macrostep :fetcher github :repo "joddie/macrostep" :ref "424e373"))
+
+(elpaca (magit :fetcher github :repo "magit/magit" :ref "86eec7b"))
+
+(elpaca (magit-section :fetcher github :repo "magit/magit" :ref "86eec7b"))
+
+(elpaca (map :host github :repo "emacs-straight/map" :fetcher github :ref "dc4f657"))
+
+(elpaca (marginalia :repo "minad/marginalia" :fetcher github :ref "b65d66e"))
+
+(elpaca (markdown-mode :fetcher github :repo "jrblevin/markdown-mode" :ref "c338cdf"))
+
+(elpaca (mini-modeline :repo "kiennq/emacs-mini-modeline" :fetcher github :ref "7dcd0ab"))
+
+(elpaca (mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956"))
+
+(elpaca (modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9"))
+
+(elpaca (notmuch :url "https://git.notmuchmail.org/git/notmuch" :fetcher git :ref "a5f7efd"))
+
+(elpaca (orderless :repo "oantolin/orderless" :fetcher github :ref "cbc0109"))
+
+(elpaca (org-auto-tangle :repo "yilkalargaw/org-auto-tangle" :fetcher github :ref "2494a6f"))
+
+(elpaca (org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be"))
+
+(elpaca (org-ql :fetcher github :repo "alphapapa/org-ql" :ref "d7ada53"))
+
+(elpaca (org-remark :host github :repo "emacs-straight/org-remark" :ref "7e72e86"))
+
+(elpaca (org-super-agenda :fetcher github :repo "alphapapa/org-super-agenda" :ref "f5e80e4"))
+
+(elpaca (org-superstar :fetcher github :repo "integral-dw/org-superstar-mode" :ref "7f83636"))
+
+(elpaca (ov :fetcher github :repo "emacsorphanage/ov" :ref "c5b9aa4"))
+
+(elpaca (paredit :fetcher nil :url "https://mumble.net/~campbell/git/paredit.git" :repo "https://mumble.net/~campbell/git/paredit.git" :ref "d0b1a2f"))
+
+(elpaca (pass :fetcher github :repo "NicolasPetton/pass" :ref "a095d24"))
+
+(elpaca (password-generator :fetcher github :repo "vandrlexay/emacs-password-genarator" :ref "c1da979"))
+
+(elpaca (password-store :fetcher github :repo "zx2c4/password-store" :ref "f152064"))
+
+(elpaca (password-store-otp :repo "volrath/password-store-otp.el" :fetcher github :ref "04998c8"))
+
+(elpaca (pinentry :host github :repo "emacs-straight/pinentry" :fetcher github :ref "cd942f7"))
+
+(elpaca (plural :fetcher github :repo "emacsmirror/plural" :ref "b91ce15"))
+
+(elpaca (popup :fetcher github :repo "auto-complete/popup-el" :ref "bd5a0df"))
+
+(elpaca (popwin :fetcher github :repo "emacsorphanage/popwin" :ref "215d6cb"))
+
+(elpaca (rainbow-delimiters :fetcher github :repo "Fanael/rainbow-delimiters" :ref "f43d48a"))
+
+(elpaca (redacted :fetcher github :repo "bkaestner/redacted.el" :ref "156311e"))
+
+(elpaca (restart-emacs :fetcher github :repo "iqbalansari/restart-emacs" :ref "1607da2"))
+
+(elpaca (s :fetcher github :repo "magnars/s.el" :ref "43ba8b5"))
+
+(elpaca (search-web :repo "tomoya/search-web.el" :fetcher github :ref "c4ae86a"))
+
+(elpaca (shut-up :fetcher github :repo "cask/shut-up" :ref "081d6b0"))
+
+(elpaca (smartparens :fetcher github :repo "Fuco1/smartparens" :ref "63695c6"))
+
+(elpaca (spell-number :fetcher github :repo "emacsmirror/spell-number" :ref "3ce612d"))
+
+(elpaca (super-save :fetcher github :repo "bbatsov/super-save" :ref "886b551"))
+
+(elpaca (swiper :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+
+(elpaca (swiper-helm :repo "abo-abo/swiper-helm" :fetcher github :ref "93fb6db"))
+
+(elpaca (tempel :repo "minad/tempel" :fetcher github :ref "b4bb703"))
+
+(elpaca (transient :fetcher github :repo "magit/transient" :ref "90e640f"))
+
+(elpaca (transpose-frame :fetcher github :repo "emacsorphanage/transpose-frame" :ref "12e523d"))
+
+(elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github :ref "191d84c"))
+
+(elpaca (ts :fetcher github :repo "alphapapa/ts.el" :ref "b7ca357"))
+
+(elpaca (undo-tree :host github :repo "emacs-straight/undo-tree" :fetcher github :ref "e326c61"))
+
+(elpaca (vc-auto-commit :fetcher github :repo "thisirs/vc-auto-commit" :ref "56f4780"))
+
+(elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
+                 :files (:defaults "extensions/*")))
+
+(elpaca (which-key :repo "justbur/emacs-which-key" :fetcher github :ref "428aedf"))
+
+(elpaca (with-editor :fetcher github :repo "magit/with-editor" :ref "139ef39"))
+
+(elpaca (with-emacs :fetcher github :repo "twlz0ne/with-emacs.el" :ref "9f99bec"))
+
+(elpaca (workgroups2 :repo "pashinin/workgroups2" :fetcher github :ref "c9403c6"))
+
+(elpaca (xelb :host github :repo "emacs-straight/xelb" :fetcher github :ref "f5880e6"))
+
+(elpaca (xr :host github :repo "emacs-straight/xr" :fetcher github :ref "277c549"))
+
+(elpaca (zone-matrix :fetcher github :repo "emacsmirror/zone-matrix" :ref "e1fc8c7"))
+
+(elpaca (zone-rainbow :repo "kawabata/zone-rainbow" :fetcher github :ref "2ba4f1a"))
+
+(elpaca (zone-sl :repo "kawabata/zone-sl" :fetcher github :ref "7ec22e3"))
+
+(elpaca (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm" :ref "59e2fce" ))
+
+(elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
+
+;; If there are any incomplete queues, complete them and restart emacs.
+(if-let ((queues (reverse elpaca--queues))
+	 ((mapc #'elpaca--maybe-reset-queue queues))
+	 (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+    (progn (elpaca-process-queues)
+	   (add-hook 'elpaca-after-init-hook #'restart-emacs))
+  (run-hooks 'elpaca--post-queues-hook))
+
+(require 'seq)
+
+(require 'anaphora)
+
+(require 'dash)
+(require 'dash-functional)
+
+(require 'mmt)
+
+(require 'shut-up)
+
+(require 'on)
+
+(require 'log4e)
+
+(log4e:deflogger "oo" "%t [%l] %m" "%H:%M:%S")
+
+(defalias 'oo-log 'oo--log-info)
+(defalias 'oo-log-info 'oo--log-info)
+(defalias 'oo-log-warn 'oo--log-warn)
+(defalias 'oo-log-debug 'oo--log-debug)
+(defalias 'oo-log-error 'oo--log-error)
+(defalias 'oo-log-fatal 'oo--log-fatal)
+(defalias 'oo/open-log 'oo--log-open-log)
+
+(oo--log-set-level 'trace)
+
+(oo--log-enable-logging)
+
+(require 's)
+
+(defun oo-ampersand-symbol-p (obj)
+  "Return non-nil of OBJ is an ampersand symbol.
+An ampersand symbol is a symbol that starts with `&'."
+  (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
+
+(defsubst oo-sharp-quoted-p (obj)
+  "Return non-nil if OBJ is sharp quoted."
+  (equal (car-safe obj) 'function))
+
+(defun oo-wrap-forms (wrappers forms)
+  "Return FORMS wrapped by WRAPPERS.
+FORMS is a list of lisp forms.  WRAPPER are a list of forms."
+  (declare (pure t) (side-effect-free t))
+  (unless wrappers (push '(progn) wrappers))
+  (setq wrappers (reverse wrappers))
+  (setq forms (append (pop wrappers) forms))
+  (dolist (wrapper wrappers)
+    (setq forms (-snoc wrapper forms)))
+  forms)
+
+(defun oo-non-keyword-symbol-p (object)
+  "Return t if OBJECT is a symbol but not a keyword."
+  (declare (pure t) (side-effect-free t))
+  (and (symbolp object) (not (keywordp object))))
+
+(defun oo-args-to-string (&rest args)
+  "Return ARGS as a string."
+  (declare (pure t) (side-effect-free t))
+  (with-output-to-string (mapc #'princ args)))
+
+(defun oo-args-to-symbol (&rest args)
+  "Return an interned symbol from args."
+  (declare (pure t) (side-effect-free t))
+  (intern (apply #'oo-args-to-string args)))
+
+(defun oo-args-to-keyword (&rest args)
+  "Return ARGS as a keyword."
+  (declare (pure t) (side-effect-free t))
+  (apply #'oo-args-to-symbol ":" args))
+
+(defun @silence (orig-fn &rest args)
+  "Advice that silences ORIG-FN."
+  (shut-up (apply orig-fn args)))
+
+(defun oo-silence (fn &rest fns)
+  "Add advice to FN and FNS that silences their output."
+  (--each (cons fn fns)
+    (oo-add-advice it :around '@silence)))
+
+(defun oo-popup-at-bottom (regexp)
+  "Open buffers at bottom that match regexp."
+  (alet `(,regexp
+	      (display-buffer-at-bottom)
+	      (side bottom)
+	      (slot 1)
+	      (window-height 0.5)
+	      (window-parameters ((no-other-window t))))
+    (push it display-buffer-alist)))
+
+(defmacro loop! (pred &rest body)
+  "A generic looping macro and drop-in replacement for `dolist'.
+This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
+symbol as in `dolist', but.  LIST can be a sequence."
+  (declare (indent 1))
+  (pcase pred
+    ;; ((pred oo-sharp-quoted-p)
+    ;;  `(while (funcall ,pred) ,@body))
+    ((or `(repeat ,n) (and n (pred integerp)))
+     (mmt-once-only (n)
+       `(if (integerp ,n)
+	    (dotimes (_ ,n) ,@body)
+	  (error "Wrong type argument integerp: %S" ,n))))
+    (`(,(and match-form (pred sequencep)) ,list)
+     (alet (make-symbol "var")
+       `(for! (,it ,list)
+	  (-let [,match-form ,it]
+	    ,@body))))
+    (`(,(and var (pred symbolp)) ,list)
+     (mmt-once-only (list)
+       `(cond ((listp ,list)
+	       (dolist (,var ,list) ,@body))
+	      ((sequencep ,list)
+	       (seq-doseq (,var ,list) ,@body))
+	      ((integerp ,list)
+	       (loop! ,list ,@body))
+	      (t
+	       (error "Unknown list predicate: %S" ',pred)))))))
+
+(defalias 'for! 'loop!)
+
+(defmacro let-thread-last! (var &rest forms)
+  "Bind VAR to the result of threading FORMS with `thread-last'."
+  (declare (indent defun))
+  `(-setq ,var (->> ,@forms)))
+
+(defalias 'let->>! 'let-thread-last!)
+
+(defmacro updating! (place fn &rest args)
+  "Set PLACE to the result of `(apply FN PLACE args)'."
+  `(setf ,place (apply ,fn ,place ,args)))
+
+(defmacro updating-it! (place expr)
+  "Set PLACE to the value of EXPR.
+PLACE is bound to `it' for the duration of EXPR."
+  `(setf ,place (alet ,place ,expr)))
+
+(defalias 'it-updating! 'updating-it!)
+
+(defmacro appending! (place list)
+  "Append LIST to the end of PLACE."
+  (declare (indent 1))
+  `(setf ,place (append ,place ,list)))
+
+(defalias 'incrementing! 'cl-incf)
+
+(defmacro collecting! (place item)
+  "Affix ITEM to the end of PLACE."
+  (declare (indent defun))
+  `(setf ,place (append ,place (list ,item))))
+
+(defalias 'snocing! 'collecting!)
+(defalias 'affixing! 'collecting!)
+
+(defmacro finding! (place expr)
+  "Set VAR to the result of \(or VAR EXPR\)."
+  `(setf ,place (or ,place ,expr)))
+
+(defmacro counting! (place &optional x)
+  "Increment PLACE by 1 if FORM is non-nil."
+  `(cl-incf ,place (or ,x 1)))
+
+(defmacro prepending! (place list)
+  "Prepend LIST to beginning of PLACE."
+  `(setf ,place (append ,list ,place)))
+
+(defmacro maxing! (var form)
+  "Set VAR to."
+  (let ((form-var (gensym "form-var-")))
+    `(let ((,form-var ,form))
+       (setq ,var (if (> ,form-var ,var) ,form-var ,var)))))
+
+(defalias 'decrementing! 'cl-decf)
+
+(defmacro concating! (place string &optional sep)
+  "Concat PLACE and STRING with optional separator, SEP."
+  `(setf ,place (string-join (list ,place ,string) ,sep)))
+
+(defmacro unioning! (place form &optional test)
+  "Set PLACE to the union of PLACE and FORM."
+  `(updating! ,place #'cl-union ,form :test ,(or test '#'equal)))
+
+(defmacro updating! (place fn &rest args)
+  "Set PLACE to the result of `(apply FN PLACE args)'."
+  `(cl-callf2 funcall ,fn ,place ,@args))
+
+(defmacro take! (pred place)
+  (mmt-with-gensyms (taken)
+    (mmt-once-only (pred)
+      `(let (,taken)
+	 (pcase ,pred
+	   ((pred integerp)
+	    (dotimes (_ ,pred)
+	      (collecting! ,taken (pop ,place))))
+	   (_
+	    (while (and ,place (funcall ,pred (car ,place)))
+	      (collecting! ,taken (pop ,place)))))
+	 ,taken))))
+
+;; (defalias 'pop! 'take!)
+
+(defmacro adjoining! (place item &optional test)
+  "Set PLACE to ITEM consed onto the front of PLACE only if it's not already there."
+  `(setf ,place (cl-adjoin ,item ,place :test ,(or test '#'equal))))
+
+(defmacro pushing! (place form)
+  "Same as `push', except the arguments are switched.
+Designed to be used in `block!'."
+  (declare (indent 1))
+  `(push ,form ,place))
+
+(defmacro adding-to-list! (var value &optional append compare-fn)
+  `(set! ,var (add-to-list ',var ,value ,append ,compare-fn)))
+
+(defun oo-candidate-features (fn)
+  "Return a list of candidate features for FN.
+FN is a function symbol.  Look in the load path for names that match features."
+  (let ((candidates nil)
+        (base nil)
+        (fname (symbol-name fn)))
+    (for! (path load-path)
+      (setq base (file-name-sans-extension (file-name-nondirectory (directory-file-name path))))
+      (when (s-prefix-p base fname)
+        (collecting! candidates (intern base))))
+    (seq-sort-by (-compose #'length #'symbol-name) #'> candidates)))
+
+(defun oo-autoload-fn (fn &optional feature)
+  "If FN is bound return FN, otherwise return an interactive lambda."
+  (unless (and (symbolp fn) (fboundp fn))
+    (alet `(lambda (&rest _)
+	     (interactive)
+	     (if-let (feature (or ',feature (car (oo-possible-features #',fn))))
+		 (progn (fmakunbound #',fn)
+			(message "Autoloading %s from %s" #',fn feature)
+			(require feature)
+			(cond ((fboundp #',fn)
+			       (alet (symbol-function #',fn)
+				 (if (keymapp it)
+				     (set-transient-map it)
+				   (call-interactively #',fn))))
+			      (t
+			       (error "Not able to load %s from %s." #',fn feature))))
+	       (error "Not able to find feature for %s." #',fn)))
+      (fset fn it)))
+  fn)
+
+(defmacro catch-autoloads! (&rest body)
+  "Try to autoload any unbound functions."
+  (let ((err (gensym "error"))
+        (void-fn (gensym "void-function")))
+    `(condition-case ,err
+         (progn ,@body)
+       (void-function
+        (let ((,void-fn (cadr ,err)))
+          (mapc #'oo-try-load-feature (-select #'symbolp (flatten-tree ',body)))
+          (progn ,@body))))))
+
+(require 'treepy)
+
+(defun +treepy-skip (zipper)
+  "Skip the current node."
+  (let ((orig zipper))
+    (while (and (not (treepy-right zipper)) (treepy-up zipper))
+      (setq zipper (treepy-up zipper)))
+    (if (treepy-right zipper)
+	(setq zipper (treepy-right zipper))
+      ;; If we've reached the top level, that means there is no next node.  So
+      ;; let's go back to where we were and go next until we reach the end.
+      (setq zipper orig)
+      (while (not (treepy-end-p zipper))
+	(setq zipper (treepy-next zipper)))
+      zipper)))
+
+(defun oo-tree-map-nodes (pred fun tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+     (funcall fun tree))
+    ((consp tree)
+     (cons (oo-tree-map-nodes pred fun (car tree))
+           (oo-tree-map-nodes pred fun (cdr tree))))
+    (t
+     tree)))
+
+(defalias 'let! '-setq)
+
+(defmacro with! (wrapper &rest wrappers)
+  "Enclose BODY with wrappers.
+WRAPPER is the same as in `oo-wrap-forms'.
+Meant to be used with `block!'.  See `oo-block-parse-with'.")
+
+(defalias 'wrap 'with!)
+
+(defmacro label! (&rest args)
+  (declare (indent defun)))
+
+(defalias 'letf! 'label!)
+
+(defmacro excluding! (symbol &rest symbols)
+  "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
+See `oo-block-parse-excluding'."
+  (cl-assert (-all-p #'symbolp (cons symbol symbols))))
+
+(defalias 'without! 'excluding!)
+
+(defalias 'return! 'cl-return)
+(defalias 'return-from! 'cl-return-from)
+
+(defmacro continue! ()
+  "Skip the current iteration of loop.
+This is meant to be used in `block!'.  For what counts as a loop is, see
+`oo-block-macro-loop-macros' and `oo-block-parse-loop'."
+  `(throw 'continue! nil))
+
+(defalias 'skip! 'continue!)
+
+(defmacro break! (&optional value)
+  "Exit the current loop and return VALUE.
+For what counts as a loop is, see `oo-block-macro-loop-macros' and
+`oo-block-parse-loop'."
+  `(throw 'break! ,value))
+(defalias 'break-with! 'break!)
+(defalias 'exit! 'break!)
+(defalias 'exit-with! 'exit!)
+
+(defun oo-block-let-bindings (let no-let)
+  "Return list of let bindings, ignoring no-let.
+Ignore any symbols.  See `excluding!'."
+  (let (binds)
+    (when let
+      (for! ((match-form value) let)
+	(if (and (symbolp match-form) (member match-form no-let))
+	    (setq match-form '_)
+	  (alet (oo-tree-map-nodes (-partial #'-contains-p no-let) (-const '_) match-form)
+	    (setq match-form it)))
+	(pushing! binds (list match-form value))))
+    (nreverse binds)))
+
+(defun oo-block-parse-body (body)
+  (let ((zipper (treepy-list-zip body))
+	(data nil))
+    (while (not (treepy-end-p zipper))
+      (pcase (treepy-node zipper)
+	(`(,(pred (-contains-p '(quote function \`))) . ,(guard t))
+	 (setq zipper (+treepy-skip zipper)))
+	(`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
+	 (alet `(catch 'break! (,loop ,pred (catch 'continue ,@body)))
+	   (setq zipper (treepy-replace zipper it)))
+	 ;; To avoid infinite recursion I need to get past the loop name.  Here I
+	 ;; end up at the loop predicate.
+	 (loop! (repeat 7)
+	   (setq zipper (treepy-next zipper))))
+	(`(,(and name (or 'flet! 'labels! 'noflet! 'macrolet! 'letf!)) ,fn ,args . ,body)
+	 (alet (cl-case name
+		 (flet! 'cl-flet)
+		 (label! 'cl-labels)
+		 (noflet! 'noflet)
+		 (macrolet! 'cl-macrolet)
+		 (letf! 'cl-letf))
+	   (setq zipper (treepy-replace zipper `(,it ((,fn ,args ,@body)) ,@(treepy-rights zipper))))
+	   (while (treepy-right zipper)
+	     (setq zipper (treepy-remove (treepy-right zipper))))))
+	(`(,(or 'without! 'excluding!) . ,(and symbols (guard (-all-p #'symbolp symbols))))
+	 (appending! (plist-get data :no-let) symbols)
+	 (setq zipper (treepy-remove zipper)))
+	(`(,(or 'wrap! 'with!) . ,(and wrappers (guard (-all-p #'listp wrappers))))
+	 (setq zipper (treepy-replace zipper (oo-wrap-forms wrappers (treepy-rights zipper))))
+	 (while (treepy-right zipper)
+	   (setq zipper (treepy-remove (treepy-right zipper)))))
+	(`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
+	 (alet (cl-case name
+		 ((maxing! maximizing!) most-negative-fixnum)
+		 ((minning! minimizing!) most-positive-fixnum)
+		 (counting! 0))
+	   (adjoining! (plist-get data :let) (list symbol it) (-on #'equal #'car)))
+	 (setq zipper (treepy-next zipper)))
+	(`(,(or 'let! 'let->>! 'let-->!) ,match-form ,_ . ,(and plist (guard t)))
+	 (alet (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
+		   (plist-get plist :init))
+	   (adjoining! (plist-get data :let) (list match-form it) (-on #'equal #'car)))
+	 (setq zipper (treepy-next zipper)))
+	;; (`(alet! ,expr)
+	;;  (pushing! (plist-get data :let) (list 'it expr))
+	;;  (setq zipper (treepy-next zipper)))
+	(_
+	 (setq zipper (treepy-next zipper)))))
+    (list data zipper)))
+
+(defmacro block! (name &rest body)
+  "Define a lexically-scoped block named NAME.
+Name may be any symbol.  Code inside body can call `return!'."
+  (declare (indent 1))
+  (-let* (((data zipper) (oo-block-parse-body body))
+	      ((&plist :let :no-let) data)
+	      (body (treepy-root zipper))
+	      (let-bindings (oo-block-let-bindings let no-let)))
+    `(cl-block nil (-let ,(oo-block-let-bindings let no-let) ,@body))))
+
+(defun oo-defun-components (arglist)
+  "Return the components of defun.
+ARGLIST is the arglist of `defun' or similar macro.
+The components returned are in the form of (name args (docstring declaration interactive-form) body)."
+  (block! nil
+    (let! (name args . body) arglist)
+    (let! docstring (when (stringp (car body)) (pop body)))
+    (let! declarations (when (equal 'declare (car-safe (car body))) (pop body)))
+    (let! interactive-form (when (equal 'interactive (car-safe (car body))) (pop body)))
+    (list name args (list docstring declarations interactive-form) body)))
+
+(defun oo-destructure-defun-plus (arglist)
+  "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."
+  (block! nil
+    (let! (name args (docstring declarations) body) (oo-defun-components arglist))
+    (let! (args plist) (-split-with (-not #'keywordp) args))
+    (let! (raw body) (-split-with (-compose #'keywordp #'car-safe) body))
+    (for! ((elt &as k v) raw)
+      (let! (k . v) elt)
+      (pushing! alist (cons k (if (cdr v) v (car v)))))
+    (let! new (if (and plist alist)
+		  (map-merge 'plist plist alist)
+		(map-into (or alist plist) 'plist)))
+    (list name args (list docstring declarations) new body)))
+
+(defmacro lambda! (args &rest body)
+  "Wrapper around lambda that uses `block!'"
+  (declare (indent defun))
+  `(lambda (,@args) (block! nil ,@body)))
+
+(defmacro defmacro! (&rest args)
+  "Wrapper around `defmacro!'."
+  (declare (indent defun) (doc-string 3))
+  (-let [(name arglist metadata body) (oo-defun-components args)]
+    `(defmacro ,name ,arglist
+       ,@(-non-nil metadata)
+       (block! ,name
+	     (excluding! ,@(-remove #'oo-ampersand-symbol-p (-flatten arglist)))
+	     (catch-autoloads! ,@body)))))
+
+(defmacro! defun! (&rest args)
+  "Wrapper around `defun'."
+  (declare (indent defun) (doc-string 3))
+  (-let [(name arglist metadata body) (oo-defun-components args)]
+    `(defun ,name ,arglist
+       ,@(-non-nil metadata)
+       (block! ,name
+	     (excluding! ,@(-remove #'oo-ampersand-symbol-p (flatten-list arglist)))
+	     (catch-autoloads! ,@body)))))
+
+(add-to-list 'log4e-log-level-alist '(setting . 3))
+(log4e--def-level-logger "oo" "log-setting" 'setting)
+(defalias 'oo-log-setting 'oo--log-advice)
+(defun! oo-log-setting (var value)
+  "Log a setting."
+  (let! svalue (s-truncate 40 (format "%S" value)))
+  (oo--log-setting "%s -> %s" var svalue))
+
+(defvar oo-unbound-symbol-alist nil
+  "An alist mapping an unbound symbol to an expression.
+This alist is checked by the hook `after-load-functions&set-bound-symbols' for
+any symbols that are now bound.")
+
+(defmacro! set! (symbol value)
+  "A \"do-it-all\" setter for configuring variables."
+  (let! value-var (make-symbol "value"))
+  `(if (not (boundp ',symbol))
+       (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+     (let ((,value-var ,value))
+       (oo-log-setting ',symbol ,value-var)
+       (aif (get ',symbol 'custom-set)
+	   (funcall it ',symbol ,value-var)
+	 (setq ,symbol ,value-var)))))
+
+(defun! after-load-functions&set-bound-symbols (&rest _)
+  "Set symbols that have been bound to the result of their corresponding expr.
+Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
+bound and setting them to the result of evaluating expr."
+  (for! ((elt &as symbol . expr) oo-unbound-symbol-alist)
+    (cond ((boundp symbol)
+	   (pushing! exprs `(set! ,symbol ,expr)))
+	  (t
+	   (pushing! updated elt))))
+  (setq oo-unbound-symbol-alist (nreverse updated))
+  (when exprs (funcall `(lambda () ,@exprs))))
+
+(add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
+
+(defun! oo-try-load-feature (fn)
+  "Try to load feature that could contain FN."
+  (unless (fboundp fn)
+    (dolist (feature (oo-candidate-features fn))
+      (require feature)
+      (when (fboundp fn)
+        (return! feature)))))
+
+(adding-to-list! log4e-log-level-alist '(after-load . 3))
+(log4e--def-level-logger "oo" "log-after-load" 'after-load)
+(defalias 'oo-log-after-load 'oo--log-after-load)
+(defun oo-log-after-load (fn args)
+  "Log an `after-load!' form."
+  (cond ((symbolp fn)
+	 (oo--log-after-load (s-truncate 70 (format "%S" (cons fn args)))))
+	(t
+	 (oo--log-after-load "(anonymous-after-block)"))))
+
+(defun oo--call-after-load (condition fn &rest args)
+  "Call FN with ARGS after CONDITION is met.
+For what CONDITION is see `oo-call-after-load'."
+  (pcase condition
+    (`(:or . ,conditions)
+     (--each conditions (apply #'oo--call-after-load it fn args)))
+    (`(:and . ,conditions)
+     (apply #'oo--call-after-load conditions fn args))
+    ((or (pred null) (and (pred symbolp) (pred featurep)))
+     (apply fn args))
+    (`(,condition . ,conditions)
+     (apply #'oo--call-after-load condition #'oo--call-after-load conditions fn args))
+    ((and feature (pred symbolp))
+     (eval-after-load feature `(funcall #',fn ,@(mapcar #'macroexp-quote args))))
+    (_
+     (error "invalid condition `%S'" condition))))
+
+(defun! oo-call-after-load-fn (fn args)
+  "Return function to be used for `oo-call-after-load' based on FN.
+The returned function calls FN with args ignoring any resulting errors.
+Additionally, it does nothing and returns nil on any calls after its first call.
+Finally, logs into the log buffer using `oo-log-after-load'."
+  (let! fname (gensym "eval-after-load-fn-"))
+  (let! closure (eval `(let ((first-call-p t))
+			 (lambda (&rest _)
+			   (when first-call-p
+			     (setq first-call-p nil)
+			     (oo-log-after-load #',fn ',args)
+			     (ignore-errors (apply #',fn ',args)))))
+		      t))
+  (fset fname closure)
+  fname)
+
+(defun oo-call-after-load (condition fn &rest args)
+  "Call FN with ARGS after CONDITION resolves.
+CONDITION can be a feature (symbol), a list of CONDITIONS, a list whose CAR is
+either `:or' or `:and' and whose CDR is a list of CONDITIONS.  If CONDITION is a
+feature, call FN with ARGS if feature has already been provided; otherwise,
+behave similarly to `eval-after-load'.  If CONDITION is a list of
+CONDITIONS, call FN with ARGS only after all CONDITIONS have been met.  If
+CONDITION is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
+If CONDITION is a list whose CAR is `:or', call FN with ARGS after any of
+CONDITIONS in (CDR CONDITION) is met."
+  (oo--call-after-load condition (oo-call-after-load-fn fn args)))
+
+(defmacro! after! (condition &rest body)
+  "Eval BODY after CONDITION is met.
+For what CONDITION is see `oo-call-after-load'."
+  (declare (indent 1))
+  `(oo-call-after-load ',condition (lambda () ,@body)))
+
+(defmacro! defafter! (&rest args)
+  "A wrapper around `after!' With same syntax as `defun'."
+  (declare (indent defun))
+  (let! (_ args _ body) (oo-defun-components args))
+  `(after! ,args ,@body))
+
+(adding-to-list! log4e-log-level-alist '(hook . 3))
+(log4e--def-level-logger "oo" "log-hook" 'hook)
+(defun oo-log-hook (_ function &rest _)
+  (oo--log-hook "%s" function))
+
+(defun! oo-generate-hook-name (hook function args)
+  "Return a hook name based on HOOK, FUNCTION and ARGS."
+  (let! prefix hook)
+  (alet (pcase function
+	  ((pred listp)
+	   (gensym "anonymous-hook-"))
+	  ((guard (aand args (-all-p (-orfn #'stringp #'symbolp #'numberp) args)))
+	   ;; Combine function and args into a name if it's reasonable to do so.
+	   (string-join (mapcar #'oo-args-to-string (cons function args)) "-"))
+	  (_
+	   function))
+    (intern (format "%s&%s" prefix it))))
+
+(defun oo-add-hook (symbols function &rest arglist)
+  "Add new hooks generated from FUNCTIONS to SYMBOLS.
+Unlike `add-hook', SYMBOLS and FUNCTIONS can be single items or lists.  EXPIRE is
+the same as in `oo-hook-create'.  When EXPIRE is non-nil, each
+function will remove itself from the hook it is in after it is run once.  If
+EXPIRE is a function, call it on the return value in order to determine
+whether to remove a function from the hook."
+  (dolist (symbol (-list symbols))
+    (apply #'oo-create-hook symbol function arglist)))
+
+(defmacro! defhook! (&rest rest)
+  "Define a hook and add it to SYMBOL and SYMBOLS.
+DOCSTRING and BODY are the docstring and body (respectively) of the defined
+hook.  Optionally, this macro takes key-value pairs passed in as either.
+
+Optional keyword arguments:
+
+- `:args' the arguments of the hook, `\(&rest)' by default.
+- `:depth' - same as `depth' in `add-hook'.
+- `:append' - same as `:depth'.
+- `:local' - same as `local' in `add-hook'.
+- `:expire' - a function that returns non-nil when the advice should be removed.
+
+\(fn NAME (SYMBOL [SYMBOLS] [KEY VALUE]...) [DOCSTRING] [[KEY VALUE]...] [BODY])"
+  (declare (indent defun) (doc-string 3))
+  (let! (name symbols metadata plist body) (oo-destructure-defun-plus rest))
+  (dolist (symbol symbols)
+    (let! args (or (plist-get plist :args) '(&rest _)))
+    (let! lambda `(lambda ,args ,@metadata (block! nil ,@body)))
+    (let! fname (intern (format "%s+" name)))
+    (collecting! forms `(oo-add-hook ',symbol #',lambda ,@plist :name ',fname)))
+  (macroexp-progn forms))
+
+(defun! oo-create-hook (symbol fn &rest arglist)
+  "Add a hook at SYMBOL that behaves like FUNCTION.
+DEPTH and LOCAL are the same as in `add-hook'.  When EXPIRE is non-nil, each
+the new hook will remove itself from SYMBOL after it is run once.  If
+EXPIRE is a function, call it on the return value of the new hook (which is will
+be the same as the return value for FUNCTION) in order to determine whether to
+remove a function from the hook."
+  (let! args (take! (-not #'keywordp) arglist))
+  (let! (&plist :append :depth :local :expire) arglist)
+  (let! hook (oo-generate-hook-name symbol fn args))
+  (fset hook
+	`(lambda (&rest _)
+	   ,@(when (symbolp fn) `((oo-try-load-feature #',fn)))
+	   (oo-log-hook nil ',hook)
+	   (prog1 (condition-case-unless-debug err
+		      (apply #',fn ',args)
+		    (error (oo-log-error "hook `%s' failed because %s -> %s" ',hook (car err) (cdr err))))
+	     (when ,expire (remove-hook ',symbol ',hook)))))
+  (add-hook symbol hook (or depth append) local))
+
+;; (defalias 'oo-generate-hook 'oo-create-hook)
+;; (defalias 'oo-gen-hook 'oo-create-hook)
+
+(defun! oo-advice-create (&rest args)
+  "Return a function that advises SYMBOL at PLACE.
+PROPS is the same as in `advice-add'.  When EXPIRE is non-nil, each function will
+remove itself as advice after it is run once.  If EXPIRE is a function, call it
+on the return value in order to determine whether to remove a function as advice."
+  (let! (symbol place function (&plist :name :expire :props)) args)
+  (let! name (or name (if (symbolp function) function (gensym "anonymous-advice-"))))
+  (let! new-advice (oo-args-to-symbol symbol '@ name))
+  (fset new-advice
+	    `(lambda (&rest args)
+	       ,@(when (symbolp function) `((oo-try-load-feature #',function)))
+	       (aprog1 (apply #',function args)
+	         (when (and ',expire (or (not (functionp ',expire)) (funcall ',expire it)))
+	           (advice-remove ',symbol ',new-advice)))))
+  (advice-add symbol place new-advice props)
+  new-advice)
+
+(cl-defun oo-add-advice (symbols place function &key expire props)
+  "SYMBOLS, WHERE, FUNCTIONS, and PROPS correspond to the arguments for
+advice-add.  Unlike advice-add, SYMBOLS and FUNCTIONS can be single items or
+lists.  When EXPIRE is non-nil, each function will remove itself as advice
+after it is run once.  If EXPIRE is a function, call it on the return value in
+order to determine whether to remove a function as advice."
+  (dolist (symbol (-list symbols))
+    (oo-advice-create symbol place function :expire expire :props props)))
+
+(defmacro! defadvice! (&rest args)
+  "Define an advice for FUNCTION called FUNCTION@NAME+.
+DOCSTRING and BODY are the docstring and body of the defined advice.  PLACE is
+the same as in `add-function' except it is a symbol instead of a keyword.  FLAGS
+is set of key value pairs.  Optionally,
+
+Optional keyword arguments:
+- `:args' - the arguments for the advice, \(&rest _) by default.
+- `:props' - the same as in `advice-add'.
+- `:expire' - a function that returns non-nil when the advice should be removed.
+
+\(fn NAME (PLACE FUNCTION [OTHER-FUNCTIONS] [KEY VAL]...) [DOCSTRING] [interactive-form] [[KEY VAL]...]
+BODY...)"
+  (declare (indent defun) (doc-string 3))
+  (let! (name (place . symbols) metadata plist body) (oo-destructure-defun-plus args))
+  (dolist (symbol symbols)
+    (let! lambda `(lambda ,(or (plist-get plist :args) '(&rest _)) ,@metadata ,@body))
+    (let! kargs (map-delete (plist-put plist :name (macroexp-quote (oo-args-to-symbol name '+))) :args))
+    (pushing! forms `(oo-advice-create ',symbol ,(oo-args-to-keyword place) ,lambda ,@kargs)))
+  (macroexp-progn (nreverse forms)))
+
+(defmacro pop! (place &optional pred)
+  "Set place to the result of."
+  (mmt-with-gensyms (collected)
+    (cond ((null pred)
+	   `(list (pop ,place)))
+	  ((numberp pred)
+	   `(let (,collected)
+	      (dotimes (_ ,pred)
+		(pushing! ,collected (pop ,place)))
+	      (nreverse ,collected)))
+	  (t
+	   `(let (,collected)
+	      (while (and ,place (funcall ,pred (car ,place)))
+		(pushing! ,collected (pop ,place)))
+	      (nreverse ,collected))))))
+
+(defconst oo-normal-leader-key "SPC"
+  "The evil leader prefix key.")
+
+(defconst oo-normal-localleader-key "SPC m"
+  "The localleader prefix key for major-mode specific commands.")
+
+(defconst oo-normal-localleader-short-key ","
+  "A shorter alternative `oo-localleader-key'.")
+
+(defconst oo-insert-leader-key "M-SPC"
+  "The leader prefix key used for Insert state.")
+
+(defconst oo-insert-localleader-key "M-SPC m"
+  "The localleader prefix key for major-mode specific commands.")
+
+(defconst oo-insert-localleader-short-key "M-,"
+  "A short non-normal `oo-localleader-key'.")
+
+(defconst oo-emacs-leader-key "C-c l"
+  "The leader prefix key used for Emacs states.")
+
+(defconst oo-emacs-localleader-key "C-c l m"
+  "The localleader prefix key for major-mode specific commands.")
+
+(defconst oo-emacs-localleader-short-key "C-c s"
+  "A short non-normal `oo-localleader-key'.")
+
+(defvar oo-initial-evil-key-bindings nil
+  "A list of binding forms to be run after evil is loaded.")
+
+(defvar oo-initial-evil-key-bindings-enabled-p nil
+  "Whether forms in `oo-initial-evil-key-bindings-' have been evaluated.")
+
+(defafter! evaluate-initial-evil-key-bindings (evil)
+  "Evaluate forms in `oo-initial-evil-key-bindings'."
+  (oo-log "Evaluating initial bindings...")
+  (funcall `(lambda () (ignore-errors ,@oo-initial-evil-key-bindings)))
+  (setq oo-initial-evil-key-bindings-enabled-p t))
+
+(defhook! enable-deferred-key-binding-evaluation (emacs-startup-hook :depth 80)
+  "Evaluate any deferred bindings.
+Also, setup deferred binding evaluation in `after-load-functions'."
+  (oo-eval-deferred-key-bindings-maybe)
+  (oo-add-hook 'after-load-functions #'oo-eval-deferred-key-bindings-maybe))
+
+(defvar oo-override-mode-map (make-sparse-keymap))
+
+(define-minor-mode oo-override-mode
+  "Global minor mode for higher precedence evil keybindings."
+  :keymap oo-override-mode-map
+  :global t)
+
+(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
+
+(defun evil-mode-hook&make-intercept-map ()
+  "Register `oo-override-map' as an intercept map."
+  (evil-make-intercept-map oo-override-mode-map 'all t))
+
+(oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
+
+(pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
+
+(defvar oo-deferred-key-bindings nil
+  "An alist with elements of (KEYMAP . FORMS).
+KEYMAP is the name of a keymap.  FORMS are a list of lisp forms that should be
+evaluated when KEYMAP is bound.")
+
+(defun! oo-eval-deferred-key-bindings-maybe (&rest _)
+  "Evaluate any binding forms whose keymap has been loaded.
+Evaluate forms from all elements of `oo-deferred-key-bindings' whose
+KEYMAP is bound \(the elements of the form \(KEYMAP . FORMS\)\).  Additionally,
+remove those elements from `oo-deferred-key-bindings'."
+  (for! ((item &as map . forms) oo-deferred-key-bindings)
+    (cond ((boundp map)
+	   (pushing! forms `(oo--log-info "Evaluating %s bindings..." ',map))
+	   (appending! body forms))
+	  (t
+	   (pushing! to-keep item))))
+  (setq oo-deferred-key-bindings to-keep)
+  (funcall `(lambda () ,@body)))
+
+(defvar oo-leader-map (make-sparse-keymap))
+(define-prefix-command 'oo/leader-prefix-command 'oo-leader-map)
+
+(defun! oo-bind-macro-handle-evil-bind (token interpreters)
+  "Return form that performs evil binding."
+  (let! state (map-elt token :state))
+  (let! key (map-elt token :key))
+  (let! map (map-elt token :map))
+  (let! def (map-elt token :def))
+  (let! minor-mode (map-elt token :minor-mode))
+  (cond ((or (member state '(nil global)) (not key) (not (map-contains-key token :def)))
+	 (oo-bind-macro-handle-token token interpreters))
+	(minor-mode
+	 `((evil-define-minor-mode-key ',state ',minor-mode ,key ,def)
+	   ,@(oo-bind-macro-handle-token token interpreters)))
+	(t
+	 `((evil-define-key* ',state ,map ,key ,def)
+	   (oo-log-keybinding ',map ,key ,def ',state)
+	   ,@(oo-bind-macro-handle-token token interpreters)))))
+
+(defvar oo-bind-macro-state-to-localleaders
+  `((oo-normal-localleader-short-key . normal)
+    (oo-normal-localleader-key . normal)
+    (oo-insert-localleader-key . insert)
+    (oo-insert-localleader-short-key . insert)
+    (oo-emacs-localleader-key . emacs)
+    (oo-emacs-localleader-short-key . emacs)
+    (oo-emacs-localleader-key . global)
+    (oo-emacs-localleader-short-key . global))
+  "List of localleaders to state.")
+
+(defun! oo-bind-macro-handle-init-evil-binds (token interpreters)
+  (let! state (map-elt token :state))
+  (let! forms (oo-bind-macro-handle-token token interpreters))
+  (if (member state '(nil global))
+      forms
+    `((cond ((bound-and-true-p oo-initial-evil-key-bindings-enabled-p)
+	     ,@forms)
+	    (t
+	     (appending! oo-initial-evil-key-bindings ',forms))))))
+
+(defun! oo-bind-macro-handle-after-evil-maybe (token interpreters)
+  (let! state (map-elt token :state))
+  (if (not (member state '(global nil)))
+      `((after! evil ,@(oo-bind-macro-handle-token token interpreters)))
+    (oo-bind-macro-handle-token token interpreters)))
+
+(defun! oo-bind-macro-handle-alt (token interpreters)
+  "Remap uses of command to alternate command."
+  (let! (command . alt) (map-elt token :alt))
+  (let! condition (or (map-elt token :when) t))
+  (cond ((and alt condition command)
+	 (let! hook (oo-args-to-symbol 'oo-bind-hook-for- command))
+	 (let! filter-fn (oo-args-to-symbol 'oo-bind-filter-for- command))
+	 (let! key-var (gensym "key-"))
+	 (let! def-var (gensym "def-"))
+	 (setq token (map-insert token :def def-var))
+	 (setq token (map-insert token :key key-var))
+	 (unless (map-elt token :map)
+	   (setq token (map-insert token :map 'global-map)))
+	 `((setq ,def-var '(menu-item "" nil :filter ,filter-fn))
+	   (setq ,key-var [remap ,command])
+	   (unless (boundp ',hook)
+	     (defvar ,hook '((t ,command)))
+	     (defun ,filter-fn (&rest _)
+	       (run-hook-with-args-until-success ',hook))
+	     (defhook! ,(oo-args-to-symbol 'run- command '-maybe) (,hook)
+	       (when t #',command)))
+	   (defhook! ,(oo-args-to-symbol 'run- alt '-maybe) (,hook)
+	     (when ,condition #',alt))
+	   ,@(oo-bind-macro-handle-token token interpreters)))
+	(t
+	 (oo-bind-macro-handle-token token interpreters))))
+
+(defvar oo-bind-macro-state-alist
+  '((?n . normal) (?i . insert) (?e . emacs)
+    (?v . visual) (?m . motion) (?o . operator)
+    (?r . replace) (?g . global))
+  "An alist mapping the first character of an evil state to the state.")
+
+(defun! oo-bind-macro-evil-keyword-to-states (evil-keyword)
+  "Return list of evil states specified by EVIL-KEYWORD.
+EVIL-KEYWORD is a keyword whose letters correspond to the first letters of evil
+states (e.g. :i \"i\" would correspond to \"insert\" state).
+If any letter in EVIL-KEYWORD does not correspond to an evil state, return nil."
+  (let! state 'dummy)
+  (let! string (seq-rest (symbol-name evil-keyword)))
+  (while (and (not (string-empty-p string)) state)
+    (let! char (seq-first string))
+    (updating! string #'seq-rest)
+    (let! state (alist-get char oo-bind-macro-state-alist))
+    (adjoining! states state))
+  (and state (nreverse states)))
+
+(defun! oo-bind-macro-handle-concat-prefix (token interpreters)
+  "Return form that concatenates prefix to key."
+  (let! prefix (map-elt token :prefix))
+  (let! key (map-elt token :key))
+  (cond (prefix
+	 `((setq ,key (concat ,prefix "\s" ,key))
+	   ,@(oo-bind-macro-handle-token token interpreters)))
+	(t
+	 (oo-bind-macro-handle-token token interpreters))))
+
+(defvar oo-bind-macro-handlers
+  '(oo-bind-macro-handle-localleader
+    oo-bind-macro-handle-defer-if-map-unbound
+    oo-bind-macro-handle-init-evil-binds
+    oo-bind-macro-handle-after-evil-maybe
+    oo-bind-macro-handle-stop-var-leaks
+    oo-bind-macro-handle-alt
+    oo-bind-macro-handle-autoload
+    oo-bind-macro-handle-concat-prefix
+    oo-bind-macro-handle-which-key
+    oo-bind-macro-handle-kbd
+    oo-bind-macro-handle-evil-bind
+    oo-bind-macro-handle-bind)
+  "List of INTERPRETERS that convert a token to lisp forms.
+A INTERPRETER is a function with two arguments, a token and a list of
+interpreters.  A INTERPRETER should return a list of forms.
+See `bind!'.")
+
+(defun! oo-bind-macro-handle-which-key (token interpreters)
+  "Return form that registers binding specified by TOKEN with `which-!key'."
+  (let! key (map-elt token :key))
+  (let! wk (or (map-elt token :wk) (map-elt token :which-key)))
+  (let! state (map-elt token :state))
+  (let! map (alet (map-elt token :map)
+	      (if (not (member state '(nil global)))
+		  `(evil-get-auxiliary-keymap ,it ',state)
+		it)))
+  (let! wk-fn 'which-key-add-keymap-based-replacements)
+  (let! forms (oo-bind-macro-handle-token token interpreters))
+  (let! wk-prefix (map-elt token :wk-prefix))
+  (let! prefix (map-elt token :prefix))
+  (cond ((and map key wk)
+	 (pushing! forms `(oo-call-after-load '(which-key evil) #',wk-fn ,map ,key ,wk)))
+	((and map key wk)
+	 (pushing! forms `(oo-call-after-load 'which-key #',wk-fn ,map ,key ,wk))))
+  (when (and prefix wk-prefix)
+    (pushing! forms `(oo-call-after-load 'which-key #',wk-fn ,map ,prefix ,wk-prefix)))
+  forms)
+
+(defun! oo-bind-macro-merge-token (token)
+  "Join necessary values for token."
+  (let! done nil)
+  (for! ((key . values) token)
+    (pcase key
+      (:prefix
+       (updating! (map-elt done key) (lambda (x) (list (string-join (append x values) "\s")))))
+      (_
+       (appending! (map-elt done key) values))))
+  (nreverse done))
+
+(defun! oo-bind-macro-handle-bind (token interpreters)
+  "Define a binding using `define-key'."
+  (let! map (map-elt token :map))
+  (let! key (map-elt token :key))
+  (let! def (map-elt token :def))
+  (let! state (map-elt token :state))
+  (if (and map key (map-contains-key token :def) (member state '(nil global)))
+      `((oo-log-keybinding ',map ,key ,def)
+	(define-key ,map ,key ,def)
+	,@(oo-bind-macro-handle-token token interpreters))
+    (oo-bind-macro-handle-token token interpreters)))
+
+(defun! oo-bind-macro-handle-kbd (token interpreters)
+  "Apply kbd to key if key is a string."
+  (let! key (map-elt token :key))
+  (let! forms (oo-bind-macro-handle-token token interpreters))
+  (if key
+      (cons `(setq ,key (if (stringp ,key) (kbd ,key) ,key)) forms)
+    forms))
+
+(defun! oo-bind-macro-handle-stop-var-leaks (token interpreters)
+  "Prevent variable leakage from evaluation save variables."
+  (let! key (map-elt token :key))
+  (when key
+    (let! key-var (gensym "key-"))
+    (collecting! let-binds (list key-var key))
+    (setq token (map-insert token :key key-var)))
+  (let! def (map-elt token :def))
+  (when def
+    (let! def-var (gensym "def-"))
+    (collecting! let-binds (list def-var def))
+    (setq token (map-insert token :def def-var)))
+  (if let-binds
+      `((let ,let-binds ,@(oo-bind-macro-handle-token token interpreters)))
+    (oo-bind-macro-handle-token token interpreters)))
+
+(defun! oo-bind-macro-handle-token (token interpreters)
+  "Return a list of forms created from applying INTERPRETERS to TOKEN.
+INTERPRETERS are a list of function symbols that are applied to TOKEN."
+  (let! (interpreter-fn . rest) interpreters)
+  (funcall (or interpreter-fn #'ignore) token rest))
+
+(defun! oo-bind-macro-handle-autoload (token interpreters)
+  "Autoload binding definition."
+  (let! def (map-elt token :def))
+  (let! autoload (map-elt token :autoload))
+  (cond ((and def autoload)
+	 `((when (and (symbolp ,def) (not (member ,def '(t nil))))
+	     (setq ,def (oo-autoload-fn ,def ',autoload)))
+	   ,@(oo-bind-macro-handle-token token interpreters)))
+	(t
+	 (oo-bind-macro-handle-token token interpreters))))
+
+(defun! oo-bind-macro-handle-defer-if-map-unbound (token interpreters)
+  "Return a form that defers keybinding forms until keymap is unbound."
+  (when (and (not (map-contains-key token :map)) (map-contains-key token :key))
+    (setq token (map-insert token :map 'global-map)))
+  (let! map (map-elt token :map))
+  (let! forms (oo-bind-macro-handle-token token interpreters))
+  (if (and map (symbolp map) (not (member map '(global-map))))
+      `((if (boundp ',map)
+	    (progn ,@forms)
+	  (appending! (map-elt oo-deferred-key-bindings ',map) ',forms)))
+    forms))
+
+(defun! oo-bind-macro-tokenize-clause (clause)
+  "Return a list of tokens generated from CLAUSES."
+  (dolist (raw (oo-bind-macro-generate-raw-tokens clause))
+    (let! merged (oo-bind-macro-merge-token raw))
+    (appending! tokens (oo-bind-macro-separate merged)))
+  tokens)
+
+(defun! oo-bind-macro-separate (raw-tokens)
+  "Divide tokens such that each token has only one."
+  (let! heads (list nil))
+  (while raw-tokens
+    ;; (let! (pair &as key . values) (pop raw-tokens))
+    (let! pair (pop raw-tokens))
+    (let! (key . values) pair)
+    (let! new-heads nil)
+    (for! (value values)
+      (for! (head heads)
+	(pushing! new-heads (cons (cons key value) head))))
+    (let! heads new-heads))
+  (mapcar #'reverse heads))
+
+(defun! oo-bind-macro-get-tokenites (clause)
+  "Return \(TOKENITES CLAUSE) from CLAUSE.
+Tokenites is a list of token attributes."
+  (let! tokenites
+	(pcase clause
+	  (`(:minor-mode ,(pred symbolp) . ,(guard t))
+	   (list (list (pop clause) (pop clause))))
+	  (`(:alt ,(pred symbolp) ,(pred symbolp) . ,(guard t))
+	   (list (list (pop clause) (cons (pop clause) (pop clause)))))
+	  (`(:state ,(pred oo-non-keyword-symbol-p) . ,(guard t))
+	   (list (cons (pop clause) (pop! clause #'oo-non-keyword-symbol-p))))
+	  (`(,(or :map :localleader) ,(pred oo-non-keyword-symbol-p) . ,(guard t))
+	   (list (cons (pop clause) (pop! clause #'oo-non-keyword-symbol-p))))
+	  (`(,(pred stringp) . nil)
+	   (list (list :key (pop clause)) (list :def nil)))
+	  (`(:wk ,(pred stringp) :prefix ,(pred stringp) . nil)
+	   (pop clause)
+	   (list (list :wk-prefix (pop clause))
+		 (list (pop clause) (pop clause))))
+	  (`(:wk ,(pred stringp) . ,(guard t))
+	   (list (list (pop clause) (pop clause))))
+	  (`(,(or :when :def :prefix) ,_ . ,(guard t))
+	   (list (pop! clause 2)))
+	  (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) (function ,(pred symbolp)) . ,(guard t))
+	   `((:key ,(pop clause)) (:def ,(pop clause))))
+	  (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) ,(pred symbolp) . nil)
+	   `((:key ,(pop clause)) (:def ,(pop clause))))
+	  (`(:key ,_ . ,(guard t))
+	   (let! tokenites (list (pop! clause 2)))
+	   (cond ((equal :def (car clause))
+		  (affixing! tokenite (list (pop clause) (pop clause))))
+		 ((keywordp (car clause))
+		  (affixing! tokenites (list :def nil)))
+		 (t
+		  (affixing! tokenites (list :def (pop clause)))))
+	   tokenites)
+	  (`(,(and (pred keywordp) (app oo-bind-macro-evil-keyword-to-states states)) ,_ ,_ . ,(guard t))
+	   (pop clause)
+	   (list (cons :state states) (list :key (pop clause)) (list :def (pop clause))))
+	  (`(,(or (pred stringp) (pred vectorp)) :wk . ,(guard t))
+	   (list (list :key (pop clause)) (list :def nil) (list :ignore t)))
+	  (_
+	   (error "No matcher for `%S' of `%S'" (car clause) clause))))
+  (list tokenites clause))
+
+(defun oo-bind-macro-keybinding-p (token)
+  "Return non-nil if TOKEN is a binding token."
+  (or (and (assoc :def token) (assoc :key token)) (assoc :alt token)))
+
+(defun! oo-bind-macro-generate-raw-tokens (clause)
+  "Return list of tokens specified by CLAUSE."
+  (let! stack (list (list clause nil 0)))
+  (while stack
+    (pcase (car stack)
+      (`(nil nil ,level)
+       (let! tokenites (mapcar #'-second-item (pop! leaves (lambda (x) (= (1+ level) (car x))))))
+       (let! (bindings settings) (-separate #'oo-bind-macro-keybinding-p tokenites))
+       (let! settings (reverse (apply #'append settings)))
+       (let! new-leaves (mapcar (lambda (x) (list level (append settings x))) bindings))
+       (prepending! leaves new-leaves)
+       (pop stack))
+      (`(nil ,tokenites ,level)
+       (pushing! leaves (list level tokenites))
+       (pop stack))
+      (`((,(and (pred listp) car) . ,(and (guard t) cdr)) ,_ ,_)
+       (setf (nth 0 (car stack)) cdr)
+       (pushing! stack (list car nil (length stack))))
+      (`(,(and (pred listp) clause) ,_ ,_)
+       (let! (tokenites updated) (oo-bind-macro-get-tokenites clause))
+       (setf (nth 0 (car stack)) updated)
+       (appending! (nth 1 (car stack)) tokenites))
+      (_
+       (error "Unknown case `%S'" (car stack)))))
+  (nreverse (mapcar #'cadr leaves)))
+
+(adjoining! log4e-log-level-alist '(keybinding . 3))
+(log4e--def-level-logger "oo" "log-keybinding" 'keybinding)
+(defalias 'oo-log-keybinding 'oo--log-keybinding)
+(defun oo-log-keybinding (key map def &optional state)
+  (cond (state
+	 (oo--log-keybinding "%s %s %s @ %s" key map def state))
+	(t
+	 (oo--log-keybinding "%s %s %s" key map def))))
+
+(defun! oo-bind-macro-handle-localleader (token interpreters)
+  "Return form that processes localleader."
+  (let! localleader (map-elt token :localleader))
+  (let! prefix (map-elt token :prefix))
+  (cond (localleader
+	 (for! ((leader . state) oo-bind-macro-state-to-localleaders)
+	   (let ((token token))
+	     (let! new-prefix (if prefix `(concat ,leader "\s" ,prefix) leader))
+	     (updating! token #'map-insert :prefix new-prefix)
+	     (updating! token #'map-insert :map localleader)
+	     (updating! token #'map-insert :state state)
+	     (appending! forms (oo-bind-macro-handle-token token interpreters))))
+	 forms)
+	(t
+	 (oo-bind-macro-handle-token token interpreters))))
+
+(defmacro! bind! (&rest clause)
+  "An extensible macro for binding keys."
+  (for! (token (oo-bind-macro-tokenize-clause clause))
+    (appending! forms (oo-bind-macro-handle-token token oo-bind-macro-handlers)))
+  (macroexp-progn forms))
+
+(defvar oo-window-map (make-sparse-keymap))
+(define-prefix-command 'oo/window-prefix-command 'oo-window-map)
+(bind! (:map oo-leader-map)
+       (:wk "window" "w" #'oo/window-prefix-command))
+
+(bind! (:map oo-window-map)
+       ("M" #'maximize-window)
+       ("m" #'minimize-window)
+       ("b" #'balance-windows)
+       ("z" #'zoom-window-zoom))
+
+(bind! (:map oo-window-map)
+       (:wk "left"         "h" #'windmove-left)
+       (:wk "down"         "j" #'windmove-down)
+       (:wk "up"           "k" #'windmove-up)
+       (:wk "right"        "l" #'windmove-right)
+       (:wk "ace"          "o" #'ace-window)
+       (:wk "delete"       "d" #'delete-window)
+       (:wk "delete others""D" #'delete-other-windows)
+       (:wk "vsplit"       "v" #'split-window-horizontally)
+       (:wk "split"        "s" #'split-window-vertically)
+       (:wk "vsplit+focus" "V" #'oo/split-window-right-and-focus)
+       (:wk "split+focus"  "v" #'oo/split-window-below-and-focus)
+       (:wk "transpose"    "t" #'transpose-frame))
+
+(defvar oo-buffer-map (make-sparse-keymap))
+(define-prefix-command 'oo/buffer-prefix-command 'oo-buffer-map)
+(bind! (:map oo-leader-map)
+       (:wk "buffer" "b" #'oo/buffer-prefix-command))
+
+(bind! (:map oo-buffer-map)
+       ("w" #'save-buffer)
+       ("x" #'buffer-expose)
+       ((:wk "kill" :prefix "k")
+	("c" #'kill-current-buffer))
+       ("j" #'pop-to-buffer)
+       ("b" #'switch-to-buffer)
+       ("n" #'next-buffer)
+       ("p" #'previous-buffer)
+       ("d" #'display-buffer))
+
+(defvar oo-quit-map (make-sparse-keymap))
+(define-prefix-command 'oo/quit-prefix-command 'oo-quit-map)
+(bind! (:map oo-leader-map)
+       (:wk "quit" "q" #'oo/quit-prefix-command))
+
+(defvar oo-quick-map (make-sparse-keymap))
+(define-prefix-command 'oo/quick-prefix-command 'oo-quick-map)
+(bind! (:map oo-leader-map)
+       (:wk "quick" "j" #'oo/quick-prefix-command))
+
+(defvar oo-app-map (make-sparse-keymap))
+(define-prefix-command 'oo/app-prefix-command 'oo-app-map)
+(bind! (:map oo-leader-map)
+       (:wk "app" "a" #'oo/app-prefix-command))
+
+(defvar oo-toggle-map (make-sparse-keymap))
+(define-prefix-command 'oo/toggle-prefix-command 'oo-toggle-map)
+(bind! (:map oo-leader-map "t" #'oo/toggle-prefix-command))
+
+(defvar oo-help-map (make-sparse-keymap))
+(define-prefix-command 'oo/help-prefix-command 'oo-help-map)
+(bind! (:map oo-leader-map "h" #'oo/help-prefix-command))
+
+(defvar oo-package-map (make-sparse-keymap))
+(define-prefix-command 'oo/package-prefix-command 'oo-package-map)
+(bind! (:map oo-leader-map)
+       (:wk "package" "p" #'oo/package-prefix-command))
+
+(bind! (:map oo-quit-map)
+       (:wk "quit emacs" "q" #'save-buffers-kill-emacs))
+
+(bind! (:map oo-quit-map)
+       (:wk "quit and restart" "r" #'restart-emacs))
+
+;; Note that this can't work with `on-first-input-hook' because which-key
+;; doesn't happen on first keypress.  It needs to be in the startup hook.
+(oo-add-hook 'emacs-startup-hook #'which-key-mode)
+
+(set! which-key-sort-uppercase-first nil)
+(set! which-key-max-display-columns nil)
+(set! which-key-add-column-padding 1)
+(set! which-key-min-display-lines 6)
+(set! which-key-side-window-slot -10)
+(set! which-key-sort-order #'which-key-prefix-then-key-order)
+(set! which-key-popup-type 'side-window)
+(set! which-key-idle-delay 0.8)
+
+;; (set! line-spacing 3 :hook which-key-init-buffer-hook :local t)
+
+(set! which-key-show-transient-maps t)
+(set! which-key-show-operator-state-maps t)
+
+(bind! (:map oo-override-mode-map)
+       (:g   oo-emacs-leader-key  #'oo/leader-prefix-command)
+       (:i   oo-insert-leader-key #'oo/leader-prefix-command)
+       (:nmv oo-normal-leader-key #'oo/leader-prefix-command))
+
+(oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
+
+(set! idle-require-load-break 5)
+(set! idle-require-idle-delay 10)
+
+(set! gcmh-high-cons-threshold (* 8 1024 1024))
+(set! gcmh-low-cons-threshold (* 4 1024 1024))
+
+(set! gcmh-idle-delay 'auto)
+
+(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+
+(defvar oo-initial-buffer-choice-hook nil
+  "Hook run to choose initial buffer.
+Each hook should return either a buffer to be displayed or a boolean.
+For what buffer is displayed in the case of a boolean see
+`initial-buffer-choice'.")
+
+(defun oo-run-initial-buffer-choice-hook ()
+  "Run `oo-initial-buffer-choice-hook'."
+  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
+	      (get-buffer-create "*scratch*"))
+    (oo-log-info "set initial buffer to %s" (buffer-name))))
+
+(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
+
+(defhook! minibuffer-setup-hook&boost-garbage-collection ()
+  "Boost garbage collection settings to `gcmh-high-cons-threshold"
+  (setq gc-cons-threshold gcmh-high-cons-threshold))
+
+(defhook! minibuffer-exit-hook&defer-garbage-collection (minibuffer-exit-hook :append t)
+  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+  (setq gc-cons-threshold gcmh-low-cons-threshold))
+
+(set! helm-candidate-number-limit 50)
+
+(oo-popup-at-bottom "\\*Helm")
+
+(bind! (:map helm-map)
+       (:ie "TAB" #'helm-next-line)
+       (:ie "C-j" #'helm-next-line)
+       (:ie "C-k" #'helm-previous-line))
+
+(bind! (:map helm-map)
+       (:ie "C-a" #'helm-select-action)
+       (:ie "C-m" #'helm-toggle-visible-mark-forward)
+       (:ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
+       ;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
+       (:ie "S-TAB" #'helm-mark-current-line))
+
+(bind! (:when (bound-and-true-p helm-mode))
+       (:alt oo/set-font-face helm-select-xfont)
+       (:alt apropos                  helm-apropos)
+       (:alt find-library             helm-locate-library)
+       (:alt execute-extended-command helm-M-x)
+       (:alt find-file                helm-find-files)
+       (:alt locate                   helm-locate)
+       (:alt imenu                    helm-semantic-or-imenu)
+       (:alt noop-show-kill-ring      helm-show-kill-ring)
+       (:alt recentf                  helm-recentf)
+       (:alt switch-to-buffer         helm-mini))
+
+(set! consult-preview-key nil)
+
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+
+(set! recentf-max-menu-items 0)
+(set! recentf-max-saved-items 700)
+(set! recentf-save-file (concat oo-cache-dir "recentf"))
+(set! recentf-auto-cleanup (* 60 10))
+(set! recentf-filename-handlers '(file-truename))
+
+(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
+(oo-add-hook 'kill-emacs-hook #'recentf-save-list)
+
+(oo-silence #'recentf-mode #'recentf-cleanup #'recentf-save-list)
+
+(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
+(when (display-graphic-p)
+  (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode))
+;; Declaratively add hooks.
+;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
+
+(set! crm-separator ",")
+
+(set! vertico-quick1 "abcdefghijklmnopqrstuvwxyz")
+
+(set! vertico-count-format '("%-6s " . "%2$s"))
+(set! vertico-count 15)
+
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
+
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
+
+(oo-popup-at-bottom "\\*Vertico")
+
+(defhook! enable-orderless (vertico-mode-hook :expire t)
+  (when (require 'orderless nil t)
+    (setq completion-styles '(orderless))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides '((file (styles partial-completion))))
+    (alet '(orderless-strict-leading-initialism orderless-initialism orderless-regexp)
+      (set! orderless-matching-styles it))))
+
+(defun oo-dashboard-init-info (&rest _)
+  (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
+(set! dashboard-init-info #'oo-dashboard-init-info)
+
+(set! dashboard-banner-logo-title "Welcome!")
+(set! dashboard-set-footer nil)
+(set! dashboard-items nil)
+(set! dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
+(set! dashboard-center-content t)
+;; (set! dashboard-banner-logo-title "Welcome!")
+
+(defhook! create-dashboard (oo-initial-buffer-choice-hook)
+  (when (require 'dashboard nil t)
+    (aprog1 (get-buffer-create dashboard-buffer-name)
+      (with-current-buffer it
+	(dashboard-insert-startupify-lists)))))
+
+(defun oo-set-window-divider-face (&rest _)
+  "Set the window divider face."
+  (set-face-foreground 'window-divider "black"))
+
+(oo-add-hook 'after-init-hook #'oo-set-window-divider-face :depth 11)
+
+(oo-add-advice #'load-theme :after #'oo-set-window-divider-face)
+
+(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
+
+(set! window-divider-default-bottom-width 7)
+(set! window-divider-default-right-width 7)
+
+(setq window-divider-default-places t)
+
+(oo-add-hook 'after-init-hook #'load-theme 'modus-operandi)
+
+(set! lambda-themes-set-italic-comments nil)
+(set! lambda-themes-set-italic-keywords nil)
+
+(set! lambda-themes-set-variable-pitch nil)
+
+(set! modus-themes-headings '((1 . (rainbow light 1.4))
+			                  (2 . (rainbow light 1.3))
+			                  (3 . (rainbow light 1.2))
+			                  (4 . (rainbow light 1.1))
+			                  (t . (rainbow light 1.0))))
+
+(set! mu4e-compose-signature-auto-include t)
+(set! mu4e-compose-format-flowed t)
+
+(set! mu4e-headers-auto-update t)
+
+(bind! (:map dired-mode-map)
+       (:nm "h" #'dired-up-directory))
+
+(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+
+(set! dired-recursive-copies 'always)
+(set! dired-recursive-deletes 'always)
+
+(oo-call-after-load 'dirvish #'dirvish-override-dired-mode 1)
+
+(set! dirvish-use-mode-line nil)
+
+(set! dirvish-attributes '(file-size all-the-icons subtree-state))
+
+(bind! (:map oo-app-map "d" #'dired))
+
+(bind! (:alt dired dirvish))
+
+(set! dirvish-default-layout nil)
+
+(set! idle-require-symbols (append '(em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls em-prompt em-term em-unix)
+                                   idle-require-symbols))
+
+(oo-popup-at-bottom "\\*eshell")
+
+(set! eshell-directory-name (concat oo-cache-dir "eshell/"))
+(set! eshell-history-file-name (concat eshell-directory-name "history"))
+
+(set! eshell-banner-message "")
+
+(set! eshell-hist-ignoredups t)
+
+(set! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
+(set! emms-directory (expand-file-name "emms/" oo-cache-dir))
+
+(oo-call-after-load 'emms #'require 'emms-player-mpv)
+(set! emms-player-list '(emms-player-mpv))
+
+(oo-popup-at-bottom "\\*[Hh]elp")
+
+(set! org-auto-tangle-default t)
+
+(defun! +org/choose-capture-template ()
+  "Choose a capture template."
+  (interactive)
+  (dolist (template org-capture-templates)
+    (let! (keys name) template)
+    (collecting! alist (cons name keys)))
+  (let! selected (completing-read "capture template: " alist nil t))
+  (org-capture nil (alist-get selected alist nil nil #'string=)))
+
+(oo-popup-at-bottom "CAPTURE[^z-a]+")
+
+(oo-popup-at-bottom "\\*Org Src")
+
+(gv-define-expander org-ml-headline-get-section
+  (lambda (do place)
+    (gv-letplace (getter setter) place
+      (funcall do `(org-ml-headline-get-section ,getter)
+               (lambda (v)
+                 (macroexp-let2 nil v v
+                   `(progn
+                      ,(funcall setter `(org-ml-headline-set-section ,v ,getter)))))))))
+
+(bind! (:map org-mode-map)
+       (:n "C" #'org-refile-copy))
+
+(set! org-refile-target-verify-function (lambda () (not (+org-has-src-block-p))))
+
+(defun! +org-has-src-block-p ()
+  "Return non-nil if current headline has a source block."
+  (save-excursion
+    (let! beg (point))
+    (let! end (or (outline-next-heading) (point-max)))
+    (goto-char beg)
+    (and (save-match-data (re-search-forward "^#\\+begin_src" end t)) t)))
+
+(set! org-superstar-leading-bullet ?\s)
+(set! org-superstar-special-todo-items t)
+(set! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
+(oo-add-hook 'org-mode-hook #'org-superstar-mode)
+
+(set! org-refile-use-outline-path 'file)
+
+(defun +org-directory-files ()
+  "Return a list of org files in the `org-directory'."
+  (directory-files org-directory t "\\.org\\'"))
+
+(set! org-directory (expand-file-name "~/dotfiles"))
+
+(set! org-archive-location (concat org-directory "archive.org::"))
+
+(set! org-default-notes-file null-device)
+
+(set! org-refile-use-cache nil)
+
+(setq org-outline-path-complete-in-steps nil)
+
+(set! org-refile-targets '((+org-directory-files :maxlevel . 10)))
+
+(set! org-archive-save-context-info nil)
+
+(set! org-refile-allow-creating-parent-nodes t)
+
+(set! org-src-preserve-indentation t)
+(set! org-edit-src-content-indentation 0)
+
+(set! org-src-ask-before-returning-to-edit-buffer nil)
+
+(defun! +org/dwim-next-visible-heading ()
+  (interactive)
+  (+org/dwim-previous-visible-heading t))
+
+(defun! +org/dwim-previous-visible-heading (&optional next)
+  (interactive)
+  (let! case-fold-search nil)
+  (let! regexp "^\\*+\\(?: +[[:upper:]]+\\)?\\(?: +\\[#.]\\)?\\(?: +\\(.*?\\)\\)?")
+  (if next
+      (org-next-visible-heading 1)
+    (org-previous-visible-heading 1))
+  (org-back-to-heading)
+  (save-match-data
+    (looking-at regexp)
+    (goto-char (match-beginning 1))))
+
+(defun +org/disable-tangling ()
+  "Disable tangling source block at point."
+  (interactive)
+  (org-entry-put (point) "HEADER-ARGS" ":tangle no"))
+
+(set! org-babel-default-header-args
+      '((:session . "none")
+        (:results . "silent")
+        (:exports . "code")
+        (:mkdirp  . "yes")
+        (:cache   .  "no")
+        (:noweb   .  "no")
+        (:hlines  .  "no")
+        (:tangle  .  "no")))
+
+(set! org-tags-column 80)
+
+(defun! +org/open-heading-above (&optional below)
+  "Insert a heading above the current heading."
+  (interactive)
+  (ignore-errors (org-back-to-heading))
+  (let! level (if (org-at-heading-p)
+		          (car (org-heading-components))
+		        1))
+  (when (and below (org-at-heading-p))
+    (or (outline-next-heading) (org-end-of-subtree)))
+  (let->>! headline
+    (org-ml-build-headline! :level level)
+	(org-ml-headline-set-node-property "ID" (org-id-new)))
+  (org-ml-insert (point) headline)
+  (run-hooks 'org-insert-heading-hook))
+
+(defun +org/open-heading-below ()
+  (interactive)
+  (+org/open-heading-above t))
+
+(defun! +org/dwim-insert-src-block ()
+  "Insert source block for the current headline if it does not already exist."
+  (interactive)
+  (let! lang (completing-read "Language: " (mapcar 'car org-src-lang-modes)))
+  (let! headline (org-ml-parse-this-headline))
+  (let! section (org-ml-headline-get-section headline))
+  (when (--any-p (equal 'src-block (org-element-type it)) section) (return!))
+  (let! src-block (org-ml-build-src-block :value "" :language lang))
+  (snocing! (org-ml-headline-get-section headline) src-block)
+  (org-ml-update-this-headline (-const headline)))
+
+(defun! +org/dwim-edit-src-code ()
+  (interactive)
+  (mapc #'require '(edit-indirect org-ml))
+  (unless (org-in-src-block-p) (org-next-block 1))
+  (let! (beg end) (org-src--contents-area (org-ml-parse-this-element)))
+  (let! parent-buffer (current-buffer))
+  (edit-indirect-region beg end t))
+
+(set! org-hide-emphasis-markers t)
+
+(set! org-fontify-emphasized-text t)
+
+(set! org-adapt-indentation nil)
+
+(set! org-edit-src-persistent-message nil)
+
+(defun! +org/update-tags ()
+  "Update tags for the current entry."
+  (interactive)
+  (let->>! all
+    (org-map-entries #'org-get-tags nil (+org-directory-files))
+    (apply #'append)
+    (-non-nil)
+    (-uniq))
+  (let! old (org-get-tags))
+  (let! new (completing-read-multiple "Tags: " all))
+  (let! updated (-uniq (append (-difference old new) (-difference new old))))
+  (org-set-tags updated))
+
+(set! org-id-track-globally t)
+(set! org-id-locations-file (concat oo-cache-dir "org-id-locations"))
+
+(set! org-id-method 'ts)
+
+(set! org-src-window-setup 'plain)
+
+(set! org-id-link-to-org-use-id t)
+
+(defun! +org/add-tangle-header-arg ()
+  "Add header arguments to current headline."
+  (interactive)
+  ;; Find tangle header arguments from other source blocks.
+  (let! files (directory-files org-directory t "\\.org\\'"))
+  (let! regexp ":tangle \\([^[:space:]]+\\)")
+  (flet! tangle-file ()
+    (awhen (org-entry-get (point) "HEADER-ARGS")
+      (-second-item (s-match regexp (or it "")))))
+  (let! header-args (-non-nil (-uniq (org-map-entries #'tangle-file nil files))))
+  (let! choosen (completing-read "files: " header-args))
+  ;; Now replace based on what was selected.
+  (let! header-args (org-entry-get (point) "HEADER-ARGS" ))
+  (org-entry-put (point) "HEADER-ARGS"))
+
+(bind! (:map org-mode-map)
+       (:n "TAB" #'oo/toggle-fold-subtree))
+
+(defun! oo/toggle-fold-subtree ()
+  "Toggle folding of current subtree."
+  (interactive)
+  (let! folded-p (outline-invisible-p (line-end-position)))
+  (outline-toggle-children)
+  (save-excursion
+    (next-line 1)
+    (when (org-at-drawer-p)
+      (org-fold-hide-drawer-toggle))))
+
+(defun +org/dwim-eval-src-block ()
+  "Eval block contents."
+  (interactive)
+  (unless (org-at-heading-p)
+    (user-error "Not in source block"))
+  (save-window-excursion
+    (org-babel-execute-subtree)))
+
+(set! org-src-lang-modes (add-to-list 'org-src-lang-modes '("emacs-lisp" . emacs-lisp)))
+
+(oo-add-hook 'org-insert-heading-hook #'evil-append 1)
+
+(bind! (:map oo-toggle-map)
+       ("f" #'oo/set-font-face))
+
+(bind! (:map oo-app-map)
+       ("E" #'restart-emacs-start-new-emacs))
+
+(bind! ((:map oo-quick-map)
+        (:wk "capture" "j" #'org-capture))
+       ((:map oo-app-map)
+        (:wk "capture" "a" #'org-capture)
+        (:wk "capture" "j" #'org-capture)))
+
+(bind! (:localleader org-mode-map)
+       (:wk "execute subtree" "E" #'org-babel-execute-subtree)
+       ("w" #'widen)
+       (:wk "narrow" "n" #'org-narrow-to-subtree)
+       (:wk "refile" "r" #'org-refile)
+       (:wk "tangle" "t" #'org-babel-tangle))
+
+(bind! (:map oo-leader-map)
+       (:wk "eval" :prefix "e")
+       ("e" #'eval-expression))
+
+(bind! (:localleader emacs-lisp-mode-map)
+       (:wk "eval" :prefix "e")
+       ("r" #'lispy-eval-and-replace)
+       ("b" #'eval-buffer)
+       ("d" #'eval-defun)
+       ("e" #'eval-expression)
+       ("l" #'eval-last-sexp)
+       ("p" #'eval-print-last-sexp))
+
+(bind! (:map oo-app-map "e" #'eshell))
+
+(bind! (:nm "+" #'text-scale-increase)
+       (:nm "-" #'text-scale-decrease))
+
+(bind! (:map oo-toggle-map)
+       ("r" #'read-only-mode)
+       ("t" #'load-theme)
+       ("c" #'caps-lock-mode)
+       ("r" #'redacted-mode)
+       ("s" #'smartparens-mode)
+       ("d" #'toggle-debug-on-error))
+
+(bind! (:map oo-miscellany-map "k" #'bookmark-set))
+
+(defvar oo-miscellany-map (make-sparse-keymap))
+(define-prefix-command 'oo/miscellany-prefix-command 'oo-miscellany-map)
+(bind! (:map oo-leader-map)
+       (:wk "miscellany" "k" #'oo/miscellany-prefix-command))
+
+(bind! (:map oo-help-map)
+       ("i" #'info)
+       ("m" #'describe-mode)
+       ("f" #'describe-function)
+       ("v" #'describe-variable)
+       ("h" #'describe-variable)
+       ("C" #'describe-char)
+       ("k" #'describe-key)
+       ("a" #'apropos)
+       ("w" #'woman))
+
+(bind! (:when (require 'helpful nil t))
+       (:alt describe-function helpful-callable)
+       (:alt describe-command helpful-command)
+       (:alt describe-variable helpful-variable)
+       (:alt describe-key helpful-key))
+
+(bind! (:map vertico-map)
+       (:state insert)
+       ("TAB" #'vertico-next)
+       ("C-k" #'vertico-previous)
+       ("C-j" #'vertico-next)
+       (";" #'vertico-quick-exit)
+       ("C-;" #'vertico-quick-exit)
+       ([backtab] #'vertico-previous))
+
+(bind! ((:map vertico-map)
+	(:i "C-o" #'embark-act)
+	(:i "C-," #'embark-collect))
+       (:n "C-o" #'embark-act))
+
+(bind! (:map oo-leader-map "SPC" #'execute-extended-command)
+       (:map oo-override-mode-map :nmv ";" #'execute-extended-command)
+       (:i "A-x" #'execute-extended-command)
+       (:i "M-x" #'execute-extended-command))
+
+(bind! (:map org-mode-map)
+       (:n "j" #'+org/dwim-next-visible-heading)
+       (:n "k" #'+org/dwim-previous-visible-heading))
+
+(bind! (:map org-mode-map)
+       (:n "p" #'ignore))
+
+(bind! (:map org-mode-map)
+       (:n "Y" #'org-copy-subtree)
+       (:n "D" #'org-cut-subtree)
+       (:n "P" #'org-paste-subtree))
+
+(bind! (:map org-mode-map)
+       (:n "R" #'org-refile))
+
+(bind! (:map org-mode-map)
+       (:n "b" #'+org/dwim-insert-src-block))
+
+(bind! (:map org-mode-map)
+       (:n "o" #'+org/open-heading-below)
+       (:n "O" #'+org/open-heading-above))
+
+(oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
+(oo-add-hook 'prog-mode-hook #'corfu-mode)
+
+(set! org-confirm-babel-evaluate nil)
+
+(bind! (:map org-mode-map)
+       (:n "e" #'+org/dwim-eval-src-block))
+
+(bind! (:map org-mode-map)
+       (:n "t" #'+org/update-tags))
+
+(bind! (:map org-mode-map)
+       (:n ">" #'org-demote-subtree)
+       (:n "<" #'org-promote-subtree))
+
+(bind! (:map org-mode-map)
+       (:n "K" #'org-metaup)
+       (:n "J" #'org-metadown))
+
+(bind! (:map oo-window-map)
+       (:wk "left"  "h" #'windmove-left)
+       (:wk "down"  "j" #'windmove-down)
+       (:wk "up"    "k" #'windmove-up)
+       (:wk "right" "l" #'windmove-right))
+
+(bind! (:map oo-window-map)
+       (:wk "delete"        "d" #'delete-window)
+       (:wk "delete others" "D" #'delete-other-windows))
+
+(bind! (:map oo-window-map)
+       (:wk "vsplit"       "v" #'split-window-horizontally)
+       (:wk "split"        "s" #'split-window-vertically)
+       (:wk "vsplit+focus" "V" #'oo/split-window-right-and-focus)
+       (:wk "split+focus"  "v" #'oo/split-window-below-and-focus))
+
+(bind! (:n "gr" 'evil-operator-eval))
+
+(bind! (:when (require 'eros nil t))
+       (:alt eval-last-sexp eros-eval-last-sexp))
+
+(bind! (:map evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+       (:map evil-outer-text-objects-map "f" #'evil-cp-a-form))
+
+(bind! (:minor-mode org-src-mode)
+       (:localleader org-src-mode-map)
+       ("," #'org-edit-src-exit)
+       ("a" #'org-edit-src-abort)
+       ("c" #'org-edit-src-exit))
+
+(defun! +org/dwim-edit-src-code ()
+  "Edit nearest source block."
+  (interactive)
+  (unless (org-in-src-block-p) (org-next-block 1))
+  (call-interactively #'org-edit-src-code))
+
+(bind! (:alt org-edit-src-code +org/dwim-edit-src-code))
+
+(bind! (:localleader org-mode-map)
+       ("," #'org-edit-src-code)
+       ((:wk "edit" :prefix "e")
+	(:wk "source block" "s" #'org-edit-src-code)))
+
+(bind! (:localleader emacs-lisp-mode-map)
+       (:wk "macrostep" :prefix "m")
+       ("e" #'macrostep-expand)
+       ("c" #'macrostep-collapse)
+       ("C" #'macrostep-collapse-all))
+
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
+
+(bind! (:map lispyville-mode-map)
+       (:i "SPC" #'lispy-space)
+       (:i ";" #'lispy-comment))
+
+(setq corfu-bar-width 0)
+
+(set! sp-show-pair-delay 0.2)
+;; fix paren highlighting in normal mode
+;; (set! sp-show-pair-from-inside nil)
+;; sp-cancel-autoskip-on-backward-movement nil
+
+(set! corfu-quit-at-boundary nil)
+(set! corfu-auto t)
+(set! corfu-auto-delay 0.1)
+(set! corfu-auto-prefix 2)
+
+(setq-default fill-column 100)
+
+(set! sp-highlight-wrap-tag-overlay nil)
+(set! sp-highlight-pair-overlay nil)
+(set! sp-highlight-wrap-overlay nil)
+
+(defadvice! disable-old-themes (around load-theme)
+  "Disable old themes before loading new ones."
+  (:args orig-fn &rest args)
+  (mapc #'disable-theme custom-enabled-themes)
+  (apply orig-fn args))
+
+(bind! (:state visual)
+       ("V" #'er/contract-region)
+       ("v" #'er/expand-region))
+
+(defvar oo-file-map (make-sparse-keymap))
+(define-prefix-command 'oo/file-prefix-command 'oo-file-map)
+(bind! (:map oo-leader-map)
+       (:wk "file" "f" #'oo/file-prefix-command))
+
+(bind! (:when (require 'consult nil t))
+       (:alt switch-to-buffer consult-buffer)
+       (:alt yank-pop consult-yank-pop)
+       (:alt apropos consult-apropos)
+       (:alt man consult-man))
+
+(defvar oo-search-map (make-sparse-keymap))
+(define-prefix-command 'oo/search-prefix-command 'oo-search-map)
+(bind! (:map oo-leader-map)
+       (:wk "search" "s" #'oo/search-prefix-command))
+
+(bind! (:map oo-search-map)
+       (:wk "line"        "f" #'consult-line)
+       (:wk "line"        "s" #'consult-line)
+       (:wk "line"        "l" #'consult-line)
+       (:wk "outline"     "h" #'consult-outline)
+       (:wk "org heading" "o" #'consult-org-heading))
+
+(bind! (:prefix "g")
+       (:n "," #'lispyville-comment-or-uncomment)
+       (:n "c" #'lispyville-comment-and-clone-dwim)
+       (:n "l" #'lispyville-comment-or-uncomment-line))
+
+(bind! (:map oo-package-map)
+       (:wk "browse" "b" #'elpaca-browse)
+       (:wk "update all"     "U" #'elpaca-update-all)
+       (:wk "update"         "u" #'elpaca-update)
+       (:wk "visit"          "v" #'elpaca-visit)
+       (:wk "try"            "i" #'elpaca-try)
+       (:wk "rebuild"        "r" #'elpaca-rebuild)
+       (:wk "delete"         "d" #'elpaca-delete)
+       (:wk "log"            "l" #'elpaca-log)
+       (:wk "write lockfile" "w" #'elpaca-write-lockfile)
+       (:wk "manager"        "m" #'elpaca-manager))
+
+(bind! (:alt org-capture +org/choose-capture-template))
+
+(bind! (:v "E" #'lispy-eval-and-replace))
+
+(bind! (:map oo-app-map)
+       ("g" #'gumshoe-peruse-globally))
+
+(bind! (:map org-mode-map)
+       (:n "H" #'outline-up-heading))
+
+(bind! (:when (require 'consult nil t))
+       (:alt switch-to-buffer consult-buffer)
+       (:alt yank-pop consult-yank-pop)
+       (:alt apropos consult-apropos)
+       (:alt man consult-man))
+
+(bind! (:map oo-find-map)
+       (:wk "line"        "s" #'consult-line)
+       (:wk "line"        "l" #'consult-line)
+       (:wk "outline"     "h" #'consult-outline)
+       (:wk "org heading" "o" #'consult-org-heading))
+
+(bind! (:map helm-map)
+       (:ie "C-;" #'ace-jump-helm-line))
+
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+
+(bind! (:map oo-miscellany-map)
+       ("l" #'consult-bookmark))
+
+(set! bookmark-save-flag 1)
+
+(defafter! dont-pair-quotes (smartparens)
+  (sp-local-pair sp-lisp-modes "'" nil :actions nil))
+
+(defafter! pair-backquote-quote (smartparens)
+  (sp-local-pair sp-lisp-modes "`" "'" :when '(sp-in-string-p sp-in-comment-p)))
+
+(set! avy-style 'pre)
+(set! avy-keys (number-sequence 97 122))
+
+(defsubst +captain-in-string-or-comment-p ()
+  "Return non-nil if point is in a string or comment."
+  (nth 8 (syntax-ppss (point))))
+
+(defun! +captain-prog-mode-sentence-start-function ()
+  "Return point at the start of the last sentence.
+Mean to be used as the value of `captain-predicate'."
+  (cl-assert (require 'smartparens nil 'noerror))
+  (awhen (car (bounds-of-thing-at-point 'sentence))
+    (pushing! points it))
+  (acond ((save-excursion (and (comment-beginning) (point)))
+          (pushing! points it))
+         ((and (nth 8 (syntax-ppss (point))) (sp-in-docstring-p nil nil 'string))
+          (pushing! points it)))
+  (apply #'max points))
+
+(defhook! auto-capitalize-sentences-in-docstrings-and-comments (prog-mode-hook)
+  (captain-mode 1)
+  (setq-local captain-predicate #'+captain-in-string-or-comment-p)
+  (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
+
+(defhook! auto-capitalize-sentences (text-mode-hook)
+  (captain-mode 1)
+  (setq-local captain-predicate (lambda () t)))
+
+(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+
+(set! rainbow-delimiters-max-face-count 9)
+(oo-add-hook '(prog-mode-hook reb-mode-hook) #'rainbow-delimiters-mode)
+
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(set! savehist-save-minibuffer-history t)
+(set! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(set! savehist-autosave-interval (* 60 5))
+(set! savehist-file (concat oo-cache-dir "savehist"))
+
+(oo-add-hook 'on-first-input-hook #'savehist-mode)
+
+(set! save-place-file (concat oo-cache-dir "saveplace"))
+(set! save-place-limit nil)
+
+(oo-add-hook 'on-first-file-hook #'save-place-mode)
+
+(set! super-save-auto-save-when-idle t)
+(set! super-save-idle-duration 5)
+
+(oo-add-hook 'on-first-file-hook #'super-save-mode)
+
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+
+(set! evil-search-wrap nil)
+
+(defvar oo-evil-state-before-minibuffer nil
+  "Store the evil state before entering the minibuffer.")
+
+(defhook! preserve-prior-evil-state (minibuffer-setup-hook)
+  "Save state before entering the minibuffer and enter insert state."
+  (when (bound-and-true-p evil-mode)
+    (setq oo-evil-state-before-minibuffer evil-state)
+    (evil-insert-state)))
+
+(defhook! restore-prior-evil-state (minibuffer-exit-hook)
+  "Restore state after minibuffer."
+  (when (bound-and-true-p evil-mode)
+    (evil-change-state oo-evil-state-before-minibuffer)
+    (setq oo-evil-state-before-minibuffer nil)))
+
+(oo-add-hook 'after-init-hook #'require 'evil :depth 10)
+
+(oo-add-hook 'after-init-hook #'evil-mode :depth 90)
+
+(set! evil-echo-state nil)
+
+;; Whether the cursor is moved backwards when exiting insert state.
+(set! evil-move-cursor-back nil)
+
+(set! evil-move-beyond-eol nil)
+
+(defun oo-set-default-evil-cursors (&rest _)
+  "Set the evil cursors."
+  (when (bound-and-true-p evil-mode)
+    (set! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
+    (set! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
+    (set! evil-normal-state-cursor '(box "DarkGoldenrod2"))
+    (set! evil-visual-state-cursor '((hollow) "dark gray"))
+    (set! evil-operator-state-cursor '((hbar . 10) "hot pink"))
+    (set! evil-replace-state-cursor '(box "chocolate"))
+    (set! evil-motion-state-cursor '(box "plum3"))))
+
+(oo-add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
+(oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
+
+(defvar oo-escape-hook nil
+  "Hook run after escaping.")
+
+(defun @exit-everything (&rest _)
+  "Exits out of whatever is happening after escape."
+  (cond ((minibuffer-window-active-p (minibuffer-window))
+	 (abort-recursive-edit))
+	((run-hook-with-args-until-success 'oo-escape-hook))
+	((or defining-kbd-macro executing-kbd-macro) nil)
+	(t (keyboard-quit))))
+
+(bind! (:ie [escape] #'evil-force-normal-state))
+
+(oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
+(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+
+(oo-add-hook '(prog-mode-hook text-mode-hook) #'evil-surround-mode)
+
+(defhook! enable-smartparens-maybe (minibuffer-setup-hook)
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
+
+(defmacro! defevilem! (&rest args)
+  "Convenience macro for defining an `evil-easymotion' motion."
+  (declare (indent defun))
+  (let! (name arglist metadata keys body) (oo-destructure-defun-plus args))
+  (let! lambda `(lambda ,arglist (interactive) ,@metadata (block! nil ,@body)))
+  `(progn (oo-autoload-fn ',name 'evil-easymotion)
+	  (after! evil-easymotion (evilem-make-motion ,name ,lambda ,@keys))))
+
+(defevilem! oo/goto-beginning-of-word ()
+  "Jump to beginning of word at current buffer."
+  (:scope 'page)
+  (:initial-point #'point-min)
+  (let! regexp (rx (or (seq bol (1+ white))
+		       (seq (1+ white))
+		       (seq bol (1+ punct))
+		       (seq (1+ white) (1+ punct))
+		       (seq (1+ punct)))
+		   word))
+  (save-match-data
+    (when (re-search-forward regexp nil t nil)
+      (backward-char))))
+
+(defevilem! oo/goto-end-of-word ()
+  "Jump to the end of word in the current buffer."
+  (:scope 'page)
+  (:initial-point #'point-min)
+  (let! regexp (rx (1+ alnum)))
+  (save-match-data
+    (awhen (save-excursion (goto-char (1+ (point)))
+                           (re-search-forward regexp nil t nil))
+      (goto-char (1- (match-end 0))))))
+
+(defevilem! oo/goto-char ()
+  "Jump to the character in current buffer."
+  (:initial-point #'point-min)
+  (:scope 'page)
+  (:bind ((char (read-char "Char: "))))
+  (with! (save-match-data))
+  (when (save-excursion (goto-char (1+ (point)))
+			            (re-search-forward (rx-to-string (char-to-string char)) nil t nil))
+    (goto-char (1- (match-end 0)))))
+
+(set! evilem-keys (number-sequence ?a ?z))
+(set! evilem-style 'at)
+
+(bind! (:nv "w" #'oo/goto-beginning-of-word)
+       (:nv "e" #'oo/goto-end-of-word)
+       (:nv "f" #'oo/goto-char))
+
+(adding-to-list! dogears-ignore-modes 'dashboard-mode)
+
+(bind! (:map oo-leader-map)
+       (:prefix "l")
+       ("l" #'dogears-go))
+
+(defun oo-org-src-buffer-p () (bound-and-true-p org-src-mode))
+(adding-to-list! dogears-ignore-places-functions #'oo-org-src-buffer-p)
+
+(adding-to-list! savehist-additional-variables 'dogears-list)
+
+(adding-to-list! savehist-additional-variables 'register-alist)
+
+(oo-add-hook 'on-first-input-hook #'dogears-mode)
+
+(oo-silence #'flyspell-mode)
+
+(oo-add-hook 'text-mode-hook #'flyspell-mode)
+
+(setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
+
+(defun! oo/set-font-face ()
+  "Apply an existing xfont to all graphical frames."
+  (interactive)
+  (let! font (completing-read "Choose font: " (x-list-fonts "*")))
+  (set-frame-font font nil t))
+
+(set! transient-levels-file (concat oo-cache-dir "transient/levels"))
+(set! transient-values-file (concat oo-cache-dir "transient/values"))
+(set! transient-history-file (concat oo-cache-dir "transient/history"))
+
+(adding-to-list! recentf-filename-handlers #'abbreviate-file-name)
+
+(adding-to-list! recentf-filename-handlers #'substring-no-properties)
+
+(oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+
+(set! ispell-program-name (or (executable-find "hunspell") (executable-find "ispell")))
