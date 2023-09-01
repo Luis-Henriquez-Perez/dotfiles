@@ -201,7 +201,11 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 (setq ring-bell-function #'ignore)
 
 ;; Whenever the cursor hits the beginning or end of the buffer, emacs signals in error in the
-;; Message buffer; same thing when you're trying to edit a read-only buffer.
+;; Message buffer; same thing when you're trying to edit a read-only buffer. I'd rather not see
+;; These messages--especially the beginning/end of buffer one. First, they tend to crowd up the
+;; *Messages* buffer; and, second, I usually don't need the indicator anyway--I can see that if
+;; nothing happens I've reached the top of the buffer. I might consider adding an visual indicator
+;; via `beacon'.
 (defun oo-command-error-function (data context caller)
   "Ignore the buffer-read-only, beginning-of-buffer,
 end-of-buffer signals; pass the rest to the default handler."
