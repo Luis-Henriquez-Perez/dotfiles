@@ -1,300 +1,145 @@
-(elpaca :repo "https://github.com/progfolio/elpaca.git"
-        :branch "master"
-        :ref "9478158"
-        :files (:defaults (:exclude "extensions"))
-        :build (:not elpaca--activate-package))
-
-(dogears :fetcher github :branch "master" :repo "alphapapa/dogears.el" :ref "080bfa1" :files (:defaults (:exclude "helm-dogears.el")))
-
-(captain :repo "git://git.sv.gnu.org/emacs/elpa" :local-repo "captain" :branch "externals/captain" :ref "364ee98")
-
-(lambda-themes :repo "Lambda-Emacs/lambda-themes" :branch "main" :fetcher github :ref "7342250")
-
-(consult :repo "minad/consult" :fetcher github :branch "main" :ref "fae9b50")
-
-(textsize :repo "WJCFerguson/textsize" :fetcher github :branch "master" :ref "df91392")
-
-(on :host github :repo "ajgrf/on.el" :branch "master" :ref "3cf623e")
-
-(ligature :fetcher github :repo "mickeynp/ligature.el" :ref "3d14604")
-
-(log4e :repo "aki2o/log4e" :fetcher github :ref "7df0c1f")
-
-(org :local-repo "org" :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git" :ref "f731d45")
-
-(refine :repo "Wilfred/refine" :fetcher github :ref "d72fa50")
-
-(ace-window :repo "abo-abo/ace-window" :fetcher github :ref "c7cb315")
-
-(aggressive-fill-paragraph :fetcher github :repo "davidshepherd7/aggressive-fill-paragraph-mode" :ref "4a620e6")
-
-(aggressive-indent :repo "Malabarba/aggressive-indent-mode" :fetcher github :ref "b0ec004")
-
-(all-the-icons :repo "domtronn/all-the-icons.el" :fetcher github :ref "be99987")
-
-(all-the-icons-completion :repo "iyefrat/all-the-icons-completion" :fetcher github :ref "286e2c0")
-
-(anaphora :repo "rolandwalker/anaphora" :fetcher github :ref "3b2da3f")
-
-(async :repo "jwiegley/emacs-async" :fetcher github :ref "9a8cd0c")
-
-(auth-source-pass :fetcher github :repo "DamienCassou/auth-source-pass" :ref "aa7f171")
-
-(auto-capitalize :fetcher github :repo "emacsmirror/auto-capitalize" :ref "0ee14c7")
-
-(avy :repo "abo-abo/avy" :fetcher github :ref "e92cb37")
-
-(buffer-expose :host github :repo "clemera/buffer-expose" :fetcher github :ref "c4a1c74")
-
-(centered-cursor-mode :fetcher github :repo "andre-r/centered-cursor-mode.el" :ref "ebaeb80")
-
-(centered-window :fetcher github :repo "anler/centered-window-mode" :old-names (centered-window-mode) :ref "80965f6")
-
-(corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref "a59c41d")
-
-(counsel :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
-
-(dash :fetcher github :repo "magnars/dash.el" :ref "7a9c937")
-
-(dash-functional :fetcher github :repo "magnars/dash.el" :ref "7a9c937")
-
-(dashboard :fetcher github :repo "emacs-dashboard/emacs-dashboard" :ref "36c8da4")
-
-(decide :fetcher github :repo "lifelike/decide-mode" :ref "668fa55")
-
-(default-text-scale :fetcher github :repo "purcell/default-text-scale" :ref "bfc0987")
-
-(dirvish :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
-
-(dirvish-collapse :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
-
-(dirvish-icons :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
-
-(dirvish-media :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
-
-(dirvish-subtree :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
-
-(doct :repo "progfolio/doct" :fetcher github :ref "15974ad")
-
-(edit-indirect :fetcher github :repo "Fanael/edit-indirect" :ref "bdc8f54")
-
-(ednc :repo "sinic/ednc" :fetcher github :ref "d1a3c37")
-
-(elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b")
-
-(elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf")
-
-(elfeed-score :fetcher github :repo "sp1ff/elfeed-score" :ref "5fff415")
-
-(elisp-demos :fetcher github :repo "xuchunyang/elisp-demos" :ref "ed9578d")
-
-(elisp-refs :repo "Wilfred/elisp-refs" :branch "master" :fetcher github :ref "bf3cca8")
-
-(ellocate :fetcher github :repo "walseb/ellocate" :ref "8140508")
-
-(embark :repo "oantolin/embark" :fetcher github :ref "5d0459d")
-
-(emms :fetcher github :url "https://git.savannah.gnu.org/git/emms.git" :repo "emacsmirror/emms" :ref "5c3226b")
-
-(eros :fetcher github :repo "xiongtx/eros" :ref "dd89102")
-
-(eshell-up :fetcher github :repo "peterwvj/eshell-up" :ref "9c100ba")
-
-(eshell-z :fetcher github :repo "xuchunyang/eshell-z" :ref "337cb24")
-
-(evil :repo "emacs-evil/evil" :fetcher github :ref "cc9d688")
-
-(evil-cleverparens :fetcher github :repo "luxbock/evil-cleverparens" :ref "8c45879")
-
-(evil-easymotion :repo "PythonNut/evil-easymotion" :fetcher github :ref "f96c2ed")
-
-(evil-goggles :repo "edkolev/evil-goggles" :fetcher github :ref "08a2205")
-
-(evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d")
-
-(evil-surround :repo "emacs-evil/evil-surround" :fetcher github :old-names (surround) :ref "346d4d8")
-
-(expand-region :repo "magnars/expand-region.el" :fetcher github :ref "ea6b4cb")
-
-(exwm :branch "master" :host github :repo "ch11ng/exwm" :fetcher github :ref "b62d5e7")
-
-(exwm-edit :repo "agzam/exwm-edit" :fetcher github :ref "2fd9426")
-
-(exwm-firefox-core :fetcher github :repo "walseb/exwm-firefox-core" :ref "e2fe2a8")
-
-(exwm-firefox-evil :fetcher github :repo "walseb/exwm-firefox-evil" :ref "14643ee")
-
-(exwm-float :fetcher gitlab :repo "mtekman/exwm-float.el" :ref "eb1b60b")
-
-(f :fetcher github :repo "rejeep/f.el" :ref "1814209")
-
-(fennel-mode :fetcher sourcehut :repo "technomancy/fennel-mode" :ref "da958db")
-
-(figlet :fetcher github :repo "jpkotta/figlet" :ref "19a3878")
-
-(frame-cmds :fetcher github :repo "emacsmirror/frame-cmds" :ref "b803354")
-
-(frame-fns :fetcher github :repo "emacsmirror/frame-fns" :ref "b675ee5")
-
-(gcmh :repo "koral/gcmh" :fetcher gitlab :ref "0089f9c")
-
-(git-auto-commit-mode :fetcher github :repo "ryuslash/git-auto-commit-mode" :ref "a6b6e0f")
-
-(git-commit :fetcher github :repo "magit/magit" :old-names (git-commit-mode) :ref "86eec7b")
-
-(git-gutter+ :fetcher github :repo "nonsequitur/git-gutter-plus" :ref "b772699")
-
-(goto-chg :repo "emacs-evil/goto-chg" :fetcher github :ref "2af6121")
-
-(grugru :repo "ROCKTAKEY/grugru" :fetcher github :ref "92e588e")
-
-(helm :repo "emacs-helm/helm" :fetcher github :ref "8de5444")
-
-(helm-core :repo "emacs-helm/helm" :fetcher github :ref "8de5444")
-
-(helm-system-packages :repo "emacs-helm/helm-system-packages" :fetcher github :ref "e93f4ae")
-
-(helpful :repo "Wilfred/helpful" :branch "master" :fetcher github :ref "6f8991a")
-
-(hide-mode-line :repo "hlissner/emacs-hide-mode-line" :fetcher github :ref "8888882")
-
-(highlight-quoted :fetcher github :repo "Fanael/highlight-quoted" :ref "2410347")
-
-(ht :fetcher github :repo "Wilfred/ht.el" :ref "2850301")
-
-(hydra :repo "abo-abo/hydra" :fetcher github :ref "2d55378")
-
-(ialign :fetcher github :repo "mkcms/interactive-align" :ref "bc4d30d")
-
-(idle-require :fetcher github :repo "nschum/idle-require.el" :ref "33592bb")
-
-(iedit :repo "victorhge/iedit" :fetcher github :ref "27c6186")
-
-(ivy :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
-
-(key-chord :fetcher github :repo "emacsorphanage/key-chord" :ref "7f7fd7c")
-
-(lispy :repo "abo-abo/lispy" :fetcher github :ref "1ad128b")
-
-(lispyville :fetcher github :repo "noctuid/lispyville" :ref "0f13f26")
-
-(loopy :fetcher github :repo "okamsn/loopy" :ref "31dc58f")
-
-(lv :repo "abo-abo/hydra" :fetcher github :ref "2d55378")
-
-(macrostep :fetcher github :repo "joddie/macrostep" :ref "424e373")
-
-(magit :fetcher github :repo "magit/magit" :ref "86eec7b")
-
-(magit-section :fetcher github :repo "magit/magit" :ref "86eec7b")
-
-(map :host github :repo "emacs-straight/map" :fetcher github :ref "dc4f657")
-
-(marginalia :repo "minad/marginalia" :fetcher github :ref "b65d66e")
-
-(markdown-mode :fetcher github :repo "jrblevin/markdown-mode" :ref "c338cdf")
-
-(mini-modeline :repo "kiennq/emacs-mini-modeline" :fetcher github :ref "7dcd0ab")
-
-(mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956")
-
-(modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9")
-
-(notmuch :url "https://git.notmuchmail.org/git/notmuch" :fetcher git :ref "a5f7efd")
-
-(orderless :repo "oantolin/orderless" :fetcher github :ref "cbc0109")
-
-(org-auto-tangle :repo "yilkalargaw/org-auto-tangle" :fetcher github :ref "2494a6f")
-
-(org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be")
-
-(org-ql :fetcher github :repo "alphapapa/org-ql" :ref "d7ada53")
-
-(org-remark :host github :repo "emacs-straight/org-remark" :ref "7e72e86")
-
-(org-super-agenda :fetcher github :repo "alphapapa/org-super-agenda" :ref "f5e80e4")
-
-(org-superstar :fetcher github :repo "integral-dw/org-superstar-mode" :ref "7f83636")
-
-(ov :fetcher github :repo "emacsorphanage/ov" :ref "c5b9aa4")
-
-(paredit :fetcher nil :url "https://mumble.net/~campbell/git/paredit.git" :repo "https://mumble.net/~campbell/git/paredit.git" :ref "d0b1a2f")
-
-(pass :fetcher github :repo "NicolasPetton/pass" :ref "a095d24")
-
-(password-generator :fetcher github :repo "vandrlexay/emacs-password-genarator" :ref "c1da979")
-
-(password-store :fetcher github :repo "zx2c4/password-store" :ref "f152064")
-
-(password-store-otp :repo "volrath/password-store-otp.el" :fetcher github :ref "04998c8")
-
-(pinentry :host github :repo "emacs-straight/pinentry" :fetcher github :ref "cd942f7")
-
-(plural :fetcher github :repo "emacsmirror/plural" :ref "b91ce15")
-
-(popup :fetcher github :repo "auto-complete/popup-el" :ref "bd5a0df")
-
-(popwin :fetcher github :repo "emacsorphanage/popwin" :ref "215d6cb")
-
-(rainbow-delimiters :fetcher github :repo "Fanael/rainbow-delimiters" :ref "f43d48a")
-
-(redacted :fetcher github :repo "bkaestner/redacted.el" :ref "156311e")
-
-(restart-emacs :fetcher github :repo "iqbalansari/restart-emacs" :ref "1607da2")
-
-(s :fetcher github :repo "magnars/s.el" :ref "43ba8b5")
-
-(search-web :repo "tomoya/search-web.el" :fetcher github :ref "c4ae86a")
-
-(shut-up :fetcher github :repo "cask/shut-up" :ref "081d6b0")
-
-(smartparens :fetcher github :repo "Fuco1/smartparens" :ref "63695c6")
-
-(spell-number :fetcher github :repo "emacsmirror/spell-number" :ref "3ce612d")
-
-(super-save :fetcher github :repo "bbatsov/super-save" :ref "886b551")
-
-(swiper :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
-
-(swiper-helm :repo "abo-abo/swiper-helm" :fetcher github :ref "93fb6db")
-
-(tempel :repo "minad/tempel" :fetcher github :ref "b4bb703")
-
-(transient :fetcher github :repo "magit/transient" :ref "90e640f")
-
-(transpose-frame :fetcher github :repo "emacsorphanage/transpose-frame" :ref "12e523d")
-
-(treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github :ref "191d84c")
-
-(ts :fetcher github :repo "alphapapa/ts.el" :ref "b7ca357")
-
-(undo-tree :host github :repo "emacs-straight/undo-tree" :fetcher github :ref "e326c61")
-
-(vc-auto-commit :fetcher github :repo "thisirs/vc-auto-commit" :ref "56f4780")
-
-(vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
-         :files (:defaults "extensions/*"))
-
-(which-key :repo "justbur/emacs-which-key" :fetcher github :ref "428aedf")
-
-(with-editor :fetcher github :repo "magit/with-editor" :ref "139ef39")
-
-(with-emacs :fetcher github :repo "twlz0ne/with-emacs.el" :ref "9f99bec")
-
-(workgroups2 :repo "pashinin/workgroups2" :fetcher github :ref "c9403c6")
-
-(xelb :host github :repo "emacs-straight/xelb" :fetcher github :ref "f5880e6")
-
-(xr :host github :repo "emacs-straight/xr" :fetcher github :ref "277c549")
-
-(zone-matrix :fetcher github :repo "emacsmirror/zone-matrix" :ref "e1fc8c7")
-
-(zone-rainbow :repo "kawabata/zone-rainbow" :fetcher github :ref "2ba4f1a")
-
-(zone-sl :repo "kawabata/zone-sl" :fetcher github :ref "7ec22e3")
-
-(zoom-frm :fetcher github :repo "emacsmirror/zoom-frm" :ref "59e2fce" )
-
-(zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47")
-
-(el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master")
+;; This is a list of package recipes.
+
+'((dogears :fetcher github :branch "master" :repo "alphapapa/dogears.el" :ref "080bfa1" :files (:defaults (:exclude "helm-dogears.el")))
+  (captain :repo "git://git.sv.gnu.org/emacs/elpa" :local-repo "captain" :branch "externals/captain" :ref "364ee98")
+  (lambda-themes :repo "Lambda-Emacs/lambda-themes" :branch "main" :fetcher github :ref "7342250")
+  (consult :repo "minad/consult" :fetcher github :branch "main" :ref "fae9b50")
+  (textsize :repo "WJCFerguson/textsize" :fetcher github :branch "master" :ref "df91392")
+  (on :host github :repo "ajgrf/on.el" :branch "master" :ref "3cf623e")
+  (ligature :fetcher github :repo "mickeynp/ligature.el" :ref "3d14604")
+  (log4e :repo "aki2o/log4e" :fetcher github :ref "7df0c1f")
+  (org :local-repo "org" :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git" :ref "f731d45")
+  (refine :repo "Wilfred/refine" :fetcher github :ref "d72fa50")
+  (ace-window :repo "abo-abo/ace-window" :fetcher github :ref "c7cb315")
+  (aggressive-fill-paragraph :fetcher github :repo "davidshepherd7/aggressive-fill-paragraph-mode" :ref "4a620e6")
+  (aggressive-indent :repo "Malabarba/aggressive-indent-mode" :fetcher github :ref "b0ec004")
+  (all-the-icons :repo "domtronn/all-the-icons.el" :fetcher github :ref "be99987")
+  (all-the-icons-completion :repo "iyefrat/all-the-icons-completion" :fetcher github :ref "286e2c0")
+  (anaphora :repo "rolandwalker/anaphora" :fetcher github :ref "3b2da3f")
+  (async :repo "jwiegley/emacs-async" :fetcher github :ref "9a8cd0c")
+  (auth-source-pass :fetcher github :repo "DamienCassou/auth-source-pass" :ref "aa7f171")
+  (auto-capitalize :fetcher github :repo "emacsmirror/auto-capitalize" :ref "0ee14c7")
+  (avy :repo "abo-abo/avy" :fetcher github :ref "e92cb37")
+  (buffer-expose :host github :repo "clemera/buffer-expose" :fetcher github :ref "c4a1c74")
+  (centered-cursor-mode :fetcher github :repo "andre-r/centered-cursor-mode.el" :ref "ebaeb80")
+  (centered-window :fetcher github :repo "anler/centered-window-mode" :old-names (centered-window-mode) :ref "80965f6")
+  (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref "a59c41d")
+  (counsel :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
+  (dash :fetcher github :repo "magnars/dash.el" :ref "7a9c937")
+  (dash-functional :fetcher github :repo "magnars/dash.el" :ref "7a9c937")
+  (dashboard :fetcher github :repo "emacs-dashboard/emacs-dashboard" :ref "36c8da4")
+  (decide :fetcher github :repo "lifelike/decide-mode" :ref "668fa55")
+  (default-text-scale :fetcher github :repo "purcell/default-text-scale" :ref "bfc0987")
+  (dirvish :fetcher github :repo "alexluigit/dirvish" :ref "ec41006")
+  (doct :repo "progfolio/doct" :fetcher github :ref "15974ad")
+  (edit-indirect :fetcher github :repo "Fanael/edit-indirect" :ref "bdc8f54")
+  (ednc :repo "sinic/ednc" :fetcher github :ref "d1a3c37")
+  (elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b")
+  (elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf")
+  (elfeed-score :fetcher github :repo "sp1ff/elfeed-score" :ref "5fff415")
+  (elisp-demos :fetcher github :repo "xuchunyang/elisp-demos" :ref "ed9578d")
+  (elisp-refs :repo "Wilfred/elisp-refs" :branch "master" :fetcher github :ref "bf3cca8")
+  (ellocate :fetcher github :repo "walseb/ellocate" :ref "8140508")
+  (embark :repo "oantolin/embark" :fetcher github :ref "5d0459d")
+  (emms :fetcher github :url "https://git.savannah.gnu.org/git/emms.git" :repo "emacsmirror/emms" :ref "5c3226b")
+  (eros :fetcher github :repo "xiongtx/eros" :ref "dd89102")
+  (eshell-up :fetcher github :repo "peterwvj/eshell-up" :ref "9c100ba")
+  (eshell-z :fetcher github :repo "xuchunyang/eshell-z" :ref "337cb24")
+  (evil :repo "emacs-evil/evil" :fetcher github :ref "cc9d688")
+  (evil-cleverparens :fetcher github :repo "luxbock/evil-cleverparens" :ref "8c45879")
+  (evil-easymotion :repo "PythonNut/evil-easymotion" :fetcher github :ref "f96c2ed")
+  (evil-goggles :repo "edkolev/evil-goggles" :fetcher github :ref "08a2205")
+  (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d")
+  (evil-surround :repo "emacs-evil/evil-surround" :fetcher github :old-names (surround) :ref "346d4d8")
+  (expand-region :repo "magnars/expand-region.el" :fetcher github :ref "ea6b4cb")
+  (exwm :branch "master" :host github :repo "ch11ng/exwm" :fetcher github :ref "b62d5e7")
+  (exwm-edit :repo "agzam/exwm-edit" :fetcher github :ref "2fd9426")
+  (exwm-firefox-core :fetcher github :repo "walseb/exwm-firefox-core" :ref "e2fe2a8")
+  (exwm-firefox-evil :fetcher github :repo "walseb/exwm-firefox-evil" :ref "14643ee")
+  (exwm-float :fetcher gitlab :repo "mtekman/exwm-float.el" :ref "eb1b60b")
+  (f :fetcher github :repo "rejeep/f.el" :ref "1814209")
+  (fennel-mode :fetcher sourcehut :repo "technomancy/fennel-mode" :ref "da958db")
+  (figlet :fetcher github :repo "jpkotta/figlet" :ref "19a3878")
+  (frame-cmds :fetcher github :repo "emacsmirror/frame-cmds" :ref "b803354")
+  (frame-fns :fetcher github :repo "emacsmirror/frame-fns" :ref "b675ee5")
+  (gcmh :repo "koral/gcmh" :fetcher gitlab :ref "0089f9c")
+  (git-auto-commit-mode :fetcher github :repo "ryuslash/git-auto-commit-mode" :ref "a6b6e0f")
+  (git-commit :fetcher github :repo "magit/magit" :old-names (git-commit-mode) :ref "86eec7b")
+  (git-gutter+ :fetcher github :repo "nonsequitur/git-gutter-plus" :ref "b772699")
+  (goto-chg :repo "emacs-evil/goto-chg" :fetcher github :ref "2af6121")
+  (grugru :repo "ROCKTAKEY/grugru" :fetcher github :ref "92e588e")
+  (helm :repo "emacs-helm/helm" :fetcher github :ref "8de5444")
+  (helm-core :repo "emacs-helm/helm" :fetcher github :ref "8de5444")
+  (helm-system-packages :repo "emacs-helm/helm-system-packages" :fetcher github :ref "e93f4ae")
+  (helpful :repo "Wilfred/helpful" :branch "master" :fetcher github :ref "6f8991a")
+  (hide-mode-line :repo "hlissner/emacs-hide-mode-line" :fetcher github :ref "8888882")
+  (highlight-quoted :fetcher github :repo "Fanael/highlight-quoted" :ref "2410347")
+  (ht :fetcher github :repo "Wilfred/ht.el" :ref "2850301")
+  (hydra :repo "abo-abo/hydra" :fetcher github :ref "2d55378")
+  (ialign :fetcher github :repo "mkcms/interactive-align" :ref "bc4d30d")
+  (idle-require :fetcher github :repo "nschum/idle-require.el" :ref "33592bb")
+  (iedit :repo "victorhge/iedit" :fetcher github :ref "27c6186")
+  (ivy :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
+  (key-chord :fetcher github :repo "emacsorphanage/key-chord" :ref "7f7fd7c")
+  (lispy :repo "abo-abo/lispy" :fetcher github :ref "1ad128b")
+  (lispyville :fetcher github :repo "noctuid/lispyville" :ref "0f13f26")
+  (loopy :fetcher github :repo "okamsn/loopy" :ref "31dc58f")
+  (lv :repo "abo-abo/hydra" :fetcher github :ref "2d55378")
+  (macrostep :fetcher github :repo "joddie/macrostep" :ref "424e373")
+  (magit :fetcher github :repo "magit/magit" :ref "86eec7b")
+  (magit-section :fetcher github :repo "magit/magit" :ref "86eec7b")
+  (map :host github :repo "emacs-straight/map" :fetcher github :ref "dc4f657")
+  (marginalia :repo "minad/marginalia" :fetcher github :ref "b65d66e")
+  (markdown-mode :fetcher github :repo "jrblevin/markdown-mode" :ref "c338cdf")
+  (mini-modeline :repo "kiennq/emacs-mini-modeline" :fetcher github :ref "7dcd0ab")
+  (mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956")
+  (modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9")
+  (notmuch :url "https://git.notmuchmail.org/git/notmuch" :fetcher git :ref "a5f7efd")
+  (orderless :repo "oantolin/orderless" :fetcher github :ref "cbc0109")
+  (org-auto-tangle :repo "yilkalargaw/org-auto-tangle" :fetcher github :ref "2494a6f")
+  (org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be")
+  (org-ql :fetcher github :repo "alphapapa/org-ql" :ref "d7ada53")
+  (org-remark :host github :repo "emacs-straight/org-remark" :ref "7e72e86")
+  (org-super-agenda :fetcher github :repo "alphapapa/org-super-agenda" :ref "f5e80e4")
+  (org-superstar :fetcher github :repo "integral-dw/org-superstar-mode" :ref "7f83636")
+  (ov :fetcher github :repo "emacsorphanage/ov" :ref "c5b9aa4")
+  (paredit :fetcher nil :url "https://mumble.net/~campbell/git/paredit.git" :repo "https://mumble.net/~campbell/git/paredit.git" :ref "d0b1a2f")
+  (pass :fetcher github :repo "NicolasPetton/pass" :ref "a095d24")
+  (password-generator :fetcher github :repo "vandrlexay/emacs-password-genarator" :ref "c1da979")
+  (password-store :fetcher github :repo "zx2c4/password-store" :ref "f152064")
+  (password-store-otp :repo "volrath/password-store-otp.el" :fetcher github :ref "04998c8")
+  (pinentry :host github :repo "emacs-straight/pinentry" :fetcher github :ref "cd942f7")
+  (plural :fetcher github :repo "emacsmirror/plural" :ref "b91ce15")
+  (popup :fetcher github :repo "auto-complete/popup-el" :ref "bd5a0df")
+  (popwin :fetcher github :repo "emacsorphanage/popwin" :ref "215d6cb")
+  (rainbow-delimiters :fetcher github :repo "Fanael/rainbow-delimiters" :ref "f43d48a")
+  (redacted :fetcher github :repo "bkaestner/redacted.el" :ref "156311e")
+  (restart-emacs :fetcher github :repo "iqbalansari/restart-emacs" :ref "1607da2")
+  (s :fetcher github :repo "magnars/s.el" :ref "43ba8b5")
+  (search-web :repo "tomoya/search-web.el" :fetcher github :ref "c4ae86a")
+  (shut-up :fetcher github :repo "cask/shut-up" :ref "081d6b0")
+  (smartparens :fetcher github :repo "Fuco1/smartparens" :ref "63695c6")
+  (spell-number :fetcher github :repo "emacsmirror/spell-number" :ref "3ce612d")
+  (super-save :fetcher github :repo "bbatsov/super-save" :ref "886b551")
+  (swiper :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3")
+  (swiper-helm :repo "abo-abo/swiper-helm" :fetcher github :ref "93fb6db")
+  (tempel :repo "minad/tempel" :fetcher github :ref "b4bb703")
+  (transient :fetcher github :repo "magit/transient" :ref "90e640f")
+  (transpose-frame :fetcher github :repo "emacsorphanage/transpose-frame" :ref "12e523d")
+  (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github :ref "191d84c")
+  (ts :fetcher github :repo "alphapapa/ts.el" :ref "b7ca357")
+  (undo-tree :host github :repo "emacs-straight/undo-tree" :fetcher github :ref "e326c61")
+  (vc-auto-commit :fetcher github :repo "thisirs/vc-auto-commit" :ref "56f4780")
+  (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b" :files (:defaults "extensions/*"))
+  (which-key :repo "justbur/emacs-which-key" :fetcher github :ref "428aedf")
+  (with-editor :fetcher github :repo "magit/with-editor" :ref "139ef39")
+  (with-emacs :fetcher github :repo "twlz0ne/with-emacs.el" :ref "9f99bec")
+  (workgroups2 :repo "pashinin/workgroups2" :fetcher github :ref "c9403c6")
+  (xelb :host github :repo "emacs-straight/xelb" :fetcher github :ref "f5880e6")
+  (xr :host github :repo "emacs-straight/xr" :fetcher github :ref "277c549")
+  (zone-matrix :fetcher github :repo "emacsmirror/zone-matrix" :ref "e1fc8c7")
+  (zone-rainbow :repo "kawabata/zone-rainbow" :fetcher github :ref "2ba4f1a")
+  (zone-sl :repo "kawabata/zone-sl" :fetcher github :ref "7ec22e3")
+  (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm" :ref "59e2fce" )
+  (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47")
+  (el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master"))
