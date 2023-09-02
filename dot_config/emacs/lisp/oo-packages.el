@@ -337,4 +337,14 @@
 
 (elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
 
+;; (elpaca (el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master"))
+
+;; (elpaca (cape))
+
+;; (elpaca (chezmoi))
+
+;; filladapt
+
+;; burly
+
 (provide 'oo-packages)
