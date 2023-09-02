@@ -1,4 +1,4 @@
-(defun oo-bootstrap-straight ()
+(defun oo-bootstrap-straight (&optional dir)
   (setq straight-use-package-by-default t)
   (setq straight-vc-git-default-clone-depth 1)
   (setq straight-recipes-gnu-elpa-use-mirror t)
