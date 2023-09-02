@@ -1,4 +1,3 @@
-
 (defun oo-bootstrap-straight ()
   (setq straight-use-package-by-default t)
   (setq straight-vc-git-default-clone-depth 1)
@@ -26,7 +25,7 @@
   (setq comp-deferred-compilation-black-list nil))
 
 (defun oo-straight-boostrap-packages (dir recipes)
-  "Install all packages."
+  "Install all packages as specified by recipe."
   (let ((load-path load-path)
         (recipes ()))
     (oo-bootstrap-straight)
@@ -37,7 +36,10 @@
     ;; 2. Clone all the packages in recipes.
     (mapc #'straight-clone-package recipes)
     ;; 3. Set all the branches to the proper branch and commit
-    (dolist ())
+    (dolist (recipe recipes)
+      (setq repo (str))
+      (straight-vc-branch)
+      (straight-vc-checkout version))
     ;; 4. Build the packages.
     (mapc #'straight-build-package recipes))
   ;; 5. Return the difference in load paths
