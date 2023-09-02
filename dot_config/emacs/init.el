@@ -84,8 +84,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 
-;; (require 'on)
-
 ;; (require 'log4e)
 
 ;; (log4e:deflogger "oo" "%t [%l] %m" "%H:%M:%S")
