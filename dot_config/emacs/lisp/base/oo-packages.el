@@ -352,4 +352,11 @@
 
 ;; burly
 
+(if-let ((queues (reverse elpaca--queues))
+	     ((mapc #'elpaca--maybe-reset-queue queues))
+	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+    (progn (elpaca-process-queues)
+	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
+  (run-hooks 'elpaca--post-queues-hook))
+
 (provide 'oo-packages)
