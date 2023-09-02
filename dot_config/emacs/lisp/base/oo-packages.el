@@ -1,3 +1,8 @@
+;; Not =cl= which is depreciated.  Loading =cl= instead of =cl-lib= will create an annoying warning message
+;; during startup that says package cl is depreciated.
+;; https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it
+(require 'cl-lib)
+
 (defvar elpaca-installer-version 0.5)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -337,7 +342,7 @@
 
 (elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
 
-;; (elpaca (el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master"))
+(elpaca (el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master"))
 
 ;; (elpaca (cape))
 
