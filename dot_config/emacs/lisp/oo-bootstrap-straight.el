@@ -7,7 +7,7 @@
   (setq use-package-always-defer t)
   (defvar bootstrap-version)
   (let* ((straight-repo-dir
-          (expand-file-name "straight/repos" user-emacs-directory))
+          (or dir (expand-file-name "straight/repos" user-emacs-directory)))
          (bootstrap-file
           (concat straight-repo-dir "/straight.el/bootstrap.el"))
          (bootstrap-version 5))
@@ -24,7 +24,7 @@
   ;; doing :sraight (:no-native-compile t)
   (setq comp-deferred-compilation-black-list nil))
 
-(defun oo-straight-boostrap-packages (dir recipes)
+(defun oo-straight-bootstrap-packages (dir recipes)
   "Install all packages as specified by recipe."
   (let ((load-path load-path)
         (recipes ()))

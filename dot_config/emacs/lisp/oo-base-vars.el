@@ -13,3 +13,10 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 (defvar oo-cache-dir (concat user-emacs-directory "cache/")
   "Directory containing files used for caching information.")
 
+;; (defvar oo-recipe-file nil)
+
+;; (defvar oo-package-dir nil)
+
+;; (defvar oo-lisp-dir nil)
+
+(provide 'oo-base-vars)
