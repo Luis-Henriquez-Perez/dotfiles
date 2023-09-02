@@ -85,4 +85,20 @@ Designed to be used in `block!'."
 (defmacro adding-to-list! (var value &optional append compare-fn)
   `(set! ,var (add-to-list ',var ,value ,append ,compare-fn)))
 
+(defmacro pop! (place &optional pred)
+  "Set place to the result of."
+  (mmt-with-gensyms (collected)
+    (cond ((null pred)
+	       `(list (pop ,place)))
+	      ((numberp pred)
+	       `(let (,collected)
+	          (dotimes (_ ,pred)
+		        (pushing! ,collected (pop ,place)))
+	          (nreverse ,collected)))
+	      (t
+	       `(let (,collected)
+	          (while (and ,place (funcall ,pred (car ,place)))
+		        (pushing! ,collected (pop ,place)))
+	          (nreverse ,collected))))))
+
 (provide 'oo-modification-macros)

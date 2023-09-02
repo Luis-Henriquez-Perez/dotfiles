@@ -2,6 +2,37 @@
 (require 'oo-modification-macros)
 (require 'oo-autoload)
 
+(adding-to-list! log4e-log-level-alist '(hook . 3))
+(log4e--def-level-logger "oo" "log-hook" 'hook)
+(defun oo-log-hook (_ function &rest _)
+  (oo--log-hook "%s" function))
+
+(defun! oo-generate-hook-name (hook function args)
+  "Return a hook name based on HOOK, FUNCTION and ARGS."
+  (let! prefix hook)
+  (alet (pcase function
+	      ((pred listp)
+	       (gensym "anonymous-hook-"))
+	      ((guard (aand args (-all-p (-orfn #'stringp #'symbolp #'numberp) args)))
+	       ;; Combine function and args into a name if it's reasonable to do so.
+	       (string-join (mapcar #'oo-args-to-string (cons function args)) "-"))
+	      (_
+	       function))
+    (intern (format "%s&%s" prefix it))))
+
+(defun oo-add-hook (symbols function &rest arglist)
+  "Add new hooks generated from FUNCTIONS to SYMBOLS.
+Unlike `add-hook', SYMBOLS and FUNCTIONS can be single items or lists.  EXPIRE is
+the same as in `oo-hook-create'.  When EXPIRE is non-nil, each
+function will remove itself from the hook it is in after it is run once.  If
+EXPIRE is a function, call it on the return value in order to determine
+whether to remove a function from the hook."
+  (dolist (symbol (-list symbols))
+    (apply #'oo-create-hook symbol function arglist)))
+
+;; (defalias 'oo-generate-hook 'oo-create-hook)
+;; (defalias 'oo-gen-hook 'oo-create-hook)
+
 (defmacro! defhook! (&rest rest)
   "Define a hook and add it to SYMBOL and SYMBOLS.
 DOCSTRING and BODY are the docstring and body (respectively) of the defined
