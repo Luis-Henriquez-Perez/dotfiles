@@ -108,5 +108,4 @@ symbol as in `dolist', but.  LIST can be a sequence."
         (t
          tree)))
 
-
 (provide 'oo-base-utils)

@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 (require 'treepy)
+(require 'dash)
 
 (defun +treepy-skip (zipper)
   "Skip the current node."
