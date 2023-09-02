@@ -1,5 +1,6 @@
 (require 'dash)
 (require 'mmt)
+(require 'shut-up)
 
 (defun oo-ampersand-symbol-p (obj)
   "Return non-nil of OBJ is an ampersand symbol.
@@ -47,8 +48,8 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 
 (defun oo-silence (fn &rest fns)
   "Add advice to FN and FNS that silences their output."
-  (--each (cons fn fns)
-    (oo-add-advice it :around '@silence)))
+  (dolist (fun (cons fn fns))
+    (oo-add-advice fun :around '@silence)))
 
 (defun oo-popup-at-bottom (regexp)
   "Open buffers at bottom that match regexp."
