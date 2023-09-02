@@ -337,4 +337,4 @@
 
 (elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
 
-(require 'oo-packages)
+(provide 'oo-packages)
