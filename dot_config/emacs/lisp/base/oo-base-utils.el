@@ -2,6 +2,8 @@
 (require 'mmt)
 (require 'shut-up)
 
+;; The ampersand symbol (&) is that is used to differentiate special symbols in function arguments
+;; such as `&rest' and `&body'. I use this function.
 (defun oo-ampersand-symbol-p (obj)
   "Return non-nil of OBJ is an ampersand symbol.
 An ampersand symbol is a symbol that starts with `&'."
