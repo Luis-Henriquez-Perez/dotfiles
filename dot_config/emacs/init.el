@@ -47,10 +47,11 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
     (makunbound 'original-file-name-handler-alist))
   (add-hook 'emacs-startup-hook #'emacs-startup-hook&restore-file-name-handler-alist))
 
+;; Put the base directory into the `load-path', making sure it's at the front.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
 ;; Set the settings as soon as possible so we can avoid any GUI display.
-(require 'oo-settings)
+(require 'oo-base-settings)
 
 ;; Add the base directory to the load-path.
 (let (font)
@@ -68,4 +69,10 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 			                :size 15)))
   (set-face-attribute 'default nil :font font))
 
-;; Put the base directory into the `load-path', making sure it's at the front.
+(require 'oo-base-packages)
+
+(oo-bootstrap-packages (locate-user-emacs-file "packages/") (locate-user-emacs-file "recipes"))
+
+(require 'oo-base-library)
+
+;; (el-init-load)
