@@ -1,5 +1,13 @@
 (require 'oo-utils)
 
+(defun! oo-try-load-feature (fn)
+  "Try to load feature that could contain FN."
+  (unless (fboundp fn)
+    (dolist (feature (oo-candidate-features fn))
+      (require feature)
+      (when (fboundp fn)
+        (return! feature)))))
+
 (defun oo-candidate-features (fn)
   "Return a list of candidate features for FN.
 FN is a function symbol.  Look in the load path for names that match features."
