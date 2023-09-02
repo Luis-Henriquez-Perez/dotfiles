@@ -74,16 +74,15 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
   (set-face-attribute 'default nil :font font))
 
 ;; Put the base directory into the `load-path', making sure it's at the front.
-
 (require 'oo-packages)
 
-;; ;; ;; If there are any incomplete queues, complete them and restart emacs.
-;; (if-let ((queues (reverse elpaca--queues))
-;; 	     ((mapc #'elpaca--maybe-reset-queue queues))
-;; 	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
-;;     (progn (elpaca-process-queues)
-;; 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
-;;   (run-hooks 'elpaca--post-queues-hook))
+;; If there are any incomplete queues, complete them and restart emacs.
+(if-let ((queues (reverse elpaca--queues))
+	     ((mapc #'elpaca--maybe-reset-queue queues))
+	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+    (progn (elpaca-process-queues)
+	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
+  (run-hooks 'elpaca--post-queues-hook))
 
 ;; (require 'on)
 
