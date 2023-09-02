@@ -52,7 +52,7 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it
 (require 'cl-lib)
 
-(push (expand-file-name "base" user-emacs-directory) load-path)
+(push (expand-file-name "lisp" user-emacs-directory) load-path)
 
 ;; Set the settings as soon as possible so we can avoid any GUI display.
 (require 'oo-settings)
@@ -83,8 +83,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
     (progn (elpaca-process-queues)
 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
-
-;; (require 'log4e)
 
 ;; (log4e:deflogger "oo" "%t [%l] %m" "%H:%M:%S")
 
@@ -296,98 +294,8 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;;   (dolist (symbol (-list symbols))
 ;;     (apply #'oo-create-hook symbol function arglist)))
 
-;; (defmacro! defhook! (&rest rest)
-;;   "Define a hook and add it to SYMBOL and SYMBOLS.
-;; DOCSTRING and BODY are the docstring and body (respectively) of the defined
-;; hook.  Optionally, this macro takes key-value pairs passed in as either.
-
-;; Optional keyword arguments:
-
-;; - `:args' the arguments of the hook, `\(&rest)' by default.
-;; - `:depth' - same as `depth' in `add-hook'.
-;; - `:append' - same as `:depth'.
-;; - `:local' - same as `local' in `add-hook'.
-;; - `:expire' - a function that returns non-nil when the advice should be removed.
-
-;; \(fn NAME (SYMBOL [SYMBOLS] [KEY VALUE]...) [DOCSTRING] [[KEY VALUE]...] [BODY])"
-;;   (declare (indent defun) (doc-string 3))
-;;   (let! (name symbols metadata plist body) (oo-destructure-defun-plus rest))
-;;   (dolist (symbol symbols)
-;;     (let! args (or (plist-get plist :args) '(&rest _)))
-;;     (let! lambda `(lambda ,args ,@metadata (block! nil ,@body)))
-;;     (let! fname (intern (format "%s+" name)))
-;;     (collecting! forms `(oo-add-hook ',symbol #',lambda ,@plist :name ',fname)))
-;;   (macroexp-progn forms))
-
-;; (defun! oo-create-hook (symbol fn &rest arglist)
-;;   "Add a hook at SYMBOL that behaves like FUNCTION.
-;; DEPTH and LOCAL are the same as in `add-hook'.  When EXPIRE is non-nil, each
-;; the new hook will remove itself from SYMBOL after it is run once.  If
-;; EXPIRE is a function, call it on the return value of the new hook (which is will
-;; be the same as the return value for FUNCTION) in order to determine whether to
-;; remove a function from the hook."
-;;   (let! args (take! (-not #'keywordp) arglist))
-;;   (let! (&plist :append :depth :local :expire) arglist)
-;;   (let! hook (oo-generate-hook-name symbol fn args))
-;;   (fset hook
-;; 	`(lambda (&rest _)
-;; 	   ,@(when (symbolp fn) `((oo-try-load-feature #',fn)))
-;; 	   (oo-log-hook nil ',hook)
-;; 	   (prog1 (condition-case-unless-debug err
-;; 		      (apply #',fn ',args)
-;; 		    (error (oo-log-error "hook `%s' failed because %s -> %s" ',hook (car err) (cdr err))))
-;; 	     (when ,expire (remove-hook ',symbol ',hook)))))
-;;   (add-hook symbol hook (or depth append) local))
-
 ;; ;; (defalias 'oo-generate-hook 'oo-create-hook)
 ;; ;; (defalias 'oo-gen-hook 'oo-create-hook)
-
-;; (defun! oo-advice-create (&rest args)
-;;   "Return a function that advises SYMBOL at PLACE.
-;; PROPS is the same as in `advice-add'.  When EXPIRE is non-nil, each function will
-;; remove itself as advice after it is run once.  If EXPIRE is a function, call it
-;; on the return value in order to determine whether to remove a function as advice."
-;;   (let! (symbol place function (&plist :name :expire :props)) args)
-;;   (let! name (or name (if (symbolp function) function (gensym "anonymous-advice-"))))
-;;   (let! new-advice (oo-args-to-symbol symbol '@ name))
-;;   (fset new-advice
-;; 	    `(lambda (&rest args)
-;; 	       ,@(when (symbolp function) `((oo-try-load-feature #',function)))
-;; 	       (aprog1 (apply #',function args)
-;; 	         (when (and ',expire (or (not (functionp ',expire)) (funcall ',expire it)))
-;; 	           (advice-remove ',symbol ',new-advice)))))
-;;   (advice-add symbol place new-advice props)
-;;   new-advice)
-
-;; (cl-defun oo-add-advice (symbols place function &key expire props)
-;;   "SYMBOLS, WHERE, FUNCTIONS, and PROPS correspond to the arguments for
-;; advice-add.  Unlike advice-add, SYMBOLS and FUNCTIONS can be single items or
-;; lists.  When EXPIRE is non-nil, each function will remove itself as advice
-;; after it is run once.  If EXPIRE is a function, call it on the return value in
-;; order to determine whether to remove a function as advice."
-;;   (dolist (symbol (-list symbols))
-;;     (oo-advice-create symbol place function :expire expire :props props)))
-
-;; (defmacro! defadvice! (&rest args)
-;;   "Define an advice for FUNCTION called FUNCTION@NAME+.
-;; DOCSTRING and BODY are the docstring and body of the defined advice.  PLACE is
-;; the same as in `add-function' except it is a symbol instead of a keyword.  FLAGS
-;; is set of key value pairs.  Optionally,
-
-;; Optional keyword arguments:
-;; - `:args' - the arguments for the advice, \(&rest _) by default.
-;; - `:props' - the same as in `advice-add'.
-;; - `:expire' - a function that returns non-nil when the advice should be removed.
-
-;; \(fn NAME (PLACE FUNCTION [OTHER-FUNCTIONS] [KEY VAL]...) [DOCSTRING] [interactive-form] [[KEY VAL]...]
-;; BODY...)"
-;;   (declare (indent defun) (doc-string 3))
-;;   (let! (name (place . symbols) metadata plist body) (oo-destructure-defun-plus args))
-;;   (dolist (symbol symbols)
-;;     (let! lambda `(lambda ,(or (plist-get plist :args) '(&rest _)) ,@metadata ,@body))
-;;     (let! kargs (map-delete (plist-put plist :name (macroexp-quote (oo-args-to-symbol name '+))) :args))
-;;     (pushing! forms `(oo-advice-create ',symbol ,(oo-args-to-keyword place) ,lambda ,@kargs)))
-;;   (macroexp-progn (nreverse forms)))
 
 ;; (defmacro pop! (place &optional pred)
 ;;   "Set place to the result of."
@@ -404,90 +312,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; 	      (while (and ,place (funcall ,pred (car ,place)))
 ;; 		(pushing! ,collected (pop ,place)))
 ;; 	      (nreverse ,collected))))))
-
-;; (defconst oo-normal-leader-key "SPC"
-;;   "The evil leader prefix key.")
-
-;; (defconst oo-normal-localleader-key "SPC m"
-;;   "The localleader prefix key for major-mode specific commands.")
-
-;; (defconst oo-normal-localleader-short-key ","
-;;   "A shorter alternative `oo-localleader-key'.")
-
-;; (defconst oo-insert-leader-key "M-SPC"
-;;   "The leader prefix key used for Insert state.")
-
-;; (defconst oo-insert-localleader-key "M-SPC m"
-;;   "The localleader prefix key for major-mode specific commands.")
-
-;; (defconst oo-insert-localleader-short-key "M-,"
-;;   "A short non-normal `oo-localleader-key'.")
-
-;; (defconst oo-emacs-leader-key "C-c l"
-;;   "The leader prefix key used for Emacs states.")
-
-;; (defconst oo-emacs-localleader-key "C-c l m"
-;;   "The localleader prefix key for major-mode specific commands.")
-
-;; (defconst oo-emacs-localleader-short-key "C-c s"
-;;   "A short non-normal `oo-localleader-key'.")
-
-;; (defvar oo-initial-evil-key-bindings nil
-;;   "A list of binding forms to be run after evil is loaded.")
-
-;; (defvar oo-initial-evil-key-bindings-enabled-p nil
-;;   "Whether forms in `oo-initial-evil-key-bindings-' have been evaluated.")
-
-;; (defafter! evaluate-initial-evil-key-bindings (evil)
-;;   "Evaluate forms in `oo-initial-evil-key-bindings'."
-;;   (oo-log "Evaluating initial bindings...")
-;;   (funcall `(lambda () (ignore-errors ,@oo-initial-evil-key-bindings)))
-;;   (setq oo-initial-evil-key-bindings-enabled-p t))
-
-;; (defhook! enable-deferred-key-binding-evaluation (emacs-startup-hook :depth 80)
-;;   "Evaluate any deferred bindings.
-;; Also, setup deferred binding evaluation in `after-load-functions'."
-;;   (oo-eval-deferred-key-bindings-maybe)
-;;   (oo-add-hook 'after-load-functions #'oo-eval-deferred-key-bindings-maybe))
-
-;; (defvar oo-override-mode-map (make-sparse-keymap))
-
-;; (define-minor-mode oo-override-mode
-;;   "Global minor mode for higher precedence evil keybindings."
-;;   :keymap oo-override-mode-map
-;;   :global t)
-
-;; (oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
-
-;; (defun evil-mode-hook&make-intercept-map ()
-;;   "Register `oo-override-map' as an intercept map."
-;;   (evil-make-intercept-map oo-override-mode-map 'all t))
-
-;; (oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
-
-;; (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
-
-;; (defvar oo-deferred-key-bindings nil
-;;   "An alist with elements of (KEYMAP . FORMS).
-;; KEYMAP is the name of a keymap.  FORMS are a list of lisp forms that should be
-;; evaluated when KEYMAP is bound.")
-
-;; (defun! oo-eval-deferred-key-bindings-maybe (&rest _)
-;;   "Evaluate any binding forms whose keymap has been loaded.
-;; Evaluate forms from all elements of `oo-deferred-key-bindings' whose
-;; KEYMAP is bound \(the elements of the form \(KEYMAP . FORMS\)\).  Additionally,
-;; remove those elements from `oo-deferred-key-bindings'."
-;;   (for! ((item &as map . forms) oo-deferred-key-bindings)
-;;     (cond ((boundp map)
-;; 	   (pushing! forms `(oo--log-info "Evaluating %s bindings..." ',map))
-;; 	   (appending! body forms))
-;; 	  (t
-;; 	   (pushing! to-keep item))))
-;;   (setq oo-deferred-key-bindings to-keep)
-;;   (funcall `(lambda () ,@body)))
-
-;; (defvar oo-leader-map (make-sparse-keymap))
-;; (define-prefix-command 'oo/leader-prefix-command 'oo-leader-map)
 
 ;; (defun! oo-bind-macro-handle-evil-bind (token interpreters)
 ;;   "Return form that performs evil binding."
@@ -963,34 +787,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; (defhook! minibuffer-exit-hook&defer-garbage-collection (minibuffer-exit-hook :append t)
 ;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
 ;;   (setq gc-cons-threshold gcmh-low-cons-threshold))
-
-;; (set! helm-candidate-number-limit 50)
-
-;; (oo-popup-at-bottom "\\*Helm")
-
-;; (bind! (:map helm-map)
-;;        (:ie "TAB" #'helm-next-line)
-;;        (:ie "C-j" #'helm-next-line)
-;;        (:ie "C-k" #'helm-previous-line))
-
-;; (bind! (:map helm-map)
-;;        (:ie "C-a" #'helm-select-action)
-;;        (:ie "C-m" #'helm-toggle-visible-mark-forward)
-;;        (:ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
-;;        ;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
-;;        (:ie "S-TAB" #'helm-mark-current-line))
-
-;; (bind! (:when (bound-and-true-p helm-mode))
-;;        (:alt oo/set-font-face helm-select-xfont)
-;;        (:alt apropos                  helm-apropos)
-;;        (:alt find-library             helm-locate-library)
-;;        (:alt execute-extended-command helm-M-x)
-;;        (:alt find-file                helm-find-files)
-;;        (:alt locate                   helm-locate)
-;;        (:alt imenu                    helm-semantic-or-imenu)
-;;        (:alt noop-show-kill-ring      helm-show-kill-ring)
-;;        (:alt recentf                  helm-recentf)
-;;        (:alt switch-to-buffer         helm-mini))
 
 ;; (set! consult-preview-key nil)
 
@@ -1608,9 +1404,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;;        (:wk "outline"     "h" #'consult-outline)
 ;;        (:wk "org heading" "o" #'consult-org-heading))
 
-;; (bind! (:map helm-map)
-;;        (:ie "C-;" #'ace-jump-helm-line))
-
 ;; (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 
 ;; (bind! (:map oo-miscellany-map)
@@ -1677,64 +1470,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; (oo-add-hook 'on-first-file-hook #'super-save-mode)
 
 ;; (oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-;; (set! evil-search-wrap nil)
-
-;; (defvar oo-evil-state-before-minibuffer nil
-;;   "Store the evil state before entering the minibuffer.")
-
-;; (defhook! preserve-prior-evil-state (minibuffer-setup-hook)
-;;   "Save state before entering the minibuffer and enter insert state."
-;;   (when (bound-and-true-p evil-mode)
-;;     (setq oo-evil-state-before-minibuffer evil-state)
-;;     (evil-insert-state)))
-
-;; (defhook! restore-prior-evil-state (minibuffer-exit-hook)
-;;   "Restore state after minibuffer."
-;;   (when (bound-and-true-p evil-mode)
-;;     (evil-change-state oo-evil-state-before-minibuffer)
-;;     (setq oo-evil-state-before-minibuffer nil)))
-
-;; (oo-add-hook 'after-init-hook #'require 'evil :depth 10)
-
-;; (oo-add-hook 'after-init-hook #'evil-mode :depth 90)
-
-;; (set! evil-echo-state nil)
-
-;; ;; Whether the cursor is moved backwards when exiting insert state.
-;; (set! evil-move-cursor-back nil)
-
-;; (set! evil-move-beyond-eol nil)
-
-;; (defun oo-set-default-evil-cursors (&rest _)
-;;   "Set the evil cursors."
-;;   (when (bound-and-true-p evil-mode)
-;;     (set! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
-;;     (set! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
-;;     (set! evil-normal-state-cursor '(box "DarkGoldenrod2"))
-;;     (set! evil-visual-state-cursor '((hollow) "dark gray"))
-;;     (set! evil-operator-state-cursor '((hbar . 10) "hot pink"))
-;;     (set! evil-replace-state-cursor '(box "chocolate"))
-;;     (set! evil-motion-state-cursor '(box "plum3"))))
-
-;; (oo-add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
-;; (oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
-
-;; (defvar oo-escape-hook nil
-;;   "Hook run after escaping.")
-
-;; (defun @exit-everything (&rest _)
-;;   "Exits out of whatever is happening after escape."
-;;   (cond ((minibuffer-window-active-p (minibuffer-window))
-;; 	 (abort-recursive-edit))
-;; 	((run-hook-with-args-until-success 'oo-escape-hook))
-;; 	((or defining-kbd-macro executing-kbd-macro) nil)
-;; 	(t (keyboard-quit))))
-
-;; (bind! (:ie [escape] #'evil-force-normal-state))
-
-;; (oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
-;; (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 
 ;; (oo-add-hook '(prog-mode-hook text-mode-hook) #'evil-surround-mode)
 
