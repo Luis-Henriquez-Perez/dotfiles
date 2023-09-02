@@ -141,4 +141,4 @@ end-of-buffer signals; pass the rest to the default handler."
 
 (setq command-error-function #'oo-command-error-function)
 
-(provide 'oo-settings)
+(provide 'oo-base-settings)
