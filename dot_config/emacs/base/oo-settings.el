@@ -27,21 +27,6 @@
 ;; and it seems unnecessary.
 (setq auto-mode-case-fold nil)
 
-;; During startup emacs renders several messages.  The messages may be important so
-;; we don't want to get rid of them altogether.  This code prevents these message
-;; from flashing on the screen.  However they are still logged to the =*messages*=
-;; buffer.
-(when (and (display-graphic-p) oo-normal-startup)
-  (setq-default inhibit-redisplay t)
-  (setq-default inhibit-message t)
-  (defun reset-inhibit-vars ()
-    (setq-default inhibit-redisplay nil)
-    (setq-default inhibit-message nil)
-    (redraw-frame))
-  (add-hook 'window-setup-hook #'reset-inhibit-vars)
-  (define-advice startup--load-user-init-file (:after (&rest _) reset-inhibit-vars)
-    (and init-file-had-error (reset-inhibit-vars))))
-
 ;; Don't suggest keybindings for me.
 ;; When you select a command from the minibuffer that already has a keybinding emacs will try to
 ;; prompt you saying that you could have invoked said keybinding instead.  I don't need this.
