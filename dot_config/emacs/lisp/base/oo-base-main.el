@@ -1,3 +1,6 @@
+(require 'oo-base-settings)
+(require 'oo-base-utils)
+
 (defvar oo-initial-buffer-choice-hook nil
   "Hook run to choose initial buffer.
 Each hook should return either a buffer to be displayed or a boolean.
