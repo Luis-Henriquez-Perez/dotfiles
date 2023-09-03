@@ -1,3 +1,8 @@
+(bind! (:map oo-override-mode-map)
+       (:g   oo-emacs-leader-key  #'oo/leader-prefix-command)
+       (:i   oo-insert-leader-key #'oo/leader-prefix-command)
+       (:nmv oo-normal-leader-key #'oo/leader-prefix-command))
+
 (bind! (:map oo-leader-map)
        (:prefix "l")
        ("l" #'dogears-go))
