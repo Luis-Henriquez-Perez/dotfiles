@@ -142,4 +142,4 @@
   (zone-sl :repo "kawabata/zone-sl" :fetcher github :ref "7ec22e3")
   (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm" :ref "59e2fce" )
   (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47")
-  (el-init :fetcher github :repo "HKey/el-init" :ref "" :branch "master"))
+  (el-init :fetcher github :repo "HKey/el-init" :ref "7538e15" :branch "master"))

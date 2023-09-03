@@ -15,10 +15,6 @@
     (evil-change-state oo-evil-state-before-minibuffer)
     (setq oo-evil-state-before-minibuffer nil)))
 
-(oo-add-hook 'after-init-hook #'require 'evil :depth 10)
-
-(oo-add-hook 'after-init-hook #'evil-mode :depth 90)
-
 (set! evil-echo-state nil)
 
 ;; Whether the cursor is moved backwards when exiting insert state.
