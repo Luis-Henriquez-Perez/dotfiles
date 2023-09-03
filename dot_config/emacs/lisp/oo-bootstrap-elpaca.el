@@ -341,6 +341,8 @@
 
 (elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
 
+(elpaca (el-init :fetcher github :repo "HKey/el-init" :ref "7538e15" :branch "master"))
+
 ;; If there are any incomplete queues, complete them and restart emacs.
 (if-let ((queues (reverse elpaca--queues))
 	     ((mapc #'elpaca--maybe-reset-queue queues))

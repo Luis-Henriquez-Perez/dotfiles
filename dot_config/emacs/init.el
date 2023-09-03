@@ -35,7 +35,7 @@
 ;; Put the base directory into the `load-path', making sure it's at the front.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
-(require 'oo-base-vars)
+;; (require 'oo-base-vars)
 
 (require 'oo-bootstrap-elpaca)
 
@@ -54,30 +54,18 @@
 			                :size 15)))
   (set-face-attribute 'default nil :font font))
 
-(require 'cl-lib)
+;; The package `el-init' is one that I consider underused.
+(require 'el-init)
+(setq el-init-lazy-init-regexp "^oo-\\(.+\\)-config$")
 
-;; Set the settings as soon as possible so we can avoid any GUI display.
-;; (require 'oo-base-settings)
+(el-init-load (locate-user-emacs-file "lisp/")
+              :subdirectories '("base" "config")
+              :wrappers '(el-init-require/lazy el-init-require/record-error el-init-require/benchmark))
 
-;; ;; Add the base directory to the load-path.
-;; (require 'oo-base-font)
 
-;; (oo-initialize-base-font oo-font-file)
+(setq-default fill-column 100)
 
-;; (require 'oo-base-packages)
-;; (oo-bootstrap-packages oo-package-dir oo-recipe-file)
-
-;; (require 'oo-base-library)
-
-;; ;; The package `el-init' is one that I consider underused.
-;; (require 'el-init)
-;; (setq el-init-lazy-init-regexp "^oo-\\(.+\\)-config$")
-
-;; (el-init-load oo-lisp-dir
-;;               :subdirectories nil
-;;               :wrappers (when oo-debug-p '(el-init-require/record-error el-init-require/benchmark)))
-(require 'oo-base-settings)
-
+(require 'log4e)
 (log4e:deflogger "oo" "%t [%l] %m" "%H:%M:%S")
 
 (defalias 'oo-log 'oo--log-info)
@@ -91,24 +79,6 @@
 (oo--log-set-level 'trace)
 
 (oo--log-enable-logging)
-
-(require 'oo-base-utils)
-
-(require 'oo-modification-macros)
-
-(require 'oo-autoload)
-
-(require 'oo-block-macro)
-
-(require 'oo-base-definers)
-
-(require 'oo-set)
-
-(require 'oo-after-load)
-
-(require 'oo-hook)
-
-(require 'oo-advice)
 
 ;; `prog-mode-hook'
 (oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
@@ -157,181 +127,80 @@
 (oo-add-hook 'text-mode-hook #'auto-fill-mode)
 (oo-add-hook 'text-mode-hook #'visual-line-mode)
 
-(require 'oo-bind-macro)
-
-(require 'oo-base-leaders)
-
 ;; Note that this can't work with `on-first-input-hook' because which-key
 ;; doesn't happen on first keypress.  It needs to be in the startup hook.
 
-(bind! (:map oo-override-mode-map)
-       (:g   oo-emacs-leader-key  #'oo/leader-prefix-command)
-       (:i   oo-insert-leader-key #'oo/leader-prefix-command)
-       (:nmv oo-normal-leader-key #'oo/leader-prefix-command))
+;; (set! consult-preview-key nil)
 
-(set! idle-require-load-break 5)
-(set! idle-require-idle-delay 10)
+;; (when (display-graphic-p)
+;;   (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode))
+;; ;; Declaratively add hooks.
+;; ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
-(set! gcmh-high-cons-threshold (* 8 1024 1024))
-(set! gcmh-low-cons-threshold (* 4 1024 1024))
-(set! gcmh-idle-delay 'auto)
+;; (set! crm-separator ",")
 
-(defvar oo-initial-buffer-choice-hook nil
-  "Hook run to choose initial buffer.
-Each hook should return either a buffer to be displayed or a boolean.
-For what buffer is displayed in the case of a boolean see
-`initial-buffer-choice'.")
+;; (oo-popup-at-bottom "\\*Vertico")
 
-(defun oo-run-initial-buffer-choice-hook ()
-  "Run `oo-initial-buffer-choice-hook'."
-  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
-	          (get-buffer-create "*scratch*"))
-    (oo-log-info "set initial buffer to %s" (buffer-name))))
+;; (defun oo-set-window-divider-face (&rest _)
+;;   "Set the window divider face."
+;;   (set-face-foreground 'window-divider "black"))
 
-(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
+;; (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)
 
-;; (defhook! minibuffer-setup-hook&boost-garbage-collection ()
-;;   "Boost garbage collection settings to `gcmh-high-cons-threshold"
-;;   (setq gc-cons-threshold gcmh-high-cons-threshold))
+;; (set! window-divider-default-places t)
 
-;; (defhook! minibuffer-exit-hook&defer-garbage-collection (minibuffer-exit-hook :append t)
-;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-;;   (setq gc-cons-threshold gcmh-low-cons-threshold))
+;; (set! lambda-themes-set-italic-comments nil)
+;; (set! lambda-themes-set-italic-keywords nil)
 
-(oo-call-after-load 'helm #'require 'oo-helm-config)
+;; (set! lambda-themes-set-variable-pitch nil)
 
-(set! consult-preview-key nil)
+;; (set! modus-themes-headings '((1 . (rainbow light 1.4))
+;; 			                  (2 . (rainbow light 1.3))
+;; 			                  (3 . (rainbow light 1.2))
+;; 			                  (4 . (rainbow light 1.1))
+;; 			                  (t . (rainbow light 1.0))))
 
-(when (display-graphic-p)
-  (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode))
-;; Declaratively add hooks.
-;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
+;; (oo-add-hook 'dired-mode-hook #'dired-omit-mode)
 
-(set! crm-separator ",")
+;; (set! dired-recursive-copies 'always)
+;; (set! dired-recursive-deletes 'always)
 
-(set! vertico-quick1 "abcdefghijklmnopqrstuvwxyz")
+;; (oo-call-after-load 'dirvish #'dirvish-override-dired-mode 1)
 
-(set! vertico-count-format '("%-6s " . "%2$s"))
-(set! vertico-count 15)
+;; (set! dirvish-use-mode-line nil)
 
-(oo-popup-at-bottom "\\*Vertico")
+;; (set! dirvish-attributes '(file-size all-the-icons subtree-state))
 
-(defun oo-set-window-divider-face (&rest _)
-  "Set the window divider face."
-  (set-face-foreground 'window-divider "black"))
+;; (bind! (:alt dired dirvish))
 
-(oo-add-advice #'load-theme :after #'oo-set-window-divider-face)
+;; (set! dirvish-default-layout nil)
 
-(set! window-divider-default-places t)
+;; (set! idle-require-symbols (append '(em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls em-prompt em-term em-unix)
+;;                                    idle-require-symbols))
 
-(set! lambda-themes-set-italic-comments nil)
-(set! lambda-themes-set-italic-keywords nil)
+;; (oo-popup-at-bottom "\\*[Hh]elp")
 
-(set! lambda-themes-set-variable-pitch nil)
+;; ;; By default this variable is set to =t= which means, save bookmarks whenever emacs is killed.  An
+;; ;; integer mans to save my bookmarks whenever I set a bookmark.  That way I minimize the chances of
+;; ;; losing them if emacs crashes.
+;; (set! bookmark-save-flag 1)
 
-(set! modus-themes-headings '((1 . (rainbow light 1.4))
-			                  (2 . (rainbow light 1.3))
-			                  (3 . (rainbow light 1.2))
-			                  (4 . (rainbow light 1.1))
-			                  (t . (rainbow light 1.0))))
+;; (set! avy-style 'pre)
+;; (set! avy-keys (number-sequence 97 122))
 
-(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+;; (set! rainbow-delimiters-max-face-count 9)
 
-(set! dired-recursive-copies 'always)
-(set! dired-recursive-deletes 'always)
+;; (set! save-place-file (concat oo-cache-dir "saveplace"))
+;; (set! save-place-limit nil)
 
-(oo-call-after-load 'dirvish #'dirvish-override-dired-mode 1)
+;; (adding-to-list! dogears-ignore-modes 'dashboard-mode)
 
-(set! dirvish-use-mode-line nil)
+;; (after! org
+;;   (defun oo-org-src-buffer-p () (bound-and-true-p org-src-mode))
+;;   (adding-to-list! dogears-ignore-places-functions #'oo-org-src-buffer-p))
 
-(set! dirvish-attributes '(file-size all-the-icons subtree-state))
+;; (oo-silence #'flyspell-mode)
 
-(bind! (:alt dired dirvish))
+;; (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
 
-(set! dirvish-default-layout nil)
-
-(set! idle-require-symbols (append '(em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls em-prompt em-term em-unix)
-                                   idle-require-symbols))
-
-(oo-popup-at-bottom "\\*[Hh]elp")
-
-(oo-call-after-load 'org #'require 'oo-org-config)
-
-(setq corfu-bar-width 0)
-
-(set! corfu-auto-prefix 1)
-
-(set! corfu-quit-at-boundary nil)
-(set! corfu-auto t)
-(set! corfu-auto-delay 0.1)
-
-(setq-default fill-column 100)
-
-(defadvice! disable-old-themes (around load-theme)
-  "Disable old themes before loading new ones."
-  (:args orig-fn &rest args)
-  (mapc #'disable-theme custom-enabled-themes)
-  (apply orig-fn args))
-
-(set! bookmark-save-flag 1)
-
-(set! avy-style 'pre)
-(set! avy-keys (number-sequence 97 122))
-
-(defsubst +captain-in-string-or-comment-p ()
-  "Return non-nil if point is in a string or comment."
-  (nth 8 (syntax-ppss (point))))
-
-(defun! +captain-prog-mode-sentence-start-function ()
-  "Return point at the start of the last sentence.
-Mean to be used as the value of `captain-predicate'."
-  (cl-assert (require 'smartparens nil 'noerror))
-  (awhen (car (bounds-of-thing-at-point 'sentence))
-    (pushing! points it))
-  (acond ((save-excursion (and (comment-beginning) (point)))
-          (pushing! points it))
-         ((and (nth 8 (syntax-ppss (point))) (sp-in-docstring-p nil nil 'string))
-          (pushing! points it)))
-  (apply #'max points))
-
-(defhook! auto-capitalize-sentences-in-docstrings-and-comments (prog-mode-hook)
-  (captain-mode 1)
-  (setq-local captain-predicate #'+captain-in-string-or-comment-p)
-  (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
-
-(defhook! auto-capitalize-sentences (text-mode-hook)
-  (captain-mode 1)
-  (setq-local captain-predicate (lambda () t)))
-
-(set! rainbow-delimiters-max-face-count 9)
-
-(set! save-place-file (concat oo-cache-dir "saveplace"))
-(set! save-place-limit nil)
-
-(set! super-save-auto-save-when-idle t)
-(set! super-save-idle-duration 5)
-
-(oo-call-after-load 'evil #'require 'oo-evil-config)
-
-(oo-call-after-load 'evil-easymotion #'oo-evil-easymotion-config)
-
-(adding-to-list! dogears-ignore-modes 'dashboard-mode)
-
-(defun oo-org-src-buffer-p () (bound-and-true-p org-src-mode))
-(adding-to-list! dogears-ignore-places-functions #'oo-org-src-buffer-p)
-
-(oo-silence #'flyspell-mode)
-
-(setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
-
-(defun! oo/set-font-face ()
-  "Apply an existing xfont to all graphical frames."
-  (interactive)
-  (let! font (completing-read "Choose font: " (x-list-fonts "*")))
-  (set-frame-font font nil t))
-
-(set! transient-levels-file (concat oo-cache-dir "transient/levels"))
-(set! transient-values-file (concat oo-cache-dir "transient/values"))
-(set! transient-history-file (concat oo-cache-dir "transient/history"))
-
-(set! ispell-program-name (or (executable-find "hunspell") (executable-find "ispell")))
+;; (set! ispell-program-name (or (executable-find "hunspell") (executable-find "ispell")))
