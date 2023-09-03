@@ -35,8 +35,6 @@
 ;; Put the base directory into the `load-path', making sure it's at the front.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
-;; (require 'oo-base-vars)
-
 (require 'oo-bootstrap-elpaca)
 
 (let (font)

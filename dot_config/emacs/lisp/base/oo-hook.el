@@ -1,5 +1,6 @@
 (require 'log4e)
 (require 'oo-modification-macros)
+(require 'oo-base-utils)
 (require 'oo-autoload)
 
 (adding-to-list! log4e-log-level-alist '(hook . 3))
