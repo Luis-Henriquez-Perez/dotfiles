@@ -9,11 +9,4 @@
 (set! dashboard-center-content t)
 ;; (set! dashboard-banner-logo-title "Welcome!")
 
-(defhook! create-dashboard (oo-initial-buffer-choice-hook)
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-	    (dashboard-insert-startupify-lists)))))
-
-
 (provide 'oo-dashboard-config)
