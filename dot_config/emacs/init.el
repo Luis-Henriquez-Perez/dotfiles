@@ -119,6 +119,19 @@
       (with-current-buffer it
 	    (dashboard-insert-startupify-lists)))))
 
+;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
+;; other character like "$" or "@".
+(defmacro! with-map! (&rest args)
+  "Bind keys to."
+  (declare (indent defun))
+  (let! mapvar (gensym "map"))
+  (flet! name (symbol)
+    (intern (s-chop-prefix "$" (symbol-name symbol))))
+  (flet! let-bind (symbol)
+    `(,symbol (map-elt ,mapvar ',(name symbol))))
+  (let! binds (mapcar #'let-bind (oo-atoms "\\`\\$" body)))
+  `(let* ((,mapvar ,map) ,@binds)
+     ,@body))
 ;; Note that this can't work with `on-first-input-hook' because which-key
 ;; doesn't happen on first keypress.  It needs to be in the startup hook.
 

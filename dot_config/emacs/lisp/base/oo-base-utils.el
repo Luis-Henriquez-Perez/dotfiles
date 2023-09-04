@@ -28,6 +28,8 @@
                (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
                (-uniq)))
 
+;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
+;; other character like "$" or "@".
 (defmacro! with-map! (map &rest body)
   (declare (indent defun))
   (let! mapvar (gensym "map"))
