@@ -3,6 +3,7 @@
 (require 'dash-functional)
 (require 'mmt)
 (require 'shut-up)
+(require 'subr-x)
 
 (log4e:deflogger "oo" "%t [%l] %m" "%H:%M:%S")
 
@@ -18,6 +19,7 @@
 (oo--log-enable-logging)
 
 (defsubst oo-symbol-match-p (regexp symbol)
+  "Return non-nil if SYMBOL matches REGEXP."
   (string-match-p regexp (symbol-name symbol)))
 
 (defun oo-atoms (regexp tree)
