@@ -122,7 +122,6 @@
 ;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
 ;; other character like "$" or "@".
 (defmacro! with-map! (&rest args)
-  "Bind keys to."
   (declare (indent defun))
   (let! mapvar (gensym "map"))
   (flet! name (symbol)

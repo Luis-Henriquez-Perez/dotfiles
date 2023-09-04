@@ -28,19 +28,6 @@
                (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
                (-uniq)))
 
-;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
-;; other character like "$" or "@".
-(defmacro! with-map! (map &rest body)
-  (declare (indent defun))
-  (let! mapvar (gensym "map"))
-  (flet! name (symbol)
-    (intern (s-chop-prefix "$" (symbol-name symbol))))
-  (flet! let-bind (symbol)
-    `(,symbol (map-elt ,mapvar ',(name symbol))))
-  (let! binds (mapcar #'let-bind (oo-atoms "\\`\\$" body)))
-  `(let* ((,mapvar ,map) ,@binds)
-     ,@body))
-
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
   (equal (car-safe obj) 'function))

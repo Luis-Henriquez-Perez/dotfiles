@@ -30,6 +30,7 @@ Meant to be used with `block!'.  See `oo-block-parse-with'.")
   (declare (indent defun)))
 
 (defalias 'letf! 'label!)
+(defalias 'flet! 'label!)
 
 (defmacro excluding! (symbol &rest symbols)
   "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
