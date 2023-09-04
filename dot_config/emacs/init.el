@@ -81,7 +81,6 @@
 (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
 
-(require 'on)
 ;; `on-first-input-hook'
 (oo-add-hook 'on-first-input-hook #'vertico-mode)
 (oo-add-hook 'on-first-input-hook #'savehist-mode)
@@ -114,6 +113,12 @@
 (oo-add-hook 'text-mode-hook #'auto-fill-mode)
 (oo-add-hook 'text-mode-hook #'visual-line-mode)
 
+(defhook! create-dashboard (oo-initial-buffer-choice-hook)
+  (when (require 'dashboard nil t)
+    (aprog1 (get-buffer-create dashboard-buffer-name)
+      (with-current-buffer it
+	    (dashboard-insert-startupify-lists)))))
+
 ;; Note that this can't work with `on-first-input-hook' because which-key
 ;; doesn't happen on first keypress.  It needs to be in the startup hook.
 
@@ -125,8 +130,6 @@
 ;; ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
 ;; (set! crm-separator ",")
-
-;; (oo-popup-at-bottom "\\*Vertico")
 
 ;; (defun oo-set-window-divider-face (&rest _)
 ;;   "Set the window divider face."
