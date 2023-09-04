@@ -26,7 +26,6 @@
                (-select (-partial #'oo-symbol-match-p regexp))
                (-uniq)))
 
-
 (defmacro with-map! (map)
   (flet! bind (symbol) (cons symbol))
   (mapcar #'map-binding (oo-atoms "\\`\\$" map))
