@@ -25,14 +25,19 @@
 (defun oo-atoms (regexp tree)
   "Return symbols that match REGEXP in TREE."
   (thread-last (flatten-list tree)
-               (-select (-partial #'oo-symbol-match-p regexp))
+               (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
                (-uniq)))
 
-;; (defmacro with-map! (map)
-;;   (flet! bind (symbol) (cons symbol (map-elt map symbol)))
-;;   (mapcar #'map-binding (oo-atoms "\\`\\$" map))
-;;   (let ((map-symbols)
-;;         ())))
+(defmacro! with-map! (map &rest body)
+  (declare (indent defun))
+  (let! mapvar (gensym "map"))
+  (flet! name (symbol)
+    (intern (s-chop-prefix "$" (symbol-name symbol))))
+  (flet! let-bind (symbol)
+    `(,symbol (map-elt ,mapvar ',(name symbol))))
+  (let! binds (mapcar #'let-bind (oo-atoms "\\`\\$" body)))
+  `(let* ((,mapvar ,map) ,@binds)
+     ,@body))
 
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
