@@ -28,11 +28,11 @@
                (-select (-partial #'oo-symbol-match-p regexp))
                (-uniq)))
 
-(defmacro with-map! (map)
-  (flet! bind (symbol) (cons symbol))
-  (mapcar #'map-binding (oo-atoms "\\`\\$" map))
-  (let ((map-symbols)
-        ())))
+;; (defmacro with-map! (map)
+;;   (flet! bind (symbol) (cons symbol (map-elt map symbol)))
+;;   (mapcar #'map-binding (oo-atoms "\\`\\$" map))
+;;   (let ((map-symbols)
+;;         ())))
 
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
