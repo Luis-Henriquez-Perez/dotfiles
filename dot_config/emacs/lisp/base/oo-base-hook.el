@@ -1,7 +1,9 @@
 (require 'log4e)
+(require 'pcase)
 (require 'oo-modification-macros)
 (require 'oo-base-utils)
 (require 'oo-autoload)
+(require 'oo-set)
 
 (adding-to-list! log4e-log-level-alist '(hook . 3))
 (log4e--def-level-logger "oo" "log-hook" 'hook)
@@ -77,4 +79,4 @@ remove a function from the hook."
 	         (when ,expire (remove-hook ',symbol ',hook)))))
   (add-hook symbol hook (or depth append) local))
 
-(provide 'oo-hook)
+(provide 'oo-base-hook)

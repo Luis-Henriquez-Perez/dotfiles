@@ -1,3 +1,5 @@
+(require 'oo-base-definers)
+
 (add-to-list 'log4e-log-level-alist '(setting . 3))
 (log4e--def-level-logger "oo" "log-setting" 'setting)
 (defalias 'oo-log-setting 'oo--log-advice)

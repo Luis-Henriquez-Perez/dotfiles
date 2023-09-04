@@ -43,3 +43,5 @@ property drawer and the source block in the current heading."
   (edit-indirect-region beg end t))
 
 (oo-popup-at-bottom "\\*edit-indirect[^z-a]+")
+
+(provide 'oo-edit-paragraphs)

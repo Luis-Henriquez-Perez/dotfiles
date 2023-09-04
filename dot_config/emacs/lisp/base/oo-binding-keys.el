@@ -1,32 +1,6 @@
 (require 'oo-modification-macros)
-(require 'oo-hooking)
-
-(defconst oo-normal-leader-key "SPC"
-  "The evil leader prefix key.")
-
-(defconst oo-normal-localleader-key "SPC m"
-  "The localleader prefix key for major-mode specific commands.")
-
-(defconst oo-normal-localleader-short-key ","
-  "A shorter alternative `oo-localleader-key'.")
-
-(defconst oo-insert-leader-key "M-SPC"
-  "The leader prefix key used for Insert state.")
-
-(defconst oo-insert-localleader-key "M-SPC m"
-  "The localleader prefix key for major-mode specific commands.")
-
-(defconst oo-insert-localleader-short-key "M-,"
-  "A short non-normal `oo-localleader-key'.")
-
-(defconst oo-emacs-leader-key "C-c l"
-  "The leader prefix key used for Emacs states.")
-
-(defconst oo-emacs-localleader-key "C-c l m"
-  "The localleader prefix key for major-mode specific commands.")
-
-(defconst oo-emacs-localleader-short-key "C-c s"
-  "A short non-normal `oo-localleader-key'.")
+(require 'oo-base-hook)
+(require 'oo-base-definers)
 
 (defvar oo-initial-evil-key-bindings nil
   "A list of binding forms to be run after evil is loaded.")
@@ -82,5 +56,4 @@ remove those elements from `oo-deferred-key-bindings'."
   (setq oo-deferred-key-bindings to-keep)
   (funcall `(lambda () ,@body)))
 
-(defvar oo-leader-map (make-sparse-keymap))
-(define-prefix-command 'oo/leader-prefix-command 'oo-leader-map)
+(provide 'oo-binding-keys)

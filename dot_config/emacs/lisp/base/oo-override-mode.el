@@ -1,3 +1,5 @@
+(require 'oo-base-hook)
+
 (defvar oo-override-mode-map (make-sparse-keymap))
 
 (define-minor-mode oo-override-mode

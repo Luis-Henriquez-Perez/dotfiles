@@ -1,4 +1,9 @@
+(require 'cl-lib)
 (require 'log4e)
+(require 'oo-base-utils)
+(require 'oo-modification-macros)
+(require 'oo-base-definers)
+(require 'oo-set)
 
 (defun! oo-advice-create (&rest args)
   "Return a function that advises SYMBOL at PLACE.
@@ -33,7 +38,7 @@ the same as in `add-function' except it is a symbol instead of a keyword.  FLAGS
 is set of key value pairs.  Optionally,
 
 Optional keyword arguments:
-- `:args' - the arguments for the advice, \(&rest _) by default.
+- `:args' - the arguments for the advice, (&rest _) by default.
 - `:props' - the same as in `advice-add'.
 - `:expire' - a function that returns non-nil when the advice should be removed.
 
@@ -47,4 +52,4 @@ BODY...)"
     (pushing! forms `(oo-advice-create ',symbol ,(oo-args-to-keyword place) ,lambda ,@kargs)))
   (macroexp-progn (nreverse forms)))
 
-(provide 'oo-advice)
+(provide 'oo-base-advice)

@@ -1,4 +1,7 @@
-(require 'log4e)
+(require 'oo-base-utils)
+(require 'oo-modification-macros)
+(require 'oo-base-definers)
+(require 'oo-set)
 
 (adding-to-list! log4e-log-level-alist '(after-load . 3))
 (log4e--def-level-logger "oo" "log-after-load" 'after-load)

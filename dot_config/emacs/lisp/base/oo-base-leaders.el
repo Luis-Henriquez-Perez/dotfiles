@@ -1,3 +1,5 @@
+(require 'oo-bind-macro)
+
 (defconst oo-normal-leader-key "SPC"
   "The evil leader prefix key.")
 
@@ -60,6 +62,9 @@
 
 (defvar oo-miscellany-map (make-sparse-keymap))
 (define-prefix-command 'oo/miscellany-prefix-command 'oo-miscellany-map)
+
+(defvar oo-leader-map (make-sparse-keymap))
+(define-prefix-command 'oo/leader-prefix-command 'oo-leader-map)
 
 (bind! (:map oo-leader-map)
        (:wk "buffer" "b" #'oo/buffer-prefix-command))

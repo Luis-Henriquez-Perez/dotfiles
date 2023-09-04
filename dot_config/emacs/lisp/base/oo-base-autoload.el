@@ -57,4 +57,4 @@ FN is a function symbol.  Look in the load path for names that match features."
           (mapc #'oo-try-load-feature (-select #'symbolp (flatten-tree ',body)))
           (progn ,@body))))))
 
-(provide 'oo-autoload)
+(provide 'oo-base-autoload)

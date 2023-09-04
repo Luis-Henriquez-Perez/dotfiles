@@ -1,3 +1,8 @@
+(require 'oo-base-utils)
+(require 'oo-modification-macros)
+(require 'oo-base-definers)
+(require 'oo-base-hook)
+
 (defvar oo-initial-evil-key-bindings nil
   "A list of binding forms to be run after evil is loaded.")
 
@@ -24,7 +29,7 @@ evaluated when KEYMAP is bound.")
 (defun! oo-eval-deferred-key-bindings-maybe (&rest _)
   "Evaluate any binding forms whose keymap has been loaded.
 Evaluate forms from all elements of `oo-deferred-key-bindings' whose
-KEYMAP is bound \(the elements of the form \(KEYMAP . FORMS\)\).  Additionally,
+KEYMAP is bound (the elements of the form (KEYMAP . FORMS)).  Additionally,
 remove those elements from `oo-deferred-key-bindings'."
   (for! ((item &as map . forms) oo-deferred-key-bindings)
     (cond ((boundp map)

@@ -10,7 +10,7 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; functions.  This way I can reference the full path.  Certain directories are
 ;; important; and I end up referencing them alot.  One of these is my
 ;; cache directory.
-(defvar oo-cache-dir (concat user-emacs-directory "cache/")
+(defvar oo-cache-dir (locate-user-emacs-file "cache/")
   "Directory containing files used for caching information.")
 
 ;; (defvar oo-recipe-file nil)

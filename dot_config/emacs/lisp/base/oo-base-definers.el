@@ -1,4 +1,5 @@
-(require 'oo-autoload)
+(require 'oo-base-utils)
+(require 'oo-base-autoload)
 (require 'oo-block-macro)
 
 ;; The ampersand symbol (&) is that is used to differentiate special symbols in function arguments

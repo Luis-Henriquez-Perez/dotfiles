@@ -86,7 +86,6 @@ Designed to be used in `block!'."
   `(set! ,var (add-to-list ',var ,value ,append ,compare-fn)))
 
 (defmacro pop! (place &optional pred)
-  "Set place to the result of."
   (mmt-with-gensyms (collected)
     (cond ((null pred)
 	       `(list (pop ,place)))
