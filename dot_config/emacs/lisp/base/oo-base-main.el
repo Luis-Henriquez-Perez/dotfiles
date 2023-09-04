@@ -1,5 +1,6 @@
 (require 'oo-base-settings)
 (require 'oo-base-utils)
+(require 'on)
 
 (defvar oo-initial-buffer-choice-hook nil
   "Hook run to choose initial buffer.
