@@ -40,6 +40,28 @@ remove those elements from `oo-deferred-key-bindings'."
   (setq oo-deferred-key-bindings to-keep)
   (funcall `(lambda () ,@body)))
 
+(defun oo-bind-join-prefix ())
+
+;; 1. Replace handlers with a function.
+;; 2. Use treepy for producing tokens
+;; 3. Add a specific function for alternate bindings
+(defun oo-bind-alt (def alt)
+  )
+
+(defun oo-bind-key (&rest plist)
+  "Generic do-what-I-mean bind key."
+  (when prefix)
+  (when autoload)
+  (when which-key
+    (setq def))
+  (cond ((and (symbolp keymap))
+         ())
+        ((and evil-state minor-mode)
+         (oo-call-after-load 'evil #'))
+        ((and evil-state))
+        (t
+         (define-key keymap key def))))
+
 (defun! oo-bind-macro-handle-evil-bind (token interpreters)
   "Return form that performs evil binding."
   (let! state (map-elt token :state))

@@ -17,6 +17,22 @@
 (oo--log-set-level 'trace)
 (oo--log-enable-logging)
 
+(defsubst oo-symbol-match-p (regexp symbol)
+  (string-match-p regexp (symbol-name symbol)))
+
+(defun oo-atoms (regexp tree)
+  "Return symbols that match REGEXP in TREE."
+  (thread-last (flatten-list tree)
+               (-select (-partial #'oo-symbol-match-p regexp))
+               (-uniq)))
+
+
+(defmacro with-map! (map)
+  (flet! bind (symbol) (cons symbol))
+  (mapcar #'map-binding (oo-atoms "\\`\\$" map))
+  (let ((map-symbols)
+        ())))
+
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
   (equal (car-safe obj) 'function))
