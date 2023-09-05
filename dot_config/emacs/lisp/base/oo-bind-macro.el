@@ -202,7 +202,8 @@ If any letter in EVIL-KEYWORD does not correspond to an evil state, return nil."
       (_
        (error "No matcher for `%S' of `%S'" (car node) node)))
     (message "node-> %S" node)
-    (setq zipper (treepy-next zipper))))
+    ;; (setq zipper (treepy-next zipper))
+    ))
 
 (defun oo-bind-macro-keybinding-p (token)
   "Return non-nil if TOKEN is a binding token."
