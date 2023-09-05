@@ -15,6 +15,9 @@
   (funcall `(lambda () (ignore-errors ,@oo-initial-evil-key-bindings)))
   (setq oo-initial-evil-key-bindings-enabled-p t))
 
+;; It's faster to have a hook specifically for evaluating deferred bindings than it is to check
+;; individually with a lambda. Each keymap is only checked once and only one function call is used
+;; to check everything.
 (defhook! enable-deferred-key-binding-evaluation (emacs-startup-hook :depth 80)
   "Evaluate any deferred bindings.
 Also, setup deferred binding evaluation in `after-load-functions'."
@@ -43,13 +46,48 @@ remove those elements from `oo-deferred-key-bindings'."
 ;; 1. Replace handlers with a function.
 ;; 2. Use treepy for producing tokens
 ;; 3. Add a specific function for alternate bindings
-(defun oo-bind-alt (def alt)
+
+(defun! oo-bind-macro-handle-alt (token interpreters)
+  "Remap uses of command to alternate command."
+  (let! (command . alt) (map-elt token :alt))
+  (let! condition (or (map-elt token :when) t))
+  (cond ((and alt condition command)
+	     (let! hook (oo-args-to-symbol 'oo-bind-hook-for- command))
+	     (let! filter-fn (oo-args-to-symbol 'oo-bind-filter-for- command))
+	     (let! key-var (gensym "key-"))
+	     (let! def-var (gensym "def-"))
+	     (setq token (map-insert token :def def-var))
+	     (setq token (map-insert token :key key-var))
+	     (unless (map-elt token :map)
+	       (setq token (map-insert token :map 'global-map)))
+	     `((setq ,def-var '(menu-item "" nil :filter ,filter-fn))
+	       (setq ,key-var [remap ,command])
+	       (unless (boundp ',hook)
+	         (defvar ,hook '((t ,command)))
+	         (defun ,filter-fn (&rest _)
+	           (run-hook-with-args-until-success ',hook))
+	         (defhook! ,(oo-args-to-symbol 'run- command '-maybe) (,hook)
+	           (when t #',command)))
+	       (defhook! ,(oo-args-to-symbol 'run- alt '-maybe) (,hook)
+	         (when ,condition #',alt))
+	       ,@(oo-bind-macro-handle-token token interpreters)))
+	    (t
+	     (oo-bind-macro-handle-token token interpreters))))
+
+(defun! oo-bind-alt (def alt &optional when-fn)
+  "Call ALT instead of DEF in keybindings.
+If WHEN-FN."
+  (let! name (oo-args-to-symbol 'oo-alt-bind-for- command))
+  (fset name (-partial #'run-hook-with-args-until-success))
+  ;; '(menu-item "" nil :filter ,filter-fn)
+  ;; [remap ,command]
   )
 
 ;; Make a function variant of `evil-define-minor-mode-key'. It's the same implementation of
 ;; `evil-define-minor-mode-key' but I want it to be a function not a macro so that I can more
 ;; easily use it with `oo-bind-key'.
 (defun! +evil-define-minor-mode-key (minor-mode states key def)
+  "Same as `evil-define-minor-mode-key' but as a function."
   (dolist (state (-list states))
     (let! keymap (evil-get-minor-mode-keymap st mode))
     (define-key keymap key def)))
@@ -61,11 +99,11 @@ remove those elements from `oo-deferred-key-bindings'."
 ;; In the future I should probably modularize this. Right now `oo-bind-key' is more of
 ;; hard-coded. But right now I don't have so many things that I want it to do. I think it's body is
 ;; still relatively small.
-(defun! oo-bind-key (keymap key def &rest plist)
+(defun! oo-bind-key (&rest map)
   "Generic do-what-I-mean bind key."
   (if (and (symbolp keymap) (not (bound-and-true-p keymap)))
       (pushing! oo-deferred-key-bindings (list keymap key def plist))
-    (with-map! plist
+    (with-map! map
       (when @prefix
         (setq @key (concat prefix "\n" key)))
       (when @kbd
@@ -98,42 +136,9 @@ remove those elements from `oo-deferred-key-bindings'."
   (if (member state '(nil global))
       forms
     `((cond ((bound-and-true-p oo-initial-evil-key-bindings-enabled-p)
-	     ,@forms)
-	    (t
-	     (appending! oo-initial-evil-key-bindings ',forms))))))
-
-(defun! oo-bind-macro-handle-after-evil-maybe (token interpreters)
-  (let! state (map-elt token :state))
-  (if (not (member state '(global nil)))
-      `((after! evil ,@(oo-bind-macro-handle-token token interpreters)))
-    (oo-bind-macro-handle-token token interpreters)))
-
-;; (defun! oo-bind-macro-handle-alt (token interpreters)
-;;   "Remap uses of command to alternate command."
-;;   (let! (command . alt) (map-elt token :alt))
-;;   (let! condition (or (map-elt token :when) t))
-;;   (cond ((and alt condition command)
-;; 	 (let! hook (oo-args-to-symbol 'oo-bind-hook-for- command))
-;; 	 (let! filter-fn (oo-args-to-symbol 'oo-bind-filter-for- command))
-;; 	 (let! key-var (gensym "key-"))
-;; 	 (let! def-var (gensym "def-"))
-;; 	 (setq token (map-insert token :def def-var))
-;; 	 (setq token (map-insert token :key key-var))
-;; 	 (unless (map-elt token :map)
-;; 	   (setq token (map-insert token :map 'global-map)))
-;; 	 `((setq ,def-var '(menu-item "" nil :filter ,filter-fn))
-;; 	   (setq ,key-var [remap ,command])
-;; 	   (unless (boundp ',hook)
-;; 	     (defvar ,hook '((t ,command)))
-;; 	     (defun ,filter-fn (&rest _)
-;; 	       (run-hook-with-args-until-success ',hook))
-;; 	     (defhook! ,(oo-args-to-symbol 'run- command '-maybe) (,hook)
-;; 	       (when t #',command)))
-;; 	   (defhook! ,(oo-args-to-symbol 'run- alt '-maybe) (,hook)
-;; 	     (when ,condition #',alt))
-;; 	   ,@(oo-bind-macro-handle-token token interpreters)))
-;; 	(t
-;; 	 (oo-bind-macro-handle-token token interpreters))))
+	         ,@forms)
+	        (t
+	         (appending! oo-initial-evil-key-bindings ',forms))))))
 
 (defvar oo-bind-macro-state-alist
   '((?n . normal) (?i . insert) (?e . emacs)
@@ -165,24 +170,6 @@ If any letter in EVIL-KEYWORD does not correspond to an evil state, return nil."
       (_
        (appending! (map-elt done key) values))))
   (nreverse done))
-
-(defun! oo-bind-macro-handle-token (token interpreters)
-  "Return a list of forms created from applying INTERPRETERS to TOKEN.
-INTERPRETERS are a list of function symbols that are applied to TOKEN."
-  (let! (interpreter-fn . rest) interpreters)
-  (funcall (or interpreter-fn #'ignore) token rest))
-
-(defun! oo-bind-macro-handle-defer-if-map-unbound (token interpreters)
-  "Return a form that defers keybinding forms until keymap is unbound."
-  (when (and (not (map-contains-key token :map)) (map-contains-key token :key))
-    (setq token (map-insert token :map 'global-map)))
-  (let! map (map-elt token :map))
-  (let! forms (oo-bind-macro-handle-token token interpreters))
-  (if (and map (symbolp map) (not (member map '(global-map))))
-      `((if (boundp ',map)
-	        (progn ,@forms)
-	      (appending! (map-elt oo-deferred-key-bindings ',map) ',forms)))
-    forms))
 
 (defun! oo-bind-macro-tokenize-clause (clause)
   "Return a list of tokens generated from CLAUSES."
@@ -305,10 +292,10 @@ Tokenites is a list of token attributes."
 	(t
 	 (oo-bind-macro-handle-token token interpreters))))
 
-(defmacro! bind! (&rest clause)
+(defmacro! bind!! (&rest clause)
   "An extensible macro for binding keys."
   (for! (token (oo-bind-macro-tokenize-clause clause))
-    (appending! forms (oo-bind-macro-handle-token token oo-bind-macro-handlers)))
+    (pushing! forms `(oo-define-key ,@token)))
   (macroexp-progn forms))
 
 (provide 'oo-bind-macro)
