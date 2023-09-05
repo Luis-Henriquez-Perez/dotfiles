@@ -3,9 +3,11 @@
        (:i   oo-insert-leader-key #'oo/leader-prefix-command)
        (:nmv oo-normal-leader-key #'oo/leader-prefix-command))
 
-(bind! (:map oo-leader-map)
-       (:prefix "l")
-       ("l" #'dogears-go))
+(oo-bind-key
+ '((:map . oo-leader-map)
+   (:prefix . "l")
+   (:key . "l")
+   (:def function dogears-go)))
 
 (bind! (:map oo-app-map "d" #'dired))
 

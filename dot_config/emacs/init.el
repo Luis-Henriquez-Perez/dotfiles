@@ -119,16 +119,22 @@
       (with-current-buffer it
 	    (dashboard-insert-startupify-lists)))))
 
+;; Take from plist.
 ;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
 ;; other character like "$" or "@".
-(defmacro! with-map! (&rest args)
+(defmacro! with-map! (map &rest body)
   (declare (indent defun))
+  (flet! option-p (form) (member (car-safe form) '(:use-keywords :prefix)))
+  ;; (let! taken (apply #'append (pop! body #'option-p)))
+  (let! (&plist :use-keywords :prefix) (apply #'append (pop! body #'option-p)))
+  (let! prefix (when prefix (oo-args-to-string prefix)))
   (let! mapvar (gensym "map"))
   (flet! name (symbol)
-    (intern (s-chop-prefix "$" (symbol-name symbol))))
+         (intern (s-chop-prefix (or prefix "$") (symbol-name symbol))))
   (flet! let-bind (symbol)
-    `(,symbol (map-elt ,mapvar ',(name symbol))))
-  (let! binds (mapcar #'let-bind (oo-atoms "\\`\\$" body)))
+         `(,symbol (map-elt ,mapvar ',(name symbol))))
+  (let! regexp (rx-to-string `(seq bos ,(or prefix "$"))))
+  (let! binds (mapcar #'let-bind (oo-atoms regexp body)))
   `(let* ((,mapvar ,map) ,@binds)
      ,@body))
 ;; Note that this can't work with `on-first-input-hook' because which-key
