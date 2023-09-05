@@ -1,3 +1,4 @@
+(require 'treepy)
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
 (require 'oo-base-definers)
@@ -46,7 +47,6 @@ remove those elements from `oo-deferred-key-bindings'."
 ;; 1. Replace handlers with a function.
 ;; 2. Use treepy for producing tokens
 ;; 3. Add a specific function for alternate bindings
-
 (defun! oo-bind-macro-handle-alt (token interpreters)
   "Remap uses of command to alternate command."
   (let! (command . alt) (map-elt token :alt))
@@ -92,6 +92,7 @@ If WHEN-FN."
     (let! keymap (evil-get-minor-mode-keymap st mode))
     (define-key keymap key def)))
 
+;; TODO:
 ;; Extension to evil that lets me figure out the state later. This is needed if we want to be
 ;; thorough. As in, if we want to ensure that we account for evil states that may be defined
 ;; later. What we need to do is check to see which.
@@ -99,25 +100,26 @@ If WHEN-FN."
 ;; In the future I should probably modularize this. Right now `oo-bind-key' is more of
 ;; hard-coded. But right now I don't have so many things that I want it to do. I think it's body is
 ;; still relatively small.
-(defun! oo-bind-key (&rest map)
+(defun! oo-define-key (map)
   "Generic do-what-I-mean bind key."
-  (if (and (symbolp keymap) (not (bound-and-true-p keymap)))
-      (pushing! oo-deferred-key-bindings (list keymap key def plist))
-    (with-map! map
-      (when @prefix
-        (setq @key (concat prefix "\n" key)))
-      (when @kbd
+  (with-map! map
+    (:use-keywords t)
+    (if (and (symbolp $keymap) (not (bound-and-true-p $keymap)))
+        (pushing! (alist-get $keymap oo-deferred-key-bindings) map)
+      (when $prefix
+        (setq $key (concat $prefix "\s" key)))
+      (when $kbd
         (setq key (kbd key)))
-      (when @autoload
-        (oo-autoload-fn @def @autoload))
-      (when @which-key
-        (setq def (cons @which-key @def)))
-      (cond ((member @state '(nil global))
-             (define-key keymap key def))
-            ((and @state @minor-mode)
-             (oo-call-after-load 'evil #'+evil-define-minor-mode-key @minor-mode @state @keymap @key @def))
+      (when $autoload
+        (oo-autoload-fn $def (unless (eq t $autoload) $autoload)))
+      (when $which-key
+        (setq def (cons $which-key $def)))
+      (cond ((member $state '(nil global))
+             (define-key $keymap $key $def))
+            ((and $state $minor-mode)
+             (oo-call-after-load 'evil #'+evil-define-minor-mode-key $minor-mode $state $keymap $key $def))
             (t
-             (oo-call-after-load 'evil #'evil-define-key* @state @keymap @key @def))))))
+             (oo-call-after-load 'evil #'evil-define-key* $state $keymap $key $def))))))
 
 (defvar oo-bind-macro-state-to-localleaders
   `((oo-normal-localleader-short-key . normal)
@@ -140,12 +142,6 @@ If WHEN-FN."
 	        (t
 	         (appending! oo-initial-evil-key-bindings ',forms))))))
 
-(defvar oo-bind-macro-state-alist
-  '((?n . normal) (?i . insert) (?e . emacs)
-    (?v . visual) (?m . motion) (?o . operator)
-    (?r . replace) (?g . global))
-  "An alist mapping the first character of an evil state to the state.")
-
 (defun! oo-bind-macro-evil-keyword-to-states (evil-keyword)
   "Return list of evil states specified by EVIL-KEYWORD.
 EVIL-KEYWORD is a keyword whose letters correspond to the first letters of evil
@@ -160,142 +156,85 @@ If any letter in EVIL-KEYWORD does not correspond to an evil state, return nil."
     (adjoining! states state))
   (and state (nreverse states)))
 
-(defun! oo-bind-macro-merge-token (token)
-  "Join necessary values for token."
-  (let! done nil)
-  (for! ((key . values) token)
-    (pcase key
-      (:prefix
-       (updating! (map-elt done key) (lambda (x) (list (string-join (append x values) "\s")))))
-      (_
-       (appending! (map-elt done key) values))))
-  (nreverse done))
-
-(defun! oo-bind-macro-tokenize-clause (clause)
-  "Return a list of tokens generated from CLAUSES."
-  (dolist (raw (oo-bind-macro-generate-raw-tokens clause))
-    (let! merged (oo-bind-macro-merge-token raw))
-    (appending! tokens (oo-bind-macro-separate merged)))
-  tokens)
-
-(defun! oo-bind-macro-separate (raw-tokens)
-  "Divide tokens such that each token has only one."
-  (let! heads (list nil))
-  (while raw-tokens
-    ;; (let! (pair &as key . values) (pop raw-tokens))
-    (let! pair (pop raw-tokens))
-    (let! (key . values) pair)
-    (let! new-heads nil)
-    (for! (value values)
-      (for! (head heads)
-	(pushing! new-heads (cons (cons key value) head))))
-    (let! heads new-heads))
-  (mapcar #'reverse heads))
-
-(defun! oo-bind-macro-get-tokenites (clause)
-  "Return \(TOKENITES CLAUSE) from CLAUSE.
-Tokenites is a list of token attributes."
-  (let! tokenites
-	(pcase clause
-	  (`(:minor-mode ,(pred symbolp) . ,(guard t))
-	   (list (list (pop clause) (pop clause))))
-	  (`(:alt ,(pred symbolp) ,(pred symbolp) . ,(guard t))
-	   (list (list (pop clause) (cons (pop clause) (pop clause)))))
-	  (`(:state ,(pred oo-non-keyword-symbol-p) . ,(guard t))
-	   (list (cons (pop clause) (pop! clause #'oo-non-keyword-symbol-p))))
-	  (`(,(or :map :localleader) ,(pred oo-non-keyword-symbol-p) . ,(guard t))
-	   (list (cons (pop clause) (pop! clause #'oo-non-keyword-symbol-p))))
-	  (`(,(pred stringp) . nil)
-	   (list (list :key (pop clause)) (list :def nil)))
-	  (`(:wk ,(pred stringp) :prefix ,(pred stringp) . nil)
-	   (pop clause)
-	   (list (list :wk-prefix (pop clause))
-		 (list (pop clause) (pop clause))))
-	  (`(:wk ,(pred stringp) . ,(guard t))
-	   (list (list (pop clause) (pop clause))))
-	  (`(,(or :when :def :prefix) ,_ . ,(guard t))
-	   (list (pop! clause 2)))
-	  (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) (function ,(pred symbolp)) . ,(guard t))
-	   `((:key ,(pop clause)) (:def ,(pop clause))))
-	  (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) ,(pred symbolp) . nil)
-	   `((:key ,(pop clause)) (:def ,(pop clause))))
-	  (`(:key ,_ . ,(guard t))
-	   (let! tokenites (list (pop! clause 2)))
-	   (cond ((equal :def (car clause))
-		  (affixing! tokenite (list (pop clause) (pop clause))))
-		 ((keywordp (car clause))
-		  (affixing! tokenites (list :def nil)))
-		 (t
-		  (affixing! tokenites (list :def (pop clause)))))
-	   tokenites)
-	  (`(,(and (pred keywordp) (app oo-bind-macro-evil-keyword-to-states states)) ,_ ,_ . ,(guard t))
-	   (pop clause)
-	   (list (cons :state states) (list :key (pop clause)) (list :def (pop clause))))
-	  (`(,(or (pred stringp) (pred vectorp)) :wk . ,(guard t))
-	   (list (list :key (pop clause)) (list :def nil) (list :ignore t)))
-	  (_
-	   (error "No matcher for `%S' of `%S'" (car clause) clause))))
-  (list tokenites clause))
+(defun! oo-bind-get-metadata (clause)
+  (let! zipper (treepy-list-zip clause))
+  (while (not (treepy-end-p zipper))
+    (let! node (treepy-node (treepy-next zipper)))
+    (message "node-> %S" node)
+    (setq zipper (treepy-next zipper))))
 
 (defun oo-bind-macro-keybinding-p (token)
   "Return non-nil if TOKEN is a binding token."
   (or (and (assoc :def token) (assoc :key token)) (assoc :alt token)))
-
-(defun! oo-bind-macro-generate-raw-tokens (clause)
-  "Return list of tokens specified by CLAUSE."
-  (let! stack (list (list clause nil 0)))
-  (while stack
-    (pcase (car stack)
-      (`(nil nil ,level)
-       (let! tokenites (mapcar #'-second-item (pop! leaves (lambda (x) (= (1+ level) (car x))))))
-       (let! (bindings settings) (-separate #'oo-bind-macro-keybinding-p tokenites))
-       (let! settings (reverse (apply #'append settings)))
-       (let! new-leaves (mapcar (lambda (x) (list level (append settings x))) bindings))
-       (prepending! leaves new-leaves)
-       (pop stack))
-      (`(nil ,tokenites ,level)
-       (pushing! leaves (list level tokenites))
-       (pop stack))
-      (`((,(and (pred listp) car) . ,(and (guard t) cdr)) ,_ ,_)
-       (setf (nth 0 (car stack)) cdr)
-       (pushing! stack (list car nil (length stack))))
-      (`(,(and (pred listp) clause) ,_ ,_)
-       (let! (tokenites updated) (oo-bind-macro-get-tokenites clause))
-       (setf (nth 0 (car stack)) updated)
-       (appending! (nth 1 (car stack)) tokenites))
-      (_
-       (error "Unknown case `%S'" (car stack)))))
-  (nreverse (mapcar #'cadr leaves)))
 
 (adjoining! log4e-log-level-alist '(keybinding . 3))
 (log4e--def-level-logger "oo" "log-keybinding" 'keybinding)
 (defalias 'oo-log-keybinding 'oo--log-keybinding)
 (defun oo-log-keybinding (key map def &optional state)
   (cond (state
-	 (oo--log-keybinding "%s %s %s @ %s" key map def state))
-	(t
-	 (oo--log-keybinding "%s %s %s" key map def))))
+	     (oo--log-keybinding "%s %s %s @ %s" key map def state))
+	    (t
+	     (oo--log-keybinding "%s %s %s" key map def))))
 
 (defun! oo-bind-macro-handle-localleader (token interpreters)
   "Return form that processes localleader."
   (let! localleader (map-elt token :localleader))
   (let! prefix (map-elt token :prefix))
   (cond (localleader
-	 (for! ((leader . state) oo-bind-macro-state-to-localleaders)
-	   (let ((token token))
-	     (let! new-prefix (if prefix `(concat ,leader "\s" ,prefix) leader))
-	     (updating! token #'map-insert :prefix new-prefix)
-	     (updating! token #'map-insert :map localleader)
-	     (updating! token #'map-insert :state state)
-	     (appending! forms (oo-bind-macro-handle-token token interpreters))))
-	 forms)
-	(t
-	 (oo-bind-macro-handle-token token interpreters))))
+	     (for! ((leader . state) oo-bind-macro-state-to-localleaders)
+	       (let ((token token))
+	         (let! new-prefix (if prefix `(concat ,leader "\s" ,prefix) leader))
+	         (updating! token #'map-insert :prefix new-prefix)
+	         (updating! token #'map-insert :map localleader)
+	         (updating! token #'map-insert :state state)
+	         (appending! forms (oo-bind-macro-handle-token token interpreters))))
+	     forms)
+	    (t
+	     (oo-bind-macro-handle-token token interpreters))))
 
-(defmacro! bind!! (&rest clause)
+(defmacro! bind! (&rest clause)
   "An extensible macro for binding keys."
-  (for! (token (oo-bind-macro-tokenize-clause clause))
-    (pushing! forms `(oo-define-key ,@token)))
-  (macroexp-progn forms))
+  (flet! bind-form (plist) `())
+  (macroexp-progn (mapcar #'bind-form (oo-bind-macro-tokenites clause))))
 
 (provide 'oo-bind-macro)
+
+;; (pcase node
+;;   (`(:minor-mode ,(pred symbolp) . ,(guard t))
+;;    (list (list (pop node) (pop node))))
+;;   ;; (`(:alt ,(pred symbolp) ,(pred symbolp) . ,(guard t))
+;;   ;;  (list (list (pop node) (cons (pop node) (pop node)))))
+;;   (`(:state ,(pred oo-non-keyword-symbol-p) . ,(guard t))
+;;    (list (cons (pop node) (pop! node #'oo-non-keyword-symbol-p))))
+;;   (`(,(or :map :localleader) ,(pred oo-non-keyword-symbol-p) . ,(guard t))
+;;    (list (cons (pop node) (pop! node #'oo-non-keyword-symbol-p))))
+;;   (`(,(pred stringp) . nil)
+;;    (list (list :key (pop node)) (list :def nil)))
+;;   (`(:wk ,(pred stringp) :prefix ,(pred stringp) . nil)
+;;    (pop node)
+;;    (list (list :wk-prefix (pop node))
+;; 	     (list (pop node) (pop node))))
+;;   (`(:wk ,(pred stringp) . ,(guard t))
+;;    (list (list (pop node) (pop node))))
+;;   (`(,(or :when :def :prefix) ,_ . ,(guard t))
+;;    (list (pop! node 2)))
+;;   (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) (function ,(pred symbolp)) . ,(guard t))
+;;    `((:key ,(pop node)) (:def ,(pop node))))
+;;   (`(,(or (pred stringp) (pred vectorp) (pred symbolp)) ,(pred symbolp) . nil)
+;;    `((:key ,(pop node)) (:def ,(pop node))))
+;;   (`(:key ,_ . ,(guard t))
+;;    (let! tokenites (list (pop! node 2)))
+;;    (cond ((equal :def (car node))
+;; 	      (affixing! tokenite (list (pop node) (pop node))))
+;; 	     ((keywordp (car node))
+;; 	      (affixing! tokenites (list :def nil)))
+;; 	     (t
+;; 	      (affixing! tokenites (list :def (pop node)))))
+;;    tokenites)
+;;   (`(,(and (pred keywordp) (app oo-bind-macro-evil-keyword-to-states states)) ,_ ,_ . ,(guard t))
+;;    (pop node)
+;;    (list (cons :state states) (list :key (pop node)) (list :def (pop node))))
+;;   (`(,(or (pred stringp) (pred vectorp)) :wk . ,(guard t))
+;;    (list (list :key (pop node)) (list :def nil) (list :ignore t)))
+;;   (_
+;;    (error "No matcher for `%S' of `%S'" (car node) node)))
