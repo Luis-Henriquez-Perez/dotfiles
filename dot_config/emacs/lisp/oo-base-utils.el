@@ -53,18 +53,12 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-args-to-symbol ":" args))
-;; ***** invoke a function silently
-;; :PROPERTIES:
-;; :ID:       86007e07-0e54-4007-b990-1ba8d2a933aa
-;; :END:
+
 (defun oo-funcall-silently (function &rest args)
   "Call function silently.
 Don't produce any output to the *Messages* buffer when calling function."
   (shut-up (apply function args)))
-;; ***** register buffers to open at the bottom
-;; :PROPERTIES:
-;; :ID:       20230824T154801.717011
-;; :END:
+
 (defun oo-popup-at-bottom (regexp)
   "Open buffers at bottom that match regexp."
   (alet `(,regexp
@@ -74,27 +68,18 @@ Don't produce any output to the *Messages* buffer when calling function."
 	      (window-height 0.5)
 	      (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;; ***** select symbols from a tree
-;; :PROPERTIES:
-;; :ID:       20230906T184925.910863
-;; :END:
+
 (defun oo-symbols (regexp tree)
   "Return symbols that match REGEXP in TREE."
   (thread-last (flatten-list tree)
                (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
                (-uniq)))
-;; ***** see if symbols match a string
-;; :PROPERTIES:
-;; :ID:       20230906T185202.488397
-;; :END:
+
 ;; I find myself using the idiom ~(string-match-p regexp (symbol-name symbol))~ enough times.
 (defsubst oo-symbol-match-p (regexp symbol)
   "Return non-nil if SYMBOL matches REGEXP."
   (string-match-p regexp (symbol-name symbol)))
-;; ***** generate a function that checks if a symbol is bound
-;; :PROPERTIES:
-;; :ID:       20230908T092316.906858
-;; :END:
+
 ;; For I want my advices, hooks and bindings to be dynamic in the sense that they only take effect when
 ;; it makes sense to do so.  For example [[id:20230801T175939.021467][this headline]] I append =evil-append-line= to
 ;; org-insert-heading-hook=.  But obviously I don't want this to happen if for whatever reason I'm not
@@ -102,10 +87,7 @@ Don't produce any output to the *Messages* buffer when calling function."
 (defun oo-bound-and-true-fn (symbol)
   "Return a function that checks if SYMBOL is bound and non-nil."
   `(lambda () (bound-and-true-p ,symbol)))
-;; **** loop! - a generic looping macro
-;; :PROPERTIES:
-;; :ID:       20230801T062217.710179
-;; :END:
+
 ;; This generic looping macro with predicate clauses inspired by =loopy=.  The goal
 ;; is to provide a unified syntax to cover all of my looping needs.  It should
 ;; "do-what-I-mean" whenever possible.
@@ -146,10 +128,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
 	           (error "Unknown list predicate: %S" ',pred)))))))
 
 (defalias 'for! 'loop!)
-;; **** combine =-setq= and =->>=
-;; :PROPERTIES:
-;; :ID:       20230801T164346.492565
-;; :END:
+
 ;; The threading macro [[][->>]] can be particularly useful when you want to.  I've
 ;; often had cases in my code where I've.
 (defmacro let-thread-last! (var &rest forms)
