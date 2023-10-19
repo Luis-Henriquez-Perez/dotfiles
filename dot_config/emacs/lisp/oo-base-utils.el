@@ -1,0 +1,162 @@
+(require 'dash)
+(require 'dash-functional)
+
+
+;; Emacs uses these symbols as sugars in =defun= and =defmacro= signatures.  I'm
+;; defining a function specifically for identifying these symbols so I can
+;; differentiate them from actual argument symbols.
+(defun oo-ampersand-symbol-p (obj)
+  "Return non-nil of OBJ is an ampersand symbol.
+An ampersand symbol is a symbol that starts with `&'."
+  (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
+
+(defsubst oo-sharp-quoted-p (obj)
+  "Return non-nil if OBJ is sharp quoted."
+  (equal (car-safe obj) 'function))
+
+;; This function is more for helping me write macros than for anything else.  It's
+;; easy to wrap one form around a macro.  But this function automates the process of
+;; wrapping =N= wrappers around a set of forms.
+(defun oo-wrap-forms (wrappers forms)
+  "Return FORMS wrapped by WRAPPERS.
+FORMS is a list of lisp forms.  WRAPPER are a list of forms."
+  (declare (pure t) (side-effect-free t))
+  (unless wrappers (push '(progn) wrappers))
+  (setq wrappers (reverse wrappers))
+  (setq forms (append (pop wrappers) forms))
+  (dolist (wrapper wrappers)
+    (setq forms (-snoc wrapper forms)))
+  forms)
+
+;; Being able to distinguish between a non-keyword symbol is useful enough to merit
+;; its own function.
+(defun oo-non-keyword-symbol-p (object)
+  "Return t if OBJECT is a symbol but not a keyword."
+  (declare (pure t) (side-effect-free t))
+  (and (symbolp object) (not (keywordp object))))
+
+;;  with very
+;; simple symbols, using this function can save me having to provide a string for
+;; =format=.
+(defun oo-args-to-symbol (&rest args)
+  "Return an interned symbol from ARGS."
+  (declare (pure t) (side-effect-free t))
+  (intern (apply #'oo-args-to-string args)))
+;; ***** convert a list of arguments into a keyword
+;; :PROPERTIES:
+;; :ID:       0618b8d7-e0a4-4e3e-8d89-b7d0ebe43917
+;; :GROUPS:   [[id:20230531T083603.695777][core]] [[id:20230531T080943.090689][emacs]] [[id:20230615T235040.443895][function]] [[id:20230707T101757.981655][prime-function]]
+;; :END:
+;; Sometimes I want to create a keyword by interning a string or a symbol.  This
+;; commands saves me having to add the colon at the beginning before interning.
+(defun oo-args-to-keyword (&rest args)
+  "Return ARGS as a keyword."
+  (declare (pure t) (side-effect-free t))
+  (apply #'oo-args-to-symbol ":" args))
+;; ***** invoke a function silently
+;; :PROPERTIES:
+;; :ID:       86007e07-0e54-4007-b990-1ba8d2a933aa
+;; :END:
+(defun oo-funcall-silently (function &rest args)
+  "Call function silently.
+Don't produce any output to the *Messages* buffer when calling function."
+  (shut-up (apply function args)))
+;; ***** register buffers to open at the bottom
+;; :PROPERTIES:
+;; :ID:       20230824T154801.717011
+;; :END:
+(defun oo-popup-at-bottom (regexp)
+  "Open buffers at bottom that match regexp."
+  (alet `(,regexp
+	      (display-buffer-at-bottom)
+	      (side bottom)
+	      (slot 1)
+	      (window-height 0.5)
+	      (window-parameters ((no-other-window t))))
+    (push it display-buffer-alist)))
+;; ***** select symbols from a tree
+;; :PROPERTIES:
+;; :ID:       20230906T184925.910863
+;; :END:
+(defun oo-symbols (regexp tree)
+  "Return symbols that match REGEXP in TREE."
+  (thread-last (flatten-list tree)
+               (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
+               (-uniq)))
+;; ***** see if symbols match a string
+;; :PROPERTIES:
+;; :ID:       20230906T185202.488397
+;; :END:
+;; I find myself using the idiom ~(string-match-p regexp (symbol-name symbol))~ enough times.
+(defsubst oo-symbol-match-p (regexp symbol)
+  "Return non-nil if SYMBOL matches REGEXP."
+  (string-match-p regexp (symbol-name symbol)))
+;; ***** generate a function that checks if a symbol is bound
+;; :PROPERTIES:
+;; :ID:       20230908T092316.906858
+;; :END:
+;; For I want my advices, hooks and bindings to be dynamic in the sense that they only take effect when
+;; it makes sense to do so.  For example [[id:20230801T175939.021467][this headline]] I append =evil-append-line= to
+;; org-insert-heading-hook=.  But obviously I don't want this to happen if for whatever reason I'm not
+;; in =evil-mode=.
+(defun oo-bound-and-true-fn (symbol)
+  "Return a function that checks if SYMBOL is bound and non-nil."
+  `(lambda () (bound-and-true-p ,symbol)))
+;; **** loop! - a generic looping macro
+;; :PROPERTIES:
+;; :ID:       20230801T062217.710179
+;; :END:
+;; This generic looping macro with predicate clauses inspired by =loopy=.  The goal
+;; is to provide a unified syntax to cover all of my looping needs.  It should
+;; "do-what-I-mean" whenever possible.
+
+;; An implementation note: You might wonder why I check whether its a list if
+;; =seq-doseq= already deals with the case that the sequence is a list.  The reason
+;; is that =seq-doseq= is a wrapper around =seq-do= which works by wrapping the
+;; iteration body in a lambda and calling it on every single iteration.  The lambda
+;; adds an overhead.  So the answer is I do this for better performance when dealing
+;; with lists.
+(defmacro loop! (pred &rest body)
+  "A generic looping macro and drop-in replacement for `dolist'.
+This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
+symbol as in `dolist', but.  LIST can be a sequence."
+  (declare (indent 1))
+  (pcase pred
+    ;; ((pred oo-sharp-quoted-p)
+    ;;  `(while (funcall ,pred) ,@body))
+    ((or `(repeat ,n) (and n (pred integerp)))
+     (mmt-once-only (n)
+       `(if (integerp ,n)
+	        (dotimes (_ ,n) ,@body)
+	      (error "Wrong type argument integerp: %S" ,n))))
+    (`(,(and match-form (pred sequencep)) ,list)
+     (alet (make-symbol "var")
+       `(for! (,it ,list)
+	      (-let [,match-form ,it]
+	        ,@body))))
+    (`(,(and var (pred symbolp)) ,list)
+     (mmt-once-only (list)
+       `(cond ((listp ,list)
+	           (dolist (,var ,list) ,@body))
+	          ((sequencep ,list)
+	           (seq-doseq (,var ,list) ,@body))
+	          ((integerp ,list)
+	           (loop! ,list ,@body))
+	          (t
+	           (error "Unknown list predicate: %S" ',pred)))))))
+
+(defalias 'for! 'loop!)
+;; **** combine =-setq= and =->>=
+;; :PROPERTIES:
+;; :ID:       20230801T164346.492565
+;; :END:
+;; The threading macro [[][->>]] can be particularly useful when you want to.  I've
+;; often had cases in my code where I've.
+(defmacro let-thread-last! (var &rest forms)
+  "Bind VAR to the result of threading FORMS with `thread-last'."
+  (declare (indent defun))
+  `(-setq ,var (->> ,@forms)))
+
+(defalias 'let->>! 'let-thread-last!)
+
+(provide 'oo-base-utils)

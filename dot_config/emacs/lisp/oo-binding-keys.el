@@ -1,0 +1,2 @@
+(require 'oo-block-macro)
+

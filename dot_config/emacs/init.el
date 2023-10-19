@@ -1,44 +1,107 @@
-;; -*- lexical-binding: t -*-
+;; [[file:snapshots/emacs-logo.png]]
 
-;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very big
-;; number, essentially disables garbage collection.  The garbage collection is later
-;; reset to a reasonable value.
+;; This file constitutes my emacs configuration and settings.  When you have a long,
+;; non-trivial emacs configuration documentation becomes *extremely* important.
+;; * emacs
+;; :PROPERTIES:
+;; :ID:       20230801T181521.277553
+;; :END:
+;; Emacs is a lisp interpreter masquerading as a text-editor.
+;; ** about
+;; :PROPERTIES:
+;; :ID:       20230929T111323.550699
+;; :END:
+;; *** why Emacs?
+;; :PROPERTIES:
+;; :ID:       20231001T045900.022457
+;; :END:
+;; *** why I choose an org mode configuration over an elisp one
+;; :PROPERTIES:
+;; :ID:       20230801T072846.682395
+;; :END:
+;; Choosing a literate configuration over a standard one was a hard decison.  And to
+;; really understand the reasoning I had to migrate back and forth multiple times
+;; between the two.  As I see it the main advantage of an elisp configuration is
+;; that it is consistent with the way emacs itself organizes its files.
+
+;; An org configuration is highly consistent with its org markup language. You can
+;; use org for all of your dotfiles and that means all of your dotfiles will be
+;; documented in the same syntax.  Furthermore, you modularize. You get a dotfile
+;; manager for free.
+
+;; What tipped the scales for choosing a literate configuration is that I already
+;; had lots of commentary and documentation for my code--much more than in normal
+;; Emacs configurations; and I used links and emphasis markers extensively.
+;; Ultimately, I felt that it was better to go all in with =Org= than to half-ass use
+;; it in an elisp configuration.
+;; ** base
+;; :PROPERTIES:
+;; :ID:       20230822T164702.892021
+;; :END:
+;; The goal behind this headline is to setup Emacs.
+;; *** disable garbage collection until I'm done with startup
+;; :PROPERTIES:
+;; :ID:       20230731T162410.519555
+;; :END:
+;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
+;; big number, essentially disables garbage collection.  The garbage collection is
+;; later reset to a reasonable value.
 (setq gc-cons-threshold most-positive-fixnum)
-
-(when (not (or (daemonp) noninteractive init-file-debug))
-  ;; During startup emacs renders several messages.  The messages may be important so
-  ;; we don't want to get rid of them altogether.  This code prevents these message
-  ;; from flashing on the screen.  However they are still logged to the =*messages*=
-  ;; buffer.
-  (when (display-graphic-p)
-    (setq-default inhibit-redisplay t)
-    (setq-default inhibit-message t)
-    (defun reset-inhibit-vars ()
-      (setq-default inhibit-redisplay nil)
-      (setq-default inhibit-message nil)
-      (redraw-frame))
-    (add-hook 'window-setup-hook #'reset-inhibit-vars)
-    (define-advice startup--load-user-init-file (:after (&rest _) reset-inhibit-vars)
-      (and init-file-had-error (reset-inhibit-vars))))
-
-  ;; Suppress file handlers operations at startup. The value of `file-name-handler-alist' is
-  ;; consulted on each call to `require' and `load'. Here I disable it (set it to nil) and schedule it
-  ;; to be re-enabled after startup. I got this from centaur emacs.
-  (defvar original-file-name-handler-alist file-name-handler-alist)
-  (setq file-name-handler-alist nil)
-
-  (defun emacs-startup-hook&restore-file-name-handler-alist ()
-    (setq file-name-handler-alist original-file-name-handler-alist)
-    (makunbound 'original-file-name-handler-alist))
-  (add-hook 'emacs-startup-hook #'emacs-startup-hook&restore-file-name-handler-alist))
-
-;; Put the base directory into the `load-path', making sure it's at the front.
-(push (expand-file-name "lisp" user-emacs-directory) load-path)
-
-(require 'oo-bootstrap-elpaca)
-
+;; *** determine whether emacs is in debug mode
+;; :PROPERTIES:
+;; :ID:       39197346-c420-4518-b8f8-8ea247d6decb
+;; :END:
+;; This variable is snatched from [[https://github.com/hlissner/doom-emacs][Doom]].  The point of this variable is to serve as
+;; an indicator of whether the current Emacs instance is run for
+;; debugging. Normally, when starting Emacs I suppress non-critical errors so as
+;; not to interfere with startup; but if I know I'm specifically debugging my
+;; configuration using this variable then I might disable the suppression of
+;; errors.
+(defvar oo-debug-p (or (getenv "DEBUG") init-file-debug)
+  "When non-nil print debug messages.
+The --debug-init flag and setting the DEBUG envar will enable this at startup.")
+;; *** store errors that occur in hooks and advices
+;; :PROPERTIES:
+;; :ID:       20230907T154338.147014
+;; :END:
+;; This is influenced by the excellent stackoverflow on
+;; [[https://emacs.stackexchange.com/questions/669/how-to-gracefully-handle-errors-in-init-file][how-to-gracefully-handle-errors-in-init-file]].  The idea is that I don't want
+;; errors to interfere with startup or with my usage of Emacs.  But I also don't
+;; want to ignore them altogether.  Instead, I want to raise them when I decide
+;; to I want to deal with them; from the comfort of a working Emacs
+;; configuration.
+(defvar oo-errors nil
+  "An alist of errors that occur in advices or hooks during Emacs startup.
+Each element looks like (HOOK-OR-ADVICE . ERROR).  HOOK-OR-ADVICE is a hook or
+an advice symbol that raised an error.  ERROR is the error object generated by
+HOOK-OR-ADVICE.")
+;; *** define a place to store temporary files
+;; :PROPERTIES:
+;; :ID:       be8993d3-c8f7-451b-8cb4-04a9138e5c4e
+;; :END:
+;; It's useful to store directories which I reference frequently in variables and
+;; functions.  This way I can reference the full path.  Certain directories are
+;; important; and I end up referencing them alot.  One of these is my
+;; cache directory.
+(defvar oo-cache-dir (concat user-emacs-directory "cache/")
+  "Directory containing files used for caching information.")
+;; *** set the initial font
+;; :PROPERTIES:
+;; :ID:       20230731T162406.357220
+;; :END:
+;; It is more performant to do this in the =early-init.el= because that's run
+;; when the frame has not yet been initialized.  However, since the frame has
+;; not been initialized none of the commands for checking system fonts work yet;
+;; meaning that I can't robustly check for existing fonts.  In fact, I have to
+;; know that the font I set in the =early-init.el= file is present because if it
+;; isn't Emacs will crash due to the frame having a non-existent font.  Although
+;; it is less performant, it's better for robustness to set the font here.
 (let (font)
-  (setq font (or (font-spec :name "Iosevka Comfy Wide"
+  (setq font (or (font-spec :name "Nimbus Mono PS"
+			                :weight 'normal
+			                :slant 'normal
+			                :size 15)
+                 (font-spec :name "Iosevka Comfy Wide"
 			                :weight 'normal
 			                :slant 'normal
 			                :size 15)
@@ -52,163 +115,4 @@
 			                :size 15)))
   (set-face-attribute 'default nil :font font))
 
-;; The package `el-init' is one that I consider underused.
-(require 'el-init)
-(setq el-init-lazy-init-regexp "^oo-\\(.+\\)-config$")
-
-(setq el-init-alert-enabled-p t)
-
-;; (setq debug-on-message "Loading ALL autoload functions")
-
-(el-init-load (locate-user-emacs-file "lisp/")
-              :subdirectories '("base" "config")
-              :wrappers '(el-init-require/benchmark el-init-require/lazy))
-
-;; (setq-default fill-column 100)
-
-;; ;; `prog-mode-hook'
-(oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
-(oo-add-hook 'prog-mode-hook #'corfu-mode)
-(oo-add-hook 'prog-mode-hook #'lispyville-mode)
-(oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-(oo-add-hook '(prog-mode-hook reb-mode-hook) #'rainbow-delimiters-mode)
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
-(oo-add-hook 'prog-mode-hook #'auto-fill-mode)
-
-;; ;; `emacs-startup-hook'
-(oo-add-hook 'emacs-startup-hook #'which-key-mode)
-;; (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
-(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
-
-;; `on-first-input-hook'
-(oo-add-hook 'on-first-input-hook #'vertico-mode)
-(oo-add-hook 'on-first-input-hook #'savehist-mode)
-(oo-add-hook 'on-first-input-hook #'dogears-mode)
-
-(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
-
-;; ;; `after-init-hook'
-(oo-add-hook 'after-init-hook #'require 'evil :depth 10)
-(oo-add-hook 'after-init-hook #'evil-mode :depth 90)
-(oo-add-hook 'after-init-hook #'oo-set-window-divider-face :depth 11)
-(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
-(oo-add-hook 'after-init-hook #'load-theme 'modus-operandi)
-(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
-
-;; ;; `on-first-file-hook'
-(oo-add-hook 'on-first-file-hook #'save-place-mode)
-(oo-add-hook 'on-first-file-hook #'super-save-mode)
-
-;; ;; `emacs-lisp-mode-hook'
-(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
-
-(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-;; `text-mode-hook'
-(oo-add-hook '(prog-mode-hook text-mode-hook) #'evil-surround-mode)
-(oo-add-hook 'text-mode-hook #'flyspell-mode)
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-
-(defhook! create-dashboard (oo-initial-buffer-choice-hook)
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-	    (dashboard-insert-startupify-lists)))))
-
-;; Take from plist.
-;; Don't use "." because it clashes with lisp's representation of a cons cell. Instead use some
-;; other character like "$" or "@".
-(defmacro! with-map! (map &rest body)
-  (declare (indent defun))
-  (flet! option-p (form) (member (car-safe form) '(:use-keywords :prefix)))
-  ;; (let! taken (apply #'append (pop! body #'option-p)))
-  (let! (&plist :use-keywords :prefix) (apply #'append (pop! body #'option-p)))
-  (let! prefix (when prefix (oo-args-to-string prefix)))
-  (let! mapvar (gensym "map"))
-  (flet! name (symbol)
-         (intern (s-chop-prefix (or prefix "$") (symbol-name symbol))))
-  (flet! let-bind (symbol)
-         `(,symbol (map-elt ,mapvar ',(name symbol))))
-  (let! regexp (rx-to-string `(seq bos ,(or prefix "$"))))
-  (let! binds (mapcar #'let-bind (oo-atoms regexp body)))
-  `(let* ((,mapvar ,map) ,@binds)
-     ,@body))
-;; Note that this can't work with `on-first-input-hook' because which-key
-;; doesn't happen on first keypress.  It needs to be in the startup hook.
-
-;; (set! consult-preview-key nil)
-
-;; (when (display-graphic-p)
-;;   (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode))
-;; ;; Declaratively add hooks.
-;; ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
-
-;; (set! crm-separator ",")
-
-;; (defun oo-set-window-divider-face (&rest _)
-;;   "Set the window divider face."
-;;   (set-face-foreground 'window-divider "black"))
-
-;; (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)
-
-;; (set! window-divider-default-places t)
-
-;; (set! lambda-themes-set-italic-comments nil)
-;; (set! lambda-themes-set-italic-keywords nil)
-
-;; (set! lambda-themes-set-variable-pitch nil)
-
-;; (set! modus-themes-headings '((1 . (rainbow light 1.4))
-;; 			                  (2 . (rainbow light 1.3))
-;; 			                  (3 . (rainbow light 1.2))
-;; 			                  (4 . (rainbow light 1.1))
-;; 			                  (t . (rainbow light 1.0))))
-
-;; (oo-add-hook 'dired-mode-hook #'dired-omit-mode)
-
-;; (set! dired-recursive-copies 'always)
-;; (set! dired-recursive-deletes 'always)
-
-;; (oo-call-after-load 'dirvish #'dirvish-override-dired-mode 1)
-
-;; (set! dirvish-use-mode-line nil)
-
-;; (set! dirvish-attributes '(file-size all-the-icons subtree-state))
-
-;; (bind! (:alt dired dirvish))
-
-;; (set! dirvish-default-layout nil)
-
-;; (set! idle-require-symbols (append '(em-alias em-banner em-basic em-cmpl em-glob em-hist em-ls em-prompt em-term em-unix)
-;;                                    idle-require-symbols))
-
-;; (oo-popup-at-bottom "\\*[Hh]elp")
-
-;; ;; By default this variable is set to =t= which means, save bookmarks whenever emacs is killed.  An
-;; ;; integer mans to save my bookmarks whenever I set a bookmark.  That way I minimize the chances of
-;; ;; losing them if emacs crashes.
-;; (set! bookmark-save-flag 1)
-
-;; (set! avy-style 'pre)
-;; (set! avy-keys (number-sequence 97 122))
-
-;; (set! rainbow-delimiters-max-face-count 9)
-
-;; (set! save-place-file (concat oo-cache-dir "saveplace"))
-;; (set! save-place-limit nil)
-
-;; (adding-to-list! dogears-ignore-modes 'dashboard-mode)
-
-;; (after! org
-;;   (defun oo-org-src-buffer-p () (bound-and-true-p org-src-mode))
-;;   (adding-to-list! dogears-ignore-places-functions #'oo-org-src-buffer-p))
-
-;; (oo-silence #'flyspell-mode)
-
-;; (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
-
-;; (set! ispell-program-name (or (executable-find "hunspell") (executable-find "ispell")))
+(require 'oo-boostrap-packages)
