@@ -62,6 +62,7 @@ HOOK-OR-ADVICE.")
 
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
+(require 'oo-defaults)
 (require 'oo-bootstrap-elpaca)
 
 ;; The package `el-init' is one that I consider underused.
@@ -74,6 +75,7 @@ HOOK-OR-ADVICE.")
               ;; :subdirectories '("base" "config")
               :wrappers '(el-init-require/benchmark el-init-require/lazy))
 
+;; * hooks
 ;; `prog-mode-hook'
 (oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
 (oo-add-hook 'prog-mode-hook #'corfu-mode)
