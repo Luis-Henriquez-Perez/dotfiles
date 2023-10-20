@@ -1,9 +1,5 @@
 (require 'cl-lib)
 
-;; * generic settings
-;; :PROPERTIES:
-;; :ID:       20230801T200546.260384
-;; :END:
 ;; Here lies a collection of built-in settings that I want to take effect
 ;; immediately.  Many of them have to do with disabling default Emacs behaviors
 ;; that I don't like. I specifically place them at the forefront of my configuration
@@ -223,10 +219,7 @@
 ;; just uses its default function.  Instead, to be disabled it must
 ;; be set to [[file:snapshots/helpful-command:ignore.png][ignore]].
 (setq ring-bell-function #'ignore)
-;; **** disable repeated error message functions
-;; :PROPERTIES:
-;; :ID:       20230815T235002.324826
-;; :END:
+;; * disable repeated error message functions
 ;; When you try to move past the beginning and end of a buffer Emacs produces
 ;; error messages.
 ;; [[https://emacs.stackexchange.com/questions/10932/how-do-you-disable-the-buffer-end-beginning-warnings-in-the-minibuffer][disable warnings]]

@@ -1,7 +1,10 @@
 (require 'dash)
 (require 'dash-functional)
+(require 'subr-x)
+(require 'mmt)
 
 
+;; * oo-ampersand-symbol-p
 ;; Emacs uses these symbols as sugars in =defun= and =defmacro= signatures.  I'm
 ;; defining a function specifically for identifying these symbols so I can
 ;; differentiate them from actual argument symbols.
@@ -9,11 +12,11 @@
   "Return non-nil of OBJ is an ampersand symbol.
 An ampersand symbol is a symbol that starts with `&'."
   (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
-
+;; * oo-sharp-quoted-p
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
   (equal (car-safe obj) 'function))
-
+;; * oo-wrap-forms
 ;; This function is more for helping me write macros than for anything else.  It's
 ;; easy to wrap one form around a macro.  But this function automates the process of
 ;; wrapping =N= wrappers around a set of forms.
@@ -27,26 +30,21 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (dolist (wrapper wrappers)
     (setq forms (-snoc wrapper forms)))
   forms)
-
+;; * oo-non-keyword-symbol-p
 ;; Being able to distinguish between a non-keyword symbol is useful enough to merit
 ;; its own function.
 (defun oo-non-keyword-symbol-p (object)
   "Return t if OBJECT is a symbol but not a keyword."
   (declare (pure t) (side-effect-free t))
   (and (symbolp object) (not (keywordp object))))
-
-;;  with very
+;; * oo-args-to-symbol
 ;; simple symbols, using this function can save me having to provide a string for
 ;; =format=.
 (defun oo-args-to-symbol (&rest args)
   "Return an interned symbol from ARGS."
   (declare (pure t) (side-effect-free t))
   (intern (apply #'oo-args-to-string args)))
-;; ***** convert a list of arguments into a keyword
-;; :PROPERTIES:
-;; :ID:       0618b8d7-e0a4-4e3e-8d89-b7d0ebe43917
-;; :GROUPS:   [[id:20230531T083603.695777][core]] [[id:20230531T080943.090689][emacs]] [[id:20230615T235040.443895][function]] [[id:20230707T101757.981655][prime-function]]
-;; :END:
+;; * oo-args-to-keyword
 ;; Sometimes I want to create a keyword by interning a string or a symbol.  This
 ;; commands saves me having to add the colon at the beginning before interning.
 (defun oo-args-to-keyword (&rest args)
@@ -59,16 +57,6 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 Don't produce any output to the *Messages* buffer when calling function."
   (shut-up (apply function args)))
 
-(defun oo-popup-at-bottom (regexp)
-  "Open buffers at bottom that match regexp."
-  (alet `(,regexp
-	      (display-buffer-at-bottom)
-	      (side bottom)
-	      (slot 1)
-	      (window-height 0.5)
-	      (window-parameters ((no-other-window t))))
-    (push it display-buffer-alist)))
-
 (defun oo-symbols (regexp tree)
   "Return symbols that match REGEXP in TREE."
   (thread-last (flatten-list tree)
@@ -79,7 +67,7 @@ Don't produce any output to the *Messages* buffer when calling function."
 (defsubst oo-symbol-match-p (regexp symbol)
   "Return non-nil if SYMBOL matches REGEXP."
   (string-match-p regexp (symbol-name symbol)))
-
+;; * oo-bound-and-true-fn
 ;; For I want my advices, hooks and bindings to be dynamic in the sense that they only take effect when
 ;; it makes sense to do so.  For example [[id:20230801T175939.021467][this headline]] I append =evil-append-line= to
 ;; org-insert-heading-hook=.  But obviously I don't want this to happen if for whatever reason I'm not
@@ -87,7 +75,7 @@ Don't produce any output to the *Messages* buffer when calling function."
 (defun oo-bound-and-true-fn (symbol)
   "Return a function that checks if SYMBOL is bound and non-nil."
   `(lambda () (bound-and-true-p ,symbol)))
-
+;; * loop!
 ;; This generic looping macro with predicate clauses inspired by =loopy=.  The goal
 ;; is to provide a unified syntax to cover all of my looping needs.  It should
 ;; "do-what-I-mean" whenever possible.
@@ -104,8 +92,6 @@ This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
 symbol as in `dolist', but.  LIST can be a sequence."
   (declare (indent 1))
   (pcase pred
-    ;; ((pred oo-sharp-quoted-p)
-    ;;  `(while (funcall ,pred) ,@body))
     ((or `(repeat ,n) (and n (pred integerp)))
      (mmt-once-only (n)
        `(if (integerp ,n)

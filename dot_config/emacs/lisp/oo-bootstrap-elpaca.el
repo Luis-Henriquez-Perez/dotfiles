@@ -1,9 +1,6 @@
-;; *** elpaca
-;; :PROPERTIES:
-;; :ID:       20230802T093552.746151
-;; :END:
+(require 'cl-lib)
 ;; [[Elpaca]] is a new package manager.  It installs packages asynchronously.
-;; **** bootstrap elpaca
+;; * bootstrap elpaca
 ;; :PROPERTIES:
 ;; :ID:       20230731T162355.242276
 ;; :END:
@@ -97,7 +94,7 @@
 ;; :ID:       20230914T155737.045932
 ;; :END:
 ;; Outshine is an Emacs package that allows for the use of org mode in non org
-;; files.  It is what I use to allow me to go back and forth between org mode
+
 ;; features.  It promises a kind of "have your cake and eat it too" type thing
 ;; where you can utilize the features of org mode--which include markup support,
 ;; link support, headline refiling, etc--while not paying the price of needing
@@ -146,7 +143,7 @@
 ;; :ID:       20230906T111914.254820
 ;; :END:
 ;; This package provides bookmark functions catered specifically for org files.
-;; Typically bookmarks store where something is by using a combination of
+
 ;; =point= as well as surrounding text that can be searched for in text files.
 ;; Obviously, this is not perfect but because a bookmark may easily become
 ;; Broken when you edit the region.  With org you can do better because each
@@ -379,7 +376,7 @@
 ;; :END:
 (elpaca (elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b"))
 ;; ***** elfeed-org
-;; :PROPERTIES:
+
 ;; :ID:       46cc4c63-49c4-4b56-935d-2a10d13a751d
 ;; :END:
 (elpaca (elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf"))
@@ -572,7 +569,7 @@
 ;; ***** highlight-quoted
 ;; :PROPERTIES:
 ;; :ID:       9f8f3e54-34a6-473a-8de5-d235f2cb7fcc
-;; :END:
+
 (elpaca (highlight-quoted :fetcher github :repo "Fanael/highlight-quoted" :ref "2410347"))
 ;; ***** ht
 ;; :PROPERTIES:
@@ -670,7 +667,7 @@
 ;; :END:
 (elpaca (mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956"))
 ;; ***** modus-themes
-;; :PROPERTIES:
+
 ;; :ID:       6824ab97-0509-4058-bea1-b4e56cf15610
 ;; :END:
 (elpaca (modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9"))
@@ -927,6 +924,8 @@
 ;; This package provides functions and macro to log information.  It's the most
 ;; recent package for logging I could find.
 (elpaca (lgr :fetcher github :repo "Fuco1/Emacs-lgr" :commit "4ab6c22"))
+;; ***** el-init
+;; (elpaca (el-init :fetcher github :repo "" :commit ""))
 ;; ***** setup
 ;; :PROPERTIES:
 ;; :ID:       20230920T190421.807596
@@ -957,4 +956,4 @@
 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 
-(provide 'oo-boostrap-packages)
+(provide 'oo-bootstrap-elpaca)

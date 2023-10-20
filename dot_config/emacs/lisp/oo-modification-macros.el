@@ -2,26 +2,18 @@
 (require 'oo-base-utils)
 
 ;; * syntactic sugar for generic modification
-;; :PROPERTIES:
-;; :ID:       20221225T003138.786795
-;; :END:
 ;; These macros are designed to provide me with "syntactic sugar" for very common
 ;; operations that take the form of ~(setf a (funcall f a ..))~--where a is being
-;; set to some function of itself.  They are variants of =cl-callf= but for more
-;; specific cases with what I consider more descriptive names.  These macros were
-;; inspired by =loopy=.
-;; * appending!
-;; :PROPERTIES:
-;; :ID:       20230802T092600.858801
-;; :END:
+;; set to some function of itself.  They are more specialized variants of
+;; =cl-callf=.  These macros were inspired by [[][loopy]]; specifically, by its
+;; [[][accumulation clauses]].
+
+;; ** appending!
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
 SETTER is the symbol of the macro or function used to do the setting."
   `(,setter ,place (append ,place ,list)))
-;; * collecting!
-;; :PROPERTIES:
-;; :ID:       20230806T212250.269902
-;; :END:
+;; ** collecting!
 ;; Important to note that this macro is not as efficient as pushing because it's adding to the end
 ;; of the list.  So this macro should be used only in non-performance-intensive code.  In
 ;; performance-intensive code we need the =push-nreverse= idiom.
@@ -32,7 +24,7 @@ SETTER is the same as in `appending!'."
 
 (defalias 'snocing! 'collecting!)
 (defalias 'affixing! 'collecting!)
-;; * incrementing! and decrementing! and counting!
+;; ** incrementing! and decrementing! and counting!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212240.938293
 ;; :END:
@@ -42,7 +34,7 @@ SETTER is the same as in `appending!'."
 (defalias 'incrementing! 'cl-incf)
 (defalias 'counting! 'cl-incf)
 (defalias 'decrementing! 'cl-decf)
-;; * prepending!
+;; ** prepending!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212329.446613
 ;; :END:
@@ -51,7 +43,7 @@ SETTER is the same as in `appending!'."
   "Prepend LIST to beginning of PLACE.
 SETTER is the same as in `appending!'."
   `(,setter ,place (append ,list ,place)))
-;; * maxing!
+;; ** maxing!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212335.824132
 ;; :END:
@@ -62,7 +54,7 @@ SETTER is the same as in `appending!'."
     `(,setter ,place (let ((,value1 ,form)
                            (,value2 ,place))
                        (if (,comparator ,value1 ,value2) ,value1 ,value2)))))
-;; ***** minning!
+;; ** minning!
 ;; :PROPERTIES:
 ;; :ID:       20230911T201204.426861
 ;; :END:
@@ -70,7 +62,7 @@ SETTER is the same as in `appending!'."
   "Set PLACE to the lesser of PLACE and FORM.
 SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
   `(maxing! ,place ,form :setter ,setter :comparator ,comparator))
-;; ***** concating!
+;; ** concating!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212345.896585
 ;; :END:
@@ -78,7 +70,7 @@ SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
   "Concat PLACE and STRING with SEPARATOR.
 SETTER is the same as in `appending!'"
   `(,setter ,place (string-join (list ,place ,string) ,separator)))
-;; ***** adjoining!
+;; ** adjoining!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212313.188774
 ;; :END:
@@ -86,7 +78,7 @@ SETTER is the same as in `appending!'"
   "Set PLACE to the value of `cl-adjoin'.
 SETTER is the same as in `appending!'."
   `(,setter ,place (cl-adjoin ,item ,place :test ,test :test-not ,test-not :key ,key)))
-;; ***** pushing!
+;; ** pushing!
 ;; :PROPERTIES:
 ;; :ID:       20230805T133526.591261
 ;; :END:
@@ -96,7 +88,7 @@ SETTER is the same as in `appending!'."
   "Cons ITEM to PLACE.
 SETTER is the same as in `appending!'."
   `(,setter ,place (cons ,item ,place)))
-;; ***** adjoin!
+;; ** adjoin!
 ;; :PROPERTIES:
 ;; :ID:       20230827T032444.991905
 ;; :END:
@@ -113,7 +105,7 @@ SETTER is the same as in `appending!'."
 Same as `adjoining!' but use `set!' as the setter.  Meant to be used for
 customizing variables."
   `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
-;; ***** unioning!
+;; ** unioning!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212356.131552
 ;; :END:
@@ -121,7 +113,7 @@ customizing variables."
   "Set PLACE to the union of PLACE and FORM.
 SETTER is the same as in `appending!'."
   `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
-;; ***** take!
+;; ** take!
 ;; :PROPERTIES:
 ;; :ID:       20230814T044518.786123
 ;; :END:
