@@ -1,10 +1,13 @@
 ;; [[file:snapshots/emacs-logo.png]]
-
+;; https://karl-voit.at/2017/09/23/orgmode-as-markup-only/
+;; * init.el
+;; * boost =gc-cons-threshold=
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
 ;; later reset to a reasonable value.
 (setq gc-cons-threshold most-positive-fixnum)
 
+;; * debugp
 ;; This variable is snatched from [[https://github.com/hlissner/doom-emacs][Doom]].  The point of this variable is to serve as
 ;; an indicator of whether the current Emacs instance is run for
 ;; debugging. Normally, when starting Emacs I suppress non-critical errors so as
@@ -15,6 +18,7 @@
   "When non-nil print debug messages.
 The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 
+;; * catch any errors in initialization
 ;; This is influenced by the excellent stackoverflow on
 ;; [[https://emacs.stackexchange.com/questions/669/how-to-gracefully-handle-errors-in-init-file][how-to-gracefully-handle-errors-in-init-file]].  The idea is that I don't want
 ;; errors to interfere with startup or with my usage of Emacs.  But I also don't
@@ -60,23 +64,23 @@ HOOK-OR-ADVICE.")
 			                :size 15)))
   (set-face-attribute 'default nil :font font))
 
+;; * add lisp directory to load-path
+;; The [[][load-path]] is a list of paths that emacs uses to find features it
+;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
-;; This file contains the defaults.
+;; * =require= the main files
+;; This file contains the defaults.  I had been using =el-init= but for just
+;; manually load.
 (require 'oo-defaults)
 
 ;; This file bootstraps `elpaca'.  Still a work in progress.
 (require 'oo-bootstrap-elpaca)
 
-;; ;; The package `el-init' is one that I consider underused.
-;; (require 'el-init)
-;; (setq el-init-lazy-init-regexp "^oo-\\(.+\\)-config$")
-
-;; (setq el-init-alert-enabled-p t)
-
-;; (el-init-load (locate-user-emacs-file "lisp/")
-;;               ;; :subdirectories '("base" "config")
-;;               :wrappers '(el-init-require/benchmark el-init-require/lazy))
+(require 'oo-base-utils)
+;; (require 'oo-modification-macros)
+;; (require 'oo-block-macro)
+;; (require 'oo-bind-functions)
 
 ;; * hooks
 ;; `prog-mode-hook'

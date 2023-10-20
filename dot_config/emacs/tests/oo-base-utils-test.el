@@ -1,7 +1,5 @@
 (require 'oo-base-utils)
 
-;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
-
 (ert-deftest oo-ampersand-symbol-p ()
   (should (oo-ampersand-symbol-p '&foo))
   (should-not (oo-ampersand-symbol-p 'foo)))
