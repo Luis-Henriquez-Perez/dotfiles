@@ -196,9 +196,6 @@ Ignore any symbols.  See `excluding!'."
 	     (setq zipper (treepy-next zipper)))))
     (list data zipper)))
 ;; ***** block!
-;; :PROPERTIES:
-;; :ID:       20230807T063155.724861
-;; :END:
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
