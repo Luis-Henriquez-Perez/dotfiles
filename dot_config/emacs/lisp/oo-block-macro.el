@@ -41,9 +41,6 @@
 	    (setq zipper (treepy-next zipper)))
       zipper)))
 ;; ** account for improper lists when mapping nodes
-;; :PROPERTIES:
-;; :ID:       20230731T162337.195589
-;; :END:
 ;; The dash function [[][-tree-map-nodes]] will fail when walking the body of a macro that has
 ;; improper lists.  While I wouldn't say improper lists are common in lisp code,
 ;; they do happen--particularly when using [[][dash]] and [[][loopy]] destructuring.  A
@@ -58,9 +55,6 @@
         (t
          tree)))
 ;; ** define placeholders
-;; :PROPERTIES:
-;; :ID:       20230625T101030.763172
-;; :END:
 ;; There are a number of what I call placeholder macros for block.  They are macros
 ;; that do pretty much nothing in an of themselves; they might at most verify the
 ;; arguments they recieve are correct.  They serve as markers used by the =block!=
@@ -71,14 +65,8 @@
 ;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
 ;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
 ;; ** let!
-;; :PROPERTIES:
-;; :ID:       20230807T185016.806410
-;; :END:
 (defalias 'let! '-setq)
 ;; ** with!
-;; :PROPERTIES:
-;; :ID:       20230107T183227.404180
-;; :END:
 ;; Meant to be used with =oo-block-macro-handle-with=.  These macros are for just
 ;; making sure that the keywords =wrap!= and =with!= are properly syntax
 ;; highlighted and have the correct indentation.
