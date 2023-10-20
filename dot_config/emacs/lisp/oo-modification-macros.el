@@ -2,9 +2,10 @@
 (require 'oo-base-utils)
 
 ;; * syntactic sugar for generic modification
-;; These macros are designed to provide me with "syntactic sugar" for very common
-;; operations that take the form of ~(setf a (funcall f a ..))~--where a is being
-;; set to some function of itself.  They are more specialized variants of
+;; These macros are designed to provide me with "syntactic sugar" macros for
+;; very common operations that take the form of ~(setf a (funcall f a
+;; ...))~--where =a=, a [[https://emacsdocs.org/docs/elisp/Setting-Generalized-Variables][setfable place]], is being set to some function of
+;; itself.  Essentially, these macros are more specialized variants of
 ;; =cl-callf=.  These macros were inspired by [[][loopy]]; specifically, by its
 ;; [[][accumulation clauses]].
 
@@ -13,6 +14,7 @@
   "Append LIST to the end of PLACE.
 SETTER is the symbol of the macro or function used to do the setting."
   `(,setter ,place (append ,place ,list)))
+
 ;; ** collecting!
 ;; Important to note that this macro is not as efficient as pushing because it's adding to the end
 ;; of the list.  So this macro should be used only in non-performance-intensive code.  In
@@ -24,6 +26,7 @@ SETTER is the same as in `appending!'."
 
 (defalias 'snocing! 'collecting!)
 (defalias 'affixing! 'collecting!)
+
 ;; ** incrementing! and decrementing! and counting!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212240.938293
@@ -34,6 +37,7 @@ SETTER is the same as in `appending!'."
 (defalias 'incrementing! 'cl-incf)
 (defalias 'counting! 'cl-incf)
 (defalias 'decrementing! 'cl-decf)
+
 ;; ** prepending!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212329.446613
@@ -43,6 +47,7 @@ SETTER is the same as in `appending!'."
   "Prepend LIST to beginning of PLACE.
 SETTER is the same as in `appending!'."
   `(,setter ,place (append ,list ,place)))
+
 ;; ** maxing!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212335.824132
@@ -54,6 +59,7 @@ SETTER is the same as in `appending!'."
     `(,setter ,place (let ((,value1 ,form)
                            (,value2 ,place))
                        (if (,comparator ,value1 ,value2) ,value1 ,value2)))))
+
 ;; ** minning!
 ;; :PROPERTIES:
 ;; :ID:       20230911T201204.426861
@@ -62,6 +68,7 @@ SETTER is the same as in `appending!'."
   "Set PLACE to the lesser of PLACE and FORM.
 SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
   `(maxing! ,place ,form :setter ,setter :comparator ,comparator))
+
 ;; ** concating!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212345.896585
@@ -70,6 +77,7 @@ SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
   "Concat PLACE and STRING with SEPARATOR.
 SETTER is the same as in `appending!'"
   `(,setter ,place (string-join (list ,place ,string) ,separator)))
+
 ;; ** adjoining!
 ;; :PROPERTIES:
 ;; :ID:       20230806T212313.188774

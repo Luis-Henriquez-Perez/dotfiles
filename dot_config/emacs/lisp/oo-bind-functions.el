@@ -1,7 +1,6 @@
 (require 'oo-additional-hooks)
 
 ;; This file provides a simple, generic extension to binding keys.
-
 (defvar oo-bind-functions '(oo--bind-defer-by-keymap
                             oo--bind-defer-by-evil
                             oo--bind-add-which-key-description
