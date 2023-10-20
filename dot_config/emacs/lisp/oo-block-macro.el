@@ -2,7 +2,7 @@
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
 
-;; **** block! - an advanced macro
+;; * block! - an advanced macro
 ;; The =block!= macro goals:
 ;; 1 - reduce excessive nesting nesting by making intelligent assumptions about the intended scope of variables.
 ;; This includes:
@@ -16,13 +16,13 @@
 ;;  - return!
 ;;  - continue! (skip!) skip the current iteration of a loop
 ;;  - break! (exit!) exit the current loop
-;; ***** load treepy
+;; ** load treepy
 ;; This library is for [[][walking lisp forms]].  Basically, it provides an iterator
 ;; that I can use to navigate a form.  The iterator allows me to move freely and
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; [[][dash's]] [[][-tree-map-nodes]].
 (require 'treepy)
-;; ***** extend treepy with a way to skip nodes
+;; ** extend treepy with a way to skip nodes
 ;; There's no function to skip a node and I can't see a quick/clever way to do it
 ;; with the existing functions.  I want to be where I would be if I had deleted the
 ;; node, but I don't want the node itself to be deleted.  If there is a right node
