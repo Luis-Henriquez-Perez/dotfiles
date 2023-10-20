@@ -5,17 +5,19 @@
 
 
 ;; * oo-ampersand-symbol-p
-;; Emacs uses these symbols as sugars in =defun= and =defmacro= signatures.  I'm
+;; Emacs uses these symbols as markers in =defun= and =defmacro= signatures.  I'm
 ;; defining a function specifically for identifying these symbols so I can
 ;; differentiate them from actual argument symbols.
 (defun oo-ampersand-symbol-p (obj)
   "Return non-nil of OBJ is an ampersand symbol.
 An ampersand symbol is a symbol that starts with `&'."
   (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
+
 ;; * oo-sharp-quoted-p
 (defsubst oo-sharp-quoted-p (obj)
   "Return non-nil if OBJ is sharp quoted."
   (equal (car-safe obj) 'function))
+
 ;; * oo-wrap-forms
 ;; This function is more for helping me write macros than for anything else.  It's
 ;; easy to wrap one form around a macro.  But this function automates the process of
@@ -30,6 +32,7 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (dolist (wrapper wrappers)
     (setq forms (-snoc wrapper forms)))
   forms)
+
 ;; * oo-non-keyword-symbol-p
 ;; Being able to distinguish between a non-keyword symbol is useful enough to merit
 ;; its own function.
@@ -37,6 +40,7 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   "Return t if OBJECT is a symbol but not a keyword."
   (declare (pure t) (side-effect-free t))
   (and (symbolp object) (not (keywordp object))))
+
 ;; * oo-args-to-symbol
 ;; simple symbols, using this function can save me having to provide a string for
 ;; =format=.

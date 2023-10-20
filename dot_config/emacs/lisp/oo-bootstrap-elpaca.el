@@ -924,8 +924,6 @@
 ;; This package provides functions and macro to log information.  It's the most
 ;; recent package for logging I could find.
 (elpaca (lgr :fetcher github :repo "Fuco1/Emacs-lgr" :commit "4ab6c22"))
-;; ***** el-init
-;; (elpaca (el-init :fetcher github :repo "" :commit ""))
 ;; ***** setup
 ;; :PROPERTIES:
 ;; :ID:       20230920T190421.807596
