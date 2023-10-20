@@ -91,20 +91,10 @@ See `oo-block-parse-excluding'."
 
 (defalias 'without! 'excluding!)
 ;; ***** define control-flow macros
-;; :PROPERTIES:
-;; :ID:       20230807T071641.392370
-;; :END:
 ;; These are macros that capitalize on the catch blocks I generate with [[id:20230807T063155.724861][block!]] to
 ;; provide control flow structures like those found in other lanaguges.
-;; ****** return! and return-from!
-;; :PROPERTIES:
-;; :ID:       20230810T083506.743135
-;; :END:
 (defalias 'return! 'cl-return)
 (defalias 'return-from! 'cl-return-from)
-;; ****** continue!
-;; :PROPERTIES:
-;; :END:
 (defmacro continue! ()
   "Skip the current iteration of loop.
 This is meant to be used in `block!'.  For what counts as a loop is, see
