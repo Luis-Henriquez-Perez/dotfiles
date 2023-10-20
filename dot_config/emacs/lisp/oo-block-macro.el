@@ -4,7 +4,8 @@
 
 ;; * block! - an advanced macro
 ;; The =block!= macro goals:
-;; 1 - reduce excessive nesting nesting by making intelligent assumptions about the intended scope of variables.
+;; 1 - reduce excessive nesting nesting by making intelligent assumptions about
+;; the intended scope of variables.
 ;; This includes:
 ;;  - automatically let binding variables
 ;;  - automatically let binding in designated macros--[[][the "ing!" macros]]
