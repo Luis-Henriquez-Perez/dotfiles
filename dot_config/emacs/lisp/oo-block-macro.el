@@ -125,12 +125,7 @@ Ignore any symbols.  See `excluding!'."
 	        (setq match-form it)))
 	    (pushing! binds (list match-form value))))
     (nreverse binds)))
-;; ***** try to do it all in one pcase
-;; :PROPERTIES:
-;; :ID:       20230809T092211.590259
-;; :END:
-;; At first I did this by creating functions.  Although this is nice for splitting
-;; up code.
+
 (defun oo-block-parse-body (body)
   (let ((zipper (treepy-list-zip body))
 	    (data nil))
