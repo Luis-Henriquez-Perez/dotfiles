@@ -65,9 +65,7 @@
 ;; to write is more than one line long.  This is nice so
 ;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
 ;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
-;; ** let!
 (defalias 'let! '-setq)
-;; ** with!
 ;; Meant to be used with =oo-block-macro-handle-with=.  These macros are for just
 ;; making sure that the keywords =wrap!= and =with!= are properly syntax
 ;; highlighted and have the correct indentation.
@@ -77,22 +75,14 @@ WRAPPER is the same as in `oo-wrap-forms'.
 Meant to be used with `block!'.  See `oo-block-parse-with'.")
 
 (defalias 'wrap 'with!)
-;; ****** label!
-;; :PROPERTIES:
-;; :ID:       20230625T103837.353668
-;; :END:
+
 (defmacro label! (&rest args)
   (declare (indent defun)))
-;; ****** letf!
-;; :PROPERTIES:
-;; :ID:       20230625T103905.830390
-;; :END:
+
 (defalias 'letf! 'label!)
+
 (defalias 'flet! 'label!)
-;; ****** excluding!
-;; :PROPERTIES:
-;; :ID:       20230806T212245.641523
-;; :END:
+
 ;; Sometimes we encounter symbols we don't want =block!= let binding.
 (defmacro excluding! (symbol &rest symbols)
   "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
