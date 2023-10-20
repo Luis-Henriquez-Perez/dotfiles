@@ -40,7 +40,7 @@
       (while (not (treepy-end-p zipper))
 	    (setq zipper (treepy-next zipper)))
       zipper)))
-;; ***** account for improper lists when mapping nodes
+;; ** account for improper lists when mapping nodes
 ;; :PROPERTIES:
 ;; :ID:       20230731T162337.195589
 ;; :END:
