@@ -90,7 +90,6 @@ See `oo-block-parse-excluding'."
   (cl-assert (-all-p #'symbolp (cons symbol symbols))))
 
 (defalias 'without! 'excluding!)
-;; ***** define control-flow macros
 ;; These are macros that capitalize on the catch blocks I generate with [[id:20230807T063155.724861][block!]] to
 ;; provide control flow structures like those found in other lanaguges.
 (defalias 'return! 'cl-return)
@@ -100,24 +99,20 @@ See `oo-block-parse-excluding'."
 This is meant to be used in `block!'.  For what counts as a loop is, see
 `oo-block-macro-loop-macros' and `oo-block-parse-loop'."
   `(throw 'continue! nil))
-
 (defalias 'skip! 'continue!)
-;; ****** break!
-;; :PROPERTIES:
-;; :ID:       20230613T070208.182341
-;; :END:
+
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
 For what counts as a loop is, see `oo-block-macro-loop-macros' and
 `oo-block-parse-loop'."
   `(throw 'break! ,value))
+
 (defalias 'break-with! 'break!)
+
 (defalias 'exit! 'break!)
+
 (defalias 'exit-with! 'exit!)
-;; ***** process let bindings
-;; :PROPERTIES:
-;; :ID:       20230810T083635.048606
-;; :END:
+
 (defun oo-block-let-bindings (let no-let)
   "Return list of let bindings, ignoring no-let.
 Ignore any symbols.  See `excluding!'."
