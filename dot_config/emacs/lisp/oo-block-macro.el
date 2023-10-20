@@ -57,7 +57,7 @@
                (oo-tree-map-nodes pred fun (cdr tree))))
         (t
          tree)))
-;; ***** define placeholders
+;; ** define placeholders
 ;; :PROPERTIES:
 ;; :ID:       20230625T101030.763172
 ;; :END:
@@ -70,12 +70,12 @@
 ;; to write is more than one line long.  This is nice so
 ;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
 ;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
-;; ****** let!
+;; ** let!
 ;; :PROPERTIES:
 ;; :ID:       20230807T185016.806410
 ;; :END:
 (defalias 'let! '-setq)
-;; ****** with!
+;; ** with!
 ;; :PROPERTIES:
 ;; :ID:       20230107T183227.404180
 ;; :END:
