@@ -1,11 +1,27 @@
-EMACS ?= emacs
+# Makefile copied from [[][]]
+.PHONY: clean
+clean:
+  eldev clean all
 
-TEST_DIR=$(shell pwd)/test
+.PHONY: bootstrap
+bootstrap:
+  eldev clean autoloads
+  eldev -C --unstable -a -dtT build :autoloads
 
-# Run all tests by default.
-MATCH ?=
+.PHONY: upgrade
+upgrade:
+  eldev -C --unstable -a -dtT upgrade
+
+.PHONY: compile
+compile:
+  eldev clean elc
+  eldev -C --unstable -a -dtT compile
+
+.PHONY: lint
+lint:
+  eldev -C --unstable -a -dtT lint
 
 .PHONY: test
-
 test:
-    $(EMACS) --batch -L . -L $(TEST_DIR) -l all-tests.el -eval '(ert-run-tests-batch-and-exit "$(MATCH)")'
+  eldev exec t
+  eldev -C --unstable -a -dtT test

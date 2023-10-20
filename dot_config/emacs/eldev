@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 
-;; This code and commentary was taken from
-;; [[https://d12frosted.io/posts/2021-04-09-emacs-d.html][this post]].  From what I understand...
+;; This code and commentary was taken from [[https://d12frosted.io/posts/2021-04-09-emacs-d.html][this post]].  This file defines a
+;; "project" for =eldev=.
 
 ;; * tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
