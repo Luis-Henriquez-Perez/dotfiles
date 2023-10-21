@@ -80,7 +80,7 @@ HOOK-OR-ADVICE.")
 
 ;; (require 'oo-base-utils)
 (require 'oo-modification-macros)
-;; (require 'oo-block-macro)
+(require 'oo-block-macro)
 ;; (require 'oo-bind-functions)
 
 ;; * hooks
