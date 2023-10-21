@@ -3,6 +3,7 @@
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; dash's [[][-tree-map-nodes]].
 (require 'treepy)
+(require 'cl-lib)
 (require 'oo-modification-macros)
 
 ;; * block! - an advanced macro
