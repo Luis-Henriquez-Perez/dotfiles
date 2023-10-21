@@ -78,8 +78,8 @@ HOOK-OR-ADVICE.")
 ;; This file bootstraps `elpaca'.  Still a work in progress.
 (require 'oo-bootstrap-elpaca)
 
-(require 'oo-base-utils)
-;; (require 'oo-modification-macros)
+;; (require 'oo-base-utils)
+(require 'oo-modification-macros)
 ;; (require 'oo-block-macro)
 ;; (require 'oo-bind-functions)
 
