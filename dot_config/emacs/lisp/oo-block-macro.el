@@ -4,6 +4,7 @@
 ;; dash's [[][-tree-map-nodes]].
 (require 'treepy)
 (require 'cl-lib)
+(require 'dash)
 (require 'oo-modification-macros)
 
 ;; * block! - an advanced macro
