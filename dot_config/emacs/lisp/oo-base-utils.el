@@ -14,9 +14,9 @@ An ampersand symbol is a symbol that starts with `&'."
   (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
 
 ;; * oo-sharp-quoted-p
-(defsubst oo-sharp-quoted-p (obj)
-  "Return non-nil if OBJ is sharp quoted."
-  (equal (car-safe obj) 'function))
+;; (defsubst oo-sharp-quoted-p (obj)
+;;   "Return non-nil if OBJ is sharp quoted."
+;;   (equal (car-safe obj) 'function))
 
 ;; ** oo-wrap-forms
 ;; This function is more for helping me write macros than for anything else.  It's
@@ -55,18 +55,19 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-args-to-symbol ":" args))
-
+;; ** oo-funcall-silently
 (defun oo-funcall-silently (function &rest args)
   "Call function silently.
 Don't produce any output to the *Messages* buffer when calling function."
   (shut-up (apply function args)))
-
+;; ** oo-symbols
 (defun oo-symbols (regexp tree)
   "Return symbols that match REGEXP in TREE."
   (thread-last (flatten-list tree)
                (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
                (-uniq)))
 
+;; ** oo-symbol-match-p
 ;; I find myself using the idiom ~(string-match-p regexp (symbol-name symbol))~ enough times.
 (defsubst oo-symbol-match-p (regexp symbol)
   "Return non-nil if SYMBOL matches REGEXP."
