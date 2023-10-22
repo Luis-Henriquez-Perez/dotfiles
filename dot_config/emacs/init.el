@@ -75,10 +75,10 @@ HOOK-OR-ADVICE.")
 (require 'oo-bootstrap-elpaca)
 
 ;; (require 'oo-base-utils)
-(require 'oo-modification-macros)
-(require 'oo-block-macro)
-(require 'oo-definers)
-(require 'oo-bind-functions)
+;; (require 'oo-modification-macros)
+;; (require 'oo-block-macro)
+;; (require 'oo-definers)
+;; (require 'oo-bind-functions)
 
 ;; * hooks
 ;; ** prog-mode-hook
