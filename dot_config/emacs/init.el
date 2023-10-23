@@ -2,6 +2,7 @@
 ;; Karl Volt argues that =org= has many advantages over =markdown=
 ;; https://karl-voit.at/2017/09/23/orgmode-as-markup-only/
 ;; * init.el
+;; ** set initial variables
 ;; ** boost =gc-cons-threshold=
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
@@ -62,11 +63,11 @@ HOOK-OR-ADVICE.")
 			                :slant 'normal
 			                :size 15)))
   (set-face-attribute 'default nil :font font))
-;; * add lisp directory to load-path
+;; ** add lisp directory to load-path
 ;; The [[][load-path]] is a list of paths that emacs uses to find features it
 ;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
-;; * =require= the main files
+;; ** =require= the main files
 ;; This file contains the defaults.  I had been using =el-init= but for just
 ;; manually load.
 (require 'oo-defaults)
@@ -80,7 +81,7 @@ HOOK-OR-ADVICE.")
 ;; (require 'oo-definers)
 ;; (require 'oo-bind-functions)
 
-;; * hooks
+;; ** hooks
 ;; ** prog-mode-hook
 ;; (oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
 ;; (oo-add-hook 'prog-mode-hook #'corfu-mode)
