@@ -6,4 +6,4 @@
 
 (require 'oo-base-utils-test)
 (require 'oo-bind-functions-test)
-(require ')
+(require 'oo-modifications-macro)
