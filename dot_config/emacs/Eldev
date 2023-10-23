@@ -3,7 +3,8 @@
 ;; This code and commentary was taken from [[https://d12frosted.io/posts/2021-04-09-emacs-d.html][this post]].  This file defines a
 ;; "project" for =eldev=.
 
-;; One thing I wish was mentioned in the post is that 
+;; One thing I wish was mentioned in the post is that to run any of the shell
+;; commands for =eldev=, the =eldev= executable needs to be in your path.
 
 ;; * tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
