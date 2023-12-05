@@ -360,7 +360,9 @@ end-of-buffer signals; pass the rest to the default handler."
 
 ;; In case I want to use different package mangers I want.
 (require 'oo-package)
+(require 'oo-package-recipes)
 (oo-bootstrap-package-manager)
+(oo-package-install )
 (oo-package-install)
 (oo-package-install)
 
