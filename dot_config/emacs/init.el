@@ -1,1 +1,3 @@
+;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
+
 (load "config.el")
