@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
+
 ;; [[file:snapshots/emacs-logo.png]]
 ;; Karl Volt argues that =org= has many advantages over =markdown=
 ;; https://karl-voit.at/2017/09/23/orgmode-as-markup-only/
