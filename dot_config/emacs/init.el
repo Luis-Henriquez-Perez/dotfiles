@@ -352,3 +352,4 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq command-error-function #'oo-command-error-function)
 ;; You cannot just do ~(load "config.el")~.
 ;; (load (locate-user-emacs-file "config.el"))
+;; * install packages
