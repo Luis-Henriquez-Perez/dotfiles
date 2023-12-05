@@ -353,3 +353,7 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; You cannot just do ~(load "config.el")~.
 ;; (load (locate-user-emacs-file "config.el"))
 ;; * install packages
+;; The million dollar question is: how should installing packages work?  For me
+;; I'd like to run a script in bash or preferably elisp that just installs my
+;; packages for me up front and then at that point I can install my emacs
+;; configuration. 
