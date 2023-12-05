@@ -6802,5 +6802,4 @@ Produce a png image of the current buffer and add it into."
 ;; :END:
 ;; I am using the info command frequently to get information of packages that I install so that I can
 ;; write their recipe down. It merits its own function.
-(bind! (:map oo-package-map)
-       (:wk "info" "I" #'elpaca-info))
+(oo-bind 'oo-package-map "I" #'elpaca-info :wk "info")
