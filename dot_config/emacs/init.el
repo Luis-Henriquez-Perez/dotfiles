@@ -362,4 +362,5 @@ end-of-buffer signals; pass the rest to the default handler."
 (require 'oo-package)
 (oo-bootstrap-package-manager)
 (oo-package-install)
+(oo-package-install)
 
