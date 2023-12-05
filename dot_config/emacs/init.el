@@ -357,3 +357,4 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; I'd like to run a script in bash or preferably elisp that just installs my
 ;; packages for me up front and then at that point I can just run my emacs
 ;; configuration.  I just want a script that will install packages.
+(require 'package)
