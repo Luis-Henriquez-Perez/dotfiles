@@ -86,7 +86,7 @@ HOOK-OR-ADVICE.")
 ;; I specifically load =cl-lib= and not =cl=.  Otherwise I will recieve an
 ;; unavoidable message saying which is [[https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it][depreciated]].
 (require 'cl-lib)
-;; *** generic settings
+;; ** generic settings
 ;; :PROPERTIES:
 ;; :ID:       20230801T200546.260384
 ;; :END:
@@ -95,7 +95,7 @@ HOOK-OR-ADVICE.")
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
-;; **** prevent =*Messages*= and =*scratch*= buffers from being killed
+;; *** prevent =*Messages*= and =*scratch*= buffers from being killed
 ;; :PROPERTIES:
 ;; :ID:       20230907T101201.734381
 ;; :END:
@@ -113,13 +113,13 @@ HOOK-OR-ADVICE.")
 (setq emacs-lock-default-locking-mode 'kill)
 (with-current-buffer "*Messages*" (emacs-lock-mode 1))
 (with-current-buffer "*scratch*" (emacs-lock-mode 1))
-;; **** stop creating =auto-save-list= directory
+;; *** stop creating =auto-save-list= directory
 ;; :PROPERTIES:
 ;; :ID:       20230827T140209.010138
 ;; :END:
 ;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
 (setq auto-save-list-file-prefix nil)
-;; **** use =yes-or-no-p= instead of =y-or-n-p=
+;; *** use =yes-or-no-p= instead of =y-or-n-p=
 ;; :PROPERTIES:
 ;; :ID:       82a84315-2018-42e0-bd1a-74af7b722593
 ;; :END:
@@ -127,12 +127,12 @@ HOOK-OR-ADVICE.")
 ;; or =no= to instead allow me to type =y= or =p=.  [[helpfn:yes-or-no-p][yes-or-no-p]] is defined in c
 ;; source code.
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
-;; **** don't create lockfiles
+;; *** don't create lockfiles
 ;; :PROPERTIES:
 ;; :ID:       20230825T124046.455636
 ;; :END:
 (setq create-lockfiles nil)
-;; **** don't flash unstyled modeline at startup
+;; *** don't flash unstyled modeline at startup
 ;; :PROPERTIES:
 ;; :ID:       20230731T181236.344398
 ;; :END:
@@ -140,14 +140,14 @@ HOOK-OR-ADVICE.")
 ;; modeline at startup does slightly slow down emacs (insignificant on it's own but
 ;; these things add up).  So I disable it.
 (setq-default mode-line-format nil)
-;; **** don't ask me whether I want to kill a buffer with a live process
+;; *** don't ask me whether I want to kill a buffer with a live process
 ;; :PROPERTIES:
 ;; :ID:       20230807T002031.281189
 ;; :END:
 ;; I got this from [[https://www.masteringemacs.org/article/disabling-prompts-emacs][this-post]].  Every time you try to kill a buffer with a live
 ;; process, Emacs will ask you if you're sure you want to kill it.
 (setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
-;; **** don't pass case-insensitive to =auto-mode-alist=
+;; *** don't pass case-insensitive to =auto-mode-alist=
 ;; :PROPERTIES:
 ;; :ID:       20230731T183648.053172
 ;; :END:
@@ -155,7 +155,7 @@ HOOK-OR-ADVICE.")
 ;; non-nil; when enabled the auto-mode-alist is traversed twice.  This double
 ;; traversal can be expensive and it seems unnecessary.
 (setq auto-mode-case-fold nil)
-;; **** don't suggest keybindings or the like for me
+;; *** don't suggest keybindings or the like for me
 ;; :PROPERTIES:
 ;; :ID:       20230807T002419.333469
 ;; :END:
@@ -163,7 +163,7 @@ HOOK-OR-ADVICE.")
 ;; command that has an existing keybinding, or something that could be abbreviated,
 ;; emacs will suggest a shorter way.
 (setq suggest-key-bindings nil)
-;; **** stop asking me whether I want to enable file local variables
+;; *** stop asking me whether I want to enable file local variables
 ;; :PROPERTIES:
 ;; :ID:       20230806T164746.702869
 ;; :END:
@@ -175,7 +175,7 @@ HOOK-OR-ADVICE.")
 ;; [[][]] in =common-lisp-mode= and I realized Emacs wasn't doing it because I
 ;; told it not to with this variable.
 (setq enable-local-variables :safe)
-;; **** don't ask me whether to follow symlinks, just do it
+;; *** don't ask me whether to follow symlinks, just do it
 ;; :PROPERTIES:
 ;; :ID:       20230731T162025.361386
 ;; :END:
@@ -184,7 +184,7 @@ HOOK-OR-ADVICE.")
 ;; the answer is predominately yes.
 (setq vc-follow-symlinks t)
 (setq vc-follow-link t)
-;; **** don't ask me for permission to enable a theme
+;; *** don't ask me for permission to enable a theme
 ;; :PROPERTIES:
 ;; :ID:       20230731T162020.231251
 ;; :END:
@@ -193,7 +193,7 @@ HOOK-OR-ADVICE.")
 ;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
 ;; from wierd places online and evaluating them.  So I don't need.
 (setq custom-safe-themes t)
-;; **** don't create a custom file
+;; *** don't create a custom file
 ;; :PROPERTIES:
 ;; :ID:       20230731T162013.703695
 ;; :END:
@@ -201,7 +201,7 @@ HOOK-OR-ADVICE.")
 ;; interface is intended for people that don't know elisp.  For me it's completely
 ;; unnecessary.  Every variable I customize is in my emacs configuration.
 (setq custom-file null-device)
-;; **** don't disable any commands
+;; *** don't disable any commands
 ;; :PROPERTIES:
 ;; :ID:       20230731T162007.289836
 ;; :END:
@@ -210,14 +210,14 @@ HOOK-OR-ADVICE.")
 ;; accidentally narrowed the buffer.  I am experienced enough so that I don't
 ;; Need this.
 (setq disabled-command-function nil)
-;; **** disable cursor blinking
+;; *** disable cursor blinking
 ;; :PROPERTIES:
 ;; :ID:       20230731T161959.758192
 ;; :END:
 ;; By default the cursor blinks.  The point is so that it is easier to find on the
 ;; screen.  Usually, however, I have no trouble finding it so I disable it.
 (blink-cursor-mode -1)
-;; **** move files to trash instead of deleting them
+;; *** move files to trash instead of deleting them
 ;; :PROPERTIES:
 ;; :ID:       20230731T162509.072098
 ;; :END:
@@ -226,7 +226,7 @@ HOOK-OR-ADVICE.")
 ;; if you accidentally delete a file or discover you can still just go get your
 ;; file from the trash.
 (setq delete-by-moving-to-trash t)
-;; **** enable recursive minibuffer
+;; *** enable recursive minibuffer
 ;; :PROPERTIES:
 ;; :ID:       20230731T174221.389416
 ;; :END:
@@ -234,7 +234,7 @@ HOOK-OR-ADVICE.")
 ;; minibuffer.  At the very least this is useful so that I can inspect which keys
 ;; are bound in the minibuffer.
 (setq enable-recursive-minibuffers t)
-;; **** recenter point if it goes 20 lines past what is visible
+;; *** recenter point if it goes 20 lines past what is visible
 ;; :PROPERTIES:
 ;; :ID:       20230731T204800.923611
 ;; :END:
@@ -244,7 +244,7 @@ HOOK-OR-ADVICE.")
 ;; the window bottom, but a higher value is nice to automatically recenter after
 ;; any bigger jump."
 (setq scroll-conservatively 20)
-;; **** don't show the startup screen
+;; *** don't show the startup screen
 ;; :PROPERTIES:
 ;; :ID:       20230731T205458.499736
 ;; :END:
@@ -253,41 +253,41 @@ HOOK-OR-ADVICE.")
 (setq inhibit-startup-message t)
 (setq inhibit-startup-screen t)
 (setq inhibit-splash-screen t)
-;; **** skip fontification functions when there's input pending
+;; *** skip fontification functions when there's input pending
 ;; :PROPERTIES:
 ;; :ID:       20230803T163524.316856
 ;; :END:
 (setq redisplay-skip-fontification-on-input t)
-;; **** don't update things on the screen as frequently
+;; *** don't update things on the screen as frequently
 ;; :PROPERTIES:
 ;; :ID:       20230801T055728.697987
 ;; :END:
 ;; This variable is.
 ;; https://github.com/hlissner/doom-emacs/blob/01aadd8900be45f912124d9d815d8790f540d38c/core/core.el#L177
 (setq idle-update-delay 1)
-;; **** don't make backups
+;; *** don't make backups
 ;; :PROPERTIES:
 ;; :ID:       20230812T062001.541694
 ;; :END:
 (setq make-backup-files nil)
-;; **** backup files to trash
+;; *** backup files to trash
 ;; :PROPERTIES:
 ;; :ID:       20230812T062140.061699
 ;; :END:
 (setq backup-directory-alist '((".*" . "~/.Trash")))
-;; **** diable auto-save-mode
+;; *** diable auto-save-mode
 ;; :PROPERTIES:
 ;; :ID:       20230812T062512.579521
 ;; :END:
 (setq auto-save-default nil)
 (auto-save-mode -1)
-;; **** don't echo keystrokes
+;; *** don't echo keystrokes
 ;; :PROPERTIES:
 ;; :ID:       20230731T205343.423280
 ;; :END:
 ;; By default emacs shows.
 (setq echo-keystrokes 0)
-;; **** ensure there's always a newline at the end of files
+;; *** ensure there's always a newline at the end of files
 ;; :PROPERTIES:
 ;; :ID:       20230731T162322.281287
 ;; :END:
@@ -295,37 +295,37 @@ HOOK-OR-ADVICE.")
 ;; chrontab--this is more or less what noctuid said and I'll take his word for
 ;; it.
 (setq require-final-newline t)
-;; **** set the tab-width to =4=; it's =8= by default
+;; *** set the tab-width to =4=; it's =8= by default
 ;; :PROPERTIES:
 ;; :ID:       20230803T154240.186291
 ;; :END:
 (setq-default tab-width 4)
-;; **** set the initial major mode to =fundamental-mode=
+;; *** set the initial major mode to =fundamental-mode=
 ;; :PROPERTIES:
 ;; :ID:       20230803T154745.494981
 ;; :END:
 ;; This improve startup time because packages enabled for emacs-lisp-mode are not
 ;; loaded immediately.
 (setq initial-major-mode 'fundamental-mode)
-;; **** don't display message advertising gnu system
+;; *** don't display message advertising gnu system
 ;; :PROPERTIES:
 ;; :ID:       20230807T000924.633977
 ;; :END:
 ;; They made the process of disabling this more difficult.
 (advice-add #'display-startup-echo-area-message :around #'ignore)
-;; **** disable initial scratch message
+;; *** disable initial scratch message
 ;; :PROPERTIES:
 ;; :ID:       20230807T000558.580301
 ;; :END:
 ;; Don't display any documentation--or any message at all--in the =*scratch*=
 ;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
 (setq initial-scratch-message nil)
-;; **** don't add indent
+;; *** don't add indent
 ;; :PROPERTIES:
 ;; :ID:       20230803T154112.206542
 ;; :END:
 (setq-default indent-tabs-mode nil)
-;; **** don't beep
+;; *** don't beep
 ;; :PROPERTIES:
 ;; :ID:       20230731T162326.479823
 ;; :END:
@@ -336,7 +336,7 @@ HOOK-OR-ADVICE.")
 ;; just uses its default function.  Instead, to be disabled it must
 ;; be set to [[file:snapshots/helpful-command:ignore.png][ignore]].
 (setq ring-bell-function #'ignore)
-;; **** disable repeated error message functions
+;; *** disable repeated error message functions
 ;; :PROPERTIES:
 ;; :ID:       20230815T235002.324826
 ;; :END:
