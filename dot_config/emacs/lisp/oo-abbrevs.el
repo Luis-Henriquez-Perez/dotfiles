@@ -1,115 +1,31 @@
-(provide 'oo-abbrevs)
+(require 'abbrev)
 
-;; *** abbrevs
-;; :PROPERTIES:
-;; :ID:       20230802T172218.869756
-;; :END:
-;; The abbrev system for emacs.
-;; **** don't save my abbrevs to a file; I'd rather have them as lisp
-;; :PROPERTIES:
-;; :ID:       20230803T055416.342537
-;; :END:
 (set! abbrev-file-name null-device)
-;; **** capitalize
-;; :PROPERTIES:
-;; :ID:       20230909T153643.051946
-;; :END:
 (define-global-abbrev "i" "I")
 (define-global-abbrev "luis" "Luis")
-;; **** imho                                                                       :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T192737.209043
-;; :END:
+
 (define-global-abbrev "imho" "in my humble opinion")
-;; **** imo                                                                        :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T192722.138540
-;; :END:
 (define-global-abbrev "imo" "in my opinion")
-;; **** fyi                                                                        :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T192700.148484
-;; :END:
 (define-global-abbrev "fyi" "for your information")
-;; **** lmk                                                                        :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T171239.604183
-;; :END:
 (define-global-abbrev "lmk" "let me know")
-;; **** afaik                                                                      :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T163541.823256
-;; :END:
 (define-global-abbrev "afaik" "as far as I know")
-;; **** idk                                                                        :abbrev:
-;; :PROPERTIES:
-;; :ID:       20230802T171437.846231
-;; :END:
 (define-global-abbrev "idk" "I do not know")
-;; **** abbreviate =im= to =I'm=
-;; :PROPERTIES:
-;; :ID:       20230909T153859.786986
-;; :END:
-;; To press =I'm= on a QWERTY keyboard is too hard.  It's much easier to just type =im=.
 (define-global-abbrev "im" "I am")
-;; **** tbh
 (define-global-abbrev "tbh" "to be honest")
-;; **** abbreviate =qwerty= to =QWERTY=
-;; :PROPERTIES:
-;; :ID:       20230909T153936.924067
-;; :END:
-;; Haha.  As I was typing my commentary for [[][]] I realized how troublesome it is to type QWERTY and
-;; I immediately made an abbrev for it.
 (define-global-abbrev "qwerty" "QWERTY")
-;; **** spell out all english abbreviation with ='=
-;; :PROPERTIES:
-;; :ID:       20230909T154712.166953
-;; :END:
-;; A continuation of my war on ='=.  I started this war with [[][I'm]].
 (define-global-abbrev "dont" "do not")
-;; **** convert =ive= to =I've=
-;; :PROPERTIES:
-;; :ID:       20230911T124829.255887
-;; :END:
 (define-global-abbrev "ive" "I've")
-;; **** stop myself from misspelling =surprise= as =surprise=
-;; I don't know why but I often tend to mispell =surprise= as =surprise=.  This
-;; abbrev will fix this typo for me should I ever make this mistake in the
-;; future.
 (define-global-abbrev "suprise" "surprise")
-;; **** another common misspell is for me to mix up the =i= and =o=
 (define-global-abbrev "functoin" "function")
-;; **** =gonna= - going to
-;; :PROPERTIES:
-;; :ID:       20230918T150556.925877
-;; :END:
 (define-global-abbrev "gonna" "going to")
-;; **** =ngl= - not going to lie
-;; :PROPERTIES:
-;; :ID:       20230918T150535.294257
-;; :END:
 (define-global-abbrev "ngl" "not going to lie")
-;; **** =tbf= - to be frank
-;; :PROPERTIES:
-;; :ID:       20230918T150442.391086
-;; :END:
 (define-global-abbrev "tfb" "to be frank")
-;; **** more abbrevs
-;; :PROPERTIES:
-;; :ID:       20231010T112351.552472
-;; :END:
 (define-global-abbrev "ndo" "window")
 (define-global-abbrev "tis" "it is")
 (define-global-abbrev "amly" "automatically")
 (define-global-abbrev "rn" "right now")
 (define-global-abbrev "bly" "probably")
 (define-global-abbrev "lk" "like")
-;; **** abbreviate =configuration= with =config=
-;; :PROPERTIES:
-;; :ID:       20231006T144138.256297
-;; :END:
-;; I need to figure out how to only expand an abbrev based on certain condition
-;; because it clashes with some things such as the =~/.config= directory.
 (define-global-abbrev "config" "configuration")
 ;; **** abbreviate =obviously= with =obv=
 ;; :PROPERTIES:
