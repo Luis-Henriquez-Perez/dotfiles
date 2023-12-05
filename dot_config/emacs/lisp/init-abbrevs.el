@@ -1,1 +1,1 @@
-(oo-add-hook 'abbrev-mode-hook )
+(oo-funcall-hook 'abbrev-mode-hook #'require 'config-abbrev)
