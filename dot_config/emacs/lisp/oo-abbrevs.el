@@ -37,45 +37,14 @@
 (define-global-abbrev "dnt" "don't")
 (define-global-abbrev "ofc" "of course")
 (define-global-abbrev "ok" "O.K.")
-;; **** abbreviate =it's= with =iis=
 (define-global-abbrev "iis" "it's")
 (define-global-abbrev "ul" "you'll")
-;; **** abbreviate =in other words= with =iow=
-;; :PROPERTIES:
-;; :ID:       20231007T131818.928017
-;; :END:
 (define-global-abbrev "iow" "in other words")
-;; **** abbreviate =up until now= with =uun=
-;; :PROPERTIES:
-;; :ID:       20231008T061259.034293
-;; :END:
 (define-global-abbrev "uun" "up until now")
-;; **** abbreviate =EXWM= with =exwm=
-;; :PROPERTIES:
-;; :ID:       20231009T142712.079778
-;; :END:
 (define-global-abbrev "exwm" "EXWM")
-;; **** abbreviate "for example" with =fe=
-;; :PROPERTIES:
-;; :ID:       20231007T110531.380588
-;; :END:
 (define-global-abbrev "fe" "for example")
-;; **** abbreviate =evaluated= with =evaled=
-;; :PROPERTIES:
-;; :ID:       20231006T120812.742130
-;; :END:
 (define-global-abbrev "evaled" "evaluated")
-;; **** abbreviate =I'd= with =id=
-;; :PROPERTIES:
-;; :ID:       20231008T055429.648521
-;; :END:
-;; +I think =id= is [[https://www.verywellmind.com/what-is-the-id-2795275][actually a word]] but I never use it; however, I use =I'd= all the+
-;; +time.  It's a worthwhile trade-off then to abbreviate =I'd= as =I'd=.+
 (define-global-abbrev "idd" "I would")
-;; **** abbreviate =that is= with =thats=
-;; :PROPERTIES:
-;; :ID:       20231014T193558.633337
-;; :END:
 (define-global-abbrev "thats" "that is")
 ;; **** abbreviate =I will= with =illl=
 ;; :PROPERTIES:
