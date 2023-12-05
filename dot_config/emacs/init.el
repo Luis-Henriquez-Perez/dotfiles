@@ -87,4 +87,4 @@ HOOK-OR-ADVICE.")
 ;; unavoidable message saying which is [[https://emacs.stackexchange.com/questions/66758/package-cl-is-deprecated-is-there-any-easy-fix-for-it][depreciated]].
 (require 'cl-lib)
 ;; You cannot just do ~(load "config.el")~.
-(load (locate-user-emacs-file "config.el"))
+;; (load (locate-user-emacs-file "config.el"))
