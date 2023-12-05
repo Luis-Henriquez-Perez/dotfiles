@@ -46,28 +46,12 @@
 (define-global-abbrev "evaled" "evaluated")
 (define-global-abbrev "idd" "I would")
 (define-global-abbrev "thats" "that is")
-;; **** abbreviate =I will= with =illl=
-;; :PROPERTIES:
-;; :ID:       20231014T195733.115935
-;; :END:
 (define-global-abbrev "illl" "I will")
-;; **** abbreviate =doc-string= with =doc-string= and =dstr=
-;; :PROPERTIES:
-;; :ID:       20231015T125840.552335
-;; :END:
 (define-global-abbrev "docstring" "doc-string")
 (define-global-abbrev "docstrings" "doc-strings")
 (define-global-abbrev "dstr" "doc-string")
 (define-global-abbrev "dstrs" "doc-strings")
-;; **** abbreviate =I know= with =ik=
-;; :PROPERTIES:
-;; :ID:       20231015T151329.190932
-;; :END:
 (define-global-abbrev "ik" "I know")
-;; **** abbreviate =describe= with =ribe=
-;; :PROPERTIES:
-;; :ID:       20231015T151617.394097
-;; :END:
 (define-global-abbrev "ribe" "describe")
 
 (provide 'config-abbrevs)
