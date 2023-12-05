@@ -1,3 +1,3 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 
-(load "./config.el")
+(load (locate-user-emacs-file "config.el"))
