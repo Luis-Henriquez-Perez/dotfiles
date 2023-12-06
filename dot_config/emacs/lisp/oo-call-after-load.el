@@ -2,6 +2,7 @@
 (require 'oo-modification-macros)
 
 ;;; oo-call-after-load
+;; This package provides the star function `oo-call-after-load' as well as.
 ;;;; create a hook that checks for any unbound symbols and binds them
 ;; :PROPERTIES:
 ;; :ID:       20230801T060330.101692
