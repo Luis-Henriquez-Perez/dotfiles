@@ -361,4 +361,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; In case I want to use different package mangers I want.
 (require 'package)
 (require 'package-vc)
-(package-vc-install )
+(edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master")
+(package-vc-install)
