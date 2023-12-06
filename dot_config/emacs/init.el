@@ -363,3 +363,7 @@ end-of-buffer signals; pass the rest to the default handler."
 (require 'package-vc)
 (edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master")
 (package-vc-install)
+(package-vc-install
+ '(bbdb :url "https://git.savannah.nongnu.org/git/bbdb.git"
+        :lisp-dir "lisp"
+        :doc "doc/bbdb.texi"))
