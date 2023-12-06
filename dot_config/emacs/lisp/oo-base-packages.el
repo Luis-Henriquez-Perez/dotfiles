@@ -955,4 +955,4 @@
 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 
-(provide 'oo-bootstrap-elpaca)
+(provide 'oo-pase-packages)
