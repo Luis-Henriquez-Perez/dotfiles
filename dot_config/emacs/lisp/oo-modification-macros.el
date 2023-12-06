@@ -5,6 +5,7 @@
 ;; itself.  Essentially, these macros are more specialized variants of
 ;; =cl-callf=.  These macros were inspired by [[][loopy]]; specifically, by its
 ;; [[][accumulation clauses]].
+(require 'cl-lib)
 ;;;; appending!
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
