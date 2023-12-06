@@ -1,4 +1,8 @@
-;; ***** create a hook that checks for any unbound symbols and binds them
+(require 'oo-base-utils)
+(require 'oo-modification-macros)
+
+;;; oo-call-after-load
+;;;; create a hook that checks for any unbound symbols and binds them
 ;; :PROPERTIES:
 ;; :ID:       20230801T060330.101692
 ;; :END:
@@ -21,11 +25,11 @@ bound and setting them to the result of evaluating expr."
   (when exprs (funcall `(lambda () ,@exprs))))
 
 (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
-;; **** after feature is loaded
+;;;; after feature is loaded
 ;; :PROPERTIES:
 ;; :ID:       20230824T140744.273989
 ;; :END:
-;; ***** oo-try-load-feature
+;;;; oo-try-load-feature
 ;; :PROPERTIES:
 ;; :ID:       957942d3-9632-4e04-a6e6-9a4e03b26fba
 ;; :END:
@@ -36,7 +40,7 @@ bound and setting them to the result of evaluating expr."
       (require feature)
       (when (fboundp fn)
         (return! feature)))))
-;; ***** oo--call-after-load
+;;;; oo--call-after-load
 ;; :PROPERTIES:
 ;; :ID:       20230112T144220.969274
 ;; :END:
@@ -56,7 +60,7 @@ For what CONDITION is see `oo-call-after-load'."
      (eval-after-load feature `(funcall #',fn ,@(mapcar #'macroexp-quote args))))
     (_
      (error "invalid condition `%S'" condition))))
-;; ***** oo-call-after-load-fn
+;;;; oo-call-after-load-fn
 ;; :PROPERTIES:
 ;; :ID:       20230111T064508.607498
 ;; :END:
@@ -89,7 +93,7 @@ call."
                       t))
   (fset fname closure)
   fname)
-;; ***** oo-call-after-load
+;;;; oo-call-after-load
 ;; :PROPERTIES:
 ;; :ID:       5f10adc7-11bc-4100-b775-6f1d43655754
 ;; :END:
@@ -106,7 +110,7 @@ CONDITION is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If CONDITION is a list whose CAR is `:or', call FN with ARGS after any of
 CONDITIONS in (CDR CONDITION) is met."
   (oo--call-after-load condition (oo-call-after-load-fn fn args)))
-;; ***** after!
+;;;; after!
 ;; :PROPERTIES:
 ;; :ID:       931dc720-6514-4564-acbf-1cfe37436f68
 ;; :END:
@@ -119,7 +123,7 @@ CONDITIONS in (CDR CONDITION) is met."
 For what CONDITION is see `oo-call-after-load'."
   (declare (indent 1))
   `(oo-call-after-load ',condition (lambda () ,@body)))
-;; ***** defafter!
+;;;; defafter!
 ;; :PROPERTIES:
 ;; :ID:       892a40f9-7023-4cdc-a73c-c03d79037fca
 ;; :END:
@@ -135,3 +139,5 @@ For what CONDITION is see `oo-call-after-load'."
   (declare (indent defun))
   (let! (_ args _ body) (oo-defun-components args))
   `(after! ,args ,@body))
+
+(provide 'oo-call-after-load)
