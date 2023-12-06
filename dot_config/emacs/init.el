@@ -86,12 +86,10 @@ HOOK-OR-ADVICE.")
 ;; packages for me up front and then at that point I can just run my emacs
 ;; configuration.  I just want a script that will install packages.
 ;; In case I want to use different package mangers I want.
-(setq load-path (append load-path
-                        (eval-when-compile
-                          (require 'oo-packages)
-                          (oo-install-packages))))
+(require 'oo-base-packages)
+
 ;;;; load needed libraries
-(require 'oo-block-macro)
+(require 'oo-base-library)
 ;;;; setup hooks
 ;;;;; hooks
 ;;;;;; prog-mode-hook
