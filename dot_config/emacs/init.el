@@ -71,3 +71,4 @@ HOOK-OR-ADVICE.")
                           (oo-install-packages))))
 ;; * load needed libraries
 (require 'oo-bind)
+;; * setup hooks
