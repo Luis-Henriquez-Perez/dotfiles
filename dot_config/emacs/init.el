@@ -320,7 +320,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; packages for me up front and then at that point I can just run my emacs
 ;; configuration.  I just want a script that will install packages.
 ;; In case I want to use different package mangers I want.
-
 (setq load-path (append load-path
                         (eval-when-compile
                           (require 'oo-packages)
