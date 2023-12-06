@@ -1,5 +1,5 @@
 ;; This file is designed to be.
 
-(require 'oo-base-)
+(require 'oo-base-utils)
 
 (provide 'oo-base-library)
