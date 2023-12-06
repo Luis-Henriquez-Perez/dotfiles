@@ -32,3 +32,5 @@ any symbols that are now bound.")
        (aif (get ',symbol 'custom-set)
            (funcall it ',symbol ,value-var)
          (setq ,symbol ,value-var)))))
+
+(provide 'oo-set-macro)
