@@ -88,7 +88,7 @@ HOOK-OR-ADVICE.")
 ;; In case I want to use different package mangers I want.
 (require 'oo-base-packages)
 
-;;;; load my library
+;;;; load library
 (require 'oo-base-library)
 
 ;;;; setup hooks
