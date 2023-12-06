@@ -6,6 +6,7 @@
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
+
 ;; ** prevent =*Messages*= and =*scratch*= buffers from being killed
 ;; :PROPERTIES:
 ;; :ID:       20230907T101201.734381
