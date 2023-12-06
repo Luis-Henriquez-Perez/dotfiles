@@ -12,6 +12,7 @@
 ;; big number, essentially disables garbage collection.  The garbage collection is
 ;; later reset to a reasonable value.
 (setq gc-cons-threshold most-positive-fixnum)
+
 ;;;;  determine whether emacs is in debug mode
 ;; :PROPERTIES:
 ;; :ID:       39197346-c420-4518-b8f8-8ea247d6decb
