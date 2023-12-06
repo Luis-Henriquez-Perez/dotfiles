@@ -1,6 +1,10 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 ;;; initialization
-;; This file starts up everything else.  
+;; This file starts up everything else.
+
+;; I had been using =org= to manage my configuration for a long time.  But
+;; ultimately I switched to pure elisp because of several major reasons.  One is
+;; that 
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
