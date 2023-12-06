@@ -7,7 +7,8 @@
 ;; that it is how emacs and programming files in general are designed to
 ;; operate.  Using =org= means that you will need to figure.  Using outshine
 ;; commenting style is very minimal and unobtrusive and therefore easily
-;; transferable to other programming files.
+;; transferable to other programming files.  One could argue that this is how
+;; org should have been implemented
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
