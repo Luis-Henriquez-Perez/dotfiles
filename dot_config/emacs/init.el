@@ -69,5 +69,3 @@ HOOK-OR-ADVICE.")
                         (eval-when-compile
                           (require 'oo-packages)
                           (oo-install-packages))))
-
-;; (edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master")
