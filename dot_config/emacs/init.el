@@ -69,3 +69,5 @@ HOOK-OR-ADVICE.")
                         (eval-when-compile
                           (require 'oo-packages)
                           (oo-install-packages))))
+;; * load needed libraries
+(require 'oo-bind)
