@@ -49,6 +49,9 @@ HOOK-OR-ADVICE.")
 ;; cache directory.
 (defvar oo-cache-dir (concat user-emacs-directory "cache/")
   "Directory containing files used for caching information.")
+
+(require 'oo-defaults)
+
 ;; * install packages
 ;; The million dollar question is: how should installing packages work?  For me
 ;; I'd like to run a script in bash or preferably elisp that just installs my
