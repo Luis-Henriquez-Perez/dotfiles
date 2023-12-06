@@ -94,8 +94,8 @@ HOOK-OR-ADVICE.")
 ;;;; setup hooks
 ;;;;; hooks
 ;;;;;; prog-mode-hook
-;; (oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
-;; (oo-add-hook 'prog-mode-hook #'corfu-mode)
+(oo-add-hook 'prog-mode-hook #'smartparens-strict-mode)
+(oo-add-hook 'prog-mode-hook #'corfu-mode)
 ;; (oo-add-hook 'prog-mode-hook #'lispyville-mode)
 ;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
 ;; (oo-add-hook '(prog-mode-hook reb-mode-hook) #'rainbow-delimiters-mode)
