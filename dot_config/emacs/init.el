@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 
-;; * base
+;; * set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
 ;; :END:
