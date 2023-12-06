@@ -90,6 +90,7 @@ HOOK-OR-ADVICE.")
 
 ;;;; load needed libraries
 (require 'oo-base-library)
+
 ;;;; setup hooks
 ;;;;; hooks
 ;;;;;; prog-mode-hook
