@@ -239,3 +239,5 @@ Name may be any symbol.  Code inside body can call `return!'."
           (body (treepy-root zipper))
           (let-bindings (oo-block-let-bindings let no-let)))
     `(cl-block nil (-let ,(oo-block-let-bindings let no-let) ,@body))))
+
+(provide 'oo-block-macro)
