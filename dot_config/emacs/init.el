@@ -359,10 +359,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; configuration.  I just want a script that will install packages.
 
 ;; In case I want to use different package mangers I want.
-(require 'oo-package)
-(require 'oo-package-recipes)
-(oo-bootstrap-package-manager)
-(oo-package-install )
-(oo-package-install)
-(oo-package-install)
-
+(require 'package)
+(require 'package-vc)
+(package-vc-in)
