@@ -9,7 +9,14 @@
 ;; And while I do not think that there is anything theoretically wrong with
 ;; having everything in a huge file, I think that the current system and
 ;; debugging tools are designed with the assumption that features are divided
-;; into multiple files. is  Using =org= means that you will need to figure.  Using outshine
+;; into multiple files. is  Using =org= means that you will need to figure out
+;; how to do these things indirectly.  I think the most natural way of using
+;; =org= to manage configuration files is putting everything in one file because
+;; headlines fulfill the role of segregation into manageable pieces so you don't
+;; need files to do that.  And you should want to do that to avoid the
+;; complexity that arises from loading order. Already I think its questionable
+;; to use org if you're
+;; going to also try to maintain the file hierarchy. Using outshine
 ;; commenting style is very minimal and unobtrusive and therefore easily
 ;; transferable to other programming files.  One could argue that this is how
 ;; org should have been implemented as sort of adding features to an existing
