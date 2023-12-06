@@ -91,7 +91,7 @@ HOOK-OR-ADVICE.")
                           (require 'oo-packages)
                           (oo-install-packages))))
 ;;;; load needed libraries
-(require 'oo-block)
+(require 'oo-block-macro)
 ;;;; setup hooks
 ;;;;; hooks
 ;;;;;; prog-mode-hook
