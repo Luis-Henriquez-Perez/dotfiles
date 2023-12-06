@@ -58,3 +58,5 @@ Evaluate and remove from all elements of `oo-after-keymap-alist'."
 
 (add-hook 'emacs-startup-hook #'oo-call-after-keymap-functions)
 (add-hook 'after-load-functions #'oo-call-after-keymap-functions)
+
+(provide 'oo-call-after-keymap)
