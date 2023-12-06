@@ -1,11 +1,11 @@
 (require 'cl-lib)
 
+;; * defaults
 ;; Here lies a collection of built-in settings that I want to take effect
 ;; immediately.  Many of them have to do with disabling default Emacs behaviors
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
-
 ;; ** prevent =*Messages*= and =*scratch*= buffers from being killed
 ;; :PROPERTIES:
 ;; :ID:       20230907T101201.734381
