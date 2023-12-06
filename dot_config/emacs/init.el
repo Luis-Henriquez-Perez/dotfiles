@@ -77,7 +77,7 @@ HOOK-OR-ADVICE.")
 ;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
-;;;; load defaults
+;;;; load base settings
 (require 'oo-base-settings)
 
 ;;;; install packages
