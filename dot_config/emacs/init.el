@@ -5,7 +5,11 @@
 ;; I had been using =org= to manage my configuration for a long time.  But
 ;; ultimately I switched to pure elisp because of several major reasons.  One is
 ;; that it is how emacs and programming files in general are designed to
-;; operate.  Using =org= means that you will need to figure.  Using outshine
+;; operate.  The way files are tested assumes dividing code into multiple files.
+;; And while I do not think that there is anything theoretically wrong with
+;; having everything in a huge file, I think that the current system and
+;; debugging tools are designed with the assumption that features are divided
+;; into multiple files. is  Using =org= means that you will need to figure.  Using outshine
 ;; commenting style is very minimal and unobtrusive and therefore easily
 ;; transferable to other programming files.  One could argue that this is how
 ;; org should have been implemented as sort of adding features to an existing
