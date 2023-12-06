@@ -86,7 +86,7 @@ HOOK-OR-ADVICE.")
 ;; packages for me up front and then at that point I can just run my emacs
 ;; configuration.  I just want a script that will install packages.
 ;; In case I want to use different package mangers I want.
-(require 'oo-base-packages)
+;; (require 'oo-base-packages)
 
 ;; ;;;; load library
 ;; (require 'oo-base-library)
