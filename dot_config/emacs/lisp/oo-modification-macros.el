@@ -1,5 +1,4 @@
 (require 'cl-lib)
-(require 'mmt)
 
 ;; **** syntactic sugar for generic modification
 ;; :PROPERTIES:
@@ -59,10 +58,10 @@ SETTER is the same as in `appending!'."
 (cl-defmacro maxing! (place form &key (setter 'setf) (comparator '>))
   "Set PLACE to the greater of PLACE and FORM.
 SETTER is the same as in `appending!'."
-  (mmt-with-gensyms (value1 value2)
-                    `(,setter ,place (let ((,value1 ,form)
-                                           (,value2 ,place))
-                                       (if (,comparator ,value1 ,value2) ,value1 ,value2)))))
+  (cl-with-gensyms (value1 value2)
+    `(,setter ,place (let ((,value1 ,form)
+                           (,value2 ,place))
+                       (if (,comparator ,value1 ,value2) ,value1 ,value2)))))
 ;; ***** minning!
 ;; :PROPERTIES:
 ;; :ID:       20230911T201204.426861
