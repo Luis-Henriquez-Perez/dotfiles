@@ -17,7 +17,6 @@
 (eldev-add-loading-roots 'bootstrap "lisp")
 
 ;; * specify test directory
-;; 
 ;; There are dependencies for testing and linting phases, they should
 ;; be installed by Eldev from MELPA and GNU ELPA (latter is enabled by
 ;; default).
