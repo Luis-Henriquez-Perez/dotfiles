@@ -70,7 +70,7 @@ HOOK-OR-ADVICE.")
                           (require 'oo-packages)
                           (oo-install-packages))))
 ;; * load needed libraries
-(require 'oo-bind)
+(require 'oo-block)
 ;; * setup hooks
 ;; ** hooks
 ;; *** prog-mode-hook
