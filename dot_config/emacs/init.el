@@ -78,7 +78,7 @@ HOOK-OR-ADVICE.")
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
 ;;;; load defaults
-(require 'oo-defaults)
+(require 'oo-base-settings)
 
 ;;;; install packages
 ;; The million dollar question is: how should installing packages work?  For me
