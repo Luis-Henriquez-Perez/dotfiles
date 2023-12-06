@@ -1,5 +1,6 @@
 ;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
 ;;; initialization
+;; This file starts up everything else.
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
