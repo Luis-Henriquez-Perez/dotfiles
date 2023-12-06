@@ -4,7 +4,10 @@
 
 ;; I had been using =org= to manage my configuration for a long time.  But
 ;; ultimately I switched to pure elisp because of several major reasons.  One is
-;; that 
+;; that it is how emacs and programming files in general are designed to
+;; operate.  Using =org= means that you will need to figure.  Using outshine
+;; commenting style is very minimal and unobtrusive and therefore easily
+;; transferable to other programming files.
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
