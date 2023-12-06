@@ -1,4 +1,3 @@
-
 ;;; syntactic sugar for generic modification
 ;; These macros are designed to provide me with "syntactic sugar" macros for
 ;; very common operations that take the form of ~(setf a (funcall f a
@@ -99,4 +98,5 @@ SETTER is the same as in `appending!'."
 	                                       (collecting! ,taken (pop ,place)))))
 	                                  ,taken))))
 
+;;; provide
 (provide 'oo-modification-macros)
