@@ -262,3 +262,5 @@ end-of-buffer signals; pass the rest to the default handler."
     (command-error-default-function data context caller)))
 
 (setq command-error-function #'oo-command-error-function)
+
+(provide 'oo-defaults)
