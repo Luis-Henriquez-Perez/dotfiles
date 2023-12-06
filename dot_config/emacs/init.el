@@ -50,6 +50,7 @@ HOOK-OR-ADVICE.")
 (defvar oo-cache-dir (concat user-emacs-directory "cache/")
   "Directory containing files used for caching information.")
 
+;; * load defaults
 (require 'oo-defaults)
 
 ;; * install packages
