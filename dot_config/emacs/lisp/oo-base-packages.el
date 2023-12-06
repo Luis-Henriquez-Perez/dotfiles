@@ -1,10 +1,10 @@
 (require 'cl-lib)
 
-;; [[Elpaca]] is a new package manager.  It installs packages asynchronously.
 ;;; bootstrap elpaca
 ;; :PROPERTIES:
 ;; :ID:       20230731T162355.242276
 ;; :END:
+;; [[Elpaca]] is a new package manager.  It installs packages asynchronously.
 ;; This is the boostrap code provided by [[][]] with a few modifications.  First I
 ;; specify the exact commit for elpaca so I can achieve my [[][aforementioned goal]].
 (defvar elpaca-installer-version 0.5)
