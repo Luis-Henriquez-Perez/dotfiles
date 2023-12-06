@@ -321,6 +321,9 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; configuration.  I just want a script that will install packages.
 ;; In case I want to use different package mangers I want.
 
-(setq load-path (append load-path (eval-when-compile (require 'oo-packages)
-                                                     (oo-install-packages))))
-(edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master")
+(setq load-path (append load-path
+                        (eval-when-compile
+                          (require 'oo-packages)
+                          (oo-install-packages))))
+
+;; (edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master")
