@@ -95,7 +95,7 @@ HOOK-OR-ADVICE.")
 (require 'oo-base-library)
 
 ;;;; (lazy) load patches and extensions
-;; (require 'oo-base-extra)
+(require 'oo-base-extra)
 
 ;;;; hooks
 ;; (require 'oo-base-hooks)
