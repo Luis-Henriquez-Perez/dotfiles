@@ -53,17 +53,15 @@ ALIST is an alist of (FN . ARGS).")
 ;; The way I wrote this function is noteworthy.  I can't just wrap it with an
 ;; =after!= block as I did initially because it uses the variables =states=, =function=
 ;; and =args=.
-;; #+begin_src elisp
-;; (defun! oo-call-after-evil-state (states function &rest args)
-;;   "Call FUNCTION with ARGS after evil state STATE is defined.
-;; STATE is either a state, list of states or an evil state keyword."
-;;   (flet! load-state-maybe (function args state)
-;;     (cond ((and (keywordp state) (assoc (oo-evil-state state) evil-state-properties))
-;;            (apply function args))
-;;           ((assoc state evil-state-properties)
-;;            (apply function args))
-;;           ((push (cons function args)
-;;                  (alist-get state oo-undefined-state-functions)))))
-;;   (let! fn (-partial #'load-state-maybe function args))
-;;   (oo-call-after-load 'evil #'mapc fn (-list states)))
-;; #+end_src
+(defun! oo-call-after-evil-state (states function &rest args)
+  "Call FUNCTION with ARGS after evil state STATE is defined.
+STATE is either a state, list of states or an evil state keyword."
+  (flet! load-state-maybe (function args state)
+    (cond ((and (keywordp state) (assoc (oo-evil-state state) evil-state-properties))
+           (apply function args))
+          ((assoc state evil-state-properties)
+           (apply function args))
+          ((push (cons function args)
+                 (alist-get state oo-undefined-state-functions)))))
+  (let! fn (-partial #'load-state-maybe function args))
+  (oo-call-after-load 'evil #'mapc fn (-list states)))
