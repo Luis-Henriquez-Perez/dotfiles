@@ -1,4 +1,4 @@
-;; This extension adds org markup to non-nor files.
+;; This extension adds org markup to non-org files.
 
 (defun oo-add-org-italic-emphasis ()
   "Add Org-style italic emphasis to comments in Lisp modes."
