@@ -1,7 +1,11 @@
 ;; It is worth mentioning a trade-off between robustness and convenience I am
 ;; making here.  To make the loading "robust" in the sense that different
 ;; packages can be toggled on and off as with doom modules or doom's `package!'
-;; macro that can disable the use of a package. 
+;; macro that can disable the use of a package.  As in to make this robust I
+;; should probably have things like =oo-init-smartparens= and
+;; =oo-config-smartparens= where the file =oo-init-smartparens= has what should
+;; be evaluated immediately on startup and =oo-config-smartparens= has the code
+;; that should be evaluated after smartparens is loaded.
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
