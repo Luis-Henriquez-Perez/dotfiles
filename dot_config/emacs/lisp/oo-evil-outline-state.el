@@ -4,7 +4,7 @@
 (require 'outline)
 (require 'oo-base-library)
 
-(oo-call-after-load '(evil outline) #'require 'oo-evil-outline-state)
+;; (oo-call-after-load '(evil outline) #'require 'oo-evil-outline-state)
 
 (evil-define-state outline ())
 
