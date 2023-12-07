@@ -4203,21 +4203,6 @@ to exceed 255 characters long."
 ;; I'm not sure, but my thinking is that ros recommends to set it to ~ros -Q run~
 ;; because this will handle the cases where you switch implementations.
 (set! inferior-lisp-program "ros -Q run")
-;; *** make descriptive buffer names for exwm buffers
-;; :PROPERTIES:
-;; :ID:       20231007T133541.648095
-;; :END:
-;; This is adapted from the [[file:screenshots/archwiki-EXWM-meaningful-buffer-names.png][example]] given in the [[https://wiki.archlinux.org/title/EXWM][archwiki]].
-
-;; #+begin_quote
-;; You may see the buffer names being named '*EXWM*'. This makes it confusing while
-;; switching between buffers .EXWM allows the buffers to name themself . To allow
-;; buffers to name themself put the following in your dotemacs.
-;; #+end_quote
-(defun exwm-update-class-hook&set-descriptive-name ()
-  "Set the name of EXWM buffer to be more descriptive."
-  (exwm-workspace-rename-buffer exwm-class-name))
-(add-hook 'exwm-update-class-hook #'exwm-update-class-hook&set-descriptive-name)
 ;; *** start the picom daemon
 ;; :PROPERTIES:
 ;; :ID:       20230702T133823.552540
