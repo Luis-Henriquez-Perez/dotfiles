@@ -1,4 +1,3 @@
-(require ')
 ;; ****** create an advice that runs =oo-evil-define-state-hook=
 ;; :PROPERTIES:
 ;; :ID:       20231022T034649.894152
