@@ -36,4 +36,4 @@
     (oo--bind-do-binding fns metadata)))
 (adjoining! oo-bind-functions #'oo--bind-exwm-keys)
 
-(provide 'exwm-config)
+(provide 'oo-exwm-config)
