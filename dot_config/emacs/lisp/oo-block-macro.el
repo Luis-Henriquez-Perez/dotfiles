@@ -1,3 +1,6 @@
+(require 'treepy)
+(require 'oo-treepy-patch)
+
 ;; **** block! - an advanced macro
 ;; :PROPERTIES:
 ;; :ID:       20230531T132818.529776
@@ -23,28 +26,10 @@
 ;; that I can use to navigate a form.  The iterator allows me to move freely and
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; [[][dash's]] [[][-tree-map-nodes]].
-(require 'treepy)
 ;; ***** extend treepy with a way to skip nodes
 ;; :PROPERTIES:
 ;; :ID:       20230810T023929.247897
 ;; :END:
-;; There's no function to skip a node and I can't see a quick/clever way to do it
-;; with the existing functions.  I want to be where I would be if I had deleted the
-;; node, but I don't want the node itself to be deleted.  If there is a right node
-;; in the same level skipping is tantamount to [[][treepy-right]].
-(defun +treepy-skip (zipper)
-  "Skip the current node."
-  (let ((orig zipper))
-    (while (and (not (treepy-right zipper)) (treepy-up zipper))
-      (setq zipper (treepy-up zipper)))
-    (if (treepy-right zipper)
-        (setq zipper (treepy-right zipper))
-      ;; If we've reached the top level, that means there is no next node.  So
-      ;; let's go back to where we were and go next until we reach the end.
-      (setq zipper orig)
-      (while (not (treepy-end-p zipper))
-        (setq zipper (treepy-next zipper)))
-      zipper)))
 ;; ***** account for improper lists when mapping nodes
 ;; :PROPERTIES:
 ;; :ID:       20230731T162337.195589
