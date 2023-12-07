@@ -4,9 +4,6 @@
 ;;; oo-call-after-load
 ;; This feature provides the star function `oo-call-after-load' as well as.
 ;;;; create a hook that checks for any unbound symbols and binds them
-;; :PROPERTIES:
-;; :ID:       20230801T060330.101692
-;; :END:
 ;; The abnormal hook [[][after-load-functions]] is run after any file is loaded.
 
 ;; I'll note that I push all the forms into a list and evaluate them all in the
@@ -27,9 +24,6 @@ bound and setting them to the result of evaluating expr."
 
 (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
 ;;;; after feature is loaded
-;; :PROPERTIES:
-;; :ID:       20230824T140744.273989
-;; :END:
 ;;;; oo-try-load-feature
 ;; :PROPERTIES:
 ;; :ID:       957942d3-9632-4e04-a6e6-9a4e03b26fba
