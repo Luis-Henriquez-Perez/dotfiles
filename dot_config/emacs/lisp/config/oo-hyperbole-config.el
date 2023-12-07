@@ -5,4 +5,6 @@
 ;; patterns into links.
 (require 'hyperbole)
 
+;; Creating new "buttons" (which I think of as links).
+
 (provide 'oo-hyperbole-config)
