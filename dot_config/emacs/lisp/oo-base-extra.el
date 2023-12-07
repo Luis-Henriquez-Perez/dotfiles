@@ -7,6 +7,14 @@
 ;; I had also considered specifying the package in the name so that I can
 ;; automate loading them.
 
+
+;; Patches are files that add advices to existing functions to an existing
+;; package or add a few new functions I think would be useful to me.
+(push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
+
+;; Extensions are.
+(push (expand-file-name "lisp/extensions" user-emacs-directory) load-path)
+
 (oo-call-after-load '(outline evil) #'require 'oo-evil-headline-state)
 (oo-call-after-load 'outline #'require 'oo-outline-patch)
 (oo-call-after-load 'outshine #'require 'oo-outshine-bullets)
