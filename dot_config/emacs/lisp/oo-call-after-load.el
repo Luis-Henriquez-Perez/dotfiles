@@ -1,9 +1,7 @@
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
 
-;;; oo-call-after-load
 ;; This feature provides the star function `oo-call-after-load' as well as.
-;;;; create a hook that checks for any unbound symbols and binds them
 ;; The abnormal hook [[][after-load-functions]] is run after any file is loaded.
 
 ;; I'll note that I push all the forms into a list and evaluate them all in the
