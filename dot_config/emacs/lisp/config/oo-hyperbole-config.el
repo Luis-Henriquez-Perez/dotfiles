@@ -6,5 +6,6 @@
 (require 'hyperbole)
 
 ;; Creating new "buttons" (which I think of as links).
+;; Make a new button type for
 
 (provide 'oo-hyperbole-config)
