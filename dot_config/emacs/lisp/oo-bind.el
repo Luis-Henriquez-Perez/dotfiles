@@ -1,3 +1,4 @@
+(require 'oo-block-macro)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-load)
 
@@ -167,9 +168,9 @@ If there are no more functions, do nothing."
             (oo-call-after-load 'which-key)))
     (funcall this-fn keymap (kbd-maybe key) def))
   (apply fn args))
-;; ****** cannot compose kbd function for which-key
+
 ;; I need to combine the =noflet= form for =which-key= and using kbd because.
-;; ****** oo--bind
+
 ;; This is the internal function that I will use to bind keys.
 (defun oo--bind (&rest metadata)
   (oo--resolve-binding oo-binding-fns metadata))
