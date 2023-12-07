@@ -91,6 +91,7 @@ HOOK-OR-ADVICE.")
 ;;;; load library
 (require 'oo-base-library)
 
+(push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
 ;;;; (lazy) load patches and extensions
 ;; (require 'oo-base-extra)
 
