@@ -39,18 +39,18 @@
 (oo-add-hook 'after-init-hook #'load-theme 'modus-operandi)
 (oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
 ;;;;;; on-first-file-hook
-;; (oo-add-hook 'on-first-file-hook #'save-place-mode)
-;; (oo-add-hook 'on-first-file-hook #'super-save-mode)
+(oo-add-hook 'on-first-file-hook #'save-place-mode)
+(oo-add-hook 'on-first-file-hook #'super-save-mode)
 ;;;;;; emacs-lisp-mode-hook
-;; (oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-;; (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 
-;; (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
-;; (oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
 ;;;;;; text-mode-hook
-;; (oo-add-hook '(prog-mode-hook text-mode-hook) #'evil-surround-mode)
-;; (oo-add-hook 'text-mode-hook #'flyspell-mode)
-;; (oo-add-hook 'text-mode-hook #'auto-fill-mode)
-;; (oo-add-hook 'text-mode-hook #'visual-line-mode)
+(oo-add-hook '(prog-mode-hook text-mode-hook) #'evil-surround-mode)
+(oo-add-hook 'text-mode-hook #'flyspell-mode)
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
 
 (provide 'oo-base-hooks)
