@@ -1,3 +1,4 @@
+(require 'lgr)
 (require 'oo-log)
 
 ;; This macro is designed with the following goals in mind.
