@@ -7,7 +7,8 @@
 ;; be evaluated immediately on startup and =oo-config-smartparens= has the code
 ;; that should be evaluated after smartparens is loaded.  But that is a lot of
 ;; files.  Two files per package being configured. Furthermore, the "init" file
-;; will often have just one line of code.  I did not want to do that.
+;; will often have just one line of code.  I did not want to do that.  This is
+;; less robust but 
 (require 'oo-add-hook)
 
 ;;;; setup hooks
