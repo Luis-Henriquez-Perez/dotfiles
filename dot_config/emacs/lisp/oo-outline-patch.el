@@ -3,6 +3,7 @@
 
 (defun oo-outline-promote-advice (orig-fn &rest args)
   (condition-case err
-      (apply orig-fn args)))
+      (apply orig-fn args)
+    ))
 
 (provide 'oo-outline-promote-patch)
