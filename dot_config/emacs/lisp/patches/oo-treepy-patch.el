@@ -18,3 +18,5 @@
 
 
 ;; This will also address fixing the fact that =treepy-delete= doesn't seem to work.
+
+(provide 'oo-treepy-patch)
