@@ -83,7 +83,7 @@ HOOK-OR-ADVICE.")
   "Directory containing files used for caching information.")
 
 ;;;; add lisp directory to load-path
-;; The [[][load-path]] is a list of paths that emacs uses to find features it
+;; The load-path is a list of paths that emacs uses to find features it
 ;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
