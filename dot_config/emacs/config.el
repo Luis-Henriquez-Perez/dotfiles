@@ -1687,23 +1687,6 @@ when ALT should be invoked instead of ORIG."
 ;; Note that I add gcmh mode hook at the end so that all the other hook commands
 ;; are done before setting the =gc-cons-threshold= back to a normal value.
 (set! gcmh-idle-delay 'auto)
-;; **** oo-initial-buffer-choice-hook
-;; :PROPERTIES:
-;; :ID:       20230827T094911.785281
-;; :END:
-(defvar oo-initial-buffer-choice-hook nil
-  "Hook run to choose initial buffer.
-Each hook should return either a buffer to be displayed or a boolean.
-For what buffer is displayed in the case of a boolean see
-`initial-buffer-choice'.")
-
-(defun oo-run-initial-buffer-choice-hook ()
-  "Run `oo-initial-buffer-choice-hook'."
-  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
-              (get-buffer-create "*scratch*"))
-    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
-
-(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
 ;; **** boost garbage collection in minibuffer
 ;; :PROPERTIES:
 ;; :ID:       20230801T161328.023311
