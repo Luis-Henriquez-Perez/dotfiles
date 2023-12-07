@@ -25,26 +25,24 @@ defined.")
 ;; :ID:       20231027T185412.231726
 ;; :END:
 ;; This is the same design model as the keymap.
-;; #+begin_src elisp
-;; (defvar oo-undefined-state-functions nil
-;;   "An alist of (STATE . ALIST) where state is an evil state.
-;; STATE is either an evil state or an evil state keyword.
-;; ALIST is an alist of (FN . ARGS).")
+(defvar oo-undefined-state-functions nil
+  "An alist of (STATE . ALIST) where state is an evil state.
+STATE is either an evil state or an evil state keyword.
+ALIST is an alist of (FN . ARGS).")
 
-;; (defun! oo-call-undefined-state-functions (_)
-;;   "Call the functions."
-;;   (for! ((state . alist) oo-undefined-state-functions)
-;;     ;; If the state is a keyword and the letter matches the first letter of an
-;;     ;; existing evil state, then eval the bindings.
-;;     (if (or (and (keywordp state) (oo-evil-state state))
-;;             (assoc state evil-state-properties))
-;;         (mapc #'apply alist)
-;;       (pushing! updated item)))
-;;   (setq oo-undefined-state-functions (nreverse updated)))
+(defun! oo-call-undefined-state-functions (_)
+  "Call the functions."
+  (for! ((state . alist) oo-undefined-state-functions)
+    ;; If the state is a keyword and the letter matches the first letter of an
+    ;; existing evil state, then eval the bindings.
+    (if (or (and (keywordp state) (oo-evil-state state))
+            (assoc state evil-state-properties))
+        (mapc #'apply alist)
+      (pushing! updated item)))
+  (setq oo-undefined-state-functions (nreverse updated)))
 
-;; (add-hook 'evil-mode-hook #'oo-call-undefined-state-functions)
-;; (add-hook 'oo-after-define-evil-state-hook #'oo-call-undefined-state-functions)
-;; #+end_src
+(add-hook 'evil-mode-hook #'oo-call-undefined-state-functions)
+(add-hook 'oo-after-define-evil-state-hook #'oo-call-undefined-state-functions)
 ;; ****** oo-call-after-evil-state
 ;; :PROPERTIES:
 ;; :ID:       20231022T112758.062308
