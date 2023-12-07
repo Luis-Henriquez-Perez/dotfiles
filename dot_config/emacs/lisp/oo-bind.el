@@ -24,16 +24,14 @@
 ;;                          oo--bind-define-key)
 ;;   "List of functions that generate the body of `bind!'.")
 ;; #+end_src
-;; ******* oo--resolve-binding
 ;; This is the function that will be invoked by the functions in
 ;; [[id:20231026T133140.783912][oo-binding-functions]] to proceed to the next step.
-;; #+begin_src elisp
-;; (defun oo--resolve-binding (fns metadata)
-;;   "Run the next function in `oo-bind-functions'.
-;; If there are no more functions, do nothing."
-;;   (funcall (or (car fns) #'ignore) (cdr fns) metadata))
-;; #+end_src
-;; ******* oo--bind-alt
+
+(defun oo--resolve-binding (fns metadata)
+  "Run the next function in `oo-bind-functions'.
+If there are no more functions, do nothing."
+  (funcall (or (car fns) #'ignore) (cdr fns) metadata))
+
 (defun oo--bind-alt (fns metadata)
   (cond ((map-elt metadata :alt)
          (unless (map-elt metadata :keymap)
@@ -44,7 +42,7 @@
          (oo--do-binding metadata #'oo-alt-bind :keymap :key :def :condition))
         (t
          (oo--resolve-binding fns metadata))))
-;; ******* oo--bind-localleader
+
 (defun! oo--bind-localleader (fns metadata)
   "Automate binding to leader."
   (let! alist '((oo-normal-localleader-short-key . normal)
