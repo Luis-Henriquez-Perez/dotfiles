@@ -73,3 +73,5 @@
   :file (expand-file-name "~/dotfiles/dotfiles.org")
   :olp '("emacs" "uncategorized")
   :template (-partial (function oo-src-block-headline) nil "emacs-lisp"))
+
+(provide 'oo-org-capture-configuration)
