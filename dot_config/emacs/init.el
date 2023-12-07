@@ -84,8 +84,8 @@ HOOK-OR-ADVICE.")
 ;; The million dollar question is: how should installing packages work?  For me
 ;; I'd like to run a script in bash or preferably elisp that just installs my
 ;; packages for me up front and then at that point I can just run my emacs
-;; configuration.  I just want a script that will install packages.
-;; In case I want to use different package mangers I want.
+;; configuration.  I just want a script that will install packages.  For now I
+;; am just trying to migrate from an org configuration to a pure elisp one so 
 (require 'oo-base-packages)
 
 (push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
