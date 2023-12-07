@@ -92,7 +92,8 @@ HOOK-OR-ADVICE.")
 (require 'oo-base-packages)
 
 ;;;; (lazy) load patches and extensions
-;; This registers the files into the load-path and sets up extensions for loading.
+;; This registers the files into the load-path and sets up extensions for
+;; loading.  It is important to put this before the base library because.
 (require 'oo-base-extra)
 
 ;;;; load library
