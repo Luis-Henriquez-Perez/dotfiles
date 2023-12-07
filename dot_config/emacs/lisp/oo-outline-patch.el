@@ -3,7 +3,7 @@
 
 ;; What I don't understand is why =outline-promote= gets the appropriate level
 ;; by going up a heading instead of just computing it based on the current one.
-;; See the [[][definition of]]
+;; See the [[][]].
 (defun oo-outline-promote-advice (orig-fn &rest args)
   ;; If there's an error in `outline-up-heading' then do my own
   ;; promotion or demotion.
