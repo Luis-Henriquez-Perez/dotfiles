@@ -2,9 +2,6 @@
 (require 'oo-modification-macros)
 
 ;; ***** defer function calls until keymap is loaded
-;; :PROPERTIES:
-;; :ID:       20231018T170355.378301
-;; :END:
 ;; I want the ability to be able to bind keys in keymaps without having to always
 ;; consider whether the keymap is bound yet or not; and without always having to
 ;; write non-declarative code such as ~(after! evil (evil-define-key* ...))~.  The
@@ -13,17 +10,11 @@
 ;; exists.  The contents of this headline provides the framework for =oo-bind= to let
 ;; me do this.
 ;; ****** oo-after-keymap-alist
-;; :PROPERTIES:
-;; :ID:       20231018T175135.214308
-;; :END:
 (defvar oo-after-keymap-alist nil
   "An alist whose elements are of the form (KEYMAP . ((FN . ARGS) ...)).
 Each key is a unique keymap symbol.  Every corresponding value is an alist whose
 elements are of the form (FN . ARGS).")
 ;; ****** oo-call-after-keymap
-;; :PROPERTIES:
-;; :ID:       20231018T170544.999236
-;; :END:
 ;; This function is similar to [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]].  It is designed to be used
 ;; as the interface for adding stuff into [[id:20231018T175135.214308][oo-after-keymap-alist]].
 (defun oo-call-after-keymap (keymap fn &rest args)
@@ -35,9 +26,6 @@ KEYMAP is a keymap symbol."
         (t
          (pushing! (alist-get keymap oo-after-keymap-alist) (cons fn args)))))
 ;; ****** oo-call-after-keymap-functions
-;; :PROPERTIES:
-;; :ID:       20231023T095619.827974
-;; :END:
 ;; To implement this behavior I add hook function to [[file:snapshots/_helpful_variable__after-load-functions_.png][after-load-functions]], an
 ;; abnormally named hook that is run after any file is loaded.  The hook function
 ;; evaluates the forms of any item of [[file:snapshots/_helpful_variable__oo-after-keymap-alist_.png][oo-after-keymap-alist]] whose keymap is bound.
