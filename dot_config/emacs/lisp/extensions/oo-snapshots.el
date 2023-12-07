@@ -42,3 +42,5 @@ Produce a png image of the current buffer and add it into."
     (unless (y-or-n-p "Snapshot already exists, replace it?")
       (return!)))
   (oo-snapshot-buffer (current-buffer) image))
+
+(provide 'oo-snapshots)
