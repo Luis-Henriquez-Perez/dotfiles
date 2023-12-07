@@ -7,7 +7,7 @@
 (defun oo-outline-promote-advice (orig-fn &rest args)
   ;; If there's an error in `outline-up-heading' then do my own
   ;; promotion or demotion.  I should be able to do it by just traversing the
-  ;; subheadings and demoting each level by 1.
+  ;; subheadings and promoting or demoting each level by 1.
   (condition-case err
       (apply orig-fn args)
     ()))
