@@ -1,5 +1,5 @@
 ;; This file is intended as a patch to `outline-promote' which doesn't seem to
-;; be working properly.
+;; be working properly.  The problem is that when you 
 
 (defun oo-outline-promote-advice (orig-fn &rest args)
   ())
