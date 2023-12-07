@@ -10,7 +10,6 @@
 ;; 3 - stop worrying about variables that haven't been bound
 ;; 4 - stop worrying about whether a variable is a custom variable or not
 ;; Some variables are custom variables.  Meaning they have some function that.
-
 (defvar oo-unbound-symbol-alist nil
   "An alist mapping an unbound symbol to an expression.
 This alist is checked by the hook `after-load-functions&set-bound-symbols' for
