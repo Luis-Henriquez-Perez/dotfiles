@@ -2,6 +2,6 @@
 ;; be working properly.  The problem is that when you try to promote
 
 (defun oo-outline-promote-advice (orig-fn &rest args)
-  ())
+  (apply orig-fn args))
 
 (provide 'oo-outline-promote-patch)
