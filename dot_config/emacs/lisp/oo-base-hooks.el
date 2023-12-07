@@ -1,5 +1,6 @@
 ;; It is worth mentioning a trade-off between robustness and convenience I am
-;; making here.  To make the loading "robust" in the sense that 
+;; making here.  To make the loading "robust" in the sense that different
+;; packages can be toggled on and off
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
