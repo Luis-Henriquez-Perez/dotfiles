@@ -1,8 +1,8 @@
 ;; This is a state for.
 
-(require 'oo-base-library)
 (require 'evil)
 (require 'outline)
+(require 'oo-base-library)
 
 (evil-define-state outline ())
 
