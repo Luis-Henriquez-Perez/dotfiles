@@ -91,6 +91,9 @@ HOOK-OR-ADVICE.")
 ;;;; load library
 (require 'oo-base-utils)
 
+;;;; (lazy) load patches and extensions
+(require 'oo-base-extra)
+
 ;; ;;;; setup hooks
 ;; ;;;;; hooks
 ;; ;;;;;; prog-mode-hook
