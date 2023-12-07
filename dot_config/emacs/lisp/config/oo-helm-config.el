@@ -50,3 +50,5 @@
        (:alt noop-show-kill-ring      helm-show-kill-ring)
        (:alt recentf                  helm-recentf)
        (:alt switch-to-buffer         helm-mini))
+
+(provide 'oo-helm-config)
