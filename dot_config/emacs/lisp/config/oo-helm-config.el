@@ -39,6 +39,7 @@
 ;; :ID:       20230829T191338.513238
 ;; :HEADER-ARGS: :tangle no
 ;; :END:
+;; This should happen immediately.
 (bind! (:when (bound-and-true-p helm-mode))
        (:alt oo-set-font-face helm-select-xfont)
        (:alt apropos                  helm-apropos)
