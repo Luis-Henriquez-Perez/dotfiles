@@ -22,7 +22,7 @@
 ;; existing thing.
 
 ;; My approach to writing code when using one big org file is to write functions
-;; and macros that work regardless of whether a pertenant feature is loaded or
+;; and macros that work regardless of whether a pertinent feature is loaded or
 ;; not.  For example.  I had to do that because the whole file was evaluated at
 ;; once; I did not delegate to different files as a typical configuration
 ;; normally would.  Now that I am using a multi-file elisp configuration, it is
