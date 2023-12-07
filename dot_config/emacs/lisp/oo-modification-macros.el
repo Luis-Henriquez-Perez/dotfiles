@@ -87,17 +87,17 @@ SETTER is the same as in `appending!'."
   `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
 ;;;; take!
 (defmacro take! (pred place)
-  (mmt-with-gensyms (taken)
-                    (mmt-once-only (pred)
-                                   `(let (,taken)
-	                                  (pcase ,pred
-	                                    ((pred integerp)
-	                                     (dotimes (_ ,pred)
-	                                       (collecting! ,taken (pop ,place))))
-	                                    (_
-	                                     (while (and ,place (funcall ,pred (car ,place)))
-	                                       (collecting! ,taken (pop ,place)))))
-	                                  ,taken))))
+  (cl-with-gensyms (taken)
+    (cl-once-only (pred)
+      `(let (,taken)
+	     (pcase ,pred
+	       ((pred integerp)
+	        (dotimes (_ ,pred)
+	          (collecting! ,taken (pop ,place))))
+	       (_
+	        (while (and ,place (funcall ,pred (car ,place)))
+	          (collecting! ,taken (pop ,place)))))
+	     ,taken))))
 
 ;;; provide
 (provide 'oo-modification-macros)
