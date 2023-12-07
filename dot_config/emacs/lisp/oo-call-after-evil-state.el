@@ -1,7 +1,4 @@
-;; ****** create an advice that runs =oo-evil-define-state-hook=
-;; :PROPERTIES:
-;; :ID:       20231022T034649.894152
-;; :END:
+
 ;; An evil state is defined whenever [[file:snapshots/_helpful_function__evil-put-property_.png][evil-put-property]] is invoked with
 ;; =evil-state-properties= as its first argument.  I know this from the definition of
 ;; [[file:snapshots/_helpful_macro__evil-define-state_.png][evil-define-state]].  Therefore, to create the proper hook I add an after advice
@@ -20,10 +17,7 @@ defined.")
     (run-hook-with-args 'oo-after-define-evil-state-hook state)))
 
 (oo-add-advice #'evil-put-property :after #'oo-run-after-define-evil-state-hook)
-;; ****** undefined-state-functions
-;; :PROPERTIES:
-;; :ID:       20231027T185412.231726
-;; :END:
+
 ;; This is the same design model as the keymap.
 (defvar oo-undefined-state-functions nil
   "An alist of (STATE . ALIST) where state is an evil state.
@@ -43,10 +37,7 @@ ALIST is an alist of (FN . ARGS).")
 
 (add-hook 'evil-mode-hook #'oo-call-undefined-state-functions)
 (add-hook 'oo-after-define-evil-state-hook #'oo-call-undefined-state-functions)
-;; ****** oo-call-after-evil-state
-;; :PROPERTIES:
-;; :ID:       20231022T112758.062308
-;; :END:
+
 ;; This function is to help me deal with evil states that are not yet defined, but
 ;; I want to register a binding for them.
 
