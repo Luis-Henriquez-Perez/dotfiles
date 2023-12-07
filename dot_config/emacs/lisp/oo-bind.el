@@ -138,13 +138,12 @@ If there are no more functions, do nothing."
              (-p-> (oo--do-binding metadata #'evil-define-key* :state :keymap :key :def)
                    (oo-call-after-evil-state state)))))))
 
-;; ******* oo--bind-define-key
+
 ;; This is the default behavior for binding a key and what I generally will want to
 ;; use if I do not specify a state.
-;; #+begin_src elisp
-;; (defun oo--bind-define-key (_ metadata)
-;;   (oo--do-binding metadata #'define-key :keymap :key :def))
-;; #+end_src
+(defun oo--bind-define-key (_ metadata)
+  (oo--do-binding metadata #'define-key :keymap :key :def))
+
 ;; ******* oo--do-binding
 ;; This function is the indicator for when the function that actually does the
 ;; keybinding is actually called as opposed to forms that may defer the keybinding
