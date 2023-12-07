@@ -88,11 +88,12 @@ HOOK-OR-ADVICE.")
 ;; In case I want to use different package mangers I want.
 (require 'oo-base-packages)
 
+(push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
+(push (expand-file-name "lisp/extensions" user-emacs-directory) load-path)
+
 ;;;; load library
 (require 'oo-base-library)
 
-(push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
-(push (expand-file-name "lisp/extensions" user-emacs-directory) load-path)
 ;;;; (lazy) load patches and extensions
 ;; (require 'oo-base-extra)
 
