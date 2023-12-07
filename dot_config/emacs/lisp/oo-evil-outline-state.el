@@ -2,6 +2,7 @@
 
 (require 'evil)
 (require 'outline)
+(require 'oo-base-library)
 
 (evil-define-state outline ())
 
