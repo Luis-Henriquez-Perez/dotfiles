@@ -9,7 +9,7 @@
 ;; And while I do not think that there is anything theoretically wrong with
 ;; having everything in a huge file, I think that the current system and
 ;; debugging tools are designed with the assumption that features are divided
-;; into multiple files. is Using =org= means that you will need to figure out
+;; into multiple files. Using =org= means that you will need to figure out
 ;; how to do these things indirectly.  I think the most natural way of using
 ;; =org= to manage configuration files is putting everything in one file because
 ;; headlines fulfill the role of segregation into manageable pieces so you don't
