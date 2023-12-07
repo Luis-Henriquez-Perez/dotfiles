@@ -165,27 +165,24 @@ If there are no more functions, do nothing."
 ;; that it only either [[][logs]] or outputs to the messages buffer.  The latter is
 ;; useful if I want to see what keys would be bound by an invocation to =oo-bind=
 ;; instead of actually binding them.
-;; #+begin_src elisp
-;; (defun! oo--do-binding (metadata fn &rest keys)
-;;   "Call FN with values of KEYS in METADATA."
-;;   (flet! kbd-maybe (x) (if (vectorp x) x (kbd x)))
-;;   (let! desc (map-elt metadata :wk))
-;;   (let! args (mapcar (-partial #'map-elt metadata) keys))
-;;   ;; (message "%S" (cons fn (-replace-where #'keymapp (-const 'keymap) args)))
-;;   (stub! define-key (keymap key def)
-;;     (when desc
-;;       (-p-> (which-key-add-keymap-based-replacements keymap key desc)
-;;             (oo-call-after-load 'which-key)))
-;;     (funcall this-fn keymap (kbd-maybe key) def))
-;;   (apply fn args))
-;; #+end_src
+(defun! oo--do-binding (metadata fn &rest keys)
+  "Call FN with values of KEYS in METADATA."
+  (flet! kbd-maybe (x) (if (vectorp x) x (kbd x)))
+  (let! desc (map-elt metadata :wk))
+  (let! args (mapcar (-partial #'map-elt metadata) keys))
+  ;; (message "%S" (cons fn (-replace-where #'keymapp (-const 'keymap) args)))
+  (stub! define-key (keymap key def)
+    (when desc
+      (-p-> (which-key-add-keymap-based-replacements keymap key desc)
+            (oo-call-after-load 'which-key)))
+    (funcall this-fn keymap (kbd-maybe key) def))
+  (apply fn args))
 ;; ****** cannot compose kbd function for which-key
 ;; I need to combine the =noflet= form for =which-key= and using kbd because.
 ;; ****** oo--bind
 ;; This is the internal function that I will use to bind keys.
-;; #+begin_src elisp
-;; (defun oo--bind (&rest metadata)
-;;   (oo--resolve-binding oo-binding-fns metadata))
+(defun oo--bind (&rest metadata)
+  (oo--resolve-binding oo-binding-fns metadata))
 ;; This is the "front-end" that I'll be using to bind keys.  Unlike the internal
 ;; function [[id:20231026T075710.285898][oo--bind]] whose goal is to be programmatically consistent (e.g. in
 ;; other functions and macros), the goal of =oo-bind= is to be easy and concise for
