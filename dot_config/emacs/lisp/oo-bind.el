@@ -15,15 +15,15 @@
 ;; This variable will contain the functions that will be called in turn to produce
 ;; the side-effect that results in the actual binding.  Order matters here.
 ;; #+begin_src elisp
-;; (defvar oo-binding-fns '(oo--bind-localleader
-;;                          oo--bind-alt
-;;                          oo--bind-ensure-keybinding
-;;                          oo--bind-exwm-key
-;;                          oo--bind-evil-state-keyword
-;;                          oo--bind-evil-define-key
-;;                          oo--bind-define-key)
-;;   "List of functions that generate the body of `bind!'.")
-;; #+end_src
+(defvar oo-binding-fns '(oo--bind-localleader
+                         oo--bind-alt
+                         oo--bind-ensure-keybinding
+                         oo--bind-exwm-key
+                         oo--bind-evil-state-keyword
+                         oo--bind-evil-define-key
+                         oo--bind-define-key)
+  "List of functions that generate the body of `bind!'.")
+
 ;; This is the function that will be invoked by the functions in
 ;; [[id:20231026T133140.783912][oo-binding-functions]] to proceed to the next step.
 
