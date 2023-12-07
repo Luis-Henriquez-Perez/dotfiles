@@ -1,4 +1,4 @@
-;; This file is designed to be.
+;; This file is designed to be used to conveniently load all of the library files.
 
 (require 'oo-base-utils)
 (require 'oo-block-macro)
