@@ -144,7 +144,6 @@ If there are no more functions, do nothing."
 (defun oo--bind-define-key (_ metadata)
   (oo--do-binding metadata #'define-key :keymap :key :def))
 
-;; ******* oo--do-binding
 ;; This function is the indicator for when the function that actually does the
 ;; keybinding is actually called as opposed to forms that may defer the keybinding
 ;; until a later time.  With this I can access the precise time when a key is going
