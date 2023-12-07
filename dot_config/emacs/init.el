@@ -23,7 +23,7 @@
 
 ;; My approach to writing code when using one big org file is to write functions
 ;; and macros that work regardless of whether a pertenant feature is loaded or
-;; not.  For example
+;; not.  For example.  I had to do that because the whole file was evaluated at once
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
