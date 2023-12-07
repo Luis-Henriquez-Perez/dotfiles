@@ -186,45 +186,41 @@ If there are no more functions, do nothing."
 ;; #+begin_src elisp
 ;; (defun oo--bind (&rest metadata)
 ;;   (oo--resolve-binding oo-binding-fns metadata))
-;; #+end_src
-;; ****** oo-bind
 ;; This is the "front-end" that I'll be using to bind keys.  Unlike the internal
 ;; function [[id:20231026T075710.285898][oo--bind]] whose goal is to be programmatically consistent (e.g. in
 ;; other functions and macros), the goal of =oo-bind= is to be easy and concise for
 ;; me to use for configuration.
-;; #+begin_src elisp
-;; (defun! oo-bind (&rest args)
-;;   "Bind KEY in KEYMAP to DEFINITION.
-;; This is the same as `define-key'.  If KEYMAP is not specified use `global-map'.
-;; If STATES is specified use evil binding.  If KEYMAP is a symbol."
-;;   (flet! plist-p (x) (or (null x) (keywordp (car x))))
-;;   ;; States is a list of symbols
-;;   (flet! states-p (x) (or (symbolp x) (and (listp x) (-all-p #'symbolp x))))
-;;   (flet! map-symbol-p (x) (and (symbolp x)
-;;                                (not (keywordp x))
-;;                                (string-match-p "-map\\'" (symbol-name x))))
-;;   (flet! keymap-p (-orfn #'keymapp #'map-symbol-p))
-;;   (flet! key-p (-orfn #'stringp #'vectorp))
-;;   (pcase args
-;;     ;; Just passing in key and def, implies `global-map'.
-;;     (`(:alt ,key ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :alt t :key key :def def metadata))
-;;     (`(,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :keymap global-map :key key :def def metadata))
-;;     (`(,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :keymap keymap :key key :def def metadata))
-;;     (`(,(and (pred keymap-p) keymap) ,(and (pred keywordp) state-key) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :state-key state-key :keymap keymap :key key :def def metadata))
-;;     (`(,(and (pred keywordp) state-key) ,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :state-key state-key :keymap keymap :key key :def def metadata))
-;;     (`(,(and (pred keywordp) state-key) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :state-key state-key :keymap 'global-map :key key :def def metadata))
-;;     (`(,(and (pred states-p) states) ,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :states states :keymap keymap :key key :def def metadata))
-;;     (`(,(and (pred states-p) states) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
-;;      (apply #'oo--bind :states states :keymap 'global-map :key key :def def metadata))
-;;     (_
-;;      (error "unknown binding syntax"))))
-;; #+end_src
+(defun! oo-bind (&rest args)
+  "Bind KEY in KEYMAP to DEFINITION.
+This is the same as `define-key'.  If KEYMAP is not specified use `global-map'.
+If STATES is specified use evil binding.  If KEYMAP is a symbol."
+  (flet! plist-p (x) (or (null x) (keywordp (car x))))
+  ;; States is a list of symbols
+  (flet! states-p (x) (or (symbolp x) (and (listp x) (-all-p #'symbolp x))))
+  (flet! map-symbol-p (x) (and (symbolp x)
+                               (not (keywordp x))
+                               (string-match-p "-map\\'" (symbol-name x))))
+  (flet! keymap-p (-orfn #'keymapp #'map-symbol-p))
+  (flet! key-p (-orfn #'stringp #'vectorp))
+  (pcase args
+    ;; Just passing in key and def, implies `global-map'.
+    (`(:alt ,key ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :alt t :key key :def def metadata))
+    (`(,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :keymap global-map :key key :def def metadata))
+    (`(,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :keymap keymap :key key :def def metadata))
+    (`(,(and (pred keymap-p) keymap) ,(and (pred keywordp) state-key) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :state-key state-key :keymap keymap :key key :def def metadata))
+    (`(,(and (pred keywordp) state-key) ,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :state-key state-key :keymap keymap :key key :def def metadata))
+    (`(,(and (pred keywordp) state-key) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :state-key state-key :keymap 'global-map :key key :def def metadata))
+    (`(,(and (pred states-p) states) ,(and (pred keymap-p) keymap) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :states states :keymap keymap :key key :def def metadata))
+    (`(,(and (pred states-p) states) ,(and (pred key-p) key) ,def . ,(and (pred plist-p) metadata))
+     (apply #'oo--bind :states states :keymap 'global-map :key key :def def metadata))
+    (_
+     (error "unknown binding syntax"))))
 (provide 'oo-bind)
 
