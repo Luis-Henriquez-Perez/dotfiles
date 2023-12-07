@@ -11,7 +11,8 @@
 (oo-call-after-load 'outline #'require 'oo-outline-patch)
 (oo-call-after-load 'outshine #'require 'oo-outshine-bullets)
 ;; This is redundant because I [[][already load]] the patch in [[][]].  But for
-;; the sake of 
+;; the sake of consistency and to account for the event where I either don't use
+;; treepy for the block macro or don't use the block macro I include this here.
 (oo-call-after-load 'treepy #'require 'oo-treepy-patch)
 
 (provide 'oo-base-extra)
