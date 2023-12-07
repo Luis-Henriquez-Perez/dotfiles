@@ -1,3 +1,4 @@
+(require 'oo-base-utils)
 (require 'oo-modification-macros)
 
 ;; ***** defer function calls until keymap is loaded
