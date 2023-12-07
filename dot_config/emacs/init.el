@@ -25,7 +25,7 @@
 ;; and macros that work regardless of whether a pertenant feature is loaded or
 ;; not.  For example.  I had to do that because the whole file was evaluated at
 ;; once; I did not delegate to different files as a typical configuration
-;; normally would.  Now that I am using 
+;; normally would.  Now that I am using a multi-file elisp config
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
