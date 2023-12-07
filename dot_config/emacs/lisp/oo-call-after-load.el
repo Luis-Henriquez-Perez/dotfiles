@@ -93,7 +93,7 @@ CONDITION is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If CONDITION is a list whose CAR is `:or', call FN with ARGS after any of
 CONDITIONS in (CDR CONDITION) is met."
   (oo--call-after-load condition (oo-call-after-load-fn fn args)))
-;;;; after!
+
 ;; This is a convenince macro for =oo-call-after-load=.  The latter is concise when
 ;; there is an existing function and possibly arguments that I can add.  However,
 ;; =after!= is more convenient the case when I want a custom body and I don't want
@@ -103,7 +103,7 @@ CONDITIONS in (CDR CONDITION) is met."
 For what CONDITION is see `oo-call-after-load'."
   (declare (indent 1))
   `(oo-call-after-load ',condition (lambda () ,@body)))
-;;;; defafter!
+
 ;; I want to encourage named after blocks.  The name helps provide a
 ;; description of what I'm intending to accomplish with said after
 ;; block.  Although I don't have to define a named function to evaluate
