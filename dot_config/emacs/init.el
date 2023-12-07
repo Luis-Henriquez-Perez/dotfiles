@@ -30,6 +30,9 @@
 ;; loaded.  Instead of having every form be safe as in with =set!= I could just
 ;; have them be normal and call the file only when its needed features are ready
 ;; to be loaded.
+
+;; Probably the saddest thing about not having org-mode is that none of my links
+;; will work for people viewing the code file on github for example.
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
