@@ -1,5 +1,5 @@
 ;; It is worth mentioning a trade-off between robustness and convenience I am
-;; making here.  To make 
+;; making here.  To make the loading "robust" in the sense that 
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
