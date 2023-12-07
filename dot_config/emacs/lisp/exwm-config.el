@@ -1,4 +1,5 @@
-(require 'oo-bind-keys)
+(require 'oo-base-library)
+(require 'oo-ext-bind-exwm-key)
 
 ;; [[https://systemreboot.net/dot-emacs#org89a07df][bind-EXWM keys]]
 (defun)
