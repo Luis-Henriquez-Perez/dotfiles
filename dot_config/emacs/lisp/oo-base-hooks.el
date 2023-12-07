@@ -1,3 +1,5 @@
+(require 'oo-add-hook)
+
 ;; ;;;; setup hooks
 ;; ;;;;; hooks
 ;; ;;;;;; prog-mode-hook
@@ -39,3 +41,5 @@
 ;; ;; (oo-add-hook 'text-mode-hook #'flyspell-mode)
 ;; ;; (oo-add-hook 'text-mode-hook #'auto-fill-mode)
 ;; ;; (oo-add-hook 'text-mode-hook #'visual-line-mode)
+
+(provide 'oo-base-hooks)
