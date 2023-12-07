@@ -23,8 +23,7 @@ bound and setting them to the result of evaluating expr."
   (when exprs (funcall `(lambda () ,@exprs))))
 
 (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
-;;;; after feature is loaded
-;;;; oo-try-load-feature
+
 (defun! oo-try-load-feature (fn)
   "Try to load feature that could contain FN."
   (unless (fboundp fn)
@@ -32,7 +31,7 @@ bound and setting them to the result of evaluating expr."
       (require feature)
       (when (fboundp fn)
         (return! feature)))))
-;;;; oo--call-after-load
+
 (defun oo--call-after-load (condition fn &rest args)
   "Call FN with ARGS after CONDITION is met.
 For what CONDITION is see `oo-call-after-load'."
@@ -49,7 +48,7 @@ For what CONDITION is see `oo-call-after-load'."
      (eval-after-load feature `(funcall #',fn ,@(mapcar #'macroexp-quote args))))
     (_
      (error "invalid condition `%S'" condition))))
-;;;; oo-call-after-load-fn
+
 ;; An error in a =eval-after-load= form interferes with any subsequent
 ;; =eval-after-load= forms.  Furthermore, if features depend on the feature you're
 ;; trying to load then the error interferes with loading them (its similar to
