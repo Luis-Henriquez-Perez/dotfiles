@@ -9,7 +9,7 @@
 ;; files.  Two files per package being configured. Furthermore, the "init" file
 ;; will often have just one line of code.  I did not want to do that.  This is
 ;; less robust but simpler.
-(require 'oo-add-hook)
+(require 'oo-base-library)
 
 ;;;; setup hooks
 ;;;;; hooks
