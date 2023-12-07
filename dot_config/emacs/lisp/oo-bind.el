@@ -11,7 +11,6 @@
 
 ;; This variable will contain the functions that will be called in turn to produce
 ;; the side-effect that results in the actual binding.  Order matters here.
-
 (defvar oo-binding-fns '(oo--bind-localleader
                          oo--bind-alt
                          oo--bind-ensure-keybinding
