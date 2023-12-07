@@ -93,3 +93,6 @@ HOOK-OR-ADVICE.")
 
 ;;;; (lazy) load patches and extensions
 (require 'oo-base-extra)
+
+;;;; hooks
+(require 'oo-base-hooks)
