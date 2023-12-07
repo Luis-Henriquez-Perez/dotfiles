@@ -2,7 +2,7 @@
 ;; the patches and the extensions lazily.
 
 (oo-call-after-load '(outline evil) #'require 'oo-evil-headline-state)
-(oo-call-after-load 'outline #'require)
+(oo-call-after-load 'outline #'require 'oo-outline-patch)
 (oo-call-after-load 'outshine #'require)
 
 (provide 'oo-base-extra)
