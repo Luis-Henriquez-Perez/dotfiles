@@ -6,7 +6,7 @@
 ;; =oo-config-smartparens= where the file =oo-init-smartparens= has what should
 ;; be evaluated immediately on startup and =oo-config-smartparens= has the code
 ;; that should be evaluated after smartparens is loaded.  But that is a lot of
-;; files.
+;; files.  Two files per package being configured. Furthermore, 
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
