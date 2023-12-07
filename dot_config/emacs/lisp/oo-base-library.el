@@ -2,6 +2,6 @@
 
 (require 'oo-base-utils)
 (require 'oo-block-macro)
-(require 'oo-bind)
+;; (require 'oo-bind)
 
 (provide 'oo-base-library)
