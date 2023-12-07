@@ -1,5 +1,4 @@
 (require 'oo-bind)
-(require 'exwm)
 
 (defun! oo--bind-exwm-key (fns metadata)
   "If map is `exwm-input-keys' use `exwm-input-set-key' instead of `define-key'."
