@@ -6,6 +6,7 @@
 (require 'hyperbole)
 
 ;; Creating new "buttons" (which I think of as links).
-;; Make a new button type for
+;; Make a new button type for the idiom ~(require 'foo)~ where I can jump to the
+;; file =foo=.
 
 (provide 'oo-hyperbole-config)
