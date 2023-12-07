@@ -10,5 +10,8 @@
 (oo-call-after-load '(outline evil) #'require 'oo-evil-headline-state)
 (oo-call-after-load 'outline #'require 'oo-outline-patch)
 (oo-call-after-load 'outshine #'require 'oo-outshine-bullets)
+;; This is redundant because I [[][already load]] the patch in [[][]].  But for
+;; the sake of 
+(oo-call-after-load 'treepy #'require 'oo-treepy-patch)
 
 (provide 'oo-base-extra)
