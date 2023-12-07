@@ -91,14 +91,6 @@ HOOK-OR-ADVICE.")
 ;; packages.
 (require 'oo-base-packages)
 
-;; Patches are files that add advices to existing functions to an existing
-;; package or add a few new functions I think would be useful to me.
-(push (expand-file-name "lisp/patches" user-emacs-directory)
- load-path)
-
-;; Extensions are.
-(push (expand-file-name "lisp/extensions" user-emacs-directory) load-path)
-
 ;;;; load library
 (require 'oo-base-library)
 
