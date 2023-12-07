@@ -1,7 +1,6 @@
 ;; Define leader map.
 (require 'oo-bind-functions)
 
-;; **** emacs leaders
 ;; These leaders are for evil insert and emacs states as well as vanilla
 ;; Emacs.  Note that evil Emacs state is different from vanilla Emacs.  One of the
 ;; goals with these bindings is to set up keybindings in the case that I disable
