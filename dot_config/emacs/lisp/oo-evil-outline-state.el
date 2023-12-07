@@ -2,4 +2,6 @@
 
 (require 'evil)
 
+(evil-define-state outline ())
+
 (provide 'oo-evil-outline-state)
