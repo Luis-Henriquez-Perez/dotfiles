@@ -1,4 +1,3 @@
-;; **** set! - the "hakuna matata" for setting variables
 ;; This macro is designed with the following goals in mind.
 ;; 1 - use one generic macro for most binding needs
 ;; 2 - log the variables I set and when they are being set
