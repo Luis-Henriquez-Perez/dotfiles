@@ -1,6 +1,6 @@
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
-
+;; * foo
 ;; ***** defer function calls until keymap is loaded
 ;; I want the ability to be able to bind keys in keymaps without having to always
 ;; consider whether the keymap is bound yet or not; and without always having to
