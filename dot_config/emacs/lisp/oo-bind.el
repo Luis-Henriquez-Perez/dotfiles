@@ -85,14 +85,6 @@ If there are no more functions, do nothing."
         (t
          (oo--resolve-binding fns metadata))))
 
-(defun! oo--bind-exwm-key (fns metadata)
-  "If map is `exwm-input-keys' use `exwm-input-set-key' instead of `define-key'."
-  (let! keymap (map-elt metadata :keymap))
-  (if (equal keymap 'exwm-input-keys)
-      (-p-> (oo--do-binding metadata #'exwm-input-set-key :key :def)
-            (oo-call-after-load 'exwm))
-    (oo--resolve-binding fns metadata)))
-
 ;; This function is to deal with the user passing in an abbreviation for a set of
 ;; states or as I call it an =evil-state-keyword= . The abbreviation.
 ;; #+begin_src elisp
