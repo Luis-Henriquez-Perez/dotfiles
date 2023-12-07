@@ -1,0 +1,1 @@
+(provide 'oo-override-mode)
