@@ -15,3 +15,6 @@
       (while (not (treepy-end-p zipper))
         (setq zipper (treepy-next zipper)))
       zipper)))
+
+
+;; This will also address fixing the fact that =treepy-delete= doesn't seem to work.
