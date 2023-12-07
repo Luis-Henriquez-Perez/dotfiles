@@ -1,5 +1,3 @@
-(provide 'oo-override-mode)
-
 ;; **** override map
 ;; :PROPERTIES:
 ;; :ID:       20231025T103439.873082
@@ -36,7 +34,8 @@
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
 
-(oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
+;; (oo-call-after-load 'evil)
+;; (oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
 ;; ***** make =oo-override-mode-map= take precedence over most other emacs keymaps
 ;; :PROPERTIES:
 ;; :ID:       9248fb7f-1901-4beb-8b3a-faded48cdddc
@@ -44,3 +43,5 @@
 ;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
 ;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
 (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
+
+(provide 'oo-override-mode)
