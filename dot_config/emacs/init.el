@@ -91,7 +91,7 @@ HOOK-OR-ADVICE.")
 ;; packages.
 (require 'oo-base-packages)
 
-;; Patches are files that add advices
+;; Patches are files that add advices to 
 (push (expand-file-name "lisp/patches" user-emacs-directory) load-path)
 (push (expand-file-name "lisp/extensions" user-emacs-directory) load-path)
 
