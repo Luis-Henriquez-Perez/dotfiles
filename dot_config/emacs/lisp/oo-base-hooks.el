@@ -1,3 +1,5 @@
+;; It is worth mentioning a trade-off between robustness and convenience I am
+;; making here.  To make 
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
