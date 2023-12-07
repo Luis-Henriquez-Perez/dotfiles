@@ -1,3 +1,4 @@
+(require 'oo-modification-macros)
 ;; ***** defer function calls until keymap is loaded
 ;; :PROPERTIES:
 ;; :ID:       20231018T170355.378301
