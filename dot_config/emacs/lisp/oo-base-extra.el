@@ -3,6 +3,6 @@
 
 (oo-call-after-load '(outline evil) #'require 'oo-evil-headline-state)
 (oo-call-after-load 'outline #'require 'oo-outline-patch)
-(oo-call-after-load 'outshine #'require)
+(oo-call-after-load 'outshine #'require 'oo-outshine-bullets)
 
 (provide 'oo-base-extra)
