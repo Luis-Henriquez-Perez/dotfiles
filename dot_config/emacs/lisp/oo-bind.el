@@ -3,17 +3,12 @@
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-load)
 
-;; ***** binding functions
-;; These functions are the building blocks of binding.  Keybinding in Emacs is
-;; extensive and there are so many packages that it necessitates an extensible and
-;; malleable design for a binding function.  This is the part of the design where I
-;; try to ensure extensibility.
-;; ****** binding functions
+
 ;; The functions here are functions to generate the body of the =bind!= macro.  I
 ;; divided form generation into two parts: the functions generate the deferment for
 ;; bindings and decide which binding function and arguments to use and the ones
 ;; that generate the actual binding forms.
-;; ******* oo-binding-fns
+
 ;; This variable will contain the functions that will be called in turn to produce
 ;; the side-effect that results in the actual binding.  Order matters here.
 ;; #+begin_src elisp
@@ -28,7 +23,6 @@
 
 ;; This is the function that will be invoked by the functions in
 ;; [[id:20231026T133140.783912][oo-binding-functions]] to proceed to the next step.
-
 (defun oo--resolve-binding (fns metadata)
   "Run the next function in `oo-bind-functions'.
 If there are no more functions, do nothing."
