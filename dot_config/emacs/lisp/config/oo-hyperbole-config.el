@@ -3,5 +3,6 @@
 ;; everything into an org file so that you can utilize org links everywhere.
 ;; Hyperbole is more of a "bottom-up" approach where you try make existing
 ;; patterns into links.
+(require 'hyperbole)
 
 (provide 'oo-hyperbole-config)
