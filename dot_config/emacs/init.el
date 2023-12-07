@@ -90,7 +90,6 @@ HOOK-OR-ADVICE.")
 
 ;; ;;;; load library
 (require 'oo-base-utils)
-;; (require 'oo-base-library)
 
 ;; ;;;; setup hooks
 ;; ;;;;; hooks
