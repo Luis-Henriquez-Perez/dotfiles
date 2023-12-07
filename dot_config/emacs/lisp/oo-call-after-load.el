@@ -118,5 +118,3 @@ For what CONDITION is see `oo-call-after-load'."
   `(after! ,args ,@body))
 
 (provide 'oo-call-after-load)
-
-(provide 'oo-call-after-load)
