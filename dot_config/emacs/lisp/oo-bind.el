@@ -89,31 +89,29 @@ If there are no more functions, do nothing."
 
 ;; This function is to deal with the user passing in an abbreviation for a set of
 ;; states or as I call it an =evil-state-keyword= . The abbreviation.
-;; #+begin_src elisp
 ;; ;; I need a separate function for this because I need to determine the state on
 ;; ;; the fly once I know it exists.  That is I can't just specify it in
 ;; ;; `oo--bind-state-key' as I would like to because I don't know what it is yet.
-;; (defun! oo--bind-with-state-key (key metadata)
-;;   "Replace state-key with state."
-;;   (let! state (oo-evil-state key))
-;;   (setf (map-elt metadata :state) state)
-;;   (oo--bind-evil-define-key nil metadata))
+(defun! oo--bind-with-state-key (key metadata)
+  "Replace state-key with state."
+  (let! state (oo-evil-state key))
+  (setf (map-elt metadata :state) state)
+  (oo--bind-evil-define-key nil metadata))
 
-;; (defun oo--bind-evil-state-keyword (fns metadata)
-;;   (let! state-key (map-elt metadata :state-key))
-;;   (if (not state-key)
-;;       (oo--resolve-binding fns metadata)
-;;     (let! keys
-;;       (--> (symbol-name state-key)
-;;         (seq-rest it)
-;;         (string-split it "" t)
-;;         (mapcar #'oo-args-to-keyword it)))
-;;     (dolist (key keys)
-;;       (if (equal key :g)
-;;           (oo--resolve-binding fns metadata)
-;;         (-p-> (oo--bind-with-state-key key metadata)
-;;               (oo-call-after-evil-state key))))))
-;; #+end_src
+(defun oo--bind-evil-state-keyword (fns metadata)
+  (let! state-key (map-elt metadata :state-key))
+  (if (not state-key)
+      (oo--resolve-binding fns metadata)
+    (let! keys
+      (--> (symbol-name state-key)
+        (seq-rest it)
+        (string-split it "" t)
+        (mapcar #'oo-args-to-keyword it)))
+    (dolist (key keys)
+      (if (equal key :g)
+          (oo--resolve-binding fns metadata)
+        (-p-> (oo--bind-with-state-key key metadata)
+              (oo-call-after-evil-state key))))))
 ;; ******* oo--bind-evil-define-key
 ;; Part of the reason that =evil= was deferred separately in [[][]] is immediately
 ;; apparent: this function can be written with the assumption that =evil= is already
@@ -124,22 +122,22 @@ If there are no more functions, do nothing."
 ;; I worry about the bindings not being active when I define a state myself and no
 ;; file is being loaded by =after-load-functions=.  But maybe in practice this will
 ;; always work?  I'm not sure so I will test it out first.
-;; #+begin_src elisp
-;; (defun! oo--bind-evil-define-key (fns metadata)
-;;   "Define evil key based on metadata."
-;;   (let! states (-list (map-elt metadata :state)))
-;;   (if (not states)
-;;       (oo--resolve-binding fns metadata)
-;;     (dolist (state states)
-;;       (cond ((equal state 'global)
-;;              (oo--resolve-binding fns metadata))
-;;             ((map-elt metadata :mode)
-;;              (-p-> (oo--do-binding metadata #'evil-define-minor-mode-key :state :mode :key :def)
-;;                    (oo-call-after-evil-state state)))
-;;             (t
-;;              (-p-> (oo--do-binding metadata #'evil-define-key* :state :keymap :key :def)
-;;                    (oo-call-after-evil-state state)))))))
-;; #+end_src
+
+(defun! oo--bind-evil-define-key (fns metadata)
+  "Define evil key based on metadata."
+  (let! states (-list (map-elt metadata :state)))
+  (if (not states)
+      (oo--resolve-binding fns metadata)
+    (dolist (state states)
+      (cond ((equal state 'global)
+             (oo--resolve-binding fns metadata))
+            ((map-elt metadata :mode)
+             (-p-> (oo--do-binding metadata #'evil-define-minor-mode-key :state :mode :key :def)
+                   (oo-call-after-evil-state state)))
+            (t
+             (-p-> (oo--do-binding metadata #'evil-define-key* :state :keymap :key :def)
+                   (oo-call-after-evil-state state)))))))
+
 ;; ******* oo--bind-define-key
 ;; This is the default behavior for binding a key and what I generally will want to
 ;; use if I do not specify a state.
