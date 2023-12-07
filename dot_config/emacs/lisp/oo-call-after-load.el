@@ -25,9 +25,6 @@ bound and setting them to the result of evaluating expr."
 (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
 ;;;; after feature is loaded
 ;;;; oo-try-load-feature
-;; :PROPERTIES:
-;; :ID:       957942d3-9632-4e04-a6e6-9a4e03b26fba
-;; :END:
 (defun! oo-try-load-feature (fn)
   "Try to load feature that could contain FN."
   (unless (fboundp fn)
@@ -36,9 +33,6 @@ bound and setting them to the result of evaluating expr."
       (when (fboundp fn)
         (return! feature)))))
 ;;;; oo--call-after-load
-;; :PROPERTIES:
-;; :ID:       20230112T144220.969274
-;; :END:
 (defun oo--call-after-load (condition fn &rest args)
   "Call FN with ARGS after CONDITION is met.
 For what CONDITION is see `oo-call-after-load'."
@@ -56,9 +50,6 @@ For what CONDITION is see `oo-call-after-load'."
     (_
      (error "invalid condition `%S'" condition))))
 ;;;; oo-call-after-load-fn
-;; :PROPERTIES:
-;; :ID:       20230111T064508.607498
-;; :END:
 ;; An error in a =eval-after-load= form interferes with any subsequent
 ;; =eval-after-load= forms.  Furthermore, if features depend on the feature you're
 ;; trying to load then the error interferes with loading them (its similar to
@@ -89,9 +80,6 @@ call."
   (fset fname closure)
   fname)
 ;;;; oo-call-after-load
-;; :PROPERTIES:
-;; :ID:       5f10adc7-11bc-4100-b775-6f1d43655754
-;; :END:
 ;; This has to be separate from =oo--call-after-load= because I need to make sure
 ;; that =oo-call-after-load-fn= is called only one time.
 (defun oo-call-after-load (condition fn &rest args)
@@ -106,9 +94,6 @@ If CONDITION is a list whose CAR is `:or', call FN with ARGS after any of
 CONDITIONS in (CDR CONDITION) is met."
   (oo--call-after-load condition (oo-call-after-load-fn fn args)))
 ;;;; after!
-;; :PROPERTIES:
-;; :ID:       931dc720-6514-4564-acbf-1cfe37436f68
-;; :END:
 ;; This is a convenince macro for =oo-call-after-load=.  The latter is concise when
 ;; there is an existing function and possibly arguments that I can add.  However,
 ;; =after!= is more convenient the case when I want a custom body and I don't want
@@ -119,9 +104,6 @@ For what CONDITION is see `oo-call-after-load'."
   (declare (indent 1))
   `(oo-call-after-load ',condition (lambda () ,@body)))
 ;;;; defafter!
-;; :PROPERTIES:
-;; :ID:       892a40f9-7023-4cdc-a73c-c03d79037fca
-;; :END:
 ;; I want to encourage named after blocks.  The name helps provide a
 ;; description of what I'm intending to accomplish with said after
 ;; block.  Although I don't have to define a named function to evaluate
