@@ -98,7 +98,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
   (declare (indent 1))
   (pcase pred
     ((or `(repeat ,n) (and n (pred integerp)))
-     (mmt-once-only (n)
+     (cl-once-only (n)
        `(if (integerp ,n)
 	        (dotimes (_ ,n) ,@body)
 	      (error "Wrong type argument integerp: %S" ,n))))
@@ -108,7 +108,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
 	      (-let [,match-form ,it]
 	        ,@body))))
     (`(,(and var (pred symbolp)) ,list)
-     (mmt-once-only (list)
+     (cl-once-only (list)
        `(cond ((listp ,list)
 	           (dolist (,var ,list) ,@body))
 	          ((sequencep ,list)
