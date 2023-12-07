@@ -65,3 +65,5 @@ STATE is either a state, list of states or an evil state keyword."
                  (alist-get state oo-undefined-state-functions)))))
   (let! fn (-partial #'load-state-maybe function args))
   (oo-call-after-load 'evil #'mapc fn (-list states)))
+
+(provide 'oo-call-after-state)
