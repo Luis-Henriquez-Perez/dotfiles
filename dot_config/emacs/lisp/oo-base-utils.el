@@ -1,7 +1,6 @@
 (require 'dash)
 (require 'dash-functional)
 (require 'subr-x)
-(require 'mmt)
 
 ;; * oo-base-utils
 ;; ** oo-ampersand-symbol-p
