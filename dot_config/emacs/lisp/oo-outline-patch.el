@@ -10,6 +10,7 @@
   ;; subheadings and promoting or demoting each level by 1.
   (condition-case err
       (apply orig-fn args)
+    (outline-next-heading)
     ()))
 
 (provide 'oo-outline-promote-patch)
