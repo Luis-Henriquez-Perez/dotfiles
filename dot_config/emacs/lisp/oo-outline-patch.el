@@ -6,8 +6,7 @@
 ;; See the [[][]].
 (defun oo-outline-promote-advice (orig-fn &rest args)
   ;; If there's an error in `outline-up-heading' then do my own
-  ;; promotion or demotion.
-  (outline-)
+  ;; promotion or demotion.  I should be able to do it by just 
   (condition-case err
       (apply orig-fn args)
     ()))
