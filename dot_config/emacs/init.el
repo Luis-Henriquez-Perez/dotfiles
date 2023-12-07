@@ -93,7 +93,8 @@ HOOK-OR-ADVICE.")
 
 ;;;; (lazy) load patches and extensions
 ;; This registers the files into the load-path and sets up extensions for
-;; loading.  It is important to put this before the base library because.
+;; loading.  It is important to put this before the base library specifically
+;; because =oo-block-macro= uses a patch.
 (require 'oo-base-extra)
 
 ;;;; load library
