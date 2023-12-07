@@ -1,6 +1,7 @@
 ;; The purpose of this funciton is to
 
 (defun! oo-convert-comment-bullets ()
+  "Convert."
   (interactive)
   (let! regexp (seq bol (group (one-or-more ";")) (one-or-more blank) (group (one-or-more "*"))))
   (save-excursion
