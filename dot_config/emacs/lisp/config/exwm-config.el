@@ -37,10 +37,6 @@
     (oo--bind-do-binding fns metadata)))
 (adjoining! oo-bind-functions #'oo--bind-exwm-keys)
 
-;; *** make descriptive buffer names for exwm buffers
-;; :PROPERTIES:
-;; :ID:       20231007T133541.648095
-;; :END:
 ;; This is adapted from the [[file:screenshots/archwiki-EXWM-meaningful-buffer-names.png][example]] given in the [[https://wiki.archlinux.org/title/EXWM][archwiki]].
 
 ;; #+begin_quote
