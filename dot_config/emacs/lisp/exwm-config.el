@@ -1,3 +1,4 @@
+(require 'exwm)
 (require 'oo-base-library)
 (require 'oo-ext-bind-exwm-key)
 
