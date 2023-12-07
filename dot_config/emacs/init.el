@@ -20,6 +20,8 @@
 ;; easily transferable to other programming files.  One could argue that this is
 ;; how org should have been implemented as sort of adding features to an
 ;; existing thing.
+
+;; my approach to 
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
