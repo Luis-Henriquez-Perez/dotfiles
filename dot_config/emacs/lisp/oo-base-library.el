@@ -2,6 +2,7 @@
 
 (require 'oo-base-utils)
 (require 'oo-block-macro)
-(require 'oo-bind)
+(require 'oo-call-after-load)
+(require 'oo-call-after-keymap)
 
 (provide 'oo-base-library)
