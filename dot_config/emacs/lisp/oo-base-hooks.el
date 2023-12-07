@@ -1,6 +1,7 @@
 ;; It is worth mentioning a trade-off between robustness and convenience I am
 ;; making here.  To make the loading "robust" in the sense that different
-;; packages can be toggled on and off
+;; packages can be toggled on and off as with doom modules or doom's `package!'
+;; macro that can disable the use of a package. 
 (require 'oo-add-hook)
 
 ;; ;;;; setup hooks
