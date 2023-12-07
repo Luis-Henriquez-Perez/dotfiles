@@ -171,6 +171,7 @@ If there are no more functions, do nothing."
 ;; This is the internal function that I will use to bind keys.
 (defun oo--bind (&rest metadata)
   (oo--resolve-binding oo-binding-fns metadata))
+
 ;; This is the "front-end" that I'll be using to bind keys.  Unlike the internal
 ;; function [[id:20231026T075710.285898][oo--bind]] whose goal is to be programmatically consistent (e.g. in
 ;; other functions and macros), the goal of =oo-bind= is to be easy and concise for
