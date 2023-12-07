@@ -37,4 +37,20 @@
     (oo--bind-do-binding fns metadata)))
 (adjoining! oo-bind-functions #'oo--bind-exwm-keys)
 
+;; *** make descriptive buffer names for exwm buffers
+;; :PROPERTIES:
+;; :ID:       20231007T133541.648095
+;; :END:
+;; This is adapted from the [[file:screenshots/archwiki-EXWM-meaningful-buffer-names.png][example]] given in the [[https://wiki.archlinux.org/title/EXWM][archwiki]].
+
+;; #+begin_quote
+;; You may see the buffer names being named '*EXWM*'. This makes it confusing while
+;; switching between buffers .EXWM allows the buffers to name themself . To allow
+;; buffers to name themself put the following in your dotemacs.
+;; #+end_quote
+(defun exwm-update-class-hook&set-descriptive-name ()
+  "Set the name of EXWM buffer to be more descriptive."
+  (exwm-workspace-rename-buffer exwm-class-name))
+(add-hook 'exwm-update-class-hook #'exwm-update-class-hook&set-descriptive-name)
+
 (provide 'oo-exwm-config)
