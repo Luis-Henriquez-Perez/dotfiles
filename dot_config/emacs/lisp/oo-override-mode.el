@@ -1,11 +1,5 @@
 ;; **** override map
-;; :PROPERTIES:
-;; :ID:       20231025T103439.873082
-;; :END:
 ;; ***** oo-override-mode-map
-;; :PROPERTIES:
-;; :ID:       9863dc90-fc8c-422c-918f-3d75d52e8a14
-;; :END:
 ;; Creating a minor mode to hold the leader map allows us to toggle our leader
 ;; bindings on or off.
 
@@ -22,9 +16,6 @@
 
 (oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
 ;; ***** make =oo-override-mode-map= an intercept map
-;; :PROPERTIES:
-;; :ID:       23b55b9c-ea38-485a-b986-ac62d60a6f75
-;; :END:
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
@@ -37,9 +28,6 @@
 ;; (oo-call-after-load 'evil)
 ;; (oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
 ;; ***** make =oo-override-mode-map= take precedence over most other emacs keymaps
-;; :PROPERTIES:
-;; :ID:       9248fb7f-1901-4beb-8b3a-faded48cdddc
-;; :END:
 ;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
 ;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
 (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
