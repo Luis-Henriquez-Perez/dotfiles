@@ -11,7 +11,7 @@
 
 ;; This variable will contain the functions that will be called in turn to produce
 ;; the side-effect that results in the actual binding.  Order matters here.
-;; #+begin_src elisp
+
 (defvar oo-binding-fns '(oo--bind-localleader
                          oo--bind-alt
                          oo--bind-ensure-keybinding
@@ -106,7 +106,7 @@ If there are no more functions, do nothing."
           (oo--resolve-binding fns metadata)
         (-p-> (oo--bind-with-state-key key metadata)
               (oo-call-after-evil-state key))))))
-;; ******* oo--bind-evil-define-key
+
 ;; Part of the reason that =evil= was deferred separately in [[][]] is immediately
 ;; apparent: this function can be written with the assumption that =evil= is already
 ;; loaded.
@@ -116,7 +116,6 @@ If there are no more functions, do nothing."
 ;; I worry about the bindings not being active when I define a state myself and no
 ;; file is being loaded by =after-load-functions=.  But maybe in practice this will
 ;; always work?  I'm not sure so I will test it out first.
-
 (defun! oo--bind-evil-define-key (fns metadata)
   "Define evil key based on metadata."
   (let! states (-list (map-elt metadata :state)))
