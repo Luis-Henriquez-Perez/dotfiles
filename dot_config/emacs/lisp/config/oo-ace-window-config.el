@@ -1,3 +1,5 @@
+(require 'ace-window)
+
 ;; *** variant of =ace-swap-windows= that keeps cursor on same window
 ;; :PROPERTIES:
 ;; :ID:       20231011T071635.290759
