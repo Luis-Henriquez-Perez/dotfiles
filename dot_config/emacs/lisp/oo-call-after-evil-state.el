@@ -1,3 +1,5 @@
+(require 'oo-base-definers)
+
 ;; An evil state is defined whenever [[file:snapshots/_helpful_function__evil-put-property_.png][evil-put-property]] is invoked with
 ;; =evil-state-properties= as its first argument.  I know this from the definition of
 ;; [[file:snapshots/_helpful_macro__evil-define-state_.png][evil-define-state]].  Therefore, to create the proper hook I add an after advice
