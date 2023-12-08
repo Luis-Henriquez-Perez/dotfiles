@@ -21,4 +21,6 @@
 ;;; problem with
 
 ;;; add feature to
+
+;;; provide
 (provide 'oo-wallpaper-config)
