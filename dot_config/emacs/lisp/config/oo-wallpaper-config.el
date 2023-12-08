@@ -1,4 +1,5 @@
 ;;; settings
+;;;; control how often a wallpaper is changed
 ;; This variable controls how often (in seconds) to change your wallpaper when you
 ;; have =wallpaper-cycle-mode= enabled. The default is every =15= seconds but in my
 ;; opinion that's way too distracting and disorienting.  Therefore, I set it to =5=
@@ -8,10 +9,8 @@
 ;; effect because the timer is already running; you have to disable and re-enable
 ;; wallpaper-cycle-mode= which would create a new timer.
 (set! wallpaper-cycle-interval (* 5 60))
-;; *** set directory where my wallpapers should go
-;; :PROPERTIES:
-;; :ID:       20231006T031131.263677
-;; :END:
+
+;;;; set directory where my wallpapers should go
 ;; This is the symbol that provides the path for getting the set of wallpapers.  I
 ;; would have just name this =wallpaper-directory= or =wallpaper-dir= (probably the
 ;; former so that its more predictable) because this directory is used for more
