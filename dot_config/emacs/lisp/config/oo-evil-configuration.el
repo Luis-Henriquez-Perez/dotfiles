@@ -11,6 +11,9 @@
 ;; It's confusing to if the cursor is allowed to move beyond the end of the line.
 (set! evil-move-beyond-eol nil)
 
+;; Don't wrap search around.
+(set! evil-search-wrap nil)
+
 ;;; cursor color
 ;; Changing the cursor shape and color depending on the state is a convenient and
 ;; asthetically pleasing way of determining which state you're in.  Some add some
@@ -27,3 +30,5 @@
 
 (oo-add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
 (oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
+
+;;; use insert state in the minibuffer
