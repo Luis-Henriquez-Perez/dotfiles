@@ -55,7 +55,9 @@
 
 ;; I had been thinking of the problem with initializing when I was working on
 ;; easymotion.  So the issue is that many packages need code that is evaluated
-;; immediately.
+;; immediately.  I had been thinking that with an org configuration it might be
+;; easier because you can put all init code in one file, but you'd still have to
+;; deal with loading the configuration code at the proper time.
 
 ;;;; set initial variables
 ;; :PROPERTIES:
