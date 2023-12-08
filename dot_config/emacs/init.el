@@ -33,7 +33,12 @@
 
 ;; Another thing is that unfortunately without using org I can't have multiple
 ;; languages in the same file.  On the upside, there is the flexibility of not
-;; being strictly tied to the headling/source block syntax.  For example in.
+;; being strictly tied to the headling/source block syntax.  For example in the
+;; abbrev file, I can have multiple abbrevs without the source block syntax;
+;; whereas in my org file there had to be a heading for each of them.  Also I
+;; don't need a headline for every function.  I can do the same thing with =org=
+;; and put multiple functions in one source block, or give a headline multiple
+;; source blocks, but that kind of thing doesn't make sense to me.
 
 ;; Probably the saddest thing about not having org-mode is that none of my links
 ;; will work for people viewing the code file on github for example.
