@@ -49,6 +49,10 @@
 ;; make unnecessary categories between things and should try to let the demands
 ;; of the problem itself speak above my own prejudices.
 
+;; An advantage of org-mode is you don't have to deal (directly at least) with a
+;; file hierarchy.  And, searching your configurations is super easy as it
+;; amounts to just searching one file.
+
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
