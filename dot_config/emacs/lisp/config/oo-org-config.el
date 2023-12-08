@@ -90,4 +90,4 @@
   :template (-partial (function oo-src-block-headline) nil "emacs-lisp"))
 
 ;;; provide
-(provide 'oo-org-capture-configuration)
+(provide 'oo-org-config)
