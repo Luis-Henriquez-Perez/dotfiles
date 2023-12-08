@@ -3961,10 +3961,6 @@ to exceed 255 characters long."
   (when (> (length legal-filename) max-filename-length)
     (setq legal-filename (substring legal-filename 0 max-filename-length)))
   legal-filename)
-;; *** change my wallpaper every 5 minutes when =wallpaper-cycle-mode= is enabled
-;; :PROPERTIES:
-;; :ID:       20231006T025343.452570
-;; :END:
 ;; *** when auto-committing add any new files
 ;; :PROPERTIES:
 ;; :ID:       20231006T122900.601589
