@@ -1,10 +1,9 @@
-;; *** recentf
 ;; =recentf= is a built-in program that tracks the files you've opened recently
 ;; persistently.  This is a great idea because these are the files you'll likely
 ;; revisit.  In practice, I look at this list of files in addition to the buffers I
 ;; already have open using a [[id:f26bedb3-a172-4543-afd0-4c47f5872d15][completion-framework]].  Because of this I rarely
 ;; have to set out to look for a file with =dired=.
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+;; (oo-add-hook 'emacs-startup-hook #'recentf-mode)
 
 (set! recentf-max-menu-items 0)
 (set! recentf-max-saved-items 700)
