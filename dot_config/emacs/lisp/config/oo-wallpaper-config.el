@@ -2,7 +2,7 @@
 (require 'wallpaper)
 
 ;;; settings
-;;;; control how often a wallpaper is changed
+;;;; change my wallpaper every 5 minutes when =wallpaper-cycle-mode= is enabled
 ;; This variable controls how often (in seconds) to change your wallpaper when you
 ;; have =wallpaper-cycle-mode= enabled. The default is every =15= seconds but in my
 ;; opinion that's way too distracting and disorienting.  Therefore, I set it to =5=
