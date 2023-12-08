@@ -32,7 +32,8 @@
 ;; to be loaded.
 
 ;; Another thing is that unfortunately without using org I can't have multiple
-;; languages in the same file.  On the upside, there is the flexibility of 
+;; languages in the same file.  On the upside, there is the flexibility of not
+;; being strictly tied to the headling/source block syntax.  For example in 
 
 ;; Probably the saddest thing about not having org-mode is that none of my links
 ;; will work for people viewing the code file on github for example.
