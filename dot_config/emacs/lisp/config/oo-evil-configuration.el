@@ -1,3 +1,4 @@
+(require 'oo-base-library)
 (require 'evil)
 
 ;;; settings
