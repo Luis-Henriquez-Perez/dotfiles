@@ -111,7 +111,12 @@ HOOK-OR-ADVICE.")
 (require 'oo-base-extra)
 
 ;;;; load library
-(require 'oo-base-library)
+(require 'oo-base-utils)
+(require 'oo-block-macro)
+(require 'oo-call-after-load)
+(require 'oo-call-after-keymap)
+(require 'oo-call-after-evil-state)
+;; (require 'oo-base-library)
 
 ;;;; hooks
 ;; (require 'oo-base-hooks)
