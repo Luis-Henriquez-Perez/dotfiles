@@ -3365,7 +3365,6 @@ Mean to be used as the value of `captain-predicate'."
 ;; :PROPERTIES:
 ;; :ID:       20230824T075017.720370
 ;; :END:
-(set! evil-search-wrap nil)
 ;; **** switch to insert state in minibuffer
 ;; :PROPERTIES:
 ;; :ID:       a23137c5-62a0-4e77-9e51-6a7372dac703
