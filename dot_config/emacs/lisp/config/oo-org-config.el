@@ -1,7 +1,6 @@
 ;;; org
 ;;;; refiling
 
-(set! org-refile-allow-creating-parent-nodes t)
 ;;;; capturing
 ;;;;; use =completing-read= for choosing a template
 ;; Org uses its own ugly looking interface for choosing a capture template.  I'd rather keep things
