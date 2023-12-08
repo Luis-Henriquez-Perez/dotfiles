@@ -1,7 +1,9 @@
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
 
-;;; Store the
+;;; 
+
+;;; store the
 ;; I want the ability to be able to bind keys in keymaps without having to always
 ;; consider whether the keymap is bound yet or not; and without always having to
 ;; write non-declarative code such as ~(after! evil (evil-define-key* ...))~.  The
@@ -14,7 +16,7 @@
 Each key is a unique keymap symbol.  Every corresponding value is an alist whose
 elements are of the form (FN . ARGS).")
 
-;;; Add the
+;;; add the
 ;; This function is similar to [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]].  It is designed to be used
 ;; as the interface for adding stuff into [[id:20231018T175135.214308][oo-after-keymap-alist]].
 (defun oo-call-after-keymap (keymap fn &rest args)
@@ -51,4 +53,5 @@ Evaluate and remove from all elements of `oo-after-keymap-alist'."
 (add-hook 'emacs-startup-hook #'oo-call-after-keymap-functions)
 (add-hook 'after-load-functions #'oo-call-after-keymap-functions)
 
+;;; provide
 (provide 'oo-call-after-keymap)
