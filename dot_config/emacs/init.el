@@ -44,7 +44,7 @@
 ;; will work for people viewing the code file on github for example.
 
 ;; Should I distinguish between patches and configurations?  I feel like there
-;; can be a grey area between the two.
+;; can be a grey area between the two.  I am thinking that.
 
 ;;;; set initial variables
 ;; :PROPERTIES:
