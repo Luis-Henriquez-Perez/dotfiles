@@ -1,3 +1,5 @@
+(require 'recentf)
+
 ;; =recentf= is a built-in program that tracks the files you've opened recently
 ;; persistently.  This is a great idea because these are the files you'll likely
 ;; revisit.  In practice, I look at this list of files in addition to the buffers I
