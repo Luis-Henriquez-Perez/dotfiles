@@ -173,3 +173,5 @@
               (desired-indent)
               (t
                normal-indent))))))
+
+(provide 'oo-lisp-indent-config)
