@@ -1,3 +1,4 @@
+;;; settings
 ;; This variable controls how often (in seconds) to change your wallpaper when you
 ;; have =wallpaper-cycle-mode= enabled. The default is every =15= seconds but in my
 ;; opinion that's way too distracting and disorienting.  Therefore, I set it to =5=
@@ -18,4 +19,7 @@
 ;; [[file:snapshots/_helpful_command__wallpaper-set-wallpaper_.png][wallpaper-set-wallpaper]].
 (set! wallpaper-cycle-directory (expand-file-name "~/dotfiles/wallpapers"))
 
+;;; problem with
+
+;;; add feature to
 (provide 'oo-wallpaper-config)
