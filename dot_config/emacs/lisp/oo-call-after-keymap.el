@@ -1,7 +1,7 @@
 (require 'oo-base-utils)
 (require 'oo-modification-macros)
 
-;;; 
+;;; defer
 
 ;;; store the
 ;; I want the ability to be able to bind keys in keymaps without having to always
