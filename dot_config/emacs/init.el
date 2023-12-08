@@ -53,7 +53,9 @@
 ;; file hierarchy.  And, searching your configurations is super easy as it
 ;; amounts to just searching one file.
 
-;; I had been thinking of the problem with initializing.
+;; I had been thinking of the problem with initializing when I was working on
+;; easymotion.  So the issue is that many packages need code that is evaluated
+;; immediately.
 
 ;;;; set initial variables
 ;; :PROPERTIES:
