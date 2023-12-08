@@ -1,7 +1,7 @@
+;;; patch promotion and demotion of headlines
 ;; This file is intended as a patch to `outline-promote' which doesn't seem to
 ;; be working properly.  The problem is that when you try to promote
 
-;;; patch 
 ;; What I don't understand is why =outline-promote= gets the appropriate level
 ;; by going up a heading instead of just computing it based on the current one.
 ;; See the [[][]].
@@ -15,4 +15,4 @@
     ()
     ()))
 
-(provide 'oo-outline-promote-patch)
+(provide 'oo-outline-configuration)
