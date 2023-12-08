@@ -25,7 +25,6 @@
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
 (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
 ;;;;;; on-first-input-hook
 (oo-add-hook 'on-first-input-hook #'vertico-mode)
 (oo-add-hook 'on-first-input-hook #'savehist-mode)
