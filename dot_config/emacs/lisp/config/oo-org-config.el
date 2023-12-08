@@ -1,3 +1,6 @@
+(require 'oo-base-library)
+(require 'org)
+
 ;;; org
 ;;;; source blocks 
 ;;;; refiling
