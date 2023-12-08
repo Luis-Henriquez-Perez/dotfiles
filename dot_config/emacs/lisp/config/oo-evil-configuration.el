@@ -35,4 +35,5 @@
 
 ;;; use insert state in the minibuffer
 
+;;; provide
 (provide 'oo-evil-configuration)
