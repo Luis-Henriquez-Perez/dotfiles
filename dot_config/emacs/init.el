@@ -59,7 +59,9 @@
 ;; easier because you can put all init code in one file, but you'd still have to
 ;; deal with loading the configuration code at the proper time.
 
-;; 
+;; So the way I will design this is I will have multiple init files for
+;; packages.  I do not like having so many files for very little lines of code
+;; but.
 
 ;;;; set initial variables
 ;; :PROPERTIES:
