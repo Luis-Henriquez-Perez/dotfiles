@@ -42,6 +42,8 @@
 
 ;; Probably the saddest thing about not having org-mode is that none of my links
 ;; will work for people viewing the code file on github for example.
+
+;; Should I distinguish between
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
