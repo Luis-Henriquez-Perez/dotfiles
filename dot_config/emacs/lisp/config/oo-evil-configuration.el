@@ -1,3 +1,5 @@
+(require 'evil)
+
 ;;; settings
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
@@ -32,3 +34,5 @@
 (oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
 
 ;;; use insert state in the minibuffer
+
+(provide 'oo-evil-configuration)
