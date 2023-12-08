@@ -1,3 +1,5 @@
+(require 'wallpaper)
+
 ;;; settings
 ;;;; control how often a wallpaper is changed
 ;; This variable controls how often (in seconds) to change your wallpaper when you
