@@ -17,3 +17,5 @@
 ;; homerow keys, the letters closes to the center are the fastest. Therefore, I set the
 ;; letters in order by the keys closest to the center of the QWERTY keyboard.
 (set! aw-keys (list ?f ?j ?d ?k ?s ?l ?a ?\; ?g ?h ?t ?y ?r ?u))
+
+(provide 'oo-ace-window-configuration.el)
