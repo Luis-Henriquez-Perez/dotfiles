@@ -149,8 +149,8 @@ HOOK-OR-ADVICE.")
 ;; (require 'oo-base-library)
 
 ;;;; Load all init files
-(dolist (file)
-  (require file))
+;; (dolist (file)
+;;   (require file))
 
 ;;;; hooks
 ;; (require 'oo-base-hooks)
