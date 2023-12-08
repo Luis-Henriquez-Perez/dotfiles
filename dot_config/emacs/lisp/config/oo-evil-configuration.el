@@ -1,3 +1,4 @@
+;;; settings
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
 ;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
@@ -9,3 +10,5 @@
 
 ;; It's confusing to if the cursor is allowed to move beyond the end of the line.
 (set! evil-move-beyond-eol nil)
+
+;;; cursor color
