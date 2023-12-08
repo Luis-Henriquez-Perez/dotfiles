@@ -14,7 +14,7 @@
 Each key is a unique keymap symbol.  Every corresponding value is an alist whose
 elements are of the form (FN . ARGS).")
 
-;;; 
+;;; Add the
 ;; This function is similar to [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]].  It is designed to be used
 ;; as the interface for adding stuff into [[id:20231018T175135.214308][oo-after-keymap-alist]].
 (defun oo-call-after-keymap (keymap fn &rest args)
