@@ -3396,23 +3396,6 @@ Mean to be used as the value of `captain-predicate'."
 ;; :PROPERTIES:
 ;; :ID:       20230815T213317.354181
 ;; :END:
-;; By default =evil= displays the current state in the echo area.  I think some
-;; indicator for the current state is necessary but I don't want to do it via
-;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
-;; modeline as well.
-(set! evil-echo-state nil)
-;; **** don't move the cursor back when entering insert state
-;; :PROPERTIES:
-;; :ID:       20230815T213950.676165
-;; :END:
-;; Whether the cursor is moved backwards when exiting insert state.
-(set! evil-move-cursor-back nil)
-;; **** don't move the cursor beyond a line
-;; :PROPERTIES:
-;; :ID:       20230815T234405.981271
-;; :END:
-;; It's confusing to if the cursor is allowed to move beyond the end of the line.
-(set! evil-move-beyond-eol nil)
 ;; **** colors and shapes
 ;; :PROPERTIES:
 ;; :ID:       b9d4490c-ef9f-4a04-809c-35e213f2029a
