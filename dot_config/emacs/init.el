@@ -149,6 +149,8 @@ HOOK-OR-ADVICE.")
 ;; (require 'oo-base-library)
 
 ;;;; Load all init files
+;; The way I organized my configuration, each package that I configure has an
+;; init and a configuration file.
 ;; (dolist (file)
 ;;   (require file))
 
