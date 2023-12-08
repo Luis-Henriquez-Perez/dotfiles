@@ -3365,32 +3365,6 @@ Mean to be used as the value of `captain-predicate'."
 ;; :PROPERTIES:
 ;; :ID:       20230824T075017.720370
 ;; :END:
-;; **** switch to insert state in minibuffer
-;; :PROPERTIES:
-;; :ID:       a23137c5-62a0-4e77-9e51-6a7372dac703
-;; :END:
-;; Before I just used ~(evil-change-state evil-previous-state)~ to revert the
-;; state back to what it last was.  But this fails with ~evil-force-normal-state~
-;; which is what I'm currently using to exit the minibuffer because then the
-;; last state is normal state if the minibuffer is aborted.  Using a
-;; =oo-evil-state-before-minibuffer= ensures that the state will be reverted to
-;; the correct one.
-(defvar oo-evil-state-before-minibuffer nil
-  "Store the evil state before entering the minibuffer.")
-
-(defhook! preserve-prior-evil-state (minibuffer-setup-hook)
-  "Save state before entering the minibuffer and enter insert state."
-  ;; :on evil-mode
-  (when (bound-and-true-p evil-mode)
-    (setq oo-evil-state-before-minibuffer evil-state)
-    (evil-insert-state)))
-
-(defhook! restore-prior-evil-state (minibuffer-exit-hook)
-  "Restore state after minibuffer."
-  ;; :on evil-mode
-  (when (bound-and-true-p evil-mode)
-    (evil-change-state oo-evil-state-before-minibuffer)
-    (setq oo-evil-state-before-minibuffer nil)))
 ;; **** don't message the current state
 ;; :PROPERTIES:
 ;; :ID:       20230815T213317.354181
