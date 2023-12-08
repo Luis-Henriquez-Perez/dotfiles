@@ -31,6 +31,9 @@
 ;; have them be normal and call the file only when its needed features are ready
 ;; to be loaded.
 
+;; Another thing is that unfortunately without using org I can't have multiple
+;; languages in the same file.  On the upside, there is the flexibility of 
+
 ;; Probably the saddest thing about not having org-mode is that none of my links
 ;; will work for people viewing the code file on github for example.
 ;;;; set initial variables
