@@ -3400,21 +3400,6 @@ Mean to be used as the value of `captain-predicate'."
 ;; :PROPERTIES:
 ;; :ID:       b9d4490c-ef9f-4a04-809c-35e213f2029a
 ;; :END:
-;; Changing the cursor shape and color depending on the state is a convenient and
-;; asthetically pleasing way of determining which state you're in.  Some add some
-;; modeline indicator for this but I find that the cursor suffices.
-(defun oo-set-default-evil-cursors (&rest _)
-  "Set the evil cursors."
-  (set! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
-  (set! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
-  (set! evil-normal-state-cursor '(box "DarkGoldenrod2"))
-  (set! evil-visual-state-cursor '((hollow) "dark gray"))
-  (set! evil-operator-state-cursor '((hbar . 10) "hot pink"))
-  (set! evil-replace-state-cursor '(box "chocolate"))
-  (set! evil-motion-state-cursor '(box "plum3")))
-
-(oo-add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
-(oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
 ;; **** use =escape= to quit everything
 ;; :PROPERTIES:
 ;; :ID:       ea9378de-e5c5-482c-b53b-743a81e3bc8e
