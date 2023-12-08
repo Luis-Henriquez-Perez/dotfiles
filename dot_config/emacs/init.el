@@ -53,6 +53,8 @@
 ;; file hierarchy.  And, searching your configurations is super easy as it
 ;; amounts to just searching one file.
 
+;; I had been thinking of the problem with initializing.
+
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
