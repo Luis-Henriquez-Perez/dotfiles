@@ -130,7 +130,6 @@ If there are no more functions, do nothing."
              (-p-> (oo--do-binding metadata #'evil-define-key* :state :keymap :key :def)
                    (oo-call-after-evil-state state)))))))
 
-
 ;; This is the default behavior for binding a key and what I generally will want to
 ;; use if I do not specify a state.
 (defun oo--bind-define-key (_ metadata)
