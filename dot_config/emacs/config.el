@@ -2686,51 +2686,6 @@ edit-indirect buffer.")
 ;; :END:
 ;; This is the file where archived headings should go to.
 (set! org-archive-location (concat org-directory "archive.org::"))
-;; *** refiling
-;; **** create a heading if necessary
-;; :PROPERTIES:
-;; :ID:       20230801T134417.318262
-;; :END:
-(set! org-refile-allow-creating-parent-nodes t)
-;; **** set the refile targets to all my org files
-;; :PROPERTIES:
-;; :ID:       20230801T134421.975320
-;; :END:
-;; The variable =org-refile-targets= specifies the places from which information is
-;; taken to create the list of possible refile targets.  So, for example,
-(set! org-refile-targets '((oo-directory-files :maxlevel . 10)))
-;; **** don't complete in steps; show me all the information at once
-;; :PROPERTIES:
-;; :ID:       20230825T130940.525933
-;; :END:
-;; [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Aaron Bieber's post]] explains this pretty well.  Since we're using a completion framework--in my
-;; case, primarily =corfu= we don't need to complete in steps.  It's more expedient to just select from
-;; all the candidates.
-(setq org-outline-path-complete-in-steps nil)
-;; **** don't use a cache for refiling
-(set! org-refile-use-cache nil)
-;; **** allow files as targets for refiling
-;; :PROPERTIES:
-;; :ID:       d85fd068-97bc-4291-99c9-30f716697ba5
-;; :END:
-;; Without this setting, you can't actually refile to a generic file with refiling;
-;; you can only refile to existing headings within that file.  The way I use
-;; refiling, I'm refiling to files most of the time.
-(set! org-refile-use-outline-path 'file)
-;; **** when refiling, only consider headlines without a source block
-;; :PROPERTIES:
-;; :ID:       20230825T145959.961216
-;; :END:
-;; I will never let a headline with a source block be the parent of another headline.  It is simply not my style.
-(set! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
-;; *** headlines
-;; **** enter insert state after inserting a headline
-;; :PROPERTIES:
-;; :ID:       20230801T175939.021467
-;; :END:
-;; Predominately, the first thing I want to do after creating a headline is to
-;; start writing the title.  For that it's more convenient to start out in insert
-;; state.
 (oo-add-hook 'org-insert-heading-hook #'evil-append-line :args '(1) :mode 'evil-mode)
 ;; **** evil-headline-state
 ;; :PROPERTIES:
