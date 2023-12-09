@@ -153,6 +153,8 @@ HOOK-OR-ADVICE.")
 ;; init and a configuration file.
 ;; (dolist (file)
 ;;   (require file))
+(dolist (module modules)
+  (load recipe))
 
 ;;;; hooks
 ;; (require 'oo-base-hooks)
