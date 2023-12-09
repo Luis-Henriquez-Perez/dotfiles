@@ -32,7 +32,6 @@
 (oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 ;;;;;; after-init-hook
 ;; (oo-call-hook 'after-init-hook #'require 'evil :depth 10)
-(oo-add-hook 'after-init-hook #'evil-mode :depth 90)
 (oo-add-hook 'after-init-hook #'oo-set-window-divider-face :depth 11)
 (oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 (oo-add-hook 'after-init-hook #'load-theme 'modus-operandi)
