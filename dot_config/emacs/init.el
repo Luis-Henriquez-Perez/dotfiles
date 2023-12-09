@@ -154,7 +154,9 @@ HOOK-OR-ADVICE.")
 ;; (dolist (file)
 ;;   (require file))
 (dolist (module modules)
-  (load recipe))
+  (load recipes)
+  (load init)
+  (oo-call-after-load package))
 
 ;;;; hooks
 ;; (require 'oo-base-hooks)
