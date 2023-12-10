@@ -3,7 +3,8 @@
 ;; This file is for specifying information about modules.  What I call modules
 ;; differs from what would be considered modules in doom or spacemacs.  I am
 ;; hesitant to make a generic abstraction like "completion" or to group a set of
-;; packages together as one unit
+;; packages together as one unit.  A "module" as I use it here is more of just a
+;; single package
 
 (defvar oo-loaded-modules nil)
 
