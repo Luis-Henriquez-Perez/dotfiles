@@ -139,7 +139,7 @@ HOOK-OR-ADVICE.")
 ;; This registers the files into the load-path and sets up extensions for
 ;; loading.  It is important to put this before the base library specifically
 ;; because =oo-block-macro= uses a patch.
-(require 'oo-base-extra)
+;; (require 'oo-base-extra)
 
 ;;;; load library
 (require 'oo-base-utils)
