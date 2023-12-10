@@ -1,7 +1,8 @@
 (require 'oo-call-after-load)
 
 ;; This file is for specifying information about modules.  What I call modules
-;; differs from what would be considered modules in doom or spacemacs.  
+;; differs from what would be considered modules in doom or spacemacs.  I am
+;; hesitant to make a generic abstraction like "completion" 
 
 (defvar oo-loaded-modules nil)
 
