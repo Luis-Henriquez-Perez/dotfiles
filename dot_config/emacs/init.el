@@ -69,9 +69,6 @@
 ;; are as many tools to deal with a single large file.
 
 ;;;; set initial variables
-;; :PROPERTIES:
-;; :ID:       20230822T164702.892021
-;; :END:
 ;;;;;  disable garbage collection until I'm done with startup
 ;; :PROPERTIES:
 ;; :ID:       20230731T162410.519555
