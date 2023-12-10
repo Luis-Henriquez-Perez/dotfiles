@@ -1,3 +1,5 @@
+(require 'oo-call-after-load)
+
 ;; This file is for specifying how to load modules.
 
 (defun oo-list-modules ()
@@ -8,7 +10,7 @@
   (let! recipe-file )
   (let! init-file)
   (let! config ())
-  ()
-  (when (file-exists-p)
-    (load file t))
-  (when (file)))
+  (dolist ()
+    (when (file-exists-p)
+      (load file t)))
+  (oo-call-after-load name #'load configuration))
