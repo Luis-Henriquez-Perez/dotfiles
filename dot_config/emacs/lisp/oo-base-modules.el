@@ -14,7 +14,7 @@
 
 (defun oo-module-recipes ()
   (dolist (module modules)
-    (collecting! )))
+    (collecting! recipes recipe)))
 
 (defun oo-load-module (name)
   "Load module named NAME."
