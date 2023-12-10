@@ -63,6 +63,11 @@
 ;; packages.  I do not like having so many files for very little lines of code
 ;; but.
 
+;; As much as I want to make org work I think that I was forcing it too much.
+;; First, I know that the "normal" method works but I don't know what exactly
+;; will be involved with org's method.  Furthermore, I just do not think there
+;; are as many tools to deal with a single large file.
+
 ;;;; set initial variables
 ;; :PROPERTIES:
 ;; :ID:       20230822T164702.892021
