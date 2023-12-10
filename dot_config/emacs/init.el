@@ -156,6 +156,7 @@ HOOK-OR-ADVICE.")
 ;;;; Load all init files
 ;; The way I organized my configuration, each package has a module and each
 ;; module has a recipe.
+(oo-load-modules)
 ;; (dolist (file)
 ;;   (require file))
 ;; (dolist (module modules)
