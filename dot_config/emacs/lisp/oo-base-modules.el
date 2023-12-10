@@ -12,7 +12,6 @@
   "List available modules."
   (directory-files))
 
-;; Loading a module con
 (defun oo-load-module (name)
   "Load module named NAME."
   (let! recipe-file)
