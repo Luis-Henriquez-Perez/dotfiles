@@ -1,6 +1,7 @@
 (require 'oo-call-after-load)
 
-;; This file is for specifying how to load modules.
+;; This file is for specifying information about modules.  What I call modules
+;; differs from what would be considered modules in doom or spacemacs.  
 
 (defvar oo-loaded-modules nil)
 
