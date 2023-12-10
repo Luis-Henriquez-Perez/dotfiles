@@ -12,7 +12,9 @@
   "List available modules."
   (directory-files))
 
-(defun oo-)
+(defun oo-module-recipes ()
+  (dolist (module modules)
+    (collecting! )))
 
 (defun oo-load-module (name)
   "Load module named NAME."
