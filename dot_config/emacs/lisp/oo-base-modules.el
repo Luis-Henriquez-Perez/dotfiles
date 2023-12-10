@@ -5,4 +5,4 @@
 
 (defun oo-load-module (name)
   "Load module named NAME."
-  ())
+  (load ))
