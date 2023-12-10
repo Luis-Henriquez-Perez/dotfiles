@@ -82,9 +82,6 @@
 (setq gc-cons-threshold most-positive-fixnum)
 
 ;;;;;  determine whether emacs is in debug mode
-;; :PROPERTIES:
-;; :ID:       39197346-c420-4518-b8f8-8ea247d6decb
-;; :END:
 ;; This variable is snatched from [[https://github.com/hlissner/doom-emacs][Doom]].  The point of this variable is to serve as
 ;; an indicator of whether the current Emacs instance is run for
 ;; debugging. Normally, when starting Emacs I suppress non-critical errors so as
