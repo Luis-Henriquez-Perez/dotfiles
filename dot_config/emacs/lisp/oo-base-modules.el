@@ -4,7 +4,7 @@
 ;; differs from what would be considered modules in doom or spacemacs.  I am
 ;; hesitant to make a generic abstraction like "completion" or to group a set of
 ;; packages together as one unit.  A "module" as I use it here is more pertains
-;; to a single package and its configuration.  Specifically.
+;; to a single package and its configuration.  Specifically,
 
 (defvar oo-loaded-modules nil)
 
@@ -12,9 +12,10 @@
   "List available modules."
   (directory-files))
 
+;; Loading a module con
 (defun oo-load-module (name)
   "Load module named NAME."
-  (let! recipe-file )
+  (let! recipe-file)
   (let! init-file)
   (let! config ())
   (dolist ()
