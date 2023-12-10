@@ -2,6 +2,8 @@
 
 ;; This file is for specifying how to load modules.
 
+(defvar oo-loaded-modules nil)
+
 (defun oo-list-modules ()
   "List available modules."
   (directory-files))
@@ -14,4 +16,7 @@
   (dolist ()
     (when (file-exists-p)
       (load file t)))
-  (oo-call-after-load name #'load configuration))
+  (oo-call-after-load name #'load configuration)
+  (push module oo-loaded-modules))
+
+(provide 'oo-modules)
