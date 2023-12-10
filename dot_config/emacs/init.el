@@ -144,7 +144,6 @@ HOOK-OR-ADVICE.")
 (require 'oo-call-after-load)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
-;; (require 'oo-base-library)
 
 ;;;; Load all init files
 ;; The way I organized my configuration, each package has a module and each
