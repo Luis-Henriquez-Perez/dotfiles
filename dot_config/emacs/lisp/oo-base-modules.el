@@ -5,4 +5,10 @@
 
 (defun oo-load-module (name)
   "Load module named NAME."
-  (load ))
+  (let! recipe-file )
+  (let! init-file)
+  (let! config ())
+  ()
+  (when (file-exists-p)
+    (load file t))
+  (when (file)))
