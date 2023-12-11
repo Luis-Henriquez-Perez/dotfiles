@@ -10,3 +10,5 @@
 (elpaca (org-appear :fetcher github :repo "awth13/org-appear" :ref "eb9f9db" :branch "master"))
 
 (elpaca (org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be"))
+
+(elpaca (org-ql :fetcher github :repo "alphapapa/org-ql" :ref "d7ada53"))
