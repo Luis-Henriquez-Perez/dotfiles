@@ -8,3 +8,5 @@
 ;; make it so if your cursor is on the emphasis marker or link, it's visibility
 ;; automatically toggled.
 (elpaca (org-appear :fetcher github :repo "awth13/org-appear" :ref "eb9f9db" :branch "master"))
+
+(elpaca (org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be"))
