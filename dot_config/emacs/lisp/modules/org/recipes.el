@@ -1,4 +1,4 @@
-;; org-appear
+;;; org-appear
 ;; This package allows for the editing of org emphasis markers and links in a
 ;; "do-what-I-mean" type way.  Typically when I edit an org link or markup I have
 ;; to manually toggle [[][]] and then edit it. That's because I tell org mode to
