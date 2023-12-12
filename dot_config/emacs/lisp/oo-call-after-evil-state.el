@@ -1,4 +1,5 @@
 (require 'oo-base-definers)
+(require 'oo-block)
 
 ;; An evil state is defined whenever [[file:snapshots/_helpful_function__evil-put-property_.png][evil-put-property]] is invoked with
 ;; =evil-state-properties= as its first argument.  I know this from the definition of
