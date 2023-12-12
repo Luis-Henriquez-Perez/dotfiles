@@ -79,11 +79,12 @@ See `oo-block-parse-excluding'."
 ;; provide control flow structures like those found in other lanaguges.
 (defalias 'return! 'cl-return)
 (defalias 'return-from! 'cl-return-from)
-;; ****** continue!
-("Skip the current iteration of loop.
+
+(defmacro continue! ()
+  "Skip the current iteration of loop.
 This is meant to be used in `block!'.  For what counts as a loop is, see
 `oo-block-macro-loop-macros' and `oo-block-parse-loop'."
- `(throw 'continue! nil))
+  `(throw 'continue! nil))
 
 (defalias 'skip! 'continue!)
 
