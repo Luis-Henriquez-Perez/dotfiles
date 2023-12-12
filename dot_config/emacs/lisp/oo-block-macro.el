@@ -1,5 +1,4 @@
 (require 'treepy)
-(require 'oo-treepy-patch)
 
 ;;; block! - an advanced macro
 ;; The =block!= macro goals:
