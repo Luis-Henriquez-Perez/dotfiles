@@ -28,7 +28,7 @@ KEYMAP is a keymap symbol."
         (t
          (pushing! (alist-get keymap oo-after-keymap-alist) (cons fn args)))))
 
-;;; Create the hook needed
+;;; create the hook needed
 ;; To implement this behavior I add hook function to [[file:snapshots/_helpful_variable__after-load-functions_.png][after-load-functions]], an
 ;; abnormally named hook that is run after any file is loaded.  The hook function
 ;; evaluates the forms of any item of [[file:snapshots/_helpful_variable__oo-after-keymap-alist_.png][oo-after-keymap-alist]] whose keymap is bound.
