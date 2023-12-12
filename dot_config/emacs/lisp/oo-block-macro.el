@@ -1,7 +1,7 @@
 (require 'treepy)
 (require 'oo-treepy-patch)
 
-;; **** block! - an advanced macro
+;;; block! - an advanced macro
 ;; The =block!= macro goals:
 ;; 1 - reduce excessive nesting nesting by making intelligent assumptions about the intended scope of variables.
 ;; This includes:
@@ -15,13 +15,13 @@
 ;;  - return!
 ;;  - continue! (skip!) skip the current iteration of a loop
 ;;  - break! (exit!) exit the current loop
-;; ***** load treepy
+;;;; load treepy
 ;; This library is for [[][walking lisp forms]].  Basically, it provides an iterator
 ;; that I can use to navigate a form.  The iterator allows me to move freely and
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; [[][dash's]] [[][-tree-map-nodes]].
 
-;; ***** account for improper lists when mapping nodes
+;;;; account for improper lists when mapping nodes
 ;; The dash function [[][-tree-map-nodes]] will fail when walking the body of a macro that has
 ;; improper lists.  While I wouldn't say improper lists are common in lisp code,
 ;; they do happen--particularly when using [[][dash]] and [[][loopy]] destructuring.  A
@@ -35,7 +35,7 @@
                (oo-tree-map-nodes pred fun (cdr tree))))
         (t
          tree)))
-;; ***** define placeholders
+;;;; define placeholders
 ;; There are a number of what I call placeholder macros for block.  They are macros
 ;; that do pretty much nothing in an of themselves; they might at most verify the
 ;; arguments they recieve are correct.  They serve as markers used by the =block!=
