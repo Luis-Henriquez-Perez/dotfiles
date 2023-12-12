@@ -155,5 +155,5 @@ HOOK-OR-ADVICE.")
 ;;   (load init)
 ;;   (oo-call-after-load package configuration))
 
-;;;; hooks
-;; (require 'oo-base-hooks)
+;;;; package specific setup
+;; (load )
