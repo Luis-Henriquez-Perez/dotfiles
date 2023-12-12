@@ -68,13 +68,10 @@
 ;; will be involved with org's method.  Furthermore, I just do not think there
 ;; are as many tools to deal with a single large file.
 
-;; With packages there is a diffence between a
+;; There is a general desire to keep package information together
 
 ;;;; set initial variables
 ;;;;;  disable garbage collection until I'm done with startup
-;; :PROPERTIES:
-;; :ID:       20230731T162410.519555
-;; :END:
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
 ;; later reset to a reasonable value.
