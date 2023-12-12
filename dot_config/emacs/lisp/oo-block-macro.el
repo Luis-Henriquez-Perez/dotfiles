@@ -46,14 +46,8 @@
 ;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
 ;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
 ;; ****** let!
-;; :PROPERTIES:
-;; :ID:       20230807T185016.806410
-;; :END:
 (defalias 'let! '-setq)
 ;; ****** with!
-;; :PROPERTIES:
-;; :ID:       20230107T183227.404180
-;; :END:
 ;; Meant to be used with =oo-block-macro-handle-with=.  These macros are for just
 ;; making sure that the keywords =wrap!= and =with!= are properly syntax
 ;; highlighted and have the correct indentation.
@@ -64,23 +58,14 @@ Meant to be used with `block!'.  See `oo-block-parse-with'.")
 
 (defalias 'wrap 'with!)
 ;; ****** label!
-;; :PROPERTIES:
-;; :ID:       20230625T103837.353668
-;; :END:
 (defmacro label! (&rest args)
   (declare (indent defun)))
 ;; ****** letf!
-;; :PROPERTIES:
-;; :ID:       20230625T103905.830390
-;; :END:
 (defalias 'letf! 'label!)
 (defalias 'flet! 'label!)
 (defalias 'noflet! 'label!)
 (defalias 'stub! 'label!)
 ;; ****** excluding!
-;; :PROPERTIES:
-;; :ID:       20230806T212245.641523
-;; :END:
 ;; Sometimes we encounter symbols we don't want =block!= let binding.
 (defmacro excluding! (symbol &rest symbols)
   "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
@@ -90,31 +75,19 @@ See `oo-block-parse-excluding'."
 
 (defalias 'without! 'excluding!)
 ;; ***** define control-flow macros
-;; :PROPERTIES:
-;; :ID:       20230807T071641.392370
-;; :END:
 ;; These are macros that capitalize on the catch blocks I generate with [[id:20230807T063155.724861][block!]] to
 ;; provide control flow structures like those found in other lanaguges.
 ;; ****** return! and return-from!
-;; :PROPERTIES:
-;; :ID:       20230810T083506.743135
-;; :END:
 (defalias 'return! 'cl-return)
 (defalias 'return-from! 'cl-return-from)
 ;; ****** continue!
-;; :PROPERTIES:
-;; :END:
-(defmacro continue! ()
-  "Skip the current iteration of loop.
+("Skip the current iteration of loop.
 This is meant to be used in `block!'.  For what counts as a loop is, see
 `oo-block-macro-loop-macros' and `oo-block-parse-loop'."
-  `(throw 'continue! nil))
+ `(throw 'continue! nil))
 
 (defalias 'skip! 'continue!)
 ;; ****** break!
-;; :PROPERTIES:
-;; :ID:       20230613T070208.182341
-;; :END:
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
 For what counts as a loop is, see `oo-block-macro-loop-macros' and
@@ -124,9 +97,6 @@ For what counts as a loop is, see `oo-block-macro-loop-macros' and
 (defalias 'exit! 'break!)
 (defalias 'exit-with! 'exit!)
 ;; ***** process let bindings
-;; :PROPERTIES:
-;; :ID:       20230810T083635.048606
-;; :END:
 (defun oo-block-let-bindings (let no-let)
   "Return list of let bindings, ignoring no-let.
 Ignore any symbols.  See `excluding!'."
@@ -140,9 +110,6 @@ Ignore any symbols.  See `excluding!'."
         (pushing! binds (list match-form value))))
     (nreverse binds)))
 ;; ***** try to do it all in one pcase
-;; :PROPERTIES:
-;; :ID:       20230809T092211.590259
-;; :END:
 ;; At first I did this by creating functions.  Although this is nice for splitting
 ;; up code.
 (defun oo-block-parse-body (body)
@@ -197,9 +164,6 @@ Ignore any symbols.  See `excluding!'."
          (setq zipper (treepy-next zipper)))))
     (list data zipper)))
 ;; ***** block!
-;; :PROPERTIES:
-;; :ID:       20230807T063155.724861
-;; :END:
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
