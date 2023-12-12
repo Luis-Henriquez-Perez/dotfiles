@@ -68,6 +68,8 @@
 ;; will be involved with org's method.  Furthermore, I just do not think there
 ;; are as many tools to deal with a single large file.
 
+;; Sometimes what gets me is that.
+
 ;;;; set initial variables
 ;;;;;  disable garbage collection until I'm done with startup
 ;; :PROPERTIES:
