@@ -20,7 +20,7 @@
 ;; that I can use to navigate a form.  The iterator allows me to move freely and
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; [[][dash's]] [[][-tree-map-nodes]].
-;; ***** extend treepy with a way to skip nodes
+
 ;; ***** account for improper lists when mapping nodes
 ;; The dash function [[][-tree-map-nodes]] will fail when walking the body of a macro that has
 ;; improper lists.  While I wouldn't say improper lists are common in lisp code,
@@ -57,15 +57,15 @@ WRAPPER is the same as in `oo-wrap-forms'.
 Meant to be used with `block!'.  See `oo-block-parse-with'.")
 
 (defalias 'wrap 'with!)
-;; ****** label!
+
 (defmacro label! (&rest args)
   (declare (indent defun)))
-;; ****** letf!
+
 (defalias 'letf! 'label!)
 (defalias 'flet! 'label!)
 (defalias 'noflet! 'label!)
 (defalias 'stub! 'label!)
-;; ****** excluding!
+
 ;; Sometimes we encounter symbols we don't want =block!= let binding.
 (defmacro excluding! (symbol &rest symbols)
   "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
@@ -74,10 +74,9 @@ See `oo-block-parse-excluding'."
   )
 
 (defalias 'without! 'excluding!)
-;; ***** define control-flow macros
+
 ;; These are macros that capitalize on the catch blocks I generate with [[id:20230807T063155.724861][block!]] to
 ;; provide control flow structures like those found in other lanaguges.
-;; ****** return! and return-from!
 (defalias 'return! 'cl-return)
 (defalias 'return-from! 'cl-return-from)
 ;; ****** continue!
@@ -87,7 +86,7 @@ This is meant to be used in `block!'.  For what counts as a loop is, see
  `(throw 'continue! nil))
 
 (defalias 'skip! 'continue!)
-;; ****** break!
+
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
 For what counts as a loop is, see `oo-block-macro-loop-macros' and
@@ -96,7 +95,7 @@ For what counts as a loop is, see `oo-block-macro-loop-macros' and
 (defalias 'break-with! 'break!)
 (defalias 'exit! 'break!)
 (defalias 'exit-with! 'exit!)
-;; ***** process let bindings
+
 (defun oo-block-let-bindings (let no-let)
   "Return list of let bindings, ignoring no-let.
 Ignore any symbols.  See `excluding!'."
@@ -109,7 +108,7 @@ Ignore any symbols.  See `excluding!'."
             (setq match-form it)))
         (pushing! binds (list match-form value))))
     (nreverse binds)))
-;; ***** try to do it all in one pcase
+
 ;; At first I did this by creating functions.  Although this is nice for splitting
 ;; up code.
 (defun oo-block-parse-body (body)
@@ -163,7 +162,7 @@ Ignore any symbols.  See `excluding!'."
         (_
          (setq zipper (treepy-next zipper)))))
     (list data zipper)))
-;; ***** block!
+
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
