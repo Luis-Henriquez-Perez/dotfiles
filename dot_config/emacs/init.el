@@ -68,7 +68,7 @@
 ;; will be involved with org's method.  Furthermore, I just do not think there
 ;; are as many tools to deal with a single large file.
 
-;; There is a general desire to keep package information together
+;; There is a general desire to keep package information together, but.
 
 ;;;; set initial variables
 ;;;;;  disable garbage collection until I'm done with startup
