@@ -143,16 +143,3 @@ HOOK-OR-ADVICE.")
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
 
-;;;; Load all init files
-;; The way I organized my configuration, each package has a module and each
-;; module has a recipe.
-;; (oo-load-modules)
-;; (dolist (file)
-;;   (require file))
-;; (dolist (module modules)
-;;   (load recipes)
-;;   (load init)
-;;   (oo-call-after-load package configuration))
-
-;;;; package specific setup
-;; (load )
