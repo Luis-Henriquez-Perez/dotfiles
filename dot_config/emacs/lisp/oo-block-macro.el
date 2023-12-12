@@ -21,9 +21,6 @@
 ;; edit nodes precisely--allowing me to do things that would be very difficult with
 ;; [[][dash's]] [[][-tree-map-nodes]].
 ;; ***** extend treepy with a way to skip nodes
-;; :PROPERTIES:
-;; :ID:       20230810T023929.247897
-;; :END:
 ;; ***** account for improper lists when mapping nodes
 ;; The dash function [[][-tree-map-nodes]] will fail when walking the body of a macro that has
 ;; improper lists.  While I wouldn't say improper lists are common in lisp code,
