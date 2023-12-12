@@ -51,7 +51,7 @@
 (defun elpa-upgrade ()
   "Bootstrap personal configurations."
   ;; make sure that bootstrap has completed
-  (elpa-bootstrap)
+  ;; (elpa-bootstrap)
 
   ;;  fetch all packages and then merge the latest version
   ;; (straight-fetch-all)
