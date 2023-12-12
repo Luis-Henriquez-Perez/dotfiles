@@ -10,10 +10,6 @@
 An ampersand symbol is a symbol that starts with `&'."
   (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
 
-;; (defsubst oo-sharp-quoted-p (obj)
-;;   "Return non-nil if OBJ is sharp quoted."
-;;   (equal (car-safe obj) 'function))
-
 ;; This function is more for helping me write macros than for anything else.  It's
 ;; easy to wrap one form around a macro.  But this function automates the process of
 ;; wrapping =N= wrappers around a set of forms.
