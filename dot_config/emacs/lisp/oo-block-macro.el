@@ -45,9 +45,9 @@
 ;; to write is more than one line long.  This is nice so
 ;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
 ;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
-;; ****** let!
+
 (defalias 'let! '-setq)
-;; ****** with!
+
 ;; Meant to be used with =oo-block-macro-handle-with=.  These macros are for just
 ;; making sure that the keywords =wrap!= and =with!= are properly syntax
 ;; highlighted and have the correct indentation.
