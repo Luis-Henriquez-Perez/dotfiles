@@ -6,7 +6,8 @@
 ;; One thing I wish was mentioned in the post is that to run any of the shell
 ;; commands for =eldev=, the =eldev= executable needs to be in your path.
 
-;; * tell =eldev= where to load
+;;; eldev
+;;;; tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
 (setq eldev-main-fileset '("init.el" "early-init.el" "lisp/*.el"))
 
@@ -16,13 +17,13 @@
 (eldev-add-loading-roots 'build "lisp")
 (eldev-add-loading-roots 'bootstrap "lisp")
 
-;; * specify test directory
+;;;; specify test directory
 ;; There are dependencies for testing and linting phases, they should
 ;; be installed by Eldev from MELPA and GNU ELPA (latter is enabled by
 ;; default).
 (eldev-use-package-archive 'melpa)
 
-;; * define bootstrap command
+;;;; define bootstrap command
 ;; We set the value of elpa-bootstrap-p to t, so that autoloads file is not
 ;; required from init.el (we are going to generate it during bootstrap flow). We
 ;; also set load-prefer-newer to t so that Emacs prefers newer files instead of
@@ -43,7 +44,7 @@
 ;; straight.el.
 (add-hook 'eldev-build-system-hook #'elpa-bootstrap)
 
-;; * define update command
+;;;; define update command
 ;; In [[][d12frosted's configuration]] he defined "upgrading" the configuration
 ;; as all the packages which are not pinned.  However, I pin all of my packages
 ;; because I want complete control over.
