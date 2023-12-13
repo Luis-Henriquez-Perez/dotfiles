@@ -72,6 +72,10 @@
 ;; every package the information is split into two components--things that will
 ;; be evaluated immediately and things that will be evaluated later.
 
+;; For organizational purposes there is a general desire to have everything
+;; pertaining to a package in one place.  I think this is a big reason why
+;; =use-package= is a 
+
 ;;;; set initial variables
 ;;;;;  disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
