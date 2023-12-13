@@ -143,4 +143,4 @@ HOOK-OR-ADVICE.")
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
 
-;;;; setup 
+;;;; setup packages for lazy loading
