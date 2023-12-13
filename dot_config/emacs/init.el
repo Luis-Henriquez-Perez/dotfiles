@@ -77,7 +77,8 @@
 ;; =use-package= is such a popular macro because it lets you do this in one
 ;; form by having different keywords that specify how things should be loaded.
 ;; With an org configuration, it is nice that I can tangle source blocks that
-;; are right next to each other in the file, to different files.
+;; are right next to each other in the file, to different files.  In an elisp
+;; configuration, I would rather keep things.
 
 ;;;; set initial variables
 ;;;;;  disable garbage collection until I'm done with startup
