@@ -152,3 +152,6 @@ HOOK-OR-ADVICE.")
 (require 'oo-call-after-evil-state)
 
 ;;;; setup packages for lazy loading
+
+;;;; load the file for lazy loading
+;; (require 'setup)
