@@ -32,4 +32,4 @@
 ;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
 (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
 
-(provide 'oo-override-mode)
+(provide 'oo-base-override-mode)
