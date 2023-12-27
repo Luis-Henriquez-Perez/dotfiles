@@ -1,8 +1,39 @@
+(require 'map)
+(require 'anaphora)
 (require 'oo-base-utils)
-(require 'oo-block-macro)
+(require 'oo-base-block-macro)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-load)
+(require 'oo-call-after-evil-state)
 
+;; Inspired by [[https://stackoverflow.com/questions/16090517/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
+;; bindings for commands giving me a flexible and robust experience with key
+;; bindings.  By "condition bindings" I mean key bindings that can invoke a
+;; particular command based on certain conditions.  For example, =SPC h f=  might
+;; invoke [[file:snapshots/_helpful_command__helpful_callable_.png][helpful-callable]] if the package helpful is present (see [[][]]), otherwise it
+;; would fallback to [[file:snapshots/_helpful_command__describe-function_.png][describe-function]] instead.
+
+;; As opposed to [[file:snapshots/_helpful_special_form__cond_.png][cond]], for example, which requires multiple conditions I designed
+;; this macro to add one condition at a time.  I do not want to be tied to naming
+;; all the conditions at once in general I write my configuration in such a way
+;; that I can augment it incrementally as opposed to building one big block of
+;; code.
+(defvar oo-alternate-commands (make-hash-table)
+  "A hash-table mapping command symbols to a list of command symbols.")
+
+(defun oo-alternate-command-choose-fn (command)
+  "Return command that should be called instead of COMMAND."
+  (or (oo-first-success #'funcall (gethash command oo-alternate-commands))
+      command))
+
+(defun! oo-alt-bind (map orig alt &optional condition)
+  "Remap keys bound to ORIG so ALT is called if CONDITION returns non-nil.
+ORIG and ALT are command symbols.  CONDITION is a function that returns non-nil
+when ALT should be invoked instead of ORIG."
+  (flet! oo-when-fn (condition fn)
+    `(lambda (&rest _) (when (funcall #',condition) #',alt)))
+  (push (oo-when-fn (or condition #'always) alt) (gethash orig oo-alternate-commands))
+  (define-key map `[remap ,orig] `(menu-item "" ,orig :filter oo-alternate-command-choose-fn)))
 
 ;; The functions here are functions to generate the body of the =bind!= macro.  I
 ;; divided form generation into two parts: the functions generate the deferment for
@@ -11,10 +42,9 @@
 
 ;; This variable will contain the functions that will be called in turn to produce
 ;; the side-effect that results in the actual binding.  Order matters here.
-(defvar oo-binding-fns '(oo--bind-localleader
-                         oo--bind-alt
+(defvar oo-binding-fns '(oo--bind-alt
                          oo--bind-ensure-keybinding
-                         oo--bind-exwm-key
+                         ;; oo--bind-exwm-key
                          oo--bind-evil-state-keyword
                          oo--bind-evil-define-key
                          oo--bind-define-key)
@@ -37,29 +67,6 @@ If there are no more functions, do nothing."
          (oo--do-binding metadata #'oo-alt-bind :keymap :key :def :condition))
         (t
          (oo--resolve-binding fns metadata))))
-
-(defun! oo--bind-localleader (fns metadata)
-  "Automate binding to leader."
-  (let! alist '((oo-normal-localleader-short-key . normal)
-                (oo-normal-localleader-key . normal)
-                (oo-insert-localleader-key . insert)
-                (oo-insert-localleader-short-key . insert)
-                (oo-emacs-localleader-key . emacs)
-                (oo-emacs-localleader-short-key . emacs)
-                (oo-emacs-localleader-key . global)
-                (oo-emacs-localleader-short-key . global)))
-  (let! key (map-elt metadata :key))
-  (let! localleader (map-elt metadata :localleader))
-  (if localleader
-      (for! ((leader . state) alist)
-        (let! new-key (if (vectorp key)
-                          key
-                        (concat (symbol-value leader) "\s" key)))
-        (alet (-> metadata
-                  (map-insert :key new-key)
-                  (map-insert :state state))
-          (oo--resolve-binding fns it)))
-    (oo--resolve-binding fns metadata)))
 
 ;; I think [[][general]] does the same kind of thing where you can specify a symbol
 ;; as the keymap in case you want to load the keybinding only when the keymap
@@ -149,7 +156,6 @@ If there are no more functions, do nothing."
   (flet! kbd-maybe (x) (if (vectorp x) x (kbd x)))
   (let! desc (map-elt metadata :wk))
   (let! args (mapcar (-partial #'map-elt metadata) keys))
-  ;; (message "%S" (cons fn (-replace-where #'keymapp (-const 'keymap) args)))
   (stub! define-key (keymap key def)
     (when desc
       (-p-> (which-key-add-keymap-based-replacements keymap key desc)

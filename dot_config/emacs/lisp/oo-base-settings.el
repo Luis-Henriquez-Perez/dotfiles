@@ -249,9 +249,6 @@
 ;; be set to [[file:snapshots/helpful-command:ignore.png][ignore]].
 (setq ring-bell-function #'ignore)
 ;;;; disable repeated error message functions
-;; :PROPERTIES:
-;; :ID:       20230815T235002.324826
-;; :END:
 ;; When you try to move past the beginning and end of a buffer Emacs produces
 ;; error messages.
 ;; [[https://emacs.stackexchange.com/questions/10932/how-do-you-disable-the-buffer-end-beginning-warnings-in-the-minibuffer][disable warnings]]
@@ -262,5 +259,14 @@ end-of-buffer signals; pass the rest to the default handler."
     (command-error-default-function data context caller)))
 
 (setq command-error-function #'oo-command-error-function)
+
+;; designate the location of the trash directory
+;; I accidentally sent files to the trash and I could not find them in my trash
+;; directory.  I was confused because I knew that the variable
+;; [[file:_helpful_variable__delete-by-moving-to-trash_.png][delete-by-moving-to-trash]] was non-nil and I even verified this to be the case
+;; with [[file:_helpful_function__helpful-variable_.png][helpful-variable]].  After reading the documentation of [[][]] I realized
+;; that emacs uses the [[][]].  To be honest I had no idea what this actually was
+;; but I extracted what looked like the location, [[][]].
+(setq trash-directory (expand-file-name "~/Trash"))
 
 (provide 'oo-base-settings)

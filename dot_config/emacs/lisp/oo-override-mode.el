@@ -23,13 +23,13 @@
 ;; override an evil keymap).
 (defun evil-mode-hook&make-intercept-map ()
   "Register `oo-override-map' as an intercept map."
+  (message "Make intercept map.")
   (evil-make-intercept-map oo-override-mode-map 'all t))
 
-;; (oo-call-after-load 'evil)
-;; (oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
+(oo-add-hook 'evil-mode-hook #'evil-mode-hook&make-intercept-map)
 
 ;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
 ;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
 (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
 
-(provide 'oo-base-override-mode)
+(provide 'oo-override-mode)

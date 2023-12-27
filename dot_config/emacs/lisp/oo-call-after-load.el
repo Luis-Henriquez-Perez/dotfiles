@@ -1,8 +1,21 @@
-(require 'oo-base-utils)
-(require 'oo-modification-macros)
+(require 'oo-base-ing-macros)
+(require 's)
 
 ;; This feature provides the star function `oo-call-after-load' as well as.
 ;; The abnormal hook [[][after-load-functions]] is run after any file is loaded.
+
+;; This macro is designed with the following goals in mind.
+;; 1 - use one generic macro for most binding needs
+;; 2 - log the variables I set and when they are being set
+;; You'll get a warning when trying to bind a symbol that hasn't been defined yet.
+;; So it's best to bind a package symbol only after the package has been loaded.
+;; 3 - stop worrying about variables that haven't been bound
+;; 4 - stop worrying about whether a variable is a custom variable or not
+;; Some variables are custom variables.  Meaning they have some function that.
+(defvar oo-unbound-symbol-alist nil
+  "An alist mapping an unbound symbol to an expression.
+This alist is checked by the hook `after-load-functions&set-bound-symbols' for
+any symbols that are now bound.")
 
 ;; I'll note that I push all the forms into a list and evaluate them all in the
 ;; body of one lambda as opposed to evaluating one lambda per form.  This is
@@ -22,13 +35,13 @@ bound and setting them to the result of evaluating expr."
 
 (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
 
-(defun! oo-try-load-feature (fn)
-  "Try to load feature that could contain FN."
-  (unless (fboundp fn)
-    (dolist (feature (oo-candidate-features fn))
-      (require feature)
-      (when (fboundp fn)
-        (return! feature)))))
+;; (defun! oo-try-load-feature (fn)
+;;   "Try to load feature that could contain FN."
+;;   (unless (fboundp fn)
+;;     (dolist (feature (oo-candidate-features fn))
+;;       (require feature)
+;;       (when (fboundp fn)
+;;         (return! feature)))))
 
 (defun oo--call-after-load (condition fn &rest args)
   "Call FN with ARGS after CONDITION is met.

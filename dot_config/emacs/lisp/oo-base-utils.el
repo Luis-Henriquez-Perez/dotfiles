@@ -2,14 +2,6 @@
 (require 'dash-functional)
 (require 'subr-x)
 
-;; Emacs uses these symbols as markers in =defun= and =defmacro= signatures.  I'm
-;; defining a function specifically for identifying these symbols so I can
-;; differentiate them from actual argument symbols.
-(defun oo-ampersand-symbol-p (obj)
-  "Return non-nil of OBJ is an ampersand symbol.
-An ampersand symbol is a symbol that starts with `&'."
-  (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
-
 ;; This function is more for helping me write macros than for anything else.  It's
 ;; easy to wrap one form around a macro.  But this function automates the process of
 ;; wrapping =N= wrappers around a set of forms.
@@ -31,7 +23,12 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (declare (pure t) (side-effect-free t))
   (and (symbolp object) (not (keywordp object))))
 
-;; simple symbols, using this function can save me having to provide a string for
+(defun oo-args-to-string (&rest args)
+  "Return ARGS as a string."
+  (declare (pure t) (side-effect-free t))
+  (with-output-to-string (mapc #'princ args)))
+
+;; Simple symbols, using this function can save me having to provide a string for
 ;; =format=.
 (defun oo-args-to-symbol (&rest args)
   "Return an interned symbol from ARGS."
@@ -61,24 +58,25 @@ Don't produce any output to the *Messages* buffer when calling function."
   "Return non-nil if SYMBOL matches REGEXP."
   (string-match-p regexp (symbol-name symbol)))
 
-;; For I want my advices, hooks and bindings to be dynamic in the sense that they only take effect when
-;; it makes sense to do so.  For example [[id:20230801T175939.021467][this headline]] I append =evil-append-line= to
-;; org-insert-heading-hook=.  But obviously I don't want this to happen if for whatever reason I'm not
-;; in =evil-mode=.
+;; For I want my advices, hooks and bindings to be dynamic in the sense that
+;; they only take effect when it makes sense to do so.  For example [[id:20230801T175939.021467][this
+;; headline]] I append =evil-append-line= to org-insert-heading-hook=.  But
+;; obviously I don't want this to happen if for whatever reason I'm not in
+;; =evil-mode=.
 (defun oo-bound-and-true-fn (symbol)
   "Return a function that checks if SYMBOL is bound and non-nil."
   `(lambda () (bound-and-true-p ,symbol)))
 
-;; This generic looping macro with predicate clauses inspired by =loopy=.  The goal
-;; is to provide a unified syntax to cover all of my looping needs.  It should
-;; "do-what-I-mean" whenever possible.
+;; This generic looping macro with predicate clauses inspired by =loopy=.  The
+;; goal is to provide a unified syntax to cover all of my looping needs.  It
+;; should "do-what-I-mean" whenever possible.
 
 ;; An implementation note: You might wonder why I check whether its a list if
-;; =seq-doseq= already deals with the case that the sequence is a list.  The reason
-;; is that =seq-doseq= is a wrapper around =seq-do= which works by wrapping the
-;; iteration body in a lambda and calling it on every single iteration.  The lambda
-;; adds an overhead.  So the answer is I do this for better performance when dealing
-;; with lists.
+;; =seq-doseq= already deals with the case that the sequence is a list.  The
+;; reason is that =seq-doseq= is a wrapper around =seq-do= which works by
+;; wrapping the iteration body in a lambda and calling it on every single
+;; iteration.  The lambda adds an overhead.  So the answer is I do this for
+;; better performance when dealing with lists.
 (defmacro loop! (pred &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a

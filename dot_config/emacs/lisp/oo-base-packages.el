@@ -942,6 +942,8 @@
 ;; What I want is a uniform, declarative interface to configuring things that come
 ;; up often across several packages.
 (elpaca (setup :repo "https://git.sr.ht/~pkal/setup" :ref "b2e3f3a"))
+
+(elpaca (noflet :fetcher github :branch "master" :repo "nicferrier/emacs-noflet" :ref "7ae84dc3257637af7334101456dafe1759c6b68a"))
 ;;;;;; simulate startup hooks after emacs has been initialized
 ;; :PROPERTIES:
 ;; :ID:       20230806T080128.224548

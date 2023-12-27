@@ -1,93 +1,42 @@
-;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
+;; -*- lexical-binding: t -*-
+
 ;;; initialization
 ;; This file starts up everything else.
-
-;; I had been using =org= to manage my configuration for a long time.  But
-;; ultimately I switched to pure elisp because of several major reasons.  One is
-;; that it is how emacs and programming files in general are designed to
-;; operate.  The way files are tested assumes dividing code into multiple files.
-;; And while I do not think that there is anything theoretically wrong with
-;; having everything in a huge file, I think that the current system and
-;; debugging tools are designed with the assumption that features are divided
-;; into multiple files. Using =org= means that you will need to figure out
-;; how to do these things indirectly.  I think the most natural way of using
-;; =org= to manage configuration files is putting everything in one file because
-;; headlines fulfill the role of segregation into manageable pieces so you don't
-;; need files to do that.  And you should want to do that to avoid the
-;; complexity that arises from loading order. Already I think its questionable
-;; to use org if you're going to also try to maintain the file hierarchy. Using
-;; outshine commenting style is very minimal and unobtrusive and therefore
-;; easily transferable to other programming files.  One could argue that this is
-;; how org should have been implemented as sort of adding features to an
-;; existing thing.
-
-;; My approach to writing code when using one big org file is to write functions
-;; and macros that work regardless of whether a pertinent feature is loaded or
-;; not.  For example.  I had to do that because the whole file was evaluated at
-;; once; I did not delegate to different files as a typical configuration
-;; normally would.  Now that I am using a multi-file elisp configuration, it is
-;; possible to code less defensively because I can control when a file is
-;; loaded.  Instead of having every form be safe as in with =set!= I could just
-;; have them be normal and call the file only when its needed features are ready
-;; to be loaded.
-
-;; Another thing is that unfortunately without using org I can't have multiple
-;; languages in the same file.  On the upside, there is the flexibility of not
-;; being strictly tied to the headling/source block syntax.  For example in the
-;; abbrev file, I can have multiple abbrevs without the source block syntax;
-;; whereas in my org file there had to be a heading for each of them.  Also I
-;; don't need a headline for every function.  I can do the same thing with =org=
-;; and put multiple functions in one source block, or give a headline multiple
-;; source blocks, but that kind of thing doesn't make sense to me.
-
-;; Probably the saddest thing about not having org-mode is that none of my links
-;; will work for people viewing the code file on github for example.
-
-;; Should I distinguish between patches and configurations?  Concretely, should
-;; I just turn =oo-outline-patch= into =oo-outline-configuration=?  I feel like
-;; there can be a grey area between the two.  In general I do not think I should
-;; make unnecessary categories between things and should try to let the demands
-;; of the problem itself speak above my own prejudices.
-
-;; An advantage of org-mode is you don't have to deal (directly at least) with a
-;; file hierarchy.  And, searching your configurations is super easy as it
-;; amounts to just searching one file.
-
-;; I had been thinking of the problem with initializing when I was working on
-;; easymotion.  So the issue is that many packages need code that is evaluated
-;; immediately.  I had been thinking that with an org configuration it might be
-;; easier because you can put all init code in one file, but you'd still have to
-;; deal with loading the configuration code at the proper time.
-
-;; So the way I will design this is I will have multiple init files for
-;; packages.  I do not like having so many files for very little lines of code
-;; but.
-
-;; As much as I want to make org work I think that I was forcing it too much.
-;; First, I know that the "normal" method works but I don't know what exactly
-;; will be involved with org's method.  Furthermore, I just do not think there
-;; are as many tools to deal with a single large file.
-
-;; There is a general desire to keep package information together, but with
-;; every package the information is split into two components--things that will
-;; be evaluated immediately and things that will be evaluated later.
-
-;; For organizational purposes there is a general desire to have everything
-;; pertaining to a package in one place.  I think this is a big reason why
-;; =use-package= is such a popular macro because it lets you do this in one
-;; form by having different keywords that specify how things should be loaded.
-;; With an org configuration, it is nice that I can tangle source blocks that
-;; are right next to each other in the file, to different files.  In an elisp
-;; configuration, I would rather keep things more "pure".
-
 ;;;; set initial variables
-;;;;;  disable garbage collection until I'm done with startup
+;;;;; startup values
+;; There are certain variables whose values I want to be different
+;; only during initialization.  Why don't I let-bind them?  I don't want to
+;; add another layer of nesting to all the code in my init file.
+;; Also, let-binding only does a =set= like binding, but sometimes I
+;; want to use other setters like =set-default=.
+(defvar oo-old-values-alist nil
+  "An alist that contains symbols I want to \"reset\" after startup.
+Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL is the
+symbol whose value should be reset to OLD-VALUE by calling SETTER with
+SYMBOL and OLD-VALUE.")
+
+(defmacro startup-set! (symbol value &optional setter)
+  "Set VAR to VALUE using SETTER.
+At the end of `emacs-statup-hook' set VAR back to its original VALUE."
+  `(progn (setf (alist-get ',symbol oo-old-values-alist) (list ,symbol #',setter))
+          (funcall (or #',setter #'set) ',symbol ,value)))
+
+;;;;; disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
 ;; later reset to a reasonable value.
-(setq gc-cons-threshold most-positive-fixnum)
+(startup-set! gc-cons-threshold most-positive-fixnum)
 
-;;;;;  determine whether emacs is in debug mode
+;; This is the percentage of the heap before.
+(startup-set! gc-cons-percentage 0.8)
+
+;;;;; don't search for whenever a package is loaded
+(startup-set! file-name-handler-alist nil)
+
+;;;;; prevent flashing of unstyled modeline 
+(startup-set! mode-line-format nil set-default)
+
+;;;;; determine whether emacs is in debug mode
 ;; This variable is snatched from [[https://github.com/hlissner/doom-emacs][Doom]].  The point of this variable is to serve as
 ;; an indicator of whether the current Emacs instance is run for
 ;; debugging. Normally, when starting Emacs I suppress non-critical errors so as
@@ -98,7 +47,7 @@
   "When non-nil print debug messages.
 The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 
-;;;;;  store errors that occur in hooks and advices
+;;;;; store errors that occur in hooks and advices
 ;; This is influenced by the excellent stackoverflow on
 ;; [[https://emacs.stackexchange.com/questions/669/how-to-gracefully-handle-errors-in-init-file][how-to-gracefully-handle-errors-in-init-file]].  The idea is that I don't want
 ;; errors to interfere with startup or with my usage of Emacs.  But I also don't
@@ -111,7 +60,7 @@ Each element looks like (HOOK-OR-ADVICE . ERROR).  HOOK-OR-ADVICE is a hook or
 an advice symbol that raised an error.  ERROR is the error object generated by
 HOOK-OR-ADVICE.")
 
-;;;;;  define a place to store temporary files
+;;;;; define a place to store temporary files
 ;; It's useful to store directories which I reference frequently in variables and
 ;; functions.  This way I can reference the full path.  Certain directories are
 ;; important; and I end up referencing them alot.  One of these is my
@@ -138,20 +87,79 @@ HOOK-OR-ADVICE.")
 ;; packages.
 (require 'oo-base-packages)
 
-;;;; (lazy) load patches and extensions
-;; This registers the files into the load-path and sets up extensions for
-;; loading.  It is important to put this before the base library specifically
-;; because =oo-block-macro= uses a patch.
-;; (require 'oo-base-extra)
-
 ;;;; load library
-(require 'oo-base-utils)
-(require 'oo-block-macro)
+(require 'oo-base-ing-macros)
+(require 'oo-base-block-macro)
+(require 'oo-base-advice-utils)
+(require 'oo-base-hook-utils)
+(require 'oo-base-set-macro)
 (require 'oo-call-after-load)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
+;; Provides hooks.
+(require 'on)
+(require 'oo-base-bind-key)
+;; I need to figure out how this is going to work.
+(require 'oo-base-function-generators)
+;; Defines the leader keys and binds them.
+(require 'oo-base-leader)
+(require 'oo-initial-buffer-choice)
+
+;; I don't yet know where to put this function.  So for now, here it goes.
+(defun oo-popup-at-bottom (regexp)
+  "Open buffers at bottom that match regexp."
+  (alet `(,regexp
+          (display-buffer-at-bottom)
+          (side bottom)
+          (slot 1)
+          (window-height 0.5)
+          (window-parameters ((no-other-window t))))
+    (push it display-buffer-alist)))
 
 ;;;; setup packages for lazy loading
+;; Note that the configuration files do assume that the =oo-base= files have
+;; been loaded, so this lazy loading must happen after base files are loaded.
 
-;;;; load the file for lazy loading
-;; (require 'setup)
+;; What I do here is loop through each file whose name matches
+;; =oo-config-FEATURE.el= and tell emacs to load that particular file when
+;; FEATURE is loaded.  Said files each contain the configuration for their
+;; particular feature.  To reduce startup time and to avoid any errors because
+;; parent features are not defined, I avoid loading these files all at once.
+;; The duration of this loop itself should be very short.
+(block! nil
+  (let! dir (locate-user-emacs-file "lisp/"))
+  ;; At first I tried to do this with one loop, but on second thought I think
+  ;; I'll have to do this in two separate loops because I need to load all the
+  ;; init files first.  I shouldn't be intermixing loading.
+  (let! regexp "\\`oo-init-.+?\\.el\\'")
+  (dolist (file (directory-files dir t regexp))
+    (let! fname (file-name-nondirectory file))
+    ;; I may choose to divide up =setup.el= into its corresponding packages
+    ;; for modularity in which case this could be useful.
+    (load file nil (not oo-debug-p)))
+  (let! regexp "\\`oo-config-\\(.+?\\)\\.el\\'")
+  (dolist (file (directory-files dir t regexp))
+    (let! fname (file-name-nondirectory file))
+    (string-match regexp fname)
+    ;; I may choose to divide up =setup.el= into its corresponding packages
+    ;; for modularity in which case this could be useful.
+    (let! feature (intern (match-string-no-properties 1 fname)))
+    (oo-call-after-load feature #'load file nil (not oo-debug-p))))
+
+;;;; init code
+;; This file actually.
+(load (locate-user-emacs-file "setup.el") nil t)
+;;;; reset variable values
+;; Remember when I set variables to a different original value?  Here
+;; I am resetting them to their old values.  It is especially
+;; important to do this with =file-name-handler-alist= or.  Basically
+;; I just loop through the all the variables and set them to their
+;; corresponding value.
+;; Note that I waited before actually writing this hook so that I
+;; could use my custom macros and functions such as =for!= and
+;; =oo-add-hook=.
+(defun oo-reset-startup-symbols ()
+  (for! ((var old-value setter) oo-old-values-alist)
+    (funcall (or setter #'set) var old-value)))
+
+(oo-add-hook 'emacs-startup-hook #'oo-reset-startup-symbols :append t)

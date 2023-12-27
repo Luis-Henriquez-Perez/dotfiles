@@ -1,5 +1,14 @@
-(require 'oo-base-definers)
-(require 'oo-block)
+(require 'oo-base-ing-macros)
+(require 'oo-base-block-definers)
+(require 'oo-call-after-load)
+
+;; This function is for getting the state that corresponds to an evil keyword.
+;; In contrast to Doom this function only handles "mono-character" keywords.
+(defun! oo-evil-state (evil-keyword)
+  "Return the state that corresponds to the state keyword."
+  (flet! letter (state) (seq-first (symbol-name state)))
+  (let! target (seq-first (seq-rest (symbol-name evil-keyword))))
+  (--first (equal (letter it) target) (map-keys evil-state-properties)))
 
 ;; An evil state is defined whenever [[file:snapshots/_helpful_function__evil-put-property_.png][evil-put-property]] is invoked with
 ;; =evil-state-properties= as its first argument.  I know this from the definition of

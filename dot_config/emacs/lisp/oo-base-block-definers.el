@@ -1,13 +1,15 @@
 ;; This file extends.
+(require 'dash)
+(require 'oo-base-ing-macros)
 
-;; **** definers
-;; :PROPERTIES:
-;; :ID:       20230827T095607.163333
-;; :END:
-;; ***** get function components of a defun-like macro
-;; :PROPERTIES:
-;; :ID:       20230807T082315.646128
-;; :END:
+;; Emacs uses these symbols as markers in =defun= and =defmacro= signatures.  I'm
+;; defining a function specifically for identifying these symbols so I can
+;; differentiate them from actual argument symbols.
+(defun oo-ampersand-symbol-p (obj)
+  "Return non-nil of OBJ is an ampersand symbol.
+An ampersand symbol is a symbol that starts with `&'."
+  (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
+
 ;; In macros I often want access to defun arg components (see defhook! and
 ;; defadvice!).  Until I get better destructuring, I use this function to quickly
 ;; access these values.  Notably, I put docstring and declarations in a sublist
@@ -22,10 +24,7 @@ The components returned are in the form of (name args (docstring declaration int
     (let! declarations (when (equal 'declare (car-safe (car body))) (pop body)))
     (let! interactive-form (when (equal 'interactive (car-safe (car body))) (pop body)))
     (list name args (list docstring declarations interactive-form) body)))
-;; ***** oo-destructure-defun-plus
-;; :PROPERTIES:
-;; :ID:       20230525T185113.198300
-;; :END:
+
 ;; This is a specific variant of function allows me to destructure the
 ;; arguments of a defun-like macro that can take keyword arguments.
 (defun oo-destructure-defun-plus (arglist)
@@ -41,18 +40,12 @@ The components returned are in the form of (name args (docstring declaration int
                   (map-merge 'plist plist alist)
                 (map-into (or alist plist) 'plist)))
     (list name args (list docstring declarations) new body)))
-;; ***** lambda!
-;; :PROPERTIES:
-;; :ID:       20230807T174355.869373
-;; :END:
-(defmacro lambda! (args &rest body)
-  "Wrapper around lambda that uses `block!'"
-  (declare (indent defun))
-  `(lambda (,@args) (block! nil ,@body)))
-;; ***** defmacro!
-;; :PROPERTIES:
-;; :ID:       20230807T130804.645571
-;; :END:
+
+;; (defmacro lambda! (args &rest body)
+;;   "Wrapper around lambda that uses `block!'"
+;;   (declare (indent defun))
+;;   `(lambda (,@args) (block! nil ,@body)))
+
 (defmacro defmacro! (&rest args)
   "Wrapper around `defmacro!'."
   (declare (indent defun) (doc-string 3))
@@ -62,10 +55,7 @@ The components returned are in the form of (name args (docstring declaration int
        (block! ,name
          (excluding! ,@(-remove #'oo-ampersand-symbol-p (-flatten arglist)))
          ,@body))))
-;; ***** defun!
-;; :PROPERTIES:
-;; :ID:       20230807T082321.026274
-;; :END:
+
 (defmacro! defun! (&rest args)
   "Wrapper around `defun'."
   (declare (indent defun) (doc-string 3))
@@ -76,4 +66,4 @@ The components returned are in the form of (name args (docstring declaration int
          (excluding! ,@(-remove #'oo-ampersand-symbol-p (flatten-list arglist)))
          ,@body))))
 
-(provide 'oo-base-definers)
+(provide 'oo-base-block-definers)
