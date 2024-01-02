@@ -1,5 +1,3 @@
-;; -*- lexical-binding: t -*-
-
 ;;; initialization
 ;; This file starts up everything else.
 ;;;; set initial variables
@@ -34,6 +32,9 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 (startup-set! file-name-handler-alist nil)
 
 ;;;;; prevent flashing of unstyled modeline 
+;; Don't render the modeline on startup.  For one thing, the startup looks
+;; better without flashing stuff on the screen.  Additionally, the more that's
+;; saved on rendering, the faster the startup.
 (startup-set! mode-line-format nil set-default)
 
 ;;;;; determine whether emacs is in debug mode
@@ -131,12 +132,12 @@ HOOK-OR-ADVICE.")
   ;; At first I tried to do this with one loop, but on second thought I think
   ;; I'll have to do this in two separate loops because I need to load all the
   ;; init files first.  I shouldn't be intermixing loading.
-  (let! regexp "\\`oo-init-.+?\\.el\\'")
-  (dolist (file (directory-files dir t regexp))
-    (let! fname (file-name-nondirectory file))
-    ;; I may choose to divide up =setup.el= into its corresponding packages
-    ;; for modularity in which case this could be useful.
-    (load file nil (not oo-debug-p)))
+  ;; (let! regexp "\\`oo-init-.+?\\.el\\'")
+  ;; (dolist (file (directory-files dir t regexp))
+  ;;   (let! fname (file-name-nondirectory file))
+  ;;   ;; I may choose to divide up =setup.el= into its corresponding packages
+  ;;   ;; for modularity in which case this could be useful.
+  ;;   (load file nil (not oo-debug-p)))
   (let! regexp "\\`oo-config-\\(.+?\\)\\.el\\'")
   (dolist (file (directory-files dir t regexp))
     (let! fname (file-name-nondirectory file))
@@ -146,9 +147,6 @@ HOOK-OR-ADVICE.")
     (let! feature (intern (match-string-no-properties 1 fname)))
     (oo-call-after-load feature #'load file nil (not oo-debug-p))))
 
-;;;; init code
-;; This file actually.
-(load (locate-user-emacs-file "setup.el") nil t)
 ;;;; reset variable values
 ;; Remember when I set variables to a different original value?  Here
 ;; I am resetting them to their old values.  It is especially
@@ -163,3 +161,858 @@ HOOK-OR-ADVICE.")
     (funcall (or setter #'set) var old-value)))
 
 (oo-add-hook 'emacs-startup-hook #'oo-reset-startup-symbols :append t)
+
+;;; setup
+;;;; keybindings 
+;;;;; setup leader maps
+(defvar oo-toggle-map (make-sparse-keymap))
+(define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
+(oo-bind 'oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
+
+(defvar oo-package-map (make-sparse-keymap))
+(define-prefix-command 'oo/package-prefix-command 'oo-package-map)
+(oo-bind 'oo-leader-map "p" #'oo/package-prefix-command :wk "package")
+
+(defvar oo-find-map (make-sparse-keymap))
+(define-prefix-command 'oo-find-prefix-command 'oo-find-map)
+(oo-bind 'oo-leader-map "f" #'oo-find-prefix-command :wk "find")
+
+(defvar oo-quit-map (make-sparse-keymap))
+(define-prefix-command 'oo-quit-prefix-command 'oo-quit-map)
+(oo-bind oo-leader-map "q" #'oo-quit-prefix-command :wk "quit")
+
+(defvar oo-help-map (make-sparse-keymap))
+(define-prefix-command 'oo-help-prefix-command 'oo-help-map)
+(oo-bind oo-leader-map "l" #'oo-help-prefix-command :wk "help")
+(oo-bind oo-leader-map "h" #'oo-help-prefix-command :wk "help")
+
+(defvar oo-app-map (make-sparse-keymap))
+(define-prefix-command 'oo-app-prefix-command 'oo-app-map)
+(oo-bind 'oo-leader-map "a" #'oo-app-prefix-command :wk "app")
+
+(oo-bind 'oo-find-map "d" #'switch-to-buffer)
+(oo-bind 'oo-find-map "f" #'display-buffer)
+
+(oo-bind 'oo-quit-map "q" #'save-buffers-kill-emacs :wk "quit")
+(oo-bind 'oo-quit-map "r" #'restart-emacs :wk "restart")
+;; Should make this one restart with no prompt, just automatically save buffers
+;; and exit processes.
+(oo-bind 'oo-quit-map "R" #'restart-emacs :wk "restart")
+(oo-bind 'oo-quit-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
+
+(oo-bind 'oo-app-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
+
+(defvar oo-help-map (make-sparse-keymap))
+(define-prefix-command 'oo-help-prefix-command 'oo-help-map)
+(oo-bind oo-leader-map "l" #'oo-help-prefix-command :wk "help")
+(oo-bind oo-leader-map "h" #'oo-help-prefix-command :wk "help")
+
+(defvar oo-buffer-map (make-sparse-keymap))
+(define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
+(oo-bind oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
+(oo-bind 'oo-buffer-map "j" #'next-buffer)
+(oo-bind 'oo-buffer-map "k" #'previous-buffer)
+(oo-bind 'oo-buffer-map "x" #'kill-current-buffer)
+(oo-bind 'oo-buffer-map "b" #'switch-to-buffer)
+
+(defvar oo-window-map (make-sparse-keymap))
+(define-prefix-command 'oo-window-prefix-command 'oo-window-map)
+(oo-bind oo-leader-map "w" #'oo-window-prefix-command :wk "window")
+
+(oo-bind 'oo-toggle-map "f" #'oo-set-font-face)
+
+(oo-bind 'oo-package-map "b" #'elpaca-browse     :wk "browse")
+(oo-bind 'oo-package-map "U" #'elpaca-update-all :wk "update all")
+(oo-bind 'oo-package-map "u" #'elpaca-update     :wk "update")
+(oo-bind 'oo-package-map "v" #'elpaca-visit      :wk "visit")
+(oo-bind 'oo-package-map "i" #'elpaca-try        :wk "try")
+(oo-bind 'oo-package-map "r" #'elpaca-rebuild    :wk "rebuild")
+(oo-bind 'oo-package-map "d" #'elpaca-delete     :wk "delete")
+(oo-bind 'oo-package-map "l" #'elpaca-log        :wk "log")
+(oo-bind 'oo-package-map "m" #'elpaca-manager    :wk "manager")
+
+;; Emacs has a family of describe functions that are used for help and
+;; introspection.  To name a few, there's [[file:snapshots/_helpful_command__describe-function_.png][describe-function]], [[file:snapshots/_helpful_command__describe-character_.png][describe-character]].
+;; The command =describe-callable=  and =describe-variable= are the ones I use the most
+;; by far and I them it to be accessible quickly.  The various snapshots you see
+;; named are a result of these functions and you can already guess buy how many
+;; such snapshots there are how much I use these commands.
+(oo-bind oo-help-map "m" #'describe-mode)
+(oo-bind oo-help-map "l" #'describe-function)
+(oo-bind oo-help-map "f" #'describe-function)
+(oo-bind oo-help-map "j" #'describe-variable)
+(oo-bind oo-help-map "v" #'describe-variable)
+(oo-bind oo-help-map "h" #'describe-variable)
+(oo-bind oo-help-map "C" #'describe-char)
+(oo-bind oo-help-map "k" #'describe-key)
+
+;;;;; maximize a window with =M=
+;; Of course sometimes you want to focus on a window more than others.  Typically
+;; this is handled with =edwina= because it makes the master window take up more than
+;; =50%= of the width--by default =55%= (see [[file:snapshots/_helpful_variable__edwina-mfact_.png][edwina-mfact]]).
+(oo-bind 'oo-window-map "M" #'maximize-window :wk "maximize")
+
+;;;;; splitting windows
+;; I'm unsure about whether to have any bindings splitting windows.  Since =edwina=
+;; automates the way I split windows I do not use these splitting commands much.
+;; However, I'm not so sure whether I should remove them entirely.
+(oo-bind 'oo-window-map "v" #'split-window-horizontally :wk "vsplit")
+(oo-bind 'oo-window-map "h" #'split-window-vertically :wk "hsplit")
+;; (oo-bind 'oo-window-map "V" #'oo-split-window-right-and-focus :wk "vsplit+focus")
+;; (oo-bind 'oo-window-map "v" #'oo-split-window-below-and-focus :wk "split+focus")
+
+;;;;; undo changes to window configuration with =u=
+;; There's a global mode called [[https://www.emacswiki.org/emacs/WinnerMode#:~:text=Winner%20Mode%20is%20a%20global%20minor%20mode%20that,included%20in%20GNU%20Emacs%2C%20and%20documented%20as%20winner-mode.][winner-mode]] that allow you to undo changes to
+;; your window configuration.
+(oo-bind 'oo-window-map "u" #'winner-undo :wk "undo")
+
+;;;;; delete a window with =D= or =d=
+;; The letter =d= is both mnemonic for deleting windows and it is easy to press
+;; because its own the home key.
+(oo-bind 'oo-window-map "d" #'delete-window :wk "delete")
+(oo-bind 'oo-window-map "D" #'delete-other-windows :wk "delete others")
+
+;;;;; open a new window with =k=
+;; This binding overlaps with.  My reasoning is you can think of it as opening a
+;; new window.
+(oo-bind 'oo-window-map "k" #'display-buffer :wk "open")
+
+;;;;; bind =TAB= to toggle children in =outshine-mode=
+;; I need a way of folding headings.  This is a quick fix until I can
+;; adapt the headline state I wrote about into a generic outline state.
+(oo-bind 'outshine-mode-map :n "TAB" #'outline-toggle-children)
+
+;;;; set theme to =modus-operandi=
+(oo-add-hook 'after-init-hook #'load-theme :args '(modus-operandi))
+
+(oo-bind 'oo-toggle-map "r" #'read-only-mode)
+(oo-bind 'oo-toggle-map "t" #'load-theme)
+(oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
+
+(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+
+(oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+
+(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
+
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
+
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
+
+;;;; disable old themes before enabling new ones
+;; We end up with remants of the faces of old themes when we load a new
+;; one.  For this reason, I make sure to disable any enabled themes before applying
+;; a new theme.
+
+;; When you load a theme you'll end up with quite a surprise.  And it
+;; stacks as well when working on a big configuration change I didn't
+;; have this code and I could literally backtrack the themes.
+
+;; Don't know why deleting the previous theme before enabling a new
+;; one isn't the default behavior.  When would anyone want to layer
+;; the colors of one theme on top of an older one.
+(defadvice! disable-old-themes (around load-theme)
+  "Disable old themes before loading new ones."
+  (:args orig-fn &rest args)
+  (mapc #'disable-theme custom-enabled-themes)
+  (apply orig-fn args))
+
+;;;; miscellaneous
+(oo-bind :nm "+" #'text-scale-increase)
+(oo-bind :nm "-" #'text-scale-decrease)
+
+(oo-bind 'emacs-lisp-mode-map "e" nil :localleader t :wk "eval")
+(oo-bind 'emacs-lisp-mode-map "eb" #'eval-buffer :localleader t)
+(oo-bind 'emacs-lisp-mode-map "ed" #'eval-defun :localleader t)
+(oo-bind 'emacs-lisp-mode-map "ee" #'eval-expression :localleader t)
+(oo-bind 'emacs-lisp-mode-map "el" #'eval-last-sexp :localleader t)
+(oo-bind 'emacs-lisp-mode-map "ep" #'eval-print-last-sexp :localleader t)
+
+;;;; custom functions
+(defun! oo-set-font-face ()
+  "Apply an existing xfont to all graphical frames."
+  (interactive)
+  (let! font (completing-read "Choose font: " (x-list-fonts "*")))
+  (set-frame-font font nil t))
+
+(defun oo-split-window-right-and-focus ()
+  "Split window right and select the window created with the split."
+  (interactive)
+  (select-window (split-window-right)))
+
+(defun oo-split-window-below-and-focus ()
+  "Split window below and select the window created with the split."
+  (interactive)
+  (select-window (split-window-below)))
+;;;; packages
+;;;;; abbrev
+(oo-add-hook 'text-mode-hook #'abbrev-mode)
+
+(oo-add-hook 'prog-mode-hook #'abbrev-mode)
+
+(set! abbrev-file-name null-device)
+;;;;; ace-window
+;;;;;; swap
+(set! aw-swap-invert t)
+
+;;;;;; set the keys used by ace-window
+(set! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+
+;; **** select a window with =w=, =j= or =o=
+;; There are commands such as.  I do not need these commands.  After moving left,
+;; right, up or down some direction once, the effort needed to traverse a window
+;; using directional window movement commands greatly increases.  The command
+;; [[file:snapshots/_helpful_command__ace-window][ace-window]] in contrast scales really well with a greater number of
+;; windows.  And it only loses slightly to directional window commands when moving
+;; one time.
+
+;; The command [[file:snapshots/_helpful_command__ace-window_.png][ace-window]] leverages [[https://github.com/abo-abo/avy][avy]] to select a window.  It assigns each window
+;; a character (I'm using [[][letters]] close to the homerow) which it displays on
+;; the upper right-hand corner of windows. I've found that
+;; ace-window is the quickest way possible to switch focus form one live window to
+;; another.
+
+;; The mnemonic bind is =w= and the quick bindings--which I will likely use most
+;; often--are =o= and =j=.
+(oo-bind 'oo-window-map "w" #'ace-window :wk "select")
+(oo-bind 'oo-window-map "j" #'ace-window :wk "select")
+(oo-bind 'oo-window-map "o" #'ace-window :wk "select")
+
+;;;;;; swap two windows with =s=
+;; :PROPERTIES:
+;; :ID:       20231012T125502.066095
+;; :END:
+;; Often when I want to switch focus from my main window to one of its
+;; subsidiaries; I will want to swap buffers from the two windows.
+;; Actually, =edwina= does provide functions to do this: namely
+;; [[_helpful_command__edwina-swap-next-window_.png][edwina-swap-next-window]] and [[file:snapshots/_helpful_command__edwina-swap-previous-window_.png][edwina-swap-previous-window]].
+;; But I can do something similar, but much faster with.  This is a case where =s= is
+;; mnemonic and easy to press.
+(oo-bind 'oo-window-map "s" #'ace-swap-window :wk "swap")
+
+;;;;; avy
+(set! avy-style 'pre)
+
+(set! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+
+(set! avy-background t)
+
+(set! avy-timeout-seconds 0.3)
+;;;;; burly
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
+
+;; *** save window configuration with =b= or =S=
+;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
+;; necessary to reproduce the current window configuration.  I can then restore the
+;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+
+;;;;; caps-lock
+(oo-bind 'oo-toggle-map "c" #'caps-lock-mode)
+
+;;;;; captain
+(oo-add-hook 'prog-mode-hook #'captain-mode)
+(oo-add-hook 'text-mode-hook #'captain-mode)
+
+(defhook! auto-capitalize-sentences (text-mode-hook)
+  (setq-local captain-predicate (lambda () t)))
+
+(defhook! auto-capitalize-sentences-in-docstrings-and-comments (prog-mode-hook)
+  (setq-local captain-predicate #'+captain-in-string-or-comment-p)
+  (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
+
+;;;;; consult
+(set! consult-preview-key nil)
+
+(set! consult-fontify-preserve nil)
+
+(defun! oo-display-buffer ()
+  (interactive)
+  (require 'consult)
+  (let! consult--buffer-display #'display-buffer)
+  (call-interactively #'consult-buffer))
+
+(oo-bind :alt #'display-buffer #'oo-display-buffer)
+
+(oo-bind 'oo-find-map "k" #'consult-bookmark :wk "bookmark")
+(oo-bind 'oo-find-map "b" #'consult-bookmark :wk "bookmark")
+
+(oo-bind 'oo-find-map "s" #'consult-line :wk "line")
+(oo-bind 'oo-find-map "l" #'consult-line :wk "line")
+
+(oo-bind 'oo-find-map "h" #'consult-outline :wk "outline")
+(oo-bind 'oo-find-map "h" #'consult-org-heading :wk "heading")
+
+(oo-bind :alt #'switch-to-buffer #'consult-buffer :feature 'consult)
+(oo-bind :alt #'yank-pop #'consult-yank-pop :feature 'consult)
+(oo-bind :alt #'apropos #'consult-apropos :feature 'consult)
+(oo-bind :alt #'man #'consult-man :feature 'consult)
+
+(oo-bind :alt #'switch-to-buffer #'consult-buffer :feature 'consult)
+(oo-bind :alt #'yank-pop #'consult-yank-pop :feature 'consult)
+(oo-bind :alt #'apropos #'consult-apropos :feature 'consult)
+(oo-bind :alt #'man #'consult-man :feature 'consult)
+
+(oo-bind 'oo-miscellany-map "l" #'consult-bookmark)
+;;;;; corfu
+(oo-bind 'corfu-map "<tab>" #'corfu-next)
+(oo-bind 'corfu-map [backtab] #'corfu-previous)
+(oo-bind 'corfu-map "C-;" #'corfu-quick-complete)
+(oo-bind 'corfu-map "C-j" #'corfu-next)
+(oo-bind 'corfu-map "M-k" #'corfu-previous)
+(oo-bind 'corfu-map :ieg "C-k" #'corfu-previous)
+(oo-bind 'corfu-map :ieg "C-p" #'corfu-previous)
+
+(set! corfu-quick1 "abcdefghijklmnopqrstuvxyz")
+
+(oo-add-hook 'corfu-mode #'corfu-history-mode)
+
+(set! corfu-quit-at-boundary nil)
+
+(set! corfu-auto t)
+
+(set! corfu-auto-delay 0.1)
+
+(set! corfu-auto-prefix 1)
+
+(set! corfu-bar-width 0)
+;;;;; dashboard
+(defhook! create-dashboard (oo-initial-buffer-choice-hook)
+  (when (require 'dashboard nil t)
+    (aprog1 (get-buffer-create dashboard-buffer-name)
+      (with-current-buffer it
+        (dashboard-insert-startupify-lists)))))
+
+(defun oo-dashboard-init-info (&rest _)
+  (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
+
+(set! dashboard-init-info #'oo-dashboard-init-info)
+
+(set! dashboard-banner-logo-title "Welcome!")
+
+(set! dashboard-set-footer nil)
+
+(set! dashboard-items nil)
+
+(set! dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
+
+(set! dashboard-center-content t)
+;;;;; denote
+;; The directory where all denote notes lie.
+(set! denote-directory (expand-file-name "~/notes/"))
+;; Denote can accept multiple file types.  In my case I want the file
+;; type to be as generic and flexible as possible, so text.
+(set! denote-file-type 'text)
+;;;;; dired
+(oo-bind 'oo-app-map "d" #'dired)
+;;;;; dirvish
+(oo-bind :alt #'dired #'dirvish)
+
+(oo-call-after-load 'dirvish #'dirvish-override-dired-mode 1)
+
+(set! dirvish-use-mode-line nil)
+
+(set! dirvish-attributes '(file-size all-the-icons subtree-state))
+
+(set! dirvish-default-layout nil)
+;;;;; dogears
+(oo-add-hook 'on-first-input-hook #'dogears-mode)
+
+(after! org
+  (defun oo-org-src-buffer-p () (bound-and-true-p org-src-mode))
+  (adjoining! dogears-ignore-places-functions #'oo-org-src-buffer-p))
+
+(after! savehist (adjoin! savehist-additional-variables 'dogears-list))
+
+(after! dashboard (adjoin! dogears-ignore-modes 'dashboard-mode))
+
+(oo-bind 'oo-leader-map "ll" #'dogears-go)
+;;;;; edwina
+;;;;;; add edwina
+(defun! oo-display-buffer-base-action (&rest args)
+  "Open new window and ensure all windows are arranged as master-slave."
+  (require 'edwina)
+  (aprog1 (with-demoted-errors "Error: %S" (apply #'display-buffer-at-bottom args))
+    (edwina--respective-window it
+                               (edwina-arrange))))
+
+(setq display-buffer-base-action (cons #'oo-display-buffer-base-action nil))
+
+;;;;;; arrange windows in a master-slave style with =a=
+;; I [[https://gitlab.com/ajgrf/edwina][edwina]] to automatically window configurations.  I choose the buffers I
+;; want to display and it opens a window at a predictable location.  It is possible
+;; that through some operation my windows could get out of wack.  It shouldn't
+;; happen accidentally, but most often it will happen after I maximize or minimize
+;; a window.  In that case, I can call =edwina-arrange= to proportion my windows properly.
+(oo-bind 'oo-window-map "a" #'edwina-arrange :wk "arrange")
+;;;;; eshell
+;;;;;; miscellaneous
+(oo-bind 'oo-app-map "e" #'eshell)
+
+(oo-popup-at-bottom "\\*eshell")
+
+;;;;;; specify locations for files
+(setq eshell-directory-name (concat oo-cache-dir "eshell/"))
+
+(set! eshell-history-file-name (concat eshell-directory-name "history"))
+
+;;;;;; don't display a banner message
+(set! eshell-banner-message "")
+
+;;;;;; eshell history
+(set! eshell-hist-ignoredups t)
+
+;;;;;; prevent eshell from printing out messages on load
+;; Eshell prints various messages about loading modules.  These messages
+;; originate from the function [[][eshell-unload-all-modules]].  I would rather
+;; not see these messages.
+(oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
+
+;; At first I thought the culprit was this function, but I was wrong.  The
+;; printing comes from =eshell-mode=.  In any case, however, I silence it as
+;; well.
+(oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
+
+;;;;; evil-easymotion
+;; These functions will trigger the loading of `evil-easymotion' which
+;; will then trigger the loading of =oo-config-evil-easymotion=.
+(autoload #'oo-goto-beginning-of-word "evil-easymotion")
+(autoload #'oo-goto-end-of-word "evil-easymotion")
+(autoload #'oo-goto-char "evil-easymotion")
+
+(oo-bind :nv "w" #'oo-goto-beginning-of-word)
+(oo-bind :nv "e" #'oo-goto-end-of-word)
+(oo-bind :nv "f" #'oo-goto-char)
+
+(set! evilem-style 'at)
+
+(set! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+;;;;; evil
+;;;;;; hooks
+(oo-add-hook 'after-init-hook #'evil-mode :depth 90)
+
+(oo-add-hook 'after-init-hook #'require :args '(evil) :depth 10)
+
+;;;;;; base variables
+
+;;;;;;; don't echo the state 
+;; By default =evil= displays the current state in the echo area.  I think some
+;; indicator for the current state is necessary but I don't want to do it via
+;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
+;; modeline as well.
+(set! evil-echo-state nil)
+
+(set! evil-move-cursor-back nil)
+
+(set! evil-move-beyond-eol nil)
+
+(set! evil-search-wrap nil)
+
+;;;;; evil-cleverparens
+(oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+(oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
+
+;;;;; evil-surround
+(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
+(oo-add-hook 'text-mode-hook #'evil-surround-mode)
+
+;;;;; evil-operator
+(oo-bind :n "gr" #'evil-operator-eval)
+
+;;;;; evil-easymotion
+(autoload #'oo-goto-beginning-of-word "evil-easymotion")
+(autoload #'oo-goto-end-of-word "evil-easymotion")
+(autoload #'oo-goto-char "evil-easymotion")
+
+(oo-bind :nv "w" #'oo-goto-beginning-of-word)
+(oo-bind :nv "e" #'oo-goto-end-of-word)
+(oo-bind :nv "f" #'oo-goto-char)
+
+;;;;; expand-region
+(oo-bind :v "V" #'er/contract-region)
+(oo-bind :v "v" #'er/expand-region)
+;;;;; frame
+(oo-add-hook 'after-init-hook #'oo-set-window-divider-face :depth 11)
+
+;; TODO: The display flickers when setting the initial theme.  Maybe this is
+;; inevitable.  But maybe this has to do with me either disabling the previous
+;; theme first or the order of setting the window-divider, or maybe I can
+;; specify the default theme to load beforehand.  I need to play around with
+;; settings and see if this flickering can be avoided.
+(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
+
+(add-hook 'emacs-startup-hook
+          (lambda (&rest _) (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)))
+
+;; You can either use =right-only= to place window dividers on the right of each
+;; window.  Or =bottom-only= to place them just on the bottom.
+(set! window-divider-default-places t)
+
+;; The default value is 6.
+(set! window-divider-default-right-width 7)
+(set! window-divider-default-bottom-width 7)
+
+;;;;; window divider
+;; The function =oo-set-window-divider-face= was being called like 10 times and
+;; I was unsure why.  Adding the advice to =load-theme= after
+;; =emacs-startup-hook= stopped it from being called so much. I wonder how many
+;; times =load-theme= was being called?
+
+(defun oo-set-window-divider-face (&rest _)
+  "Set the window divider face."
+  (message "set face of window divider to black")
+  (set-face-foreground 'window-divider "black"))
+;;;;; gcmh
+(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+
+(set! gcmh-idle-delay 'auto)
+
+(set! gcmh-high-cons-threshold (* 8 1024 1024))
+
+(set! gcmh-low-cons-threshold (* 4 1024 1024))
+
+;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
+;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
+;; primarily doing searches for variables and functions.  There are alot of
+;; variables and functions so this can certainly get computationally expensive.  To
+;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
+;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
+
+(defhook! boost-garbage-collection (minibuffer-setup-hook)
+  "Boost garbage collection settings to `gcmh-high-cons-threshold"
+  (setq gc-cons-threshold gcmh-high-cons-threshold))
+
+(defhook! defer-garbage-collection (minibuffer-exit-hook :append t)
+  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+  (setq gc-cons-threshold gcmh-low-cons-threshold))
+;;;;; gumshoe
+(oo-bind 'oo-app-map "g" #'gumshoe-peruse-globally)
+
+;; (oo-add-hook 'on-first-input-hook #'global-gumshoe-mode)
+
+;; The time until gumshoe records the position.
+(set! gumshoe-idle-time 30)
+
+;;;;; helpful
+(oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
+(oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
+(oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
+(oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
+
+;;;;; idle-require
+;; (defrecipe! idle-require :fetcher github :repo "nschum/idle-require.el" :ref "33592bb")
+
+(oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
+
+(oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
+
+(set! idle-require-load-break 5)
+
+(set! idle-require-idle-delay 10)
+;;;;; lispy
+(oo-bind :v "E" #'lispy-eval-and-replace)
+
+(oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
+;;;;; lispyville
+(oo-bind :n "g," #'lispyville-comment-or-uncomment)
+(oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
+(oo-bind :n "gl" #'lispyville-comment-and-clone-dwim)
+
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
+
+(oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
+(oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
+
+(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+;;;;; macrostep
+(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
+(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
+(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+
+;;;;; magit
+(oo-popup-at-bottom "magit: ")
+
+(set! magit-completing-read-function #'completing-read)
+(set! magit-diff-refine-hunk t)
+(set! magit-auto-revert-mode t)
+;;;;; mu4e
+(oo-bind 'oo-app-map "m" #'mu4e :wk "mail")
+
+;; https://systemcrafters.net/emacs-mail/streamline-your-email-with-mu4e/
+
+;;;;;; add =mu4e= to =load-path=
+(adjoining! load-path "/usr/share/emacs/site-lisp/mu4e/")
+
+;;;;;; refresh mail using isync every 10 minutes
+;; To be honest I am not sure whether to leave this for a cronjob with
+;; =mcron= or have emacs do it.  By the way, this is incomplete too
+;; because to update mail you need to update the index as well. 
+;; (setq mu4e-update-interval (* 10 60))
+;; (setq mu4e-get-mail-command "mbsync -a")
+;; (setq mu4e-maildir "~/Mail")
+
+;;;;;; Miscellaneous
+;; Avoid mail syncing issues when using mbsync
+(set! mu4e-change-filenames-when-moving t)
+
+;; Specify the directory of mail directory.
+(set! mu4e-maildir (expand-file-name "~/.mail"))
+;;;;; orderless
+(defhook! enable-orderless (vertico-mode-hook :expire t)
+  (when (require 'orderless nil t)
+    (setq completion-styles '(orderless))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides '((file (styles partial-completion))))
+    (alet '(orderless-strict-leading-initialism orderless-initialism orderless-regexp)
+      (set! orderless-matching-styles it))))
+
+;;;;; org
+
+;;;;;; initial line spacing
+(add-hook 'org-mode-hook (lambda () (setq-local line-spacing 4)))
+
+;;;;;; org-src
+(oo-popup-at-bottom "\\*Org Src")
+
+(set! org-edit-src-persistent-message nil)
+
+(adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
+
+(adjoin! org-src-lang-modes '("lua" . lua))
+
+(set! org-src-ask-before-returning-to-edit-buffer nil)
+
+(set! org-src-preserve-indentation t)
+(set! org-edit-src-content-indentation 0)
+
+(set! org-src-window-setup 'plain)
+
+(oo-bind :alt #'org-edit-src-code #'oo-dwim-edit-src-code)
+(oo-bind :h "," #'org-edit-src-code :localleader t)
+;; (oo-bind 'org-mode-map "e" #'org-edit-src-code)
+                                        ;(oo-bind ':h "es" #'org-edit-src-code :wk "source block" :localleader t)
+
+(oo-bind 'org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+(oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+(oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+
+;;;;; org-appear
+(oo-add-hook 'org-mode-hook #'org-appear-mode)
+
+(set! org-appear-autolinks t)
+
+;;;;; org-auto-tangle
+(set! org-auto-tangle-default t)
+
+;;;;; org-superstar
+(oo-add-hook 'org-mode-hook #'org-superstar-mode)
+
+(set! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
+
+(set! org-superstar-leading-bullet ?\s)
+
+(set! org-superstar-special-todo-items t)
+
+;;;;; org-tidy
+(oo-add-hook 'org-mode-hook #'org-tidy-mode)
+
+(set! org-tidy-properties-style 'invisible)
+
+;;;;; org-refile
+(set! org-refile-allow-creating-parent-nodes t)
+
+;; The variable =org-refile-targets= specifies the places from which information is
+;; taken to create the list of possible refile targets.  So, for example,
+(set! org-refile-targets '((oo-directory-files :maxlevel . 10)))
+
+(set! org-outline-path-complete-in-steps nil)
+
+(set! org-refile-use-cache nil)
+
+;; Without this setting, you can't actually refile to a generic file with refiling;
+;; you can only refile to existing headings within that file.  The way I use
+;; refiling, I'm refiling to files most of the time.
+(set! org-refile-use-outline-path 'file)
+
+;; Although it is possible to have a parent headline that also has a source
+;; block, I prefer not to.  I guess it is a stylistic thing.
+(set! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
+
+;;;;; org-capture
+(oo-popup-at-bottom "CAPTURE[^z-a]+")
+
+(oo-bind 'oo-quick-map "j" #'org-capture :wk "capture")
+(oo-bind 'oo-app-map "a" #'org-capture :wk "capture")
+(oo-bind 'oo-app-map "j" #'org-capture :wk "capture")
+
+(set! org-archive-save-context-info nil)
+
+(set! org-archive-location (concat org-directory "archive.org::"))
+
+(oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
+
+;;;;; org-id
+(set! org-id-track-globally t)
+(set! org-id-locations-file (concat oo-cache-dir "org-id-locations"))
+
+;; The way I see it, if I can have a universally unique identifier that also tells
+;; me the date my headline was created; we hit two birds with one stone.  That way I
+;; never need a =date-created= property.
+(set! org-id-method 'ts)
+
+(set! org-id-link-to-org-use-id t)
+;;;;; rainbow-delimiters
+(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
+
+(set! rainbow-delimiters-max-face-count 9)
+;;;;; recentf
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+
+(set! recentf-max-menu-items 0)
+
+(set! recentf-max-saved-items 700)
+
+(set! recentf-save-file (concat oo-cache-dir "recentf"))
+
+(set! recentf-auto-cleanup (* 60 10))
+
+(set! recentf-filename-handlers '(file-truename))
+
+(oo-add-hook 'kill-emacs-hook #'recentf-save-list)
+
+(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
+
+(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
+(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
+
+;; TODO: Add back =adjoin!= if I removed it.
+(adjoin! recentf-filename-handlers #'abbreviate-file-name)
+
+(adjoin! recentf-filename-handlers #'substring-no-properties)
+;;;;; redacted
+(oo-bind 'oo-toggle-map "r" #'redacted-mode)
+;;;;; savehist
+(oo-add-hook 'on-first-input-hook #'savehist-mode)
+
+(set! savehist-save-minibuffer-history t)
+(set! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+(set! savehist-autosave-interval (* 60 5))
+(set! savehist-file (concat oo-cache-dir "savehist"))
+
+(adjoin! savehist-additional-variables 'register-alist)
+
+(defadvice! remove-properties-from-kill-ring (before savehist-save)
+  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+;;;;; saveplace
+(oo-add-hook 'on-first-file-hook #'save-place-mode)
+
+(set! save-place-file (concat oo-cache-dir "saveplace"))
+(set! save-place-limit nil)
+;;;;; smartparens
+(set! sp-highlight-wrap-tag-overlay nil)
+
+(set! sp-highlight-pair-overlay nil)
+
+(set! sp-highlight-wrap-overlay nil)
+
+(set! sp-show-pair-delay 0.2)
+
+(defhook! enable-smartparens-maybe (minibuffer-setup-hook)
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
+
+(oo-add-hook 'text-mode-hook 'smartparens-mode)
+
+(oo-add-hook 'prog-mode-hook #'smartparens-mode)
+
+(oo-bind 'oo-toggle-map "s" #'smartparens-mode)
+;;;;; spacemacs-theme
+(set! spacemacs-theme-comment-bg nil)
+;;;;; super-save
+(oo-add-hook 'on-first-file-hook #'super-save-mode)
+
+;; The default auto-saving feature in emacs saves after a certain number of
+;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
+;; the middle of typing and you've just hit the number of characters that trigger a
+;; save, you could experience a lag, particularly if you are dealing with a large
+;; file being saved.  Instead of doing this, [[https://github.com/bbatsov/super-save][super-save]] saves buffers during idle
+;; time and after certain commands like [[helpfn:switch-to-buffer][switch-to-buffer]] (see [[helpvar:super-save-triggers][super-save-triggers]]).
+;; Note that this is the same strategy employed by [[id:c550f82a-9608-47e6-972b-eca460015e3c][idle-require]] to load packages.
+;; Saving files like this reduces the likelihood of user delays.
+(set! super-save-auto-save-when-idle t)
+(set! super-save-idle-duration 5)
+;;;;; tempel
+(oo-bind 'tempel-map :ie "C-j" #'tempel-next)
+(oo-bind 'tempel-map :ie "C-k" #'tempel-previous)
+(oo-bind 'tempel-map :ie "TAB" #'tempel-next)
+(oo-bind 'tempel-map :ie [backtab] #'tempel-previous)
+;;;;; transient
+(set! transient-levels-file (concat oo-cache-dir "transient/levels"))
+(set! transient-values-file (concat oo-cache-dir "transient/values"))
+(set! transient-history-file (concat oo-cache-dir "transient/history"))
+;;;;; vertico
+(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
+(oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
+
+(oo-add-hook 'emacs-startup-hook #'vertico-mode)
+
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
+
+(set! vertico-quick1 "asdf")
+(set! vertico-quick2 "jkl;")
+
+(set! vertico-count-format '("%-6s " . "%2$s"))
+(set! vertico-count 15)
+
+(oo-popup-at-bottom "\\*Vertico")
+
+(oo-bind 'vertico-map :i "TAB" #'vertico-next)
+(oo-bind 'vertico-map :i "C-k" #'vertico-previous)
+(oo-bind 'vertico-map :i "C-j" #'vertico-next)
+(oo-bind 'vertico-map :i ";" #'vertico-quick-exit)
+(oo-bind 'vertico-map :i "C-;" #'vertico-quick-exit)
+(oo-bind 'vertico-map :i [backtab] #'vertico-previous)
+
+(oo-bind 'vertico-map :i "C-o" #'embark-act)
+(oo-bind 'vertico-map :i "C-o" #'embark-collect)
+(oo-bind 'vertico-map :n "C-o" #'embark-collect)
+;;;;; wallpaper
+(oo-bind 'oo-toggle-map "w" #'wallpaper-set-wallpaper)
+
+(set! wallpaper-cycle-interval (* 5 60))
+
+(set! wallpaper-cycle-directory (expand-file-name "~/dotfiles/wallpapers"))
+
+
+;;;;; which-key
+(oo-add-hook 'emacs-startup-hook #'which-key-mode)
+
+(set! which-key-sort-uppercase-first nil)
+(set! which-key-max-display-columns nil)
+(set! which-key-add-column-padding 1)
+(set! which-key-min-display-lines 1)
+(set! which-key-side-window-slot -10)
+(set! which-key-sort-order #'which-key-prefix-then-key-order)
+(set! which-key-popup-type 'side-window)
+(set! which-key-idle-delay 0.8)
+;; (set! line-spacing 3 :hook which-key-init-buffer-hook :local t)
+
+(set! which-key-show-transient-maps t)
+(set! which-key-show-operator-state-maps t)
+
+(set! which-key-show-prefix 'top)
