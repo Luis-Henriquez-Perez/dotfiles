@@ -1,24 +1,24 @@
 #!/bin/sh
 
-# * xprofile
+## xprofile
 # The =xprofile= is that is conventially used to execute commands at the start of
 # the xsession before the window manager is loaded.  I should mention this is not
 # a crazy hardset rule.  I could execute these commands in [[][]] or [[][]].
 # The system's xprofile [[/etc/xprofile]]
 
-# ** remap caps-lock with escape
+### remap caps-lock with escape
 # I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
 # the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
 # that escape is used often to get out of states.
 setxkbmap -option caps:escape
 
-# ** start the picom daemon
+### start the picom daemon
 # The compositor.  See [[][the config]].
 picom &
 
-# ** start dunst
+### start dunst
 # For notifications...
 # dunst &
 
-# ** set the wallpaper
+### set the wallpaper
 # Im not sure whether to do this here or not.
