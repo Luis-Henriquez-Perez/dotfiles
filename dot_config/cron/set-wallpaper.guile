@@ -1,0 +1,2 @@
+;; Change my wallpaper every 15 minutes.
+(job '(next-minute (range 0 60 15)) "feh")

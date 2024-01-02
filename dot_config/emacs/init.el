@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 ;;; initialization
 ;; This file starts up everything else.
 ;;;; set initial variables
@@ -74,8 +76,247 @@ HOOK-OR-ADVICE.")
 ;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
 
-;;;; load base settings
-(require 'oo-base-settings)
+;;;; settings
+;; Here lies a collection of built-in settings that I want to take effect
+;; immediately.  Many of them have to do with disabling default Emacs behaviors
+;; that I don't like. I specifically place them at the forefront of my configuration
+;; to ensure that they will always be evaluated regardless of what unexpected error
+;; should occur afterwards.
+
+;;;;; stop creating =auto-save-list= directory
+;; :PROPERTIES:
+;; :ID:       20230827T140209.010138
+;; :END:
+;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
+(setq auto-save-list-file-prefix nil)
+;;;;; use =yes-or-no-p= instead of =y-or-n-p=
+;; :PROPERTIES:
+;; :ID:       82a84315-2018-42e0-bd1a-74af7b722593
+;; :END:
+;; Essentially, I am telling all Emacs functions that prompt the user for a =yes=
+;; or =no= to instead allow me to type =y= or =p=.  [[helpfn:yes-or-no-p][yes-or-no-p]] is defined in c
+;; source code.
+(advice-add #'yes-or-no-p :override #'y-or-n-p)
+;;;;; don't create lockfiles
+;; :PROPERTIES:
+;; :ID:       20230825T124046.455636
+;; :END:
+(setq create-lockfiles nil)
+;;;;; don't flash unstyled modeline at startup
+;; :PROPERTIES:
+;; :ID:       20230731T181236.344398
+;; :END:
+;; When emacs starts up, the default modeline will show up.  Rendering this default
+;; modeline at startup does slightly slow down emacs (insignificant on it's own but
+;; these things add up).  So I disable it.
+(setq-default mode-line-format nil)
+;;;;; don't ask me whether I want to kill a buffer with a live process
+;; :PROPERTIES:
+;; :ID:       20230807T002031.281189
+;; :END:
+;; I got this from [[https://www.masteringemacs.org/article/disabling-prompts-emacs][this-post]].  Every time you try to kill a buffer with a live
+;; process, Emacs will ask you if you're sure you want to kill it.
+(setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
+;;;;; don't pass case-insensitive to =auto-mode-alist=
+;; :PROPERTIES:
+;; :ID:       20230731T183648.053172
+;; :END:
+;; This is taken from =centaur-emacs=.  By default [[file:snapshots/*helpful variable: auto-mode-case-fold*.png][auto-mode-case-fold]] is
+;; non-nil; when enabled the auto-mode-alist is traversed twice.  This double
+;; traversal can be expensive and it seems unnecessary.
+(setq auto-mode-case-fold nil)
+;;;;; don't suggest keybindings or the like for me
+;; :PROPERTIES:
+;; :ID:       20230807T002419.333469
+;; :END:
+;; See [[https://stackoverflow.com/questions/19781529/how-to-disable-emacs-messages-like-you-can-run-the-command-x-with-y][this stackoverflow post]].  After invoking [[file:snapshots/*helpful command: execute-extended-command*.png][execute-extended-command]] on a
+;; command that has an existing keybinding, or something that could be abbreviated,
+;; emacs will suggest a shorter way.
+(setq suggest-key-bindings nil)
+;;;;; stop asking me whether I want to enable file local variables
+;; :PROPERTIES:
+;; :ID:       20230806T164746.702869
+;; :END:
+;; When installing packages with =quelpa=, I was prompted whether I wanted to apply
+;; file local variables.  I'm guessing =straight.el= and =elpaca= disable this.
+;; The value safe tells Emacs to only apply the "safe" local variables.  I'm
+;; assuming this means ones like "mode" which tell Emacs to open the buffer at a
+;; certain major mode.  At first I had this set to nil, but I wanted to open
+;; [[][]] in =common-lisp-mode= and I realized Emacs wasn't doing it because I
+;; told it not to with this variable.
+(setq enable-local-variables :safe)
+;;;;; don't ask me for permission to enable a theme
+;; :PROPERTIES:
+;; :ID:       20230731T162020.231251
+;; :END:
+;; By default Emacs will ask you whether you are sure you want to enable a theme
+;; as a precaution because a theme could contain malicious code.  Downloading
+;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
+;; from wierd places online and evaluating them.  So I don't need.
+(setq custom-safe-themes t)
+;;;;; don't create a custom file
+;; :PROPERTIES:
+;; :ID:       20230731T162013.703695
+;; :END:
+;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
+;; interface is intended for people that don't know elisp.  For me it's completely
+;; unnecessary.  Every variable I customize is in my emacs configuration.
+(setq custom-file null-device)
+;;;;; don't disable any commands
+;; :PROPERTIES:
+;; :ID:       20230731T162007.289836
+;; :END:
+;; If non-nil certain commands such as narrowing are disabled.  The idea is that
+;; a new user would think that emacs deleted the contents of their file if they
+;; accidentally narrowed the buffer.  I am experienced enough so that I don't
+;; Need this.
+(setq disabled-command-function nil)
+;;;;; disable cursor blinking
+;; :PROPERTIES:
+;; :ID:       20230731T161959.758192
+;; :END:
+;; By default the cursor blinks.  The point is so that it is easier to find on the
+;; screen.  Usually, however, I have no trouble finding it so I disable it.
+(blink-cursor-mode -1)
+;;;;; move files to trash instead of deleting them
+;; :PROPERTIES:
+;; :ID:       20230731T162509.072098
+;; :END:
+;; By default Emacs actually deletes files.  By setting this to t, you tell Emacs
+;; to move a file to trash instead of actually deleting it.  This is better because
+;; if you accidentally delete a file or discover you can still just go get your
+;; file from the trash.
+(setq delete-by-moving-to-trash t)
+;;;;; enable recursive minibuffer
+;; :PROPERTIES:
+;; :ID:       20230731T174221.389416
+;; :END:
+;; With this enabled, I can invoke the minibuffer while still being in the
+;; minibuffer.  At the very least this is useful so that I can inspect which keys
+;; are bound in the minibuffer.
+(setq enable-recursive-minibuffers t)
+;;;;; recenter point if it goes 20 lines past what is visible
+;; :PROPERTIES:
+;; :ID:       20230731T204800.923611
+;; :END:
+;; Note that the following comment is taken from noctuid's config: "Recenter the
+;; point if it goes greater than 20 lines past what is visible the default, 0, is
+;; kind of annoying because it recenters even if you just go one line down from
+;; the window bottom, but a higher value is nice to automatically recenter after
+;; any bigger jump."
+(setq scroll-conservatively 20)
+;;;;; don't show the startup screen
+;; :PROPERTIES:
+;; :ID:       20230731T205458.499736
+;; :END:
+;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
+;; think these variables are all aliases for eachother.
+(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
+;;;;; skip fontification functions when there's input pending
+;; :PROPERTIES:
+;; :ID:       20230803T163524.316856
+;; :END:
+(setq redisplay-skip-fontification-on-input t)
+;;;;; don't update things on the screen as frequently
+;; :PROPERTIES:
+;; :ID:       20230801T055728.697987
+;; :END:
+;; This variable is.
+;; https://github.com/hlissner/doom-emacs/blob/01aadd8900be45f912124d9d815d8790f540d38c/core/core.el#L177
+(setq idle-update-delay 1)
+;;;;; don't make backups
+;; :PROPERTIES:
+;; :ID:       20230812T062001.541694
+;; :END:
+(setq make-backup-files nil)
+;;;;; backup files to trash
+;; :PROPERTIES:
+;; :ID:       20230812T062140.061699
+;; :END:
+(setq backup-directory-alist '((".*" . "~/.Trash")))
+;;;;; diable auto-save-mode
+;; :PROPERTIES:
+;; :ID:       20230812T062512.579521
+;; :END:
+(setq auto-save-default nil)
+(auto-save-mode -1)
+;;;;; don't echo keystrokes
+;; :PROPERTIES:
+;; :ID:       20230731T205343.423280
+;; :END:
+;; By default emacs shows.
+(setq echo-keystrokes 0)
+;;;;; ensure there's always a newline at the end of files
+;; :PROPERTIES:
+;; :ID:       20230731T162322.281287
+;; :END:
+;; Several linux programs require a newline at the end of a file, such as
+;; chrontab--this is more or less what noctuid said and I'll take his word for
+;; it.
+(setq require-final-newline t)
+;;;;; set the tab-width to =4=; it's =8= by default
+;; :PROPERTIES:
+;; :ID:       20230803T154240.186291
+;; :END:
+(setq-default tab-width 4)
+;;;;; set the initial major mode to =fundamental-mode=
+;; :PROPERTIES:
+;; :ID:       20230803T154745.494981
+;; :END:
+;; This improve startup time because packages enabled for emacs-lisp-mode are not
+;; loaded immediately.
+(setq initial-major-mode 'fundamental-mode)
+;;;;; don't display message advertising gnu system
+;; :PROPERTIES:
+;; :ID:       20230807T000924.633977
+;; :END:
+;; They made the process of disabling this more difficult.
+(advice-add #'display-startup-echo-area-message :around #'ignore)
+;;;;; disable initial scratch message
+;; :PROPERTIES:
+;; :ID:       20230807T000558.580301
+;; :END:
+;; Don't display any documentation--or any message at all--in the =*scratch*=
+;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
+(setq initial-scratch-message nil)
+;;;;; don't add indent
+;; :PROPERTIES:
+;; :ID:       20230803T154112.206542
+;; :END:
+(setq-default indent-tabs-mode nil)
+;;;;; don't beep
+;; :PROPERTIES:
+;; :ID:       20230731T162326.479823
+;; :END:
+;; This variable controls whether emacs makes a sound when certain events happen
+;; such as invoking a binding that doesn't have anything bound to it or trying
+;; to exceed the end of the buffer--things like that.  Personally, I don't want
+;; such beeping.  Setting this variable to nil still result in beeping, emacs
+;; just uses its default function.  Instead, to be disabled it must
+;; be set to [[file:snapshots/helpful-command:ignore.png][ignore]].
+(setq ring-bell-function #'ignore)
+;;;;; disable repeated error message functions
+;; When you try to move past the beginning and end of a buffer Emacs produces
+;; error messages.
+;; [[https://emacs.stackexchange.com/questions/10932/how-do-you-disable-the-buffer-end-beginning-warnings-in-the-minibuffer][disable warnings]]
+(defun oo-command-error-function (data context caller)
+  "Ignore the buffer-read-only, beginning-of-buffer,
+end-of-buffer signals; pass the rest to the default handler."
+  (unless (memq (car data) '(buffer-read-only beginning-of-buffer end-of-buffer))
+    (command-error-default-function data context caller)))
+
+(setq command-error-function #'oo-command-error-function)
+
+;; designate the location of the trash directory
+;; I accidentally sent files to the trash and I could not find them in my trash
+;; directory.  I was confused because I knew that the variable
+;; [[file:_helpful_variable__delete-by-moving-to-trash_.png][delete-by-moving-to-trash]] was non-nil and I even verified this to be the case
+;; with [[file:_helpful_function__helpful-variable_.png][helpful-variable]].  After reading the documentation of [[][]] I realized
+;; that emacs uses the [[][]].  To be honest I had no idea what this actually was
+;; but I extracted what looked like the location, [[][]].
+(setq trash-directory (expand-file-name "~/Trash"))
 
 ;;;; install packages
 ;; The million dollar question is: how should installing packages work?  For me
@@ -86,14 +327,1456 @@ HOOK-OR-ADVICE.")
 ;; For now I am just trying to migrate from an org configuration to a pure elisp
 ;; one so =oo-base-packages= just sets up elpaca and uses it to install my
 ;; packages.
-(require 'oo-base-packages)
 
-;;;; load library
+;; I want to follow [[https://github.com/nilcons/emacs-use-package-fast][this example]] for making emacs fast.
+(require 'cl-lib)
+;;;;; bootstrap elpaca
+;; :PROPERTIES:
+;; :ID:       20230731T162355.242276
+;; :END:
+;; [[Elpaca]] is a new package manager.  It installs packages asynchronously.
+;; This is the boostrap code provided by [[][]] with a few modifications.  First I
+;; specify the exact commit for elpaca so I can achieve my [[][aforementioned goal]].
+(defvar elpaca-installer-version 0.5)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order `(elpaca
+	                      :repo "https://github.com/progfolio/elpaca.git"
+	                      :ref "9478158"
+	                      :files (:defaults (:exclude "extensions"))
+	                      :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+	    (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+		         ((zerop (call-process "git" nil buffer t "clone"
+				                       (plist-get order :repo) repo)))
+		         ((zerop (call-process "git" nil buffer t "checkout"
+				                       (plist-get order :ref))))
+		         (emacs (concat invocation-directory invocation-name))
+		         ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+				                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+		         ((require 'elpaca))
+		         ((elpaca-generate-autoloads "elpaca" repo)))
+	        (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+	      (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+;;;;;;;; prefer depth 1
+(defun oo-prefer-depth-1 (_) '(:depth 1))
+(add-hook 'elpaca-order-functions #'oo-prefer-depth-1)
+;;;;;;;; specify branch in recipes to avoid detached headless state
+;; :PROPERTIES:
+;; :ID:       20230803T093840.386805
+;; :END:
+;; If you don't specify the branch in recipes, you end up in a detached headless
+;; state.  The package will be at the proper commit but if you try to update it it
+;; will fail because it will tell you that you're not on a branch.
+;;;;;;;; recipes
+;; :PROPERTIES:
+;; :ID:       20230914T171534.475976
+;; :END:
+;;;;;;;;; elpaca
+;;;;;;;;; edwina
+;; :PROPERTIES:
+;; :ID:       20231010T195639.822840
+;; :END:
+;; There are [[several]] emacs packages that save and restore window configuration. But
+;; before being able to save and restore window configurations you need to create a
+;; window configuration and that process can be repetitive and tedious. This
+;; package actually automates the building of a window configuration from one
+;; window.  This package provides tools to configure =display-buffer= so that when
+;; called I can open a buffer in a [[file:screenshots/edwina-usage.png][master-slave layout]] (see [[file:screenshots/edwina-usage.png][edwina's usage]]).
+(elpaca (edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master"))
+;;;;;;;;; htmlize
+;; :PROPERTIES:
+;; :ID:       20231009T093234.539078
+;; :END:
+;; This package converts emacs buffers to html.  I use it in combination with the
+;; command-line utility [[][wkhtmltoimage]] to take [[id:20230802T153110.062543][snapshots]] of emacs buffers.
+;; There is a similar built-in emacs package [[][html-fontify]] that I have tried
+;; to use, but I encountered [[][an error]].
+(elpaca (htmlize :fetcher github :repo "hniksic/emacs-htmlize" :ref "dd27bc3" :branch "master"))
+;;;;;;;;; org-appear
+;; :PROPERTIES:
+;; :ID:       20230919T095126.299286
+;; :END:
+;; This package allows for the editing of org emphasis markers and links in a
+;; "do-what-I-mean" type way.  Typically when I edit an org link or markup I have
+;; to manually toggle [[][]] and then edit it. That's because I tell org mode to
+;; display links and emphasis markers in a "prettified" way.  Although it's more
+;; pleasant to the eye to see emphasis markers this way; it is harder to edit
+;; them.  So what will end up happening is I toggle.  What this package does is
+;; make it so if your cursor is on the emphasis marker or link, it's visibility
+;; automatically toggled.
+(elpaca (org-appear :fetcher github :repo "awth13/org-appear" :ref "eb9f9db" :branch "master"))
+;;;;;;;;; outshine
+;; :PROPERTIES:
+;; :ID:       20230914T155737.045932
+;; :END:
+;; Outshine is an Emacs package that allows for the use of org mode in non org
+
+;; features.  It promises a kind of "have your cake and eat it too" type thing
+;; where you can utilize the features of org mode--which include markup support,
+;; link support, headline refiling, etc--while not paying the price of needing
+;; an initial tangling script.
+(elpaca (outshine :fetcher github :repo "alphapapa/outshine" :ref "bf1eed1"))
+;;;;;;;;; outorg
+;; :PROPERTIES:
+;; :ID:       20230914T155733.094553
+;; :END:
+;; Outshine depends on the package Outorg.  Outorg is what outshine uses to
+;; convert back and forth between a file with outshine syntax and an org file.
+(elpaca (outorg :fetcher github :repo "alphapapa/outorg" :ref "ef0f86f"))
+;;;;;;;;; navi-mode
+;; :PROPERTIES:
+;; :ID:       20230914T155730.004610
+;; :END:
+;; This package is a dependency of `outorg'.  It has to do with providing
+;; navigation commands for `outshine'.
+(elpaca (navi-mode :fetcher github :repo "alphapapa/navi" :ref "cf97e1e"))
+;;;;;;;;; orglink
+;; This package lets me display org links in non org buffer.  In practice I use
+;; this for buffers with outshine enabled.
+(elpaca (orglink :fetcher github :repo "tarsius/orglink" :ref "afbeffd"))
+;;;;;;;;; chezmoi
+;; :PROPERTIES:
+;; :ID:       20230914T155724.680294
+;; :END:
+;; This package provides some functions to interface with =chezmoi=, a dotfile
+;; manager.  At first--and even still to be honest I wanted to use Org as a
+;; dotfile manager; but org although having some useful dotfile management tools
+;; (such as tangling) is not designed to be a dotfile manager.  Whereas,
+;; =chezmoi= was actually designed to solve many dotfile problems.  In the
+;; future, I'd like to scrap =chezmoi= and use a dotfile manager written in
+;; Elisp; preferably with the optional of optionally using org mode tools for
+;; dotfile management.
+(elpaca (chezmoi :fetcher github :repo "tuh8888/chezmoi.el" :ref "1389782"))
+;;;;;;;;; lua-mode
+;; :PROPERTIES:
+;; :ID:       20230914T171004.330624
+;; :END:
+;; Emacs doesn't have a mode for lua built-in--not to say that's a bad
+;; thing.  This package provides such a mode.
+(elpaca (lua-mode :fetcher github :repo "immerrr/lua-mode" :ref "7eb8eaa"))
+;;;;;;;;; org-bookmark-heading
+;; :PROPERTIES:
+;; :ID:       20230906T111914.254820
+;; :END:
+;; This package provides bookmark functions catered specifically for org files.
+
+;; =point= as well as surrounding text that can be searched for in text files.
+;; Obviously, this is not perfect but because a bookmark may easily become
+;; Broken when you edit the region.  With org you can do better because each
+;; Headline has a unique ID.  This package provides the function for storing the
+;; information necessary and it provides the function to jump to that ID.
+(elpaca (org-bookmark-heading :fetcher github :repo "alphapapa/org-bookmark-heading" :ref "4e97fab"))
+;;;;;;;;; cape
+;; :PROPERTIES:
+;; :ID:       20230906T105029.007786
+;; :END:
+;; This package provides several =capfs= and utility functions for working with
+;; =capfs=.  By the way =capfs= stands for a [[][completion at point function]].
+;; I am particular interested in a function it provides to merge =capfs=.
+(elpaca (cape :repo "minad/cape" :branch "main" :fetcher github :ref "4645762"))
+;;;;;;;;; filladapt
+;; :PROPERTIES:
+;; :ID:       20230905T210004.690956
+;; :END:
+(elpaca (filladapt :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/filladapt" :ref "802c194"))
+;;;;;;;;; burly
+;; :PROPERTIES:
+;; :ID:       20230905T205622.304023
+;; :END:
+;; Burly provides functions that can save a window configuration via bookmarks.
+;; There are a plethora of packages out there provide ways to manage window
+;; configurations; to name a few: [[about:blank][eyebrowse]], [[https://github.com/knu/elscreen][persp-mode]], [[https://github.com/knu/elscreen][elscreen]], [[https://elpa.gnu.org/packages/wconf.html][wconf]].  What
+;; makes Burly different is that instead of making its own abstraction for
+;; window configuration saving, it uses bookmarks which already have existing
+;; support in Emacs.
+(elpaca (burly :fetcher github :repo "alphapapa/burly.el" :branch "master" :ref "f570fa8"))
+;;;;;;;;; dogears
+;; :PROPERTIES:
+;; :ID:       20230827T190849.871899
+;; :END:
+(elpaca (dogears :fetcher github :repo "alphapapa/dogears.el" :files (:defaults (:exclude "helm-dogears.el"))))
+;;;;;;;;; captain
+;; :PROPERTIES:
+;; :ID:       20230824T145027.998151
+;; :END:
+;; This package provides me with auto-capitalization.  It checks each word as I
+;; type and after I finish typing that word it checks whether or not it should
+;; be capitalized.
+(elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :local-repo "captain" :branch "externals/captain" :ref "364ee98"))
+;;;;;;;;; lambda-themes
+;; :PROPERTIES:
+;; :ID:       20230807T140023.427948
+;; :END:
+;; These are some beautiful and elegant themes.  They are on the minimal side, but I
+;; like that very much.
+(elpaca (lambda-themes :repo "Lambda-Emacs/lambda-themes" :branch "main" :fetcher github :ref "7342250"))
+;;;;;;;;; consult
+;; :PROPERTIES:
+;; :ID:       20230116T114841.931887
+;; :END:
+(elpaca (consult :repo "minad/consult" :fetcher github :branch "main" :ref "fae9b50"))
+;;;;;;;;; textsize
+;; :PROPERTIES:
+;; :ID:       20230116T081738.677037
+;; :END:
+(elpaca (textsize :repo "WJCFerguson/textsize" :fetcher github :branch "master" :ref "df91392"))
+;;;;;;;;; on.el
+;; :PROPERTIES:
+;; :ID:       20230114T155809.027252
+;; :END:
+;; This package provides hooks inspired by [[][Doom Emacs]].  Generally, the main
+;; idea behind the hooks these package offers is to provide ways to improve
+;; performance usually by spreading out the loading of features.  The hooks it
+;; provides are [[][]].
+(elpaca (on :host github :repo "ajgrf/on.el" :branch "master" :ref "3cf623e"))
+;;;;;;;;; ligature
+;; :PROPERTIES:
+;; :ID:       20230116T082105.773563
+;; :END:
+(elpaca (ligature :fetcher github :repo "mickeynp/ligature.el" :ref "3d14604"))
+;;;;;;;;; org
+;; :PROPERTIES:
+;; :ID:       20221224T154312.085877
+;; :END:
+(elpaca (org :local-repo "org" :repo "https://git.savannah.gnu.org/git/emacs/org-mode.git" :ref "f731d45"))
+;;;;;;;;; refine
+;; :PROPERTIES:
+;; :ID:       20221212T072440.158706
+;; :END:
+(elpaca (refine :repo "Wilfred/refine" :fetcher github :ref "d72fa50"))
+;;;;;;;;; ace-window
+;; :PROPERTIES:
+;; :ID:       a9af3603-79f9-4ab9-b8b0-cd62da54a0b6
+;; :END:
+(elpaca (ace-window :repo "abo-abo/ace-window" :fetcher github :ref "c7cb315"))
+;;;;;;;;; aggressive-fill-paragraph
+;; :PROPERTIES:
+;; :ID:       88530387-52a0-42d1-abdd-d5cfc24a8bf4
+;; :END:
+(elpaca (aggressive-fill-paragraph :fetcher github :repo "davidshepherd7/aggressive-fill-paragraph-mode" :ref "4a620e6"))
+;;;;;;;;; aggressive-indent
+;; :PROPERTIES:
+;; :ID:       e4e48016-f267-44d3-9056-3df03df40870
+;; :END:
+(elpaca (aggressive-indent :repo "Malabarba/aggressive-indent-mode" :fetcher github :ref "b0ec004"))
+;;;;;;;;; all-the-icons
+;; :PROPERTIES:
+;; :ID:       23f25241-7033-4ea2-b741-d757fcf0b2ca
+;; :END:
+(elpaca (all-the-icons :repo "domtronn/all-the-icons.el" :fetcher github :ref "be99987"))
+;;;;;;;;; all-the-icons-completion
+;; :PROPERTIES:
+;; :ID:       907942ab-cbdf-4ab4-a8ed-94c9c9fdcd29
+;; :END:
+(elpaca (all-the-icons-completion :repo "iyefrat/all-the-icons-completion" :fetcher github :ref "286e2c0"))
+;;;;;;;;; anaphora
+;; :PROPERTIES:
+;; :ID:       73f2264a-70cf-4bbc-8bae-31cb1f7bd1b9
+;; :END:
+;; This package provides me with common [[https://en.wikipedia.org/wiki/Anaphoric_macro][anaphoric macros]].
+(elpaca (anaphora :repo "rolandwalker/anaphora" :fetcher github :ref "3b2da3f"))
+;;;;;;;;; async
+;; :PROPERTIES:
+;; :ID:       7854e9f7-ca80-406b-be93-94f3af724ab3
+;; :END:
+(elpaca (async :repo "jwiegley/emacs-async" :fetcher github :ref "9a8cd0c"))
+;;;;;;;;; auth-source-pass
+;; :PROPERTIES:
+;; :ID:       17b178c3-c82a-4e8b-b458-0696fe37b3df
+;; :END:
+(elpaca (auth-source-pass :fetcher github :repo "DamienCassou/auth-source-pass" :ref "aa7f171"))
+;;;;;;;;; auto-capitalize
+;; :PROPERTIES:
+;; :ID:       fdaa28dd-86a3-4abc-8cbc-b13f96b8a777
+;; :END:
+(elpaca (auto-capitalize :fetcher github :repo "emacsmirror/auto-capitalize" :ref "0ee14c7"))
+;;;;;;;;; avy
+;; :PROPERTIES:
+;; :ID:       29b9606d-3f2b-484d-aadf-0875322bc66e
+;; :END:
+(elpaca (avy :repo "abo-abo/avy" :fetcher github :ref "e92cb37"))
+;;;;;;;;; buffer-expose
+;; :PROPERTIES:
+;; :ID:       9a11dbe2-9e07-4c21-a21b-79f9df389025
+;; :END:
+(elpaca (buffer-expose :host github :repo "clemera/buffer-expose" :fetcher github :ref "c4a1c74"))
+;;;;;;;;; centered-cursor-mode
+;; :PROPERTIES:
+;; :ID:       0b8bac4e-d720-439d-aec7-5281a7e6682e
+;; :END:
+(elpaca (centered-cursor-mode :fetcher github :repo "andre-r/centered-cursor-mode.el" :ref "ebaeb80"))
+;;;;;;;;; centered-window
+;; :PROPERTIES:
+;; :ID:       40410cd5-fb58-4b71-9d4e-5f9b3a736653
+;; :END:
+(elpaca (centered-window :fetcher github :repo "anler/centered-window-mode" :old-names (centered-window-mode) :ref "80965f6"))
+;;;;;;;;; corfu
+;; :PROPERTIES:
+;; :ID:       601cf820-6f77-44f4-958e-27345f685b70
+;; :END:
+(elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref "a59c41d"
+               :files (:defaults "extensions/corfu-history.el" "extensions/corfu-quick.el")))
+;;;;;;;;; counsel
+;; :PROPERTIES:
+;; :ID:       f37029eb-006f-469b-b4c4-385b432c06b8
+;; :END:
+(elpaca (counsel :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+;;;;;;;;; dash
+;; :PROPERTIES:
+;; :ID:       27b6c230-6d77-47ab-90ce-a8862fd23a39
+;; :END:
+(elpaca (dash :fetcher github :repo "magnars/dash.el" :ref "7a9c937"))
+;;;;;;;;; dash-functional
+;; :PROPERTIES:
+;; :ID:       3b851884-f0d9-46d7-ba7b-fa9c756ffdce
+;; :END:
+(elpaca (dash-functional :fetcher github :repo "magnars/dash.el" :ref "7a9c937"))
+;;;;;;;;; dashboard
+;; :PROPERTIES:
+;; :ID:       824bb6a2-c482-443f-a1c3-7eb5e0f644c1
+;; :END:
+(elpaca (dashboard :fetcher github :repo "emacs-dashboard/emacs-dashboard" :ref "36c8da4"))
+;;;;;;;;; decide
+;; :PROPERTIES:
+;; :ID:       e5b5b2a7-619a-4394-bb00-9dbcbe4f8327
+;; :END:
+(elpaca (decide :fetcher github :repo "lifelike/decide-mode" :ref "668fa55"))
+;;;;;;;;; default-text-scale
+;; :PROPERTIES:
+;; :ID:       bdde6aeb-c624-4a40-bfbd-9ffc8748413f
+;; :END:
+(elpaca (default-text-scale :fetcher github :repo "purcell/default-text-scale" :ref "bfc0987"))
+;;;;;;;;; dirvish
+;; :PROPERTIES:
+;; :ID:       ed269614-a449-46e3-b534-7c680c15c5a6
+;; :END:
+(elpaca (dirvish :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+;;;;;;;;; dirvish-collapse
+;; :PROPERTIES:
+;; :ID:       7b3fa568-c770-4e22-9a52-4983ba12754f
+;; :END:
+(elpaca (dirvish-collapse :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+;;;;;;;;; dirvish-icons
+;; :PROPERTIES:
+;; :ID:       de14b784-b5f9-4695-8a4b-e8868d9d3c6e
+;; :END:
+(elpaca (dirvish-icons :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+;;;;;;;;; dirvish-media
+;; :PROPERTIES:
+;; :ID:       de8e897a-8606-4796-a1bd-e85e854fcf66
+;; :END:
+(elpaca (dirvish-media :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+;;;;;;;;; dirvish-subtree
+;; :PROPERTIES:
+;; :ID:       4e013ea5-452b-4355-9279-4d7548cc7401
+;; :END:
+(elpaca (dirvish-subtree :fetcher github :repo "alexluigit/dirvish" :ref "ec41006"))
+;;;;;;;;; doct
+;; :PROPERTIES:
+;; :ID:       da5c3402-79fc-43a0-8d7a-40cceb91681b
+;; :END:
+(elpaca (doct :repo "progfolio/doct" :fetcher github :ref "15974ad"))
+;;;;;;;;; edit-indirect
+;; :PROPERTIES:
+;; :ID:       23093401-44f5-409f-a38c-5ac42ceb3592
+;; :END:
+(elpaca (edit-indirect :fetcher github :repo "Fanael/edit-indirect" :ref "bdc8f54"))
+;;;;;;;;; ednc
+;; :PROPERTIES:
+;; :ID:       54af7c3f-5bc5-4e5d-8966-dbb47f9343df
+;; :END:
+(elpaca (ednc :repo "sinic/ednc" :fetcher github :ref "d1a3c37"))
+;;;;;;;;; elfeed
+;; :PROPERTIES:
+;; :ID:       d1095193-3e69-47db-b417-51e1ad4b7804
+;; :END:
+(elpaca (elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b"))
+;;;;;;;;; elfeed-org
+
+;; :ID:       46cc4c63-49c4-4b56-935d-2a10d13a751d
+;; :END:
+(elpaca (elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf"))
+;;;;;;;;; elfeed-score
+;; :PROPERTIES:
+;; :ID:       ad8ce653-aad8-4993-90b2-f0b856435dc0
+;; :END:
+(elpaca (elfeed-score :fetcher github :repo "sp1ff/elfeed-score" :ref "5fff415"))
+;;;;;;;;; elisp-demos
+;; :PROPERTIES:
+;; :ID:       4467475c-e4d2-4f75-a1bb-5c3e74aa7216
+;; :END:
+(elpaca (elisp-demos :fetcher github :repo "xuchunyang/elisp-demos" :ref "ed9578d"))
+;;;;;;;;; elisp-refs
+;; :PROPERTIES:
+;; :ID:       dfa7c79f-3955-4e53-ac0d-6af60404e3c1
+;; :END:
+(elpaca (elisp-refs :repo "Wilfred/elisp-refs" :branch "master" :fetcher github :ref "bf3cca8"))
+;;;;;;;;; ellocate
+;; :PROPERTIES:
+;; :ID:       337766df-8aaf-457e-b7ee-9337e373b4af
+;; :END:
+(elpaca (ellocate :fetcher github :repo "walseb/ellocate" :ref "8140508"))
+;;;;;;;;; embark
+;; :PROPERTIES:
+;; :ID:       d55e9a5a-71de-469a-814a-89ed0600fa9a
+;; :END:
+(elpaca (embark :repo "oantolin/embark" :fetcher github :ref "5d0459d"))
+;;;;;;;;; emms
+;; :PROPERTIES:
+;; :ID:       88e49aa5-a5a7-4976-9d94-90fb2d5a4614
+;; :END:
+(elpaca (emms :fetcher github :url "https://git.savannah.gnu.org/git/emms.git" :repo "emacsmirror/emms" :ref "5c3226b"))
+;;;;;;;;; eros
+;; :PROPERTIES:
+;; :ID:       74bfede3-db33-49de-8318-df27596f267b
+;; :END:
+(elpaca (eros :fetcher github :repo "xiongtx/eros" :ref "dd89102"))
+;;;;;;;;; eshell-up
+;; :PROPERTIES:
+;; :ID:       5f48e81a-ab37-4716-b513-051d170ffb7f
+;; :END:
+(elpaca (eshell-up :fetcher github :repo "peterwvj/eshell-up" :ref "9c100ba"))
+;;;;;;;;; eshell-z
+;; :PROPERTIES:
+;; :ID:       b4f34808-dd00-4bbc-a3a4-30076a2b149b
+;; :END:
+(elpaca (eshell-z :fetcher github :repo "xuchunyang/eshell-z" :ref "337cb24"))
+;;;;;;;;; evil
+;; :PROPERTIES:
+;; :ID:       47a108d5-4528-4441-bb5d-dd3b7bd2ffda
+;; :END:
+(elpaca (evil :repo "emacs-evil/evil" :fetcher github :ref "cc9d688"))
+;;;;;;;;; evil-cleverparens
+;; :PROPERTIES:
+;; :ID:       290e07ea-761f-4d61-933b-847b50d5e12f
+;; :END:
+(elpaca (evil-cleverparens :fetcher github :repo "luxbock/evil-cleverparens" :ref "8c45879"))
+;;;;;;;;; evil-easymotion
+;; :PROPERTIES:
+;; :ID:       f36875c6-5e49-4959-bf11-93936f33b9f6
+;; :END:
+(elpaca (evil-easymotion :repo "PythonNut/evil-easymotion" :fetcher github :ref "f96c2ed"))
+;;;;;;;;; evil-goggles
+;; :PROPERTIES:
+;; :ID:       f64f0b90-28e0-4209-be2d-bf8598657451
+;; :END:
+(elpaca (evil-goggles :repo "edkolev/evil-goggles" :fetcher github :ref "08a2205"))
+;;;;;;;;; evil-magit
+;; :PROPERTIES:
+;; :ID:       00a6bdb5-ff07-4e7f-89b8-d3b939c265cb
+;; :END:
+(elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
+;;;;;;;;; evil-surround
+;; :PROPERTIES:
+;; :ID:       29d829c6-005c-420c-bca0-53b72582b622
+;; :END:
+(elpaca (evil-surround :repo "emacs-evil/evil-surround" :fetcher github :old-names (surround) :ref "346d4d8"))
+;;;;;;;;; expand-region
+;; :PROPERTIES:
+;; :ID:       f6fd968a-c08d-42e2-91ec-4d1168ae0509
+;; :END:
+(elpaca (expand-region :repo "magnars/expand-region.el" :fetcher github :ref "ea6b4cb"))
+;;;;;;;;; exwm
+;; :PROPERTIES:
+;; :ID:       552c31d2-12e4-420d-a967-f3afa8ada923
+;; :END:
+(elpaca (exwm :branch "master" :host github :repo "ch11ng/exwm" :fetcher github :ref "b62d5e7"))
+;;;;;;;;; exwm-edit
+;; :PROPERTIES:
+;; :ID:       d19ca9ef-2475-4e2e-8fc3-8cec8c931f77
+;; :END:
+(elpaca (exwm-edit :repo "agzam/exwm-edit" :fetcher github :ref "2fd9426"))
+;;;;;;;;; exwm-firefox-core
+;; :PROPERTIES:
+;; :ID:       6efe88da-2b36-4460-baad-61e374d452da
+;; :END:
+(elpaca (exwm-firefox-core :fetcher github :repo "walseb/exwm-firefox-core" :ref "e2fe2a8"))
+;;;;;;;;; exwm-firefox-evil
+;; :PROPERTIES:
+;; :ID:       a02a90af-0911-4ada-8b8c-f3adf983f4f6
+;; :END:
+(elpaca (exwm-firefox-evil :fetcher github :repo "walseb/exwm-firefox-evil" :ref "14643ee"))
+;;;;;;;;; exwm-float
+;; :PROPERTIES:
+;; :ID:       62c9a4d0-b89f-4a4c-a727-7b49a3f9b9ed
+;; :END:
+(elpaca (exwm-float :fetcher gitlab :repo "mtekman/exwm-float.el" :ref "eb1b60b"))
+;;;;;;;;; f
+;; :PROPERTIES:
+;; :ID:       846389a5-6878-4c63-973f-72d4963c49eb
+;; :END:
+(elpaca (f :fetcher github :repo "rejeep/f.el" :ref "1814209"))
+;;;;;;;;; fennel-mode
+;; :PROPERTIES:
+;; :ID:       60071ed0-9459-4fb3-ab4b-208f32761896
+;; :END:
+(elpaca (fennel-mode :fetcher sourcehut :repo "technomancy/fennel-mode" :ref "da958db"))
+;;;;;;;;; figlet
+;; :PROPERTIES:
+;; :ID:       0e2d4f83-1c93-475c-adb2-c1fb61f933da
+;; :END:
+(elpaca (figlet :fetcher github :repo "jpkotta/figlet" :ref "19a3878"))
+;;;;;;;;; frame-cmds
+;; :PROPERTIES:
+;; :ID:       b40e3a30-57ac-4437-89ca-4bd543604342
+;; :END:
+(elpaca (frame-cmds :fetcher github :repo "emacsmirror/frame-cmds" :ref "b803354"))
+;;;;;;;;; frame-fns
+;; :PROPERTIES:
+;; :ID:       164a42ba-5ccf-4c57-87b7-0ce7ad4581db
+;; :END:
+(elpaca (frame-fns :fetcher github :repo "emacsmirror/frame-fns" :ref "b675ee5"))
+;;;;;;;;; gcmh
+;; :PROPERTIES:
+;; :ID:       808f391b-5327-4e7c-ab1f-b58f6a06790d
+;; :END:
+(elpaca (gcmh :repo "koral/gcmh" :fetcher gitlab :ref "0089f9c"))
+;;;;;;;;; git-auto-commit-mode
+;; :PROPERTIES:
+;; :ID:       2ace7d78-3a21-4b9f-8f7c-3a2f45d0513a
+;; :END:
+(elpaca (git-auto-commit-mode :fetcher github :repo "ryuslash/git-auto-commit-mode" :ref "a6b6e0f"))
+;;;;;;;;; git-commit
+;; :PROPERTIES:
+;; :ID:       81ce0b06-6845-4df7-ac01-e392adee0086
+;; :END:
+(elpaca (git-commit :fetcher github :repo "magit/magit" :old-names (git-commit-mode) :ref "86eec7b"))
+;;;;;;;;; git-gutter+
+;; :PROPERTIES:
+;; :ID:       fe85cbe2-83b0-4b7b-befe-b79f48f791eb
+;; :END:
+(elpaca (git-gutter+ :fetcher github :repo "nonsequitur/git-gutter-plus" :ref "b772699"))
+;;;;;;;;; goto-chg
+;; :PROPERTIES:
+;; :ID:       41a6278a-eadc-49f6-95a4-4b5c9e582f1a
+;; :END:
+(elpaca (goto-chg :repo "emacs-evil/goto-chg" :fetcher github :ref "2af6121"))
+;;;;;;;;; grugru
+;; :PROPERTIES:
+;; :ID:       06cb28e3-7609-40c7-9df7-56875b4b778f
+;; :END:
+;; =Grugru= is a package that lets me switch.
+(elpaca (grugru :repo "ROCKTAKEY/grugru" :fetcher github :ref "92e588e"))
+;;;;;;;;; helm
+;; :PROPERTIES:
+;; :ID:       e5dc51a1-d431-4409-aa2f-2db7f03b8174
+;; :END:
+(elpaca (helm :repo "emacs-helm/helm" :fetcher github :ref "8de5444"))
+;;;;;;;;; helm-core
+;; :PROPERTIES:
+;; :ID:       30fc8261-6d30-46b1-9511-7a5c144eaa04
+;; :END:
+(elpaca (helm-core :repo "emacs-helm/helm" :fetcher github :ref "8de5444"))
+;;;;;;;;; helm-system-packages
+;; :PROPERTIES:
+;; :ID:       9529e9f7-7434-4fdb-9741-a1b22221e1c3
+;; :END:
+(elpaca (helm-system-packages :repo "emacs-helm/helm-system-packages" :fetcher github :ref "e93f4ae"))
+;;;;;;;;; helpful
+;; :PROPERTIES:
+;; :ID:       cf77b716-c8b5-4c12-85e9-1faa0afecf23
+;; :END:
+(elpaca (helpful :repo "Wilfred/helpful" :branch "master" :fetcher github :ref "6f8991a"))
+;;;;;;;;; hide-mode-line
+;; :PROPERTIES:
+;; :ID:       89a4a5f3-3fba-4084-938f-72e62f620f37
+;; :END:
+(elpaca (hide-mode-line :repo "hlissner/emacs-hide-mode-line" :fetcher github :ref "8888882"))
+;;;;;;;;; highlight-quoted
+;; :PROPERTIES:
+;; :ID:       9f8f3e54-34a6-473a-8de5-d235f2cb7fcc
+
+(elpaca (highlight-quoted :fetcher github :repo "Fanael/highlight-quoted" :ref "2410347"))
+;;;;;;;;; ht
+;; :PROPERTIES:
+;; :ID:       4c03ba12-852b-4a0b-aeeb-8bb6aa3f157b
+;; :END:
+(elpaca (ht :fetcher github :repo "Wilfred/ht.el" :ref "2850301"))
+;;;;;;;;; hydra
+;; :PROPERTIES:
+;; :ID:       c747090a-410b-4764-bf0c-aaa15e5c4dc4
+;; :END:
+(elpaca (hydra :repo "abo-abo/hydra" :fetcher github :ref "2d55378"))
+;;;;;;;;; ialign
+;; :PROPERTIES:
+;; :ID:       1c80eccf-1021-4f97-bf12-1aa7b3240398
+;; :END:
+(elpaca (ialign :fetcher github :repo "mkcms/interactive-align" :ref "bc4d30d"))
+;;;;;;;;; idle-require
+;; :PROPERTIES:
+;; :ID:       03a83af0-3579-4704-9615-066b6a4c5493
+;; :END:
+(elpaca (idle-require :fetcher github :repo "nschum/idle-require.el" :ref "33592bb"))
+;;;;;;;;; iedit
+;; :PROPERTIES:
+;; :ID:       41899a80-614d-4c1f-bc19-472458d2ddfe
+;; :END:
+(elpaca (iedit :repo "victorhge/iedit" :fetcher github :ref "27c6186"))
+;;;;;;;;; ivy
+;; :PROPERTIES:
+;; :ID:       7a7be1cb-90fa-4fb0-88fd-6d6f25f30399
+;; :END:
+(elpaca (ivy :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+;;;;;;;;; key-chord
+;; :PROPERTIES:
+;; :ID:       d3065ac7-bd54-4044-8f97-0c56b66800b1
+;; :END:
+(elpaca (key-chord :fetcher github :repo "emacsorphanage/key-chord" :ref "7f7fd7c"))
+;;;;;;;;; lispy
+;; :PROPERTIES:
+;; :ID:       8cba9c2c-3344-4d22-ab1e-d47770937d21
+;; :END:
+(elpaca (lispy :repo "abo-abo/lispy" :fetcher github :ref "1ad128b"))
+;;;;;;;;; lispyville
+;; :PROPERTIES:
+;; :ID:       fb4a8054-4cf8-48a8-af1c-b605e48665f8
+;; :END:
+(elpaca (lispyville :fetcher github :repo "noctuid/lispyville" :ref "0f13f26"))
+;;;;;;;;; loopy
+;; :PROPERTIES:
+;; :ID:       4af29d9a-3c30-42ae-8019-64babca099fb
+;; :END:
+(elpaca (loopy :fetcher github :repo "okamsn/loopy" :ref "31dc58f"))
+;;;;;;;;; lv
+;; :PROPERTIES:
+;; :ID:       d50412a8-69a4-4e50-b647-19888f9a7a31
+;; :END:
+(elpaca (lv :repo "abo-abo/hydra" :fetcher github :ref "2d55378"))
+;;;;;;;;; macrostep
+;; :PROPERTIES:
+;; :ID:       2d2c8fb0-4af9-471e-88fa-dc5aa8b01e2d
+;; :END:
+(elpaca (macrostep :fetcher github :repo "joddie/macrostep" :ref "424e373"))
+;;;;;;;;; magit
+;; :PROPERTIES:
+;; :ID:       ecd3979a-7402-4129-afc6-59cb1b529aa1
+;; :END:
+(elpaca (magit :fetcher github :repo "magit/magit" :ref "86eec7b"))
+;;;;;;;;; magit-section
+;; :PROPERTIES:
+;; :ID:       58a04d11-1410-4149-a0df-1507f54c2105
+;; :END:
+(elpaca (magit-section :fetcher github :repo "magit/magit" :ref "86eec7b"))
+;;;;;;;;; map
+;; :PROPERTIES:
+;; :ID:       45552f80-1214-494e-99fe-ed2d578daa1e
+;; :END:
+(elpaca (map :host github :repo "emacs-straight/map" :fetcher github :ref "dc4f657"))
+;;;;;;;;; marginalia
+;; :PROPERTIES:
+;; :ID:       532c6caf-e9ee-4152-a097-38fd402ce700
+;; :END:
+(elpaca (marginalia :repo "minad/marginalia" :fetcher github :ref "b65d66e"))
+;;;;;;;;; markdown-mode
+;; :PROPERTIES:
+;; :ID:       12cf26e7-9582-424f-ad3d-df423f24cf7c
+;; :END:
+(elpaca (markdown-mode :fetcher github :repo "jrblevin/markdown-mode" :ref "c338cdf"))
+;;;;;;;;; mini-modeline
+;; :PROPERTIES:
+;; :ID:       4a77ead9-fa68-4bad-8c98-20399a10f8ef
+;; :END:
+(elpaca (mini-modeline :repo "kiennq/emacs-mini-modeline" :fetcher github :ref "7dcd0ab"))
+;;;;;;;;; mmt
+;; :PROPERTIES:
+;; :ID:       07d788d1-2916-4c12-a3ea-17f06fb9005f
+;; :END:
+(elpaca (mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956"))
+;;;;;;;;; modus-themes
+
+;; :ID:       6824ab97-0509-4058-bea1-b4e56cf15610
+;; :END:
+(elpaca (modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9"))
+;;;;;;;;; notmuch
+;; :PROPERTIES:
+;; :ID:       46d1a3cb-ff70-4aa8-94fe-42f98c43d500
+;; :END:
+(elpaca (notmuch :url "https://git.notmuchmail.org/git/notmuch" :fetcher git :ref "a5f7efd"))
+;;;;;;;;; orderless
+;; :PROPERTIES:
+;; :ID:       97e9489e-1c05-4ac3-b779-6c471ca22995
+;; :END:
+(elpaca (orderless :repo "oantolin/orderless" :fetcher github :ref "cbc0109"))
+;;;;;;;;; org-auto-tangle
+;; :PROPERTIES:
+;; :ID:       188ee47f-b95b-452b-8adc-45f40b7744aa
+;; :END:
+(elpaca (org-auto-tangle :repo "yilkalargaw/org-auto-tangle" :fetcher github :ref "2494a6f"))
+;;;;;;;;; org-ml
+;; :PROPERTIES:
+;; :ID:       fede5d13-2974-49f2-b2aa-8baf76e98f55
+;; :END:
+(elpaca (org-ml :repo "ndwarshuis/org-ml" :fetcher github :ref "385e3be"))
+;;;;;;;;; org-ql
+;; :PROPERTIES:
+;; :ID:       b0c5ff1d-899e-4ef7-ba9f-5b7410ba71a8
+;; :END:
+(elpaca (org-ql :fetcher github :repo "alphapapa/org-ql" :ref "d7ada53"))
+;;;;;;;;; org-remark
+;; :PROPERTIES:
+;; :ID:       d9fb63a1-0f33-48f0-ae30-73bd60a13a5c
+;; :END:
+(elpaca (org-remark :host github :repo "emacs-straight/org-remark" :ref "7e72e86"))
+;;;;;;;;; org-super-agenda
+;; :PROPERTIES:
+;; :ID:       f09fcbd5-55eb-4c0c-b2aa-4d4ac6d93d51
+;; :END:
+(elpaca (org-super-agenda :fetcher github :repo "alphapapa/org-super-agenda" :ref "f5e80e4"))
+;;;;;;;;; org-superstar
+;; :PROPERTIES:
+;; :ID:       fcb62b32-b4f0-4d62-9af0-dee43fcd1247
+;; :END:
+(elpaca (org-superstar :fetcher github :repo "integral-dw/org-superstar-mode" :ref "7f83636"))
+;;;;;;;;; ov
+;; :PROPERTIES:
+;; :ID:       094ce65c-04e1-4102-827c-74d33be248bc
+;; :END:
+(elpaca (ov :fetcher github :repo "emacsorphanage/ov" :ref "c5b9aa4"))
+;;;;;;;;; paredit
+;; :PROPERTIES:
+;; :ID:       c10b3c7c-3907-4038-81f0-6a44f7232de6
+;; :END:
+(elpaca (paredit :fetcher nil :url "https://mumble.net/~campbell/git/paredit.git" :repo "https://mumble.net/~campbell/git/paredit.git" :ref "d0b1a2f"))
+;;;;;;;;; pass
+;; :PROPERTIES:
+;; :ID:       80f8581b-3304-4fb2-b25f-cee221c910c1
+;; :END:
+(elpaca (pass :fetcher github :repo "NicolasPetton/pass" :ref "a095d24"))
+;;;;;;;;; password-generator
+;; :PROPERTIES:
+;; :ID:       8604ab40-4f33-459d-9562-d368cd4ebf37
+;; :END:
+(elpaca (password-generator :fetcher github :repo "vandrlexay/emacs-password-genarator" :ref "c1da979"))
+;;;;;;;;; password-store
+;; :PROPERTIES:
+;; :ID:       3a5a17d7-ffec-4d02-b070-13ccfc844f9d
+;; :END:
+(elpaca (password-store :fetcher github :repo "zx2c4/password-store" :ref "f152064"))
+;;;;;;;;; password-store-otp
+;; :PROPERTIES:
+;; :ID:       69118d1a-98cc-4d7e-96f4-5fceb4cd173e
+;; :END:
+(elpaca (password-store-otp :repo "volrath/password-store-otp.el" :fetcher github :ref "04998c8"))
+;;;;;;;;; pinentry
+;; :PROPERTIES:
+;; :ID:       c9b343de-958a-42fc-b373-5a8949f00e7e
+;; :END:
+(elpaca (pinentry :host github :repo "emacs-straight/pinentry" :fetcher github :ref "cd942f7"))
+;;;;;;;;; plural
+;; :PROPERTIES:
+;; :ID:       18601a31-5993-4b8a-86a4-0e62cb784d03
+;; :END:
+(elpaca (plural :fetcher github :repo "emacsmirror/plural" :ref "b91ce15"))
+;;;;;;;;; popup
+;; :PROPERTIES:
+;; :ID:       8ae817d1-294b-468a-934c-a9c3e2e5787d
+;; :END:
+(elpaca (popup :fetcher github :repo "auto-complete/popup-el" :ref "bd5a0df"))
+;;;;;;;;; popwin
+;; :PROPERTIES:
+;; :ID:       4c517e3a-044d-4b4c-9be2-42c4dcece1df
+;; :END:
+(elpaca (popwin :fetcher github :repo "emacsorphanage/popwin" :ref "215d6cb"))
+;;;;;;;;; rainbow-delimiters
+;; :PROPERTIES:
+;; :ID:       2aa02b88-7cde-42ad-be18-ab92b0130662
+;; :END:
+(elpaca (rainbow-delimiters :fetcher github :repo "Fanael/rainbow-delimiters" :ref "f43d48a"))
+;;;;;;;;; redacted
+;; :PROPERTIES:
+;; :ID:       76a8bd4d-6ecb-4b5c-8330-4cb6fb188a69
+;; :END:
+(elpaca (redacted :fetcher github :repo "bkaestner/redacted.el" :ref "156311e"))
+;;;;;;;;; restart-emacs
+;; :PROPERTIES:
+;; :ID:       3faf6144-9114-4771-9ebc-b078d91886bf
+;; :END:
+(elpaca (restart-emacs :fetcher github :repo "iqbalansari/restart-emacs" :ref "1607da2"))
+;;;;;;;;; s
+;; :PROPERTIES:
+;; :ID:       b739064e-831e-47a7-bad9-81f634574593
+;; :END:
+(elpaca (s :fetcher github :repo "magnars/s.el" :ref "43ba8b5"))
+;;;;;;;;; search-web
+;; :PROPERTIES:
+;; :ID:       cd58b8df-f1b8-4d32-89f8-c6ad274fdf1a
+;; :END:
+(elpaca (search-web :repo "tomoya/search-web.el" :fetcher github :ref "c4ae86a"))
+;;;;;;;;; shut-up
+;; :PROPERTIES:
+;; :ID:       f0c06026-f834-44af-8381-e4e2d4c549eb
+;; :END:
+(elpaca (shut-up :fetcher github :repo "cask/shut-up" :ref "081d6b0"))
+;;;;;;;;; smartparens
+;; :PROPERTIES:
+;; :ID:       57b50aaf-505b-4403-a2f3-8444511032b5
+;; :END:
+(elpaca (smartparens :fetcher github :repo "Fuco1/smartparens" :ref "63695c6"))
+;;;;;;;;; spell-number
+;; :PROPERTIES:
+;; :ID:       826cb3b0-b820-4dfb-b8f5-65f3f2070ef4
+;; :END:
+(elpaca (spell-number :fetcher github :repo "emacsmirror/spell-number" :ref "3ce612d"))
+;;;;;;;;; super-save
+;; :PROPERTIES:
+;; :ID:       874aa539-841f-454c-b9c1-21f87af50a15
+;; :END:
+(elpaca (super-save :fetcher github :repo "bbatsov/super-save" :ref "886b551"))
+;;;;;;;;; swiper
+;; :PROPERTIES:
+;; :ID:       eae8fb23-7d9a-4607-9dd1-ecf0ebaa9bd4
+;; :END:
+(elpaca (swiper :repo "abo-abo/swiper" :fetcher github :ref "8f2abd3"))
+;;;;;;;;; swiper-helm
+;; :PROPERTIES:
+;; :ID:       410651e8-8188-4677-88d9-616a83b74a36
+;; :END:
+(elpaca (swiper-helm :repo "abo-abo/swiper-helm" :fetcher github :ref "93fb6db"))
+;;;;;;;;; tempel
+;; :PROPERTIES:
+;; :ID:       756039d8-a42c-42a2-a5a1-31d7ebd34981
+;; :END:
+(elpaca (tempel :repo "minad/tempel" :fetcher github :ref "b4bb703"))
+;;;;;;;;; transient
+;; :PROPERTIES:
+;; :ID:       e45d3f0f-6f8e-4069-bfb4-81c0ce6b3db1
+;; :END:
+(elpaca (transient :fetcher github :repo "magit/transient" :ref "90e640f"))
+;;;;;;;;; transpose-frame
+;; :PROPERTIES:
+;; :ID:       7de3871f-281c-4b19-a441-610406a4ff2f
+;; :END:
+(elpaca (transpose-frame :fetcher github :repo "emacsorphanage/transpose-frame" :ref "12e523d"))
+;;;;;;;;; treepy
+;; :PROPERTIES:
+;; :ID:       54567606-8d68-4094-91d0-d87c907c9492
+;; :END:
+(elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github :ref "191d84c"))
+;;;;;;;;; ts
+;; :PROPERTIES:
+;; :ID:       8d7e178b-3f62-44a9-9f87-1437e05b7056
+;; :END:
+(elpaca (ts :fetcher github :repo "alphapapa/ts.el" :ref "b7ca357"))
+;;;;;;;;; undo-tree
+;; :PROPERTIES:
+;; :ID:       89eebee7-4ab1-4bea-bf3d-86c4f6505f9d
+;; :END:
+(elpaca (undo-tree :host github :repo "emacs-straight/undo-tree" :fetcher github :ref "e326c61"))
+;;;;;;;;; vc-auto-commit
+;; :PROPERTIES:
+;; :ID:       acb8e72e-7c5d-44a0-b0ab-5b44e1614f8e
+;; :END:
+(elpaca (vc-auto-commit :fetcher github :repo "thisirs/vc-auto-commit" :ref "56f4780"))
+;;;;;;;;; vertico
+;; :PROPERTIES:
+;; :ID:       a7038ffb-6fee-44a0-a444-b2814a139859
+;; :END:
+(elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
+                 :files (:defaults "extensions/vertico-buffer.el" "extensions/vertico-quick.el" "extensions/vertico-directory.el")))
+;;;;;;;;; which-key
+;; :PROPERTIES:
+;; :ID:       e1324ac4-9fed-4170-b74b-ed851c5ce652
+;; :END:
+(elpaca (which-key :repo "justbur/emacs-which-key" :fetcher github :ref "428aedf"))
+;;;;;;;;; with-editor
+;; :PROPERTIES:
+;; :ID:       7c9c0da9-2067-47ab-9bc0-c26781e42ade
+;; :END:
+(elpaca (with-editor :fetcher github :repo "magit/with-editor" :ref "139ef39"))
+;;;;;;;;; with-emacs
+;; :PROPERTIES:
+;; :ID:       545d26ae-c678-4287-891c-430e9fc3c652
+;; :END:
+(elpaca (with-emacs :fetcher github :repo "twlz0ne/with-emacs.el" :ref "9f99bec"))
+;;;;;;;;; workgroups2
+;; :PROPERTIES:
+;; :ID:       edd5f503-8382-401b-90e8-333508cc1c50
+;; :END:
+(elpaca (workgroups2 :repo "pashinin/workgroups2" :fetcher github :ref "c9403c6"))
+;;;;;;;;; xelb
+;; :PROPERTIES:
+;; :ID:       8fc4cc36-7a32-4447-82ee-6f2fa7c392f4
+;; :END:
+(elpaca (xelb :host github :repo "emacs-straight/xelb" :fetcher github :ref "f5880e6"))
+;;;;;;;;; xr
+;; :PROPERTIES:
+;; :ID:       a3176d37-294b-4438-8748-5c9d76270f57
+;; :END:
+(elpaca (xr :host github :repo "emacs-straight/xr" :fetcher github :ref "277c549"))
+;;;;;;;;; ssh-agency
+;; :PROPERTIES:
+;; :ID:       20231005T152039.806912
+;; :END:
+;; This package automates the process of starting up =ssh-agent= and connecting to
+;; it "so that pushes and pulls from magit will not require any passphrase".  This
+;; is exactly what I had been looking for so I could [[][auto push and commit]].
+(elpaca (ssh-agency :fetcher github :repo "magit/ssh-agency" :ref "a5377e4"))
+;;;;;;;;; zone-matrix
+;; :PROPERTIES:
+;; :ID:       1e1b8d60-dc2d-43fb-8116-8873b9fa83fe
+;; :END:
+(elpaca (zone-matrix :fetcher github :repo "emacsmirror/zone-matrix" :ref "e1fc8c7"))
+;;;;;;;;; zone-rainbow
+;; :PROPERTIES:
+;; :ID:       17efd0b5-8398-472f-bb14-48c6d033f563
+;; :END:
+(elpaca (zone-rainbow :repo "kawabata/zone-rainbow" :fetcher github :ref "2ba4f1a"))
+;;;;;;;;; zone-sl
+;; :PROPERTIES:
+;; :ID:       68d37858-81c2-4ab6-9b9d-2e39dfa32467
+;; :END:
+(elpaca (zone-sl :repo "kawabata/zone-sl" :fetcher github :ref "7ec22e3"))
+;;;;;;;;; zoom-frm
+;; :PROPERTIES:
+;; :ID:       5de43a82-6590-4b4c-b56a-b3e3ae42aab2
+;; :END:
+(elpaca (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm" :ref "59e2fce" ))
+;;;;;;;;; zoom-window
+;; :PROPERTIES:
+;; :ID:       17315221-2ef9-4a59-8cac-b88f4915ea6a
+;; :END:
+(elpaca (zoom-window :fetcher github :repo "emacsorphanage/zoom-window" :ref "474ca47"))
+;;;;;;;;; lgr
+;; This package provides functions and macro to log information.  It's the most
+;; recent package for logging I could find.
+(elpaca (lgr :fetcher github :repo "Fuco1/Emacs-lgr" :commit "4ab6c22"))
+;;;;;;;;; setup
+;; :PROPERTIES:
+;; :ID:       20230920T190421.807596
+;; :END:
+;; This package is similar to =use-package=.  Essentially, it's an abstraction to
+;; configure packages.  There are parts of it that I agree with and parts that I
+;; don't.  One thing I will say is I don't like the use of it that tries to create
+;; a dsl for forms building a language.  One of the first examples from its site
+;; illustrates this.  It says that this ~(setup foo-mode (:hook bar-mode))~ expands
+;; to ~(add-hook 'foo-mode-hook #'bar-mode)~.  I think that the macro is actually far
+;; inferior to the normal =add-hook= invocation because it hides what's going on for
+;; no good reason.  What I do see is the need to abstract things for cross
+;; configuring packages.
+
+;; What I want is a uniform, declarative interface to configuring things that come
+;; up often across several packages.
+(elpaca (setup :repo "https://git.sr.ht/~pkal/setup" :ref "b2e3f3a"))
+
+(elpaca (noflet :fetcher github :branch "master" :repo "nicferrier/emacs-noflet" :ref "7ae84dc3257637af7334101456dafe1759c6b68a"))
+;;;;;;;; simulate startup hooks after emacs has been initialized
+;; :PROPERTIES:
+;; :ID:       20230806T080128.224548
+;; :END:
+;; I'm not sure of how precise this is.  To be honest, I don't like doing this.
+;; If there are any incomplete queues, complete them and restart emacs.
+(if-let ((queues (reverse elpaca--queues))
+	     ((mapc #'elpaca--maybe-reset-queue queues))
+	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+    (progn (elpaca-process-queues)
+	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
+  (run-hooks 'elpaca--post-queues-hook))
+
+;;;; library
+;;;;; utils 
+(require 'dash)
+(require 'dash-functional)
+(require 'subr-x)
+
+;; This function is more for helping me write macros than for anything else.  It's
+;; easy to wrap one form around a macro.  But this function automates the process of
+;; wrapping =N= wrappers around a set of forms.
+(defun oo-wrap-forms (wrappers forms)
+  "Return FORMS wrapped by WRAPPERS.
+FORMS is a list of lisp forms.  WRAPPER are a list of forms."
+  (declare (pure t) (side-effect-free t))
+  (unless wrappers (push '(progn) wrappers))
+  (setq wrappers (reverse wrappers))
+  (setq forms (append (pop wrappers) forms))
+  (dolist (wrapper wrappers)
+    (setq forms (-snoc wrapper forms)))
+  forms)
+
+;; Being able to distinguish between a non-keyword symbol is useful enough to merit
+;; its own function.
+(defun oo-non-keyword-symbol-p (object)
+  "Return t if OBJECT is a symbol but not a keyword."
+  (declare (pure t) (side-effect-free t))
+  (and (symbolp object) (not (keywordp object))))
+
+(defun oo-args-to-string (&rest args)
+  "Return ARGS as a string."
+  (declare (pure t) (side-effect-free t))
+  (with-output-to-string (mapc #'princ args)))
+
+;; Simple symbols, using this function can save me having to provide a string for
+;; =format=.
+(defun oo-args-to-symbol (&rest args)
+  "Return an interned symbol from ARGS."
+  (declare (pure t) (side-effect-free t))
+  (intern (apply #'oo-args-to-string args)))
+
+;; Sometimes I want to create a keyword by interning a string or a symbol.  This
+;; commands saves me having to add the colon at the beginning before interning.
+(defun oo-args-to-keyword (&rest args)
+  "Return ARGS as a keyword."
+  (declare (pure t) (side-effect-free t))
+  (apply #'oo-args-to-symbol ":" args))
+
+(defun oo-funcall-silently (function &rest args)
+  "Call function silently.
+Don't produce any output to the *Messages* buffer when calling function."
+  (shut-up (apply function args)))
+
+(defun oo-symbols (regexp tree)
+  "Return symbols that match REGEXP in TREE."
+  (thread-last (flatten-list tree)
+               (--select (and (symbolp it) (oo-symbol-match-p regexp it)))
+               (-uniq)))
+
+;; I find myself using the idiom ~(string-match-p regexp (symbol-name symbol))~ enough times.
+(defsubst oo-symbol-match-p (regexp symbol)
+  "Return non-nil if SYMBOL matches REGEXP."
+  (string-match-p regexp (symbol-name symbol)))
+
+;; For I want my advices, hooks and bindings to be dynamic in the sense that
+;; they only take effect when it makes sense to do so.  For example [[id:20230801T175939.021467][this
+;; headline]] I append =evil-append-line= to org-insert-heading-hook=.  But
+;; obviously I don't want this to happen if for whatever reason I'm not in
+;; =evil-mode=.
+(defun oo-bound-and-true-fn (symbol)
+  "Return a function that checks if SYMBOL is bound and non-nil."
+  `(lambda () (bound-and-true-p ,symbol)))
+
+;; This generic looping macro with predicate clauses inspired by =loopy=.  The
+;; goal is to provide a unified syntax to cover all of my looping needs.  It
+;; should "do-what-I-mean" whenever possible.
+
+;; An implementation note: You might wonder why I check whether its a list if
+;; =seq-doseq= already deals with the case that the sequence is a list.  The
+;; reason is that =seq-doseq= is a wrapper around =seq-do= which works by
+;; wrapping the iteration body in a lambda and calling it on every single
+;; iteration.  The lambda adds an overhead.  So the answer is I do this for
+;; better performance when dealing with lists.
+(defmacro loop! (pred &rest body)
+  "A generic looping macro and drop-in replacement for `dolist'.
+This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
+symbol as in `dolist', but.  LIST can be a sequence."
+  (declare (indent 1))
+  (pcase pred
+    ((or `(repeat ,n) (and n (pred integerp)))
+     (cl-once-only (n)
+       `(if (integerp ,n)
+	        (dotimes (_ ,n) ,@body)
+	      (error "Wrong type argument integerp: %S" ,n))))
+    (`(,(and match-form (pred sequencep)) ,list)
+     (alet (make-symbol "var")
+       `(for! (,it ,list)
+	      (-let [,match-form ,it]
+	        ,@body))))
+    (`(,(and var (pred symbolp)) ,list)
+     (cl-once-only (list)
+       `(cond ((listp ,list)
+	           (dolist (,var ,list) ,@body))
+	          ((sequencep ,list)
+	           (seq-doseq (,var ,list) ,@body))
+	          ((integerp ,list)
+	           (loop! ,list ,@body))
+	          (t
+	           (error "Unknown list predicate: %S" ',pred)))))))
+
+(defalias 'for! 'loop!)
+
+;; The threading macro [[][->>]] can be particularly useful when you want to.  I've
+;; often had cases in my code where I've.
+(defmacro let-thread-last! (var &rest forms)
+  "Bind VAR to the result of threading FORMS with `thread-last'."
+  (declare (indent defun))
+  `(-setq ,var (->> ,@forms)))
+
+(defalias 'let->>! 'let-thread-last!)
+
+(provide 'oo-base-utils)
+
+;;;;; "ing" macros 
+(cl-defmacro appending! (place list &key (setter 'setf))
+  "Append LIST to the end of PLACE.
+SETTER is the symbol of the macro or function used to do the setting."
+  `(,setter ,place (append ,place ,list)))
+
+;; Important to note that this macro is not as efficient as pushing because it's adding to the end
+;; of the list.  So this macro should be used only in non-performance-intensive code.  In
+;; performance-intensive code we need the =push-nreverse= idiom.
+(cl-defmacro collecting! (place item &key (setter 'setf))
+  "Affix ITEM to the end of PLACE.
+SETTER is the same as in `appending!'."
+  `(,setter ,place (-snoc ,place ,item)))
+
+(defalias 'snocing! 'collecting!)
+(defalias 'affixing! 'collecting!)
+
+;; You might be wondering why I didn't create a macro with a setter for these.
+;; Well I haven't had a case yet when I've wanted to increment or decrement the
+;; value symbol used in customization.
+(defalias 'incrementing! 'cl-incf)
+(defalias 'counting! 'cl-incf)
+(defalias 'decrementing! 'cl-decf)
+
+(cl-defmacro prepending! (place list &key (setter 'setf))
+  "Prepend LIST to beginning of PLACE.
+SETTER is the same as in `appending!'."
+  `(,setter ,place (append ,list ,place)))
+
+(cl-defmacro maxing! (place form &key (setter 'setf) (comparator '>))
+  "Set PLACE to the greater of PLACE and FORM.
+SETTER is the same as in `appending!'."
+  (cl-with-gensyms (value1 value2)
+    `(,setter ,place (let ((,value1 ,form)
+                           (,value2 ,place))
+                       (if (,comparator ,value1 ,value2) ,value1 ,value2)))))
+
+(cl-defmacro minning! (place form &key (setter 'setf) (comparator '<))
+  "Set PLACE to the lesser of PLACE and FORM.
+SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
+  `(maxing! ,place ,form :setter ,setter :comparator ,comparator))
+
+(cl-defmacro concating! (place string &key (setter 'setf) separator)
+  "Concat PLACE and STRING with SEPARATOR.
+SETTER is the same as in `appending!'"
+  `(,setter ,place (string-join (list ,place ,string) ,separator)))
+
+(cl-defmacro adjoining! (place item &key test test-not key (setter 'setf))
+  "Set PLACE to the value of `cl-adjoin'.
+SETTER is the same as in `appending!'."
+  `(,setter ,place (cl-adjoin ,item ,place :test ,test :test-not ,test-not :key ,key)))
+
+;; I know =push= already exists.  But I want a variant of push that can be used
+;; with the =block!= macro.
+(cl-defmacro pushing! (place item &key (setter 'setf))
+  "Cons ITEM to PLACE.
+SETTER is the same as in `appending!'."
+  `(,setter ,place (cons ,item ,place)))
+
+;; To configure variables I don't use the standard =setq=--at least not directly.
+;; Instead, I use =set!=.  Adjoining is one of the most common operations done to
+;; lisp symbols when configuring Emacs.
+
+;; Something I was always confused about was why adjoin instead of just using
+;; =push=.  The latter is more performant; however I don't think that's.  The best reason I could
+;; think of is that sometimes you want to re-evaluate parts of your configuration
+;; and in that case it is more convenient to have =adjoin= over =push=.
+(cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
+  "Set PLACE to the union of PLACE and FORM.
+SETTER is the same as in `appending!'."
+  `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
+
+;; To configure variables I don't use the standard =setq=--at least not directly.
+;; Instead, I use =set!=.  Adjoining is one of the most common operations done to
+;; lisp symbols when configuring Emacs.
+
+;; Something I was always confused about was why adjoin instead of just using
+;; =push=.  The latter is more performant; however I don't think that's.  The best reason I could
+;; think of is that sometimes you want to re-evaluate parts of your configuration
+;; and in that case it is more convenient to have =adjoin= over =push=.
+(cl-defmacro adjoin! (place value &key test key test-not)
+  "Adjoin value to place.
+Same as `adjoining!' but use `set!' as the setter.  Meant to be used for
+customizing variables."
+  `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
+;;;;; block!
+(require 'cl-lib)
+(require 'dash)
+(require 'noflet)
+;; This library is for [[][walking lisp forms]].  Basically, it provides an iterator
+;; that I can use to navigate a form.  The iterator allows me to move freely and
+;; edit nodes precisely--allowing me to do things that would be very difficult with
+;; [[][dash's]] [[][-tree-map-nodes]].
+(require 'treepy)
+(require 'pcase)
+;; The =block!= macro goals:
+;; 1 - reduce excessive nesting nesting by making intelligent assumptions about the intended scope of variables.
+;; This includes:
+;;  - automatically let binding variables
+;;  - automatically let binding in designated macros--[[][the "ing!" macros]]
+;;  - reduce the cluttered syntax that discourages the use of powerful macros such
+;;    as [[][cl-letf]] and [[][cl-labels]]
+;;  - providing a concise declarative way to wrap the macro body with common constructs
+;; 2 - allow loops to use control flow contructs popular in other languages
+;; These include:
+;;  - return!
+;;  - continue! (skip!) skip the current iteration of a loop
+;;  - break! (exit!) exit the current loop
+;;;;;; treepy patch 
+;; There's no function to skip a node and I can't see a quick/clever way to do it
+;; with the existing functions.  I want to be where I would be if I had deleted the
+;; node, but I don't want the node itself to be deleted.  If there is a right node
+;; in the same level skipping is tantamount to [[][treepy-right]].
+(defun +treepy-skip (zipper)
+  "Skip the current node."
+  (let ((orig zipper))
+    (while (and (not (treepy-right zipper)) (treepy-up zipper))
+      (setq zipper (treepy-up zipper)))
+    (if (treepy-right zipper)
+        (setq zipper (treepy-right zipper))
+      ;; If we've reached the top level, that means there is no next node.  So
+      ;; let's go back to where we were and go next until we reach the end.
+      (setq zipper orig)
+      (while (not (treepy-end-p zipper))
+        (setq zipper (treepy-next zipper)))
+      zipper)))
+;;;;;; account for improper lists when mapping nodes
+;; The dash function [[][-tree-map-nodes]] will fail when walking the body of a macro that has
+;; improper lists.  While I wouldn't say improper lists are common in lisp code,
+;; they do happen--particularly when using [[][dash]] and [[][loopy]] destructuring.  A
+;; specific example of this is in the block macro.
+(defun oo-tree-map-nodes (pred fun tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+         (funcall fun tree))
+        ((consp tree)
+         (cons (oo-tree-map-nodes pred fun (car tree))
+               (oo-tree-map-nodes pred fun (cdr tree))))
+        (t
+         tree)))
+;;;;;; define placeholders
+;; There are a number of what I call placeholder macros for block.  They are macros
+;; that do pretty much nothing in an of themselves; they might at most verify the
+;; arguments they recieve are correct.  They serve as markers used by the =block!=
+;; macro to get information about what to do.  Additionally, defining these
+;; placeholder macros tells syntax highlighting and indentation.  Trying to bind
+;; symbols to functions with is usually quite cumbersome if the function you want
+;; to write is more than one line long.  This is nice so
+;; that =flet!=, =noflet!= and =label!= with the indentation of a normal function in
+;; contrast with their counterparts =cl-flet=, =noflet=, and =cl-labels=.
+(defalias 'let! '-setq)
+
+;; Meant to be used with =oo-block-macro-handle-with=.  These macros are for just
+;; making sure that the keywords =wrap!= and =with!= are properly syntax
+;; highlighted and have the correct indentation.
+(defmacro with! (wrapper &rest wrappers)
+  "Enclose BODY with wrappers.
+WRAPPER is the same as in `oo-wrap-forms'.
+Meant to be used with `block!'.  See `oo-block-parse-with'.")
+
+(defalias 'wrap 'with!)
+
+(defmacro label! (&rest args)
+  (declare (indent defun)))
+
+(defalias 'letf! 'label!)
+(defalias 'flet! 'label!)
+(defalias 'noflet! 'label!)
+(defalias 'stub! 'label!)
+
+;; Sometimes we encounter symbols we don't want =block!= let binding.
+(defmacro excluding! (symbol &rest symbols)
+  "Exclude any SYMBOL and SYMBOLS from being let-bound in `block!'.
+See `oo-block-parse-excluding'."
+  ;; (cl-assert (-all-p #'symbolp (cons symbol symbols)))
+  )
+
+(defalias 'without! 'excluding!)
+
+;; These are macros that capitalize on the catch blocks I generate with [[id:20230807T063155.724861][block!]] to
+;; provide control flow structures like those found in other lanaguges.
+(defalias 'return! 'cl-return)
+(defalias 'return-from! 'cl-return-from)
+
+(defmacro continue! ()
+  "Skip the current iteration of loop.
+This is meant to be used in `block!'.  For what counts as a loop is, see
+`oo-block-macro-loop-macros' and `oo-block-parse-loop'."
+  `(throw 'continue! nil))
+
+(defalias 'skip! 'continue!)
+
+(defmacro break! (&optional value)
+  "Exit the current loop and return VALUE.
+For what counts as a loop is, see `oo-block-macro-loop-macros' and
+`oo-block-parse-loop'."
+  `(throw 'break! ,value))
+
+(defalias 'break-with! 'break!)
+(defalias 'exit! 'break!)
+(defalias 'exit-with! 'exit!)
+
+(defun oo-block-let-bindings (let no-let)
+  "Return list of let bindings, ignoring no-let.
+Ignore any symbols.  See `excluding!'."
+  (let (binds)
+    (when let
+      (for! ((match-form value) let)
+        (if (and (symbolp match-form) (member match-form no-let))
+            (setq match-form '_)
+          (alet (oo-tree-map-nodes (-partial #'-contains-p no-let) (-const '_) match-form)
+            (setq match-form it)))
+        (pushing! binds (list match-form value))))
+    (nreverse binds)))
+
+;; At first I did this by creating functions.  Although this is nice for splitting
+;; up code.
+(defun oo-block-parse-body (body)
+  (let ((zipper (treepy-list-zip body))
+        (data nil))
+    (while (not (treepy-end-p zipper))
+      (pcase (treepy-node zipper)
+        (`(,(pred (-contains-p '(quote function \`))) . ,(guard t))
+         (setq zipper (+treepy-skip zipper)))
+        (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
+         (alet `(catch 'break! (,loop ,pred (catch 'continue ,@body)))
+           (setq zipper (treepy-replace zipper it)))
+         ;; To avoid infinite recursion I need to get past the loop name.  Here I
+         ;; end up at the loop predicate.
+         (loop! (repeat 7)
+           (setq zipper (treepy-next zipper))))
+        (`(,(and name (or 'stub! 'flet! 'label! 'noflet! 'macrolet! 'letf!)) ,fn ,args . ,body)
+         (alet (cl-case name
+                 (stub! 'noflet)
+                 (flet! 'cl-flet)
+                 (label! 'cl-labels)
+                 (noflet! 'noflet)
+                 (macrolet! 'cl-macrolet)
+                 (letf! 'cl-letf))
+           (setq zipper (treepy-replace zipper `(,it ((,fn ,args ,@body)) ,@(treepy-rights zipper))))
+           (while (treepy-right zipper)
+             (setq zipper (treepy-remove (treepy-right zipper))))))
+        (`(,(or 'without! 'excluding!) . ,(and symbols (guard (-all-p #'symbolp symbols))))
+         (appending! (plist-get data :no-let) symbols)
+         (setq zipper (treepy-remove zipper)))
+        (`(,(or 'wrap! 'with!) . ,(and wrappers (guard (-all-p #'listp wrappers))))
+         (setq zipper (treepy-replace zipper (oo-wrap-forms wrappers (treepy-rights zipper))))
+         (while (treepy-right zipper)
+           (setq zipper (treepy-remove (treepy-right zipper)))))
+        (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
+         (alet (cl-case name
+                 ((maxing! maximizing!) most-negative-fixnum)
+                 ((minning! minimizing!) most-positive-fixnum)
+                 (counting! 0))
+           (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
+         (setq zipper (treepy-next zipper)))
+        (`(,(or 'let! 'let->>! 'let-->!) ,match-form ,_ . ,(and plist (guard t)))
+         (alet (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
+                   (plist-get plist :init))
+           (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
+         (setq zipper (treepy-next zipper)))
+        (`(alet! ,expr)
+         (setq zipper (treepy-replace zipper `(alet ,expr ,@(treepy-rights zipper))))
+         (while (treepy-right zipper)
+           (setq zipper (treepy-remove (treepy-right zipper)))))
+        (_
+         (setq zipper (treepy-next zipper)))))
+    (list data zipper)))
+
+(defmacro block! (name &rest body)
+  "Define a lexically-scoped block named NAME.
+Name may be any symbol.  Code inside body can call `return!'."
+  (declare (indent 1))
+  (-let* (((data zipper) (oo-block-parse-body body))
+          ((&plist :let :no-let) data)
+          (body (treepy-root zipper))
+          (let-bindings (oo-block-let-bindings let no-let)))
+    `(cl-block nil (-let ,(oo-block-let-bindings let no-let) ,@body))))
+
+;;;;; defun-like macros 
+(require 'dash)
 (require 'oo-base-ing-macros)
-(require 'oo-base-block-macro)
+
+;; Emacs uses these symbols as markers in =defun= and =defmacro= signatures.  I'm
+;; defining a function specifically for identifying these symbols so I can
+;; differentiate them from actual argument symbols.
+(defun oo-ampersand-symbol-p (obj)
+  "Return non-nil of OBJ is an ampersand symbol.
+An ampersand symbol is a symbol that starts with `&'."
+  (and (symbolp obj) (string-match-p "\\`&" (symbol-name obj))))
+
+;; In macros I often want access to defun arg components (see defhook! and
+;; defadvice!).  Until I get better destructuring, I use this function to quickly
+;; access these values.  Notably, I put docstring and declarations in a sublist
+;; because it's so often that I want to lump them together.
+(defun oo-defun-components (arglist)
+  "Return the components of defun.
+ARGLIST is the arglist of `defun' or similar macro.
+The components returned are in the form of (name args (docstring declaration interactive-form) body)."
+  (block! nil
+    (let! (name args . body) arglist)
+    (let! docstring (when (stringp (car body)) (pop body)))
+    (let! declarations (when (equal 'declare (car-safe (car body))) (pop body)))
+    (let! interactive-form (when (equal 'interactive (car-safe (car body))) (pop body)))
+    (list name args (list docstring declarations interactive-form) body)))
+
+;; This is a specific variant of function allows me to destructure the
+;; arguments of a defun-like macro that can take keyword arguments.
+(defun oo-destructure-defun-plus (arglist)
+  "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."
+  (block! nil
+    (let! (name args (docstring declarations) body) (oo-defun-components arglist))
+    (let! (args plist) (-split-with (-not #'keywordp) args))
+    (let! (raw body) (-split-with (-compose #'keywordp #'car-safe) body))
+    (for! ((elt &as k v) raw)
+      (let! (k . v) elt)
+      (pushing! alist (cons k (if (cdr v) v (car v)))))
+    (let! new (if (and plist alist)
+                  (map-merge 'plist plist alist)
+                (map-into (or alist plist) 'plist)))
+    (list name args (list docstring declarations) new body)))
+
+;; (defmacro lambda! (args &rest body)
+;;   "Wrapper around lambda that uses `block!'"
+;;   (declare (indent defun))
+;;   `(lambda (,@args) (block! nil ,@body)))
+
+(defmacro defmacro! (&rest args)
+  "Wrapper around `defmacro!'."
+  (declare (indent defun) (doc-string 3))
+  (-let [(name arglist metadata body) (oo-defun-components args)]
+    `(cl-defmacro ,name ,arglist
+       ,@(-non-nil metadata)
+       (block! ,name
+         (excluding! ,@(-remove #'oo-ampersand-symbol-p (-flatten arglist)))
+         ,@body))))
+
+(defmacro! defun! (&rest args)
+  "Wrapper around `defun'."
+  (declare (indent defun) (doc-string 3))
+  (-let [(name arglist metadata body) (oo-defun-components args)]
+    `(cl-defun ,name ,arglist
+       ,@(-non-nil metadata)
+       (block! ,name
+         (excluding! ,@(-remove #'oo-ampersand-symbol-p (flatten-list arglist)))
+         ,@body))))
+
+;;;;; set!
+(require 'anaphora)
+;; This file also uses the variable =oo-unbound-symbol-alist= which is defined
+;; in =oo-call-after-load=.
+(require 'oo-call-after-load)
+
+(defmacro! set! (symbol value)
+  "A \"do-it-all\" setter for configuring variables."
+  (let! value-var (make-symbol "value"))
+  `(if (not (boundp ',symbol))
+       (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+     (let ((,value-var ,value))
+       (lgr-info oo-lgr "Set %s to %S" ',symbol ,value-var)
+       (aif (get ',symbol 'custom-set)
+           (funcall it ',symbol ,value-var)
+         (with-no-warnings (setq ,symbol ,value-var))))))
+;;;;; load other libraries
+(require 'oo-base-block-definers)
+(require 'oo-base-function-generators)
 (require 'oo-base-advice-utils)
 (require 'oo-base-hook-utils)
-(require 'oo-base-set-macro)
+(require 'oo-base-log)
 (require 'oo-call-after-load)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
@@ -117,6 +1800,33 @@ HOOK-OR-ADVICE.")
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
 
+;;;; prevent =*Messages*= and =*scratch*= buffers from being killed
+;; :PROPERTIES:
+;; :ID:       20230907T101201.734381
+;; :END:
+;; "Locking" a file can mean two different things (or both of these things at
+;; once).  It can mean that Emacs cannot be exited while there are "locked"
+;; buffers; it can also mean that the locked buffers cannot be killed (e.g. via
+;; [[file:snapshots/_helpful_command__kill-buffer_.png][kill-buffer]]).  I don't think I ever want the former behavior.  Setting
+;; [[][emacs-default-locking-mode]] to kill tells Emacs just to prevent buffers
+;; with =emacs-lock-mode= enabled from being killed.  If you were to try to kill
+;; one with something like =kill-buffer=, it would fail and you'd get a message
+;; saying the buffer cannot be killed.
+
+;; The =*Messages*= buffer could contain important information and should never
+;; really be killed. See [[https://www.emacswiki.org/emacs/ProtectingBuffers][ProtectingBuffers]].
+(set! emacs-lock-default-locking-mode 'kill)
+(with-current-buffer "*Messages*" (emacs-lock-mode 1))
+(with-current-buffer "*scratch*" (emacs-lock-mode 1))
+;;;; don't ask me whether to follow symlinks, just do it
+;; :PROPERTIES:
+;; :ID:       20230731T162025.361386
+;; :END:
+;; By default Emacs will prompt you when you want to open a file a symlink
+;; references.  It will ask you whether you want to follow the symlink.  For me
+;; the answer is predominately yes.
+(set! vc-follow-symlinks t)
+(set! vc-follow-link t)
 ;;;; setup packages for lazy loading
 ;; Note that the configuration files do assume that the =oo-base= files have
 ;; been loaded, so this lazy loading must happen after base files are loaded.
@@ -407,11 +2117,12 @@ HOOK-OR-ADVICE.")
 
 (set! avy-timeout-seconds 0.3)
 ;;;;; burly
+;;;;;; leader bindings 
 (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-find-map "j" #'burly-open-bookmark)
 
-;; *** save window configuration with =b= or =S=
+;;;;;; save window configuration with =b= or =S=
 ;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
 ;; necessary to reproduce the current window configuration.  I can then restore the
 ;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].

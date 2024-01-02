@@ -1,0 +1,27 @@
+#
+# ~/.bashrc
+#
+
+# I used the bullet headings in this file because having mutiple comment
+# syntaxes next to each other does not work in this file.  Is it a bug?  I
+# confirmed additionally that this is also the case for lua files.  I think I
+# have to either try to fix this myself in the outshine code or just switch to
+# the bullet syntax, at least for non-elisp files.
+
+# * no idea
+# No idea what this stuff does.
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+PS1='[\u@\h \W]\$ '
+
+# * set emacsclient as my preferred editor 
+# Indicate to the shell (or bash?) that I want to use emacsclient as my editor
+# of choice when opening a file to read with a terminal program.  This taken
+# as advice from [[https://www.emacswiki.org/emacs/EmacsClient][the emacs wiki]].
+export ALTERNATE_EDITOR=""
+# Using the argument =-c= would make emacs open in the terminal.  But obviously
+# I would rather open with the GUI.
+export EDITOR="emacsclient -c"                  # $EDITOR opens in GUI mode
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode

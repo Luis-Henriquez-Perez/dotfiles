@@ -1,0 +1,15 @@
+[user]
+    name = Luis Henriquez-Perez
+    email = luis@luishp.xyz
+    signingkey = C3F33DA91721A6B7365FBF668DAA027F8C199794
+
+[gpg]
+# This is the first case where I need to use the chezmoi template
+# feature.  I would like something like emacs's =executable-find= to
+# give me the location of =gpg=.
+    program = <<(executable-find "gpg")>>
+
+[github]
+    user = Luis-Henriquez-Perez
+[push]
+    autoSetupRemote = true
