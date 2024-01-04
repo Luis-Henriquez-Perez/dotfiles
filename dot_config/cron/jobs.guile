@@ -1,0 +1,15 @@
+;;; mcron
+;; Why use mcron over cron.
+;; https://wiki.gentoo.org/wiki/Cron
+;; https://github.com/ciel-lang/cl-cron
+;; https://wiki.archlinux.org/title/Cron
+;; https://www.gnu.org/software/mcron/manual/mcron.html#Introduction
+;; This article has a list of why to use guile.
+
+;;; email
+;; Check my email every 5 minutes.
+(job '(next-minute (range 0 60 5)) "mbsync -a && mu4e-update")
+
+;;; wallpaper
+;; Change my wallpaper every 15 minutes.
+(job '(next-minute (range 0 60 15)) "python ")

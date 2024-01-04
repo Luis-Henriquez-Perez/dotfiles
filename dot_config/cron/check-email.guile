@@ -1,2 +1,0 @@
-;; Check my email every 5 minutes.
-(job '(next-minute (range 0 60 5)) "mbsync -a && mu4e-update")
