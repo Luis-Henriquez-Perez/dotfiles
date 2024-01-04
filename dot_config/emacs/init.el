@@ -2167,10 +2167,18 @@ The components returned are in the form of (name args (docstring declaration int
 ;; the file that is written to the users filesystem to reflect.
 
 ;; Honestly, I have not yet decided what to do with chezmoi.
-;;;;;;; TODO automatically use =chezmoi-write= when editing =chezmoi= file
+;;;;;;; TODO automatically use =chezmoi= to write files
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
+;; (defun oo-chezmoi-maybe-write-file ()
+;;   ;; If the file is managed by chezmoi, then try to write it with
+;;   ;; =chezmoi-write=
+;;   (when (aand () (or (member it (chezmoi-managed))))
+;;     (chezmoi-write)))
+
+;; (add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
+;; Additionally I may do some auto-commit stuff.  Who knows?
 ;;;;;;; TODO create a command to interactively add a file
 ;;;;;; consult
 (set! consult-preview-key nil)
@@ -2286,6 +2294,15 @@ The components returned are in the form of (name args (docstring declaration int
   (aprog1 (with-demoted-errors "Error: %S" (apply #'display-buffer-at-bottom args))
     (edwina--respective-window it
       (edwina-arrange))))
+
+;; Maybe this should be in the mode function?
+
+;; (defvar oo-old-display-buffer-base-action display-buffer-base-action)
+
+;; (defun oo-toggle-edwina-base-action ()
+;;   "Toggle."
+;;   (interactive)
+;;   (setq display-buffer-base-action oo-old-display-buffer-base-action))
 
 (setq display-buffer-base-action (cons #'oo-display-buffer-base-action nil))
 
@@ -2491,6 +2508,10 @@ The components returned are in the form of (name args (docstring declaration int
 
 ;; https://systemcrafters.net/emacs-mail/streamline-your-email-with-mu4e/
 
+;; https://emacs.stackexchange.com/questions/46156/how-to-install-mu-and-mu4e-with-gui-emacs
+;; https://blog.leonardotamiano.xyz/posts/mu4e-setup/
+;; https://blog.leonardotamiano.xyz/posts/mu4e-setup/
+;; https://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and/
 ;;;;;;; add =mu4e= to =load-path=
 ;; Unfortunately, the lisp files are bundled with the indexer instead of being a
 ;; standalone emacs package that uses the indexer like [[][notmuch]].  This means
@@ -2514,6 +2535,23 @@ The components returned are in the form of (name args (docstring declaration int
 
 ;; Specify the directory of mail directory.
 (set! mu4e-maildir (expand-file-name "~/.mail"))
+
+;;;;;;; TODO contexts 
+;; https://jherrlin.github.io/posts/emacs-mu4e/
+;; I definitely want some simple macro to declare this.
+;; (set! mu4e-contexts
+;;       (list (mu4e-make-context :name "luishp"
+;;                                :enter-func nil
+;;                                :leave-func nil
+;;                                :match-func nil
+;;                                :vars '())))
+;; (pushing! mu4e-contexts (apply #'mu4e-context))
+;; (defun oo-mu4e-enter-luisph-context ()
+;;   ())
+;; (let! leave-fn)
+;; ;; match-fn
+;; (vars)
+;; (make-mu4e-context :name "luishp" :enter-fn #')
 ;;;;;; orderless
 (defhook! enable-orderless (vertico-mode-hook :expire t)
   (when (require 'orderless nil t)

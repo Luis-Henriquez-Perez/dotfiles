@@ -13,4 +13,12 @@
 
 (grugru-define-global 'symbol '("wrong" "right"))
 
+(grugru-define-global 'symbol '("red" "orange" "yellow" "green" "blue" "indigo" "violet"))
+
+(grugru-define-global 'symbol '("front" "back"))
+
+(grugru-define-global 'symbol '("inner" "outer"))
+
 ;;;; emacs-lisp
+
+(grugru-define-on-major-mode '(emacs-lisp) 'word '("let" "let*" "let!" "-let"))
