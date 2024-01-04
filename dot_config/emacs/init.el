@@ -2000,7 +2000,12 @@ The components returned are in the form of (name args (docstring declaration int
 ;; I need a way of folding headings.  This is a quick fix until I can
 ;; adapt the headline state I wrote about into a generic outline state.
 (oo-bind 'outshine-mode-map :n "TAB" #'outline-toggle-children)
-
+;;;;;; similarly bind =TAB= to =outline-cycle= in =outli-mode=
+;; (oo-bind 'outli-mode-map :n "TAB" #'outline-cycle)
+(oo-bind 'outli-mode-map :n "TAB" #'outline-toggle-children)
+;;;;;; binding for =eval-expression= 
+;; I used to call this the eval leader map, but I do not know.
+;; (oo-bind "e" #'eval-expression)
 ;;;;; set theme to =modus-operandi=
 (oo-add-hook 'after-init-hook #'load-theme :args '(modus-operandi))
 
@@ -2045,6 +2050,7 @@ The components returned are in the form of (name args (docstring declaration int
   (apply orig-fn args))
 
 ;;;;; miscellaneous
+;;;;;; bindings
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)
 
@@ -2054,6 +2060,8 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'emacs-lisp-mode-map "ee" #'eval-expression :localleader t)
 (oo-bind 'emacs-lisp-mode-map "el" #'eval-last-sexp :localleader t)
 (oo-bind 'emacs-lisp-mode-map "ep" #'eval-print-last-sexp :localleader t)
+;;;;;; make =tab-width= 4 for python-mode 
+;; (setq)
 
 ;;;;; custom functions
 (defun! oo-set-font-face ()
@@ -2152,6 +2160,18 @@ The components returned are in the form of (name args (docstring declaration int
   (setq-local captain-predicate #'+captain-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
 
+;;;;;; chezmoi
+;; First thing to do is trigger chezmoi commands via bindings.  One of the key
+;; concepts needed with chezmoi is the concept of source state and target state.
+;; Source state is the version-controlled file that chezmoi.  Target state is
+;; the file that is written to the users filesystem to reflect.
+
+;; Honestly, I have not yet decided what to do with chezmoi.
+;;;;;;; TODO automatically use =chezmoi-write= when editing =chezmoi= file
+;; I need the command to write the source from the target.  The command
+;; =chezmoi-apply= does this but I would like it to do it automatically if I am
+;; already editing a target-file.
+;;;;;;; TODO create a command to interactively add a file
 ;;;;;; consult
 (set! consult-preview-key nil)
 
@@ -2265,7 +2285,7 @@ The components returned are in the form of (name args (docstring declaration int
   (require 'edwina)
   (aprog1 (with-demoted-errors "Error: %S" (apply #'display-buffer-at-bottom args))
     (edwina--respective-window it
-                               (edwina-arrange))))
+      (edwina-arrange))))
 
 (setq display-buffer-base-action (cons #'oo-display-buffer-base-action nil))
 
