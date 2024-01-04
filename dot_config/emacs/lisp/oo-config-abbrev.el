@@ -17,26 +17,28 @@
 
 ;;;; capitalize words 
 (define-global-abbrev "i" "I")
+
 (define-global-abbrev "luis" "Luis")
 
 ;;;; abbrevs
-(define-global-abbrev "im" "I am")
-
 (define-global-abbrev "tbh" "to be honest")
 
 (define-global-abbrev "qwerty" "QWERTY")
-
-(define-global-abbrev "cant" "cannot")
 
 (define-global-abbrev "ngl" "not going to lie")
 
 (define-global-abbrev "tfb" "to be frank")
 
 (define-global-abbrev "ndo" "window")
+
 (define-global-abbrev "tis" "it is")
+
 (define-global-abbrev "amly" "automatically")
+
 (define-global-abbrev "rn" "right now")
+
 (define-global-abbrev "bly" "probably")
+
 (define-global-abbrev "lk" "like")
 
 ;; I want the word =config= to stay the same too much for this to be useful.
@@ -46,8 +48,6 @@
 (define-global-abbrev "obv" "obviously")
 
 (define-global-abbrev "appr" "appropriate")
-
-(define-global-abbrev "dnt" "don't")
 
 (define-global-abbrev "ofc" "of course")
 
@@ -69,9 +69,18 @@
 
 ;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
+
+(define-global-abbrev "il" "I will")
+
+(define-global-abbrev "theres" "there is")
+
 (define-global-abbrev "itss" "it is")
 
+(define-global-abbrev "im" "I am")
+
 (define-global-abbrev "illl" "I will")
+
+(define-global-abbrev "cant" "cannot")
 
 (define-global-abbrev "idd" "I would")
 
@@ -81,13 +90,16 @@
 
 (define-global-abbrev "doesnt" "does not")
 
-(define-global-abbrev "wont" "will not")
+;; Not sure I actually want this abbrev because =wont= is actually a word. 
+;; (define-global-abbrev "wont" nil)
 
 (define-global-abbrev "thats" "that is")
 
 (define-global-abbrev "ul" "you'll")
 
 (define-global-abbrev "dont" "do not")
+
+(define-global-abbrev "dnt" "don't")
 
 (define-global-abbrev "ive" "I have")
 
@@ -102,8 +114,18 @@
 
 (define-global-abbrev "iff" "if and only if")
 
+(define-global-abbrev "whats" "what is")
+
+(define-global-abbrev "havent" "have not")
+
+(define-global-abbrev "didnt" "did not")
+
 ;;;; fix spelling mistakes
 ;; Here I focus on fixing unambiguous spelling mistakes.
+(define-global-abbrev "somehting" "something")
+
+(define-global-abbrev "th" "the")
+
 (define-global-abbrev "ot" "to")
 
 (define-global-abbrev "wnat" "want")
@@ -117,3 +139,7 @@
 (define-global-abbrev "suprise" "surprise")
 
 (define-global-abbrev "functoin" "function")
+
+(define-global-abbrev "refect" "reflect")
+
+(define-global-abbrev "dint" "did not")
