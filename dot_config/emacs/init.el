@@ -2599,6 +2599,12 @@ The components returned are in the form of (name args (docstring declaration int
 
 (set! org-id-link-to-org-use-id t)
 ;;;;;; outli 
+;;;;;;; use =%%= as the comment syntax for =text-mode=
+;; I want some sort of comment syntax for =text-mode= because I want the ability
+;; to outline things even there.  Not sure exactly what I should use for a
+;; comment syntax, but I figure that =%%= should be O.K.
+(adjoin! outli-heading-config '(text-mode "%%" ?% t))
+;;;;;;; add more elements
 ;; I eventually want to make these less hard-coded.  I think I have to
 ;; change the last element of =outli-heading-config= to make it so
 ;; that by default the comment syntax is some repeated number of
@@ -2606,6 +2612,11 @@ The components returned are in the form of (name args (docstring declaration int
 (adjoin! outli-heading-config '(common-lisp-mode ";;" 59 t))
 (adjoin! outli-heading-config '(lisp-mode ";;" 59 t))
 (adjoin! outli-heading-config '(sh-mode "#" 35 t))
+(adjoin! outli-heading-config '(python-mode "#" 35 t))
+;;;;;;; update the face of the headline on theme change
+;; I have noticed that the face of outli asterixes does not change on
+;; theme change.  I need to write some advice or something that will
+;; update the face for me.
 ;;;;;; rainbow-delimiters
 (oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
