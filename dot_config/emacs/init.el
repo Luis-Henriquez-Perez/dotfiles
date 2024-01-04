@@ -87,7 +87,8 @@ HOOK-OR-ADVICE.")
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
-
+;;;;;; set the fill-column 80 by default
+(setq-default fill-column 80)
 ;;;;;; stop creating =auto-save-list= directory
 ;; :PROPERTIES:
 ;; :ID:       20230827T140209.010138
@@ -2195,7 +2196,7 @@ The components returned are in the form of (name args (docstring declaration int
 
 (set! corfu-quick1 "abcdefghijklmnopqrstuvxyz")
 
-(oo-add-hook 'corfu-mode #'corfu-history-mode)
+(oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
 
 (set! corfu-quit-at-boundary nil)
 
