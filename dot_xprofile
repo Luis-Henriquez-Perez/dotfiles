@@ -20,5 +20,9 @@ picom &
 # For notifications...
 # dunst &
 
-### set the wallpaper
+### set the wallpaper for the first time
 # Im not sure whether to do this here or not.
+/home/luis/scripts/set-wallpaper.py
+
+### start mcron
+mcron &
