@@ -1,5 +1,3 @@
-;; -*- lexical-binding: t -*-
-
 ;;; emacs
 ;; For now I put everything in a single file.  The reason I choose to
 ;; do this is because it is simply easier for me with the knowledge I
@@ -34,16 +32,13 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 
 ;; This is the percentage of the heap before.
 (startup-set! gc-cons-percentage 0.8)
-
 ;;;;;; don't search for whenever a package is loaded
 (startup-set! file-name-handler-alist nil)
-
 ;;;;;; prevent flashing of unstyled modeline 
 ;; Don't render the modeline on startup.  For one thing, the startup looks
 ;; better without flashing stuff on the screen.  Additionally, the more that's
 ;; saved on rendering, the faster the startup.
 (startup-set! mode-line-format nil set-default)
-
 ;;;;;; determine whether emacs is in debug mode
 ;; This variable is snatched from [[https://github.com/hlissner/doom-emacs][Doom]].  The point of this variable is to serve as
 ;; an indicator of whether the current Emacs instance is run for
@@ -54,7 +49,6 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 (defvar oo-debug-p (or (getenv "DEBUG") init-file-debug)
   "When non-nil print debug messages.
 The --debug-init flag and setting the DEBUG envar will enable this at startup.")
-
 ;;;;;; store errors that occur in hooks and advices
 ;; This is influenced by the excellent stackoverflow on
 ;; [[https://emacs.stackexchange.com/questions/669/how-to-gracefully-handle-errors-in-init-file][how-to-gracefully-handle-errors-in-init-file]].  The idea is that I don't want
@@ -75,18 +69,19 @@ HOOK-OR-ADVICE.")
 ;; cache directory.
 (defvar oo-cache-dir (concat user-emacs-directory "cache/")
   "Directory containing files used for caching information.")
-
 ;;;;; add lisp directory to load-path
 ;; The load-path is a list of paths that emacs uses to find features it
 ;; can load.
 (push (expand-file-name "lisp" user-emacs-directory) load-path)
-
 ;;;;; settings
 ;; Here lies a collection of built-in settings that I want to take effect
 ;; immediately.  Many of them have to do with disabling default Emacs behaviors
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
+;;;;;; show newlines as =\n= instead of an actual newline
+;; They are easier to deal with and do not occupy unnecessary lines.
+(setq print-escape-newlines t)
 ;;;;;; set the fill-column 80 by default
 (setq-default fill-column 80)
 ;;;;;; stop creating =auto-save-list= directory
@@ -115,7 +110,7 @@ HOOK-OR-ADVICE.")
 ;; When emacs starts up, the default modeline will show up.  Rendering this default
 ;; modeline at startup does slightly slow down emacs (insignificant on it's own but
 ;; these things add up).  So I disable it.
-(setq-default mode-line-format nil)
+;; (setq-default mode-line-format nil)
 ;;;;;; don't ask me whether I want to kill a buffer with a live process
 ;; :PROPERTIES:
 ;; :ID:       20230807T002031.281189
@@ -1770,6 +1765,7 @@ The components returned are in the form of (name args (docstring declaration int
 ;; in =oo-call-after-load=.
 (require 'oo-call-after-load)
 
+;; TODO: better documentation.
 (defmacro! set! (symbol value)
   "A \"do-it-all\" setter for configuring variables."
   (let! value-var (make-symbol "value"))
@@ -1786,7 +1782,6 @@ The components returned are in the form of (name args (docstring declaration int
 (require 'oo-base-advice-utils)
 (require 'oo-base-hook-utils)
 (require 'oo-base-log)
-(require 'oo-call-after-load)
 (require 'oo-call-after-keymap)
 (require 'oo-call-after-evil-state)
 ;; Provides hooks.
@@ -1880,7 +1875,6 @@ The components returned are in the form of (name args (docstring declaration int
     (funcall (or setter #'set) var old-value)))
 
 (oo-add-hook 'emacs-startup-hook #'oo-reset-startup-symbols :append t)
-
 ;;;; setup
 ;;;;; keybindings 
 ;;;;;; setup leader maps
@@ -1970,7 +1964,6 @@ The components returned are in the form of (name args (docstring declaration int
 ;; this is handled with =edwina= because it makes the master window take up more than
 ;; =50%= of the width--by default =55%= (see [[file:snapshots/_helpful_variable__edwina-mfact_.png][edwina-mfact]]).
 (oo-bind 'oo-window-map "M" #'maximize-window :wk "maximize")
-
 ;;;;;; splitting windows
 ;; I'm unsure about whether to have any bindings splitting windows.  Since =edwina=
 ;; automates the way I split windows I do not use these splitting commands much.
@@ -1979,23 +1972,19 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'oo-window-map "h" #'split-window-vertically :wk "hsplit")
 ;; (oo-bind 'oo-window-map "V" #'oo-split-window-right-and-focus :wk "vsplit+focus")
 ;; (oo-bind 'oo-window-map "v" #'oo-split-window-below-and-focus :wk "split+focus")
-
 ;;;;;; undo changes to window configuration with =u=
 ;; There's a global mode called [[https://www.emacswiki.org/emacs/WinnerMode#:~:text=Winner%20Mode%20is%20a%20global%20minor%20mode%20that,included%20in%20GNU%20Emacs%2C%20and%20documented%20as%20winner-mode.][winner-mode]] that allow you to undo changes to
 ;; your window configuration.
 (oo-bind 'oo-window-map "u" #'winner-undo :wk "undo")
-
 ;;;;;; delete a window with =D= or =d=
 ;; The letter =d= is both mnemonic for deleting windows and it is easy to press
 ;; because its own the home key.
 (oo-bind 'oo-window-map "d" #'delete-window :wk "delete")
 (oo-bind 'oo-window-map "D" #'delete-other-windows :wk "delete others")
-
 ;;;;;; open a new window with =k=
 ;; This binding overlaps with.  My reasoning is you can think of it as opening a
 ;; new window.
 (oo-bind 'oo-window-map "k" #'display-buffer :wk "open")
-
 ;;;;;; bind =TAB= to toggle children in =outshine-mode=
 ;; I need a way of folding headings.  This is a quick fix until I can
 ;; adapt the headline state I wrote about into a generic outline state.
@@ -2012,25 +2001,6 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'oo-toggle-map "r" #'read-only-mode)
 (oo-bind 'oo-toggle-map "t" #'load-theme)
 (oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
-
-(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
-
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
-
-(oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
-
-(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
-
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
-
 ;;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new
 ;; one.  For this reason, I make sure to disable any enabled themes before applying
@@ -2048,8 +2018,25 @@ The components returned are in the form of (name args (docstring declaration int
   (:args orig-fn &rest args)
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
-
 ;;;;; miscellaneous
+;;;;;; hooks 
+(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+
+(oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+
+(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
+
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
+
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
 ;;;;;; bindings
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)
@@ -2062,7 +2049,6 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'emacs-lisp-mode-map "ep" #'eval-print-last-sexp :localleader t)
 ;;;;;; make =tab-width= 4 for python-mode 
 ;; (setq)
-
 ;;;;; custom functions
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."
@@ -2089,11 +2075,9 @@ The components returned are in the form of (name args (docstring declaration int
 ;;;;;; ace-window
 ;;;;;;; swap
 (set! aw-swap-invert t)
-
 ;;;;;;; set the keys used by ace-window
 (set! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-
-;; **** select a window with =w=, =j= or =o=
+;;;;;;; select a window with =w=, =j= or =o=
 ;; There are commands such as.  I do not need these commands.  After moving left,
 ;; right, up or down some direction once, the effort needed to traverse a window
 ;; using directional window movement commands greatly increases.  The command
@@ -2112,11 +2096,7 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'oo-window-map "w" #'ace-window :wk "select")
 (oo-bind 'oo-window-map "j" #'ace-window :wk "select")
 (oo-bind 'oo-window-map "o" #'ace-window :wk "select")
-
 ;;;;;;; swap two windows with =s=
-;; :PROPERTIES:
-;; :ID:       20231012T125502.066095
-;; :END:
 ;; Often when I want to switch focus from my main window to one of its
 ;; subsidiaries; I will want to swap buffers from the two windows.
 ;; Actually, =edwina= does provide functions to do this: namely
@@ -2124,7 +2104,6 @@ The components returned are in the form of (name args (docstring declaration int
 ;; But I can do something similar, but much faster with.  This is a case where =s= is
 ;; mnemonic and easy to press.
 (oo-bind 'oo-window-map "s" #'ace-swap-window :wk "swap")
-
 ;;;;;; avy
 (set! avy-style 'pre)
 
@@ -2138,17 +2117,14 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-find-map "j" #'burly-open-bookmark)
-
 ;;;;;;; save window configuration with =b= or =S=
 ;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
 ;; necessary to reproduce the current window configuration.  I can then restore the
 ;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
 (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-
 ;;;;;; caps-lock
 (oo-bind 'oo-toggle-map "c" #'caps-lock-mode)
-
 ;;;;;; captain
 (oo-add-hook 'prog-mode-hook #'captain-mode)
 (oo-add-hook 'text-mode-hook #'captain-mode)
@@ -2159,25 +2135,49 @@ The components returned are in the form of (name args (docstring declaration int
 (defhook! auto-capitalize-sentences-in-docstrings-and-comments (prog-mode-hook)
   (setq-local captain-predicate #'+captain-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
-
 ;;;;;; chezmoi
 ;; First thing to do is trigger chezmoi commands via bindings.  One of the key
 ;; concepts needed with chezmoi is the concept of source state and target state.
 ;; Source state is the version-controlled file that chezmoi.  Target state is
 ;; the file that is written to the users filesystem to reflect.
+;;;;;;; create a leader map for dotfile actions
+(defvar oo-dotfile-map (make-sparse-keymap))
+(define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
+(oo-bind 'oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
 
-;; Honestly, I have not yet decided what to do with chezmoi.
+(oo-bind 'oo-dotfile-map "f" #'chezmoi-find)
+;; I use the command =chezmoi-write= the most so far.  It syncs the current file
+;; with its corresponding chezmoi file.  If called while in the target file, it
+;; applies the changes in the target file to the source file and vice versa.
+;; Only caveat is that if there is a more recent change in the "other" file,
+;; then you have to use a prefix command to make sure you want to override those
+;; changes.
+(oo-bind 'oo-dotfile-map "w" #'chezmoi-write)
+;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
+;; homerow for QWERTY keyboards.
+(oo-bind 'oo-dotfile-map "d" #'chezmoi-write)
+;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
+;; it does something different depending on whether your in the source file or
+;; the target file.  If you are in the source file, you open the target file and
+;; vice versa.
+(oo-bind 'oo-dotfile-map "o" #'chezmoi-open-other)
+;;;;;;; TODO maybe have a way to sync all files
+;; I will be honest.  Sometimes I forget which target files I have edited and I
+;; want to sync them to make sure to.
 ;;;;;;; TODO automatically use =chezmoi= to write files
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
-;; (defun oo-chezmoi-maybe-write-file ()
-;;   ;; If the file is managed by chezmoi, then try to write it with
-;;   ;; =chezmoi-write=
-;;   (when (aand () (or (member it (chezmoi-managed))))
-;;     (chezmoi-write)))
 
-;; (add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
+;; TODO: integrate with =defhook= once I figure out how that is going to work.
+(defun oo-chezmoi-maybe-write-file ()
+  ;; If the file is managed by chezmoi, then try to write it with
+  ;; =chezmoi-write=
+  (let! file (f-full (buffer-file-name)))
+  (when (and file (member file (mapcar #'f-full (chezmoi-managed))))
+    (chezmoi-write file)))
+
+(add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
 ;; Additionally I may do some auto-commit stuff.  Who knows?
 ;;;;;;; TODO create a command to interactively add a file
 ;;;;;; consult
@@ -2224,6 +2224,7 @@ The components returned are in the form of (name args (docstring declaration int
 
 (set! corfu-quick1 "abcdefghijklmnopqrstuvxyz")
 
+(oo-add-hook 'prog-mode-hook #'corfu-mode)
 (oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
 
 (set! corfu-quit-at-boundary nil)
@@ -2293,7 +2294,7 @@ The components returned are in the form of (name args (docstring declaration int
   (require 'edwina)
   (aprog1 (with-demoted-errors "Error: %S" (apply #'display-buffer-at-bottom args))
     (edwina--respective-window it
-      (edwina-arrange))))
+                               (edwina-arrange))))
 
 ;; Maybe this should be in the mode function?
 
@@ -2492,6 +2493,17 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
 
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+;;;;;;; stop =lispy-comment= from adding an autoload cookie 
+;; I like the behavior of =lispy-comment= in general except that it adds an
+;; autoload after you have three consecutive semicolons.  I may have to advise
+;; it not to do that.  The function [[][]] is what is responsible for deciding
+;; whether to add the autoload cookie.  So I am making it return nil when it
+;; checks for three consecutive semi-colons.
+;; (defun! oo-advice-disable-autoload-comment (orig-fn &rest args)
+;;   (noflet! foo)
+;;   (apply orig-fn args))
+
+;; (advice-add #'lispy-comment :around #'oo-advice-disable-autoload-comment)
 ;;;;;; macrostep
 (oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
 (oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
@@ -2591,6 +2603,10 @@ The components returned are in the form of (name args (docstring declaration int
 (oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 (oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 
+;;;;;; orglink-mode 
+;; Enable =orglink= mode during =prog-mode= because I will likely use org links
+;; in comments.
+(oo-add-hook 'prog-mode #'orglink-mode)
 ;;;;;; org-appear
 (oo-add-hook 'org-mode-hook #'org-appear-mode)
 
@@ -2632,7 +2648,6 @@ The components returned are in the form of (name args (docstring declaration int
 ;; Although it is possible to have a parent headline that also has a source
 ;; block, I prefer not to.  I guess it is a stylistic thing.
 (set! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
-
 ;;;;;; org-capture
 (oo-popup-at-bottom "CAPTURE[^z-a]+")
 
@@ -2645,7 +2660,6 @@ The components returned are in the form of (name args (docstring declaration int
 (set! org-archive-location (concat org-directory "archive.org::"))
 
 (oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
-
 ;;;;;; org-id
 (set! org-id-track-globally t)
 (set! org-id-locations-file (concat oo-cache-dir "org-id-locations"))
@@ -2657,6 +2671,11 @@ The components returned are in the form of (name args (docstring declaration int
 
 (set! org-id-link-to-org-use-id t)
 ;;;;;; outli 
+;;;;;;; enable =outli= whenever I enter =text-mode= or =prog-mode= 
+;; The outline headings are so useful, that I want to see them all the time even
+;; in =text-mode=.
+(oo-add-hook 'prog-mode-hook #'outli-mode)
+(oo-add-hook 'text-mode-hook #'outli-mode)
 ;;;;;;; use =%%= as the comment syntax for =text-mode=
 ;; I want some sort of comment syntax for =text-mode= because I want the ability
 ;; to outline things even there.  Not sure exactly what I should use for a
@@ -2671,6 +2690,7 @@ The components returned are in the form of (name args (docstring declaration int
 (adjoin! outli-heading-config '(lisp-mode ";;" 59 t))
 (adjoin! outli-heading-config '(sh-mode "#" 35 t))
 (adjoin! outli-heading-config '(python-mode "#" 35 t))
+(adjoin! outli-heading-config '(lua-mode "--" ?- t))
 ;;;;;;; update the face of the headline on theme change
 ;; I have noticed that the face of outli asterixes does not change on
 ;; theme change.  I need to write some advice or something that will
@@ -2724,6 +2744,10 @@ The components returned are in the form of (name args (docstring declaration int
 
 (set! save-place-file (concat oo-cache-dir "saveplace"))
 (set! save-place-limit nil)
+;;;;;; setup 
+;;;;;;; mu4e contexts
+;; Sometimes certain things are rather annoying to configure and a perfect
+;; example of this is configuring mu4e-contexts.
 ;;;;;; smartparens
 (set! sp-highlight-wrap-tag-overlay nil)
 
@@ -2758,6 +2782,7 @@ The components returned are in the form of (name args (docstring declaration int
 ;; Note that this is the same strategy employed by [[id:c550f82a-9608-47e6-972b-eca460015e3c][idle-require]] to load packages.
 ;; Saving files like this reduces the likelihood of user delays.
 (set! super-save-auto-save-when-idle t)
+;; Save after 5 seconds of idle time.
 (set! super-save-idle-duration 5)
 ;;;;;; tempel
 (oo-bind 'tempel-map :ie "C-j" #'tempel-next)

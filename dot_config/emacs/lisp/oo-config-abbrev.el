@@ -1,6 +1,5 @@
 ;;; abbrevs
 ;;;; multiple word abbrevs 
-
 (define-global-abbrev "imho" "in my humble opinion")
 
 (define-global-abbrev "imo" "in my opinion")
@@ -14,12 +13,10 @@
 (define-global-abbrev "idk" "I do not know")
 
 (define-global-abbrev "gonna" "going to")
-
 ;;;; capitalize words 
 (define-global-abbrev "i" "I")
 
 (define-global-abbrev "luis" "Luis")
-
 ;;;; abbrevs
 (define-global-abbrev "tbh" "to be honest")
 
@@ -67,6 +64,7 @@
 
 (define-global-abbrev "evaled" "evaluated")
 
+(define-global-abbrev "idc" "I do not care")
 ;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
 
@@ -120,9 +118,25 @@
 
 (define-global-abbrev "didnt" "did not")
 
+(define-global-abbrev "shouldnt" "should not")
+
+(define-global-abbrev "isnt" "is not")
+
+(define-global-abbrev "youre" "you are")
+
+(define-global-abbrev "youd" "you would")
 ;;;; fix spelling mistakes
+;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
+(define-global-abbrev "htats" "that is")
+
+(define-global-abbrev "whehther" "whether")
+
 (define-global-abbrev "somehting" "something")
+
+(define-global-abbrev "hte" "the")
+
+(define-global-abbrev "te" "the")
 
 (define-global-abbrev "th" "the")
 
@@ -143,3 +157,15 @@
 (define-global-abbrev "refect" "reflect")
 
 (define-global-abbrev "dint" "did not")
+
+(define-global-abbrev "actioin" "action")
+
+(define-global-abbrev "actioins" "actions")
+
+(define-global-abbrev "optioin" "option")
+
+(define-global-abbrev "occurance" "occurrence")
+
+(define-global-abbrev "ocurance" "occurrence")
+
+(define-global-abbrev "hvae" "have")

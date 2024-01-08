@@ -6,11 +6,20 @@
 ;; https://www.gnu.org/software/mcron/manual/mcron.html#Introduction
 ;; This article has a list of why to use guile.
 
+;;; note
+;; Is there an expand path thing here?
+;; I wonder how/if I can interactively change this if I want a longer wait time.
+;; I would like to be able to change this without having to go to a different
+;; file.  Maybe I would need to integrate this with stumpwm.
+
 ;;; email
 ;; Check my email every 5 minutes.
-;; (job '(next-minute (range 0 60 5)) "mbsync -a")
+(job '(next-minute (range 0 60 5)) "~/update-email.sh")
 
 ;;; wallpaper
 ;; Change my wallpaper every 15 minutes.
 ;; Is there an expand path thing here?
-(job '(next-minute (range 0 60 15)) "/home/luis/.scripts/set-wallpaper.py")
+(job '(next-minute (range 0 60 15)) "/home/luis/scripts/set-wallpaper.py")
+
+;;; commit and push dotfiles automatically
+;; (job '(next-minute (range 0 60 10)) "/home/luis/scripts/auto-commit-and-push-dotfiles.sh")
