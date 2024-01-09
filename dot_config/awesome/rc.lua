@@ -44,7 +44,6 @@
 -- https://www.addictivetips.com/ubuntu-linux-tips/guide-awesomewm-windows-manager/
 ---https://scaron.info/blog/getting-started-with-awesome.html
 pcall(require, "luarocks.loader")
-
 ---- Libraries
 -- Standard awesome library
 local gears = require("gears")
@@ -61,7 +60,17 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
-
+----- use =revelation=
+-- This is the package that creates an expose of the clients.  I felt I needed
+-- something like this because out of the box awesome did not provide a way to
+-- actually jump to a client.  to be honest I will in general have maybe 5-7
+-- clients at most but still I do not want to just hop to them one by one.
+-- TODO: I need to make a script to clone this package to the ~/.config/awesome/
+-- directory so that this works.
+-- TODO: As it stands this package makes an expose of the clients.  Instead I
+-- want it to just add the letters to the clients in place.  Instead of moving
+-- the clients
+local revelation = require("revelation")
 ---- Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -91,10 +100,10 @@ do
    in_error = false
    end)
 end
-
 ---- Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+revelation.init()
 beautiful.useless_gap = 10
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -164,7 +173,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
-
 ---- Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
@@ -282,7 +290,6 @@ awful.screen.connect_for_each_screen(function(s)
     --     },
     -- })
 end)
-
 ---- Mouse bindings
 root.buttons(gears.table.join(
    awful.button({}, 3, function()
@@ -291,11 +298,9 @@ root.buttons(gears.table.join(
    awful.button({}, 4, awful.tag.viewnext),
    awful.button({}, 5, awful.tag.viewprev)
 ))
-
 ---- Custom Functions
 -- Make functions one line; it is too confusing to have them in separate lines.
 -- And stop it with these anonymous functions, just use named functions please.
-
 ----- master layout functions
 -- Replicate master-slave stuff with dwm and what I had with stumpwm.  When I
 -- pressed <C-z j> in stumpwm it would bring the next window to master.
@@ -338,7 +343,6 @@ end
 local function launch_terminal ()
    awful.spawn(terminal)
 end
-
 ----- take a screenshot
 -- local function take_screenshot()
 --    -- "maim -S"
@@ -501,17 +505,29 @@ global_key({ modkey, "Control" }, "h", decrease_number_of_columns, { description
 global_key({ modkey }, "s", hotkeys_popup.show_help, { description = "show help", group = "awesome" })
 ------ run an application
 global_key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end, {description = "run prompt", group = "launcher"})
+------ revelation
+global_key({ modkey}, "v", revelation, { description = "revelation", group = "launcher"} )
 ------ enable the bindings
 root.keys(globalkeys)
------ client Keys
-client_key({ modkey            }, "f",      function(c) c.fullscreen = not c.fullscreen c:raise() end, { description = "toggle fullscreen", group = "client" })
+------ close and go to master
+local function quit_and_goto_master (c)
+   if not c then return end 
+   c:kill()
+   local master = awful.client.getmaster()
+   if master then
+       client.focus = master
+       master:raise()
+   end
+end
 -- I want a shorter binding for quitting a window (or in awesome parlance a
 -- "client").  The binding =MOD SHIFT c= is just too much especially for such a
 -- common occurance.  I can fully understand why you would want the binding to
 -- quit out of awesome to be harder to press--you would not want to risk doing
 -- that by accident.  But quitting a window is too common to have a long binding
 -- for in my opinion.
-client_key({ modkey }, "q",      function(c) c:kill() end, { description = "close", group = "client" })
+client_key({ modkey }, "q", quit_and_goto_master, { description = "close and go to master", group = "client" })
+----- client Keys
+client_key({ modkey            }, "f",      function(c) c.fullscreen = not c.fullscreen c:raise() end, { description = "toggle fullscreen", group = "client" })
 client_key({ modkey, "Shift"   }, "c",      function(c) c:kill() end, { description = "close", group = "client" })
 client_key({ modkey, "Control" }, "space", awful.client.floating.toggle, { description = "toggle floating", group = "client" })
 client_key({ modkey, "Control" }, "Return", function(c) c:swap(awful.client.getmaster()) end, { description = "move to master", group = "client" })
@@ -579,7 +595,6 @@ clientbuttons = gears.table.join(
    awful.mouse.client.resize(c)
    end)
 )
-
 ---- Rules
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
@@ -640,7 +655,6 @@ awful.rules.rules = {
    -- { rule = { class = "Firefox" },
    --   properties = { screen = 1, tag = "2" } },
 }
-
 ---- Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function(c)

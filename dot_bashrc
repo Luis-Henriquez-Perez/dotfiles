@@ -40,3 +40,8 @@ export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
 # more geared to testing different versions of sbcl, which I am not doing right
 # now.
 export PATH=$PATH:~/.roswell/bin
+
+# Provided by the package [[][eat]].  I am not sure if I want to keep this.
+# Honestly, I just want to see the support the package spoke about.
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+  source "$EAT_SHELL_INTEGRATION_DIR/bash"
