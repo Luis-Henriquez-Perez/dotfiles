@@ -67,13 +67,6 @@ HOOK-OR-ADVICE.")
 ;; cache directory.
 (defvar oo-cache-dir (concat user-emacs-directory "cache/")
   "Directory containing files used for caching information.")
-;;;;; add lisp directory to load-path
-;; The load-path is a list of paths that emacs uses to find features it
-;; can load.
-
-;; Technically I do not need to do this anymore as long as I have everything in
-;; one file.  The config files that I load I use [[][directory-files]] for.
-;; (push (expand-file-name "lisp" user-emacs-directory) load-path)
 ;;;;; settings
 ;; Here lies a collection of built-in settings that I want to take effect
 ;; immediately.  Many of them have to do with disabling default Emacs behaviors
@@ -339,7 +332,7 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; where you can utilize the features of org mode--which include markup support,
 ;; link support, headline refiling, etc--while not paying the price of needing
 ;; an initial tangling script.
-(elpaca (outshine :fetcher github :repo "alphapapa/outshine" :ref "bf1eed1"))
+;; (elpaca (outshine :fetcher github :repo "alphapapa/outshine" :ref "bf1eed1"))
 ;;;;;;; outorg
 ;; Outshine depends on the package Outorg.  Outorg is what outshine uses to
 ;; convert back and forth between a file with outshine syntax and an org file.
@@ -2423,8 +2416,8 @@ For what buffer is displayed in the case of a boolean see
   (setq-local captain-predicate (lambda () t)))
 
 (defhook! auto-capitalize-sentences-in-docstrings-and-comments (prog-mode-hook)
-  (setq-local captain-predicate #'+captain-in-string-or-comment-p)
-  (setq-local captain-sentence-start-function #'+captain-prog-mode-sentence-start-function))
+  (setq-local captain-predicate #'oo-point-in-string-or-comment)
+  (setq-local captain-sentence-start-function #'oo-prog-mode-sentence-start-function))
 ;;;;;; chezmoi
 ;; First thing to do is trigger chezmoi commands via bindings.  One of the key
 ;; concepts needed with chezmoi is the concept of source state and target state.
@@ -2558,6 +2551,11 @@ For what buffer is displayed in the case of a boolean see
 ;;;;;; dired
 (oo-bind 'oo-app-map "d" #'dired)
 ;;;;;;; map =h= to =dired-up-directory= 
+;; I do not want to keep pressing =^= for the common action of going up the
+;; directory.
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
+(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
 ;;;;;; dirvish
 (oo-bind :alt #'dired #'dirvish)
 
@@ -2594,11 +2592,11 @@ For what buffer is displayed in the case of a boolean see
 ;; (defvar oo-old-display-buffer-base-action display-buffer-base-action)
 
 ;; (defun oo-toggle-edwina-base-action ()
-;;   "Toggle."
+;;   "Toggle using edwina"
 ;;   (interactive)
 ;;   (setq display-buffer-base-action oo-old-display-buffer-base-action))
 
-(setq display-buffer-base-action (cons #'oo-display-buffer-base-action nil))
+;; (setq display-buffer-base-action (cons #'oo-display-buffer-base-action nil))
 ;;;;;;; arrange windows in a master-slave style with =a=
 ;; I [[https://gitlab.com/ajgrf/edwina][edwina]] to automatically window configurations.  I choose the buffers I
 ;; want to display and it opens a window at a predictable location.  It is possible
@@ -2961,6 +2959,7 @@ For what buffer is displayed in the case of a boolean see
 ;; =comment-start=.  For now though, this handles my use case.
 (adjoin! outli-heading-config '(common-lisp-mode ";;" 59 t))
 (adjoin! outli-heading-config '(lisp-mode ";;" 59 t))
+(adjoin! outli-heading-config '(fennel-mode ";;" 59 t))
 (adjoin! outli-heading-config '(sh-mode "#" 35 t))
 (adjoin! outli-heading-config '(python-mode "#" 35 t))
 (adjoin! outli-heading-config '(lua-mode "--" ?- t))
@@ -3115,3 +3114,9 @@ For what buffer is displayed in the case of a boolean see
 (set! which-key-show-operator-state-maps t)
 
 (set! which-key-show-prefix 'top)
+;;;;;; HTML indentation
+;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
+(set! sgml-basic-offset 4)
+;;;;;; emmet 
+(oo-add-hook 'html-mode-hook #'emmet-mode)
+

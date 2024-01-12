@@ -1,0 +1,28 @@
+* Dotfiles
+These are my dotfiles.  They are managed with chezmoi.
+** goals
+*** reproducability
+** reasoning behind package choices
+** turmoil when choosing dotfiles
+** chezmoi
+I have not tried many dotfile mangers extensively, but chezmoi looked pretty
+solid to me.  I have tried [[https://yadm.io/][yadm]] and [[https://www.gnu.org/software/stow/][gnu stow]] for dotfile management
+before.  By solid I mean that it covers several things I wanted in dotfiles.
+** featured programs
+Here I'll talk briefly about some of the programs I choose and why I choose
+them.
+** awesomewm
+At first I was using stumpwm and I have got to say I do love lisp, but stumpwm
+was a bit slow and in fact the first two weeks I used it it crashed at least 5
+times (I think the problem).  In any case, awesomewm is lightweight it is fast,
+it is written in a real programming language and it is extremely customizable.
+** stumpwm
+As I have mentioned I am attracted to customizable applications and particularly
+ones written in lisp.  In this sense.
+** emacs
+This is the package I have spent the most time on.
+** os - archlinux
+I am currently using [[https://archlinux.org/][archlinux]] as my operating system, however I am
+considering migrating to [[https://guix.gnu.org/][guix]], maybe with parabola as an intermediate
+step.
+
