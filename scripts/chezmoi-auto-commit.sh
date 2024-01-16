@@ -54,7 +54,7 @@ for target in "${targets[@]}"; do
     echo "staged $source_path"
 done
 
-commit_message="Add modified chezmoi files."
+commit_message="Update chezmoi targets."
 for file in $modified; do
     commit_message="$commit_message"$'\n'" - $file"
 done
