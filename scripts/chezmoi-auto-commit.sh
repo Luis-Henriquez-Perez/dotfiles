@@ -41,12 +41,12 @@ cd $source_path
 
 staged_files=$(git diff --name-only --cached)
 
-git reset
+git reset > /dev/null 2>&1
 
 for file in $modified; do
     full_path="$source_path/$file"
     echo "staging $full_path"
-    git add $full_path > /dev/null 2>&1 || { echo "Failed to stage $file"; exit 1; }
+    git add $full_path || { echo "Failed to stage $file"; exit 1; }
 done
 
 # commit_message="Add modified chezmoi files."
