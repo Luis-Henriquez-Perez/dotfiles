@@ -58,12 +58,12 @@ git commit -m "Add modified chezmoi files"
 
 echo "auto committing: " $source_path
 
-git push || { echo "Failed to push changes"; exit 1; }
+git push > /dev/null 2>&1 || { echo "Failed to push changes"; exit 1; }
 
-echo "pushed " $source_path
+echo "pushed from $source_path to"
 
-for file in staged_files; do
-    if ! echo "$modified" | grep -q "$file"; then
-        git add $file || { echo "Failed to add $file"; exit 1; }
-    fi
-done
+# for file in staged_files; do
+#     if ! echo "$modified" | grep -q "$file"; then
+#         git add $file || { echo "Failed to add $file"; exit 1; }
+#     fi
+# done
