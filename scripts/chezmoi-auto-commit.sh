@@ -49,8 +49,8 @@ git reset > /dev/null 2>&1
 
 # Stage the files that we just added to chezmoi.
 for target in "${targets[@]}"; do
-    source_path=$(chezmoi source-path "$target")
-    git add $source_path || { echo "Failed to stage $file"; exit 1; }
+    source=$(chezmoi source-path "$target")
+    git add $source || { echo "Failed to stage $file"; exit 1; }
     echo "staged $source_path"
 done
 
