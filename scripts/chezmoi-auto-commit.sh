@@ -77,6 +77,7 @@ remote_url=${remote_url:-$(git remote get-url origin 2>/dev/null)}
 echo "pushed from $source_path to $remote_url"
 
 #
+#
 # for file in staged_files; do
 #     if ! echo "$modified" | grep -q "$file"; then
 #         git add $file || { echo "Failed to add $file"; exit 1; }
