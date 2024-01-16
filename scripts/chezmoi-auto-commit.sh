@@ -18,9 +18,16 @@
 # https://www.chezmoi.io/reference/commands/status/
 # Get the list of modified files from chezmoi status
 modified=$(chezmoi status | grep '^MM' | cut -c4-)
+
+if [ -z "$modified" ]; then
+    echo "No modified files to process."
+    exit 0
+fi
+
 target_path=$(chezmoi target-path)
 source_path=$(chezmoi source-path)
 ### Add files to chezmoi
+
 # Loop through each modified file
 for file in $modified; do
     full_path="$target_path/$file"
@@ -28,29 +35,35 @@ for file in $modified; do
     echo "Added $full_path"
 done
 
-if $modified; then
-    # Navigate to the chezmoi directory
-    chezmoi cd
+# Navigate to the chezmoi directory
+echo "changing directory to $source_path"
+cd $source_path
 
-    staged_files=$(git diff --name-only --cached)
+staged_files=$(git diff --name-only --cached)
 
-    git reset
+git reset
 
-    for file in modified; do
-        git add $file
-    done
+for file in $modified; do
+    full_path="$source_path/$file"
+    echo "staging $full_path"
+    git add $full_path || { echo "Failed to stage $file"; exit 1; }
+done
 
-    git commit -m "Add modified chezmoi files.\n The following files have been added"
+# commit_message="Add modified chezmoi files."
+# for file in $modified; do
+#     commit_message="$commit_message\n - $file"
+# done
 
-    echo "auto committing: " $source_path
+git commit -m "Add modified chezmoi files"
 
-    git push
+echo "auto committing: " $source_path
 
-    echo "pushing " $source_path
+git push || { echo "Failed to push changes"; exit 1; }
 
-    for file in staged_files; do
-        if ! echo "$modified" | grep -q "$file"; then
-            git add $file
-        fi
-    done
-fi
+echo "pushed " $source_path
+
+for file in staged_files; do
+    if ! echo "$modified" | grep -q "$file"; then
+        git add $file || { echo "Failed to add $file"; exit 1; }
+    fi
+done
