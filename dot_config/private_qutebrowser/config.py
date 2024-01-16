@@ -80,3 +80,5 @@ config.bind('<Space>je', ':set content.javascript.enabled true')
 config.bind('<Space>jd', ':set content.javascript.enabled false')
 ### open new pages with =<space>ff=
 config.bind('<Space>ff', 'set-cmd-text -s :open')
+### hide titlebars from qutebrowser
+config.set('window.hide_decoration', True)

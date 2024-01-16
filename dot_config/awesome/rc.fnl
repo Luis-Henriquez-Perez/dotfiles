@@ -316,6 +316,29 @@
 ;;;; Signals
 ;; Signals are like hooks.  They are a way to run functions when an event
 ;; happens.
+;;;;; Checking whether signals are connectd
+;; There does not seem to be a built in way to check whether a signal is
+;; connected.  I have to keep track of the signals I add and remove myself.
+(local signal-connections {})
+
+;; I make my own wrappers around =client.connect_signal= and.
+(fn connect_signal [signal-name signal-fn]
+  "Connect SIGNAL-FN to SIGNAL-NAME."
+  ;; function connect_client_signal(signal_name, func)
+  ;; if not signal_connections[signal_name] then
+  ;; signal_connections[signal_name] = {}
+  ;; end
+  ;; table.insert(signal_connections[signal_name], func)
+  ;; client.connect_signal(signal_name, func)
+  ;; end
+  (table.insert signal-connections[signal-name] signal-fn)
+  (client.connect_signal))
+
+(fn disconnect-signal [signal-name signal-fn]
+  "Disconnect SIGNAL-FN from SIGNAL-NAME.")
+
+(fn signal-connected? [signal-name signal-fn]
+  "Return non-nil if")
 ;;;;; Titlebars
 
 (fn add-titlebars-maybe [c]
@@ -361,3 +384,11 @@
 ;;;;; When a window is focused, change the border color
 (client.connect_signal "focus" (fn [c] (set c.border_color beautiful.border_focus)))
 (client.connect_signal "unfocus" (fn [c] (set c.border_color beautiful.border_normal)))
+
+
+;; (fn toggle-titlebars []
+;;   (if (signal-connected? :request::titlebars add-titlebars-maybe)
+;;       (disconnect-signal :request::titlebars))
+;;   (client.disconnect_signal :request::titlebars add-titlebars-maybe))
+
+(global-key [modkey] "p" toggle-titlebars {:description "Toggle Titlebars" :group "client"})

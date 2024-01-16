@@ -32,8 +32,6 @@ if $modified; then
     # Navigate to the chezmoi directory
     chezmoi cd
 
-    echo "auto committing source directory: " $source_path
-
     staged_files=$(git diff --name-only --cached)
 
     git reset
@@ -43,7 +41,12 @@ if $modified; then
     done
 
     git commit -m "Add modified chezmoi files.\n The following files have been added"
+
+    echo "auto committing: " $source_path
+
     git push
+
+    echo "pushing " $source_path
 
     for file in staged_files; do
         if ! echo "$modified" | grep -q "$file"; then
