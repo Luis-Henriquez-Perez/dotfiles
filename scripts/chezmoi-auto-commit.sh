@@ -50,24 +50,22 @@ git reset > /dev/null 2>&1
 # Stage the files that we just added to chezmoi.
 for target in "${targets[@]}"; do
     source_path=$(chezmoi source-path "$target")
-    echo "staging $source_path"
     git add $source_path || { echo "Failed to stage $file"; exit 1; }
+    echo "staged $source_path"
 done
 
-# Commit them.
-# commit_message="Add modified chezmoi files."
-# for file in $modified; do
-#     commit_message="$commit_message\n - $file"
-# done
+commit_message="Add modified chezmoi files."
+for file in $modified; do
+    commit_message="$commit_message"$'\n'" - $file"
+done
 
-git commit -m "Add modified chezmoi files." > /dev/null 2>&1
+git commit -m "$commit_message" > /dev/null 2>&1
 
 echo "auto committing: $source_path"
 
 # And push them.
 git push > /dev/null 2>&1 || { echo "Failed to push changes"; exit 1; }
 
-# origin=
 current_branch=$(git branch --show-current)
 
 # Get remote name associated with current branch
