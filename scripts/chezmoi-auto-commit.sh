@@ -38,7 +38,6 @@ for file in $modified; do
 done
 
 # navigate to the chezmoi directory
-echo "changing directory to $source_path"
 cd $source_path
 
 # Get a copy of the files that are staged.
