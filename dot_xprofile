@@ -28,7 +28,7 @@ mcron &
 # TODO: fix that this took a long time.  It is definitely noticeable, the
 # difference taken to startup with emacs starting as a daemon beforehand.  It is
 # still worth doing it because I am going to startup emacs anyway.
-emacs --daemon
+# emacs --daemon
 
 ### set the wallpaper for the first time
 # I am not sure whether to do this here or not.

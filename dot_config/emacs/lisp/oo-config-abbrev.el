@@ -64,7 +64,7 @@
 
 (define-global-abbrev "evaled" "evaluated")
 
-(define-global-abbrev "idc" "I do not care")
+(define-global-abbrev "imma" "I am going to")
 ;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
 
@@ -82,9 +82,9 @@
 
 (define-global-abbrev "idd" "I would")
 
-(define-global-abbrev "dont" "don't")
+(define-global-abbrev "dont" "do not")
 
-(define-global-abbrev "wontt" "won't")
+(define-global-abbrev "wontt" "will not")
 
 (define-global-abbrev "doesnt" "does not")
 
@@ -92,6 +92,8 @@
 ;; (define-global-abbrev "wont" nil)
 
 (define-global-abbrev "thats" "that is")
+
+(define-global-abbrev "u" "you")
 
 (define-global-abbrev "ul" "you'll")
 
@@ -124,7 +126,13 @@
 
 (define-global-abbrev "youre" "you are")
 
-(define-global-abbrev "youd" "you would")
+(define-global-abbrev "wouldnt" "would not")
+
+(define-global-abbrev "woudnt" "would not")
+
+(define-global-abbrev "coudnt" "could not")
+
+(define-global-abbrev "couldnt" "could not")
 ;;;; fix spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
@@ -162,10 +170,6 @@
 
 (define-global-abbrev "actioins" "actions")
 
-(define-global-abbrev "optioin" "option")
+(define-global-abbrev "orignal" "original")
 
-(define-global-abbrev "occurance" "occurrence")
-
-(define-global-abbrev "ocurance" "occurrence")
-
-(define-global-abbrev "hvae" "have")
+(define-global-abbrev "eachother" "each other")

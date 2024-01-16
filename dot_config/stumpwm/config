@@ -1,5 +1,6 @@
 ;; -*- mode: common-lisp -*-
 
+;;; stumpwm
 ;; For whatever reason stumpwm's init file is not suffixed with =.lisp=; it's just
 ;; plain =config= as opposed to something like =config.lisp= or =init.lisp=.  Not
 ;; that big of a deal but it does mean that Emacs will not know what mode open it
@@ -11,17 +12,19 @@
 ;; =import= or Emacs's =require=.
 (in-package :stumpwm)
 
+;;;; center windows
 ;; By default =stumpwm= displays it's message on the upper right hand corner.  I
 ;; call it, but it's the equivalent of =awesome's= menu where it displays all of
 ;; its keybindings.
 (setf *message-window-gravity* :center)
 
 (setf *input-window-gravity* :center)
-
+;;;; create a dynamic layout
 ;; Fairly recently a pull request was merged into stumpwm allowing it to have a
 ;; rudimentary dynamic tiling.
 (gnew-dynamic "main")
 
+;;;; create a custom command for invoking firefox
 ;; This is taken from [[][]].  Before I had this command in my configuration I had
 ;; been invoking firefox via =C-t != which is bound to [[][exec]] by default.  I
 ;; suspect that this was the reason I had felt a [[][pause]] before.  As in the way
@@ -32,6 +35,7 @@
   "Run or raise Firefox."
   (sb-thread:make-thread (lambda () (run-or-raise "firefox" '(:class "Firefox") t nil))))
 
+;;;; setup keybindings
 (define-key *root-map* (kbd "R") "loadrc")
 
 (define-key *root-map* (kbd "E") "expose")
@@ -46,8 +50,16 @@
 
 (define-key *root-map* (kbd "Y") "exec nyxt")
 
+;;;; specify the location of modules directory
+;; I cloned [[https://github.com/stumpwm/stumpwm-contrib][stumpwm-contrib]] into my downloads directory (I know this is probably a
+;; bad place, +but I don't know where else to put them yet+)[fn:2] but I don't know how to
+;; tell =stumpwm= about them. Thankfully, I say by example from [[https://config.phundrak.com/stumpwm.html][phundrak's config]]
+;; that the appropriate commands is =set-module-dir=.  I tested that the modules were
+;; properly registered with =list-modules= which displays the list of modules =stumpwm=
+;; knows about and [[][it worked!]]
 (set-module-dir "~/.config/stumpwm/modules/")
 
+;;;; create gaps
 (load-module "swm-gaps")
 (setf swm-gaps:*inner-gaps-size* 13)
 (setf swm-gaps:*outer-gaps-size* 7)
@@ -65,22 +77,40 @@
   (when (find "Roboto Mono" (the list (clx-truetype:get-font-families)) :test #'string=)
     (set-font (list (make-instance 'xft:font :family "Roboto Mono" :subfamily "Regular" :size 10)))))
 
+;;;; change prefix key from =C-t= to =C-z=
+;; On a QWERTY keyboard, it is far easier to press =C-z= than it is to press =C-t=.
+;; The =Ctrl= and =Z= keys are right next to each other.  Note that you *need* the =kbd=: I
+;; interactively evaluated this without the =kbd= and had to restart my computer because
+;; none of the bindings worked.
 (set-prefix-key (kbd "C-z"))
 
-(defun enable-mode-line-everywhere ()
-  (loop for screen in *screen-list* do
-        (loop for head in (screen-heads screen) do
-              (enable-mode-line screen head t))))
-(enable-mode-line-everywhere)
+;;;; enable the modeline
+;; Right now the modeline updates too infrequently.  I disable it until I have
+;; the time to look at it properly.  Maybe I will outsource to another modeline
+;; to be honest.
+;; (defun enable-mode-line-everywhere ()
+;;   (loop for screen in *screen-list* do
+;;         (loop for head in (screen-heads screen) do
+;;               (enable-mode-line screen head t))))
+;; (enable-mode-line-everywhere)
 
-(setf *screen-mode-line-format*
-      (list
-       ;; Groups
-       " ^7[^B^4%n^7^b] "
-       ;; Pad to right
-       "^>"
-       ;; Date
-       "^7"
-       "%d"
-       ;; Battery
-       " ^7[^n%B^7]^n "))
+;; (setf *screen-mode-line-format*
+;;       (list
+;;        ;; Groups
+;;        " ^7[^B^4%n^7^b] "
+;;        ;; Pad to right
+;;        "^>"
+;;        ;; Date
+;;        "^7"
+;;        "%d"
+;;        ;; Battery
+;;        " ^7[^n%B^7]^n "))
+
+;;;;  create a command for running emacsclient
+
+;; The =-r= flag makes emacsclient create a new frame if there is not one already.
+(defcommand emacs () ()
+  "Run or raise Emacs."
+  (sb-thread:make-thread (lambda () (run-or-raise "emacs" '(:class "Emacs") t nil)))
+  ;; (sb-thread:make-thread (lambda () (run-or-raise "emacsclient -r" '(:class "Emacs") t nil)))
+  )

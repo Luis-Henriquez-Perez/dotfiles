@@ -17,6 +17,7 @@
 (defun! oo-prog-mode-sentence-start-function ()
   "Return point at the start of the last sentence.
 Meant to be used as the value of `captain-predicate'."
+  ;; (let! rx (seq "."))
   (pcase (oo-point-in-string-or-comment)
     ('comment
      (awhen (car (bounds-of-thing-at-point 'sentence))

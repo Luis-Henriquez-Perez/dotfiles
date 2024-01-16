@@ -1,7 +1,13 @@
-* Dotfiles
+* dotfiles
 These are my dotfiles.  They are managed with chezmoi.
 ** goals
 *** reproducability
+I want to be able to get on a fresh install of archlinx or a derivative and
+install all of my packages.  Eventually, I want to switch to [[][guix]] or
+[[][nix]] to achieve ultimate reproducability.
+*** one command setup
+I want to be able to run just one command or script to set up all of my
+dotfiles.  I have not achieved this yet but I am working on it.
 ** reasoning behind package choices
 ** turmoil when choosing dotfiles
 ** chezmoi

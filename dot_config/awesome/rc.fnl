@@ -7,6 +7,8 @@
 ;; for me to code in than lua.  I prefer programming in lisp languages.  A third
 ;; reason is that I have macro support so I can automate things in a way that
 ;; would be more difficult in lua.
+
+;; I essentially had to go thought the while rc.lua file.
 ;;;; Libraries 
 ;; Standard awesome library
 (local awful (require :awful))
@@ -27,6 +29,8 @@
 (local menubar       (require :menubar))
 (local hotkeys_popup (require :awful.hotkeys_popup))
 
+;; This adds other bindings for things like tmux.  I disable it because I do not
+;; use tmux or want these bindings that I have not set myself.
 ;; Enable hotkeys help widget for VIM and other apps
 ;; when client with a matching name is opened:
 ;; (require :awful.hotkeys_popup.keys)
@@ -180,9 +184,6 @@
   (set globalkeys (gears.table.join globalkeys newkey)))
 ;;;;; Launch Applications
 ;; These are some shortcuts for launching my most common applications.
-;; (global-key [modkey] "E" launch-emacsclient {:description "Launch Emacsclient" :group "applications"})
-;; (global-key [modkey] "i" launch-firefox     {:description "Launch Firefox"     :group "applications"})
-;; (global-key [modkey] "c" launch-chromium    {:description "Launch Chromium"    :group "applications"})
 (global-key [modkey] "n" (fn [] (awful.spawn "nyxt"))        {:description "Launch Nyxt"        :group "applications"})
 ;; I have had much trouble with firefox.  It is the one application that is
 ;; consistently causing me performance issues.  Therefore I am trying to move
