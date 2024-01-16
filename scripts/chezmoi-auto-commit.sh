@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ## automatically commit and push my dotfiles
-# This script is so that I do not have to always check to see which files have
-# been modified in the target directory and adding them all.
-
+# It is easy to loose track of dotfiles you have modified.  If you do happen to
+# loose track, then you would need to find them with chezmoi status and add them
+# with ~chezmoi add~.  This script is to automate this process.
 ### check whether dotfiles are modified
 # There should be a global variable.
 
@@ -13,12 +13,13 @@
 
 # For every managed file.
 # If modified and source is not modified chezmoi apply
-### Declare variables
-# The invocation ~chezmoi status~.
+# Declare variables
+# The invocation ~chezmoi status~ produces a.
 # https://www.chezmoi.io/reference/commands/status/
 # Get the list of modified files from chezmoi status
 modified=$(chezmoi status | grep '^MM' | cut -c4-)
 
+# If there are no modified files that need adding, we are done.
 if [ -z "$modified" ]; then
     echo "No modified files to process."
     exit 0
@@ -26,41 +27,57 @@ fi
 
 target_path=$(chezmoi target-path)
 source_path=$(chezmoi source-path)
-### Add files to chezmoi
+targets=()
 
-# Loop through each modified file
+# update the changes.
 for file in $modified; do
-    full_path="$target_path/$file"
-    chezmoi add $full_path
-    echo "Added $full_path"
+    target="$target_path/$file"
+    targets+=("$target")  # Append to array
+    chezmoi add $target
+    echo "Added $target."
 done
 
-# Navigate to the chezmoi directory
+# navigate to the chezmoi directory
 echo "changing directory to $source_path"
 cd $source_path
 
+# Get a copy of the files that are staged.
 staged_files=$(git diff --name-only --cached)
 
+# Unstage everything.
 git reset > /dev/null 2>&1
 
-for file in $modified; do
-    full_path="$source_path/$file"
-    echo "staging $full_path"
-    git add $full_path || { echo "Failed to stage $file"; exit 1; }
+# Stage the files that we just added to chezmoi.
+for target in "${targets[@]}"; do
+    source_path=$(chezmoi source-path "$target")
+    echo "staging $source_path"
+    git add $source_path || { echo "Failed to stage $file"; exit 1; }
 done
 
+# Commit them.
 # commit_message="Add modified chezmoi files."
 # for file in $modified; do
 #     commit_message="$commit_message\n - $file"
 # done
 
-git commit -m "Add modified chezmoi files" > /dev/null 2>&1
+git commit -m "Add modified chezmoi files." > /dev/null 2>&1
 
-echo "auto committing: " $source_path
+echo "auto committing: $source_path"
 
+# And push them.
 git push > /dev/null 2>&1 || { echo "Failed to push changes"; exit 1; }
 
-echo "pushed from $source_path to"
+# origin=
+current_branch=$(git branch --show-current)
+
+# Get remote name associated with current branch
+remote_name=$(git config branch."$current_branch".remote)
+
+# Get remote URL, fallback to 'origin' if needed
+remote_url=$(git remote get-url "$remote_name" 2>/dev/null)
+remote_url=${remote_url:-$(git remote get-url origin 2>/dev/null)}
+
+echo "pushed from $source_path to $remote_url"
 
 # for file in staged_files; do
 #     if ! echo "$modified" | grep -q "$file"; then
