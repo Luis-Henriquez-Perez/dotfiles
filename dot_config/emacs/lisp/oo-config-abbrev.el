@@ -68,6 +68,10 @@
 ;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
 
+(define-global-abbrev "youve" "you have")
+
+(define-global-abbrev "youd" "you would")
+
 (define-global-abbrev "il" "I will")
 
 (define-global-abbrev "theres" "there is")
