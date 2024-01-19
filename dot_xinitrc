@@ -25,7 +25,7 @@ session=${1:-awesome}
 
 case $session in
     qtile             ) exec qtile start;;
-    stumpwm           ) exec stumpwm;;
+    stumpwm           ) exec ~/stumpwm.ros;;
     awesome|awesomewm ) exec awesome;;
     i3|i3wm           ) exec i3;;
     kde               ) exec startplasma-x11;;
