@@ -4,18 +4,10 @@
 # It is easy to loose track of dotfiles you have modified.  If you do happen to
 # loose track, then you would need to find them with chezmoi status and add them
 # with ~chezmoi add~.  This script is to automate this process.
-### check whether dotfiles are modified
-# There should be a global variable.
 
-# Also I need to loop through all the files managed by chezmoi and check to see
-# if their targets are modified.  If both target and source are modified
-# potentially do nothing, and leave it to me to check.  I could also potentially.
+# I have been considering having this script be more robust with rofi, allowing
+# me to choose which files I want to automatically commit and push.
 
-# For every managed file.
-# If modified and source is not modified chezmoi apply
-# Declare variables
-# The invocation ~chezmoi status~ produces a.
-# https://www.chezmoi.io/reference/commands/status/
 # Get the list of modified files from chezmoi status
 modified=$(chezmoi status | grep '^MM' | cut -c4-)
 
