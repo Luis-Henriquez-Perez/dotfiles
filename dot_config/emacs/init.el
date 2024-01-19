@@ -471,9 +471,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;;;;;;; elfeed
 (elpaca (elfeed :repo "skeeto/elfeed" :fetcher github :ref "de4b64b"))
 ;;;;;;; elfeed-org
-
-;; :ID:       46cc4c63-49c4-4b56-935d-2a10d13a751d
-;; :END:
 (elpaca (elfeed-org :repo "remyhonig/elfeed-org" :fetcher github :ref "77b6bbf"))
 ;;;;;;; elfeed-score
 (elpaca (elfeed-score :fetcher github :repo "sp1ff/elfeed-score" :ref "5fff415"))
@@ -589,9 +586,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;;;;;;; mmt
 (elpaca (mmt :repo "mrkkrp/mmt" :fetcher github :ref "d772956"))
 ;;;;;;; modus-themes
-
-;; :ID:       6824ab97-0509-4058-bea1-b4e56cf15610
-;; :END:
 (elpaca (modus-themes :fetcher github :repo "protesilaos/modus-themes" :ref "38236a9"))
 ;;;;;;; notmuch
 (elpaca (notmuch :url "https://git.notmuchmail.org/git/notmuch" :fetcher git :ref "a5f7efd"))
