@@ -136,19 +136,19 @@
     (gears.wallpaper.maximized wallpaper s true)))
 
 ;; -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-(screen.connect_signal "property::geometry" set-wallpaper)
+;; (screen.connect_signal "property::geometry" set-wallpaper)
 
 (fn setup-screen [screen]
-  (set-wallpaper screen)
+  ;; (set-wallpaper screen)
   (awful.tag ["1" "2" "3" "4" "5" "6" "7" "8" "9"] screen (. awful.layout.layouts 1))
   ;; Create a promptbox for each screen
   (set screen.mypromptbox (awful.widget.prompt))
-  (set screen.mylayoutbox (awful.widget.layoutbox s))
+  (set screen.mylayoutbox (awful.widget.layoutbox screen))
   (screen.mylayoutbox:buttons (gears.table.join
-                               (awful.button [] 1 (fn [] (awful.layout.inc 1 s awful.layout.layouts)))
-                               (awful.button [] 3 (fn [] (awful.layout.inc -1 s)))
-                               (awful.button [] 4 (fn [] (awful.layout.inc 1 s)))
-                               (awful.button [] 5 (fn [] (awful.layout.inc -1 s)))))
+                               (awful.button [] 1 (fn [] (awful.layout.inc 1 screen awful.layout.layouts)))
+                               (awful.button [] 3 (fn [] (awful.layout.inc -1 screen)))
+                               (awful.button [] 4 (fn [] (awful.layout.inc 1 screen)))
+                               (awful.button [] 5 (fn [] (awful.layout.inc -1 screen)))))
 
   (set screen.mytaglist (awful.widget.taglist {:screen screen
                                                :filter awful.widget.taglist.filter.all
@@ -233,32 +233,34 @@
 ;;;;; Set Global Keys
 (root.keys globalkeys)
 ;;;;; Manipulate Tags 
-(fn view-tag-only []
-  (local screen (awful.screen.focused))
-  (local tag (. screen.tags i))
-  (when tag (tag:view_only)))
+;; (fn view-tag-only []
+;;   (local screen (awful.screen.focused))
+;;   (local tag (. screen.tags i))
+;;   (when tag (tag:view_only)))
 
-(fn toggle-tag-display []
-  (local screen (awful.screen.focused))
-  (local tag (. screen.tags i))
-  (when tag (awful.tag.viewtoggle tag)))
+;; (fn toggle-tag-display []
+;;   (local screen (awful.screen.focused))
+;;   (local tag (. screen.tags i))
+;;   (when tag (awful.tag.viewtoggle tag)))
 
-(fn move-client-to-tag []
-  (when client.focus
-    (local tag (client.focus.screen))
-    (when tag
-      (client.focus.move))))
+;; (fn move-client-to-tag []
+;;   (when client.focus
+;;     (local tag (client.focus.screen))
+;;     (when tag
+;;       (client.focus.move))))
 
-(fn toggle-tag-on-focused-client []
-  (when client.focus
-    (let [tag (client.fc)]
-      (client.focus:toggle_tag))))
+;; (fn toggle-tag-on-focused-client []
+;;   (when client.focus
+;;     (let [tag (client.fc)]
+;;       (client.focus:toggle_tag))))
 
-(for [i 1 9]
-  (global-key [modkey]                   (.. "#" i) view-tag-only                 [(.. "view tag #" i) "tag"])
-  (global-key [modkey "Shift"]           (.. "#" i) toggle-tag-display            [(.. "toggle tag #" i) "tag"])
-  (global-key [modkey "Control"]         (.. "#" i) move-client-to-tag            [(.. "move to tag #" i)])
-  (global-key [modkey "Control" "Shift"] (.. "#" i) toggle-tag-on-focused-client) [(.. "toggle" "tag")])
+;; ;; The original bindings for moving to a workspace were crazy long.  Pressing
+;; ;; MOD, the pound key and a number seems excessive.
+;; (for [i 1 9]
+;;   (global-key [modkey]                   (.. "#" i) view-tag-only                 {:description (.. "view tag #" i)    :group "tag" })
+;;   (global-key [modkey "Shift"]           (.. "#" i) toggle-tag-display            {:description (.. "toggle tag #" i)  :group "tag"})
+;;   (global-key [modkey "Control"]         (.. "#" i) move-client-to-tag            {:description (.. "move to tag #" i) :group "tag"})
+;;   (global-key [modkey "Control" "Shift"] (.. "#" i) toggle-tag-on-focused-client  {:description (.. "toggle tag #" i)  :group "tag"}))
 ;;;;; Client Buttons
 (fn mouse-click [c]
   (c:emit_signal "request::activate" "mouse_click" {:raise true}))
@@ -316,60 +318,62 @@
 ;;;; Signals
 ;; Signals are like hooks.  They are a way to run functions when an event
 ;; happens.
-;;;;; Checking whether signals are connectd
-;; There does not seem to be a built in way to check whether a signal is
-;; connected.  I have to keep track of the signals I add and remove myself.
-(local signal-connections {})
+;;;;; Check whether signals are connected
+;; ;; There does not seem to be a built in way to check whether a signal is
+;; ;; connected.  I have to keep track of the signals I add and remove myself.
+;; (local signal-connections {})
 
-;; I make my own wrappers around =client.connect_signal= and.
-(fn connect_signal [signal-name signal-fn]
-  "Connect SIGNAL-FN to SIGNAL-NAME."
-  ;; function connect_client_signal(signal_name, func)
-  ;; if not signal_connections[signal_name] then
-  ;; signal_connections[signal_name] = {}
-  ;; end
-  ;; table.insert(signal_connections[signal_name], func)
-  ;; client.connect_signal(signal_name, func)
-  ;; end
-  (table.insert signal-connections[signal-name] signal-fn)
-  (client.connect_signal))
+;; ;; I make my own wrappers around =client.connect_signal= and.
+;; (fn connect_signal [signal-name signal-fn]
+;;   "Connect SIGNAL-FN to SIGNAL-NAME."
+;;   ;; function connect_client_signal(signal_name, func)
+;;   ;; if not signal_connections[signal_name] then
+;;   ;; signal_connections[signal_name] = {}
+;;   ;; end
+;;   ;; table.insert(signal_connections[signal_name], func)
+;;   ;; client.connect_signal(signal_name, func)
+;;   ;; end
+;;   (table.insert signal-connections[signal-name] signal-fn)
+;;   (client.connect_signal))
 
-(fn disconnect-signal [signal-name signal-fn]
-  "Disconnect SIGNAL-FN from SIGNAL-NAME.")
+;; (fn disconnect-signal [signal-name signal-fn]
+;;   "Disconnect SIGNAL-FN from SIGNAL-NAME."
+;;   ;; (if (table.contains ))
+;;   (table.remove signal-connections[signal-name] signal-fn)
+;;   (client.disconnect_signal))
 
-(fn signal-connected? [signal-name signal-fn]
-  "Return non-nil if")
+;; (fn signal-connected? [signal-name signal-fn]
+;;   "Return non-nil if")
 ;;;;; Titlebars
+;; (fn add-titlebars-maybe [c]
+;;   ;; Do not know where the =c= comes from here.
+;;   (local buttons [(awful.button [] 1 (fn []
+;;                                        (c:emit_signal "request::activate" "titlebar" {:raise true})
+;;                                        (awful.mouse.client.move c)))
 
-(fn add-titlebars-maybe [c]
-  ;; Do not know where the =c= comes from here.
-  (local buttons [(awful.button [] 1 (fn []
-                                       (c:emit_signal "request::activate" "titlebar" {:raise true})
-                                       (awful.mouse.client.move c)))
+;;                   (awful.button [] 3 (fn [] 
+;;                                        (c:emit_signal "request::activate" "titlebar" {:raise true})
+;;                                        (awful.mouse.client.resize c)))])
+;;   (local titlebar (awful.titlebar c))
+;;   (titlebar:setup {;; left
+;;                    1 {1 (awful.titlebar.widget.iconwidget c)
+;;                       :buttons buttons
+;;                       :layout wibox.layout.fixed.horizontal}
+;;                    ;; middle
+;;                    2 {1 {:align "center"
+;;                          :widget (awful.titlebar.widget.titlewidget c)}
+;;                       :buttons buttons
+;;                       :layout wibox.layout.flex.horizontal}
+;;                    ;; right
+;;                    3 {1 (awful.titlebar.widget.floatingbutton c)
+;;                       2 (awful.titlebar.widget.maximizedbutton c)
+;;                       3 (awful.titlebar.widget.stickybutton c)
+;;                       4 (awful.titlebar.widget.ontopbutton c)
+;;                       5 (awful.titlebar.widget.closebutton c)
+;;                       :layout (wibox.layout.fixed.horizontal)}
+;;                    :layout wibox.layout.align.horizontal}))
 
-                  (awful.button [] 3 (fn [] 
-                                       (c:emit_signal "request::activate" "titlebar" {:raise true})
-                                       (awful.mouse.client.resize c)))])
-  (local titlebar (awful.titlebar c))
-  (titlebar:setup {;; left
-                   1 {1 (awful.titlebar.widget.iconwidget c)
-                      :buttons buttons
-                      :layout wibox.layout.fixed.horizontal}
-                   ;; middle
-                   2 {1 {:align "center"
-                         :widget (awful.titlebar.widget.titlewidget c)}
-                      :buttons buttons
-                      :layout wibox.layout.flex.horizontal}
-                   ;; right
-                   3 {1 (awful.titlebar.widget.floatingbutton c)
-                      2 (awful.titlebar.widget.maximizedbutton c)
-                      3 (awful.titlebar.widget.stickybutton c)
-                      4 (awful.titlebar.widget.ontopbutton c)
-                      5 (awful.titlebar.widget.closebutton c)
-                      :layout (wibox.layout.fixed.horizontal)}
-                   :layout wibox.layout.align.horizontal}))
-
-(client.connect_signal :request::titlebars add-titlebars-maybe)
+;; (client.connect_signal :request::titlebars add-titlebars-maybe)
 ;;;;; When a new client window appears, make it a slave
 ;; Is executed when new client appears.  It is like an emacs hook.
 (fn ensure-clients-are-accessible [c]
@@ -385,10 +389,9 @@
 (client.connect_signal "focus" (fn [c] (set c.border_color beautiful.border_focus)))
 (client.connect_signal "unfocus" (fn [c] (set c.border_color beautiful.border_normal)))
 
-
 ;; (fn toggle-titlebars []
 ;;   (if (signal-connected? :request::titlebars add-titlebars-maybe)
 ;;       (disconnect-signal :request::titlebars))
 ;;   (client.disconnect_signal :request::titlebars add-titlebars-maybe))
 
-(global-key [modkey] "p" toggle-titlebars {:description "Toggle Titlebars" :group "client"})
+;; (global-key [modkey] "p" toggle-titlebars {:description "Toggle Titlebars" :group "client"})
