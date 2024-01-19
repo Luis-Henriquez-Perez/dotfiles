@@ -725,7 +725,7 @@ end-of-buffer signals; pass the rest to the default handler."
 	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 ;;;;; library
-;;;;;; utils 
+;;;;;; utils
 (require 'dash)
 (require 'dash-functional)
 (require 'subr-x)
@@ -843,7 +843,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
 (defalias 'let->>! 'let-thread-last!)
 
 (provide 'oo-base-utils)
-;;;;;; "ing" macros 
+;;;;;; "ing" macros
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
 SETTER is the symbol of the macro or function used to do the setting."
@@ -951,7 +951,7 @@ customizing variables."
 ;;  - return!
 ;;  - continue! (skip!) skip the current iteration of a loop
 ;;  - break! (exit!) exit the current loop
-;;;;;;; treepy patch 
+;;;;;;; treepy patch
 ;; There's no function to skip a node and I can't see a quick/clever way to do it
 ;; with the existing functions.  I want to be where I would be if I had deleted the
 ;; node, but I don't want the node itself to be deleted.  If there is a right node
@@ -1121,7 +1121,7 @@ Name may be any symbol.  Code inside body can call `return!'."
           (body (treepy-root zipper))
           (let-bindings (oo-block-let-bindings let no-let)))
     `(cl-block nil (-let ,(oo-block-let-bindings let no-let) ,@body))))
-;;;;;; defun-like macros 
+;;;;;; defun-like macros
 ;; Emacs uses these symbols as markers in =defun= and =defmacro= signatures.  I'm
 ;; defining a function specifically for identifying these symbols so I can
 ;; differentiate them from actual argument symbols.
@@ -1185,7 +1185,7 @@ The components returned are in the form of (name args (docstring declaration int
        (block! ,name
          (excluding! ,@(-remove #'oo-ampersand-symbol-p (flatten-list arglist)))
          ,@body))))
-;;;;;; oo-call-after-load 
+;;;;;; oo-call-after-load
 (defvar oo-unbound-symbol-alist nil
   "An alist mapping an unbound symbol to an expression.
 This alist is checked by the hook `after-load-functions&set-bound-symbols' for
@@ -1435,7 +1435,7 @@ BODY...)"
 ;; configuration because every mode has.  You easily note whether a hook that
 ;; should be called isn't.  And you can see any errors in hooks.
 (defun! oo-add-hook (hook function &key name args depth append local when mode expire no-log)
-  "Generate a function that behaves like FUNCTION and add it to HOOK. 
+  "Generate a function that behaves like FUNCTION and add it to HOOK.
 DEPTH and LOCAL are the same as in `add-hook'.  When EXPIRE is non-nil, each
 the generated function will remove itself from SYMBOL after it is run once.  If
 EXPIRE is a function it should take no arguments and return non-nil when the hook should be
@@ -1528,7 +1528,7 @@ Evaluate and remove from all elements of `oo-after-keymap-alist'."
 
 (add-hook 'emacs-startup-hook #'oo-call-after-keymap-functions)
 (add-hook 'after-load-functions #'oo-call-after-keymap-functions)
-;;;;;;; oo-call-after-evil-state 
+;;;;;;; oo-call-after-evil-state
 (defun! oo-evil-state (evil-keyword)
   "Return the state that corresponds to the state keyword."
   (flet! letter (state) (seq-first (symbol-name state)))
@@ -2112,7 +2112,7 @@ For what buffer is displayed in the case of a boolean see
 ;; the answer is predominately yes.
 (set! vc-follow-symlinks t)
 (set! vc-follow-link t)
-;;;;; stop emacs from asking to save buffers on quit 
+;;;;; stop emacs from asking to save buffers on quit
 ;; https://stackoverflow.com/questions/35658509/gnu-emacs-how-to-disable-prompt-to-save-modified-buffer-on-exit
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
@@ -2160,7 +2160,7 @@ For what buffer is displayed in the case of a boolean see
 
 (oo-add-hook 'emacs-startup-hook #'oo-reset-startup-symbols :append t)
 ;;;; setup
-;;;;; keybindings 
+;;;;; keybindings
 ;;;;;; setup leader maps
 (defvar oo-toggle-map (make-sparse-keymap))
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
@@ -2275,7 +2275,7 @@ For what buffer is displayed in the case of a boolean see
 ;;;;;; similarly bind =TAB= to =outline-cycle= in =outli-mode=
 ;; (oo-bind 'outli-mode-map :n "TAB" #'outline-cycle)
 ;; (oo-bind 'outli-mode-map :n "TAB" #'outline-toggle-children)
-;;;;;; binding for =eval-expression= 
+;;;;;; binding for =eval-expression=
 ;; I used to call this the eval leader map, but I do not know.
 ;; (oo-bind "e" #'eval-expression)
 ;;;;; set theme to =modus-operandi=
@@ -2302,7 +2302,7 @@ For what buffer is displayed in the case of a boolean see
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
 ;;;;; miscellaneous
-;;;;;; hooks 
+;;;;;; hooks
 (oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
 
 (oo-add-hook 'prog-mode-hook #'hs-minor-mode)
@@ -2330,7 +2330,7 @@ For what buffer is displayed in the case of a boolean see
 (oo-bind 'emacs-lisp-mode-map "ee" #'eval-expression :localleader t)
 (oo-bind 'emacs-lisp-mode-map "el" #'eval-last-sexp :localleader t)
 (oo-bind 'emacs-lisp-mode-map "ep" #'eval-print-last-sexp :localleader t)
-;;;;;; make =tab-width= 4 for python-mode 
+;;;;;; make =tab-width= 4 for python-mode
 ;; (setq)
 ;;;;; custom functions
 (defun! oo-set-font-face ()
@@ -2396,7 +2396,7 @@ For what buffer is displayed in the case of a boolean see
 
 (set! avy-timeout-seconds 0.3)
 ;;;;;; burly
-;;;;;;; leader bindings 
+;;;;;;; leader bindings
 (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 (oo-bind 'oo-find-map "j" #'burly-open-bookmark)
@@ -2550,7 +2550,7 @@ For what buffer is displayed in the case of a boolean see
 (set! denote-file-type 'text)
 ;;;;;; dired
 (oo-bind 'oo-app-map "d" #'dired)
-;;;;;;; map =h= to =dired-up-directory= 
+;;;;;;; map =h= to =dired-up-directory=
 ;; I do not want to keep pressing =^= for the common action of going up the
 ;; directory.
 (oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
@@ -2585,7 +2585,7 @@ For what buffer is displayed in the case of a boolean see
   (require 'edwina)
   (aprog1 (with-demoted-errors "Error: %S" (apply #'display-buffer-at-bottom args))
     (edwina--respective-window it
-      (edwina-arrange))))
+                               (edwina-arrange))))
 
 ;; Maybe this should be in the mode function?
 
@@ -2647,7 +2647,7 @@ For what buffer is displayed in the case of a boolean see
 
 (oo-add-hook 'after-init-hook #'require :args '(evil) :depth 10)
 ;;;;;;; base variables
-;;;;;;;; don't echo the state 
+;;;;;;;; don't echo the state
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
 ;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
@@ -2776,7 +2776,7 @@ For what buffer is displayed in the case of a boolean see
 (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
 
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
-;;;;;;; stop =lispy-comment= from adding an autoload cookie 
+;;;;;;; stop =lispy-comment= from adding an autoload cookie
 ;; I like the behavior of =lispy-comment= in general except that it adds an
 ;; autoload after you have three consecutive semicolons.  I may have to advise
 ;; it not to do that.  The function [[][]] is what is responsible for deciding
@@ -2817,7 +2817,7 @@ For what buffer is displayed in the case of a boolean see
 ;;;;;;; refresh mail using isync every 10 minutes
 ;; To be honest I am not sure whether to leave this for a cronjob with
 ;; =mcron= or have emacs do it.  By the way, this is incomplete too
-;; because to update mail you need to update the index as well. 
+;; because to update mail you need to update the index as well.
 ;; (setq mu4e-update-interval (* 10 60))
 ;; (setq mu4e-get-mail-command "mbsync -a")
 ;; (setq mu4e-maildir "~/Mail")
@@ -2827,7 +2827,7 @@ For what buffer is displayed in the case of a boolean see
 
 ;; Specify the directory of mail directory.
 (set! mu4e-maildir (expand-file-name "~/.mail"))
-;;;;;;; TODO contexts 
+;;;;;;; TODO contexts
 ;; https://jherrlin.github.io/posts/emacs-mu4e/
 ;; I definitely want some simple macro to declare this.
 ;; (set! mu4e-contexts
@@ -2878,7 +2878,7 @@ For what buffer is displayed in the case of a boolean see
 (oo-bind 'org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 (oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 (oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-;;;;;; orglink-mode 
+;;;;;; orglink-mode
 ;; Enable =orglink= mode during =prog-mode= because I will likely use org links
 ;; in comments.
 (oo-add-hook 'prog-mode #'orglink-mode)
@@ -2941,8 +2941,8 @@ For what buffer is displayed in the case of a boolean see
 (set! org-id-method 'ts)
 
 (set! org-id-link-to-org-use-id t)
-;;;;;; outli 
-;;;;;;; enable =outli= whenever I enter =text-mode= or =prog-mode= 
+;;;;;; outli
+;;;;;;; enable =outli= whenever I enter =text-mode= or =prog-mode=
 ;; The outline headings are so useful, that I want to see them all the time even
 ;; in =text-mode=.
 (oo-add-hook 'prog-mode-hook #'outli-mode)
@@ -3016,7 +3016,7 @@ For what buffer is displayed in the case of a boolean see
 
 (set! save-place-file (concat oo-cache-dir "saveplace"))
 (set! save-place-limit nil)
-;;;;;; setup 
+;;;;;; setup
 ;;;;;;; mu4e contexts
 ;; Sometimes certain things are rather annoying to configure and a perfect
 ;; example of this is configuring mu4e-contexts.
@@ -3117,6 +3117,6 @@ For what buffer is displayed in the case of a boolean see
 ;;;;;; HTML indentation
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (set! sgml-basic-offset 4)
-;;;;;; emmet 
+;;;;;; emmet
 (oo-add-hook 'html-mode-hook #'emmet-mode)
 
