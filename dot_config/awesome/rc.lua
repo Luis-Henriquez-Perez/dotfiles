@@ -19,4 +19,4 @@ package.path = package.path .. ";/usr/share/lua/5.4/?.lua"
 -- I honestly had no idea how to load this fennel file from lua.  Fortunately, I
 -- found out how to do it with the following site:
 -- https://fennel-lang.org/setup#embedding-the-fennel-compiler-in-a-lua-application
-require("fennel").install().dofile("~/.config/awesome/rc.fnl")
+require("fennel").install().dofile(os.getenv("HOME") .. "/.config/awesome/rc.fnl")
