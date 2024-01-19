@@ -1,5 +1,4 @@
 --- Loading the =rc.fnl= file with lua
----
 -- I want to stress the benefits and trade-offs and explain why I am dong this.
 -- The drawback is that starting up awesome will be very slightly slower so
 -- slightly that it is not noticeable by me.  The benefit is that I no longer
