@@ -58,7 +58,6 @@ config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
 
 # And on github
 # config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
-
 ### provide java
 # Surprisingly to me the [[][author]] I got this configuration from said that
 # he noticed qutebrowser had some big performance issues compared to firefox.
@@ -74,6 +73,9 @@ config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
 # javascript had been disabled, you need to reload it to actually see the
 # result.
 # javascript enable
+# Note that this applies to every webpage opened after enabling this.
+# As in, it changes the default.
+# I need to find away to only enable it for the
 config.bind('<Space>je', ':set content.javascript.enabled true')
 
 # javascript disable
