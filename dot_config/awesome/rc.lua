@@ -10,13 +10,11 @@
 -- work. I also did not want to version control the file avoid duplication and
 -- the compiled =rc.lua= file is a form of duplication or redundancy because the
 -- information in it can be completely derived from the =rc.fnl= file.
-
 ---- Set the package path
 -- So I am hard-coding the path for now.  I need to figure out a way to
 -- generalize this.  Right now this is very dependent on arch as well as the
 -- version of lua potentially.
 package.path = package.path .. ";/usr/share/lua/5.4/?.lua"
-
 ---- Actually install
 -- I honestly had no idea how to load this fennel file from lua.  Fortunately, I
 -- found out how to do it with the following site:
