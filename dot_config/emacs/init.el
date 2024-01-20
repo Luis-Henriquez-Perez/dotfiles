@@ -33,7 +33,7 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 (startup-set! gc-cons-percentage 0.8)
 ;;;;;; don't search for whenever a package is loaded
 (startup-set! file-name-handler-alist nil)
-;;;;;; prevent flashing of unstyled modeline 
+;;;;;; prevent flashing of unstyled modeline
 ;; Don't render the modeline on startup.  For one thing, the startup looks
 ;; better without flashing stuff on the screen.  Additionally, the more that's
 ;; saved on rendering, the faster the startup.
@@ -73,7 +73,7 @@ HOOK-OR-ADVICE.")
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
-;;;;;; save bookmark file in my cache 
+;;;;;; save bookmark file in my cache
 (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
 ;;;;;; by default do not wrap lines
 ;; When a line is too long to be displayed in the screen do not wrap it around;
@@ -82,7 +82,7 @@ HOOK-OR-ADVICE.")
 ;; wraps around, I find it makes the text confusing and harder to read.  If I
 ;; want this, then I will toggle it myself with [[][toggle-truncate-lines]].
 (setq-default truncate-lines t)
-;;;;;; automatically kill any processes when exiting emacs 
+;;;;;; automatically kill any processes when exiting emacs
 ;; If I start a process, like the =eat= shell for example, stop me from exiting
 ;; to ask me whether I want to kill it, just do it.
 ;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
@@ -260,10 +260,10 @@ end-of-buffer signals; pass the rest to the default handler."
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order `(elpaca
-	                      :repo "https://github.com/progfolio/elpaca.git"
-	                      :ref "9478158"
-	                      :files (:defaults (:exclude "extensions"))
-	                      :build (:not elpaca--activate-package)))
+                          :repo "https://github.com/progfolio/elpaca.git"
+                          :ref "9478158"
+                          :files (:defaults (:exclude "extensions"))
+                          :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
@@ -273,18 +273,18 @@ end-of-buffer signals; pass the rest to the default handler."
     (make-directory repo t)
     (when (< emacs-major-version 28) (require 'subr-x))
     (condition-case-unless-debug err
-	    (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-		         ((zerop (call-process "git" nil buffer t "clone"
-				                       (plist-get order :repo) repo)))
-		         ((zerop (call-process "git" nil buffer t "checkout"
-				                       (plist-get order :ref))))
-		         (emacs (concat invocation-directory invocation-name))
-		         ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-				                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-		         ((require 'elpaca))
-		         ((elpaca-generate-autoloads "elpaca" repo)))
-	        (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-	      (error "%s" (with-current-buffer buffer (buffer-string))))
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (call-process "git" nil buffer t "clone"
+                                       (plist-get order :repo) repo)))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (plist-get order :ref))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
       ((error) (warn "%s" err) (delete-directory repo 'recursive))))
   (unless (require 'elpaca-autoloads nil t)
     (require 'elpaca)
@@ -299,7 +299,7 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; will fail because it will tell you that you're not on a branch.
 ;;;;;; recipes
 ;;;;;;; elpaca
-;;;;;;; outli 
+;;;;;;; outli
 (elpaca (outli :fetcher github :repo "jdtsmith/outli"))
 ;;;;;;; edwina
 ;; There are [[several]] emacs packages that save and restore window configuration. But
@@ -309,6 +309,8 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; window.  This package provides tools to configure =display-buffer= so that when
 ;; called I can open a buffer in a [[file:screenshots/edwina-usage.png][master-slave layout]] (see [[file:screenshots/edwina-usage.png][edwina's usage]]).
 (elpaca (edwina :fetcher gitlab :repo "ajgrf/edwina" :ref "f95c31b" :branch "master"))
+;;;;;;; loop
+(elpaca (loop :fetcher github :repo "https://github.com/Wilfred/loop.el"))
 ;;;;;;; htmlize
 ;; This package converts emacs buffers to html.  I use it in combination with the
 ;; command-line utility [[][wkhtmltoimage]] to take [[id:20230802T153110.062543][snapshots]] of emacs buffers.
@@ -336,15 +338,15 @@ end-of-buffer signals; pass the rest to the default handler."
 ;;;;;;; outorg
 ;; Outshine depends on the package Outorg.  Outorg is what outshine uses to
 ;; convert back and forth between a file with outshine syntax and an org file.
-(elpaca (outorg :fetcher github :repo "alphapapa/outorg" :ref "ef0f86f"))
+;; (elpaca (outorg :fetcher github :repo "alphapapa/outorg" :ref "ef0f86f"))
 ;;;;;;; navi-mode
 ;; This package is a dependency of `outorg'.  It has to do with providing
 ;; navigation commands for `outshine'.
-(elpaca (navi-mode :fetcher github :repo "alphapapa/navi" :ref "cf97e1e"))
+;; (elpaca (navi-mode :fetcher github :repo "alphapapa/navi" :ref "cf97e1e"))
 ;;;;;;; orglink
 ;; This package lets me display org links in non org buffer.  In practice I use
 ;; this for buffers with outshine enabled.
-(elpaca (orglink :fetcher github :repo "tarsius/orglink" :ref "afbeffd"))
+;; (elpaca (orglink :fetcher github :repo "tarsius/orglink" :ref "afbeffd"))
 ;;;;;;; chezmoi
 ;; This package provides some functions to interface with =chezmoi=, a dotfile
 ;; manager.  At first--and even still to be honest I wanted to use Org as a
@@ -693,6 +695,12 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; This package provides functions and macro to log information.  It's the most
 ;; recent package for logging I could find.
 (elpaca (lgr :fetcher github :repo "Fuco1/Emacs-lgr" :commit "4ab6c22"))
+;;;;;;; compat
+(elpaca (compat :fetcher github :repo "emacs-compat/compat"))
+;;;;;;; list-utils
+(elpaca (list-utils :fetcher github :repo "rolandwalker/list-utils"))
+;;;;;;; zoutline
+(elpaca (zoutline :fetcher github :repo "abo-abo/zoutline"))
 ;;;;;;; setup
 ;; This package is similar to =use-package=.  Essentially, it's an abstraction to
 ;; configure packages.  There are parts of it that I agree with and parts that I
@@ -713,10 +721,10 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; I'm not sure of how precise this is.  To be honest, I don't like doing this.
 ;; If there are any incomplete queues, complete them and restart emacs.
 (if-let ((queues (reverse elpaca--queues))
-	     ((mapc #'elpaca--maybe-reset-queue queues))
-	     (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
+         ((mapc #'elpaca--maybe-reset-queue queues))
+         (incomplete (cl-find 'incomplete queues :key #'elpaca-q<-status)))
     (progn (elpaca-process-queues)
-	       (add-hook 'elpaca-after-init-hook #'restart-emacs))
+           (add-hook 'elpaca-after-init-hook #'restart-emacs))
   (run-hooks 'elpaca--post-queues-hook))
 ;;;;; library
 ;;;;;; utils
@@ -809,23 +817,23 @@ symbol as in `dolist', but.  LIST can be a sequence."
     ((or `(repeat ,n) (and n (pred integerp)))
      (cl-once-only (n)
        `(if (integerp ,n)
-	        (dotimes (_ ,n) ,@body)
-	      (error "Wrong type argument integerp: %S" ,n))))
+            (dotimes (_ ,n) ,@body)
+          (error "Wrong type argument integerp: %S" ,n))))
     (`(,(and match-form (pred sequencep)) ,list)
      (alet (make-symbol "var")
        `(for! (,it ,list)
-	      (-let [,match-form ,it]
-	        ,@body))))
+          (-let [,match-form ,it]
+            ,@body))))
     (`(,(and var (pred symbolp)) ,list)
      (cl-once-only (list)
        `(cond ((listp ,list)
-	           (dolist (,var ,list) ,@body))
-	          ((sequencep ,list)
-	           (seq-doseq (,var ,list) ,@body))
-	          ((integerp ,list)
-	           (for! ,list ,@body))
-	          (t
-	           (error "Unknown list predicate: %S" ',pred)))))))
+               (dolist (,var ,list) ,@body))
+              ((sequencep ,list)
+               (seq-doseq (,var ,list) ,@body))
+              ((integerp ,list)
+               (for! ,list ,@body))
+              (t
+               (error "Unknown list predicate: %S" ',pred)))))))
 
 ;; The threading macro [[][->>]] can be particularly useful when you want to.  I've
 ;; often had cases in my code where I've.
@@ -3113,4 +3121,3 @@ For what buffer is displayed in the case of a boolean see
 (set! sgml-basic-offset 4)
 ;;;;;; emmet
 (oo-add-hook 'html-mode-hook #'emmet-mode)
-
