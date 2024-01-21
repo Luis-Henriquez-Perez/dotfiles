@@ -2,13 +2,14 @@
 
 ## setting the wallpaper
 # Directory containing wallpapers
-wallpaper_dir="~/dotfiles/wallpapers/"
+wallpaper_dir="~/Pictures/wallpapers/"
 
 # Choose a random wallpaper from the directory
 wallpaper=$(ls "$wallpaper_dir" | shuf -n 1)
 
+echo "$wallpaper"
 # Set the wallpaper using feh (replace with your wallpaper tool)
-feh --bg-scale "$wallpaper_dir/$wallpaper"
+# feh --bg-scale "$wallpaper_dir/$wallpaper"
 
 ## alternative script
 # I found this from [[reddit][this reddit post]].
