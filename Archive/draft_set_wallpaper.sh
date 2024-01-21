@@ -4,7 +4,7 @@
 # Directory containing wallpapers
 wallpaper_dir="~/Pictures/wallpapers/"
 
-# Choose a random wallpaper from the directory
+# Choose a random wallpaper from the directory that is not among the choosen wallpapers.
 wallpaper=$(ls "$wallpaper_dir" | shuf -n 1)
 
 echo "$wallpaper"
