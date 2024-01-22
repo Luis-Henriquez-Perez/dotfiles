@@ -82,17 +82,19 @@ def random_wallpaper():
         path = os.path.join(wallpaper_dir, name)
         if os.path.isfile(path):
             all_wallpapers.append(path)
+    # If there are no wallpapers at all, do not do anything.
+    if not all_wallpapers:
+        return None
     # Get the set of wallpapers that haven't been used or more formally the
     # elements of =all_wallpapers= that are not in =used_wallpapers=.
-    unused_wallpapers = set(all_wallpapers) - set(used_wallpapers)
-    # print(unused_wallpapers)
-    # print(all_wallpapers)
+    unused_wallpapers = list(set(all_wallpapers) - set(used_wallpapers))
     #If the list is empty then choose from all the wallpapers.
-    if unused_wallpapers:
-        chosen = random.choice(all_wallpapers)
     # Otherwise, choose from the used wallpapers.
-    else:
+    if unused_wallpapers:
         chosen = random.choice(unused_wallpapers)
+    else:
+        used_wallpapers = []
+        chosen = random.choice(all_wallpapers)
     used_wallpapers.append(chosen)
     write_used_wallpapers(used_wallpapers_file, used_wallpapers)
     return chosen
