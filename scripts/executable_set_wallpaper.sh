@@ -2,7 +2,7 @@
 
 # Directory containing wallpapers
 wallpaper_dir="$HOME/Pictures/wallpapers/"
-used_wallpapers_file="$HOME/.cache/sh_used_wallpapers_file"
+used_wallpapers_file="$HOME/.cache/used_wallpapers_file"
 
 # Ensure the wallpaper file exists.
 touch "$used_wallpapers_file"

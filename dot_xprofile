@@ -32,5 +32,4 @@ mcron &
 
 ### set the wallpaper for the first time
 # I am not sure whether to do this here or not.
-rm ~/.cache/used_wallpapers_file
-~/scripts/set-wallpaper.py
+~/scripts/set_wallpaper.sh
