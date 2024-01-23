@@ -14,12 +14,12 @@
 
 ;;; email
 ;; Check my email every 5 minutes.
-(job '(next-minute (range 0 60 5)) "~/update-email.sh")
+;; (job '(next-minute (range 0 60 5)) "~/update-email.sh")
 
 ;;; wallpaper
 ;; Change my wallpaper every 15 minutes.
 ;; Is there an expand path thing here?
-(job '(next-minute (range 0 60 15)) "/home/luis/scripts/set-wallpaper.py")
+(job '(next-minute (range 0 60 15)) "~/scripts/set_wallpaper.sh")
 
 ;;; commit and push dotfiles automatically
-;; (job '(next-minute (range 0 60 10)) "/home/luis/scripts/auto-commit-and-push-dotfiles.sh")
+;; (job '(next-minute (range 0 60 10)) "~/scripts/auto-commit-and-push-dotfiles.sh")
