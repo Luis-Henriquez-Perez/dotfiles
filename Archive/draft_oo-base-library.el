@@ -78,27 +78,33 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (intern (apply #'oo-args-to-string args)))
 ;;;; function transformers 
 (defun oo-not (fn)
-  "Return a function"
   (lambda (&rest args) (not (apply fn args))))
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.
 (defmacro alet! (expr &rest body)
+  "Like `let', but the result of evaluating FORM is bound to `it'.
+FORM and BODY are otherwise as documented for `let'."
   (declare (indent 1))
   `(let ((it ,expr))
      ,@body))
 
 (defmacro aif! (expr then &rest else)
-  (declare (intent 1))
+  "Like `if', but the result of evaluating COND is bound to `it'.
+The variable `it' is available within THEN and ELSE.
+COND, THEN, and ELSE are otherwise as documented for `if'."
+  (declare (intent 2))
   `(alet! ,expr (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
+  "Like `when', but the result of evaluating COND is bound to `it'.
+The variable `it' is available within BODY.
+COND and BODY are otherwise as documented for `when'."
   (declare (indent 1))
   `(alet! ,cond (when it ,@body)))
 
 ;; For brevity I do not want to add the =!= for this macro.
 (defmacro -- (&rest body)
-  ""
   `(lambda (it) ,@body))
 ;;;; looping
 (defmacro for! (pred &rest body)
@@ -274,11 +280,6 @@ Name may be any symbol.  Code inside body can call `return!'."
   `(let ,originals
      (unwind-protect (progn ,@sets ,@body)
        ,@resets)))
-;;;; match 
-(defmacro match! (form pcase-form)
-  `(pcase ,form
-     (,pcase-form t)
-     (_ nil)))
 ;;;; defmacro! and defun! 
 (defun oo-destructure-defun-plus (arglist)
   "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."
