@@ -534,28 +534,29 @@
 ;; after I clone that package but before unpacking it, I need to checkout the
 ;; proper commit.
 
+(defun oo-checkout-commit-before-setup (commit fn pkg-desc pkg-dir)
+  (let ((default-directory pkg-dir)
+        (buff (generate-new-buffer "vc-checkout")))
+    (unwind-protect (progn
+                      (message "Checkout %s in %s..." commit pkg-dir)
+                      (vc-do-command buff 0 "git" nil "checkout" commit))
+      (kill-buffer buff))
+    (message "Activating %s...")
+    (apply fn pkg-desc pkg-dir)))
+
 (pcase-dolist (`(,name . ,spec) package-vc-selected-packages)
   (when (stringp name) (setq name (intern name)))
   (let* ((pkg-descs (assoc name package-alist))
          (recipe (cons name spec))
+         (pkg-desc (package-desc-create :name name :kind 'vc))
+         (url (plist-get spec :url))
          (commit (plist-get spec :commit)))
     (unless (seq-some #'package-vc-p (cdr pkg-descs))
-      (let* ((pkg-desc (or (cadr (assoc name package-archive-contents))
-                           (package-desc-create :name name :kind 'vc)))
-             ;; This gets the specs from `package-vc-selected-packages'.
-             ;; Don't have the side-effect of going to that directory, simply
-             ;; return the directory.
-             (repo-dir (cl-letf (((symbol-function 'find-file) (lambda (f &rest _) f)))
-                         (package-vc-checkout pkg-desc package-user-dir))))
-        (message "Cloning and installing %s at commit %s" name commit)
-        (message "Default directory: %s" default-directory)
-        (message "Repo-dir: %S" repo-dir)
-        ;; (cl-letf (((symbol-function 'make-symbolic-link) #'ignore))
-        ;;   (package-vc-install-from-checkout repo-dir name))
-        ;; (let ((buff (generate-new-buffer "vc")))
-        ;;   (unwind-protect (vc-do-command buff 0 "git" nil "checkout" commit)
-        ;;     (kill-buffer buff)))
-        ))))
+      (message "Cloning %s from %s..." name url)
+      (flet! ((package-vc--unpack-1 (lambda (desc dir)
+                                      (message "Cloning %s from %s..." name url)
+                                      (funcall this-fn desc dir))))
+        (package-vc-install recipe)))))
 
 ;; Honestly I might not deal with =package-vc-checkout= and
 ;; =package-vc-install-from-checkout=.  I have had a hard time with these

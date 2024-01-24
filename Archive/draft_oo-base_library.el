@@ -5,7 +5,31 @@
 (require 'pcase)
 (require 'subr-x)
 (require 'cl)
+;;;; aliases
+;; Make symbols with consistent naming conventions to elisp predicate functions.
+(defalias 'oo-all-p 'cl-every)
+(defalias 'oo-every-p 'cl-every)
+(defalias 'oo-none-p 'cl-notany)
+(defalias 'oo-some-p 'cl-notevery)
 ;;;; helpers
+(defun oo-not (fn)
+  "Return a function"
+  (lambda (&rest args) (not (apply fn args))))
+
+(defun oo-cons-cell-p (obj)
+  "Return t only if OBJ is a cons-cell."
+  (and (consp obj)
+       (not (listp (cdr obj)))))
+
+(defun oo-proper-list-p (obj)
+  "Return t only if OBJ is a proper list."
+  (or (null obj)
+      (null (cdr (cl-last obj)))))
+
+(defun oo-improper-list-p (obj)
+  "Return t only if OBJ is not a proper list"
+  (not (oo-proper-list-p obj)))
+
 (defun oo-snoc (list elt)
   "Add item to the end of list."
   (append list (list elt)))
@@ -39,12 +63,19 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   "Return an interned symbol from ARGS."
   (declare (pure t) (side-effect-free t))
   (intern (apply #'oo-args-to-string args)))
-;;;; destructuring 
-(defun oo-destructure ()
-  ())
+;;;; anaphoric macros
+(defmacro alet! (expr &rest body)
+  (declare (indent 1))
+  `(let ((it ,expr))
+     ,@body))
 
-(defmacro let! (patterns &rest body)
-  `(let ,patterns ,@body))
+(defmacro awhen! (cond &rest body)
+  (declare (indent 1))
+  `(alet! ,cond (when it ,@body)))
+
+(defmacro -- (&rest body)
+  ""
+  `(lambda (it) ,@body))
 ;;;; looping
 (defmacro for! (pred &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
@@ -58,7 +89,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
             (dotimes (_ ,n) ,@body)
           (error "Wrong type argument integerp: %S" ,n))))
     (`(,(and match-form (pred sequencep)) ,list)
-     (alet (make-symbol "var")
+     (alet! (make-symbol "var")
        `(for! (,it ,list)
           (-let [,match-form ,it]
             ,@body))))
@@ -84,7 +115,7 @@ SETTER is the symbol of the macro or function used to do the setting."
 (cl-defmacro collecting! (place item &key (setter 'setf))
   "Affix ITEM to the end of PLACE.
 SETTER is the same as in `appending!'."
-  `(,setter ,place (-snoc ,place ,item)))
+  `(,setter ,place (oo-snoc ,place ,item)))
 
 (defalias 'snocing! 'collecting!)
 (defalias 'affixing! 'collecting!)
@@ -157,45 +188,111 @@ SETTER is the same as in `appending!'."
 Same as `adjoining!' but use `set!' as the setter.  Meant to be used for
 customizing variables."
   `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
-;;;; quiet!
-(defmacro quiet! (&rest forms)
-  )
-;;;; flet!
-(defmacro flet! (&rest forms)
-  )
 ;;;; block!
-(defun oo-tree-map-nodes (pred fun tree)
-  "Same as `-tree-map-nodes', but works for improper lists."
-  (cond ((funcall pred tree)
-         (funcall fun tree))
-        ((consp tree)
-         (cons (oo-tree-map-nodes pred fun (car tree))
-               (oo-tree-map-nodes pred fun (cdr tree))))
-        (t
-         tree)))
+(defvar oo-block-alist '((stub! . cl-flet)
+                         (label! . cl-labels)))
 
-(defun oo-block-interpret-tree (tree &optional data)
+(defun oo-block-interpret-tree (data tree)
+  "Return new TREE and DATA."
   (pcase tree
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
-     (oo-block-interpret-tree body)
-     (list `(catch 'break! (,loop ,pred (catch 'continue ,@body))) data))
+     (pcase-let* ((`(,data1 ,tree) (oo-block-interpret-tree nil body)))
+       (list (map-merge 'plist data data1)
+             `(catch 'break! (,loop ,pred (catch 'continue ,@tree))))))
     (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
-     (setf (plist-get data :let) (list symbol nil))
-     (cl-case name
-       ((maxing! maximizing!) most-negative-fixnum)
-       ((minning! minimizing!) most-positive-fixnum)
-       (counting! 0))
-     (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
-    ;; (`(,(or 'let! 'let->>! 'let-->!) ,match-form ,_ . ,(and plist (guard t)))
-    ;;  (alet (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
-    ;;            (plist-get plist :init))
-    ;;    (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
-    ;;  (setq zipper (treepy-next zipper)))
-    (_ tree)))
+     (alet! (cl-case name
+              ((maxing! maximizing!) most-negative-fixnum)
+              ((minning! minimizing!) most-positive-fixnum)
+              (counting! 0))
+       (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
+     (list data tree))
+    (`(,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols))))
+     (appending! (plist-get data :no-let) symbols)
+     (list data tree))
+    (`(,(and macro (guard (member macro '(let!)))) ,match-form ,_ . ,(and plist (guard t)))
+     (alet! (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
+                (plist-get plist :init))
+       (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
+     (list data nil))
+    (`((,(and name (guard (assoc name oo-block-alist))) ,symbol ,args . ,body) . ,rest)
+     (pcase-let ((`(,data1 ,rest) (oo-block-interpret-tree nil rest))
+                 (`(,data2 ,body) (oo-block-interpret-tree nil body)))
+       (list (map-merge 'plist data data1 data2)
+             `((cl-flet ((,symbol ,args ,@body)) ,@rest)))))
+    ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
+     (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
+                 (`(,data2 ,tree2) (oo-block-interpret-tree nil (cdr tree))))
+       (list (map-merge 'plist data1 data2)
+             (cons tree1 tree2))))
+    (_
+     (list data tree))))
 
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
   (declare (indent 1))
-  (pcase-let ((`(,tree ,data) (oo-block-interpret-tree body)))
-    (seq-let ,(oo-block-let-bindings let nolet) ,@body)))
+  (pcase-let* ((`(,data ,tree) (oo-block-interpret-tree nil body))
+               (lets (plist-get data :let))
+               (nolets (plist-get data :nolet))
+               (bindings (cl-remove-if (-- (assoc it lets) nolets) lets)))
+    `(let ,bindings ,@tree)))
+
+(defmacro defmacro! (name &rest body)
+  )
+;;;; quiet!
+(defmacro quiet! (&rest body)
+  )
+;;;; flet!
+(defmacro! flet! (bindings &rest body)
+  (pcase-dolist (`(,symbol ,fn) bindings)
+    (collecting! originals (cl-gensym "original-fn"))
+    (collecting! sets)
+    (collecting! resets))
+  `(let ,originals
+     (unwind-protect (progn ,@sets ,@body)
+       ,@resets)))
+
+(defun oo-destructure-defun-plus (arglist)
+  "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."
+  (block! nil
+    (let! (name args (docstring declarations) body) (oo-defun-components arglist))
+    (let! (args plist) (-split-with (-not #'keywordp) args))
+    (let! (raw body) (-split-with (-compose #'keywordp #'car-safe) body))
+    (for! ((elt &as k v) raw)
+      (let! (k . v) elt)
+      (pushing! alist (cons k (if (cdr v) v (car v)))))
+    (let! new (if (and plist alist)
+                  (map-merge 'plist plist alist)
+                (map-into (or alist plist) 'plist)))
+    (list name args (list docstring declarations) new body)))
+
+(defmacro defmacro! (&rest args)
+  "Wrapper around `defmacro!'."
+  (declare (indent defun) (doc-string 3))
+  (pcase-let ((`(,name ,arglist ,metadata ,body) (oo-defun-components args)))
+    `(cl-defmacro ,name ,arglist
+       ,@(cl-remove-if #'null metadata)
+       (block! ,name
+         (excluding! ,@(-remove #'oo-ampersand-symbol-p (flatten-list arglist)))
+         ,@body))))
+
+(defmacro! defun! (&rest args)
+  "Wrapper around `defun'."
+  (declare (indent defun) (doc-string 3))
+  (pcase-let ((`(,name ,arglist ,metadata ,body) (oo-defun-components args)))
+    `(cl-defun ,name ,arglist
+       ,@(cl-remove-if #'null metadata)
+       (block! ,name
+         (excluding! ,@(cl-remove-if #'oo-ampersand-symbol-p (flatten-list arglist)))
+         ,@body))))
+
+(defmacro! set! (symbol value)
+  "A \"do-it-all\" setter for configuring variables."
+  (let! value-var (make-symbol "value"))
+  `(if (not (boundp ',symbol))
+       (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+     (let ((,value-var ,value))
+       (lgr-info oo-lgr "Set %s to %S" ',symbol ,value-var)
+       (aif (get ',symbol 'custom-set)
+           (funcall it ',symbol ,value-var)
+         (with-no-warnings (setq ,symbol ,value-var))))))

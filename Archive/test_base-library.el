@@ -1,16 +1,35 @@
-;; (require 'oo-base-library)
+(require 'draft_oo-base-library)
 (require 'ert)
 
-(should (equal '(1 2) (oo-tree-transform-nodes #'oo-block-interpret-tree '(1 2))))
+(ert-deftest oo-cons-cell-p ()
+  (should (oo-cons-cell-p (cons 1 2)))
+  (should-not (oo-cons-cell-p (list 1 2)))
+  (should-not (oo-cons-cell-p '(1 2 . 3)))
+  (should-not (oo-cons-cell-p 1)))
 
-(should (let ((x (oo-tree-transform-nodes #'oo-block-interpret-tree '((for! (n 10) (+ 1 1))))))
-          (equal x '((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))))
+(ert-deftest oo-proper-list-p ()
+  (should (oo-proper-list-p '(1 2)))
+  (should-not (oo-proper-list-p '(1 . 2)))
+  (should-not (oo-proper-list-p '(1 2 . 3)))
+  (should-not (oo-proper-list-p 10.5)))
 
-(should (let ((x (oo-block-interpret-tree '(for! (n 10) (+ 1 1)))))
-          (equal x '(catch 'break! (for! (n 10) (catch 'continue (+ 1 1)))))))
+(ert-deftest oo-block-interpret-tree ()
+  (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
+                 (oo-block-interpret-tree nil '((for! (n 10) (+ 1 1))))))
 
-(should (let (x) (equal x '(let ,foo ,@body))))
+  (should (equal '((:let ((foo nil))) ((collecting! foo 1)))
+                 (oo-block-interpret-tree nil '((collecting! foo 1)))))
 
-(should (for! (n 10) (+ 1 1)))
+  (should (equal (nil (cl-flet ((foo nil (+ 1 1))) (+ 2 2)))
+                 (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
-(should (oo-destructure '(a b) '(list 1 2)))
+  (should (equal (oo-block-interpret-tree nil '((stub! foo ()))))))
+
+(ert-deftest oo-block ()
+  (block! nil
+    (+ 1 1)
+    (appending! foo 2))
+
+  (block! nil
+    (+ 1 1)
+    (maxing! foo 2)))
