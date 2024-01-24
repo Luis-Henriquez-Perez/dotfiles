@@ -1,4 +1,4 @@
-;; -*- mode: emacs-lisp; lexical-binding: t; no-byte-compile: t -*-
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
 
 ;; This code and commentary was taken from [[https://d12frosted.io/posts/2021-04-09-emacs-d.html][this post]].  This file defines a
 ;; "project" for =eldev=.  I want things like project management.
@@ -47,19 +47,6 @@
 ;; everything at once like this; bad idea.
 (defun elpa-upgrade ()
   "Bootstrap personal configurations."
-  ;; make sure that bootstrap has completed
-  ;; (elpa-bootstrap)
+  (message "No upgrading steps yet."))
 
-  ;;  fetch all packages and then merge the latest version
-  ;; (straight-fetch-all)
-  ;; (straight-merge-all)
-
-  ;; in case we pinned some versions, revert any unneccessary merge
-  ;; (straight-thaw-versions)
-
-  ;; rebuild updated packages
-  ;; (delete-file (concat path-packages-dir "straight/build-cache.el"))
-  ;; (delete-directory (concat path-packages-dir "straight/build") 'recursive)
-  ;; (straight-check-all)
-  )
 (add-hook 'eldev-upgrade-hook #'elpa-upgrade)
