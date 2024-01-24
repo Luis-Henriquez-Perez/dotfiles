@@ -33,7 +33,6 @@
 (defun oo-snoc (list elt)
   "Add item to the end of list."
   (append list (list elt)))
-;; (defalias)
 
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
@@ -71,6 +70,9 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (declare (indent 1))
   `(let ((it ,expr))
      ,@body))
+
+(defmacro aif! (expr then &rest else)
+  `(alet! ,expr (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
   (declare (indent 1))
@@ -252,7 +254,7 @@ Name may be any symbol.  Code inside body can call `return!'."
   `(let ,originals
      (unwind-protect (progn ,@sets ,@body)
        ,@resets)))
-
+;;;; defmacro! and defun! 
 (defun oo-destructure-defun-plus (arglist)
   "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."
   (block! nil
@@ -286,14 +288,14 @@ Name may be any symbol.  Code inside body can call `return!'."
        (block! ,name
          (excluding! ,@(cl-remove-if #'oo-ampersand-symbol-p (flatten-list arglist)))
          ,@body))))
-
+;;;; set!
 (defmacro! set! (symbol value)
   "A \"do-it-all\" setter for configuring variables."
   (let! value-var (make-symbol "value"))
   `(if (not (boundp ',symbol))
        (push (cons ',symbol ',value) oo-unbound-symbol-alist)
      (let ((,value-var ,value))
-       (lgr-info oo-lgr "Set %s to %S" ',symbol ,value-var)
+       (message "Set %s to %S" ',symbol ,value-var)
        (aif (get ',symbol 'custom-set)
            (funcall it ',symbol ,value-var)
          (with-no-warnings (setq ,symbol ,value-var))))))
