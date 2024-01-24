@@ -21,23 +21,23 @@
 (ert-deftest oo-wrap-forms ()
   (should (equal '(when 1 (save-excursion foo)) (oo-wrap-forms '((when 1) (save-excursion)) '(foo)))))
 
-(ert-deftest oo-non-keyword-symbol-p ()
-  (should (oo-non-keyword-symbol-p 'foo))
-  (should-not (oo-non-keyword-symbol-p :foo))
-  (should-not (oo-non-keyword-symbol-p "foo"))
-  (should-not (oo-non-keyword-symbol-p 1)))
+;; (ert-deftest oo-non-keyword-symbol-p ()
+;;   (should (oo-non-keyword-symbol-p 'foo))
+;;   (should-not (oo-non-keyword-symbol-p :foo))
+;;   (should-not (oo-non-keyword-symbol-p "foo"))
+;;   (should-not (oo-non-keyword-symbol-p 1)))
 
-(ert-deftest oo-args-to-string ()
-  (should (equal "foo" (oo-args-to-string 'foo)))
-  (should (equal ":foo" (oo-args-to-string :foo)))
-  (should (equal "foo" (oo-args-to-string "foo")))
-  (should (equal "1" (oo-args-to-string 1))))
+;; (ert-deftest oo-args-to-string ()
+;;   (should (equal "foo" (oo-args-to-string 'foo)))
+;;   (should (equal ":foo" (oo-args-to-string :foo)))
+;;   (should (equal "foo" (oo-args-to-string "foo")))
+;;   (should (equal "1" (oo-args-to-string 1))))
 
-(ert-deftest oo-args-to-symbol ()
-  (should (equal 'foo (oo-args-to-symbol 'foo)))
-  (should (equal :foo (oo-args-to-symbol :foo)))
-  (should (equal 'foo (oo-args-to-symbol "foo")))
-  (should (equal '1 (oo-args-to-symbol 1))))
+;; (ert-deftest oo-args-to-symbol ()
+;;   (should (equal 'foo (oo-args-to-symbol 'foo)))
+;;   (should (equal :foo (oo-args-to-symbol :foo)))
+;;   (should (equal 'foo (oo-args-to-symbol "foo")))
+;;   (should (equal '1 (oo-args-to-symbol 1))))
 
 (ert-deftest alet! ()
   (should (= 2 (alet! 1 (+ it it)))))
@@ -48,27 +48,31 @@
 (ert-deftest awhen! ()
   (should (= 2 (awhen! 1 (+ it it)))))
 
-;; (ert-deftest for! ()
-;;   ;; Works for the syntax =(repeat N)= where N is a positive integer.
-;;   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+;; (ert-deftest adjoining! ()
+;;   (adjoining!))
 
-;;   ;; Also works if you just pass in the raw number.
-;;   ;; Not the most precise because I cannot specify that its the same symbol for
-;;   ;; all of =,(pred symbolp)= but good enough for now.
-;;   (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
+(ert-deftest for! ()
+  ;; Works for the syntax =(repeat N)= where N is a positive integer.
+  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
 
-;;   ;; Should allow me to loop through sequences.
-;;   (should (equal '(111 108 108 101 104)
-;;                  (let (chars) (for! (char "hello") (push char chars)) chars)))
+  ;; Also works if you just pass in the raw number.
+  ;; Not the most precise because I cannot specify that its the same symbol for
+  ;; all of =,(pred symbolp)= but good enough for now.
+  (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
 
-;;   (should (equal '(4 3 2 1)
-;;                  (let (nums) (for! (n [1 2 3 4]) (push char chars)) chars)))
+  ;; Should allow me to loop through sequences.
+  (should (equal '(111 108 108 101 104)
+                 (let (chars) (for! (char "hello") (push char chars)) chars)))
 
-;;   (should (equal '(4 3 2 1)
-;;                  (let (nums) (for! (n '(1 2 3 4)) (push char chars)) chars)))
+  (should (equal '(4 3 2 1)
+                 (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
 
-;;   ;; Should allow me to destructure arguments.
-;;   (should '(for! (a b) '((1 2) (4 5)))))
+  (should (equal '(4 3 2 1)
+                 (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
+
+  ;; Should allow me to destructure arguments.
+  ;; (should '(for! (a b) '((1 2) (4 5))))
+  )
 
 ;; (ert-deftest oo-block-interpret-tree ()
 ;;   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
@@ -86,11 +90,12 @@
 ;;   (should (equal (oo-block-interpret-tree nil '((let! foo 1)))
 ;;                  `((:let ((foo nil))) (nil))))
 
-;;   (should (equal ((:let ((gc-cons-threshold gc-cons-threshold))) (nil)))
-;;           )
-;;   (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
+;;   ;; (should (equal ((:let ((gc-cons-threshold gc-cons-threshold))) (nil)))
+;;   ;;         )
+;;   ;; (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
 
-;;   (should (equal (oo-block-interpret-tree nil '((let! foo 1))))))
+;;   ;; (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
+;;   )
 
 ;; (ert-deftest block! ()
 ;;   (block! nil (+ 1 1) (maxing! foo 2))

@@ -61,22 +61,22 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 
 ;; Being able to distinguish between a non-keyword symbol is useful enough to merit
 ;; its own function.
-(defun oo-non-keyword-symbol-p (object)
-  "Return t if OBJECT is a symbol but not a keyword."
-  (declare (pure t) (side-effect-free t))
-  (and (symbolp object) (not (keywordp object))))
+;; (defun oo-non-keyword-symbol-p (object)
+;;   "Return t if OBJECT is a symbol but not a keyword."
+;;   (declare (pure t) (side-effect-free t))
+;;   (and (symbolp object) (not (keywordp object))))
 
-(defun oo-args-to-string (&rest args)
-  "Return ARGS as a string."
-  (declare (pure t) (side-effect-free t))
-  (with-output-to-string (mapc #'princ args)))
+;; (defun oo-args-to-string (&rest args)
+;;   "Return ARGS as a string."
+;;   (declare (pure t) (side-effect-free t))
+;;   (with-output-to-string (mapc #'princ args)))
 
 ;; Simple symbols, using this function can save me having to provide a string for
 ;; =format=.
-(defun oo-args-to-symbol (&rest args)
-  "Return an interned symbol from ARGS."
-  (declare (pure t) (side-effect-free t))
-  (intern (apply #'oo-args-to-string args)))
+;; (defun oo-args-to-symbol (&rest args)
+;;   "Return an interned symbol from ARGS."
+;;   (declare (pure t) (side-effect-free t))
+;;   (intern (apply #'oo-args-to-string args)))
 ;;;; function transformers 
 ;; (defun oo-notfn (fn)
 ;;   (lambda (&rest args) (not (apply fn args))))
@@ -118,23 +118,20 @@ symbol as in `dolist', but.  LIST can be a sequence."
   (declare (indent 1))
   (pcase pred
     ((or `(repeat ,n) (and n (pred integerp)))
-     (cl-once-only (n)
-       `(if (integerp ,n)
-            (dotimes (_ ,n) ,@body)
-          (error "Wrong type argument integerp: %S" ,n))))
+     `(dotimes (_ ,n) ,@body))
     (`(,(and match-form (pred sequencep)) ,list)
-     (alet! (make-symbol "var")
-            `(for! (,it ,list)
-               (-let [,match-form ,it]
-                 ,@body))))
-    (`(,(and var (pred symbolp)) ,list)
+     (cl-with-gensyms (elt)
+       `(for! (,elt ,list)
+          (seq-let ((,match-form ,elt))
+              ,@body))))
+    (`(,(and elt (pred symbolp)) ,list)
      (cl-once-only (list)
        `(cond ((listp ,list)
-               (dolist (,var ,list) ,@body))
+               (dolist (,elt ,list) ,@body))
               ((sequencep ,list)
-               (seq-doseq (,var ,list) ,@body))
+               (seq-doseq (,elt ,list) ,@body))
               ((integerp ,list)
-               (for! ,list ,@body))
+               (dotimes (,elt ,list) ,@body))
               (t
                (error "Unknown list predicate: %S" ',pred)))))))
 ;; ;;;; setting
