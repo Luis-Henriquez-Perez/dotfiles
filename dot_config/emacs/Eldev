@@ -43,7 +43,8 @@
 ;;;; define update command
 ;; In [[][d12frosted's configuration]] he defined "upgrading" the configuration
 ;; as all the packages which are not pinned.  However, I pin all of my packages
-;; because I want complete control over.
+;; because I want complete control over.  I do not ever want to upgrade
+;; everything at once like this; bad idea.
 (defun elpa-upgrade ()
   "Bootstrap personal configurations."
   ;; make sure that bootstrap has completed
