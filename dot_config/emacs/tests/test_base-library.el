@@ -1,7 +1,5 @@
-(require 'ert)
-
-;; (add-to-list 'load-path "~/.local/share/chezmoi/Archive")
-(load-file "draft_oo-base-library.el")
+;; Does not need to be required because already autoloaded.
+(require 'oo-base-lib)
 
 (ert-deftest oo-cons-cell-p ()
   (should     (oo-cons-cell-p (cons 1 2)))
@@ -102,3 +100,5 @@
 ;;   (should (pcase (block! nil (+ 1 1) (appending! foo 2))
 ;;             (`)
 ;;             (_))))
+
+(provide)
