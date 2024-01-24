@@ -14,19 +14,23 @@
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
   "Return t only if OBJ is a cons-cell."
+  (declare (pure t) (side-effect-free t))
   (and (consp obj)
        (not (listp (cdr obj)))))
 
 (defun oo-proper-list-p (obj)
   "Return t only if OBJ is a proper list."
+  (declare (pure t) (side-effect-free t))
   (or (null obj)
       (null (cdr (cl-last obj)))))
 
 (defun oo-improper-list-p (obj)
   "Return t only if OBJ is not a proper list"
+  (declare (pure t) (side-effect-free t))
   (not (oo-proper-list-p obj)))
 
 (defun oo-snoc (list elt)
+  (declare (pure t) (side-effect-free t))
   "Add ELT to the end of LIST."
   (append list (list elt)))
 
