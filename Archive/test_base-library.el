@@ -14,10 +14,16 @@
   (should-not (oo-proper-list-p 10.5)))
 
 (ert-deftest oo-snoc ()
-  (should (oo-snoc '(1 2))))
+  (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
 
 (ert-deftest oo-wrap-forms ()
   )
+
+(ert-deftest oo-non-keyword-symbol-p ()
+  (should (oo-non-keyword-symbol-p 'foo))
+  (should-not (oo-non-keyword-symbol-p :foo))
+  (should-not (oo-non-keyword-symbol-p "foo"))
+  (should-not (oo-non-keyword-symbol-p 1)))
 
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.

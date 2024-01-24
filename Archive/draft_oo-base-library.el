@@ -30,8 +30,8 @@
   (not (oo-proper-list-p obj)))
 
 (defun oo-snoc (list elt)
+  "Append ELT to the end of LIST."
   (declare (pure t) (side-effect-free t))
-  "Add ELT to the end of LIST."
   (append list (list elt)))
 
 (defun oo-wrap-forms (wrappers forms)
