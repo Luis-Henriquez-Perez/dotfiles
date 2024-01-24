@@ -7,7 +7,7 @@
 ;; based on my past with org mode I find the outline syntax useful.
 ;; For these reasons I want to auto-enable [[][outshine]] and
 ;; [[][orglink]] in my lisp files.
-((nil    . ((mode . outli)
-            (mode . orglink)))
- ("lisp" . ((mode . outli)
-            (mode . orglink))))
+;; ((nil    . ((mode . outli)
+;;             (mode . orglink)))
+;;  ("lisp" . ((mode . outli)
+;;             (mode . orglink))))

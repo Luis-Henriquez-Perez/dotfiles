@@ -4,6 +4,4 @@
 ;; version, prefer to use the newer (typically the uncompiled) version.
 (setq load-prefer-newer t)
 
-(require 'oo-base-utils-test)
-(require 'oo-bind-functions-test)
-(require 'oo-modifications-macro)
+(require 'oo-base-library)
