@@ -22,29 +22,20 @@
 
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
-  (should (pcase (macroexpand-1 '(for! (repeat 10) 1)))
-          )
-
+  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+  
   ;; Also works if you just pass in the raw number.
   ;; Not the most precise because I cannot specify that its the same symbol for
   ;; all of =,(pred symbolp)= but good enough for now.
-  (should (pcase (macroexpand-1 '(for! 10 1))
-            (`(let ((,(pred symbolp) 10))
-                (if (integerp ,(pred symbolp))
-                    (dotimes (_ ,(pred symbolp)) 1)
-                  (error "Wrong type argument integerp: %S" ,(pred symbolp))))
-             t)
-            (_
-             nil)))
+  (should (= 11 (let ((n 1)) (for! 10 (cl-incf n))) n))
 
   ;; Should allow me to loop through sequences.
-  (should (pcase (macroexpand-1 '(for! (char "hello") 1))))
-
+  (should (equal (let (chars) (for! (char "hello") (push char chars)) chars) '()))
+  
+  (should (equal (let (nums) (for! (n [1 2 3 4]) (push char chars)) chars) '(4 3 2 1)))
+  
   ;; Should allow me to destructure arguments.
-  (should (pcase (macroexpand-1 '(for! (a b c) '((1 2 3) (4 5 6)))))
-          ))
-
-(should (pcase (macroexpand-1 '())))
+  (should (pcase (macroexpand-1 '(for! (a b c) '((1 2 3) (4 5 6)))))))
 
 (should (for! [1 2 3 4] 1))
 (should (for! [1 2 3 4] 1))
