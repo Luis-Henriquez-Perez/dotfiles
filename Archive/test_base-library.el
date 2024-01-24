@@ -17,6 +17,8 @@
   (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
 
 (ert-deftest oo-wrap-forms ()
+  (should (equal '() (oo-wrap-forms '((when 1) (save-excursion)) 'foo)))
+  (should (equal '() (oo-wrap-forms '((when 1) (save-excursion)) 'foo)))
   )
 
 (ert-deftest oo-non-keyword-symbol-p ()
@@ -43,16 +45,6 @@
   
   ;; Should allow me to destructure arguments.
   (should '(for! (a b) '((1 2) (4 5)))))
-
-(should (for! [1 2 3 4] 1))
-(should (for! [1 2 3 4] 1))
-
-(should (oo-snoc '(1 2)))
-(should (oo-snoc '(1 2)))
-(should (oo-snoc '(1 2)))
-(should (oo-snoc '(1 2)))
-(should (oo-snoc '(1 2)))
-(should (oo-snoc '(1 2)))
 
 (ert-deftest oo-block-interpret-tree ()
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
