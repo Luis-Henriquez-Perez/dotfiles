@@ -27,7 +27,7 @@
   (not (oo-proper-list-p obj)))
 
 (defun oo-snoc (list elt)
-  "Add item to the end of list."
+  "Add ELT to the end of LIST."
   (append list (list elt)))
 
 (defun oo-wrap-forms (wrappers forms)

@@ -16,6 +16,9 @@
 (ert-deftest oo-snoc ()
   (should (oo-snoc '(1 2))))
 
+(ert-deftest oo-wrap-forms ()
+  )
+
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
