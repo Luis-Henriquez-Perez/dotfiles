@@ -13,13 +13,40 @@
   (should-not (oo-proper-list-p '(1 2 . 3)))
   (should-not (oo-proper-list-p 10.5)))
 
-(should (oo-snoc '(1 2)))
+(ert-deftest oo-snoc ()
+  (should (oo-snoc '(1 2))))
+
 (should (oo-snoc '(1 2)))
 (should (oo-snoc '(1 2)))
 (should (oo-snoc '(1 2)))
 
-(should (for! (repeat 10) 1))
-(should (for! 10 1))
+(ert-deftest for! ()
+  ;; Works for the syntax =(repeat N)= where N is a positive integer.
+  (should (pcase (macroexpand-1 '(for! (repeat 10) 1)))
+          )
+
+  ;; Also works if you just pass in the raw number.
+  ;; Not the most precise because I cannot specify that its the same symbol for
+  ;; all of =,(pred symbolp)= but good enough for now.
+  (should (pcase (macroexpand-1 '(for! 10 1))
+            (`(let ((,(pred symbolp) 10))
+                (if (integerp ,(pred symbolp))
+                    (dotimes (_ ,(pred symbolp)) 1)
+                  (error "Wrong type argument integerp: %S" ,(pred symbolp))))
+             t)
+            (_
+             nil)))
+
+  ;; Should allow me to loop through sequences.
+  (should (pcase (macroexpand-1 '(for! (char "hello") 1))))
+
+  ;; Should allow me to destructure arguments.
+  (should (pcase (macroexpand-1 '(for! (a b c) '((1 2 3) (4 5 6)))))
+          ))
+
+(should (pcase (macroexpand-1 '())))
+
+(should (for! [1 2 3 4] 1))
 (should (for! [1 2 3 4] 1))
 
 (should (oo-snoc '(1 2)))
@@ -51,11 +78,8 @@
 
   (should (equal (oo-block-interpret-tree nil '((let! foo 1))))))
 
-(ert-deftest oo-block ()
-  (block! nil
-    (+ 1 1)
-    (appending! foo 2))
-
-  (block! nil
-    (+ 1 1)
-    (maxing! foo 2)))
+(ert-deftest block! ()
+  (block! nil (+ 1 1) (maxing! foo 2))
+  (should (pcase (block! nil (+ 1 1) (appending! foo 2))
+            (`)
+            (_))))

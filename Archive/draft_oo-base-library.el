@@ -12,10 +12,6 @@
 (defalias 'oo-none-p 'cl-notany)
 (defalias 'oo-some-p 'cl-notevery)
 ;;;; helpers
-(defun oo-not (fn)
-  "Return a function"
-  (lambda (&rest args) (not (apply fn args))))
-
 (defun oo-cons-cell-p (obj)
   "Return t only if OBJ is a cons-cell."
   (and (consp obj)
@@ -63,6 +59,10 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   "Return an interned symbol from ARGS."
   (declare (pure t) (side-effect-free t))
   (intern (apply #'oo-args-to-string args)))
+;;;; function transformers 
+(defun oo-not (fn)
+  "Return a function"
+  (lambda (&rest args) (not (apply fn args))))
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.
@@ -248,13 +248,20 @@ Name may be any symbol.  Code inside body can call `return!'."
   )
 ;;;; flet!
 (defmacro! flet! (bindings &rest body)
-  (pcase-dolist (`(,symbol ,fn) bindings)
-    (collecting! originals (cl-gensym "original-fn"))
-    (collecting! sets)
-    (collecting! resets))
+  ""
+  (stub! )
+  (pcase-dolist (`(,symbol ,args . ,body) bindings)
+    (collecting! originals `(,(cl-gensym "original-fn") ,symbol))
+    (collecting! sets `(fset ))
+    (collecting! resets `()))
   `(let ,originals
      (unwind-protect (progn ,@sets ,@body)
        ,@resets)))
+;;;; match 
+(defmacro match! (form pcase-form)
+  `(pcase ,form
+     (,pcase-form t)
+     (_ nil)))
 ;;;; defmacro! and defun! 
 (defun oo-destructure-defun-plus (arglist)
   "Return list (name args (docstring declarations) plist body) from DEFUN-ARGS."

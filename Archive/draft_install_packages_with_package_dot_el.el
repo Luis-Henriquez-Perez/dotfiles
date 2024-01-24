@@ -553,10 +553,7 @@
          (commit (plist-get spec :commit)))
     (unless (seq-some #'package-vc-p (cdr pkg-descs))
       (message "Cloning %s from %s..." name url)
-      (flet! ((package-vc--unpack-1 (lambda (desc dir)
-                                      (message "Cloning %s from %s..." name url)
-                                      (funcall this-fn desc dir))))
-        (package-vc-install recipe)))))
+      (flet! ((package-vc--unpack-1 (desc dir) (message "Cloning %s from %s..." name url) (funcall this-fn desc dir))) (package-vc-install recipe)))))
 
 ;; Honestly I might not deal with =package-vc-checkout= and
 ;; =package-vc-install-from-checkout=.  I have had a hard time with these
