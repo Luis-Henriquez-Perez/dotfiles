@@ -80,7 +80,8 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 (defun oo-notfn (fn)
   (lambda (&rest args) (not (apply fn args))))
 
-(defun oo-andfn (fn &rest fns))
+(defun oo-andfn (fn &rest fns)
+  )
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.
