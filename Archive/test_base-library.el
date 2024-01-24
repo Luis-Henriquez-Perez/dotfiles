@@ -2,13 +2,13 @@
 (require 'ert)
 
 (ert-deftest oo-cons-cell-p ()
-  (should (oo-cons-cell-p (cons 1 2)))
+  (should     (oo-cons-cell-p (cons 1 2)))
   (should-not (oo-cons-cell-p (list 1 2)))
   (should-not (oo-cons-cell-p '(1 2 . 3)))
   (should-not (oo-cons-cell-p 1)))
 
 (ert-deftest oo-proper-list-p ()
-  (should (oo-proper-list-p '(1 2)))
+  (should     (oo-proper-list-p '(1 2)))
   (should-not (oo-proper-list-p '(1 . 2)))
   (should-not (oo-proper-list-p '(1 2 . 3)))
   (should-not (oo-proper-list-p 10.5)))
@@ -33,7 +33,7 @@
   
   (should (equal (let (nums) (for! (n [1 2 3 4]) (push char chars)) chars) '(4 3 2 1)))
 
-  (should (equal (let (nums) (for! (n (1 2 3 4)) (push char chars)) chars) '(4 3 2 1)))
+  (should (equal (let (nums) (for! (n '(1 2 3 4)) (push char chars)) chars) '(4 3 2 1)))
   
   ;; Should allow me to destructure arguments.
   (should '(for! (a b) '((1 2) (4 5)))))
