@@ -23,7 +23,17 @@
   (should (equal (nil (cl-flet ((foo nil (+ 1 1))) (+ 2 2)))
                  (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
-  (should (equal (oo-block-interpret-tree nil '((stub! foo ()))))))
+  (should (equal (oo-block-interpret-tree nil '((without! a b c)))
+                 '((:no-let (a b c)) (nil))))
+
+  (should (equal (oo-block-interpret-tree nil '((let! foo 1)))
+                 `((:let ((foo nil))) (nil))))
+
+  (should (equal ((:let ((gc-cons-threshold gc-cons-threshold))) (nil)))
+          )
+  (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
+
+  (should (equal (oo-block-interpret-tree nil '((let! foo 1))))))
 
 (ert-deftest oo-block ()
   (block! nil

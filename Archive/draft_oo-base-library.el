@@ -33,6 +33,7 @@
 (defun oo-snoc (list elt)
   "Add item to the end of list."
   (append list (list elt)))
+;; (defalias)
 
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
@@ -64,6 +65,8 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (declare (pure t) (side-effect-free t))
   (intern (apply #'oo-args-to-string args)))
 ;;;; anaphoric macros
+;; I used the [[][anaphora]] package for these macros, but in reality they are
+;; trivial to write on my own.
 (defmacro alet! (expr &rest body)
   (declare (indent 1))
   `(let ((it ,expr))
@@ -73,6 +76,7 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (declare (indent 1))
   `(alet! ,cond (when it ,@body)))
 
+;; For brevity I do not want to add the =!= for this macro.
 (defmacro -- (&rest body)
   ""
   `(lambda (it) ,@body))
@@ -208,12 +212,12 @@ customizing variables."
      (list data tree))
     (`(,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols))))
      (appending! (plist-get data :no-let) symbols)
-     (list data tree))
+     (list data nil))
     (`(,(and macro (guard (member macro '(let!)))) ,match-form ,_ . ,(and plist (guard t)))
      (alet! (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
                 (plist-get plist :init))
        (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
-     (list data nil))
+     (list data tree))
     (`((,(and name (guard (assoc name oo-block-alist))) ,symbol ,args . ,body) . ,rest)
      (pcase-let ((`(,data1 ,rest) (oo-block-interpret-tree nil rest))
                  (`(,data2 ,body) (oo-block-interpret-tree nil body)))
@@ -236,9 +240,6 @@ Name may be any symbol.  Code inside body can call `return!'."
                (nolets (plist-get data :nolet))
                (bindings (cl-remove-if (-- (assoc it lets) nolets) lets)))
     `(let ,bindings ,@tree)))
-
-(defmacro defmacro! (name &rest body)
-  )
 ;;;; quiet!
 (defmacro quiet! (&rest body)
   )
