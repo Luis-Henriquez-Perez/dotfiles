@@ -69,8 +69,7 @@
                  (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
 
   ;; Should allow me to destructure arguments.
-  ;; (should '(for! (a b) '((1 2) (4 5))))
-  )
+  (should (equal '(3 9) (let (list) (for! (a b) '((1 2) (4 5)))))))
 
 ;; (ert-deftest oo-block-interpret-tree ()
 ;;   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
@@ -101,4 +100,4 @@
 ;;             (`)
 ;;             (_))))
 
-(provide)
+(provide 'test_oo-base-lib)

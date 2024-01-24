@@ -4,4 +4,4 @@
 ;; version, prefer to use the newer (typically the uncompiled) version.
 (setq load-prefer-newer t)
 
-(require 'oo-base-library)
+(require 'test_oo-base-lib)
