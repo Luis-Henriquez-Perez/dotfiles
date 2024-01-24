@@ -7,6 +7,11 @@
 ;; based on my past with org mode I find the outline syntax useful.
 ;; For these reasons I want to auto-enable [[][outshine]] and
 ;; [[][orglink]] in my lisp files.
+;; Right now disable this because I get errors before I have orglink and outli
+;; installed during package installation.  I do not now if the errors actually
+;; stop the packages from being installed or if they have a significant effect
+;; in practice--even if the packages fail to install.  But it is certainly
+;; uncouth to let this happen.
 ;; ((nil    . ((mode . outli)
 ;;             (mode . orglink)))
 ;;  ("lisp" . ((mode . outli)
