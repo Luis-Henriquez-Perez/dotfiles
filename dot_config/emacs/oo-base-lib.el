@@ -15,6 +15,7 @@
 ;; help me.  Another advantage is I can use my library of helpers anywhere even
 ;; for =oo-install-packages-with-package-dot-el.el=.
 
+;;;; Require built-in packages
 (require 'pcase)
 (require 'subr-x)
 (require 'cl-lib)
