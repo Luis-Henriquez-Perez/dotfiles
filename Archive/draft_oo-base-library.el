@@ -12,8 +12,8 @@
 ;; they're not your script could take much longer if it tries to install the
 ;; packages before running its code, or it could even fail.  And it is painful
 ;; to write scripts without the functions and macros I painstakingly wrote to
-;; help me.  Another advantage
-;; is I can use my library of helpers anywhere.
+;; help me.  Another advantage is I can use my library of helpers anywhere even
+;; for =oo-install-packages-with-package-dot-el.el=.
 
 (require 'pcase)
 (require 'subr-x)
