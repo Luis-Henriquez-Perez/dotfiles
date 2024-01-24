@@ -29,9 +29,11 @@
   (should (equal (let (chars) (for! (char "hello") (push char chars)) chars) '()))
   
   (should (equal (let (nums) (for! (n [1 2 3 4]) (push char chars)) chars) '(4 3 2 1)))
+
+  (should (equal (let (nums) (for! (n (1 2 3 4)) (push char chars)) chars) '(4 3 2 1)))
   
   ;; Should allow me to destructure arguments.
-  (should (pcase (macroexpand-1 '(for! (a b c) '((1 2 3) (4 5 6)))))))
+  (should '(for! (a b) '((1 2) (4 5)))))
 
 (should (for! [1 2 3 4] 1))
 (should (for! [1 2 3 4] 1))
