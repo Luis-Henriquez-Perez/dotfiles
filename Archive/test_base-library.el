@@ -13,6 +13,22 @@
   (should-not (oo-proper-list-p '(1 2 . 3)))
   (should-not (oo-proper-list-p 10.5)))
 
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+
+(should (for! (repeat 10) 1))
+(should (for! 10 1))
+(should (for! [1 2 3 4] 1))
+
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+(should (oo-snoc '(1 2)))
+
 (ert-deftest oo-block-interpret-tree ()
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
                  (oo-block-interpret-tree nil '((for! (n 10) (+ 1 1))))))

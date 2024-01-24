@@ -72,6 +72,7 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
      ,@body))
 
 (defmacro aif! (expr then &rest else)
+  (declare (intent 1))
   `(alet! ,expr (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
