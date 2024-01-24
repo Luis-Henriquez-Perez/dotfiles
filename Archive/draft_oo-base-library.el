@@ -2,6 +2,19 @@
 ;; This library should not require an external dependencies.  The main reason is
 ;; so that it can be loaded from scripts without having to think about package
 ;; management.
+;; This is an initiative to remove external dependencies from the base functions
+;; and macros that I use for my configuration.  Let me explain my reasoning.
+;; First, I do not think I generally needed the convinience functions of dash,
+;; f, and s.  With just a bit more work, I could do without them.  But also, I
+;; want this base library to be a separate file that I can load for any elisp
+;; scripts I write.  Relying on external libraries when loading scripts can be
+;; complicated because you have to be sure you're packages are all set; if
+;; they're not your script could take much longer if it tries to install the
+;; packages before running its code, or it could even fail.  And it is painful
+;; to write scripts without the functions and macros I painstakingly wrote to
+;; help me.  Another advantage
+;; is I can use my library of helpers anywhere.
+
 (require 'pcase)
 (require 'subr-x)
 (require 'cl)
