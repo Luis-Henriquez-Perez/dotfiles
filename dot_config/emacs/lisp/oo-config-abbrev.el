@@ -177,3 +177,5 @@
 (define-global-abbrev "orignal" "original")
 
 (define-global-abbrev "eachother" "each other")
+
+(define-global-abbrev "propogate" "propagate")

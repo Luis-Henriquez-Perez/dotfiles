@@ -31,5 +31,7 @@ mcron &
 # emacs --daemon
 
 ### set the wallpaper for the first time
-# I am not sure whether to do this here or not.
+# I am not sure whether to do this here or not.  It is possible to do this in
+# awesome or stumpwm itself but I do not want to do it ever time for ever window
+# manager.  This script sets the current wallpaper.
 ~/scripts/set_wallpaper.sh
