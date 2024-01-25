@@ -80,12 +80,16 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 ;;   "Return an interned symbol from ARGS."
 ;;   (declare (pure t) (side-effect-free t))
 ;;   (intern (apply #'oo-args-to-string args)))
-;;;; function transformers 
+;;;; function transformers
 ;; (defun oo-notfn (fn)
 ;;   (lambda (&rest args) (not (apply fn args))))
 
 ;; (defun oo-andfn (fn &rest fns)
 ;;   )
+;;;; advices
+;; A general advice to message the.
+(defun oo-message-arguments (fn &rest args)
+  ())
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.

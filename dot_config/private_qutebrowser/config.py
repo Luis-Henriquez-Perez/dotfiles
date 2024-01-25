@@ -84,3 +84,5 @@ config.bind('<Space>jd', ':set content.javascript.enabled false')
 config.bind('<Space>ff', 'set-cmd-text -s :open')
 ### hide titlebars from qutebrowser
 config.set('window.hide_decoration', True)
+### save with monolith
+config.bind('<Ctrl-S>', 'spawn --userscript save_with_monolith.sh')
