@@ -22,7 +22,9 @@
 # \|DA.
 
 # I do not think any of these actions would change the source state.  All of
-# them propagate the source state.
+# them propagate the source state to the target state: = A= and =DA= a add a
+# file whereas = M= modifies an existing file in the target state.  So I should
+# not need any version controlling here.
 unapplied=$(chezmoi status | grep '^\( A\| M\|DA\)' | cut -c4-)
 # Exit if no unapplied files
 if [ -z "$unapplied" ]; then
