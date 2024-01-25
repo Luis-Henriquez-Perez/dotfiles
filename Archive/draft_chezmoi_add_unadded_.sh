@@ -34,6 +34,5 @@ target_base=$(chezmoi target-path)
 
 # Iterate through unapplied files and apply changes
 for file in $unapplied; do
-    # echo "-> $file"
     chezmoi apply "$target_base/$file" --force
 done
