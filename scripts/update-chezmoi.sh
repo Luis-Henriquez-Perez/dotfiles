@@ -37,16 +37,17 @@ git reset > /dev/null 2>&1
 updated=$(chezmoi status | grep '^\( A\| M\)' | cut -c4-)
 
 for file in $updated; do
-    target="$target_path/file"
+    target="$target_path/$file"
+    source=$(chezmoi source-path "$target")
+    echo "Apply $source to $target."
     chezmoi apply "$target" --force
-    echo "Apply source file to $target."
     # Check if the file is uncommitted
     # If the files in unapplied are not committed, commit them.
     if git status --porcelain | grep -q "^?? $file\|^ M $file"; then
         # Add the file to staging
         git add "$file"
         # Commit the file
-        git commit -m "Update $file"
+        git commit -m "Update $file."
         echo "Committed changes in $file."
     else
         echo "$file is already committed."
