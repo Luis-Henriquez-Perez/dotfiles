@@ -48,7 +48,7 @@ done
 deleted=$(chezmoi status | grep '^\(DA\)' | cut -c4-)
 
 for file in $deleted; do
-    source="$source_path/$file"
+    source=$(chezmoi source-path "$file")
     rm "$source"
     echo "Remove $source from source directory."
 done
