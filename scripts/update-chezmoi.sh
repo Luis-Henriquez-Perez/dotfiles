@@ -47,10 +47,12 @@ for file in $updated; do
         # Add the file to staging
         git add "$file"
         # Commit the file
-        git commit -m "Update $file."
+        git commit -m "Update $file." > /dev/null 2>&1
         echo "Committed changes in $file."
+        git push > /dev/null 2>&1 || { echo "Failed to push changes"; exit 1; }
+        echo "Pushed"
     else
-        echo "$file is already committed."
+        echo "Updates to $file are already committed."
     fi
 done
 ### add modified files in target state
@@ -64,24 +66,29 @@ done
 # apply= could actually /overwrite/ those changes in favor of the source state.
 # modified=$(chezmoi status | grep '^MM' | cut -c4-)
 
-# for file in $modified; do
-#     target="$target_path/$file"
-#     source_file=$(chezmoi source-path "$target")
+for file in $modified; do
+    target="$target_path/$file"
+    source_file=$(chezmoi source-path "$target")
 
-#     if git diff --quiet --exit-code -- "$source_file"; then
-#         chezmoi add "$target"
-#         echo "Added $target."
-#     else
-#         echo "Skipped $target as the source state is modified."
-#     fi
-# done
+    if git diff --quiet --exit-code -- "$source_file"; then
+        chezmoi add "$target"
+        echo "Added $target."
+    else
+        echo "Skipped $target as the source state is modified."
+    fi
+done
 ### delete files
-# deleted=$(chezmoi status | grep '^\(DA\)  | cut -c4-)
+# git status --porcelain | grep -q "^?? $file\|^ M $file"
+# todelete=$(chezmoi status | grep '^\( A\| M\)' | cut -c4-)
+
+# deleted=$(chezmoi status | grep '^\(DA\)'
+#   | cut -c4-)
 
 # for file in $deleted; do
 #     source="$source_path/$file"
-#     rm "$source"
+#     git rm "$source"
 #     echo "Remove $source from source directory."
+#     git commit -m "Delete %s"
 # done
 ### restage files
 ### acknowledgements
