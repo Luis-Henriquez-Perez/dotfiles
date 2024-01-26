@@ -15,7 +15,7 @@
 ;; help me.  Another advantage is I can use my library of helpers anywhere even
 ;; for =oo-install-packages-with-package-dot-el.el=.
 
-;;;; Require built-in packages
+;;;; require built-in packages
 ;; I need it to help me with pattern matching.
 (require 'pcase)
 ;; It has several useful functions and macros.
@@ -88,8 +88,8 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 ;;   )
 ;;;; advices
 ;; A general advice to message the.
-(defun oo-message-arguments (fn &rest args)
-  ())
+;; (defun oo-message-arguments (fn &rest args)
+;;   ())
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.

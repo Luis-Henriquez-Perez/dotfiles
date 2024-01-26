@@ -13,6 +13,12 @@
   (should-not (oo-proper-list-p '(1 2 . 3)))
   (should-not (oo-proper-list-p 10.5)))
 
+(ert-deftest oo-proper-list-p ()
+  (should-not (oo-improper-list-p '(1 2)))
+  (should (oo-improper-list-p '(1 . 2)))
+  (should (oo-improper-list-p '(1 2 . 3)))
+  (should-not (oo-improper-list-p 10.5)))
+
 (ert-deftest oo-snoc ()
   (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
 
@@ -46,8 +52,21 @@
 (ert-deftest awhen! ()
   (should (= 2 (awhen! 1 (+ it it)))))
 
-;; (ert-deftest adjoining! ()
-;;   (adjoining!))
+(ert-deftest adjoining! ()
+  (let (adjoined)
+    (adjoining! adjoined 1)
+    (adjoining! adjoined 1)
+    (should (equal '(1) adjoined))
+    ;; (should)
+    ))
+
+(ert-deftest collecting! ()
+  (let (collected)
+    (collecting! adjoined 1)
+    (collecting! adjoined 1)
+    (should (equal '(1) collected))
+    ;; (should)
+    ))
 
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
