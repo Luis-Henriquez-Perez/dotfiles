@@ -11,28 +11,25 @@
 ;; I would like to be able to change this without having to go to a different
 ;; file.  Maybe I would need to integrate this with stumpwm.
 ;;;; email
-;; Check my email every 5 minutes.
-;; (job '(next-minute (range 0 60 5)) "~/download-and-index-email.sh")
+;; Download and index my email every 5 minutes.
+(job '(next-minute (range 0 60 5)) "~/download_and_index_mail.sh")
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
 ;;;;; Clean the cache 
 ;;;; chezmoi
-;;;;; Apply needed files 
-;; Apply any changes that need applying for the source state to the target state
-;; (except if the target state of the files has been modified).  It is like
-;; using =chezmoi apply= but I choose only files that are "obviously" needing to
-;; be applied without the loss of information.
-;; (job '(next-minute (range 0 60 7)) "~/scripts/chezmoi-apply-unapplied.sh")
-;;;;; Add and commit modified targets 
-;; If I changed a chezmoi target file and have not changed corresponding source
-;; file, feel free to add it and commit it.
-;; (job '(next-minute (range 0 60 7)) "~/scripts/chezmoi-apply-unapplied.sh")
+;; TODO: There are ways I can better dynamically choose when this script should
+;; be run.  One way is I could check to see if emacs is actually open because
+;; that is what I am likely going to be using to edit my files.
+(job '(next-minute (range 0 60 7)) "~/scripts/chezmoi_state_sync.sh")
 ;;;; wallpaper 
 ;;;;; change my wallpaper every 15 minutes
 ;; Change my wallpaper every 15 minutes.
 ;; Is there an expand path thing here?
-(job '(next-minute (range 0 60 15)) "~/scripts/set-wallpaper.sh")
-;;;;; Download new wallpapers
+(job '(next-minute (range 0 60 15)) "~/scripts/set_wallpaper.sh")
+;;;;; Clean my wallpapers
+;; TODO: I plan a setup where I can start by downloading wallpapers and then if
+;; a wallpaper I do not like is displayed, I can press a keybinding to replace
+;; it, and mark that one as unliked.
 ;; (job '(next-minute (range 0 60 15)) "~/scripts/set_wallpaper.sh")
 ;;;; commit and push dotfiles automatically
 ;; (job '(next-minute (range 0 60 10)) "~/scripts/auto-commit-and-push-dotfiles.sh")

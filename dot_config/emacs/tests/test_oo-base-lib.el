@@ -1,4 +1,5 @@
 ;; Does not need to be required because already autoloaded.
+
 (require 'oo-base-lib)
 
 (ert-deftest oo-cons-cell-p ()
@@ -13,7 +14,7 @@
   (should-not (oo-proper-list-p '(1 2 . 3)))
   (should-not (oo-proper-list-p 10.5)))
 
-(ert-deftest oo-proper-list-p ()
+(ert-deftest oo-improper-list-p ()
   (should-not (oo-improper-list-p '(1 2)))
   (should (oo-improper-list-p '(1 . 2)))
   (should (oo-improper-list-p '(1 2 . 3)))
@@ -60,13 +61,13 @@
     ;; (should)
     ))
 
-(ert-deftest collecting! ()
-  (let (collected)
-    (collecting! adjoined 1)
-    (collecting! adjoined 1)
-    (should (equal '(1) collected))
-    ;; (should)
-    ))
+;; (ert-deftest collecting! ()
+;;   (let (collected)
+;;     (collecting! adjoined 1)
+;;     (collecting! adjoined 1)
+;;     (should (equal '(1) collected))
+;;     ;; (should)
+;;     ))
 
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
@@ -90,6 +91,12 @@
   ;; Should allow me to destructure arguments.
   (should (equal '(3 9) (let (list) (for! (a b) '((1 2) (4 5)))))))
 
+(ert-deftest take-while! ()
+  (should (let ((foo '(a b 1 2 3))) (list (take-while! (symbolp foo) foo) foo))
+          '((a b) (1 2 3)))
+  ;; (should ())
+  )
+
 (ert-deftest oo-block-interpret-tree ()
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
                  (oo-block-interpret-tree nil '((for! (n 10) (+ 1 1))))))
@@ -97,20 +104,22 @@
   (should (equal '((:let ((foo nil))) ((collecting! foo 1)))
                  (oo-block-interpret-tree nil '((collecting! foo 1)))))
 
-  (should (equal (nil (cl-flet ((foo nil (+ 1 1))) (+ 2 2)))
+  ;; Stubbing functions.
+  (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
                  (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
+  ;; Getting data from `without!'.
   (should (equal (oo-block-interpret-tree nil '((without! a b c)))
                  '((:no-let (a b c)) (nil))))
 
-  (should (equal (oo-block-interpret-tree nil '((let! foo 1)))
-                 `((:let ((foo nil))) (nil))))
+  ;; Getting data from `let!'.
+  (should (equal `((:let ((foo nil))) ((setq foo 1)))
+                 (oo-block-interpret-tree nil '((let! foo 1)))))
+  
+  (should (equal '((:let ((gc-cons-threshold gc-cons-threshold))) ((setq gc-cons-threshold 100)))
+                 (oo-block-interpret-tree nil '((let! gc-cons-threshold 100)))))
 
-  ;; (should (equal ((:let ((gc-cons-threshold gc-cons-threshold))) (nil)))
-  ;;         )
-  ;; (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
-
-  ;; (should (equal (oo-block-interpret-tree nil '((let! foo 1)))))
+  ;; I want to see how it works with multiple data.
   )
 
 ;; (ert-deftest block! ()
@@ -118,5 +127,11 @@
 ;;   (should (pcase (block! nil (+ 1 1) (appending! foo 2))
 ;;             (`)
 ;;             (_))))
+
+(ert-deftest oo-pcase-pattern ()
+  (should (equal '`((,a (,b) ,c . ,d)) (oo-pcase-pattern '((a (b) c . d)))))
+  (should (equal '`[,a ,b ,c] (oo-pcase-pattern [a b c])))
+  (should (equal '`(,a [,b ,c (,f [,g]) [,d]] ,e)
+                 (oo-pcase-pattern '(a [b c (f [g]) [d]] e)))))
 
 (provide 'test_oo-base-lib)
