@@ -33,11 +33,11 @@ for file in $modified; do
 done
 ### delete files
 # Delete files I have deleted in the target directory.
-to_forget=$(chezmoi status | grep '^\(DA\)' | cut -c4-)
+# to_forget=$(chezmoi status | grep '^\(DA\)' | cut -c4-)
 
-for file in $to_forget; do
-    # source=$(chezmoi source-path "$target_path/$file")
-    target="$target_path/$file"
-    chezmoi forget "$target"
-    echo "Forgetting $target from source directory."
-done
+# for file in $to_forget; do
+#     # source=$(chezmoi source-path "$target_path/$file")
+#     target="$target_path/$file"
+#     chezmoi forget "$target"
+#     echo "Forgetting $target from source directory."
+# done

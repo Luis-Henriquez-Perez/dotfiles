@@ -134,4 +134,14 @@
   (should (equal '`(,a [,b ,c (,f [,g]) [,d]] ,e)
                  (oo-pcase-pattern '(a [b c (f [g]) [d]] e)))))
 
+(ert-deftest let! ()
+  (should (equal '(1 2) (let! ((foo 1) ((a b) '(1 2))) (list foo a b))))
+  (should (equal (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
+                   (list foo a b c d))
+                 '(1 2 9 8))))
+
+(ert-deftest oo-defun-components ()
+  (should (equal '(foo (a b c) ("foo" (interactive)) body)
+                 (oo-defun-components '(foo (a b c) "foo" (interactive) 1)))))
+
 (provide 'test_oo-base-lib)
