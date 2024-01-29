@@ -35,7 +35,9 @@
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
   (require 'config-path)
-  (load (expand-file-name "init.el" path-emacs-dir)))
+  ;; Until I tie a few loose ends do not load the init.el.
+  ;; (load (expand-file-name "init.el" path-emacs-dir))
+  )
 
 ;; We want to run this before any build command. This is also needed
 ;; for `flyspell-eldev` to be aware of packages installed via
