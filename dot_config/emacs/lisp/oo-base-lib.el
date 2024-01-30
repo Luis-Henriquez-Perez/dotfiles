@@ -349,8 +349,6 @@ PAT is a form with only symbols in it."
          (error "Unknown predicate %S."))))
     (oo-wrap-forms (reverse wrappers) body)))
 ;;;; block!
-(defvar oo-block-alist '((stub! . cl-flet) (label! . cl-labels)))
-
 ;; (defmacro label! (&rest args) (declare (indent defun)))
 ;; (defalias 'flet! 'label!)
 (defun oo-block-interpret-tree (data tree)
@@ -367,6 +365,9 @@ PAT is a form with only symbols in it."
               (counting! 0))
        (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
      (list data tree))
+    (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
+     (appending! (plist-get data :wrappers) wrappers)
+     (list data rest))
     (`((,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols)))) . ,rest)
      (appending! (plist-get data :no-let) symbols)
      (list data rest))
@@ -377,7 +378,7 @@ PAT is a form with only symbols in it."
      (alet! (plist-get plist :init)
        (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
-    (`((,(and name (guard (assoc name oo-block-alist))) ,symbol ,args . ,body) . ,rest)
+    (`((,(and name (guard (plist-get '(stub! cl-flet label! cl-labels flet! cl-flet) name))) ,symbol ,args . ,body) . ,rest)
      (pcase-let ((`(,data1 ,rest) (oo-block-interpret-tree nil rest))
                  (`(,data2 ,body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
@@ -399,8 +400,10 @@ Name may be any symbol.  Code inside body can call `return!'."
          (lets (plist-get data :let))
          ;; nolets is a list of symbols.
          (nolets (plist-get data :nolet))
-         (bindings (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets)))
-    `(let ,bindings ,@tree)))
+         (bindings (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
+         (wrappers (cons `(let ,bindings) (plist-get data :wrappers))))
+    ;; Yea this wrap forms function is paying dividens for me.
+    (oo-wrap-forms wrappers body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (arglist)
   "Return the components of defun.
