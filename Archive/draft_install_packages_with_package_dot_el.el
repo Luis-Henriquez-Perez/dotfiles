@@ -6,8 +6,8 @@
 ;; because it is officially supported by the emacs maintainers.  I do not know.
 ;; To me I feel that even if it is not perfect--and certainly it is quite
 ;; quirky, I have a lot of room to hack on it.
+(require 'oo-base-lib)
 ;;;; ideas
-;;;;; Sorting the Packages by Dependency
 ;;;;; revision wont work sometimes 
 ;; I kept getting empty checkout errors for packages.  I suspect there is some
 ;; bug/oversight having to do with the command for cloning a specific revision
@@ -16,44 +16,6 @@
 
 ;; This makes me curious whether =package-vc-checkout= would and then
 ;; =package-vc-install-from-checkout= would work.  I have my questions about.
-;;;; helpers
-;;;;; Advice to get arguments
-;; This is an advice to.  This will not always work perfectly because sometimes
-;; the FN is not a symbol.
-(defun oo-message-fn-and-args (fn &rest args)
-  (message "%S" (cons 'vc-clone args))
-  (apply fn args))
-;; I need to know whether vc-clone is the problem or if the problem is the
-;; arguments passed into vc-clone are incorrect.
-(advice-add #'vc-clone :around #'oo-message-fn-and-args)
-;;;;; Suppressing unecessary messages
-;; There are tons of compilation messages which is one of the complaints with
-;; the package.el.  The idea is if we do not. 
-
-;; Funny thing is I actually do not know which packages were.
-;; The idea is to use this macro to determine whether.
-;; (defmacro with-suppressed-messages! (&rest body)
-;;   "Execute BODY, suppressing messages and capturing them in a string."
-;;   (let ((original-message-fn (symbol-function 'message)))
-;;     `(let ((capture-buffer (generate-new-buffer " *captured-messages*")))
-;;        (with-current-buffer capture-buffer
-;;          (unwind-protect
-;;              (progn
-;;                (fset 'message (lambda (&rest args)
-;;                                 (with-current-buffer ,captured-messages
-;;                                   (goto-char (point-max))
-;;                                   (insert (apply 'format args) "\n"))))
-;;                ,@body)
-;;            (fset 'message ,original-message-fn)
-;;            (kill-buffer capture-buffer))))))
-;;;;; message only fail pass
-;; (defun oo-message-only-fail-pass (fn args)
-;;   (with-suppressed-messages!
-;;    (apply fn args)))
-;; (advice-add #'package-vc-install :around #'oo-message-only-fail-pass)
-;;;;; wrapper around =package-vc-install= 
-;; (defun oo-package-install ()
-;;   )
 ;;;; basic setup
 ;; Some of the packages are duplicated as well.  To me this implies that it
 ;; installed dependencies of a package without consulting the recipes I
@@ -79,7 +41,7 @@
 ;; One thing I do not find clear in the manual is how to avoid the problem of
 ;; registering packages.  Straight solves it by giving the user the option to
 ;; register packages.  Whereas, elpaca solves it by queuing.
-;;;; Deal With Dependencies
+;;;; deal With Dependencies
 ;; So when I first installed everything I noticed duplicate packages in the
 ;; dired directory.  So how to deal with this?  The first thing that comes to mind I have to figure out how
 ;; package-vc is installing dependencies, then intercept it when its choosing
@@ -97,7 +59,7 @@
 
 ;; I also want to know how package-vc determines which package is a dependency
 ;; and which is not.
-;;;; Populate =package-vc-selected-packages=
+;;;; populate =package-vc-selected-packages=
 ;;;;; elpaca
 ;;;;; outli 
 (push '(outli :url "https://github.com/jdtsmith/outli" :branch "main" :commit "956755f") package-vc-selected-packages)
@@ -516,7 +478,7 @@
 (push '(setup :url "https://git.sr.ht/~pkal/setup" :commit "b2e3f3a") package-vc-selected-packages)
 ;;;;; noflet
 (push '(noflet :branch "master" :url "https://github.com/nicferrier/emacs-noflet" :commit "7ae84dc3257637af7334101456dafe1759c6b68a") package-vc-selected-packages)
-;;;; Install Packages
+;;;; install Packages
 ;; I am aware that there is a function for doing this
 ;; =package-vc-install-selected-packages=.  The problem with this function is
 ;; that I cannot find a way to install specific package specs along with the
@@ -533,29 +495,20 @@
 ;; O.K. so I had thought the revision could specify a commit, but it can't.  So
 ;; after I clone that package but before unpacking it, I need to checkout the
 ;; proper commit.
-
-(defun oo-checkout-commit-before-setup (commit fn pkg-desc pkg-dir)
-  (let ((default-directory pkg-dir)
-        (buff (generate-new-buffer "vc-checkout")))
-    (unwind-protect (progn
-                      (message "Checkout %s in %s..." commit pkg-dir)
-                      (vc-do-command buff 0 "git" nil "checkout" commit))
-      (kill-buffer buff))
-    (message "Activating %s...")
-    (apply fn pkg-desc pkg-dir)))
-
-(for! ((name . spec) package-vc-selected-packages)
+(defun! oo-install-package (recipe)
+  "Wrapper around `package-vc-install'."
   (when (stringp name) (setq name (intern name)))
   (set! pkg-descs (assoc name package-alist))
-  (set! recipe (cons name spec))
-  (set! pkg-desc (package-desc-create :name name :kind 'vc))
   (set! url (plist-get spec :url))
   (set! commit (plist-get spec :commit))
   (unless (seq-some #'package-vc-p (cdr pkg-descs))
     (message "Cloning %s from %s..." name url)
     (flet! package-vc--unpack-1 (desc dir)
-      (message "Cloning %s from %s..." name url)
-      (funcall this-fn desc dir))))
+      (message "Checking out %s" name url)
+      (funcall this-fn desc dir))
+    (package-vc-install recipe)))
+
+(mapc #'oo-install-package package-vc-selected-packages)
 
 ;; Honestly I might not deal with =package-vc-checkout= and
 ;; =package-vc-install-from-checkout=.  I have had a hard time with these

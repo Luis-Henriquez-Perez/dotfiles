@@ -90,31 +90,31 @@
 ;;     (collecting! adjoined 1)
 ;;     (should (equal '(1) collected))))
 
-;; (ert-deftest for! ()
-;;   ;; Works for the syntax =(repeat N)= where N is a positive integer.
-;;   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+(ert-deftest for! ()
+  ;; Works for the syntax =(repeat N)= where N is a positive integer.
+  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
 
-;;   ;; Also works if you just pass in the raw number.
-;;   ;; Not the most precise because I cannot specify that its the same symbol for
-;;   ;; all of =,(pred symbolp)= but good enough for now.
-;;   (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
+  ;; Also works if you just pass in the raw number.
+  ;; Not the most precise because I cannot specify that its the same symbol for
+  ;; all of =,(pred symbolp)= but good enough for now.
+  (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
 
-;;   ;; Should allow me to loop through sequences.
-;;   (should (equal '(111 108 108 101 104)
-;;                  (let (chars) (for! (char "hello") (push char chars)) chars)))
+  ;; Should allow me to loop through sequences.
+  (should (equal '(111 108 108 101 104)
+                 (let (chars) (for! (char "hello") (push char chars)) chars)))
 
-;;   (should (equal '(4 3 2 1)
-;;                  (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
+  (should (equal '(4 3 2 1)
+                 (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
 
-;;   (should (equal '(4 3 2 1)
-;;                  (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
+  (should (equal '(4 3 2 1)
+                 (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
 
-;;   ;; Should allow me to destructure arguments.
-;;   (should (equal '(3 9) (let ((list '((1 2) (4 5)))
-;;                               (result nil))
-;;                           (for! ((a b) list)
-;;                             (push (+ a b) result))
-;;                           (reverse result)))))
+  ;; Should allow me to destructure arguments.
+  (should (equal '(3 9) (let ((list '((1 2) (4 5)))
+                              (result nil))
+                          (for! ((a b) list)
+                            (push (+ a b) result))
+                          (reverse result)))))
 
 (ert-deftest oo-block-interpret-tree ()
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
@@ -127,17 +127,23 @@
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
                  (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
-  ;; Getting data from `without!'.
-  (should (equal (oo-block-interpret-tree nil '((without! a b c)))
-                 '((:no-let (a b c)) (nil))))
+  (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
+                 (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
 
+  ;; (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
+  ;;                (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
+
+  ;; Getting data from `without!'.
+  (should (equal '((:no-let (a b c)) nil)
+                 (oo-block-interpret-tree nil '((without! a b c)))))
+  
   ;; Getting data from `let!'.
   (should (equal `((:let ((foo nil))) ((setq foo 1)))
-                 (oo-block-interpret-tree nil '((let! foo 1)))))
-  
-  ;; (should (equal '((:let ((gc-cons-threshold gc-cons-threshold))) ((setq gc-cons-threshold 100)))
-  ;;                (oo-block-interpret-tree nil '((let! gc-cons-threshold 100)))))
-  )
+                 (oo-block-interpret-tree nil '((set! foo 1)))))
+
+  (should (equal `((:let ((foo bar))) nil)
+                 (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
+                   (oo-block-interpret-tree nil '((gensym! bar)))))))
 ;; I want to see how it works with multiple data.
 
 ;; (ert-deftest block! ()
@@ -152,6 +158,7 @@
   (should (equal '`(,a [,b [,d]] ,e) (oo-pcase-pattern '(a [b [d]] e)))))
 
 (ert-deftest let! ()
+  (should (let! ((#'foo ))))
   (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
   (should (equal '((1 . 2) 1 2)
                  (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
@@ -168,10 +175,10 @@
   (should (oo-list-marker-p '&whole))
   (should (oo-list-marker-p '&rest)))
 
-(ert-deftest block! ()
-  (should (= 1 (block! nil (set! a 1) a)))
-  ;; (should (= (block! nil (without! a) () a)))
-  )
+;; (ert-deftest block! ()
+;;   (should (= 1 (block! nil (set! a 1) a)))
+;;   ;; (should (= (block! nil (without! a) () a)))
+;;   )
 
 ;; (ert-deftest with-map! ()
 ;;   (should (equal 2 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
@@ -189,5 +196,13 @@
   ;; The tests taken from dash's example page.
   (should (= 3 (funcall (oo-rpartial '- 5) 8)))
   (should (= 3 (funcall (oo-rpartial '- 5 2) 10))))
+
+;; (ert-deftest oo-condition-case-fn ()
+;;   (should (= 1 (funcall (oo-ccase-fn )))))
+
+;; (ert-deftest oo--map-let-binds ()
+;;   (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
+
+;;   (should (equal (oo--map-let-binds '(!foo !bar)))))
 
 (provide 'test_oo-base-lib)

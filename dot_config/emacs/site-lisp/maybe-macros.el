@@ -190,3 +190,37 @@
 ;;   `(let ,originals
 ;;      (unwind-protect (progn ,@sets ,@body)
 ;;        ,@resets)))
+;;;;; Suppressing unecessary messages
+;; There are tons of compilation messages which is one of the complaints with
+;; the package.el.  The idea is if we do not. 
+
+;; Funny thing is I actually do not know which packages were.
+;; The idea is to use this macro to determine whether.
+;; (defmacro with-suppressed-messages! (&rest body)
+;;   "Execute BODY, suppressing messages and capturing them in a string."
+;;   (let ((original-message-fn (symbol-function 'message)))
+;;     `(let ((capture-buffer (generate-new-buffer " *captured-messages*")))
+;;        (with-current-buffer capture-buffer
+;;          (unwind-protect
+;;              (progn
+;;                (fset 'message (lambda (&rest args)
+;;                                 (with-current-buffer ,captured-messages
+;;                                   (goto-char (point-max))
+;;                                   (insert (apply 'format args) "\n"))))
+;;                ,@body)
+;;            (fset 'message ,original-message-fn)
+;;            (kill-buffer capture-buffer))))))
+;;;;; Advice to get arguments
+;; This is an advice to.  This will not always work perfectly because sometimes
+;; the FN is not a symbol.
+(defun oo-message-fn-and-args (fn &rest args)
+  (message "%S" (cons 'vc-clone args))
+  (apply fn args))
+;; I need to know whether vc-clone is the problem or if the problem is the
+;; arguments passed into vc-clone are incorrect.
+(advice-add #'vc-clone :around #'oo-message-fn-and-args)
+;;;;; message only fail pass
+;; (defun oo-message-only-fail-pass (fn args)
+;;   (with-suppressed-messages!
+;;    (apply fn args)))
+;; (advice-add #'package-vc-install :around #'oo-message-only-fail-pass)

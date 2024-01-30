@@ -54,17 +54,23 @@
 ;; It has several useful functions and macros.
 (require 'subr-x)
 (require 'cl-lib)
-;;;; aliases
+;;;; cl-lib aliases
 ;; Make symbols with consistent naming conventions to elisp predicate functions.
 ;; Most elisp predicate functions end in by "-p" to denote that they return
 ;; non-nil if a condition is true.  Many of the predicate functions provided by
 ;; =cl-lib= do not follow this convention.
 (defalias 'oo-all-p 'cl-every)
 (defalias 'oo-every-p 'cl-every)
+(defalias 'oo-always-p 'cl-every)
 (defalias 'oo-none-p 'cl-notany)
+(defalias 'oo-never-p 'cl-notany)
 (defalias 'oo-some-p 'cl-notevery)
 (defalias 'oo-select #'cl-remove-if-not)
 (defalias 'oo-filter #'cl-remove-if-not)
+(defalias 'oo-true #'always)
+;; (defalias 'oo-always #'always)
+(defalias 'oo-false #'ignore)
+;; (defalias 'oo-never #'ignore)
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
   "Return t only if OBJ is a cons-cell."
@@ -100,6 +106,27 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
   (dolist (wrapper wrappers)
     (setq forms (oo-snoc wrapper forms)))
   forms)
+
+;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
+;; These functions take a predicate and a list and they return the first element of
+;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
+;; predicate and the list, but instead it returns the first non-nil return value of
+;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
+;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
+;; to =t=. The name of this function is inspired by a similar function designed for
+;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
+;; (defun oo-first-success (fn list)
+;;   "Return the first non-nil (fn x) in LIST, else nil."
+;;   (while (and list (funcall fn )))
+;;   success
+;;   ;; (--each-while list (not (let! success (funcall fn it))))
+;;   ;; success
+;;   )
+;;;; special symbols
+(defun oo-list-marker-p (obj)
+  "Return non-nil if OBJ is a list marker.
+Examples are `&rest' and `&optional'."
+  (char-equal ?& (seq-first (symbol-name obj))))
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.
@@ -129,6 +156,36 @@ COND and BODY are otherwise as documented for `when'."
 ;; Copied from dash's =-rpartial=.
 (defun oo-rpartial (fn &rest args)
   (lambda (&rest args-before) (apply fn (append args-before args))))
+
+;; A replacement for dash's =-const=
+;; (defun oo-const ()
+;;   ())
+
+;; I'd like to have the signature be something like ~(function &rest args &key ...)~;
+;; that way it would be truly analogous to =funcall=. However, then the signature
+;; would ambiguous if =function= has arguments that are the same as keys specified by
+;; =&key=.
+(cl-defun oo-condition-case-fn (fn &key (handlers 'error) (action #'ignore))
+  "Return a function that calls ACTION when errors matching HANDLERS are raised.
+ACTION is a function with three arguments the error object, FN and the list of
+arguments FN will be called with."
+  ;; To be honest I'm not sure if I need to make a gensym for the variable
+  ;; `err'.  I do it just in case.
+  (cl-with-gensyms (err)
+    `(lambda (&rest args)
+       (condition-case ,err
+           (apply #',fn args)
+         (,handlers (funcall #',action ,err #',fn args))))))
+(defalias 'oo-ccase-fn 'oo-condition-case-fn)
+
+;; (defun oo-demoted-errors-fn (fn)
+;;   "Return"
+;;   `(lambda ()))
+
+;; (defun oo-quiet-fn (fn)
+;;   (quiet! ))
+
+;; (defun oo-when-fn (fn condition))
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
@@ -215,15 +272,33 @@ SETTER is the same as in `appending!'."
 ;; customizing variables."
 ;;   `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
 ;;;; with-map!
-(defun oo-bang-symbol-p (obj)
-  "Return non-nil if OBJ is a bang symbol."
-  (and obj
-       (symbolp obj)
-       (string-match-p "\\`![^[:space:]]+" (symbol-name obj))))
+;; This is similar to the idea of =let-alist= but it works for plists.  And it
+;; has better symbols.
+;; (defun oo-bang-symbol-p (obj)
+;;   "Return non-nil if OBJ is a bang symbol."
+;;   (and obj
+;;        (symbolp obj)
+;;        (string-match-p "\\`![^[:space:]]+" (symbol-name obj))))
 
-;; (defmacro with-map! (map options &rest body)
-;;   (cl-remove-duplicates (cl-remove-if-not #'oo-bang-symbol-p (flatten-list body))))
-;;;; let! 
+;; This is a backend function for the macro.  It is useful so that I can keep
+;; the
+;; (defun! oo--map-let-binds (map body &key regexp use-keys)
+;;   "Return a list of let-bindings."
+;;   (gensym! mapsym)
+;;   (let->>! symbols
+;;     (flatten-list body)
+;;     (cl-remove-if-not #'oo-bang-symbol-p)
+;;     (cl-remove-duplicates))
+;;   (pushing! (list mapsym map) let-binds)
+;;   (dolist (sym symbols)
+;;     (set! key ())
+;;     (pushing! let-binds `(,mapsym ,(map-elt ,mapsym ,key))))
+;;   (nreverse let-binds))
+
+;; (defmacro with-map! (map &rest body)
+;;   `(let ,(oo--map-let-binds map body "" t)
+;;      ,@body))
+;;;; let!
 (defun oo-pcase-pattern (pat)
   "Return a pcase pattern from a tree of symbols.
 PAT is a form with only symbols in it."
@@ -258,9 +333,10 @@ PAT is a form with only symbols in it."
         ;;  (pushing! wrappers `(with-map! ,map)))
         ;; This is like `cl-letf' except the syntax is different and the
         ;; function will take the original function as its first argument.
-        ;; (`(#',(and fn (pred symbolp)) ,lambda)
-        ;;  (pushing! wrappers `(cl-letf ((symbol-function #',fn)
-        ;;                                (apply-partially ,lambda (symbol-function #',fn))))))
+        (`(#',(and fn (pred symbolp)) ,lambda)
+         `(cl-letf ((symbol-function #',fn) (apply-partially ,lambda (symbol-function #',fn)))
+            ())
+         (pushing! wrappers it))
         ;; (`((,(or label labels) ,_) ,_)
         ;;  (pushing! wrappers `(cl-labels (,bind))))
         ;; (`((,(or 'mlet 'macrolet) ,_) ,_)
@@ -290,9 +366,12 @@ PAT is a form with only symbols in it."
               (counting! 0))
        (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
      (list data tree))
-    (`(,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols))))
+    (`((,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols)))) . ,rest)
      (appending! (plist-get data :no-let) symbols)
-     (list data nil))
+     (list data rest))
+    (`((gensym! ,(and name (pred symbolp))) . ,rest)
+     (adjoining! (plist-get data :let) (list name (cl-gensym (symbol-name name))))
+     (list data rest))
     (`(,(and macro (guard (member macro '(let! set!)))) ,match-form ,_ . ,(and plist (guard t)))
      (alet! (plist-get plist :init)
        (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
@@ -322,13 +401,6 @@ Name may be any symbol.  Code inside body can call `return!'."
          (bindings (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets)))
     `(let ,bindings ,@tree)))
 ;;;; defmacro! and defun!
-;; I wanted to hard-code this, but I have a feeling I will be using this
-;; function later.
-(defun oo-list-marker-p (obj)
-  "Return non-nil if OBJ is a list marker.
-Examples are `&rest' and `&optional'."
-  (char-equal ?& (seq-first (symbol-name obj))))
-
 (defun oo-defun-components (arglist)
   "Return the components of defun.
 ARGLIST is the arglist of `defun' or similar macro.
@@ -357,6 +429,8 @@ The components returned are in the form of (name args (docstring declaration int
        ,@(cl-remove-if #'null metadata)
        (block! ,name (excluding! ,@args) ,@body))))
 ;;;; looping
+;; There is a huge question of whether to automatically wrap loops with
+;; =block!=, but I decided to.
 (defmacro for! (pred &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
@@ -364,23 +438,22 @@ symbol as in `dolist', but.  LIST can be a sequence."
   (declare (indent 1))
   (pcase pred
     ((or `(repeat ,n) (and n (pred integerp)))
-     `(block! nil (dotimes (_ ,n) ,@body)))
-    (`(,(and match-form (pred sequencep)) ,list)
+     `(dotimes (_ ,n) ,@body))
+    (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
      (cl-with-gensyms (elt)
        `(for! (,elt ,list)
           (let! ((,match-form ,elt))
             ,@body))))
     (`(,(and elt (pred symbolp)) ,list)
      (cl-once-only (list)
-       `(block! nil
-          (cond ((listp ,list)
-                 (dolist (,elt ,list) ,@body))
-                ((sequencep ,list)
-                 (seq-doseq (,elt ,list) ,@body))
-                ((integerp ,list)
-                 (dotimes (,elt ,list) ,@body))
-                (t
-                 (error "Unknown list predicate: %S" ',pred))))))))
+       `(cond ((listp ,list)
+               (dolist (,elt ,list) ,@body))
+              ((sequencep ,list)
+               (seq-doseq (,elt ,list) ,@body))
+              ((integerp ,list)
+               (for! ,list ,@body))
+              (t
+               (error "Unknown list predicate: %S" ',pred)))))))
 (defalias 'dolist! 'for!)
 (defalias 'loop! 'for!)
 ;;;; quiet!
