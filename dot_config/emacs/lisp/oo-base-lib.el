@@ -63,6 +63,8 @@
 (defalias 'oo-every-p 'cl-every)
 (defalias 'oo-none-p 'cl-notany)
 (defalias 'oo-some-p 'cl-notevery)
+(defalias 'oo-select #'cl-remove-if-not)
+(defalias 'oo-filter #'cl-remove-if-not)
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
   "Return t only if OBJ is a cons-cell."
@@ -121,30 +123,12 @@ The variable `it' is available within BODY.
 COND and BODY are otherwise as documented for `when'."
   (declare (indent 1))
   `(alet! ,cond (when it ,@body)))
-;;;; looping
-(defmacro for! (pred &rest body)
-  "A generic looping macro and drop-in replacement for `dolist'.
-This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
-symbol as in `dolist', but.  LIST can be a sequence."
-  (declare (indent 1))
-  (pcase pred
-    ((or `(repeat ,n) (and n (pred integerp)))
-     `(dotimes (_ ,n) ,@body))
-    (`(,(and match-form (pred sequencep)) ,list)
-     (cl-with-gensyms (elt)
-       `(for! (,elt ,list)
-          (let! ((,match-form ,elt))
-            ,@body))))
-    (`(,(and elt (pred symbolp)) ,list)
-     (cl-once-only (list)
-       `(cond ((listp ,list)
-               (dolist (,elt ,list) ,@body))
-              ((sequencep ,list)
-               (seq-doseq (,elt ,list) ,@body))
-              ((integerp ,list)
-               (dotimes (,elt ,list) ,@body))
-              (t
-               (error "Unknown list predicate: %S" ',pred)))))))
+;;;; functional
+(defalias 'oo-partial 'apply-partially)
+
+;; Copied from dash's =-rpartial=.
+(defun oo-rpartial (fn &rest args)
+  (lambda (&rest args-before) (apply fn (append args-before args))))
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
@@ -230,9 +214,19 @@ SETTER is the same as in `appending!'."
 ;; Same as `adjoining!' but use `set!' as the setter.  Meant to be used for
 ;; customizing variables."
 ;;   `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
-;;;; oo-pcase-pattern 
+;;;; with-map!
+(defun oo-bang-symbol-p (obj)
+  "Return non-nil if OBJ is a bang symbol."
+  (and obj
+       (symbolp obj)
+       (string-match-p "\\`![^[:space:]]+" (symbol-name obj))))
+
+;; (defmacro with-map! (map options &rest body)
+;;   (cl-remove-duplicates (cl-remove-if-not #'oo-bang-symbol-p (flatten-list body))))
+;;;; let! 
 (defun oo-pcase-pattern (pat)
-  "Return a pcase pattern from a tree of symbols."
+  "Return a pcase pattern from a tree of symbols.
+PAT is a form with only symbols in it."
   (cl-labels ((pcase-pat (pat)
                 (cl-typecase pat
                   (null nil)
@@ -240,18 +234,6 @@ SETTER is the same as in `appending!'."
                   (list (cons (pcase-pat (car pat)) (pcase-pat (cdr pat))))
                   (vector (append `[,@(mapcar #'pcase-pat pat)])))))
     (when pat (list '\` (pcase-pat pat)))))
-;;;; with-map!
-;; (defun oo-bang-symbol-p (obj)
-;;   "Return non-nil if OBJ is a bang symbol."
-;;   (and obj
-;;        (symbolp obj)
-;;        (string-match-p regexp (symbol-name obj))))
-
-;; (defalias 'oo-select #'cl-remove-if-not)
-;; (defmacro with-map! (map &rest body)
-;;   (let!)
-;;   (cl-remove-duplicates (cl-remove-if-not #'oo-bang-symbol-p (flatten-list body))))
-;;;; let! 
 ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
 ;; `(symbol-function)'.  In terms of implementation I want to create a macro
 ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
@@ -266,6 +248,10 @@ SETTER is the same as in `appending!'."
          (pushing! wrappers `(let* (,bind))))
         (`(,(pred symbolp) ,_)
          (pushing! wrappers `(let* (,bind))))
+        ;; This is not perfect as it does not work in arbitrarily nested
+        ;; match-forms.  For this, I would have to implement my own pattern
+        ;; matching.  Maybe I can get around it by replacing these forms with a
+        ;; special variable and adding to the pcase bindings the result.
         (`((&as ,alias ,match-form) ,expr)
          (pushing! wrappers `(let! ((,alias ,expr) (,match-form ,alias)))))
         ;; (`(,(or &plist &alist &hash) ,map)
@@ -286,22 +272,10 @@ SETTER is the same as in `appending!'."
          (error "Unknown predicate %S."))))
     (oo-wrap-forms (reverse wrappers) body)))
 ;;;; block!
-(defun oo-tree-map-nodes (pred fun tree)
-  "Same as `-tree-map-nodes', but works for improper lists."
-  (cond ((funcall pred tree)
-         (funcall fun tree))
-        ((consp tree)
-         (cons (oo-tree-map-nodes pred fun (car tree))
-               (oo-tree-map-nodes pred fun (cdr tree))))
-        (t
-         tree)))
+(defvar oo-block-alist '((stub! . cl-flet) (label! . cl-labels)))
 
-(defvar oo-block-alist '((stub! . cl-flet)
-                         (label! . cl-labels)))
-
-(defmacro label! (&rest args) (declare (indent defun)))
-(defalias 'flet! 'label!)
-
+;; (defmacro label! (&rest args) (declare (indent defun)))
+;; (defalias 'flet! 'label!)
 (defun oo-block-interpret-tree (data tree)
   "Return new TREE and DATA."
   (pcase tree
@@ -319,9 +293,8 @@ SETTER is the same as in `appending!'."
     (`(,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols))))
      (appending! (plist-get data :no-let) symbols)
      (list data nil))
-    (`(,(and macro (guard (member macro '(let!)))) ,match-form ,_ . ,(and plist (guard t)))
-     (alet! (or (car (member match-form '(gc-cons-threshold gc-cons-percentage)))
-                (plist-get plist :init))
+    (`(,(and macro (guard (member macro '(let! set!)))) ,match-form ,_ . ,(and plist (guard t)))
+     (alet! (plist-get plist :init)
        (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
     (`((,(and name (guard (assoc name oo-block-alist))) ,symbol ,args . ,body) . ,rest)
@@ -342,12 +315,20 @@ SETTER is the same as in `appending!'."
 Name may be any symbol.  Code inside body can call `return!'."
   (declare (indent 1))
   (let! (((data tree) (oo-block-interpret-tree nil body))
+         ;; lets is an alist.
          (lets (plist-get data :let))
+         ;; nolets is a list of symbols.
          (nolets (plist-get data :nolet))
-         ;; (bindings (cl-remove-if (lambda (x) (assoc x lets) nolets) lets))
-         )
+         (bindings (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets)))
     `(let ,bindings ,@tree)))
 ;;;; defmacro! and defun!
+;; I wanted to hard-code this, but I have a feeling I will be using this
+;; function later.
+(defun oo-list-marker-p (obj)
+  "Return non-nil if OBJ is a list marker.
+Examples are `&rest' and `&optional'."
+  (char-equal ?& (seq-first (symbol-name obj))))
+
 (defun oo-defun-components (arglist)
   "Return the components of defun.
 ARGLIST is the arglist of `defun' or similar macro.
@@ -357,12 +338,6 @@ The components returned are in the form of (name args (docstring declaration int
          (decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
          (iform (when (equal 'interactive (car-safe (car-safe body))) (pop body))))
     (list name args (list docstring decls iform) body)))
-;; I wanted to hard-code this, but I have a feeling I will be using this
-;; function later.
-(defun oo-list-marker-p (obj)
-  "Return non-nil if OBJ is a list marker.
-Examples are `&rest' and `&optional'."
-  (char-equal ?& (seq-first (symbol-name obj))))
 
 (defmacro defmacro! (&rest args)
   "Wrapper around `defmacro!'."
@@ -381,48 +356,55 @@ Examples are `&rest' and `&optional'."
     `(cl-defun ,name ,arglist
        ,@(cl-remove-if #'null metadata)
        (block! ,name (excluding! ,@args) ,@body))))
-;;;; flet!
-;; I have to say that I am not a fan of the =cl-flet= syntax where you specify
-;; the function bodies in the bindings.  I am more O.K. with the seemingly less
-;; convenient syntax of =cl-letf= because it is more idiomatic in my opinion.
-;; And you do not have to deal with bad indentation.  Only problem is =cl-letf=
-;; does not provide access to the original function and in my experience, most
-;; of the time, that is the function you want to define.  Sometimes I want this kind
-;; of thing because stubbing in =block!= does not provide access to the original
-;; function and neither does letf!.
-;; However this does require thought from the macro perspective on how.
-(defmacro! flet! (bindings &rest body)
-  ""
-  (stub! )
-  (for! ((symbol args . body) bindings)
-    (collecting! originals `(,(cl-gensym "original-fn") ,symbol))
-    (collecting! sets `(fset ))
-    (collecting! resets `()))
-  `(let ,originals
-     (unwind-protect (progn ,@sets ,@body)
-       ,@resets)))
+;;;; looping
+(defmacro for! (pred &rest body)
+  "A generic looping macro and drop-in replacement for `dolist'.
+This is the same as `dolist' except argument is MATCH-FORM.  match-form can be a
+symbol as in `dolist', but.  LIST can be a sequence."
+  (declare (indent 1))
+  (pcase pred
+    ((or `(repeat ,n) (and n (pred integerp)))
+     `(block! nil (dotimes (_ ,n) ,@body)))
+    (`(,(and match-form (pred sequencep)) ,list)
+     (cl-with-gensyms (elt)
+       `(for! (,elt ,list)
+          (let! ((,match-form ,elt))
+            ,@body))))
+    (`(,(and elt (pred symbolp)) ,list)
+     (cl-once-only (list)
+       `(block! nil
+          (cond ((listp ,list)
+                 (dolist (,elt ,list) ,@body))
+                ((sequencep ,list)
+                 (seq-doseq (,elt ,list) ,@body))
+                ((integerp ,list)
+                 (dotimes (,elt ,list) ,@body))
+                (t
+                 (error "Unknown list predicate: %S" ',pred))))))))
+(defalias 'dolist! 'for!)
+(defalias 'loop! 'for!)
 ;;;; quiet!
 ;; I copied much of the bod of this from the =shut-up= package.  I really wanted
 ;; to just use that package but the problem is that I need this macro
 ;; beforehand, specifically for package installation with =package.el=.  The
 ;; =shut-up= package does a bit more because it puts the messages in a different
 ;; buffer, but I won't go into that yet--not when and until I think I need it.
-;; (defmacro quiet! (&rest body)
-;;   "Don't allow any output to be messaged."
-;;   ;; Override `standard-output', for `print' and friends, and
-;;   ;; monkey-patch `message'
-;;   `(let! ((standard-output #'ignore)
-;;           (#'message #'ignore)
-;;           (#'write-region
-;;            ;; Wish there was a way not to have to specify all the arguments
-;;            ;; twice.  Well see if I find one or one day thing of one.
-;;            ;; complicating things is that some of the arguments are optional.
-;;            (lambda (fn start end filename &optional append visit lockname mustbenew)
-;;              (unless visit (setq visit 'no-message))
-;;              (funcall fn start end filename append visit lockname mustbenew)))
-;;           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
-;;                     (funcall fn file noerror t nosuffix must-suffix))))
-;;      ,@body))
+(defmacro quiet! (&rest body)
+  "Don't allow any output to be messaged."
+  ;; Override `standard-output', for `print' and friends, and
+  ;; monkey-patch `message'
+  `(let! ((standard-output #'ignore)
+          (#'message #'ignore)
+          (#'write-region
+           ;; Wish there was a way not to have to specify all the arguments
+           ;; twice.  Well see if I find one or one day thing of one.
+           ;; complicating things is that some of the arguments are optional.
+           (lambda (fn start end filename &optional append visit lockname mustbenew)
+             (unless visit (setq visit 'no-message))
+             (funcall fn start end filename append visit lockname mustbenew)))
+          (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
+                    (funcall fn file noerror t nosuffix must-suffix))))
+     ,@body))
 ;;;; cset!
 ;; (defmacro! cset! (symbol value)
 ;;   "A \"do-it-all\" setter for configuring variables."

@@ -544,16 +544,18 @@
     (message "Activating %s...")
     (apply fn pkg-desc pkg-dir)))
 
-(pcase-dolist (`(,name . ,spec) package-vc-selected-packages)
+(for! ((name . spec) package-vc-selected-packages)
   (when (stringp name) (setq name (intern name)))
-  (let* ((pkg-descs (assoc name package-alist))
-         (recipe (cons name spec))
-         (pkg-desc (package-desc-create :name name :kind 'vc))
-         (url (plist-get spec :url))
-         (commit (plist-get spec :commit)))
-    (unless (seq-some #'package-vc-p (cdr pkg-descs))
+  (set! pkg-descs (assoc name package-alist))
+  (set! recipe (cons name spec))
+  (set! pkg-desc (package-desc-create :name name :kind 'vc))
+  (set! url (plist-get spec :url))
+  (set! commit (plist-get spec :commit))
+  (unless (seq-some #'package-vc-p (cdr pkg-descs))
+    (message "Cloning %s from %s..." name url)
+    (flet! package-vc--unpack-1 (desc dir)
       (message "Cloning %s from %s..." name url)
-      (flet! ((package-vc--unpack-1 (desc dir) (message "Cloning %s from %s..." name url) (funcall this-fn desc dir))) (package-vc-install recipe)))))
+      (funcall this-fn desc dir))))
 
 ;; Honestly I might not deal with =package-vc-checkout= and
 ;; =package-vc-install-from-checkout=.  I have had a hard time with these

@@ -32,17 +32,14 @@
 ;;
 ;;; Code:
 ;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
+
 (require 'oo-base-lib)
 
-;; If the directory happens to have both compiled and uncompiled
-;; version, prefer to use the newer (typically the uncompiled) version.
 (setq load-prefer-newer t)
+;; Recommended in emacs info so that forms are not abbreviated unless the are
+;; really large.
 (setq ert-batch-print-level 10)
 (setq ert-batch-print-length 120)
-;; (add-to-list 'load-path (locate-user-emacs-file "lisp"))
-;; (add-to-list 'load-path (locate-user-emacs-file "tests"))
-
-;; Does not need to be required because already autoloaded.
 
 (require 'oo-base-lib)
 
@@ -70,24 +67,6 @@
 (ert-deftest oo-wrap-forms ()
   (should (equal '(when 1 (save-excursion foo)) (oo-wrap-forms '((when 1) (save-excursion)) '(foo)))))
 
-;; (ert-deftest oo-non-keyword-symbol-p ()
-;;   (should (oo-non-keyword-symbol-p 'foo))
-;;   (should-not (oo-non-keyword-symbol-p :foo))
-;;   (should-not (oo-non-keyword-symbol-p "foo"))
-;;   (should-not (oo-non-keyword-symbol-p 1)))
-
-;; (ert-deftest oo-args-to-string ()
-;;   (should (equal "foo" (oo-args-to-string 'foo)))
-;;   (should (equal ":foo" (oo-args-to-string :foo)))
-;;   (should (equal "foo" (oo-args-to-string "foo")))
-;;   (should (equal "1" (oo-args-to-string 1))))
-
-;; (ert-deftest oo-args-to-symbol ()
-;;   (should (equal 'foo (oo-args-to-symbol 'foo)))
-;;   (should (equal :foo (oo-args-to-symbol :foo)))
-;;   (should (equal 'foo (oo-args-to-symbol "foo")))
-;;   (should (equal '1 (oo-args-to-symbol 1))))
-
 (ert-deftest alet! ()
   (should (= 2 (alet! 1 (+ it it)))))
 
@@ -109,41 +88,33 @@
 ;;   (let (collected)
 ;;     (collecting! adjoined 1)
 ;;     (collecting! adjoined 1)
-;;     (should (equal '(1) collected))
-;;     ;; (should)
-;;     ))
+;;     (should (equal '(1) collected))))
 
-(ert-deftest for! ()
-  ;; Works for the syntax =(repeat N)= where N is a positive integer.
-  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+;; (ert-deftest for! ()
+;;   ;; Works for the syntax =(repeat N)= where N is a positive integer.
+;;   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
 
-  ;; Also works if you just pass in the raw number.
-  ;; Not the most precise because I cannot specify that its the same symbol for
-  ;; all of =,(pred symbolp)= but good enough for now.
-  (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
+;;   ;; Also works if you just pass in the raw number.
+;;   ;; Not the most precise because I cannot specify that its the same symbol for
+;;   ;; all of =,(pred symbolp)= but good enough for now.
+;;   (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
 
-  ;; Should allow me to loop through sequences.
-  (should (equal '(111 108 108 101 104)
-                 (let (chars) (for! (char "hello") (push char chars)) chars)))
+;;   ;; Should allow me to loop through sequences.
+;;   (should (equal '(111 108 108 101 104)
+;;                  (let (chars) (for! (char "hello") (push char chars)) chars)))
 
-  (should (equal '(4 3 2 1)
-                 (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
+;;   (should (equal '(4 3 2 1)
+;;                  (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
 
-  (should (equal '(4 3 2 1)
-                 (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
+;;   (should (equal '(4 3 2 1)
+;;                  (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
 
-  ;; Should allow me to destructure arguments.
-  (should (equal '(3 9) (let ((list '((1 2) (4 5)))
-                              (result nil))
-                          (for! ((a b) list)
-                            (push (+ a b) result))
-                          (reverse result)))))
-
-;; (ert-deftest take-while! ()
-;;   (should (let ((foo '(a b 1 2 3))) (list (take-while! (symbolp foo) foo) foo))
-;;           '((a b) (1 2 3)))
-;;   ;; (should ())
-;;   )
+;;   ;; Should allow me to destructure arguments.
+;;   (should (equal '(3 9) (let ((list '((1 2) (4 5)))
+;;                               (result nil))
+;;                           (for! ((a b) list)
+;;                             (push (+ a b) result))
+;;                           (reverse result)))))
 
 (ert-deftest oo-block-interpret-tree ()
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
@@ -164,8 +135,9 @@
   (should (equal `((:let ((foo nil))) ((setq foo 1)))
                  (oo-block-interpret-tree nil '((let! foo 1)))))
   
-  (should (equal '((:let ((gc-cons-threshold gc-cons-threshold))) ((setq gc-cons-threshold 100)))
-                 (oo-block-interpret-tree nil '((let! gc-cons-threshold 100))))))
+  ;; (should (equal '((:let ((gc-cons-threshold gc-cons-threshold))) ((setq gc-cons-threshold 100)))
+  ;;                (oo-block-interpret-tree nil '((let! gc-cons-threshold 100)))))
+  )
 ;; I want to see how it works with multiple data.
 
 ;; (ert-deftest block! ()
@@ -180,6 +152,7 @@
   (should (equal '`(,a [,b [,d]] ,e) (oo-pcase-pattern '(a [b [d]] e)))))
 
 (ert-deftest let! ()
+  (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
   (should (equal '((1 . 2) 1 2)
                  (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
   (should (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
@@ -187,6 +160,18 @@
   (should (equal '(1 1 2 9 8)
                  (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
                    (list foo a b c d)))))
+
+(ert-deftest oo-list-marker-p ()
+  (should-not (oo-list-marker-p 'foo))
+  (should-not (oo-list-marker-p '$as))
+  (should (oo-list-marker-p '&as))
+  (should (oo-list-marker-p '&whole))
+  (should (oo-list-marker-p '&rest)))
+
+(ert-deftest block! ()
+  (should (= 1 (block! nil (set! a 1) a)))
+  ;; (should (= (block! nil (without! a) () a)))
+  )
 
 ;; (ert-deftest with-map! ()
 ;;   (should (equal 2 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
@@ -199,5 +184,10 @@
                  (oo-defun-components '(foo (a b c) "foo" (interactive) 1))))
   (should (equal '(foo (a b c) (nil nil (interactive)) (1))
                  (oo-defun-components '(foo (a b c) (interactive) 1)))))
+
+(ert-deftest oo-rpartial ()
+  ;; The tests taken from dash's example page.
+  (should (= 3 (funcall (oo-rpartial '- 5) 8)))
+  (should (= 3 (funcall (oo-rpartial '- 5 2) 10))))
 
 (provide 'test_oo-base-lib)
