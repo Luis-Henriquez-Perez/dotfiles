@@ -388,8 +388,11 @@ PAT is a form with only symbols in it."
             ((data2 body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
              `((cl-flet ((,symbol ,args ,@body)) ,@rest)))))
-    ;; This is my own varient that takes the original function.
-    ;; (`(,(or 'lef! 'nflet 'noflet!) ))
+    ;; This is my own variant that takes the original function.  I name it.
+    (`((,(or 'lef! 'nflet 'noflet!) ,name ,args . ,body) . ,rest)
+     (list ()
+           `(cl-letf (((symbol-function #',name) ())) ,@rest))
+     )
     ;; (`((nflet!)))
     ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
      (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
