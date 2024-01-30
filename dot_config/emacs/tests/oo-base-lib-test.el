@@ -84,11 +84,12 @@
     ;; (should)
     ))
 
-;; (ert-deftest collecting! ()
-;;   (let (collected)
-;;     (collecting! adjoined 1)
-;;     (collecting! adjoined 1)
-;;     (should (equal '(1) collected))))
+(ert-deftest collecting! ()
+  (let (list)
+    (collecting! list 1)
+    (should (equal '(1) list))
+    (collecting! list 2)
+    (should (equal '(2) list))))
 
 (ert-deftest for! ()
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
@@ -200,9 +201,9 @@
 ;; (ert-deftest oo-condition-case-fn ()
 ;;   (should (= 1 (funcall (oo-ccase-fn )))))
 
-;; (ert-deftest oo--map-let-binds ()
-;;   (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
+(ert-deftest oo--map-let-binds ()
+  (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
 
-;;   (should (equal (oo--map-let-binds '(!foo !bar)))))
+  (should (equal (oo--map-let-binds '(!foo !bar)))))
 
 (provide 'test_oo-base-lib)
