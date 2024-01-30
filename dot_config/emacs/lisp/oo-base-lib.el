@@ -389,11 +389,11 @@ PAT is a form with only symbols in it."
        (list (map-merge 'plist data data1 data2)
              `((cl-flet ((,symbol ,args ,@body)) ,@rest)))))
     ;; This is my own variant that takes the original function.  I name it.
-    (`((,(or 'lef! 'nflet 'noflet!) ,name ,args . ,body) . ,rest)
-     (list ()
-           `(cl-letf (((symbol-function #',name) ())) ,@rest))
-     )
-    ;; (`((nflet!)))
+    (`((,(or 'nflet 'noflet!) ,name ,args . ,body) . ,rest)
+     (let! (((data1 rest) (oo-block-interpret-tree nil rest))
+            ((data2 body) (oo-block-interpret-tree nil body)))
+       (list (map-merge 'plist data data1 data2)
+             `(lef! ((,name (lambda ,args ,@body))) ,@body))))
     ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
      (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
                  (`(,data2 ,tree2) (oo-block-interpret-tree nil (cdr tree))))
@@ -401,6 +401,15 @@ PAT is a form with only symbols in it."
              (cons tree1 tree2))))
     (_
      (list data tree))))
+
+(defmacro lef! (bindings &rest body)
+  "Similar to `cl-letf' but."
+  (let (binds (args (cl-gensym "args")))
+    (for! ((sym fn) bindings)
+      (pushing! cars (symbol-function sym))
+      (alet! `(lambda (&rest args) (apply-partially ,fn (symbol-function sym) args))
+        (pushing! cadrs it)))
+    `(cl-letf ,(nreverse binds) ,@body)))
 
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
