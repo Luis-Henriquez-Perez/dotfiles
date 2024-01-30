@@ -333,10 +333,11 @@ PAT is a form with only symbols in it."
         ;;  (pushing! wrappers `(with-map! ,map)))
         ;; This is like `cl-letf' except the syntax is different and the
         ;; function will take the original function as its first argument.
-        (`(#',(and fn (pred symbolp)) ,lambda)
-         `(cl-letf ((symbol-function #',fn) (apply-partially ,lambda (symbol-function #',fn)))
-            ())
-         (pushing! wrappers it))
+        ;; (`(#',(and fn (pred symbolp)) ,lambda)
+        ;;  ;; `(cl-letf ((symbol-function #',fn) (apply-partially ,lambda (symbol-function #',fn)))
+        ;;  ;;    ())
+        ;;  ;; (pushing! wrappers it)
+        ;;  )
         ;; (`((,(or label labels) ,_) ,_)
         ;;  (pushing! wrappers `(cl-labels (,bind))))
         ;; (`((,(or 'mlet 'macrolet) ,_) ,_)
