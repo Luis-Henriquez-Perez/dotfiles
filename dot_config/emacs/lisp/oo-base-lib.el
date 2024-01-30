@@ -351,6 +351,7 @@ PAT is a form with only symbols in it."
 ;;;; block!
 ;; (defmacro label! (&rest args) (declare (indent defun)))
 ;; (defalias 'flet! 'label!)
+;; (plist-get '(stub! cl-flet label! cl-labels flet! cl-flet) name)
 (defun oo-block-interpret-tree (data tree)
   "Return new TREE and DATA."
   (pcase tree
@@ -378,11 +379,18 @@ PAT is a form with only symbols in it."
      (alet! (plist-get plist :init)
        (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
-    (`((,(and name (guard (plist-get '(stub! cl-flet label! cl-labels flet! cl-flet) name))) ,symbol ,args . ,body) . ,rest)
-     (pcase-let ((`(,data1 ,rest) (oo-block-interpret-tree nil rest))
-                 (`(,data2 ,body) (oo-block-interpret-tree nil body)))
+    ;; Typically I will use these when I am.
+    (`((,(or 'stub! 'flet)  ,name ,fn) . ,rest)
+     (let! (((data1 rest) (oo-block-interpret-tree nil rest)))
+       (list (map-merge 'plist data data1) `((cl-flet ((,name ,fn)) ,@rest)))))
+    (`((,(or 'stub! 'flet) ,name ,args . ,body) . ,rest)
+     (let! (((data1 rest) (oo-block-interpret-tree nil rest))
+            ((data2 body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
              `((cl-flet ((,symbol ,args ,@body)) ,@rest)))))
+    ;; This is my own varient that takes the original function.
+    ;; (`(,(or 'lef! 'nflet 'noflet!) ))
+    ;; (`((nflet!)))
     ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
      (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
                  (`(,data2 ,tree2) (oo-block-interpret-tree nil (cdr tree))))
