@@ -220,4 +220,4 @@
 
 ;;   (should (equal (oo--map-let-binds '(!foo !bar)))))
 
-(provide 'test_oo-base-lib)
+(provide 'oo-base-lib)
