@@ -131,8 +131,8 @@
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
                  (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
-  ;; (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-  ;;                (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
+  (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
+                 (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
 
   ;; (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
   ;;                (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
@@ -201,6 +201,16 @@
   ;; The tests taken from dash's example page.
   (should (= 3 (funcall (oo-rpartial '- 5) 8)))
   (should (= 3 (funcall (oo-rpartial '- 5 2) 10))))
+
+(ert-deftest lef! ()
+  ;; (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
+  (should (= 5 (lef! ((+ #'-)) (+ 10 5))))
+  ;; I should be able to use this-fn.
+  (should (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
+  ;; Works with an unnamed function.
+  (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
+  ;; Works with an existing function.
+  (should (= 4 (lef! ((buffer-string (lambda () 4))) (buffer-string)))))
 
 ;; (ert-deftest oo-condition-case-fn ()
 ;;   (should (= 1 (funcall (oo-ccase-fn )))))

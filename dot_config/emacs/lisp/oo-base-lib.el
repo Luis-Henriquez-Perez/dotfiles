@@ -364,7 +364,7 @@ PAT is a form with only symbols in it."
               ((maxing! maximizing!) most-negative-fixnum)
               ((minning! minimizing!) most-positive-fixnum)
               (counting! 0))
-       (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
+            (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
      (list data tree))
     (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
      (appending! (plist-get data :wrappers) wrappers)
@@ -377,7 +377,7 @@ PAT is a form with only symbols in it."
      (list data rest))
     (`(,(and macro (guard (member macro '(let! set!)))) ,match-form ,_ . ,(and plist (guard t)))
      (alet! (plist-get plist :init)
-       (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
+            (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
     ;; Typically I will use these when I am.
     (`((,(or 'stub! 'flet)  ,name ,fn) . ,rest)
@@ -387,7 +387,7 @@ PAT is a form with only symbols in it."
      (let! (((data1 rest) (oo-block-interpret-tree nil rest))
             ((data2 body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
-             `((cl-flet ((,symbol ,args ,@body)) ,@rest)))))
+             `((cl-flet ((,name ,args ,@body)) ,@rest)))))
     ;; This is my own variant that takes the original function.  I name it.
     (`((,(or 'nflet 'noflet!) ,name ,args . ,body) . ,rest)
      (let! (((data1 rest) (oo-block-interpret-tree nil rest))
@@ -402,14 +402,20 @@ PAT is a form with only symbols in it."
     (_
      (list data tree))))
 
+;; I am conflicted between the name =this-fn= and =orig-fn=.  I think all else
+;; being equal =orig-fn= is a better name than =this-fn=.  But I know that
+;; =this= and =it= are used more commonly anaphoric names.
 (defmacro lef! (bindings &rest body)
   "Similar to `cl-letf' but."
-  (let (binds (args (cl-gensym "args")))
+  (let (binds orig-fn (args (cl-gensym "args")))
     (for! ((sym fn) bindings)
-      (pushing! cars (symbol-function sym))
-      (alet! `(lambda (&rest args) (apply-partially ,fn (symbol-function sym) args))
-        (pushing! cadrs it)))
-    `(cl-letf ,(nreverse binds) ,@body)))
+      (setq orig-fn (gensym "orig-fn"))
+      (pushing! binds `(,orig-fn (if (fboundp #',sym) (symbol-function #',sym) nil)))
+      (pushing! binds `((symbol-function #',sym)
+                        (lambda (&rest ,args)
+                          (let ((this-fn ,orig-fn))
+                            (apply ,fn ,args))))))
+    `(cl-letf* ,(nreverse binds) ,@body)))
 
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
