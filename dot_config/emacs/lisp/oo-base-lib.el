@@ -330,6 +330,9 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 ;;     (pushing! binds `(,sym ,whole))))
 
 ;; This is really messy lol.  I am sure there is a better way to do this.
+;; Basically, I am saying add a comma to all the symbols, but replace certain
+;; patterns with and record these patterns for me.  I would rather do this with
+;; an iterator.
 (defun oo--match-form-wrappers (data tree)
   "Return (WRAPPERS PCASE-LET)."
   (pcase tree
@@ -337,14 +340,15 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
      (list data nil))
     ((and sym (pred symbolp))
      (list data (list '\, sym)))
-    (`((&as ,whole ,parts) . ,rest)
+    (`(&as ,whole ,parts)
      (alet! (cl-gensym "&as")
-       (list (oo--let-bind-&as sym whole parts)
-             (list '\, sym))))
+            (list `((let! ((,whole ,it)
+                           (,parts ,it))))
+                  (list '\, it))))
     (`(,(or '&alist '&plist '&hash) ,map)
      (alet! (cl-gensym "&map")
        (list (oo--let-bind-&map it)
-             (list '\, sym))))
+             (list '\, it))))
     ((pred listp)
      (pcase-let* ((`(,data1 ,tree1) (oo--match-form-wrappers nil (car tree)))
                   (`(,data2 ,tree2) (oo--match-form-wrappers nil (cdr tree))))
@@ -353,7 +357,8 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
     ;;  (append `[,@(mapcar #'pcase-pat pat)]))
     ))
 
-(defun oo-pcase-pattern (&rest _))
+;; (defun oo--match-form-wrappers (&rest _)
+;;   ())
 
 ;; This should return the wrappers for binding one let binding.
 ;; (defun oo-let-bind (match-form)
@@ -390,11 +395,12 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
         ;;  (pushing! wrappers `(cl-labels (,bind))))
         ;; (`((,(or 'mlet 'macrolet) ,_) ,_)
         ;;  (pushing! wrappers `(cl-macrolet (,bind))))
-        (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
-         (alet! `(pcase-let* ((,(oo-pcase-pattern match-form) ,value)))
-                (pushing! wrappers it)))
+        ;; (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
+        ;;  (alet! `(pcase-let* ((,(oo-pcase-pattern match-form) ,value)))
+        ;;         (pushing! wrappers it)))
         (_
-         (error "Unknown predicate %S."))))
+         ;; (error "Unknown predicate %S.")
+         )))
     (oo-wrap-forms (reverse wrappers) body)))
 ;;;; block!
 (defun oo-block-interpret-tree (data tree)
