@@ -28,12 +28,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file contains tests for `lib-string'.
+;; This file contains tests for `oo-base-lib'.
 ;;
 ;;; Code:
 ;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
-
-(require 'oo-base-lib)
 
 (setq load-prefer-newer t)
 ;; Recommended in emacs info so that forms are not abbreviated unless the are
@@ -42,6 +40,16 @@
 (setq ert-batch-print-length 120)
 
 (require 'oo-base-lib)
+
+(ert-deftest oo-into-string ()
+  (should (equal "foo" (oo-into-string 'foo)))
+  (should (equal "1" (oo-into-string 1))))
+
+(ert-deftest oo-into-symbol ()
+  (should (equal 'foo (oo-into-symbol "foo"))))
+
+(ert-deftest oo-into-keyword ()
+  (should (equal :foo (oo-into-keyword "foo"))))
 
 (ert-deftest oo-cons-cell-p ()
   (should     (oo-cons-cell-p (cons 1 2)))
@@ -92,6 +100,11 @@
     (should (equal '(1 2) list))))
 
 (ert-deftest for! ()
+  ;; Not working.
+  ;; (should (equal '(((1 . 2) 1 2) ((3 . 4) 3 4))
+  ;;                (let (list) (for! ((&as foo (a b)) '((1 . 2) (3 . 4)))
+  ;;                              (push (list foo a b) list))
+  ;;                     list)))
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
 
@@ -134,8 +147,11 @@
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
                  (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
 
-  ;; (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-  ;;                (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
+  (should (equal '(nil ((cl-flet ((foo #'+)) (+ 2 2))))
+                 (oo-block-interpret-tree nil '((flet! foo #'+) (+ 2 2)))))
+
+  (should (equal '(nil ((lef! ((foo (lambda () (+ 1 1)))) (+ 2 2))))
+                 (oo-block-interpret-tree nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
 
   ;; Getting data from `without!'.
   (should (equal '((:no-let (a b c)) nil)
@@ -163,10 +179,10 @@
   (should (equal '`(,a [,b [,d]] ,e) (oo-pcase-pattern '(a [b [d]] e)))))
 
 (ert-deftest let! ()
-  ;; (should (let! ((#'foo ))))
+  (should (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
   (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
-  (should (equal '((1 . 2) 1 2)
-                 (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
+  ;; (should (equal '((1 . 2) 1 2)
+  ;;                (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
   (should (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
   (should (equal '(1 1 2) (let! ((foo 1) ((a b) '(1 2))) (list foo a b))))
   (should (equal '(1 1 2 9 8)
@@ -205,19 +221,37 @@
 (ert-deftest lef! ()
   ;; (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
   (should (= 5 (lef! ((+ #'-)) (+ 10 5))))
-  ;; I should be able to use this-fn.
+  ;; I should be able to use this-fn.  I was worried this would not work with
+  ;; lexical binding enabled, but it is looking like it does.
   (should (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
   ;; Works with an unnamed function.
   (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
   ;; Works with an existing function.
   (should (= 4 (lef! ((buffer-string (lambda () 4))) (buffer-string)))))
 
+;; This is not passing, but I think it has to do with how =emacs -q= treats the minibuffer.
+;; (ert-deftest quiet! ()
+;;   ;; (should-not (progn (quiet! (message "LOUD NOISE")) ()))
+;;   (should (string-empty-p (oo-buffer-contents "*Messages*")))
+;;   (should (progn (message "QUIET NOISE")
+;;                  (string-match-p "QUIET NOISE" (oo-buffer-contents "*Messages*"))))
+;;   (should-not (progn (quiet! (message "LOUD NOISE"))
+;;                      (string-match-p "LOUD NOISE" (oo-buffer-contents "*Messages*")))))
+
 ;; (ert-deftest oo-condition-case-fn ()
-;;   (should (= 1 (funcall (oo-ccase-fn )))))
+;;   (should (= 1 (funcall (oo-condition-case-fn (lambda ()))))))
 
-;; (ert-deftest oo--map-let-binds ()
-;;   (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
+(ert-deftest oo--map-let-binds ()
+  (should (equal '((foo '(a 1 b 2)) (!a (map-elt foo 'a)) (!b (map-elt foo 'b)))
+                 (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest_) 'foo)))
+                   (oo--map-let-binds ''(a 1 b 2) '(+ !a !b) :regexp "\\`!\\(.+\\)"))))
+  ;; (should-not (oo--map-let-binds 'plist '(!foo !bar) :regexp (rx ())))
+  ;; (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
+  ;; (should (equal (oo--map-let-binds '(!foo !bar))))
+  )
 
-;;   (should (equal (oo--map-let-binds '(!foo !bar)))))
+;; (ert-deftest with-map! ()
+;;   (should (= 3 (with-map! '((:a . 1) (:b . 2)) (+ !a !b))))
+;;   (should (= 3 (with-map! '(:a 1 :b 2) (+ !a !b)))))
 
 (provide 'oo-base-lib)

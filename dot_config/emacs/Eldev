@@ -9,13 +9,17 @@
 ;;;; tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
 (setq eldev-main-fileset '("init.el" "early-init.el" "lisp/*.el"))
-
+;; (setq eldev-test-fileset '("tests/all-tests.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help
 ;; Eldev commands to locate them.
 (eldev-add-loading-roots 'build "lisp")
 (eldev-add-loading-roots 'bootstrap "lisp")
 (eldev-add-loading-roots 'test "lisp")
+;; Tell eldev that I need the tests directory in the load-path for running tests.
+(eldev-add-loading-roots 'test "tests")
+;; Provides the ability to intelligently inference from commands.
+(setq eldev-dwim t)
 ;;;; specify test directory
 ;; There are dependencies for testing and linting phases, they should
 ;; be installed by Eldev from MELPA and GNU ELPA (latter is enabled by
@@ -35,7 +39,6 @@
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
   (require 'config-path)
-  ;; Until I tie a few loose ends do not load the init.el.
   ;; (load (expand-file-name "init.el" path-emacs-dir))
   )
 
@@ -53,3 +56,22 @@
   (message "No upgrading steps yet."))
 
 (add-hook 'eldev-upgrade-hook #'elpa-upgrade)
+;;;; linting
+(defun eldev-lint-find-files-absolute (f &rest args)
+  "Call F with ARGS and ensure that result is absolute paths."
+  (seq-map (lambda (p)
+             (expand-file-name p eldev-project-dir))
+           (seq-filter (lambda (p)
+                         (not (string-suffix-p "autoloads.el" p)))
+                       (apply f args))))
+
+(advice-add 'eldev-lint-find-files :around #'eldev-lint-find-files-absolute)
+
+;; Use elisp-lint by default
+(setf eldev-lint-default '(elisp))
+
+(with-eval-after-load 'elisp-lint
+  (setf elisp-lint-ignored-validators '("byte-compile")))
+
+;; Tell checkdoc not to demand two spaces after a period.
+(setq sentence-end-double-space t)

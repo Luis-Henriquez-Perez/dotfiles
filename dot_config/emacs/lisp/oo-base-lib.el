@@ -54,7 +54,7 @@
 ;; It has several useful functions and macros.
 (require 'subr-x)
 (require 'cl-lib)
-;;;; cl-lib aliases
+;;;; aliases
 ;; Make symbols with consistent naming conventions to elisp predicate functions.
 ;; Most elisp predicate functions end in by "-p" to denote that they return
 ;; non-nil if a condition is true.  Many of the predicate functions provided by
@@ -122,6 +122,21 @@ FORMS is a list of lisp forms.  WRAPPER are a list of forms."
 ;;   ;; (--each-while list (not (let! success (funcall fn it))))
 ;;   ;; success
 ;;   )
+
+(defun oo-into-string (&rest args)
+  "Return ARGS as a string."
+  (declare (pure t) (side-effect-free t))
+  (with-output-to-string (mapc #'princ args)))
+
+(defun oo-into-symbol (&rest args)
+  "Return an interned symbol from ARGS."
+  (declare (pure t) (side-effect-free t))
+  (intern (apply #'oo-into-string args)))
+
+(defun oo-into-keyword (&rest args)
+  "Return ARGS as a keyword."
+  (declare (pure t) (side-effect-free t))
+  (apply #'oo-into-symbol ":" args))
 ;;;; special symbols
 (defun oo-list-marker-p (obj)
   "Return non-nil if OBJ is a list marker.
@@ -186,6 +201,8 @@ arguments FN will be called with."
 ;;   (quiet! ))
 
 ;; (defun oo-when-fn (fn condition))
+
+;; (defun oo-compose-fn (&rest fns))
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
@@ -282,33 +299,66 @@ SETTER is the same as in `appending!'."
 
 ;; This is a backend function for the macro.  It is useful so that I can keep
 ;; the
-;; (defun! oo--map-let-binds (map body &key regexp use-keys)
-;;   "Return a list of let-bindings."
-;;   (gensym! mapsym)
-;;   (let->>! symbols
-;;     (flatten-list body)
-;;     (cl-remove-if-not #'oo-bang-symbol-p)
-;;     (cl-remove-duplicates))
-;;   (pushing! (list mapsym map) let-binds)
-;;   (dolist (sym symbols)
-;;     (set! key ())
-;;     (pushing! let-binds `(,mapsym ,(map-elt ,mapsym ,key))))
-;;   (nreverse let-binds))
+(cl-defun oo--map-let-binds (map body &key regexp use-keywords)
+  "Return a list of let-bindings.
+MAP.  REGEXP is the regular expression that matches symbols that should be let
+bound.  REGEXP should have a group that matches they key used to search MAP."
+  (save-match-data
+    (let* ((mapsym (cl-gensym "map"))
+           (let-binds `((,mapsym ,map)))
+           (name nil)
+           (key nil))
+      (dolist (obj (flatten-list body))
+        (when (and obj
+                   (symbolp obj)
+                   (setq name (symbol-name obj))
+                   (string-match regexp name)
+                   (not (assoc obj let-binds)))
+          (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol) (match-string 1 name)))
+          (pushing! let-binds `(,obj (map-elt ,mapsym ',key)))))
+      (nreverse let-binds))))
 
-;; (defmacro with-map! (map &rest body)
-;;   `(let ,(oo--map-let-binds map body "" t)
-;;      ,@body))
+(defmacro with-map! (map &rest body)
+  `(let ,(oo--map-let-binds map body :regexp regexp :use-keywords nil)
+     ,@body))
 ;;;; let!
-(defun oo-pcase-pattern (pat)
+;; Return a list of wrappers to deal with pattern.
+;; ((pcase-let*...)(...)(...))
+(defun oo--let-bind-as (sym whole parts)
+  (let (())
+    (pushing! binds `(,sym ,whole))
+    (pushing! binds `(,sym ,whole))))
+
+;; This is really messy lol.  I am sure there is a better way to do this.
+(defun oo--pcase-pattern (data tree)
   "Return a pcase pattern from a tree of symbols.
 PAT is a form with only symbols in it."
-  (cl-labels ((pcase-pat (pat)
-                (cl-typecase pat
-                  (null nil)
-                  (symbol (list '\, pat))
-                  (list (cons (pcase-pat (car pat)) (pcase-pat (cdr pat))))
-                  (vector (append `[,@(mapcar #'pcase-pat pat)])))))
-    (when pat (list '\` (pcase-pat pat)))))
+  (pcase tree
+    ((pred null)
+     (list data nil))
+    (`(,(and symbol (pred symbolp)))
+     (list (list '\, symbol) data))
+    (`((&as ,whole ,parts) . ,rest)
+     (alet (cl-gensym "&as")
+       (list (list '\, sym)
+             (oo--let-bind-&as sym whole parts))))
+    (`(,(or '&alist '&plist '&hash) ,map)
+     (alet (cl-gensym "&map")
+       (list (list '\, sym)
+             (oo--let-bind-&map map))))
+    ((listp)
+     (pcase-let* (((,data1 ,tree1) (oo--pcase-pattern nil (car tree)))
+                  ((,data2 ,tree2) (oo--pcase-pattern nil (cdr tree))))
+       (list (oo-snoc data data1 data2) (cons tree1 tree2))))
+    ;; ((vectorp)
+    ;;  (append `[,@(mapcar #'pcase-pat pat)]))
+    ))
+
+;; This should return the wrappers for binding one let binding.
+(defun oo-let-bind (match-form)
+  (pcase-let* (((,wrappers ,tree) (oo--pcase-pattern data match-form)))
+    ))
+
 ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
 ;; `(symbol-function)'.  In terms of implementation I want to create a macro
 ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
@@ -327,31 +377,25 @@ PAT is a form with only symbols in it."
         ;; match-forms.  For this, I would have to implement my own pattern
         ;; matching.  Maybe I can get around it by replacing these forms with a
         ;; special variable and adding to the pcase bindings the result.
-        (`((&as ,alias ,match-form) ,expr)
-         (pushing! wrappers `(let! ((,alias ,expr) (,match-form ,alias)))))
+        ;; (`((&as ,alias ,match-form) ,expr)
+        ;;  (pushing! wrappers `(let! ((,alias ,expr) (,match-form ,alias)))))
         ;; (`(,(or &plist &alist &hash) ,map)
         ;;  (pushing! wrappers `(with-map! ,map)))
         ;; This is like `cl-letf' except the syntax is different and the
         ;; function will take the original function as its first argument.
-        ;; (`(#',(and fn (pred symbolp)) ,lambda)
-        ;;  ;; `(cl-letf ((symbol-function #',fn) (apply-partially ,lambda (symbol-function #',fn)))
-        ;;  ;;    ())
-        ;;  ;; (pushing! wrappers it)
-        ;;  )
+        (`(#',(and fn (pred symbolp)) ,lambda)
+         (pushing! wrappers `(lef! ((,fn ,lambda)))))
         ;; (`((,(or label labels) ,_) ,_)
         ;;  (pushing! wrappers `(cl-labels (,bind))))
         ;; (`((,(or 'mlet 'macrolet) ,_) ,_)
         ;;  (pushing! wrappers `(cl-macrolet (,bind))))
         (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
          (alet! `(pcase-let* ((,(oo-pcase-pattern match-form) ,value)))
-           (pushing! wrappers it)))
+                (pushing! wrappers it)))
         (_
          (error "Unknown predicate %S."))))
     (oo-wrap-forms (reverse wrappers) body)))
 ;;;; block!
-;; (defmacro label! (&rest args) (declare (indent defun)))
-;; (defalias 'flet! 'label!)
-;; (plist-get '(stub! cl-flet label! cl-labels flet! cl-flet) name)
 (defun oo-block-interpret-tree (data tree)
   "Return new TREE and DATA."
   (pcase tree
@@ -380,20 +424,20 @@ PAT is a form with only symbols in it."
             (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
     ;; Typically I will use these when I am.
-    (`((,(or 'stub! 'flet)  ,name ,fn) . ,rest)
+    (`((,(or 'stub! 'flet!)  ,name ,fn) . ,rest)
      (let! (((data1 rest) (oo-block-interpret-tree nil rest)))
        (list (map-merge 'plist data data1) `((cl-flet ((,name ,fn)) ,@rest)))))
-    (`((,(or 'stub! 'flet) ,name ,args . ,body) . ,rest)
+    (`((,(or 'stub! 'flet!) ,name ,args . ,body) . ,rest)
      (let! (((data1 rest) (oo-block-interpret-tree nil rest))
             ((data2 body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
              `((cl-flet ((,name ,args ,@body)) ,@rest)))))
     ;; This is my own variant that takes the original function.  I name it.
-    (`((,(or 'nflet 'noflet!) ,name ,args . ,body) . ,rest)
+    (`((,(or 'nflet! 'noflet!) ,name ,args . ,body) . ,rest)
      (let! (((data1 rest) (oo-block-interpret-tree nil rest))
             ((data2 body) (oo-block-interpret-tree nil body)))
        (list (map-merge 'plist data data1 data2)
-             `(lef! ((,name (lambda ,args ,@body))) ,@body))))
+             `((lef! ((,name (lambda ,args ,@body))) ,@rest)))))
     ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
      (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
                  (`(,data2 ,tree2) (oo-block-interpret-tree nil (cdr tree))))
@@ -502,22 +546,15 @@ symbol as in `dolist', but.  LIST can be a sequence."
            ;; Wish there was a way not to have to specify all the arguments
            ;; twice.  Well see if I find one or one day thing of one.
            ;; complicating things is that some of the arguments are optional.
-           (lambda (fn start end filename &optional append visit lockname mustbenew)
+           (lambda (start end filename &optional append visit lockname mustbenew)
              (unless visit (setq visit 'no-message))
-             (funcall fn start end filename append visit lockname mustbenew)))
+             (funcall this-fn start end filename append visit lockname mustbenew)))
           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
-                    (funcall fn file noerror t nosuffix must-suffix))))
+                    (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
-;;;; cset!
-;; (defmacro! cset! (symbol value)
-;;   "A \"do-it-all\" setter for configuring variables."
-;;   (let! value-var (make-symbol "value"))
-;;   `(if (not (boundp ',symbol))
-;;        (push (cons ',symbol ',value) oo-unbound-symbol-alist)
-;;      (let ((,value-var ,value))
-;;        (message "Set %s to %S" ',symbol ,value-var)
-;;        (aif! (get ',symbol 'custom-set)
-;;            (funcall it ',symbol ,value-var)
-;;          (with-no-warnings (setq ,symbol ,value-var))))))
+;;;; buffer-contents
+(defun oo-buffer-contents (buffer)
+  (with-current-buffer (get-buffer buffer)
+    (buffer-string)))
 ;;;; Provide feature
 (provide 'oo-base-lib)
