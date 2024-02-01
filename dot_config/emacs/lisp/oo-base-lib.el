@@ -324,15 +324,14 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 ;;;; let!
 ;; Return a list of wrappers to deal with pattern.
 ;; ((pcase-let*...)(...)(...))
-(defun oo--let-bind-as (sym whole parts)
-  (let (())
-    (pushing! binds `(,sym ,whole))
-    (pushing! binds `(,sym ,whole))))
+;; (defun oo--let-bind-as (sym whole parts)
+;;   (let (let-binds)
+;;     (pushing! binds `(,sym ,whole))
+;;     (pushing! binds `(,sym ,whole))))
 
 ;; This is really messy lol.  I am sure there is a better way to do this.
-(defun oo--pcase-pattern (data tree)
-  "Return a pcase pattern from a tree of symbols.
-PAT is a form with only symbols in it."
+(defun oo--match-form-wrappers (data tree)
+  "Return (WRAPPERS PCASE-LET)."
   (pcase tree
     ((pred null)
      (list data nil))
@@ -355,9 +354,9 @@ PAT is a form with only symbols in it."
     ))
 
 ;; This should return the wrappers for binding one let binding.
-(defun oo-let-bind (match-form)
-  (pcase-let* (((,wrappers ,tree) (oo--pcase-pattern data match-form)))
-    ))
+;; (defun oo-let-bind (match-form)
+;;   (pcase-let* (((,wrappers ,tree) (oo--pcase-pattern data match-form)))
+;;     ))
 
 ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
 ;; `(symbol-function)'.  In terms of implementation I want to create a macro

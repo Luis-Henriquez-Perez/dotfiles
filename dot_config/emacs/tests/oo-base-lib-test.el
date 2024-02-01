@@ -41,6 +41,13 @@
 
 (require 'oo-base-lib)
 
+(ert-deftest oo--match-form-wrappers ()
+  (should (equal (list nil '(,a ,b ,c ,d))
+                 (oo--match-form-wrappers nil '(a b c d))))
+  (should (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
+            (equal (list '(let* ((pair foo))) '(,a ,b ,foo ,d))
+                   (oo--match-form-wrappers nil '(a b (&as pair (a . b)) d))))))
+
 (ert-deftest oo-into-string ()
   (should (equal "foo" (oo-into-string 'foo)))
   (should (equal "1" (oo-into-string 1))))
