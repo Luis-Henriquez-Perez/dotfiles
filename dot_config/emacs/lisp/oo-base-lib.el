@@ -334,7 +334,6 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 ;; patterns with and record these patterns for me.  I would rather do this with
 ;; an iterator.
 (defun oo--match-form-wrappers (data tree)
-  "Return (WRAPPERS PCASE-LET)."
   (pcase tree
     ((pred null)
      (list data nil))
@@ -358,14 +357,20 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
        (list (apply #'append (mapcar #'car it))
              (vconcat (mapcan #'cdr it)))))))
 
-;; (defun oo--match-form-wrappers-main (tree)
-;;   (pcase-let* (oo--match-form-wrappers nil tree)
-;;     (oo-wrap-forms wrappers)))
-
-;; This should return the wrappers for binding one let binding.
-;; (defun oo-let-bind (match-form)
-;;   (pcase-let* (((,wrappers ,tree) (oo--pcase-pattern data match-form)))
-;;     ))
+(defun oo--let-bind (bind)
+  "Return wrappers."
+  (pcase bind
+    ((pred symbolp)
+     `((let* (,bind))))
+    (`(,(pred symbolp) ,_)
+     `((let* (,bind))))
+    (`(#',(and fn (pred symbolp)) ,lambda)
+     `(lef! ((,fn ,lambda))))
+    (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
+     (pcase-let ((`(,wrappers ,pcase-match-form) (oo--match-form-wrappers nil match-form)))
+       (cons `(pcase-let* ((`,pcase-match-form ,value))) wrappers)))
+    (_
+     (error "Unknown predicate %S." bind))))
 
 ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
 ;; `(symbol-function)'.  In terms of implementation I want to create a macro
@@ -374,36 +379,7 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 (defmacro let! (bindings &rest body)
   "Like `pcase-let*' but all."
   (declare (indent 1))
-  (let (wrappers)
-    (dolist (bind bindings)
-      (pcase bind
-        ((pred symbolp)
-         (pushing! wrappers `(let* (,bind))))
-        (`(,(pred symbolp) ,_)
-         (pushing! wrappers `(let* (,bind))))
-        ;; This is not perfect as it does not work in arbitrarily nested
-        ;; match-forms.  For this, I would have to implement my own pattern
-        ;; matching.  Maybe I can get around it by replacing these forms with a
-        ;; special variable and adding to the pcase bindings the result.
-        ;; (`((&as ,alias ,match-form) ,expr)
-        ;;  (pushing! wrappers `(let! ((,alias ,expr) (,match-form ,alias)))))
-        ;; (`(,(or &plist &alist &hash) ,map)
-        ;;  (pushing! wrappers `(with-map! ,map)))
-        ;; This is like `cl-letf' except the syntax is different and the
-        ;; function will take the original function as its first argument.
-        (`(#',(and fn (pred symbolp)) ,lambda)
-         (pushing! wrappers `(lef! ((,fn ,lambda)))))
-        ;; (`((,(or label labels) ,_) ,_)
-        ;;  (pushing! wrappers `(cl-labels (,bind))))
-        ;; (`((,(or 'mlet 'macrolet) ,_) ,_)
-        ;;  (pushing! wrappers `(cl-macrolet (,bind))))
-        ;; (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
-        ;;  (alet! `(pcase-let* ((,(oo-pcase-pattern match-form) ,value)))
-        ;;         (pushing! wrappers it)))
-        (_
-         ;; (error "Unknown predicate %S.")
-         )))
-    (oo-wrap-forms (reverse wrappers) body)))
+  (oo-wrap-forms (mapcar #'oo--let-bind bindings) body))
 ;;;; block!
 (defun oo-block-interpret-tree (data tree)
   "Return new TREE and DATA."
