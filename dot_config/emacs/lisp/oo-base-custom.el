@@ -148,7 +148,7 @@ Optional keyword arguments:
     (let! fname (intern (format "%s&%s+" symbol name)))
     (collecting! forms `(oo-add-hook ',symbol #',lambda ,@plist :name ',fname)))
   (macroexp-progn forms))
-;;;; package deferment 
+;;;; package deferment
 ;;;; oo-call-after-load
 (defvar oo-unbound-symbol-alist nil
   "An alist mapping an unbound symbol to an expression.
@@ -281,7 +281,7 @@ For what CONDITION is see `oo-call-after-load'."
        (aif! (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
              (with-no-warnings (setq ,symbol ,value-var))))))
-;;;; autoloading 
+;;;; autoloading
 ;; ***** guess possible features from a function symbol
 ;; With the [[][autoload]] function elispers usually provide.  however, it is very
 ;; possible to.  There are a few packages that have abnormally named functions, but
