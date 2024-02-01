@@ -50,9 +50,18 @@
                  (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'gsym)))
                    (oo--match-form-wrappers nil '(a b (&as pair (a . b)) d)))))
   ;; Works with `&map' directive.
-  (should-not (oo--match-form-wrappers nil '(a b (&map mymap) d)))
+  (should
+   (equal '(((let ((mapvar mymap))) (with-map! mapvar))
+            ((\, a)
+	         (\, b)
+	         (\, mapvar)
+	         (\, d)))
+          (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'mapvar)))
+            (oo--match-form-wrappers nil '(a b (&map mymap) d)))))
   ;; Works with vectors.
-  (should-not (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d))))
+  (should (equal '(nil (,a ,b [,c] ,d)) (oo--match-form-wrappers nil '(a b [c] d))))
+  ;; (should-not (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d)))
+  )
 
 (ert-deftest oo-into-string ()
   (should (equal "foo" (oo-into-string 'foo)))
