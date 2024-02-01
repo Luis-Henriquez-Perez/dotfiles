@@ -44,8 +44,8 @@
 (ert-deftest oo--match-form-wrappers ()
   (should (equal (list nil '(,a ,b ,c ,d))
                  (oo--match-form-wrappers nil '(a b c d))))
-  (should (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
-            (equal (list '(let* ((pair foo))) '(,a ,b ,foo ,d))
+  (should (equal (list '(let* ((pair gsym))) '(,a ,b ,gsym ,d))
+                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'gsym)))
                    (oo--match-form-wrappers nil '(a b (&as pair (a . b)) d))))))
 
 (ert-deftest oo-into-string ()
@@ -77,6 +77,7 @@
   (should-not (oo-improper-list-p 10.5)))
 
 (ert-deftest oo-snoc ()
+  (should (equal '(1 2 3 4 5) (oo-snoc '(1 2) 3 4 5)))
   (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
 
 (ert-deftest oo-wrap-forms ()
