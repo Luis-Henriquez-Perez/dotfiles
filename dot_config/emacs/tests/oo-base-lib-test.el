@@ -64,9 +64,10 @@
   ;; Works with vectors.
   (should (equal '(nil (,a ,b [,c] ,d)) (oo--match-form-wrappers nil '(a b [c] d))))
   ;; Can do multiple things.
-  (should-not (equal '(((let! ((pair &as5) ((a . b) &as5))))
-                       (,a ,b [(,&as5)] ,d))
-                     (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d)))))
+  (should (equal '(((let! ((pair foo) ((a . b) foo))))
+                   (,a ,b [,foo] ,d))
+                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
+                   (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d))))))
 
 (ert-deftest oo-into-string ()
   (should (equal "foo" (oo-into-string 'foo)))
@@ -205,6 +206,12 @@
   (should (equal '`((,a (,b) ,c . ,d)) (oo-pcase-pattern '((a (b) c . d)))))
   (should (equal '`[,a ,b ,c] (oo-pcase-pattern [a b c])))
   (should (equal '`(,a [,b [,d]] ,e) (oo-pcase-pattern '(a [b [d]] e)))))
+
+(ert-deftest oo--let-bind ()
+  (should (equal '((let* (a))) (oo--let-bind 'a)))
+  (should (equal '((let* ((a 1)))) (oo--let-bind '(a 1))))
+  (should (equal '((pcase-let* ((`(,a ,b) '(1 2)))))
+                 (oo--let-bind '((a b) '(1 2))))))
 
 (ert-deftest let! ()
   (should (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
