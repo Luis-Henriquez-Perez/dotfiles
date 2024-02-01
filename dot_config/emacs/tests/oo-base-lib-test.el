@@ -41,6 +41,9 @@
 
 (require 'oo-base-lib)
 
+;; (ert-deftest oo--let-bind-main ()
+;;   (mapcar ))
+
 (ert-deftest oo--match-form-wrappers ()
   (should (equal (list nil '(,a ,b ,c ,d))
                  (oo--match-form-wrappers nil '(a b c d))))
@@ -60,8 +63,10 @@
             (oo--match-form-wrappers nil '(a b (&map mymap) d)))))
   ;; Works with vectors.
   (should (equal '(nil (,a ,b [,c] ,d)) (oo--match-form-wrappers nil '(a b [c] d))))
-  ;; (should-not (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d)))
-  )
+  ;; Can do multiple things.
+  (should-not (equal '(((let! ((pair &as5) ((a . b) &as5))))
+                       (,a ,b [(,&as5)] ,d))
+                     (oo--match-form-wrappers nil '(a b [(&as pair (a . b))] d)))))
 
 (ert-deftest oo-into-string ()
   (should (equal "foo" (oo-into-string 'foo)))
