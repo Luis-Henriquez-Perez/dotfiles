@@ -345,13 +345,15 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
      (alet (cl-gensym "&map")
        (list (list '\, sym)
              (oo--let-bind-&map map))))
-    ((listp)
-     (pcase-let* (((,data1 ,tree1) (oo--pcase-pattern nil (car tree)))
-                  ((,data2 ,tree2) (oo--pcase-pattern nil (cdr tree))))
+    ((pred listp)
+     (pcase-let* (`((,data1 ,tree1) (oo--pcase-pattern nil (car tree)))
+                  `((,data2 ,tree2) (oo--pcase-pattern nil (cdr tree))))
        (list (oo-snoc data data1 data2) (cons tree1 tree2))))
     ;; ((vectorp)
     ;;  (append `[,@(mapcar #'pcase-pat pat)]))
     ))
+
+(defun oo-pcase-pattern (&rest _))
 
 ;; This should return the wrappers for binding one let binding.
 ;; (defun oo-let-bind (match-form)
