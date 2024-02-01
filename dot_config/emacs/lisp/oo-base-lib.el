@@ -345,10 +345,10 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
             (list `((let! ((,whole ,it)
                            (,parts ,it))))
                   (list '\, it))))
-    (`(,(or '&alist '&plist '&hash) ,map)
-     (alet! (cl-gensym "&map")
-       (list (oo--let-bind-&map it)
-             (list '\, it))))
+    ;; (`(,(or '&alist '&plist '&hash) ,map)
+    ;;  (alet! (cl-gensym "&map")
+    ;;    (list '((with-map! ,it))
+    ;;          (list '\, it))))
     ((pred listp)
      (pcase-let* ((`(,data1 ,tree1) (oo--match-form-wrappers nil (car tree)))
                   (`(,data2 ,tree2) (oo--match-form-wrappers nil (cdr tree))))
@@ -357,8 +357,9 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
     ;;  (append `[,@(mapcar #'pcase-pat pat)]))
     ))
 
-;; (defun oo--match-form-wrappers (&rest _)
-;;   ())
+(defun oo--match-form-wrappers-main (tree)
+  (pcase-let* (oo--match-form-wrappers nil tree)
+    (oo-wrap-forms wrappers)))
 
 ;; This should return the wrappers for binding one let binding.
 ;; (defun oo-let-bind (match-form)
