@@ -1,4 +1,4 @@
-;;; oo-base-lib-test.el --- `oo-base-lib' tests   -*- lexical-binding: t; -*-
+;;; oo-base-library-test.el --- `oo-base-library' tests   -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz.io>
 ;;
@@ -286,4 +286,4 @@
 ;;   (should (= 3 (with-map! '((:a . 1) (:b . 2)) (+ !a !b))))
 ;;   (should (= 3 (with-map! '(:a 1 :b 2) (+ !a !b)))))
 
-(provide 'oo-base-lib)
+(provide 'oo-base-library)
