@@ -45,7 +45,7 @@
 ;; features with =require=.
 (require 'oo-base-library)
 (require 'oo-base-settings)
-;; (require 'oo-base-custom)
+(require 'oo-base-custom)
 ;; (require 'oo-base-package)
 
 ;;;; disable garbage collection until I'm done with startup

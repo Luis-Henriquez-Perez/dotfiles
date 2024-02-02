@@ -1,4 +1,4 @@
-;;; Oo-base-settings.el --- Base settings -*- lexical-binding: t; -*-
+;;; oo-base-settings.el --- Base settings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -225,4 +225,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
 
+;;; oo-base-settings.el ends here
 (provide 'oo-base-settings)
