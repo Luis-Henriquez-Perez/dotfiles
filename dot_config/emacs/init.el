@@ -39,9 +39,12 @@
 ;; For now I put everything in a single file.  The reason I choose to
 ;; do this is because it is simply easier for me with the knowledge I
 ;; have about compiling than having to consider loading order and
+
+(add-to-list 'load-path (locate-user-emacs-file "lisp/"))
+
 ;; features with =require=.
 (require 'oo-base-library)
-;; (require 'oo-base-settings)
+(require 'oo-base-settings)
 ;; (require 'oo-base-custom)
 ;; (require 'oo-base-package)
 

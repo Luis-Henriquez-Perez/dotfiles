@@ -20,6 +20,10 @@
 (eldev-add-loading-roots 'test "tests")
 ;; Provides the ability to intelligently inference from commands.
 (setq eldev-dwim t)
+;; Eldev changes this to something else.
+(setq user-emacs-directory eldev-real-user-emacs-directory)
+;; (setq eldev-real-user-emacs-directory t)
+;; (setf eldev-project-source-dirs "lisp")
 ;;;; specify test directory
 ;; There are dependencies for testing and linting phases, they should
 ;; be installed by Eldev from MELPA and GNU ELPA (latter is enabled by

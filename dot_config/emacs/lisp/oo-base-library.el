@@ -1,4 +1,4 @@
-;;; oo-base-lib.el --- my library -*- lexical-binding: t; -*-
+;;; oo-base-library.el --- my library -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -548,5 +548,6 @@ symbol as in `dolist', but.  LIST can be a sequence."
 (defun oo-buffer-contents (buffer)
   (with-current-buffer (get-buffer buffer)
     (buffer-string)))
-;;;; Provide feature
-(provide 'oo-base-lib)
+
+;;; oo-base-library.el ends here
+(provide 'oo-base-library)
