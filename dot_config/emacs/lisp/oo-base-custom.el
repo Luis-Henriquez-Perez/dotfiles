@@ -335,4 +335,4 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 ;;       (fset fn it)))
 ;;   fn)
 
-;; (provide 'oo-base-custom)
+(provide 'oo-base-custom)

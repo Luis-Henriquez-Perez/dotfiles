@@ -319,7 +319,7 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
       (nreverse let-binds))))
 
 (defmacro with-map! (map &rest body)
-  `(let ,(oo--map-let-binds map body :regexp regexp :use-keywords nil)
+  `(let ,(oo--map-let-binds map body :regexp "![^[:space:]]+" :use-keywords nil)
      ,@body))
 ;;;; let!
 ;; Return a list of wrappers to deal with pattern.
@@ -388,11 +388,11 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
 ;;;; block!
-(defun oo-block-interpret-tree (data tree)
+(defun oo--interpret-block (data tree)
   "Return new TREE and DATA."
   (pcase tree
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
-     (pcase-let* ((`(,data1 ,tree) (oo-block-interpret-tree nil body)))
+     (pcase-let* ((`(,data1 ,tree) (oo--interpret-block nil body)))
        (list (map-merge 'plist data data1)
              `(catch 'break! (,loop ,pred (catch 'continue ,@tree))))))
     (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
@@ -417,22 +417,22 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
      (list data (cons 'setq (cdr tree))))
     ;; Typically I will use these when I am.
     (`((,(or 'stub! 'flet!)  ,name ,fn) . ,rest)
-     (let! (((data1 rest) (oo-block-interpret-tree nil rest)))
+     (let! (((data1 rest) (oo--interpret-block nil rest)))
        (list (map-merge 'plist data data1) `((cl-flet ((,name ,fn)) ,@rest)))))
     (`((,(or 'stub! 'flet!) ,name ,args . ,body) . ,rest)
-     (let! (((data1 rest) (oo-block-interpret-tree nil rest))
-            ((data2 body) (oo-block-interpret-tree nil body)))
+     (let! (((data1 rest) (oo--interpret-block nil rest))
+            ((data2 body) (oo--interpret-block nil body)))
        (list (map-merge 'plist data data1 data2)
              `((cl-flet ((,name ,args ,@body)) ,@rest)))))
     ;; This is my own variant that takes the original function.  I name it.
     (`((,(or 'nflet! 'noflet!) ,name ,args . ,body) . ,rest)
-     (let! (((data1 rest) (oo-block-interpret-tree nil rest))
-            ((data2 body) (oo-block-interpret-tree nil body)))
+     (let! (((data1 rest) (oo--interpret-block nil rest))
+            ((data2 body) (oo--interpret-block nil body)))
        (list (map-merge 'plist data data1 data2)
              `((lef! ((,name (lambda ,args ,@body))) ,@rest)))))
     ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
-     (pcase-let ((`(,data1 ,tree1) (oo-block-interpret-tree nil (car tree)))
-                 (`(,data2 ,tree2) (oo-block-interpret-tree nil (cdr tree))))
+     (pcase-let ((`(,data1 ,tree1) (oo--interpret-block nil (car tree)))
+                 (`(,data2 ,tree2) (oo--interpret-block nil (cdr tree))))
        (list (map-merge 'plist data1 data2)
              (cons tree1 tree2))))
     (_
@@ -457,20 +457,21 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
   (declare (indent 1))
-  (let! (((data tree) (oo-block-interpret-tree nil body))
+  (let! (((data body) (oo--interpret-block nil body))
          ;; lets is an alist.
          (lets (plist-get data :let))
          ;; nolets is a list of symbols.
          (nolets (plist-get data :nolet))
          (bindings (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
-         (wrappers (cons `(let ,bindings) (plist-get data :wrappers))))
+         (wrappers `((cl-block ,name) (let ,bindings) ,@(plist-get data :wrappers))))
     ;; Yea this wrap forms function is paying dividens for me.
     (oo-wrap-forms wrappers body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (arglist)
   "Return the components of defun.
 ARGLIST is the arglist of `defun' or similar macro.
-The components returned are in the form of (name args (docstring declaration interactive-form) body)."
+The components returned are in the form of (name args (docstring declaration
+interactive-form) body)."
   (let! (((name args . body) arglist)
          (docstring (when (stringp (car-safe body)) (pop body)))
          (decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
