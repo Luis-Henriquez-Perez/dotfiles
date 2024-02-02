@@ -63,6 +63,5 @@
 ;; better without flashing stuff on the screen.  Additionally, the more that's
 ;; saved on rendering, the faster the startup.
 ;; (startup-set! mode-line-format nil set-default)
-
 ;;; init.el ends here
 (provide 'init)
