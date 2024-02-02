@@ -1,13 +1,13 @@
-;;; config-path.el --- Path constants -*- lexical-binding: t; -*-
+;;; oo-base-variables.el --- Variables -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;;
-;; Created: 07 Feb 2021
+;; Created: 02 Feb 2024
 ;;
-;; URL: https://github.com/d12frosted/environment/tree/master/emacs
+;; URL:
 ;;
 ;; License: GPLv3
 ;;
@@ -29,7 +29,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file defines constants.
+;; This file defines constants.  It is modeled after https://github.com/d12frosted/environment/tree/master/emacs.
 ;;
 ;;; Code:
 
@@ -92,4 +92,4 @@ Use this for files that change often, like cache files.")
 ;;        (concat path-home-dir "Developer")))
 ;;   "The root directory for projects.")
 
-(provide 'config-path)
+(provide 'oo-base-variables)
