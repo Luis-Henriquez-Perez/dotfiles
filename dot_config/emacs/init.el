@@ -39,15 +39,13 @@
 ;; For now I put everything in a single file.  The reason I choose to
 ;; do this is because it is simply easier for me with the knowledge I
 ;; have about compiling than having to consider loading order and
-
+;;;; setup load-path 
 (add-to-list 'load-path (locate-user-emacs-file "lisp/"))
-
+;;;; load base libraries
 ;; features with =require=.
 (require 'oo-base-library)
 (require 'oo-base-settings)
 (require 'oo-base-custom)
-;; (require 'oo-base-package)
-
 ;;;; disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
