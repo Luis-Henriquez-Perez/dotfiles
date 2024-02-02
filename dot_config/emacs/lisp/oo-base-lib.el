@@ -334,30 +334,35 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 ;; patterns with and record these patterns for me.  I would rather do this with
 ;; an iterator.
 (defun oo--match-form-wrappers (match-form)
-  (cl-labels ((fn (wrappers tree) (pcase tree
-                                    ((pred null)
-                                     (list data nil))
-                                    ((and sym (pred symbolp))
-                                     (list data (list '\, sym)))
-                                    (`(&as ,whole ,parts)
-                                     (alet! (cl-gensym "&as")
-                                            (list `((let! ((,whole ,it)
-                                                           (,parts ,it))))
-                                                  (list '\, it))))
-                                    (`(,(or '&map '&alist '&plist '&hash) ,map)
-                                     (alet! (cl-gensym "&map")
-                                            (list `((let ((,it ,map))) (with-map! ,it))
-                                                  (list '\, it))))
-                                    ((pred listp)
-                                     (pcase-let* ((`(,data1 ,tree1) (fn nil (car tree)))
-                                                  (`(,data2 ,tree2) (fn nil (cdr tree))))
-                                       (list (append data data1 data2) (cons tree1 tree2))))
-                                    ((pred vectorp)
-                                     (alet! (mapcar (oo-partial #'fn data) (append tree))
-                                            (list (apply #'append (mapcar #'car it))
-                                                  (vconcat (mapcan #'cdr it))))))))
+  (cl-labels ((fn (wrappers tree)
+                (pcase tree
+                  ((pred null)
+                   (list wrappers nil))
+                  ((and sym (pred symbolp))
+                   (list wrappers (list '\, sym)))
+                  (`(&as ,whole ,parts)
+                   (alet! (cl-gensym "&as")
+                          (list `((let! ((,whole ,it)
+                                         (,parts ,it))))
+                                (list '\, it))))
+                  (`(,(or '&map '&alist '&plist '&hash) ,map)
+                   (alet! (cl-gensym "&map")
+                          (list `((let ((,it ,map))) (with-map! ,it))
+                                (list '\, it))))
+                  ((pred listp)
+                   (pcase-let* ((`(,wrappers1 ,tree1) (fn nil (car tree)))
+                                (`(,wrappers2 ,tree2) (fn nil (cdr tree))))
+                     (list (append wrappers wrappers1 wrappers2) (cons tree1 tree2))))
+                  ((pred vectorp)
+                   (alet! (mapcar (oo-partial #'fn wrappers) (append tree))
+                          (list (apply #'append (mapcar #'car it))
+                                (vconcat (mapcan #'cdr it))))))))
     (pcase-let* ((`(,wrappers ,pcase-mf) (fn nil match-form)))
-      ())))
+      (pcase pcase-mf
+        (`(,(and comma (guard (equal '\, comma))) ,(and symbol (pred symbolp)))
+         (list wrappers symbol))
+        (_
+         (list wrappers (list '\` pcase-mf)))))))
 
 (defun oo--let-bind (bind)
   "Return wrappers."
@@ -369,16 +374,16 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
     (`(#',(and fn (pred symbolp)) ,lambda)
      `(lef! ((,fn ,lambda))))
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
-     (pcase-let ((`(,wrappers ,pcase-match-form) (oo--match-form-wrappers nil match-form)))
+     (pcase-let ((`(,wrappers ,pcase-match-form) (oo--match-form-wrappers match-form)))
        ;; (if (equal pcase-match-form))
-       (cons `(pcase-let* ((,(list '\` pcase-match-form) ,value))) wrappers)))
+       (cons `(pcase-let* ((,pcase-match-form ,value))) wrappers)))
     (_
      (error "Unknown predicate %S." bind))))
 
-;; I do not think that sef extensions are crazy useful for `cl-letf' except for
-;; `(symbol-function)'.  In terms of implementation I want to create a macro
-;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
-;; cl-macrolet, etc.
+;; ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
+;; ;; `(symbol-function)'.  In terms of implementation I want to create a macro
+;; ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
+;; ;; cl-macrolet, etc.
 (defmacro let! (bindings &rest body)
   "Like `pcase-let*' but all."
   (declare (indent 1))
