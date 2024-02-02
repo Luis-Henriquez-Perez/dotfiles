@@ -62,15 +62,15 @@
 (when *initializing* (swm-gaps:toggle-gaps))
 (define-key *groups-map* (kbd "g") "toggle-gaps")
 
-(ql:quickload :clx-truetype)
+;; (ql:quickload :clx-truetype)
 
 ;; Check to see if desired fonts are available.  If not, try to cache the fonts
 ;; and try again.  In general, try avoiding caching the fonts if we can because
 ;; it's expensive.
-(unless (find "Roboto Mono" (the list (clx-truetype:get-font-families)) :test #'string=)
-  (xft:cache-fonts)
-  (when (find "Roboto Mono" (the list (clx-truetype:get-font-families)) :test #'string=)
-    (set-font (list (make-instance 'xft:font :family "Roboto Mono" :subfamily "Regular" :size 10)))))
+;; (unless (find "Roboto Mono" (the list (clx-truetype:get-font-families)) :test #'string=)
+;;   (xft:cache-fonts)
+;;   (when (find "Roboto Mono" (the list (clx-truetype:get-font-families)) :test #'string=)
+;;     (set-font (list (make-instance 'xft:font :family "Roboto Mono" :subfamily "Regular" :size 10)))))
 ;;;; change prefix key from =C-t= to =C-z=
 ;; On a QWERTY keyboard, it is far easier to press =C-z= than it is to press =C-t=.
 ;; The =Ctrl= and =Z= keys are right next to each other.  Note that you *need* the =kbd=: I
