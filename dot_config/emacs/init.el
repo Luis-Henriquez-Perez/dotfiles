@@ -46,7 +46,8 @@
 (require 'oo-base-library)
 (require 'oo-base-settings)
 (require 'oo-base-custom)
-;;;; disable garbage collection until I'm done with startup
+;;;; startup variables
+;;;;; disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
 ;; big number, essentially disables garbage collection.  The garbage collection is
 ;; later reset to a reasonable value.
@@ -54,12 +55,13 @@
 
 ;; This is the percentage of the heap before.
 ;; (startup-set! gc-cons-percentage 0.8)
-;;;; don't search for whenever a package is loaded
+;;;;; don't search for whenever a package is loaded
 ;; (startup-set! file-name-handler-alist nil)
-;;;; prevent flashing of unstyled modeline
+;;;;; prevent flashing of unstyled modeline
 ;; Don't render the modeline on startup.  For one thing, the startup looks
 ;; better without flashing stuff on the screen.  Additionally, the more that's
 ;; saved on rendering, the faster the startup.
 ;; (startup-set! mode-line-format nil set-default)
+;;;; package installation
 ;;; init.el ends here
 (provide 'init)
