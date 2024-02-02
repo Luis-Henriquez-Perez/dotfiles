@@ -372,22 +372,21 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
     (`(,(pred symbolp) ,_)
      `((let* (,bind))))
     (`(#',(and fn (pred symbolp)) ,lambda)
-     `(lef! ((,fn ,lambda))))
+     `((lef! ((,fn ,lambda)))))
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
      (pcase-let ((`(,wrappers ,pcase-match-form) (oo--match-form-wrappers match-form)))
-       ;; (if (equal pcase-match-form))
-       (cons `(pcase-let* ((,pcase-match-form ,value))) wrappers)))
+       `((pcase-let* ((,pcase-match-form ,value))) ,@wrappers)))
     (_
      (error "Unknown predicate %S." bind))))
 
-;; ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
-;; ;; `(symbol-function)'.  In terms of implementation I want to create a macro
-;; ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
-;; ;; cl-macrolet, etc.
+;; I do not think that sef extensions are crazy useful for `cl-letf' except for
+;; `(symbol-function)'.  In terms of implementation I want to create a macro
+;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
+;; cl-macrolet, etc.
 (defmacro let! (bindings &rest body)
   "Like `pcase-let*' but all."
   (declare (indent 1))
-  (oo-wrap-forms (mapcar #'oo--let-bind bindings) body))
+  (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
 ;;;; block!
 (defun oo-block-interpret-tree (data tree)
   "Return new TREE and DATA."
@@ -445,7 +444,7 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 (defmacro lef! (bindings &rest body)
   "Similar to `cl-letf' but."
   (let (binds orig-fn (args (cl-gensym "args")))
-    (for! ((sym fn) bindings)
+    (pcase-dolist (`(,sym ,fn) bindings)
       (setq orig-fn (gensym "orig-fn"))
       (pushing! binds `(,orig-fn (if (fboundp #',sym) (symbol-function #',sym) nil)))
       (pushing! binds `((symbol-function #',sym)
