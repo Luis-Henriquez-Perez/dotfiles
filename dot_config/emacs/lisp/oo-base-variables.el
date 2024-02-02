@@ -1,9 +1,9 @@
 ;;; config-path.el --- Path constants -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Boris Buliga <boris@d12frosted.io>
+;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
-;; Author: Boris Buliga <boris@d12frosted.io>
-;; Maintainer: Boris Buliga <boris@d12frosted.io>
+;; Author: Luis Henriquez <luis@luishp.xyz>
+;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Created: 07 Feb 2021
 ;;
@@ -29,7 +29,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; This module defines path constants used across other modules.
+;; This file defines constants.
 ;;
 ;;; Code:
 
@@ -68,28 +68,28 @@ In a nutshell, it's just a value of $HOME.")
 ;; Use this as permanent storage for files that are safe to share
 ;; across systems.")
 
-(defconst path-etc-dir (concat path-local-dir "etc/")
+(defconst oo-etc-dir (concat path-local-dir "etc/")
   "Directory for non-volatile storage.
 
 Use this for files that don't change much, like servers binaries,
 external dependencies or long-term shared data.")
 
-(defconst path-cache-dir (concat path-local-dir "cache/")
+(defconst oo-cache-dir (concat path-local-dir "cache/")
   "Directory for volatile storage.
 
 Use this for files that change often, like cache files.")
 
-(defconst path-packages-dir
+(defconst base-packages-dir
   (expand-file-name (format "packages/%s.%s/"
                             emacs-major-version
                             emacs-minor-version)
                     path-local-dir)
   "Where packages are stored.")
 
-(defconst path-projects-dir
-  (file-name-as-directory
-   (or (getenv "PROJECTS_HOME")
-       (concat path-home-dir "Developer")))
-  "The root directory for projects.")
+;; (defconst base-projects-dir
+;;   (file-name-as-directory
+;;    (or (getenv "PROJECTS_HOME")
+;;        (concat path-home-dir "Developer")))
+;;   "The root directory for projects.")
 
 (provide 'config-path)
