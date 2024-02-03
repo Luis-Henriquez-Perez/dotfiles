@@ -224,3 +224,33 @@
 ;;   (with-suppressed-messages!
 ;;    (apply fn args)))
 ;; (advice-add #'package-vc-install :around #'oo-message-only-fail-pass)
+
+;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
+;; These functions take a predicate and a list and they return the first element of
+;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
+;; predicate and the list, but instead it returns the first non-nil return value of
+;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
+;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
+;; to =t=. The name of this function is inspired by a similar function designed for
+;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
+;; (defun oo-first-success (fn list)
+;;   "Return the first non-nil (fn x) in LIST, else nil."
+;;   (while (and list (funcall fn )))
+;;   success
+;;   ;; (--each-while list (not (let! success (funcall fn it))))
+;;   ;; success
+;;   )
+
+;;
+;;; Base Library
+;; This is an initiative to remove external dependencies from the base functions
+;; and macros that I use for my configuration.  Let me explain my reasoning.
+;; First, I do not think I generally needed the convinience functions of dash,
+;; f, and s.  With just a bit more work, I could do without them.  But also, I
+;; want this base library to be a separate file that I can load for any elisp
+;; scripts I write.  Relying on external libraries when loading scripts can be
+;; complicated because you have to be sure you're packages are all set; if
+;; they're not your script could take much longer if it tries to install the
+;; packages before running its code, or it could even fail.  And it is painful
+;; to write scripts without the functions and macros I painstakingly wrote to
+;; help me.  Another advantage is I can use my library of helpers anywhere even

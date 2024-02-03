@@ -5,11 +5,10 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 02 Feb 2024
 ;;
-;; URL: MYURL
+;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
 ;;
 ;; License: GPLv3
 ;;

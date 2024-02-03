@@ -9,7 +9,7 @@
 ;;
 ;; Created: 08 Jan 2021
 ;;
-;; URL: MYURL
+;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
 ;;
 ;; License: GPLv3
 ;;
@@ -31,7 +31,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; These are my personal Emacs configurations. Please refer to the
+;; These are my personal Emacs configurations.  Please refer to the
 ;; README for information on how to run and modify them.
 ;;
 ;;; Code:
@@ -39,7 +39,7 @@
 ;; For now I put everything in a single file.  The reason I choose to
 ;; do this is because it is simply easier for me with the knowledge I
 ;; have about compiling than having to consider loading order and
-;;;; setup load-path 
+;;;; setup load-path
 ;;;; load base libraries
 ;; features with =require=.
 (require 'oo-base-variables)
@@ -52,9 +52,9 @@
 (require 'oo-base-custom)
 ;;;; startup variables
 ;;;;; disable garbage collection until I'm done with startup
-;; This variable controls how often.  Setting it to =most-positive-fixnum=, a very
-;; big number, essentially disables garbage collection.  The garbage collection is
-;; later reset to a reasonable value.
+;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
+;; very big number, essentially disables garbage collection.  The garbage
+;; collection is later reset to a reasonable value.
 ;; (startup-set! gc-cons-threshold most-positive-fixnum)
 
 ;; This is the percentage of the heap before.
@@ -67,5 +67,5 @@
 ;; saved on rendering, the faster the startup.
 ;; (startup-set! mode-line-format nil set-default)
 ;;;; package installation
-;;; init.el ends here
 (provide 'init)
+;;; init.el ends here
