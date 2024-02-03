@@ -1,4 +1,4 @@
-(require 'oo-base-lib)
+(require 'oo-base-library)
 ;;;; custom 
 (defvar oo-old-values-alist nil
   "An alist that contains symbols I want to \"reset\" after startup.

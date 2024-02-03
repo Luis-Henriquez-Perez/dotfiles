@@ -8,7 +8,7 @@
 ;;; eldev
 ;;;; tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
-(setq eldev-main-fileset '("init.el" "early-init.el" "lisp/*.el"))
+(setq eldev-main-fileset '("init.el" "early-init.el" "lisp/oo-base-*.el"))
 ;; (setq eldev-test-fileset '("tests/all-tests.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help
@@ -20,9 +20,9 @@
 (eldev-add-loading-roots 'test "tests")
 ;; Provides the ability to intelligently inference from commands.
 (setq eldev-dwim t)
-;; Eldev changes this to something else.
+;; Eldev changes this to something else.  I need it so my init file will load
+;; the proper things.
 (setq user-emacs-directory eldev-real-user-emacs-directory)
-;; (setq eldev-real-user-emacs-directory t)
 ;; (setf eldev-project-source-dirs "lisp")
 ;;;; specify test directory
 ;; There are dependencies for testing and linting phases, they should
@@ -42,8 +42,8 @@
   (setq-default elpa-bootstrap-p t)
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
-  ;; (require 'config-path)
-  (load (expand-file-name "init.el" path-emacs-dir)))
+  (require 'oo-base-variables)
+  (load (expand-file-name "init.el" oo-emacs-dir)))
 
 ;; We want to run this before any build command. This is also needed
 ;; for `flyspell-eldev` to be aware of packages installed via
@@ -60,15 +60,15 @@
 
 (add-hook 'eldev-upgrade-hook #'elpa-upgrade)
 ;;;; linting
-(defun eldev-lint-find-files-absolute (f &rest args)
-  "Call F with ARGS and ensure that result is absolute paths."
-  (seq-map (lambda (p)
-             (expand-file-name p eldev-project-dir))
-           (seq-filter (lambda (p)
-                         (not (string-suffix-p "autoloads.el" p)))
-                       (apply f args))))
+;; (defun eldev-lint-find-files-absolute (f &rest args)
+;;   "Call F with ARGS and ensure that result is absolute paths."
+;;   (seq-map (lambda (p)
+;;              (expand-file-name p eldev-project-dir))
+;;            (seq-filter (lambda (p)
+;;                          (not (string-suffix-p "autoloads.el" p)))
+;;                        (apply f args))))
 
-(advice-add 'eldev-lint-find-files :around #'eldev-lint-find-files-absolute)
+;; (advice-add 'eldev-lint-find-files :around #'eldev-lint-find-files-absolute)
 
 ;; Use elisp-lint by default
 (setf eldev-lint-default '(elisp))

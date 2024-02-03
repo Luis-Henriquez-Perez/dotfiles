@@ -154,7 +154,7 @@
                             (push (+ a b) result))
                           (reverse result)))))
 
-(ert-deftest oo-block-interpret-tree ()
+(ert-deftest oo--interpret-block ()
   (should (equal '((:wrappers ((save-excursion))) (1))
                  (oo-block-interpret-tree nil '((with! (save-excursion)) 1))))
 
@@ -286,4 +286,4 @@
 ;;   (should (= 3 (with-map! '((:a . 1) (:b . 2)) (+ !a !b))))
 ;;   (should (= 3 (with-map! '(:a 1 :b 2) (+ !a !b)))))
 
-(provide 'oo-base-library)
+(provide 'oo-base-library-test)

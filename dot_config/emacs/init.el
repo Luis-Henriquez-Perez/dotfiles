@@ -40,9 +40,13 @@
 ;; do this is because it is simply easier for me with the knowledge I
 ;; have about compiling than having to consider loading order and
 ;;;; setup load-path 
-(add-to-list 'load-path (locate-user-emacs-file "lisp/"))
 ;;;; load base libraries
 ;; features with =require=.
+(require 'oo-base-variables)
+
+;; TODO: maybe use xdg directory like d12frosted.
+(add-to-list 'load-path (expand-file-name "lisp/" oo-emacs-dir))
+
 (require 'oo-base-library)
 (require 'oo-base-settings)
 (require 'oo-base-custom)

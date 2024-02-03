@@ -193,16 +193,9 @@ arguments FN will be called with."
          (,handlers (funcall #',action ,err #',fn args))))))
 (defalias 'oo-ccase-fn 'oo-condition-case-fn)
 
-;; (defun oo-demoted-errors-fn (fn)
-;;   "Return"
-;;   `(lambda ()))
-
-;; (defun oo-quiet-fn (fn)
-;;   (quiet! ))
-
-;; (defun oo-when-fn (fn condition))
-
-;; (defun oo-compose-fn (&rest fns))
+(defun oo-const (value)
+  "Return a function."
+  `(lambda (&rest _) ,value))
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.

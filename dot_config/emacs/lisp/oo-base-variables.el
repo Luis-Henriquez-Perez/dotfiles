@@ -38,53 +38,40 @@
 
 In a nutshell, it's just a value of $HOME.")
 
-(defconst oo-config-dir
-  (file-name-as-directory
-   (or (getenv "XDG_CONFIG_HOME")
-       (concat path-home-dir ".config")))
+(defconst oo-config-dir (file-name-as-directory
+                         (or (getenv "XDG_CONFIG_HOME")
+                             (concat oo-home-dir ".config")))
   "The root directory for personal configurations.")
 
-(defconst oo-emacs-dir
-  (file-name-as-directory
-   (expand-file-name "emacs/" path-config-dir))
+(defconst oo-emacs-dir (file-name-as-directory
+                        (expand-file-name "emacs/" oo-config-dir))
   "The path to this Emacs directory.")
 
-;; (defconst path-autoloads-file
-;;   (expand-file-name "lisp/init-autoloads.el" path-emacs-dir)
-;;   "The path to personal autoloads file.")
-
-;; (defconst path-emacs-private-dir
-;;   (concat path-cloud-dir "emacs/")
-;;   "The root directory for private configurations.")
-
-;; (defconst path-local-dir
-;;   (concat
-;;    (file-name-as-directory
-;;     (or (getenv "XDG_CACHE_HOME")
-;;         (concat path-home-dir ".cache")))
-;;    "emacs/")
+;; (defconst path-local-dir (concat (file-name-as-directory
+;;                                   (or (getenv "XDG_CACHE_HOME")
+;;                                       (concat oo-home-dir ".cache")))
+;;                                  "emacs/")
 ;;   "The root directory for local Emacs files.
 
 ;; Use this as permanent storage for files that are safe to share
 ;; across systems.")
 
-(defconst oo-etc-dir (concat path-local-dir "etc/")
-  "Directory for non-volatile storage.
+;; (defconst oo-etc-dir (concat oo-local-dir "etc/")
+;;   "Directory for non-volatile storage.
 
-Use this for files that don't change much, like servers binaries,
-external dependencies or long-term shared data.")
+;; Use this for files that don't change much, like servers binaries,
+;; external dependencies or long-term shared data.")
 
-(defconst oo-cache-dir (concat path-local-dir "cache/")
+(defconst oo-cache-dir (concat oo-emacs-dir ".cache/")
   "Directory for volatile storage.
 
 Use this for files that change often, like cache files.")
 
-(defconst base-packages-dir
-  (expand-file-name (format "packages/%s.%s/"
-                            emacs-major-version
-                            emacs-minor-version)
-                    path-local-dir)
-  "Where packages are stored.")
+;; (defconst base-packages-dir (expand-file-name (format "packages/%s.%s/"
+;;                                                       emacs-major-version
+;;                                                       emacs-minor-version)
+;;                                               path-local-dir)
+;;   "Where packages are stored.")
 
 ;; (defconst base-projects-dir
 ;;   (file-name-as-directory
