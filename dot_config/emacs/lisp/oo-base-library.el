@@ -5,7 +5,6 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 02 Feb 2024
 ;;
@@ -31,8 +30,9 @@
 ;;
 ;;; Commentary:
 ;;
+;;; Code:
 ;; This is the primary set of functions and macro I use to.  They are designed
-;; to only rely on built-in emacs packages so that they can be loaded into any
+;; to only rely on built-in Emacs packages so that they can be loaded into any
 ;; script and also to make.
 ;;;; require built-in packages
 ;; I need it to help me with pattern matching.
@@ -59,20 +59,20 @@
 ;; (defalias 'oo-never #'ignore)
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
-  "Return t only if OBJ is a cons-cell."
+  "Return non-nil only if OBJ is a cons-cell."
   (declare (pure t) (side-effect-free t))
   (and (consp obj)
        (not (listp (cdr obj)))))
 
 (defun oo-proper-list-p (obj)
-  "Return t only if OBJ is a proper list."
+  "Return non-nil only if OBJ is a proper list."
   (declare (pure t) (side-effect-free t))
   (and (listp obj)
        (or (null obj)
            (null (cdr-safe (last obj))))))
 
 (defun oo-improper-list-p (obj)
-  "Return t only if OBJ is not a proper list"
+  "Return non-nil only if OBJ is not a proper list."
   (declare (pure t) (side-effect-free t))
   (and (listp obj)
        (cdr-safe (last obj))))
@@ -84,7 +84,7 @@
 
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
-FORMS is a list of lisp forms.  WRAPPER are a list of forms."
+FORMS is a list of forms.  WRAPPER are a list of forms."
   (declare (pure t) (side-effect-free t))
   (unless wrappers (push '(progn) wrappers))
   (setq wrappers (reverse wrappers))
@@ -116,40 +116,36 @@ Examples are `&rest' and `&optional'."
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
 ;; trivial to write on my own.
 (defmacro alet! (expr &rest body)
-  "Like `let', but the result of evaluating FORM is bound to `it'.
-FORM and BODY are otherwise as documented for `let'."
+  "Bind the result of EXPR to `it' during BODY."
   (declare (indent 1))
-  `(let ((it ,expr))
-     ,@body))
+  `(let ((it ,expr)) ,@body))
 
-(defmacro aif! (expr then &rest else)
-  "Like `if', but the result of evaluating COND is bound to `it'.
-The variable `it' is available within THEN and ELSE.
-COND, THEN, and ELSE are otherwise as documented for `if'."
+(defmacro aif! (cond then &rest else)
+  "Like `if', but COND is bound to `it' during THEN and ELSE."
   (declare (indent 2))
-  `(alet! ,expr (if it ,then ,@else)))
+  `(alet! ,cond (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
-  "Like `when', but the result of evaluating COND is bound to `it'.
-The variable `it' is available within BODY.
-COND and BODY are otherwise as documented for `when'."
+  "Like `when', but the result of COND is bound to `it' during BODY."
   (declare (indent 1))
   `(alet! ,cond (when it ,@body)))
 ;;;; functional
 (defalias 'oo-partial 'apply-partially)
 
-;; Copied from dash's =-rpartial=.
+;; Copied/inspired from dash's =-rpartial=.
 (defun oo-rpartial (fn &rest args)
+  ""
   (lambda (&rest args-before) (apply fn (append args-before args))))
 
 ;; A replacement for dash's =-const=
 ;; (defun oo-const ()
 ;;   ())
 
-;; I'd like to have the signature be something like ~(function &rest args &key ...)~;
-;; that way it would be truly analogous to =funcall=. However, then the signature
-;; would ambiguous if =function= has arguments that are the same as keys specified by
-;; =&key=.
+;; I'd like to have the signature be something like ~(function &rest args &key
+;; ...)~; that way it would be truly analogous to =funcall=. However, then the
+;; signature would ambiguous if =function= has arguments that are the same as
+;; keys specified by =&key=.
+
 (cl-defun oo-condition-case-fn (fn &key (handlers 'error) (action #'ignore))
   "Return a function that calls ACTION when errors matching HANDLERS are raised.
 ACTION is a function with three arguments the error object, FN and the list of
@@ -172,9 +168,10 @@ arguments FN will be called with."
 SETTER is the symbol of the macro or function used to do the setting."
   `(,setter ,place (append ,place ,list)))
 
-;; Important to note that this macro is not as efficient as pushing because it's adding to the end
-;; of the list.  So this macro should be used only in non-performance-intensive code.  In
-;; performance-intensive code we need the =push-nreverse= idiom.
+;; Important to note that this macro is not as efficient as pushing because it's
+;; adding to the end of the list.  So this macro should be used only in
+;; non-performance-intensive code.  In performance-intensive code we need the
+;; =push-nreverse= idiom.
 (cl-defmacro collecting! (place item &key (setter 'setf))
   "Affix ITEM to the end of PLACE.
 SETTER is the same as in `appending!'."
@@ -230,9 +227,10 @@ SETTER is the same as in `appending!'."
 ;; lisp symbols when configuring Emacs.
 
 ;; Something I was always confused about was why adjoin instead of just using
-;; =push=.  The latter is more performant; however I don't think that's.  The best reason I could
-;; think of is that sometimes you want to re-evaluate parts of your configuration
-;; and in that case it is more convenient to have =adjoin= over =push=.
+;; =push=.  The latter is more performant; however I don't think that's.  The
+;; best reason I could think of is that sometimes you want to re-evaluate parts
+;; of your configuration and in that case it is more convenient to have =adjoin=
+;; over =push=.
 (cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
   "Set PLACE to the union of PLACE and FORM.
 SETTER is the same as in `appending!'."
@@ -277,21 +275,16 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
                    (setq name (symbol-name obj))
                    (string-match regexp name)
                    (not (assoc obj let-binds)))
-          (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol) (match-string 1 name)))
+          (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
+                             (match-string 1 name)))
           (pushing! let-binds `(,obj (map-elt ,mapsym ',key)))))
       (nreverse let-binds))))
 
 (defmacro with-map! (map &rest body)
   `(let ,(oo--map-let-binds map body :regexp "![^[:space:]]+" :use-keywords nil)
      ,@body))
-;;;; let!
-;; Return a list of wrappers to deal with pattern.
-;; ((pcase-let*...)(...)(...))
-;; (defun oo--let-bind-as (sym whole parts)
-;;   (let (let-binds)
-;;     (pushing! binds `(,sym ,whole))
-;;     (pushing! binds `(,sym ,whole))))
 
+;;;; let!
 ;; This is really messy lol.  I am sure there is a better way to do this.
 ;; Basically, I am saying add a comma to all the symbols, but replace certain
 ;; patterns with and record these patterns for me.  I would rather do this with
@@ -315,7 +308,8 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
                   ((pred listp)
                    (pcase-let* ((`(,wrappers1 ,tree1) (fn nil (car tree)))
                                 (`(,wrappers2 ,tree2) (fn nil (cdr tree))))
-                     (list (append wrappers wrappers1 wrappers2) (cons tree1 tree2))))
+                     (list (append wrappers wrappers1 wrappers2)
+                           (cons tree1 tree2))))
                   ((pred vectorp)
                    (alet! (mapcar (oo-partial #'fn wrappers) (append tree))
                           (list (apply #'append (mapcar #'car it))
@@ -336,9 +330,9 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
      `((let* (,bind))))
     (`(#',(and fn (pred symbolp)) ,lambda)
      `((lef! ((,fn ,lambda)))))
-    (`(,(and match-form (or (pred listp) (pred vectorp))) ,value)
-     (pcase-let ((`(,wrappers ,pcase-match-form) (oo--match-form-wrappers match-form)))
-       `((pcase-let* ((,pcase-match-form ,value))) ,@wrappers)))
+    (`(,(and mf (or (pred listp) (pred vectorp))) ,value)
+     (pcase-let ((`(,wrappers ,pcase-mf) (oo--match-form-wrappers mf)))
+       `((pcase-let* ((,pcase-mf ,value))) ,@wrappers)))
     (_
      (error "Unknown predicate %S." bind))))
 

@@ -76,7 +76,50 @@
 (with-eval-after-load 'elisp-lint
   (setf elisp-lint-ignored-validators '("byte-compile")))
 
+;; This is the original comment from d12frosted.
+;; In general, `package-lint' is useful. But package prefix naming
+;; policy is not useful for personal configurations. So we chop
+;; lib/init part from the package name.
+;;
+;; And `eval-after-load'. In general it's not a good idea to use it in
+;; packages, but these are configurations.
+(with-eval-after-load 'package-lint
+  ;; (defun package-lint--package-prefix-cleanup (f &rest args)
+  ;;   "Call F with ARGS and cleanup it's result."
+  ;;   (let ((r (apply f args)))
+  ;;     (replace-regexp-in-string "\\(init\\|lib\\|config\\|compat\\)-?" "" r)))
+  ;; (advice-add 'package-lint--get-package-prefix :around #'package-lint--package-prefix-cleanup)
+  (defun package-lint--package-prefix-cleanup (prefix)
+    "Cleanup PREFIX."
+    (replace-regexp-in-string
+     "\\(private\\)-?" ""
+     (replace-regexp-in-string
+      "\\(init\\|lib\\|config\\|compat\\)-?" ""
+      prefix)))
+
+  (defun package-lint--get-package-prefix-wrapper (f &rest args)
+    "Call F with ARGS and cleanup it's result."
+    (let ((r (apply f args)))
+      (package-lint--package-prefix-cleanup r)))
+  (advice-add 'package-lint--get-package-prefix :around #'package-lint--get-package-prefix-wrapper)
+
+  (defun package-lint--check-defs-prefix-wrapper (f prefix definitions)
+    "Call F with cleared PREFIX and DEFINITIONS."
+    (funcall f (package-lint--package-prefix-cleanup prefix) definitions))
+  (advice-add 'package-lint--check-defs-prefix :around #'package-lint--check-defs-prefix-wrapper)
+
+  (defun package-lint--check-defalias-wrapper (f prefix def)
+    "Call F with cleared PREFIX and DEF."
+    (funcall f (package-lint--package-prefix-cleanup prefix) def))
+  (advice-add 'package-lint--check-defalias :around #'package-lint--check-defalias-wrapper)
+
+  (defun package-lint--check-eval-after-load ()
+    "Do nothing."))
+
 ;; Tell checkdoc not to demand two spaces after a period.
 (setq-default sentence-end-double-space t)
 ;; Bump up the fill-column from 70 to 80.
 (setq-default fill-column 80)
+
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
