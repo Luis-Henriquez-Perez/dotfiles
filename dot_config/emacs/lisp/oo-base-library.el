@@ -112,7 +112,9 @@ ensure the result is syntactically valid."
 ;;;; special symbols
 (defun oo-list-marker-p (obj)
   "Return non-nil if OBJ is a list marker.
-List markers are symbols that begin with `&' such as are `&rest' and `&optional'."
+List markers are symbols that begin with `&' such as are `&rest' and
+`&optional'."
+  (declare (pure t) (side-effect-free t))
   (char-equal ?& (seq-first (symbol-name obj))))
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
@@ -217,7 +219,8 @@ SETTER is the same as in `appending!'."
 (cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
   "Set PLACE to the union of PLACE and FORM.
 SETTER is the same as in `appending!'."
-  `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
+  (alet `(:test ,test :test-not ,test-not :key ,key)
+    `(,setter ,place (cl-union ,place ,list ,@it))))
 
 ;; This is really messy lol.  I am sure there is a better way to do this.
 ;; Basically, I am saying add a comma to all the symbols, but replace certain
@@ -263,6 +266,7 @@ The returned value is a list of two elements:
          (list wrappers (list '\` pcase-mf)))))))
 
 (defun oo--let-bind (bind)
+  "Return a list of wrappers for binding BIND."
   (pcase bind
     ((pred symbolp)
      `((let* (,bind))))
@@ -274,35 +278,25 @@ The returned value is a list of two elements:
      (pcase-let ((`(,wrappers ,pcase-mf) (oo--match-form-wrappers mf)))
        `((pcase-let* ((,pcase-mf ,value))) ,@wrappers)))
     (_
-     (error "Unknown predicate %S." bind))))
+     (error "Unknown predicate %S" bind))))
 
 ;; I do not think that sef extensions are crazy useful for `cl-letf' except for
 ;; `(symbol-function)'.  In terms of implementation I want to create a macro
 ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
 ;; cl-macrolet, etc.
 (defmacro let! (bindings &rest body)
-  "Generate let-like bindings based on BIND.
-
-BIND represents a binding structure that determines the generation
-of 'let' or similar constructs based on different patterns.
-
-BIND can take various forms:
-- If BIND is a symbol, it generates a 'let*' binding with a single variable.
-- If BIND is a cons cell of a symbol and any form, it generates a 'let*' binding with that symbol.
-- If BIND is a cons cell of a quoted function name and a lambda expression,
-  it generates a 'lef!' binding for defining a local function.
-- If BIND is a cons cell of a match form (either a list or a vector) and a value,
-  it generates a 'pcase-let*' binding with pattern matching.
-- Otherwise, it throws an error indicating an unknown predicate.
-
-The function returns a list representing the generated binding."
+  "Like `let*' but.
+(let! (MATCH-FORM ()))
+(let! (#'foo ()))"
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
 ;;;; block!
 (defun oo--interpret-block (data tree)
-  "Return new TREE and DATA."
+  "Return an updated list of (DATA TREE) based on contents of TREE.
+DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
+`block!'."
   (pcase tree
-    (`(,(or 'quote 'backquote) . ,rest)
+    (`(,(or 'quote 'backquote) . ,_)
      (list data tree))
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
      (pcase-let* ((`(,data1 ,tree) (oo--interpret-block nil body)))
@@ -318,7 +312,7 @@ The function returns a list representing the generated binding."
     (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
      (appending! (plist-get data :wrappers) wrappers)
      (list data rest))
-    (`((,(or 'without! 'excluding!) . ,(and symbols (guard (oo-all-p #'symbolp symbols)))) . ,rest)
+    (`((,(or 'without! 'exclude!) . ,(and symbols (guard (oo-all-p #'symbolp symbols)))) . ,rest)
      (appending! (plist-get data :no-let) symbols)
      (list data rest))
     (`((gensym! ,(and name (pred symbolp))) . ,rest)
@@ -352,8 +346,21 @@ The function returns a list representing the generated binding."
      (list data tree))))
 
 (defmacro block! (name &rest body)
-  "Define a lexically-scoped block named NAME.
-Name may be any symbol.  Code inside body can call `return!'."
+  "Same as `cl-block' but apply BODY depending on particular forms.
+Specifically each of the forms.
+(set! SYM VALUE)             implicitly let bind SYM to nil.
+(set! SYM VALUE :init VAL)   same as set! but let bind SYM to VAL.
+(pushing! SYM VAL)           implicitly let bind SYM to nil.
+(pushing! SYM VAL :init VAL) same.
+(pushing!)                   same as with collecting!
+(gensym! SYM)                implicitly let bind SYM to (gensym \"SYM\")
+(wrap! SYM1 SYM2)            surround block body with.
+(with! SYM1 VAR2)            surround block body with
+(exclude! VAR1 VAR2 ...)     do not let bind the following
+(without! VAR1 ...)          same as `excluding!'.
+(stub! NAME ARGS . BODY)     surround following forms with
+(nflet! NAME ARGS . BODY)    surround following forms with
+(for! ...)                   surround loops with"
   (declare (indent 1))
   (let! (((data body) (oo--interpret-block nil body))
          ;; lets is an alist.
@@ -362,8 +369,12 @@ Name may be any symbol.  Code inside body can call `return!'."
          (nolets (plist-get data :nolet))
          (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
          (wrappers `((cl-block ,name) (let ,binds) ,@(plist-get data :wrappers))))
-    ;; Yea this wrap forms function is paying dividens for me.
+    ;; (pushing! wrappers ())
+    ;; (pushing! wrappers ())
     (oo-wrap-forms wrappers body)))
+
+(defmacro break! ())
+(defmacro continue! ())
 ;;;; letf
 ;; I am conflicted between the name =this-fn= and =orig-fn=.  I think all else
 ;; being equal =orig-fn= is a better name than =this-fn=.  But I know that
@@ -396,7 +407,7 @@ interactive-form) body)."
     (list name args (list docstring decls iform) body)))
 
 (defmacro defmacro! (&rest args)
-  "Wrapper around `defmacro!'."
+  "Same as `defmacro!' but wrap body with `block!'."
   (declare (indent defun) (doc-string 3))
   (let! (((name arglist metadata body) (oo-defun-components args))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
@@ -405,7 +416,7 @@ interactive-form) body)."
        (block! ,name (excluding! ,args) ,@body))))
 
 (defmacro defun! (&rest args)
-  "Wrapper around `defun'."
+  "Same as `defun' but wrap body with `block!'."
   (declare (indent defun) (doc-string 3))
   (let! (((name arglist metadata body) (oo-defun-components args))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
