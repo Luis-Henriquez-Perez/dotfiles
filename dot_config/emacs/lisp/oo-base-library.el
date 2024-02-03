@@ -134,7 +134,6 @@ List markers are symbols that begin with `&' such as are `&rest' and `&optional'
 ;;;; functional
 (defalias 'oo-partial 'apply-partially)
 
-;; Copied/inspired from dash's =-rpartial=.
 (defun oo-rpartial (fn &rest args)
   "Return a function with fewer arguments than FN.
 FN is a function, and ARGS are additional arguments to be partially applied.
@@ -142,11 +141,9 @@ The returned function will accept the remaining arguments to be applied
 to FN after the ARGS provided here."
   (lambda (&rest args-before) (apply fn (append args-before args))))
 
-;; A replacement for dash's =-const=
 (defun oo-const (c)
   "Return a function that outputs C, ignoring any arguments."
   (lambda (&rest _) c))
-
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
@@ -301,11 +298,12 @@ BIND can take various forms:
 The function returns a list representing the generated binding."
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
-
 ;;;; block!
 (defun oo--interpret-block (data tree)
   "Return new TREE and DATA."
   (pcase tree
+    (`(,(or 'quote 'backquote) . ,rest)
+     (list data tree))
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
      (pcase-let* ((`(,data1 ,tree) (oo--interpret-block nil body)))
        (list (map-merge 'plist data data1)
@@ -353,21 +351,6 @@ The function returns a list representing the generated binding."
     (_
      (list data tree))))
 
-;; I am conflicted between the name =this-fn= and =orig-fn=.  I think all else
-;; being equal =orig-fn= is a better name than =this-fn=.  But I know that
-;; =this= and =it= are used more commonly anaphoric names.
-(defmacro lef! (bindings &rest body)
-  "Similar to `cl-letf' but."
-  (let (binds orig-fn (args (cl-gensym "args")))
-    (pcase-dolist (`(,sym ,fn) bindings)
-      (setq orig-fn (gensym "orig-fn"))
-      (pushing! binds `(,orig-fn (if (fboundp #',sym) (symbol-function #',sym) nil)))
-      (pushing! binds `((symbol-function #',sym)
-                        (lambda (&rest ,args)
-                          (let ((this-fn ,orig-fn))
-                            (apply ,fn ,args))))))
-    `(cl-letf* ,(nreverse binds) ,@body)))
-
 (defmacro block! (name &rest body)
   "Define a lexically-scoped block named NAME.
 Name may be any symbol.  Code inside body can call `return!'."
@@ -381,9 +364,28 @@ Name may be any symbol.  Code inside body can call `return!'."
          (wrappers `((cl-block ,name) (let ,binds) ,@(plist-get data :wrappers))))
     ;; Yea this wrap forms function is paying dividens for me.
     (oo-wrap-forms wrappers body)))
+;;;; letf
+;; I am conflicted between the name =this-fn= and =orig-fn=.  I think all else
+;; being equal =orig-fn= is a better name than =this-fn=.  But I know that
+;; =this= and =it= are used more commonly anaphoric names.
+(defmacro lef! (bindings &rest body)
+  "Bind symbols in BINDINGS to their corresponding functions during BODY.
+BINDINGS is a list of (SYMBOL FUNCTION), where symbol is the symbol to be bound
+and FUNCTION is the function to bind it to.  In each of BINDINGS if the symbol
+is an existing function symbol let-bind the original function to `this-fn',
+otherwise bind `this-fn' to nil."
+  (let (binds orig-fn (args (cl-gensym "args")))
+    (pcase-dolist (`(,sym ,fn) bindings)
+      (setq orig-fn (gensym "orig-fn"))
+      (pushing! binds `(,orig-fn (if (fboundp #',sym) (symbol-function #',sym) nil)))
+      (pushing! binds `((symbol-function #',sym)
+                        (lambda (&rest ,args)
+                          (let ((this-fn ,orig-fn))
+                            (apply ,fn ,args))))))
+    `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (arglist)
-  "Return the components of defun.
+  "Return the components of defun from ARGLIST.
 ARGLIST is the arglist of `defun' or similar macro.
 The components returned are in the form of (name args (docstring declaration
 interactive-form) body)."
@@ -445,9 +447,7 @@ symbol as in `dolist', but.  LIST can be a sequence."
 ;; =shut-up= package does a bit more because it puts the messages in a different
 ;; buffer, but I won't go into that yet--not when and until I think I need it.
 (defmacro quiet! (&rest body)
-  "Don't allow any output to be messaged."
-  ;; Override `standard-output', for `print' and friends, and
-  ;; monkey-patch `message'
+  "Suppress message output during BODY."
   `(let! ((standard-output #'ignore)
           (#'message #'ignore)
           (#'write-region

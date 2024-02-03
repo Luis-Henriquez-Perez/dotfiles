@@ -124,11 +124,12 @@
     (should (equal '(1 2) list))))
 
 (ert-deftest for! ()
+  "The for feature."
   ;; Not working.
-  ;; (should (equal '(((1 . 2) 1 2) ((3 . 4) 3 4))
-  ;;                (let (list) (for! ((&as foo (a b)) '((1 . 2) (3 . 4)))
-  ;;                              (push (list foo a b) list))
-  ;;                     list)))
+  (should (equal '(((1 . 2) 1 2) ((3 . 4) 3 4))
+                 (let (list) (for! ((&as foo (a . b)) '((1 . 2) (3 . 4)))
+                               (push (list foo a b) list))
+                      (reverse list))))
   ;; Works for the syntax =(repeat N)= where N is a positive integer.
   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
 
@@ -155,6 +156,9 @@
                           (reverse result)))))
 
 (ert-deftest oo--interpret-block ()
+  ;; Should not interpret quoted or backquoted forms.
+  (should (equal (list nil '('(for! (n 10) (+ 1 1))))
+                 (oo--interpret-block nil '('(for! (n 10) (+ 1 1))))))
   (should (equal '((:wrappers ((save-excursion))) (1))
                  (oo--interpret-block nil '((with! (save-excursion)) 1))))
 
