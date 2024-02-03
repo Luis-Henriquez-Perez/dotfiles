@@ -5,11 +5,10 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 02 Jan 2024
 ;;
-;; URL: MYURL
+;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
 ;;
 ;; License: GPLv3
 ;;
@@ -31,7 +30,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file contains functions and macros directly used for customizing emacs
+;; This file contains functions and macros directly used for customizing Emacs
 ;; by which I mean for doing things like adding hooks, adding advices, and
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
