@@ -44,7 +44,7 @@ Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL's value should be
 reset to OLD-VALUE by calling SETTER with SYMBOL and OLD-VALUE.")
 
 (defmacro startup-set! (symbol value &optional setter)
-  "Set VAR to VALUE using SETTER.
+  "Set SYMBOL to VALUE using SETTER.
 At the end of `emacs-statup-hook' set VAR back to its original VALUE."
   `(progn (setf (alist-get ',symbol oo-old-values-alist)
                 (list ,symbol #',setter))
