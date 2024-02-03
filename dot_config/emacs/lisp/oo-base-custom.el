@@ -7,7 +7,7 @@
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "29.1"))
 ;;
-;; Created: 08 Jan 2021
+;; Created: 02 Jan 2024
 ;;
 ;; URL: MYURL
 ;;
@@ -31,8 +31,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; These are my personal Emacs configurations.  Please refer to the
-;; README for information on how to run and modify them.
+;; This file contains functions and macros directly used for customizing emacs
+;; by which I mean for doing things like adding hooks, adding advices, and
+;; setting variables for a particular feature.  Basically tools for configuring
+;; packages and features.
 ;;
 ;;; Code:
 (require 'oo-base-library)
@@ -373,3 +375,4 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 ;;   fn)
 
 (provide 'oo-base-custom)
+;; oo-base-custom.el ends here

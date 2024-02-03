@@ -7,7 +7,7 @@
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "29.1"))
 ;;
-;; Created: 20 Jan 2024
+;; Created: 02 Feb 2024
 ;;
 ;; URL:
 ;;
@@ -543,5 +543,5 @@ symbol as in `dolist', but.  LIST can be a sequence."
   (with-current-buffer (get-buffer buffer)
     (buffer-string)))
 
-;;; oo-base-library.el ends here
 (provide 'oo-base-library)
+;;; oo-base-library.el ends here

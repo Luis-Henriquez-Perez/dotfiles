@@ -67,16 +67,5 @@ In a nutshell, it's just a value of $HOME.")
 
 Use this for files that change often, like cache files.")
 
-;; (defconst base-packages-dir (expand-file-name (format "packages/%s.%s/"
-;;                                                       emacs-major-version
-;;                                                       emacs-minor-version)
-;;                                               path-local-dir)
-;;   "Where packages are stored.")
-
-;; (defconst base-projects-dir
-;;   (file-name-as-directory
-;;    (or (getenv "PROJECTS_HOME")
-;;        (concat path-home-dir "Developer")))
-;;   "The root directory for projects.")
-
 (provide 'oo-base-variables)
+;; oo-base-variables.el ends here
