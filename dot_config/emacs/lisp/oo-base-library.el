@@ -54,9 +54,7 @@
 (defalias 'oo-select #'cl-remove-if-not)
 (defalias 'oo-filter #'cl-remove-if-not)
 (defalias 'oo-true #'always)
-;; (defalias 'oo-always #'always)
 (defalias 'oo-false #'ignore)
-;; (defalias 'oo-never #'ignore)
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
   "Return non-nil only if OBJ is a cons-cell."
@@ -65,26 +63,30 @@
        (not (listp (cdr obj)))))
 
 (defun oo-proper-list-p (obj)
-  "Return non-nil only if OBJ is a proper list."
+  "Return non-nil only if OBJ is a proper list.
+A proper list is defined as a sequence of cons cells ending with nil."
   (declare (pure t) (side-effect-free t))
   (and (listp obj)
        (or (null obj)
            (null (cdr-safe (last obj))))))
 
 (defun oo-improper-list-p (obj)
-  "Return non-nil only if OBJ is not a proper list."
+  "Return non-nil only if OBJ is not a proper list.
+See `oo-proper-list-p'."
   (declare (pure t) (side-effect-free t))
   (and (listp obj)
        (cdr-safe (last obj))))
 
 (defun oo-snoc (list elt &rest elts)
-  "Append ELT to the end of LIST."
+  "Append ELT and ELTS (if provided) to the end of LIST."
   (declare (pure t) (side-effect-free t))
   (append list (list elt) elts))
 
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
-FORMS is a list of forms.  WRAPPER are a list of forms."
+FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
+representing the wrappers to apply.  If WRAPPERS is empty, `progn' is added to
+ensure the result is syntactically valid."
   (declare (pure t) (side-effect-free t))
   (unless wrappers (push '(progn) wrappers))
   (setq wrappers (reverse wrappers))
@@ -110,7 +112,7 @@ FORMS is a list of forms.  WRAPPER are a list of forms."
 ;;;; special symbols
 (defun oo-list-marker-p (obj)
   "Return non-nil if OBJ is a list marker.
-Examples are `&rest' and `&optional'."
+List markers are symbols that begin with `&' such as are `&rest' and `&optional'."
   (char-equal ?& (seq-first (symbol-name obj))))
 ;;;; anaphoric macros
 ;; I used the [[][anaphora]] package for these macros, but in reality they are
@@ -134,12 +136,15 @@ Examples are `&rest' and `&optional'."
 
 ;; Copied/inspired from dash's =-rpartial=.
 (defun oo-rpartial (fn &rest args)
-  "Return a function with fewer arguments than FN."
+  "Return a function with fewer arguments than FN.
+FN is a function, and ARGS are additional arguments to be partially applied.
+The returned function will accept the remaining arguments to be applied
+to FN after the ARGS provided here."
   (lambda (&rest args-before) (apply fn (append args-before args))))
 
 ;; A replacement for dash's =-const=
 (defun oo-const (c)
-  "Return a function that returns C ignoring any arugments."
+  "Return a function that outputs C, ignoring any arguments."
   (lambda (&rest _) c))
 
 ;;;; setting
@@ -182,7 +187,7 @@ SETTER is the same as in `appending!'."
 
 (cl-defmacro minning! (place form &key (setter 'setf) (comparator '<))
   "Set PLACE to the lesser of PLACE and FORM.
-SETTER is the same as in `appending!'. COMPARATOR is the same as in `maxing!'."
+SETTER is the same as in `appending!'.  COMPARATOR is the same as in `maxing!'."
   `(maxing! ,place ,form :setter ,setter :comparator ,comparator))
 
 (cl-defmacro concating! (place string &key (setter 'setf) separator)
@@ -191,10 +196,10 @@ SETTER is the same as in `appending!'"
   `(,setter ,place (string-join (list ,place ,string) ,separator)))
 
 (cl-defmacro adjoining! (place item &key test test-not key (setter 'setf))
-  "Set PLACE to the value of `cl-adjoin'.
+  "Set PLACE to the value of `(cl-adjoin ITEM PLACE)'.
 SETTER is the same as in `appending!'."
-  (alet! (keys '(:test ,test :test-not ,test-not :key ,key))
-    `(,setter ,place (cl-adjoin ,item ,place ,@keys))))
+  (alet! `(:test ,test :test-not ,test-not :key ,key)
+    `(,setter ,place (cl-adjoin ,item ,place ,@it))))
 
 ;; I know =push= already exists.  But I want a variant of push that can be used
 ;; with the =block!= macro.
@@ -222,6 +227,13 @@ SETTER is the same as in `appending!'."
 ;; patterns with and record these patterns for me.  I would rather do this with
 ;; an iterator.
 (defun oo--match-form-wrappers (match-form)
+  "Return the pcase syntax representation of MATCH-FORM.
+MATCH-FORM is a nested form of lists, vectors, and symbols.
+
+The returned value is a list of two elements:
+1. WRAPPERS: A list representing the wrappers used in the pcase pattern.
+   These wrappers include '&as', '&map', '&alist', '&plist', '&hash'.
+2. PCASE-MF: The pcase syntax representation of the MATCH-FORM."
   (cl-labels ((fn (wrappers tree)
                 (pcase tree
                   ((pred null)
@@ -230,13 +242,13 @@ SETTER is the same as in `appending!'."
                    (list wrappers (list '\, sym)))
                   (`(&as ,whole ,parts)
                    (alet! (cl-gensym "&as")
-                          (list `((let! ((,whole ,it)
-                                         (,parts ,it))))
-                                (list '\, it))))
+                     (list `((let! ((,whole ,it)
+                                    (,parts ,it))))
+                           (list '\, it))))
                   (`(,(or '&map '&alist '&plist '&hash) ,map)
                    (alet! (cl-gensym "&map")
-                          (list `((let ((,it ,map))) (with-map! ,it))
-                                (list '\, it))))
+                     (list `((let ((,it ,map))) (with-map! ,it))
+                           (list '\, it))))
                   ((pred listp)
                    (pcase-let* ((`(,wrappers1 ,tree1) (fn nil (car tree)))
                                 (`(,wrappers2 ,tree2) (fn nil (cdr tree))))
@@ -244,8 +256,8 @@ SETTER is the same as in `appending!'."
                            (cons tree1 tree2))))
                   ((pred vectorp)
                    (alet! (mapcar (oo-partial #'fn wrappers) (append tree))
-                          (list (apply #'append (mapcar #'car it))
-                                (vconcat (mapcan #'cdr it))))))))
+                     (list (apply #'append (mapcar #'car it))
+                           (vconcat (mapcan #'cdr it))))))))
     (pcase-let* ((`(,wrappers ,pcase-mf) (fn nil match-form)))
       (pcase pcase-mf
         (`(,(and comma (guard (equal '\, comma))) ,(and symbol (pred symbolp)))
@@ -254,7 +266,6 @@ SETTER is the same as in `appending!'."
          (list wrappers (list '\` pcase-mf)))))))
 
 (defun oo--let-bind (bind)
-  "Return wrappers."
   (pcase bind
     ((pred symbolp)
      `((let* (,bind))))
@@ -273,9 +284,24 @@ SETTER is the same as in `appending!'."
 ;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
 ;; cl-macrolet, etc.
 (defmacro let! (bindings &rest body)
-  "Like `pcase-let*' but all."
+  "Generate let-like bindings based on BIND.
+
+BIND represents a binding structure that determines the generation
+of 'let' or similar constructs based on different patterns.
+
+BIND can take various forms:
+- If BIND is a symbol, it generates a 'let*' binding with a single variable.
+- If BIND is a cons cell of a symbol and any form, it generates a 'let*' binding with that symbol.
+- If BIND is a cons cell of a quoted function name and a lambda expression,
+  it generates a 'lef!' binding for defining a local function.
+- If BIND is a cons cell of a match form (either a list or a vector) and a value,
+  it generates a 'pcase-let*' binding with pattern matching.
+- Otherwise, it throws an error indicating an unknown predicate.
+
+The function returns a list representing the generated binding."
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
+
 ;;;; block!
 (defun oo--interpret-block (data tree)
   "Return new TREE and DATA."
@@ -289,7 +315,7 @@ SETTER is the same as in `appending!'."
               ((maxing! maximizing!) most-negative-fixnum)
               ((minning! minimizing!) most-positive-fixnum)
               (counting! 0))
-            (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
+       (adjoining! (plist-get data :let) (list symbol it) :test #'equal :key #'car))
      (list data tree))
     (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
      (appending! (plist-get data :wrappers) wrappers)
@@ -302,7 +328,7 @@ SETTER is the same as in `appending!'."
      (list data rest))
     (`(,(and macro (guard (member macro '(let! set!)))) ,match-form ,_ . ,(and plist (guard t)))
      (alet! (plist-get plist :init)
-            (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
+       (adjoining! (plist-get data :let) (list match-form it) :test #'equal :key #'car))
      (list data (cons 'setq (cdr tree))))
     ;; Typically I will use these when I am.
     (`((,(or 'stub! 'flet!)  ,name ,fn) . ,rest)
@@ -428,9 +454,9 @@ symbol as in `dolist', but.  LIST can be a sequence."
            ;; Wish there was a way not to have to specify all the arguments
            ;; twice.  Well see if I find one or one day thing of one.
            ;; complicating things is that some of the arguments are optional.
-           (lambda (start end filename &optional append visit lockname mustbenew)
+           (lambda (start end fname &optional append visit lockname mustbenew)
              (unless visit (setq visit 'no-message))
-             (funcall this-fn start end filename append visit lockname mustbenew)))
+             (funcall this-fn start end fname append visit lockname mustbenew)))
           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
