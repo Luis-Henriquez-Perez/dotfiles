@@ -51,4 +51,4 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
           (funcall (or #',setter #'set) ',symbol ,value)))
 
 (provide 'oo-base-custom)
-;; oo-base-custom.el ends here
+;;; oo-base-custom.el ends here
