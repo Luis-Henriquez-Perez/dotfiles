@@ -37,12 +37,11 @@
 ;;
 ;;; Code:
 (require 'oo-base-library)
-;;;; custom 
+;;;; custom
 (defvar oo-old-values-alist nil
   "An alist that contains symbols I want to \"reset\" after startup.
-Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL is the
-symbol whose value should be reset to OLD-VALUE by calling SETTER with
-SYMBOL and OLD-VALUE.")
+Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL's value should be
+reset to OLD-VALUE by calling SETTER with SYMBOL and OLD-VALUE.")
 
 (defmacro startup-set! (symbol value &optional setter)
   "Set VAR to VALUE using SETTER.
