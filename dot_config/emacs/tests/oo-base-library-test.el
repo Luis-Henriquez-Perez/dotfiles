@@ -39,7 +39,7 @@
 (setq ert-batch-print-level 10)
 (setq ert-batch-print-length 120)
 
-(require 'oo-base-lib)
+(require 'oo-base-library)
 
 (ert-deftest oo--match-form-wrappers ()
   (should (equal '(((let! ((foo var) ((a . b) var)))) var)
@@ -156,38 +156,38 @@
 
 (ert-deftest oo--interpret-block ()
   (should (equal '((:wrappers ((save-excursion))) (1))
-                 (oo-block-interpret-tree nil '((with! (save-excursion)) 1))))
+                 (oo--interpret-block nil '((with! (save-excursion)) 1))))
 
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
-                 (oo-block-interpret-tree nil '((for! (n 10) (+ 1 1))))))
+                 (oo--interpret-block nil '((for! (n 10) (+ 1 1))))))
 
   (should (equal '((:let ((foo nil))) ((collecting! foo 1)))
-                 (oo-block-interpret-tree nil '((collecting! foo 1)))))
+                 (oo--interpret-block nil '((collecting! foo 1)))))
 
   ;; Stubbing functions.
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo-block-interpret-tree nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--interpret-block nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo-block-interpret-tree nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--interpret-block nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
 
   (should (equal '(nil ((cl-flet ((foo #'+)) (+ 2 2))))
-                 (oo-block-interpret-tree nil '((flet! foo #'+) (+ 2 2)))))
+                 (oo--interpret-block nil '((flet! foo #'+) (+ 2 2)))))
 
   (should (equal '(nil ((lef! ((foo (lambda () (+ 1 1)))) (+ 2 2))))
-                 (oo-block-interpret-tree nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--interpret-block nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
 
   ;; Getting data from `without!'.
   (should (equal '((:no-let (a b c)) nil)
-                 (oo-block-interpret-tree nil '((without! a b c)))))
+                 (oo--interpret-block nil '((without! a b c)))))
   
   ;; Getting data from `let!'.
   (should (equal `((:let ((foo nil))) ((setq foo 1)))
-                 (oo-block-interpret-tree nil '((set! foo 1)))))
+                 (oo--interpret-block nil '((set! foo 1)))))
 
   ;; (should (equal `((:let ((foo bar))) nil)
   ;;                (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
-  ;;                  (oo-block-interpret-tree nil '((gensym! bar))))))
+  ;;                  (oo--interpret-block nil '((gensym! bar))))))
   )
 ;; I want to see how it works with multiple data.
 
@@ -261,29 +261,11 @@
   ;; Works with an existing function.
   (should (= 4 (lef! ((buffer-string (lambda () 4))) (buffer-string)))))
 
-;; This is not passing, but I think it has to do with how =emacs -q= treats the minibuffer.
-;; (ert-deftest quiet! ()
-;;   ;; (should-not (progn (quiet! (message "LOUD NOISE")) ()))
-;;   (should (string-empty-p (oo-buffer-contents "*Messages*")))
-;;   (should (progn (message "QUIET NOISE")
-;;                  (string-match-p "QUIET NOISE" (oo-buffer-contents "*Messages*"))))
-;;   (should-not (progn (quiet! (message "LOUD NOISE"))
-;;                      (string-match-p "LOUD NOISE" (oo-buffer-contents "*Messages*")))))
-
-;; (ert-deftest oo-condition-case-fn ()
-;;   (should (= 1 (funcall (oo-condition-case-fn (lambda ()))))))
-
-;; (ert-deftest oo--map-let-binds ()
-;;   (should (equal '((foo '(a 1 b 2)) (!a (map-elt foo 'a)) (!b (map-elt foo 'b)))
-;;                  (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest_) 'foo)))
-;;                    (oo--map-let-binds ''(a 1 b 2) '(+ !a !b) :regexp "\\`!\\(.+\\)"))))
-;;   ;; (should-not (oo--map-let-binds 'plist '(!foo !bar) :regexp (rx ())))
-;;   ;; (should (oo--map-let-binds 'plist '(!foo !bar) :regexp "\\`![^[:space:]]+"))
-;;   ;; (should (equal (oo--map-let-binds '(!foo !bar))))
-;;   )
-
-;; (ert-deftest with-map! ()
-;;   (should (= 3 (with-map! '((:a . 1) (:b . 2)) (+ !a !b))))
-;;   (should (= 3 (with-map! '(:a 1 :b 2) (+ !a !b)))))
+(ert-deftest oo-const ()
+  (should (equal "foo" (funcall (oo-const "foo"))))
+  (should (equal '(1 2 3) (funcall (oo-const '(1 2 3)))))
+  (should (= 4 (funcall (oo-const 4) 1 2)))
+  (should (= 4 (funcall (oo-const 4) 1)))
+  (should (= 4 (funcall (oo-const 4)))))
 
 (provide 'oo-base-library-test)

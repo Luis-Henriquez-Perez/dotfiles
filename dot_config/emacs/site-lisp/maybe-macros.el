@@ -254,3 +254,80 @@
 ;; packages before running its code, or it could even fail.  And it is painful
 ;; to write scripts without the functions and macros I painstakingly wrote to
 ;; help me.  Another advantage is I can use my library of helpers anywhere even
+
+(defun oo-compose (&rest fns)
+  "Return a function that is a composition of FNS.
+FNS are a list of functions.  The returned function accepts a variable number of
+arguments and returns the result of applying the previous function to the
+arguments (right to left)."
+  (lambda (&rest args)
+    (cl-reduce (lambda (outer inner) nil) fns)))
+
+;; I'd like to have the signature be something like ~(function &rest args &key
+;; ...)~; that way it would be truly analogous to =funcall=. However, then the
+;; signature would ambiguous if =function= has arguments that are the same as
+;; keys specified by =&key=.
+
+(cl-defun oo-condition-case-fn (fn &key (handlers 'error) (action #'ignore))
+  "Return a function that calls ACTION when errors matching HANDLERS are raised.
+ACTION is a function with three arguments the error object, FN and the list of
+arguments FN will be called with."
+  ;; To be honest I'm not sure if I need to make a gensym for the variable
+  ;; `err'.  I do it just in case.
+  (cl-with-gensyms (err)
+    `(lambda (&rest args)
+       (condition-case ,err
+           (apply #',fn args)
+         (,handlers (funcall #',action ,err #',fn args))))))
+(defalias 'oo-ccase-fn 'oo-condition-case-fn)
+
+(ert-deftest oo-compose ()
+  (should (= 6 (funcall (oo-compose '1+ '+) 2 3)))
+  (should (= 1 (funcall (oo-compose '1+ -) 2 3))))
+
+(ert-deftest oo-condition-case-fn ()
+  (should (oo-condition-case-fn)))
+
+;; This is a backend function for the macro.  It is useful so that I can keep
+;; the
+(cl-defun oo--map-let-binds (map body &key regexp use-keywords)
+  "Return a list of let-bindings.
+MAP.  REGEXP is the regular expression that matches symbols that should be let
+bound.  REGEXP should have a group that matches they key used to search MAP."
+  (save-match-data
+    (let* ((mapsym (cl-gensym "map"))
+           (let-binds `((,mapsym ,map)))
+           (name nil)
+           (key nil))
+      (dolist (obj (flatten-list body))
+        (when (and obj
+                   (symbolp obj)
+                   (setq name (symbol-name obj))
+                   (string-match regexp name)
+                   (not (assoc obj let-binds)))
+          (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
+                             (match-string 1 name)))
+          (pushing! let-binds `(,obj (map-elt ,mapsym ',key)))))
+      (nreverse let-binds))))
+
+(defmacro with-map! (map &rest body)
+  `(let ,(oo--map-let-binds map body :regexp "![^[:space:]]+" :use-keywords nil)
+     ,@body))
+
+;; ;; Something I was always confused about was why adjoin instead of just using
+;; ;; =push=.  The latter is more performant; however I don't think that's.  The best reason I could
+;; ;; think of is that sometimes you want to re-evaluate parts of your configuration
+;; ;; and in that case it is more convenient to have =adjoin= over =push=.
+;; (cl-defmacro adjoin! (place value &key test key test-not)
+;;   "Adjoin value to place.
+;; Same as `adjoining!' but use `set!' as the setter.  Meant to be used for
+;; customizing variables."
+;;   `(adjoining! ,place ,value :test ,test :key ,key :test-not ,test-not :setter set!))
+;;;; with-map!
+;; This is similar to the idea of =let-alist= but it works for plists.  And it
+;; has better symbols.
+;; (defun oo-bang-symbol-p (obj)
+;;   "Return non-nil if OBJ is a bang symbol."
+;;   (and obj
+;;        (symbolp obj)
+;;        (string-match-p "\\`![^[:space:]]+" (symbol-name obj))))
