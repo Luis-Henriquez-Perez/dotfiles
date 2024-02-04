@@ -219,7 +219,7 @@ SETTER is the same as in `appending!'."
 (cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
   "Set PLACE to the union of PLACE and FORM.
 SETTER is the same as in `appending!'."
-  (alet `(:test ,test :test-not ,test-not :key ,key)
+  (alet! `(:test ,test :test-not ,test-not :key ,key)
     `(,setter ,place (cl-union ,place ,list ,@it))))
 
 ;; This is really messy lol.  I am sure there is a better way to do this.
@@ -346,21 +346,25 @@ DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
      (list data tree))))
 
 (defmacro block! (name &rest body)
-  "Same as `cl-block' but apply BODY depending on particular forms.
+  "Same as `cl-block' but modify BODY depending on particular forms.
 Specifically each of the forms.
-(set! SYM VALUE)             implicitly let bind SYM to nil.
-(set! SYM VALUE :init VAL)   same as set! but let bind SYM to VAL.
-(pushing! SYM VAL)           implicitly let bind SYM to nil.
-(pushing! SYM VAL :init VAL) same.
-(pushing!)                   same as with collecting!
-(gensym! SYM)                implicitly let bind SYM to (gensym \"SYM\")
-(wrap! SYM1 SYM2)            surround block body with.
-(with! SYM1 VAR2)            surround block body with
-(exclude! VAR1 VAR2 ...)     do not let bind the following
-(without! VAR1 ...)          same as `excluding!'.
-(stub! NAME ARGS . BODY)     surround following forms with
-(nflet! NAME ARGS . BODY)    surround following forms with
-(for! ...)                   surround loops with"
+(set! SYM VALUE)            implicitly let bind SYM to nil.
+(set! SYM VALUE :init VAL)  same as set! but let bind SYM to VAL.
+(...ing! SYM VAL)           implicitly let bind SYM to nil.
+(...ing! SYM VAL :init VAL) same as.
+(gensym! SYM)               implicitly let bind SYM to (gensym \"SYM\").
+(wrap! . WRAPPERS)          surround block body with WRAPPERS.
+                            WRAPPERS is as in `oo-wrap-forms'.
+(with! . WRAPPERS)          same as WRAPPERS.
+(exclude! . VARS)           do not let bind any vars in VARS.
+(without! . VARS)           same as `exclude!'.
+(stub! NAME ARGS . BODY)    wrap following forms with `(cl-letf (()))'.
+(nflet! NAME ARGS . BODY)   wrap following forms with `(lef! (()))'.
+(for! ...)                  wrap the loop with `(catch 'break!) and its body.
+                            with `(catch 'continue!)'.
+(dolist/while)              same as for!
+
+Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 1))
   (let! (((data body) (oo--interpret-block nil body))
          ;; lets is an alist.
@@ -369,12 +373,18 @@ Specifically each of the forms.
          (nolets (plist-get data :nolet))
          (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
          (wrappers `((cl-block ,name) (let ,binds) ,@(plist-get data :wrappers))))
-    ;; (pushing! wrappers ())
-    ;; (pushing! wrappers ())
     (oo-wrap-forms wrappers body)))
 
 (defmacro break! ())
-(defmacro continue! ())
+(defmacro continue! ()
+  "Skip the current iteration of loop.
+This is meant to be used in `block!'.  For what counts as a loop is, see
+`oo-block-macro-loop-macros' and `oo-block-parse-loop'."
+  `(throw 'continue! nil))
+(defalias 'skip! 'continue!)
+(defmacro exclude! ())
+(defalias 'with! 'exclude!)
+(defmacro stub! ())
 ;;;; letf
 ;; I am conflicted between the name =this-fn= and =orig-fn=.  I think all else
 ;; being equal =orig-fn= is a better name than =this-fn=.  But I know that

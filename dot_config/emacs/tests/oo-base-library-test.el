@@ -159,6 +159,7 @@
   ;; Should not interpret quoted or backquoted forms.
   (should (equal (list nil '('(for! (n 10) (+ 1 1))))
                  (oo--interpret-block nil '('(for! (n 10) (+ 1 1))))))
+
   (should (equal '((:wrappers ((save-excursion))) (1))
                  (oo--interpret-block nil '((with! (save-excursion)) 1))))
 
