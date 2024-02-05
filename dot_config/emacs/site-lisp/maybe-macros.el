@@ -290,30 +290,6 @@ arguments FN will be called with."
 
 ;; This is a backend function for the macro.  It is useful so that I can keep
 ;; the
-(cl-defun oo--map-let-binds (map body &key regexp use-keywords)
-  "Return a list of let-bindings.
-MAP.  REGEXP is the regular expression that matches symbols that should be let
-bound.  REGEXP should have a group that matches they key used to search MAP."
-  (save-match-data
-    (let* ((mapsym (cl-gensym "map"))
-           (let-binds `((,mapsym ,map)))
-           (name nil)
-           (key nil))
-      (dolist (obj (flatten-list body))
-        (when (and obj
-                   (symbolp obj)
-                   (setq name (symbol-name obj))
-                   (string-match regexp name)
-                   (not (assoc obj let-binds)))
-          (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
-                             (match-string 1 name)))
-          (pushing! let-binds `(,obj (map-elt ,mapsym ',key)))))
-      (nreverse let-binds))))
-
-(defmacro with-map! (map &rest body)
-  `(let ,(oo--map-let-binds map body :regexp "![^[:space:]]+" :use-keywords nil)
-     ,@body))
-
 ;; ;; Something I was always confused about was why adjoin instead of just using
 ;; ;; =push=.  The latter is more performant; however I don't think that's.  The best reason I could
 ;; ;; think of is that sometimes you want to re-evaluate parts of your configuration
@@ -331,3 +307,13 @@ bound.  REGEXP should have a group that matches they key used to search MAP."
 ;;   (and obj
 ;;        (symbolp obj)
 ;;        (string-match-p "\\`![^[:space:]]+" (symbol-name obj))))
+
+;; (defmacro collect! (pred &rest body)
+;;   "Same as `for!' but accumulate result of body into TARGET."
+;;   `(for! ()
+;;      (pushing! ,target (macroexp-progn body))))
+
+;;;; buffer-contents
+(defun oo-buffer-contents (buffer)
+  (with-current-buffer (get-buffer buffer)
+    (buffer-string)))

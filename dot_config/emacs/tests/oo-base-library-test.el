@@ -41,28 +41,54 @@
 
 (require 'oo-base-library)
 
+(ert-deftest appending! ()
+  (let (foo plist)
+    (appending! foo '(1 2))
+    (should (equal foo '(1 2)))
+    (appending! foo '(3 4))
+    (should (equal foo '(1 2 3 4)))
+    (appending! (plist-get plist :a) '(1))
+    (should (equal plist '(:a 1)))))
+
+(ert-deftest with-map! ()
+  ;; (should-not (macroexpand-1 '(with-map! '(a 1 b 2) (+ !a !b))))
+  (should (= 3 (with-map! '(a 1 b 2) (+ !a !b)))))
+
+(ert-deftest oo--map-let-binds ()
+  (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
+    (let ((map '(!foo !bar (+ 1 !zap)))
+          (regexp "!\\([^[:space:]]+\\)")
+          (result1 '((var map)
+                     (!foo (map-elt var ':foo))
+                     (!bar (map-elt var ':bar))
+                     (!zap (map-elt var ':zap))))
+          (result2 '((var map)
+                     (!foo (map-elt var 'foo))
+                     (!bar (map-elt var 'bar))
+                     (!zap (map-elt var 'zap)))))
+      (should (equal result1 (oo--map-let-binds 'map map regexp :use-keywords)))
+      (should (equal result2 (oo--map-let-binds 'map map regexp))))))
+
 (ert-deftest oo--match-form-wrappers ()
-  (should (equal '(((let! ((foo var) ((a . b) var)))) var)
-                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
-                   (oo--match-form-wrappers '(&as foo (a . b))))))
-  (should (equal (list nil '`(,a ,b ,c ,d))
-                 (oo--match-form-wrappers '(a b c d))))
-  ;; ;; Works with `&as' directive.
-  (should (equal (list '((let! ((pair gsym) ((a . b) gsym))))
-                       '`(,a ,b ,gsym ,d))
-                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'gsym)))
-                   (oo--match-form-wrappers '(a b (&as pair (a . b)) d)))))
-  ;; ;; Works with `&map' directive.
-  (should (equal '(((let ((mapvar mymap))) (with-map! mapvar)) `(,a ,b ,mapvar ,d))
-                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'mapvar)))
-                   (oo--match-form-wrappers '(a b (&map mymap) d)))))
-  ;; ;; Works with vectors.
-  (should (equal '(nil `(,a ,b [,c] ,d)) (oo--match-form-wrappers '(a b [c] d))))
-  ;; ;; Can do multiple things.
-  (should (equal '(((let! ((pair foo) ((a . b) foo))))
-                   `(,a ,b [,foo] ,d))
-                 (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
-                   (oo--match-form-wrappers '(a b [(&as pair (a . b))] d))))))
+  (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
+    (cl-flet ((fn #'oo--match-form-wrappers))
+      (should (equal '(((let! ((foo var) ((a . b) var)))) var)
+                     (fn '(&as foo (a . b)))))
+      (should (equal (list nil '`(,a ,b ,c ,d))
+                     (fn '(a b c d))))
+      ;; ;; Works with `&as' directive.
+      (should (equal (list '((let! ((pair var) ((a . b) var))))
+                           '`(,a ,b ,var ,d))
+                     (fn '(a b (&as pair (a . b)) d))))
+      ;; ;; Works with `&map' directive.
+      (should (equal '(((let ((var mymap))) (with-map! var)) `(,a ,b ,var ,d))
+                     (fn '(a b (&map mymap) d))))
+      ;; ;; Works with vectors.
+      (should (equal '(nil `(,a ,b [,c] ,d)) (fn '(a b [c] d))))
+      ;; ;; Can do multiple things.
+      (should (equal '(((let! ((pair var) ((a . b) var))))
+                       `(,a ,b [,var] ,d))
+                     (fn '(a b [(&as pair (a . b))] d)))))))
 
 (ert-deftest oo-into-string ()
   (should (equal "foo" (oo-into-string 'foo)))
@@ -194,18 +220,9 @@
   ;;                (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
   ;;                  (oo--interpret-block nil '((gensym! bar))))))
   )
-;; I want to see how it works with multiple data.
 
 ;; (ert-deftest block! ()
-;;   (block! nil (+ 1 1) (maxing! foo 2))
-;;   (should (pcase (block! nil (+ 1 1) (appending! foo 2))
-;;             (`)
-;;             (_))))
-
-;; (ert-deftest oo-pcase-pattern ()
-;;   (should (equal '`((,a (,b) ,c . ,d)) (oo-pcase-pattern '((a (b) c . d)))))
-;;   (should (equal '`[,a ,b ,c] (oo-pcase-pattern [a b c])))
-;;   (should (equal '`(,a [,b [,d]] ,e) (oo-pcase-pattern '(a [b [d]] e)))))
+;;   (block! nil (+ 1 1) (maxing! foo 2)))
 
 (ert-deftest oo--let-bind ()
   (should (equal '((lef! ((f (lambda nil nil))))) (oo--let-bind '(#'f (lambda () nil)))))
@@ -217,9 +234,13 @@
                    (oo--let-bind '((&as foo (a b)) (1 . 3)))))))
 
 (ert-deftest let! ()
-  (should (macroexpand-1 '(let! (((foo) '(1 2 3 4))) 1)))
+  ;; (should-not (macroexpand-1 '(let! ((:flet foo #'car)) (foo '(1)))))
+  (should (= 1 (let! ((:flet foo #'car)) (foo '(1)))))
+  (should (= 1 (let! ((:noflet foo #'car)) (foo '(1)))))
+  (should (= 2 (let! ((:flet foo (a) (+ a a))) (foo '(1)))))
+  ;; (should (macroexpand-1 '(let! (((foo) '(1 2 3 4))) 1)))
   (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
-  (should (macroexpand-1 '(let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
+  ;; (should (macroexpand-1 '(let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
   (should (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
   (should (equal '((1 . 2) 1 2) (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
   (should (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
@@ -256,7 +277,10 @@
   (should (= 3 (funcall (oo-rpartial '- 5 2) 10))))
 
 (ert-deftest lef! ()
-  ;; (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
+  (should (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))
+  (should (equal '(-1 3)
+                 (lef! ((a #'-) (b (x y) (+ x y))) (list (a 4 5) (b 1 2)))))
+
   (should (= 5 (lef! ((+ #'-)) (+ 10 5))))
   ;; I should be able to use this-fn.  I was worried this would not work with
   ;; lexical binding enabled, but it is looking like it does.
@@ -265,6 +289,10 @@
   (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
   ;; Works with an existing function.
   (should (= 4 (lef! ((buffer-string (lambda () 4))) (buffer-string)))))
+
+;; (ert-deftest collect! ()
+;;   (should (equal '() (let (result) (collect! (n 4) n))))
+;;   (should (equal 50 (let (result) (collect! 5 10)))))
 
 (ert-deftest oo-const ()
   (should (equal "foo" (funcall (oo-const "foo"))))
