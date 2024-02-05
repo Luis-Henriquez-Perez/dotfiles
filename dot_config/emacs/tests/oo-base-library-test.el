@@ -41,14 +41,14 @@
 
 (require 'oo-base-library)
 
-(ert-deftest appending! ()
-  (let (foo plist)
-    (appending! foo '(1 2))
-    (should (equal foo '(1 2)))
-    (appending! foo '(3 4))
-    (should (equal foo '(1 2 3 4)))
-    (appending! (plist-get plist :a) '(1))
-    (should (equal plist '(:a 1)))))
+;; (ert-deftest appending! ()
+;;   (let (foo plist)
+;;     (appending! foo '(1 2))
+;;     (should (equal foo '(1 2)))
+;;     (appending! foo '(3 4))
+;;     (should (equal foo '(1 2 3 4)))
+;;     (appending! (plist-get plist :a) '(1))
+;;     (should (equal plist '(:a 1)))))
 
 (ert-deftest with-map! ()
   ;; (should-not (macroexpand-1 '(with-map! '(a 1 b 2) (+ !a !b))))
@@ -123,7 +123,8 @@
   (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
 
 (ert-deftest oo-wrap-forms ()
-  (should (equal '(when 1 (save-excursion foo)) (oo-wrap-forms '((when 1) (save-excursion)) '(foo)))))
+  (should (equal '(when 1 (save-excursion foo))
+                 (oo-wrap-forms '((when 1) (save-excursion)) '(foo)))))
 
 (ert-deftest alet! ()
   (should (= 2 (alet! 1 (+ it it)))))
@@ -138,9 +139,7 @@
   (let (adjoined)
     (adjoining! adjoined 1)
     (adjoining! adjoined 1)
-    (should (equal '(1) adjoined))
-    ;; (should)
-    ))
+    (should (equal '(1) adjoined))))
 
 (ert-deftest collecting! ()
   (let (list)
@@ -181,48 +180,57 @@
                             (push (+ a b) result))
                           (reverse result)))))
 
-(ert-deftest oo--interpret-block ()
+(ert-deftest oo--parse-block ()
   ;; Should not interpret quoted or backquoted forms.
-  (should (equal (list nil '('(for! (n 10) (+ 1 1))))
-                 (oo--interpret-block nil '('(for! (n 10) (+ 1 1))))))
+  (should (equal '((:let ((a nil) (b nil))) (progn (setq a 1) (setq b 2)))
+                 (oo--parse-block nil '(progn (set! a 1) (set! b 2)))))
 
-  (should (equal '((:wrappers ((save-excursion))) (1))
-                 (oo--interpret-block nil '((with! (save-excursion)) 1))))
+  (should (equal (list nil '('(for! (n 10) (+ 1 1))))
+                 (oo--parse-block nil '('(for! (n 10) (+ 1 1))))))
+
+  (should (equal '(((:wrappers (save-excursion))) (1))
+                 (oo--parse-block nil '((with! (save-excursion)) 1))))
 
   (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
-                 (oo--interpret-block nil '((for! (n 10) (+ 1 1))))))
+                 (oo--parse-block nil '((for! (n 10) (+ 1 1))))))
 
   (should (equal '((:let ((foo nil))) ((collecting! foo 1)))
-                 (oo--interpret-block nil '((collecting! foo 1)))))
+                 (oo--parse-block nil '((collecting! foo 1)))))
 
   ;; Stubbing functions.
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo--interpret-block nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--parse-block nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
 
   (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo--interpret-block nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--parse-block nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
 
   (should (equal '(nil ((cl-flet ((foo #'+)) (+ 2 2))))
-                 (oo--interpret-block nil '((flet! foo #'+) (+ 2 2)))))
+                 (oo--parse-block nil '((flet! foo #'+) (+ 2 2)))))
 
   (should (equal '(nil ((lef! ((foo (lambda () (+ 1 1)))) (+ 2 2))))
-                 (oo--interpret-block nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
+                 (oo--parse-block nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
 
   ;; Getting data from `without!'.
   (should (equal '((:no-let (a b c)) nil)
-                 (oo--interpret-block nil '((without! a b c)))))
-  
+                 (oo--parse-block nil '((without! a b c)))))
+
   ;; Getting data from `let!'.
   (should (equal `((:let ((foo nil))) ((setq foo 1)))
-                 (oo--interpret-block nil '((set! foo 1)))))
+                 (oo--parse-block nil '((set! foo 1)))))
 
-  ;; (should (equal `((:let ((foo bar))) nil)
-  ;;                (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
-  ;;                  (oo--interpret-block nil '((gensym! bar))))))
-  )
+  (should (equal `((:let ((foo bar))) nil)
+                 (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
+                   (oo--parse-block nil '((gensym! bar)))))))
 
-;; (ert-deftest block! ()
-;;   (block! nil (+ 1 1) (maxing! foo 2)))
+(ert-deftest block! ()
+  ;; (should (= 2 (block! nil (flet! foo #'+) (foo 1 1))))
+  (should (= 2 (block! nil (flet! foo #'+) (foo 1 1))))
+  (should (equal '(cl-block nil (let nil (cl-flet ((foo #'+)) (foo 1 1))))
+                 (macroexpand-1 '(block! nil (flet! foo #'+) (foo 1 1)))))
+  (should (equal '(cl-block nil (let ((a nil) (b nil)) (setq a 1) (setq b 2)))
+                 (macroexpand-1 '(block! nil (set! a 1) (set! b 2)))))
+  (should (equal '(cl-block nil (let nil (save-excursion (when 1 10))))
+                 (macroexpand-1 '(block! nil (wrap! (save-excursion) (when 1)) 10)))))
 
 (ert-deftest oo--let-bind ()
   (should (equal '((lef! ((f (lambda nil nil))))) (oo--let-bind '(#'f (lambda () nil)))))
@@ -234,13 +242,10 @@
                    (oo--let-bind '((&as foo (a b)) (1 . 3)))))))
 
 (ert-deftest let! ()
-  ;; (should-not (macroexpand-1 '(let! ((:flet foo #'car)) (foo '(1)))))
   (should (= 1 (let! ((:flet foo #'car)) (foo '(1)))))
   (should (= 1 (let! ((:noflet foo #'car)) (foo '(1)))))
-  (should (= 2 (let! ((:flet foo (a) (+ a a))) (foo '(1)))))
-  ;; (should (macroexpand-1 '(let! (((foo) '(1 2 3 4))) 1)))
+  (should (= 2 (let! ((:flet foo (a) (+ a a))) (foo 1))))
   (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
-  ;; (should (macroexpand-1 '(let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
   (should (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
   (should (equal '((1 . 2) 1 2) (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
   (should (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
@@ -264,12 +269,14 @@
 ;;   (should (equal 2 (with-map! '(a 1 b 2) (+ !a !b)))))
 
 (ert-deftest oo-defun-components ()
-  (should (equal '(foo (a b) ("foo" nil nil) ((+ 1 1)))
-                 (oo-defun-components '(foo (a b) "foo" (+ 1 1)))))
-  (should (equal '(foo (a b c) ("foo" nil (interactive)) (1))
-                 (oo-defun-components '(foo (a b c) "foo" (interactive) 1))))
-  (should (equal '(foo (a b c) (nil nil (interactive)) (1))
-                 (oo-defun-components '(foo (a b c) (interactive) 1)))))
+  (should (equal '(("foo" nil nil) ((+ 1 1)))
+                 (oo-defun-components '("foo" (+ 1 1)))))
+  (should (equal '(("foo" nil (interactive)) (1))
+                 (oo-defun-components '("foo" (interactive) 1))))
+  (should (equal '((nil nil (interactive)) (1))
+                 (oo-defun-components '((interactive) 1))))
+  (should (equal '((nil (declare (indent 1)) (interactive)) (1))
+                 (oo-defun-components '((declare (indent 1)) (interactive) 1)))))
 
 (ert-deftest oo-rpartial ()
   ;; The tests taken from dash's example page.

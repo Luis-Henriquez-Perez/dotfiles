@@ -302,7 +302,7 @@ MATCH-FORM is a nested form of lists, vectors, and symbols."
     (`(#',(and fn (pred symbolp)) ,lambda)
      `((lef! ((,fn ,lambda)))))
     (`(,(or ':noflet :nflet) ,(and fn (pred symbolp)) ,lambda)
-     `((letf! ((,fn ,lambda)))))
+     `((lef! ((,fn ,lambda)))))
     (`(,(and mf (or (pred listp) (pred vectorp))) ,value)
      (pcase-let ((`(,wrappers ,pcase-mf) (oo--match-form-wrappers mf)))
        `((pcase-let* ((,pcase-mf ,value))) ,@wrappers)))
@@ -340,7 +340,7 @@ Let bind function."
 Examples of such symbols include `appending!' and `collecting!'."
   (and (symbolp obj) (string-match-p "ing!\\'" (symbol-name obj))))
 
-(defun oo--interpret-block (data tree)
+(defun oo--parse-block (data tree)
   "Return an updated list of (DATA TREE) based on contents of TREE.
 DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
 `block!'."
@@ -348,8 +348,8 @@ DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
     (`(,(or 'quote 'backquote) . ,_)
      (list data tree))
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
-     (pcase-let* ((`(,data1 ,tree) (oo--interpret-block nil body)))
-       (list (map-merge 'plist data data1)
+     (pcase-let* ((`(,data1 ,tree) (oo--parse-block nil body)))
+       (list (map-merge-with 'plist #'append data data1)
              `(catch 'break! (,loop ,pred (catch 'continue ,@tree))))))
     (`(,(and name (pred oo-ing-symbol-p)) ,symbol . ,(guard t))
      (alet! (cl-case name
@@ -368,33 +368,21 @@ DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
     (`((gensym! ,(and name (pred symbolp))) . ,rest)
      (adjoining! (map-elt data :let) (list name (cl-gensym (symbol-name name))))
      (list data rest))
-    (`(set! ,match-form ,_ . ,(and plist (guard t)))
+    (`(set! ,match-form ,value . ,(and plist (guard t)))
      (alet! (map-elt plist :init)
-       (adjoining! (map-elt data :let)
-                   (list match-form it) :test #'equal :key #'car))
-     (list data (cons 'setq (cdr tree))))
-    ;; Typically I will use these when I am.
-    (`((,(or 'stub! 'flet!)  ,name ,fn) . ,rest)
-     (let! (((data1 rest) (oo--interpret-block nil rest)))
-       (list (map-merge 'plist data data1) `((cl-flet ((,name ,fn)) ,@rest)))))
-    (`((,(or 'stub! 'flet!) ,name ,args . ,body) . ,rest)
-     (let! (((data1 rest) (oo--interpret-block nil rest))
-            ((data2 body) (oo--interpret-block nil body)))
-       (list (map-merge 'plist data data1 data2)
-             `((cl-flet ((,name ,args ,@body)) ,@rest)))))
+       (pushing! (map-elt data :let) (list match-form it)))
+     (list data `(setq ,match-form ,value)))
+    (`((,(or 'stub! 'flet!) . ,args) . ,rest)
+     (let! (((data1 rest) (oo--parse-block nil rest)))
+       (list (map-merge 'plist data data1) `((cl-flet ((,@args)) ,@rest)))))
     ;; This is my own variant that takes the original function.  I name it.
-    (`((,(or 'nflet! 'noflet!)  ,name ,fn) . ,rest)
-     (let! (((data1 rest) (oo--interpret-block nil rest)))
-       (list (map-merge 'plist data data1) `((flet! ((,name ,fn)) ,@rest)))))
-    (`((,(or 'nflet! 'noflet!) ,name ,args . ,body) . ,rest)
-     (let! (((data1 rest) (oo--interpret-block nil rest))
-            ((data2 body) (oo--interpret-block nil body)))
-       (list (map-merge 'plist data data1 data2)
-             `((lef! ((,name (lambda ,args ,@body))) ,@rest)))))
-    ((and (pred (listp)) (pred (not oo-cons-cell-p)) (pred (not null)))
-     (pcase-let ((`(,data1 ,tree1) (oo--interpret-block nil (car tree)))
-                 (`(,data2 ,tree2) (oo--interpret-block nil (cdr tree))))
-       (list (map-merge 'plist data1 data2)
+    (`((,(or 'nflet! 'noflet!) . ,args) . ,rest)
+     (let! (((data1 rest) (oo--parse-block nil rest)))
+       (list (map-merge 'plist data data1) `((lef! ((,@args)) ,@rest)))))
+    ((and (pred listp) (pred (not oo-cons-cell-p)) (pred (not null)))
+     (pcase-let ((`(,data1 ,tree1) (oo--parse-block nil (car tree)))
+                 (`(,data2 ,tree2) (oo--parse-block nil (cdr tree))))
+       (list (map-merge-with 'plist #'append data data1 data2)
              (cons tree1 tree2))))
     (_
      (list data tree))))
@@ -447,7 +435,7 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 1))
-  (let! (((data body) (oo--interpret-block nil body))
+  (let! (((data body) (oo--parse-block nil body))
          ;; lets is an alist.
          (lets (map-elt data :let))
          ;; nolets is a list of symbols.
@@ -505,40 +493,39 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
         (push `((symbol-function #',sym) ,it) binds)))
     `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
-(defun oo-defun-components (arglist)
-  "Return the components of defun from ARGLIST.
-ARGLIST is the arglist of `defun' or similar macro.
-The components returned are in the form of (name args (docstring declaration
-interactive-form) body)."
-  (let! (((name args . body) arglist)
-         (docstring (when (stringp (car-safe body)) (pop body)))
-         (decls (when (equal 'declare (car-safe (car-safe body)))
-                  (pop body)))
-         (iform (when (equal 'interactive (car-safe (car-safe body)))
-                  (pop body))))
-    (list name args (list docstring decls iform) body)))
+(defun oo-defun-components (body)
+  "Divide BODY into its components.
+The return value should be of the form (docstring declarations interactive-form
+body)."
+  (let (docstring decls int)
+    (setq docstring (when (stringp (car-safe body)) (pop body)))
+    (setq decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
+    (setq int (when (equal 'interactive (car-safe (car-safe body))) (pop body)))
+    (list (list docstring decls int) body)))
 
-(defmacro defmacro! (&rest args)
+(defmacro defmacro! (name arglist &rest body)
   "Same as `defmacro!' but wrap body with `block!'.
+NAME, ARGLIST and BODY are the same as `defmacro!'.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (let! (((name arglist metadata body) (oo-defun-components args))
+  (let! (((metadata body) (oo-defun-components body))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
     `(cl-defmacro ,name ,arglist
        ,@(cl-remove-if #'null metadata)
-       (block! ,name (excluding! ,args) ,@body))))
+       (block! ,name (exclude! ,@args) ,@body))))
 
-(defmacro defun! (&rest args)
+(defmacro defun! (name arglist &rest body)
   "Same as `defun' but wrap body with `block!'.
+NAME, ARGS and BODY are the same as in `defun'.
 
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (let! (((name arglist metadata body) (oo-defun-components args))
+  (let! (((metadata body) (oo-defun-components body))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
     `(cl-defun ,name ,arglist
        ,@(cl-remove-if #'null metadata)
-       (block! ,name (excluding! ,@args) ,@body))))
+       (block! ,name (exclude! ,@args) ,@body))))
 ;;;; looping
 ;; There is a huge question of whether to automatically wrap loops with
 ;; =block!=, but I decided to.
@@ -594,10 +581,6 @@ Evaluate body for every element in sequence.  Match form is the same as in
           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
-;;;; buffer-contents
-(defun oo-buffer-contents (buffer)
-  (with-current-buffer (get-buffer buffer)
-    (buffer-string)))
-
+;;; provide
 (provide 'oo-base-library)
 ;;; oo-base-library.el ends here
