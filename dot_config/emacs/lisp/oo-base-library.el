@@ -345,12 +345,12 @@ Examples of such symbols include `appending!' and `collecting!'."
 DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
 `block!'."
   (pcase tree
-    (`(,(or 'quote 'backquote) . ,_)
+    (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
      (list data tree))
     (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
      (pcase-let* ((`(,data1 ,tree) (oo--parse-block nil body)))
        (list (map-merge-with 'plist #'append data data1)
-             `(catch 'break! (,loop ,pred (catch 'continue ,@tree))))))
+             `(catch 'break! (,loop ,pred (catch 'continue! ,@tree))))))
     (`(,(and name (pred oo-ing-symbol-p)) ,symbol . ,(guard t))
      (alet! (cl-case name
               ((maxing! maximizing!) most-negative-fixnum)
@@ -387,7 +387,7 @@ DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
     (_
      (list data tree))))
 
-(defmacro block! (name &rest body)
+(defmacro block! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
 
@@ -441,8 +441,13 @@ Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
          ;; nolets is a list of symbols.
          (nolets (map-elt data :nolet))
          (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
-         (wrappers `((cl-block ,name) (let ,binds) ,@(map-elt data :wrappers))))
+         (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
     (oo-wrap-forms wrappers body)))
+
+(defmacro return! (&optional value)
+  "Cause `block!' to exit and return VALUE.
+See `block!'."
+  `(throw 'return! ,value))
 
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
@@ -494,14 +499,14 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
     `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (body)
-  "Divide BODY into its components.
-The return value should be of the form (docstring declarations interactive-form
+  "Divide defun body, BODY, into its components.
+The return value should be of the form ((docstring declarations interactive)
 body)."
-  (let (docstring decls int)
-    (setq docstring (when (stringp (car-safe body)) (pop body)))
+  (let (doc decls int)
+    (setq doc (when (stringp (car-safe body)) (pop body)))
     (setq decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
     (setq int (when (equal 'interactive (car-safe (car-safe body))) (pop body)))
-    (list (list docstring decls int) body)))
+    (list (list doc decls int) body)))
 
 (defmacro defmacro! (name arglist &rest body)
   "Same as `defmacro!' but wrap body with `block!'.
@@ -529,18 +534,23 @@ NAME, ARGS and BODY are the same as in `defun'.
 ;;;; looping
 ;; There is a huge question of whether to automatically wrap loops with
 ;; =block!=, but I decided to.
-(defmacro for! (pred &rest body)
+(defmacro for! (loop-struct &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
+BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
+take the following forms:
 
-- (for! (repeat n) . BODY)
-- (for! n BODY)
-Repeat N times where n is an integer equal to or greater than zero.
+- n
+- (repeat n)
+Evaluate BODY N times where n is an integer equal to or greater than zero.
 
-- (for! (MATCH-FORM SEQUENCE) . BODY)
-Evaluate body for every element in sequence.  Match form is the same as in
+- (VAR NUMBER)
+Same as `dotimes'.
+
+- (MATCH-FORM SEQUENCE)
+Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 `let!'."
   (declare (indent 1))
-  (pcase pred
+  (pcase loop-struct
     ((or `(repeat ,n) (and n (pred integerp)))
      `(dotimes (_ ,n) ,@body))
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
@@ -555,9 +565,9 @@ Evaluate body for every element in sequence.  Match form is the same as in
               ((sequencep ,list)
                (seq-doseq (,elt ,list) ,@body))
               ((integerp ,list)
-               (for! ,list ,@body))
+               (dotimes (,elt ,list) ,@body))
               (t
-               (error "Unknown list predicate: %S" ',pred)))))))
+               (error "Unknown list predicate: %S" ',loop-struct)))))))
 
 (defalias 'dolist! 'for!)
 (defalias 'loop! 'for!)

@@ -5,7 +5,7 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz.io>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz.io>
 ;;
-;; Created: 28 Jan 2024
+;; Created: 05 Feb 2024
 ;;
 ;;
 ;; License: GPLv3
@@ -33,279 +33,176 @@
 ;;; Code:
 ;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
 
-(setq load-prefer-newer t)
-;; Recommended in emacs info so that forms are not abbreviated unless the are
-;; really large.
-(setq ert-batch-print-level 10)
-(setq ert-batch-print-length 120)
-
+(require 'buttercup)
 (require 'oo-base-library)
 
-;; (ert-deftest appending! ()
-;;   (let (foo plist)
-;;     (appending! foo '(1 2))
-;;     (should (equal foo '(1 2)))
-;;     (appending! foo '(3 4))
-;;     (should (equal foo '(1 2 3 4)))
-;;     (appending! (plist-get plist :a) '(1))
-;;     (should (equal plist '(:a 1)))))
+;; (buttercup-define-matcher :to-expand-into (form expansion)
+;;   (if (equal (macroexpand-1 form) expansion)
+;;       t
+;;     (cons nil (format ""))))
+(describe "break!"
+  (it "should exit a (catch 'break!) block"
+    ;; (expect 1 :to-equal (catch 'foo (throw 'foo 1) 2))
+    (expect 6 :to-equal (catch 'break! (break! 6) 7))))
 
-(ert-deftest with-map! ()
-  ;; (should-not (macroexpand-1 '(with-map! '(a 1 b 2) (+ !a !b))))
-  (should (= 3 (with-map! '(a 1 b 2) (+ !a !b)))))
+(describe "continue!"
+  (it "should exit a (catch 'continue!) block"
+    ;; (expect 1 :to-equal (catch 'foo (throw 'foo 1) 2))
+    (expect nil :to-equal (catch 'continue! (continue!) 7))))
 
-(ert-deftest oo--map-let-binds ()
-  (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
-    (let ((map '(!foo !bar (+ 1 !zap)))
-          (regexp "!\\([^[:space:]]+\\)")
-          (result1 '((var map)
-                     (!foo (map-elt var ':foo))
-                     (!bar (map-elt var ':bar))
-                     (!zap (map-elt var ':zap))))
-          (result2 '((var map)
-                     (!foo (map-elt var 'foo))
-                     (!bar (map-elt var 'bar))
-                     (!zap (map-elt var 'zap)))))
-      (should (equal result1 (oo--map-let-binds 'map map regexp :use-keywords)))
-      (should (equal result2 (oo--map-let-binds 'map map regexp))))))
+(describe "oo--parse-block"
+  (expect '(:let ((a nil) (b nil))) :to-equal (car (oo--parse-block nil '((set! a 1) (set! b 2))))))
 
-(ert-deftest oo--match-form-wrappers ()
-  (cl-letf* (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
-    (cl-flet ((fn #'oo--match-form-wrappers))
-      (should (equal '(((let! ((foo var) ((a . b) var)))) var)
-                     (fn '(&as foo (a . b)))))
-      (should (equal (list nil '`(,a ,b ,c ,d))
-                     (fn '(a b c d))))
-      ;; ;; Works with `&as' directive.
-      (should (equal (list '((let! ((pair var) ((a . b) var))))
-                           '`(,a ,b ,var ,d))
-                     (fn '(a b (&as pair (a . b)) d))))
-      ;; ;; Works with `&map' directive.
-      (should (equal '(((let ((var mymap))) (with-map! var)) `(,a ,b ,var ,d))
-                     (fn '(a b (&map mymap) d))))
-      ;; ;; Works with vectors.
-      (should (equal '(nil `(,a ,b [,c] ,d)) (fn '(a b [c] d))))
-      ;; ;; Can do multiple things.
-      (should (equal '(((let! ((pair var) ((a . b) var))))
-                       `(,a ,b [,var] ,d))
-                     (fn '(a b [(&as pair (a . b))] d)))))))
+(describe "collecting!"
+  (it "adds items to the end of the list"
+    (let (collected)
+      (collecting! collected 1)
+      (expect '(1) :to-equal collected)
+      (collecting! collected 2)
+      (expect '(1 2) :to-equal collected))))
 
-(ert-deftest oo-into-string ()
-  (should (equal "foo" (oo-into-string 'foo)))
-  (should (equal "1" (oo-into-string 1))))
+(describe "block!"
+  (cl-flet* ((parse (apply-partially #'oo--parse-block nil))
+             (body (body) (cadr (parse body)))
+             (let-binds (body) (plist-get (car (parse body)) :let))
+             (let-syms (body) (mapcar #'car (let-binds body)))
+             (lvalue (sym body) (car (map-elt (let-binds body) sym))))
+    (it "wraps loops with a `continue!' catch block"
+      (expect '(0 2) :to-equal (block! (for! (n 3)
+                                         (and (= 1 n) (continue!))
+                                         (collecting! nums n))
+                                 nums)))
+    (it "returns when `return!' is invoked"
+      (expect 2 :to-be (block! (when t (return! 2)) 3)))
+    (it "wraps the for loops with a break"
+      (expect '(nums) :to-equal (let-syms '(block! nil (for! (i 3) (collecting! nums i)) nums)))
+      (expect 2 :to-be (block! 2))
+      (expect 2 :to-be (catch 'break! (break! 2) 4))
+      (expect 2 :to-equal (block! (for! (n 10) (return! 2)) 3))
+      (expect 2 :to-be (block! nil (for! (x 3) (when (= x 2) (break! x)))))
+      (expect 5 :to-equal (block! nil (for! (i 10) (when (= 5 i) (break! 5))))))
+    (it "ignores quoted forms"
+      (expect nil :to-equal (let-binds '('(foo))))
+      (expect '('(foo)) :to-equal (body '('(foo)))))
+    (it "does not bind symbols marked for exclusion"
+      (expect (not (let-syms '((exclude! a) (set! a 1)))))
+      (expect (not (let-syms '((exclude! a) (counting! a 1))))))
+    (it "binds symbols specified by `maxing!' to `most-negative-fixnum'"
+      (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
+      (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
+    (it "binds symbols specified by `counting!' to 0"
+      (expect 0 :to-be (lvalue 'a '((counting! a 1)))))
+    (it "binds symbols specified by `minning!' to `most-positive-fixnum'"
+      (expect most-positive-fixnum :to-be (lvalue 'a '((minimizing! a 1))))
+      (expect most-positive-fixnum :to-be (lvalue 'a '((minning! a 1)))))
+    (it "binds symbols specified by set! to nil"
+      (expect '(a b) :to-equal (let-syms '((set! a 1) (set! b 2)))))
+    (it "binds symbols specified by other ING macros to nil"
+      (expect '(a) :to-equal (let-syms '((collecting! a 1))))
+      (expect '(a) :to-equal (let-syms '((appending! a 1))))
+      (expect '(a) :to-equal (let-syms '((prepending! a 1))))
+      (expect '(a) :to-equal (let-syms '((maxing! a 1)))))
+    (it "wraps subsequent forms with lef!"
+      (expect 10 :to-equal (block! nil (stub! plus (a b) (+ a (* 2 b))) (plus 6 2)))
+      (expect 10 :to-equal (block! nil (flet! plus #'+) (plus 5 5)))
+      (expect 10 :to-equal (block! nil
+                             (nflet! + (a b) (funcall this-fn 1 (* a b)))
+                             (+ 3 3))))))
 
-(ert-deftest oo-into-symbol ()
-  (should (equal 'foo (oo-into-symbol "foo"))))
+(describe "oo-list-marker-p"
+  (it "correctly identifies list markers"
+    (expect (oo-list-marker-p '&as))
+    (expect (oo-list-marker-p '&whole))
+    (expect (oo-list-marker-p '&rest)))
+  (it "correctly returns nil with non-list-markers"
+    (should-not (oo-list-marker-p 'foo))
+    (should-not (oo-list-marker-p '$as))))
 
-(ert-deftest oo-into-keyword ()
-  (should (equal :foo (oo-into-keyword "foo"))))
+(describe "oo-defun-components"
+  (it "separates the docstring from the body"
+    (expect (equal '(("foo" nil nil) ((+ 1 1)))
+                   (oo-defun-components '("foo" (+ 1 1))))))
+  (it "separates the interactive form from the body"
+    (expect (equal '((nil nil (interactive)) (1))
+                   (oo-defun-components '((interactive) 1))))
+    (expect (equal '(("foo" nil (interactive)) (1))
+                   (oo-defun-components '("foo" (interactive) 1))))))
 
-(ert-deftest oo-cons-cell-p ()
-  (should     (oo-cons-cell-p (cons 1 2)))
-  (should-not (oo-cons-cell-p (list 1 2)))
-  (should-not (oo-cons-cell-p '(1 2 . 3)))
-  (should-not (oo-cons-cell-p 1)))
+(describe "oo-rpartial"
+  (it "calls given function with the first argument"
+    (expect (= 3 (funcall (oo-rpartial '- 5) 8)))
+    (expect (= 3 (funcall (oo-rpartial '- 5 2) 10)))))
 
-(ert-deftest oo-proper-list-p ()
-  (should     (oo-proper-list-p '(1 2)))
-  (should-not (oo-proper-list-p '(1 . 2)))
-  (should-not (oo-proper-list-p '(1 2 . 3)))
-  (should-not (oo-proper-list-p 10.5)))
+(describe "with-map!"
+  (it "correctly assigns bang symbols to map values"
+    (expect (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
+    (expect (= 3 (with-map! '(a 1 b 2) (+ !a !b))))))
 
-(ert-deftest oo-improper-list-p ()
-  (should-not (oo-improper-list-p '(1 2)))
-  (should (oo-improper-list-p '(1 . 2)))
-  (should (oo-improper-list-p '(1 2 . 3)))
-  (should-not (oo-improper-list-p 10.5)))
+(describe "lef!"
+  (it "can bind a function symbol to a different function"
+    (expect (= 5 (lef! ((+ #'-)) (+ 10 5)))))
+  (it "can bind symbols to anonymous functions"
+    (expect (= 4 (lef! ((foo (lambda () 4))) (foo)))))
+  (it "stores original function in the symbol `this-fn'"
+    (expect (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
+    (expect (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))))
 
-(ert-deftest oo-snoc ()
-  (should (equal '(1 2 3 4 5) (oo-snoc '(1 2) 3 4 5)))
-  (should (equal '(1 2 3) (oo-snoc '(1 2) 3))))
+(describe "oo-const"
+  (it "returns the constant initialized"
+    (expect (equal '(1 2 3) (funcall (oo-const '(1 2 3))))))
+  (it "accepts a variable number of arguments"
+    (expect (= 4 (funcall (oo-const 4) 1 2)))
+    (expect (= 4 (funcall (oo-const 4) 1)))
+    (expect (= 4 (funcall (oo-const 4))))))
 
-(ert-deftest oo-wrap-forms ()
-  (should (equal '(when 1 (save-excursion foo))
-                 (oo-wrap-forms '((when 1) (save-excursion)) '(foo)))))
+(describe "for!"
+  (it "properly loops with predicate being (repeat N)"
+    (expect 11 :to-equal (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+  (it "destructures if predicate is (MATCH-FORM LIST)"
+    (expect '(3 9) :to-equal (let ((list '((1 2) (4 5)))
+                                   (result nil))
+                               (for! ((a b) list)
+                                 (push (+ a b) result))
+                               (reverse result))))
+  (it "properly loops with predicate being (VAR SEQUENCE)"
+    (expect '(4 3 2 1) :to-equal (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums))
+    (expect '(4 3 2 1) :to-equal (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums))
+    (expect '(111 108 108 101 104) :to-equal (let (chars) (for! (char "hello") (push char chars)) chars)))
+  (it "properly loops with predicate being (VAR INTEGER)"
+    (expect '(0 1 2 3) :to-equal (let (n) (for! (x 4) (collecting! n x)) n))
+    (expect 11 :to-equal (let ((n 1)) (for! (x 10) (cl-incf n)) n)))
+  (it "propertly loops with predicate being INTEGER"
+    (expect 11 :to-equal (let ((n 1)) (for! 10 (cl-incf n)) n))))
 
-(ert-deftest alet! ()
-  (should (= 2 (alet! 1 (+ it it)))))
+(describe "oo-wrap-forms"
+  (it "wrap forms around body"
+    (expect (equal '(when 1 (save-excursion foo))
+                   (oo-wrap-forms '((when 1) (save-excursion)) '(foo))))))
 
-(ert-deftest aif! ()
-  (should (= 1 (aif! 1 it 0))))
+(describe "awhen!"
+  (it "binds `it' to the result of condition"
+    (expect (= 2 (awhen! 1 (+ it it))))))
 
-(ert-deftest awhen! ()
-  (should (= 2 (awhen! 1 (+ it it)))))
+(describe "alet!"
+  (it "binds `it' to the result of the first argument"
+    (expect (= 2 (alet! 1 (+ it it))))))
 
-(ert-deftest adjoining! ()
-  (let (adjoined)
-    (adjoining! adjoined 1)
-    (adjoining! adjoined 1)
-    (should (equal '(1) adjoined))))
-
-(ert-deftest collecting! ()
-  (let (list)
-    (collecting! list 1)
-    (should (equal '(1) list))
-    (collecting! list 2)
-    (should (equal '(1 2) list))))
-
-(ert-deftest for! ()
-  "The for feature."
-  ;; Not working.
-  (should (equal '(((1 . 2) 1 2) ((3 . 4) 3 4))
-                 (let (list) (for! ((&as foo (a . b)) '((1 . 2) (3 . 4)))
-                               (push (list foo a b) list))
-                      (reverse list))))
-  ;; Works for the syntax =(repeat N)= where N is a positive integer.
-  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
-
-  ;; Also works if you just pass in the raw number.
-  ;; Not the most precise because I cannot specify that its the same symbol for
-  ;; all of =,(pred symbolp)= but good enough for now.
-  (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n)))
-
-  ;; Should allow me to loop through sequences.
-  (should (equal '(111 108 108 101 104)
-                 (let (chars) (for! (char "hello") (push char chars)) chars)))
-
-  (should (equal '(4 3 2 1)
-                 (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
-
-  (should (equal '(4 3 2 1)
-                 (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
-
-  ;; Should allow me to destructure arguments.
-  (should (equal '(3 9) (let ((list '((1 2) (4 5)))
-                              (result nil))
-                          (for! ((a b) list)
-                            (push (+ a b) result))
-                          (reverse result)))))
-
-(ert-deftest oo--parse-block ()
-  ;; Should not interpret quoted or backquoted forms.
-  (should (equal '((:let ((a nil) (b nil))) (progn (setq a 1) (setq b 2)))
-                 (oo--parse-block nil '(progn (set! a 1) (set! b 2)))))
-
-  (should (equal (list nil '('(for! (n 10) (+ 1 1))))
-                 (oo--parse-block nil '('(for! (n 10) (+ 1 1))))))
-
-  (should (equal '(((:wrappers (save-excursion))) (1))
-                 (oo--parse-block nil '((with! (save-excursion)) 1))))
-
-  (should (equal '(nil ((catch 'break! (for! (n 10) (catch 'continue (+ 1 1))))))
-                 (oo--parse-block nil '((for! (n 10) (+ 1 1))))))
-
-  (should (equal '((:let ((foo nil))) ((collecting! foo 1)))
-                 (oo--parse-block nil '((collecting! foo 1)))))
-
-  ;; Stubbing functions.
-  (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo--parse-block nil '((stub! foo () (+ 1 1)) (+ 2 2)))))
-
-  (should (equal '(nil ((cl-flet ((foo nil (+ 1 1))) (+ 2 2))))
-                 (oo--parse-block nil '((flet! foo () (+ 1 1)) (+ 2 2)))))
-
-  (should (equal '(nil ((cl-flet ((foo #'+)) (+ 2 2))))
-                 (oo--parse-block nil '((flet! foo #'+) (+ 2 2)))))
-
-  (should (equal '(nil ((lef! ((foo (lambda () (+ 1 1)))) (+ 2 2))))
-                 (oo--parse-block nil '((nflet! foo () (+ 1 1)) (+ 2 2)))))
-
-  ;; Getting data from `without!'.
-  (should (equal '((:no-let (a b c)) nil)
-                 (oo--parse-block nil '((without! a b c)))))
-
-  ;; Getting data from `let!'.
-  (should (equal `((:let ((foo nil))) ((setq foo 1)))
-                 (oo--parse-block nil '((set! foo 1)))))
-
-  (should (equal `((:let ((foo bar))) nil)
-                 (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'foo)))
-                   (oo--parse-block nil '((gensym! bar)))))))
-
-(ert-deftest block! ()
-  ;; (should (= 2 (block! nil (flet! foo #'+) (foo 1 1))))
-  (should (= 2 (block! nil (flet! foo #'+) (foo 1 1))))
-  (should (equal '(cl-block nil (let nil (cl-flet ((foo #'+)) (foo 1 1))))
-                 (macroexpand-1 '(block! nil (flet! foo #'+) (foo 1 1)))))
-  (should (equal '(cl-block nil (let ((a nil) (b nil)) (setq a 1) (setq b 2)))
-                 (macroexpand-1 '(block! nil (set! a 1) (set! b 2)))))
-  (should (equal '(cl-block nil (let nil (save-excursion (when 1 10))))
-                 (macroexpand-1 '(block! nil (wrap! (save-excursion) (when 1)) 10)))))
-
-(ert-deftest oo--let-bind ()
-  (should (equal '((lef! ((f (lambda nil nil))))) (oo--let-bind '(#'f (lambda () nil)))))
-  (should (equal '((let* (a))) (oo--let-bind 'a)))
-  (should (equal '((let* ((a 1)))) (oo--let-bind '(a 1))))
-  (should (equal '((pcase-let* ((`(,a ,b) '(1 2))))) (oo--let-bind '((a b) '(1 2)))))
-  (should (equal '((pcase-let* ((var (1 . 3)))) (let! ((foo var) ((a b) var))))
-                 (cl-letf (((symbol-function #'cl-gensym) (lambda (&rest _) 'var)))
-                   (oo--let-bind '((&as foo (a b)) (1 . 3)))))))
-
-(ert-deftest let! ()
-  (should (= 1 (let! ((:flet foo #'car)) (foo '(1)))))
-  (should (= 1 (let! ((:noflet foo #'car)) (foo '(1)))))
-  (should (= 2 (let! ((:flet foo (a) (+ a a))) (foo 1))))
-  (should (= 1 (let! (((foo) '(1 2 3 4))) 1)))
-  (should (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
-  (should (equal '((1 . 2) 1 2) (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b))))
-  (should (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
-  (should (equal '(1 1 2) (let! ((foo 1) ((a b) '(1 2))) (list foo a b))))
-  (should (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2))) (list foo a b c d)))))
-
-(ert-deftest oo-list-marker-p ()
-  (should-not (oo-list-marker-p 'foo))
-  (should-not (oo-list-marker-p '$as))
-  (should (oo-list-marker-p '&as))
-  (should (oo-list-marker-p '&whole))
-  (should (oo-list-marker-p '&rest)))
-
-;; (ert-deftest block! ()
-;;   (should (= 1 (block! nil (set! a 1) a)))
-;;   ;; (should (= (block! nil (without! a) () a)))
-;;   )
-
-;; (ert-deftest with-map! ()
-;;   (should (equal 2 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
-;;   (should (equal 2 (with-map! '(a 1 b 2) (+ !a !b)))))
-
-(ert-deftest oo-defun-components ()
-  (should (equal '(("foo" nil nil) ((+ 1 1)))
-                 (oo-defun-components '("foo" (+ 1 1)))))
-  (should (equal '(("foo" nil (interactive)) (1))
-                 (oo-defun-components '("foo" (interactive) 1))))
-  (should (equal '((nil nil (interactive)) (1))
-                 (oo-defun-components '((interactive) 1))))
-  (should (equal '((nil (declare (indent 1)) (interactive)) (1))
-                 (oo-defun-components '((declare (indent 1)) (interactive) 1)))))
-
-(ert-deftest oo-rpartial ()
-  ;; The tests taken from dash's example page.
-  (should (= 3 (funcall (oo-rpartial '- 5) 8)))
-  (should (= 3 (funcall (oo-rpartial '- 5 2) 10))))
-
-(ert-deftest lef! ()
-  (should (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))
-  (should (equal '(-1 3)
-                 (lef! ((a #'-) (b (x y) (+ x y))) (list (a 4 5) (b 1 2)))))
-
-  (should (= 5 (lef! ((+ #'-)) (+ 10 5))))
-  ;; I should be able to use this-fn.  I was worried this would not work with
-  ;; lexical binding enabled, but it is looking like it does.
-  (should (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
-  ;; Works with an unnamed function.
-  (should (= 4 (lef! ((foo (lambda () 4))) (foo))))
-  ;; Works with an existing function.
-  (should (= 4 (lef! ((buffer-string (lambda () 4))) (buffer-string)))))
-
-;; (ert-deftest collect! ()
-;;   (should (equal '() (let (result) (collect! (n 4) n))))
-;;   (should (equal 50 (let (result) (collect! 5 10)))))
-
-(ert-deftest oo-const ()
-  (should (equal "foo" (funcall (oo-const "foo"))))
-  (should (equal '(1 2 3) (funcall (oo-const '(1 2 3)))))
-  (should (= 4 (funcall (oo-const 4) 1 2)))
-  (should (= 4 (funcall (oo-const 4) 1)))
-  (should (= 4 (funcall (oo-const 4)))))
-
-(provide 'oo-base-library-test)
+(describe "let!"
+  (it "binds variables to values just like let*"
+    (expect (= 3 (let! ((a 1) (b 2)) (+ a b)))))
+  (it "can bind functions to symbols"
+    (expect (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
+    (expect (= 1 (let! ((:flet foo #'car)) (foo '(1)))))
+    (expect (= 1 (let! ((:noflet foo #'car)) (foo '(1)))))
+    (expect (= 2 (let! ((:flet foo (a) (+ a a))) (foo 1)))))
+  (describe "match forms"
+    (it "destructures a \"normal\" match-form"
+      (expect (= 1 (let! (((foo) '(1 2 3 4))) 1)))
+      (expect (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
+      (expect (equal '(1 1 2) (let! ((foo 1) ((a b) '(1 2))) (list foo a b)))))
+    (it "correctly destructures `&as' match-forms"
+      (expect (equal '((1 . 2) 1 2) (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b)))))
+    ;; (it "correctly destructures `&map' match-forms")
+    (it "destructures a match-form containing a vector"
+      (expect (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
+                                    (list foo a b c d)))))))

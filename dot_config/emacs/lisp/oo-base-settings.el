@@ -190,7 +190,7 @@ end-of-buffer signals; pass the rest to the default handler."
     (command-error-default-function data context caller)))
 
 (setq command-error-function #'oo-command-error-function)
-;;;; designate location of trash 
+;;;; designate location of trash
 ;; designate the location of the trash directory
 ;; I accidentally sent files to the trash and I could not find them in my trash
 ;; directory.  I was confused because I knew that the variable
@@ -225,5 +225,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
 
-;;; oo-base-settings.el ends here
+;;; provide
 (provide 'oo-base-settings)
+;;; oo-base-settings.el ends here

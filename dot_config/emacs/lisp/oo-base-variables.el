@@ -29,7 +29,8 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file defines constants.  It is modeled after https://github.com/d12frosted/environment/tree/master/emacs.
+;; This file defines constants.  It is modeled after
+;; https://github.com/d12frosted/environment/tree/master/emacs.
 ;;
 ;;; Code:
 
@@ -68,4 +69,4 @@ In a nutshell, it's just a value of $HOME.")
 Use this for files that change often, like cache files.")
 
 (provide 'oo-base-variables)
-;; oo-base-variables.el ends here
+;;; oo-base-variables.el ends here
