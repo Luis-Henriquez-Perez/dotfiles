@@ -210,4 +210,12 @@
       (expect (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
                                     (list foo a b c d)))))))
 
+(describe "oo-or-fn"
+  (it "returns non-nil if any of functions match"
+    (expect (funcall (oo-or-fn #'stringp #'integerp) "foo"))
+    (expect (funcall (oo-or-fn #'stringp #'integerp) 4)))
+  (it "return nil if none of the functions match"
+    (expect (not (funcall (oo-or-fn #'stringp #'integerp) 'a)))
+    (expect (not (funcall (oo-or-fn #'stringp #'integerp) 4.5)))))
+
 (provide 'oo-base-lib-test)

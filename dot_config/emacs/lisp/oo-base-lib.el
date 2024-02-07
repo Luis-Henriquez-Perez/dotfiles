@@ -145,6 +145,11 @@ The returned function will accept the remaining arguments to be applied
 to FN after the ARGS provided here."
   (lambda (&rest args-before) (apply fn (append args-before args))))
 
+(defun oo-or-fn (&rest fns)
+  "Return a unary function that returns non-nil if at least one of FNS returns
+non-nil on x."
+  (lambda (x) (cl-find-if (oo-rpartial-fn #'funcall x) fns)))
+
 (defun oo-const-fn (c)
   "Return a function that outputs C, ignoring any arguments."
   (lambda (&rest _) c))
