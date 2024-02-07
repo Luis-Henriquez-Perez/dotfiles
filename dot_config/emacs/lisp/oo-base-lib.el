@@ -1,4 +1,4 @@
-;;; oo-base-library.el --- main library -*- lexical-binding: t; -*-
+;;; oo-base-lib.el --- main library -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -136,16 +136,16 @@ List markers are symbols that begin with `&' such as are `&rest' and
   (declare (indent 1))
   `(alet! ,cond (when it ,@body)))
 ;;;; functional
-(defalias 'oo-partial 'apply-partially)
+(defalias 'oo-partial-fn 'apply-partially)
 
-(defun oo-rpartial (fn &rest args)
+(defun oo-rpartial-fn (fn &rest args)
   "Return a function with fewer arguments than FN.
 FN is a function, and ARGS are additional arguments to be partially applied.
 The returned function will accept the remaining arguments to be applied
 to FN after the ARGS provided here."
   (lambda (&rest args-before) (apply fn (append args-before args))))
 
-(defun oo-const (c)
+(defun oo-const-fn (c)
   "Return a function that outputs C, ignoring any arguments."
   (lambda (&rest _) c))
 ;;;; setting
@@ -278,7 +278,7 @@ MATCH-FORM is a nested form of lists, vectors, and symbols."
                      (list (append wrappers wrappers1 wrappers2)
                            (cons tree1 tree2))))
                   ((pred vectorp)
-                   (alet! (mapcar (oo-partial #'fn wrappers) (append tree))
+                   (alet! (mapcar (oo-partial-fn #'fn wrappers) (append tree))
                      (list (apply #'append (mapcar #'car it))
                            (vconcat (mapcan #'cdr it))))))))
     (pcase-let* ((`(,wrappers ,pcase-mf) (fn nil match-form)))
@@ -592,5 +592,5 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
 ;;; provide
-(provide 'oo-base-library)
-;;; oo-base-library.el ends here
+(provide 'oo-base-lib)
+;;; oo-base-lib.el ends here

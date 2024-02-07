@@ -1,4 +1,4 @@
-;;; oo-base-library-test.el --- `oo-base-library' tests   -*- lexical-binding: t; -*-
+;;; oo-base-lib-test.el --- `oo-base-library' tests   -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz.io>
 ;;
@@ -34,7 +34,7 @@
 ;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
 
 (require 'buttercup)
-(require 'oo-base-library)
+(require 'oo-base-lib)
 
 ;; (buttercup-define-matcher :to-expand-into (form expansion)
 ;;   (if (equal (macroexpand-1 form) expansion)
@@ -128,10 +128,10 @@
     (expect (equal '(("foo" nil (interactive)) (1))
                    (oo-defun-components '("foo" (interactive) 1))))))
 
-(describe "oo-rpartial"
+(describe "oo-rpartial-fn"
   (it "calls given function with the first argument"
-    (expect (= 3 (funcall (oo-rpartial '- 5) 8)))
-    (expect (= 3 (funcall (oo-rpartial '- 5 2) 10)))))
+    (expect (= 3 (funcall (oo-rpartial-fn '- 5) 8)))
+    (expect (= 3 (funcall (oo-rpartial-fn '- 5 2) 10)))))
 
 (describe "with-map!"
   (it "correctly assigns bang symbols to map values"
@@ -147,13 +147,13 @@
     (expect (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
     (expect (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))))
 
-(describe "oo-const"
+(describe "oo-const-fn"
   (it "returns the constant initialized"
-    (expect (equal '(1 2 3) (funcall (oo-const '(1 2 3))))))
+    (expect (equal '(1 2 3) (funcall (oo-const-fn '(1 2 3))))))
   (it "accepts a variable number of arguments"
-    (expect (= 4 (funcall (oo-const 4) 1 2)))
-    (expect (= 4 (funcall (oo-const 4) 1)))
-    (expect (= 4 (funcall (oo-const 4))))))
+    (expect (= 4 (funcall (oo-const-fn 4) 1 2)))
+    (expect (= 4 (funcall (oo-const-fn 4) 1)))
+    (expect (= 4 (funcall (oo-const-fn 4))))))
 
 (describe "for!"
   (it "properly loops with predicate being (repeat N)"
@@ -206,3 +206,5 @@
     (it "destructures a match-form containing a vector"
       (expect (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
                                     (list foo a b c d)))))))
+
+(provide 'oo-base-lib-test)
