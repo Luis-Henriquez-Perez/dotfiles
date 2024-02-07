@@ -498,7 +498,7 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
         (push `((symbol-function #',sym) ,it) binds)))
     `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
-(defun oo-defun-components (body)
+(defun oo-defun-components (body &optional show-nils)
   "Divide defun body, BODY, into its components.
 The return value should be of the form ((docstring declarations interactive)
 body)."
@@ -506,7 +506,7 @@ body)."
     (setq doc (when (stringp (car-safe body)) (pop body)))
     (setq decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
     (setq int (when (equal 'interactive (car-safe (car-safe body))) (pop body)))
-    (list (list doc decls int) body)))
+    (list (cl-remove-if (if show-nils #'ignore #'null) (list doc decls int)) body)))
 
 (defmacro defmacro! (name arglist &rest body)
   "Same as `defmacro!' but wrap body with `block!'.
@@ -517,7 +517,7 @@ NAME, ARGLIST and BODY are the same as `defmacro!'.
   (let! (((metadata body) (oo-defun-components body))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
     `(cl-defmacro ,name ,arglist
-       ,@(cl-remove-if #'null metadata)
+       ,@metadata
        (block! ,name (exclude! ,@args) ,@body))))
 
 (defmacro defun! (name arglist &rest body)
@@ -529,7 +529,7 @@ NAME, ARGS and BODY are the same as in `defun'.
   (let! (((metadata body) (oo-defun-components body))
          (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
     `(cl-defun ,name ,arglist
-       ,@(cl-remove-if #'null metadata)
+       ,@metadata
        (block! ,name (exclude! ,@args) ,@body))))
 ;;;; looping
 ;; There is a huge question of whether to automatically wrap loops with

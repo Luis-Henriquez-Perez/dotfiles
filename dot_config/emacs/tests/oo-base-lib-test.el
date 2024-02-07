@@ -120,13 +120,16 @@
 
 (describe "oo-defun-components"
   (it "separates the docstring from the body"
-    (expect (equal '(("foo" nil nil) ((+ 1 1)))
+    (expect (equal '(("foo") ((+ 1 1)))
                    (oo-defun-components '("foo" (+ 1 1))))))
+  (it "separates the docstring from the body"
+    (expect (equal '(("foo" nil nil) ((+ 1 1)))
+                   (oo-defun-components '("foo" (+ 1 1)) t))))
   (it "separates the interactive form from the body"
     (expect (equal '((nil nil (interactive)) (1))
-                   (oo-defun-components '((interactive) 1))))
+                   (oo-defun-components '((interactive) 1) t)))
     (expect (equal '(("foo" nil (interactive)) (1))
-                   (oo-defun-components '("foo" (interactive) 1))))))
+                   (oo-defun-components '("foo" (interactive) 1) t)))))
 
 (describe "oo-rpartial-fn"
   (it "calls given function with the first argument"
