@@ -47,7 +47,7 @@
   (setq-default elpa-bootstrap-p t)
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
-  (load (expand-file-name "init.el" )))
+  (load (expand-file-name "init.el" eldev-real-user-emacs-directory)))
 
 ;; We want to run this before any build command. This is also needed
 ;; for `flyspell-eldev` to be aware of packages installed via
