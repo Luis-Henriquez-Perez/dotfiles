@@ -42,7 +42,7 @@
 ;;;; setup load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load base libraries
-(require 'oo-base-library)
+(require 'oo-base-lib)
 (require 'oo-base-settings)
 (require 'oo-base-custom)
 ;;;; startup variables
