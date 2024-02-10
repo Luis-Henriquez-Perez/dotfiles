@@ -1,11 +1,10 @@
-;;; oo-package-lib.el --- Tools for pacman -*- lexical-binding: t; -*-
+;;; oo-package-lib.el --- Tools for package management -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 7 Feb 2024
 ;;
@@ -31,12 +30,13 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file provides me tools for installing packages.
+;; This file sets up package.el and installs the packages that I use.
 ;;
 ;;; Code:
 (require 'package)
 
-;; I want a clearer name.  When I saw the name "elpa" I had no idea what was in that folder.
+;; I want a clearer name.  When I saw the name "elpa" I had no idea what was in
+;; that folder.
 (setq package-user-dir (locate-user-emacs-file "packages/"))
 
 ;; Add MELPA repository if it's not already included
@@ -91,8 +91,8 @@
 (push 'aggressive-indent package-selected-packages)
 (push 'ws-butler package-selected-packages)
 (push 'magit package-selected-packages)
-(push 'evil-magit-init package-selected-packages)
 
 (package-install-selected-packages t)
 
 (provide 'oo-package-lib)
+;;; oo-package-lib.el ends here
