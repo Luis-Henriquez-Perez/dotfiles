@@ -13,7 +13,7 @@
 ;; file name.  It was catching a file in
 ;; "elpaca/repos/elpaca/doc/early-init.el".  So for precision I recommend adding
 ;; "./".
-(setq eldev-main-fileset '("./init.el" "./early-init.el" "lisp/oo-base-*.el" "lisp/oo-package-lib.el"))
+(setq eldev-main-fileset '("./init.el" "./early-init.el" "lisp/oo-base-*.el" "lisp/oo-init-package.el"))
 ;; (setq eldev-test-fileset '("tests/all-tests.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help

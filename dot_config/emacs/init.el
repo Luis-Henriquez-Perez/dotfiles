@@ -62,7 +62,8 @@
 ;; saved on rendering, the faster the startup.
 (startup-set! mode-line-format nil set-default)
 ;;;; package installation
-(require 'oo-package-lib)
-;; provide init
+(require 'oo-init-package)
+(package-install-selected-packages t)
+;;; provide init
 (provide 'init)
 ;;; init.el ends here

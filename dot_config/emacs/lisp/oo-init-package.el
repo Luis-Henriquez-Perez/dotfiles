@@ -1,4 +1,4 @@
-;;; oo-package-lib.el --- Tools for package management -*- lexical-binding: t; -*-
+;;; oo-init-package.el --- Tools for package management -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -44,11 +44,6 @@
 ;; Needed for `compat' library maybe.
 (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
 ;; Initialize the package system
-(package-initialize)
-
-;; Refresh package contents if the package list is empty
-(unless package-archive-contents
-  (package-refresh-contents))
 ;; So many problems. One problem is I compiling errors.
 
 (push 'which-key package-selected-packages)
@@ -92,7 +87,5 @@
 (push 'ws-butler package-selected-packages)
 (push 'magit package-selected-packages)
 
-(package-install-selected-packages t)
-
-(provide 'oo-package-lib)
-;;; oo-package-lib.el ends here
+(provide 'oo-init-package)
+;;; oo-init-package.el ends here
