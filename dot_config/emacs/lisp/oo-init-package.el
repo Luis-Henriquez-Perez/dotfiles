@@ -65,7 +65,6 @@
 (push 'expand-region package-selected-packages)
 (push 'helm package-selected-packages)
 (push 'gcmh package-selected-packages)
-;; (push 'modus-themes package-selected-packages)
 (push 'meow package-selected-packages)
 (push 'tempel package-selected-packages)
 (push 'redacted package-selected-packages)
@@ -86,6 +85,8 @@
 (push 'aggressive-indent package-selected-packages)
 (push 'ws-butler package-selected-packages)
 (push 'magit package-selected-packages)
+(push 'on package-selected-packages)
+(push 'shut-up package-selected-packages)
 
 (provide 'oo-init-package)
 ;;; oo-init-package.el ends here
