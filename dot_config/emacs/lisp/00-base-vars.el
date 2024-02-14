@@ -33,7 +33,6 @@
 ;; https://github.com/d12frosted/environment/tree/master/emacs.
 ;;
 ;;; Code:
-
 (defconst oo-home-dir (file-name-as-directory (getenv "HOME"))
   "Path to user home directory.
 

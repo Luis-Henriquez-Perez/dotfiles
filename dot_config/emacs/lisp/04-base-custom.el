@@ -86,14 +86,14 @@ Unlike `add-hook'."
 ;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; defhook!
-(defmacro defhook! (name args &rest body)
-  "Add function to hook as specified by NAME.
-NAME should be a hook symbol."
-  (let! hook (oo-hook name))
-  (cl-assert hook t "%s is not a hook symbol" hook)
-  `(prog1 name
-     (fset name ,)
-     (add-hook hook name)))
+;; (defmacro defhook! (name args &rest body)
+;;   "Add function to hook as specified by NAME.
+;; NAME should be a hook symbol."
+;;   (let! hook (oo-hook name))
+;;   (cl-assert hook t "%s is not a hook symbol" hook)
+;;   `(prog1 name
+;;      (fset name ,)
+;;      (add-hook hook name)))
 ;; (require 'lgr)
 ;; ;;; require
 ;; ;; This macro is to satisfy the compiler but also not have to list all the files
@@ -134,41 +134,41 @@ NAME should be a hook symbol."
 ;; (defun oo-add-advice ()
 ;;   "Add "
 ;;   )
-;;; opt!
-;;;; set unbound symbols
-(defvar oo-unbound-symbol-alist nil
-  "An alist mapping an unbound symbol to an expression.
-This alist is checked by the hook `after-load-functions&set-bound-symbols' for
-any symbols that are now bound.")
+;; ;;; opt!
+;; ;;;; set unbound symbols
+;; (defvar oo-unbound-symbol-alist nil
+;;   "An alist mapping an unbound symbol to an expression.
+;; This alist is checked by the hook `after-load-functions&set-bound-symbols' for
+;; any symbols that are now bound.")
 
-;; I'll note that I push all the forms into a list and evaluate them all in the
-;; body of one lambda as opposed to evaluating one lambda per form.  This is
-;; important because lambda calls have an overhead that adds up.  It is far less
-;; costly to invoke one lambda over N lambdas.
-(defun! after-load-functions&set-bound-symbols (&rest _)
-  "Set symbols that have been bound to the result of their corresponding expr.
-Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
-bound and setting them to the result of evaluating expr."
-  (for! ((&as elt (symbol . expr)) oo-unbound-symbol-alist)
-    (cond ((boundp symbol)
-           (pushing! exprs `(set! ,symbol ,expr)))
-          (t
-           (pushing! updated elt))))
-  (setq oo-unbound-symbol-alist (nreverse updated))
-  (when exprs (funcall `(lambda () ,@exprs))))
+;; ;; I'll note that I push all the forms into a list and evaluate them all in the
+;; ;; body of one lambda as opposed to evaluating one lambda per form.  This is
+;; ;; important because lambda calls have an overhead that adds up.  It is far less
+;; ;; costly to invoke one lambda over N lambdas.
+;; (defun! after-load-functions&set-bound-symbols (&rest _)
+;;   "Set symbols that have been bound to the result of their corresponding expr.
+;; Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
+;; bound and setting them to the result of evaluating expr."
+;;   (for! ((&as elt (symbol . expr)) oo-unbound-symbol-alist)
+;;     (cond ((boundp symbol)
+;;            (pushing! exprs `(set! ,symbol ,expr)))
+;;           (t
+;;            (pushing! updated elt))))
+;;   (setq oo-unbound-symbol-alist (nreverse updated))
+;;   (when exprs (funcall `(lambda () ,@exprs))))
 
-(add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
-;;;; opt!
-(defmacro! opt! (symbol value)
-  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
-This is like `setq' but it is meant for configuring variables."
-  (let! value-var (make-symbol "value"))
-  `(if (not (boundp ',symbol))
-       (push (cons ',symbol ',value) oo-unbound-symbol-alist)
-     (let ((,value-var ,value))
-       (aif (get ',symbol 'custom-set)
-           (funcall it ',symbol ,value-var)
-         (with-no-warnings (setq ,symbol ,value-var))))))
+;; (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
+;; ;;;; opt!
+;; (defmacro! opt! (symbol value)
+;;   "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
+;; This is like `setq' but it is meant for configuring variables."
+;;   (let! value-var (make-symbol "value"))
+;;   `(if (not (boundp ',symbol))
+;;        (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+;;      (let ((,value-var ,value))
+;;        (aif (get ',symbol 'custom-set)
+;;            (funcall it ',symbol ,value-var)
+;;          (with-no-warnings (setq ,symbol ,value-var))))))
 ;;; provide
 (provide '04-base-custom)
 ;;; 04-base-custom.el ends here

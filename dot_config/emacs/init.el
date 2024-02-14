@@ -42,8 +42,8 @@
 ;;;; setup load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load base libraries
-(require '00-base-settings)
-(require '01-base-vars)
+(require '00-base-vars)
+(require '01-base-settings)
 (require '02-base-lib)
 (require '03-init-package)
 (require '04-base-custom)
