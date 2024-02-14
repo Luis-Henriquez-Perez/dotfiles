@@ -97,7 +97,7 @@ HOOK-OR-ADVICE.")
 (defvar oo-debug-p (or (getenv "DEBUG") init-file-debug)
   "When non-nil print debug messages.
 The --debug-init flag and setting the DEBUG envar will enable this at startup.")
-;;; Log buffer
+;;; log buffer
 (defvar oo-log-buffer (get-buffer-create "*oo-log*")
   "Buffer where information should be logged.")
 ;;; values
