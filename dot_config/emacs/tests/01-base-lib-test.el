@@ -1,0 +1,228 @@
+;;; 01-base-lib-test.el --- `oo-base-library' tests   -*- lexical-binding: t; -*-
+;;
+;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz.io>
+;;
+;; Author: Luis Henriquez <luis@luishp.xyz.io>
+;; Maintainer: Luis Henriquez <luis@luishp.xyz.io>
+;;
+;; Created: 05 Feb 2024
+;;
+;;
+;; License: GPLv3
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see
+;; <http://www.gnu.org/licenses/>.
+;;
+;; This file is not part of GNU Emacs.
+;;
+;;; Commentary:
+;;
+;; This file contains tests for `oo-base-lib'.
+;;
+;;; Code:
+;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
+
+(require 'buttercup)
+(require '01-base-lib)
+
+;; (buttercup-define-matcher :to-expand-into (form expansion)
+;;   (if (equal (macroexpand-1 form) expansion)
+;;       t
+;;     (cons nil (format ""))))
+(describe "oo-condition-case-fn"
+  (let ((fn (oo-condition-case-fn (lambda (n) (/ 8 (- n 4))) :action (lambda (&rest _) 'foo))))
+    (it "should behave like function when"
+      (expect 2 :to-be (funcall fn 8)))
+    (it "should invoke action function when there is an error"
+      (expect 'foo :to-be (funcall fn 4)))))
+
+(describe "break!"
+  (it "should exit a (catch 'break!) block"
+    ;; (expect 1 :to-equal (catch 'foo (throw 'foo 1) 2))
+    (expect 6 :to-equal (catch 'break! (break! 6) 7))))
+
+(describe "continue!"
+  (it "should exit a (catch 'continue!) block"
+    ;; (expect 1 :to-equal (catch 'foo (throw 'foo 1) 2))
+    (expect nil :to-equal (catch 'continue! (continue!) 7))))
+
+(describe "oo--parse-block"
+  (expect '(:let ((a nil) (b nil))) :to-equal (car (oo--parse-block nil '((set! a 1) (set! b 2))))))
+
+(describe "collecting!"
+  (it "adds items to the end of the list"
+    (let (collected)
+      (collecting! collected 1)
+      (expect '(1) :to-equal collected)
+      (collecting! collected 2)
+      (expect '(1 2) :to-equal collected))))
+
+(describe "block!"
+  (cl-flet* ((parse (apply-partially #'oo--parse-block nil))
+             (body (body) (cadr (parse body)))
+             (let-binds (body) (plist-get (car (parse body)) :let))
+             (let-syms (body) (mapcar #'car (let-binds body)))
+             (lvalue (sym body) (car (map-elt (let-binds body) sym))))
+    (it "wraps loops with a `continue!' catch block"
+      (expect '(0 2) :to-equal (block! (for! (n 3)
+                                         (and (= 1 n) (continue!))
+                                         (collecting! nums n))
+                                 nums)))
+    (it "returns when `return!' is invoked"
+      (expect 2 :to-be (block! (when t (return! 2)) 3)))
+    (it "wraps the for loops with a break"
+      (expect '(nums) :to-equal (let-syms '(block! nil (for! (i 3) (collecting! nums i)) nums)))
+      (expect 2 :to-be (block! 2))
+      (expect 2 :to-be (catch 'break! (break! 2) 4))
+      (expect 2 :to-equal (block! (for! (n 10) (return! 2)) 3))
+      (expect 2 :to-be (block! nil (for! (x 3) (when (= x 2) (break! x)))))
+      (expect 5 :to-equal (block! nil (for! (i 10) (when (= 5 i) (break! 5))))))
+    (it "ignores quoted forms"
+      (expect nil :to-equal (let-binds '('(foo))))
+      (expect '('(foo)) :to-equal (body '('(foo)))))
+    (it "does not bind symbols marked for exclusion"
+      (expect (not (let-syms '((exclude! a) (set! a 1)))))
+      (expect (not (let-syms '((exclude! a) (counting! a 1))))))
+    (it "binds symbols specified by `maxing!' to `most-negative-fixnum'"
+      (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
+      (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
+    (it "binds symbols specified by `counting!' to 0"
+      (expect 0 :to-be (lvalue 'a '((counting! a 1)))))
+    (it "binds symbols specified by `minning!' to `most-positive-fixnum'"
+      (expect most-positive-fixnum :to-be (lvalue 'a '((minimizing! a 1))))
+      (expect most-positive-fixnum :to-be (lvalue 'a '((minning! a 1)))))
+    (it "binds symbols specified by set! to nil"
+      (expect '(a b) :to-equal (let-syms '((set! a 1) (set! b 2)))))
+    (it "binds symbols specified by other ING macros to nil"
+      (expect '(a) :to-equal (let-syms '((collecting! a 1))))
+      (expect '(a) :to-equal (let-syms '((appending! a 1))))
+      (expect '(a) :to-equal (let-syms '((prepending! a 1))))
+      (expect '(a) :to-equal (let-syms '((maxing! a 1)))))
+    (it "wraps subsequent forms with lef!"
+      (expect 10 :to-equal (block! nil (stub! plus (a b) (+ a (* 2 b))) (plus 6 2)))
+      (expect 10 :to-equal (block! nil (flet! plus #'+) (plus 5 5)))
+      (expect 10 :to-equal (block! nil
+                             (nflet! + (a b) (funcall this-fn 1 (* a b)))
+                             (+ 3 3))))))
+
+(describe "oo-list-marker-p"
+  (it "correctly identifies list markers"
+    (expect (oo-list-marker-p '&as))
+    (expect (oo-list-marker-p '&whole))
+    (expect (oo-list-marker-p '&rest)))
+  (it "correctly returns nil with non-list-markers"
+    (should-not (oo-list-marker-p 'foo))
+    (should-not (oo-list-marker-p '$as))))
+
+(describe "oo-defun-components"
+  (it "separates the docstring from the body omitting nils"
+    (expect (equal '(("foo") ((+ 1 1)))
+                   (oo-defun-components '("foo" (+ 1 1))))))
+  (it "separates the docstring from the body without omitting nils"
+    (expect (equal '(("foo" nil nil) ((+ 1 1)))
+                   (oo-defun-components '("foo" (+ 1 1)) t))))
+  (it "separates the interactive form from the body"
+    (expect (equal '((nil nil (interactive)) (1))
+                   (oo-defun-components '((interactive) 1) t)))
+    (expect (equal '(("foo" nil (interactive)) (1))
+                   (oo-defun-components '("foo" (interactive) 1) t)))))
+
+;; (describe "oo-rpartial-fn"
+;;   (it "calls given function with the first argument"
+;;     (expect (= 3 (funcall (oo-rpartial-fn '- 5) 8)))
+;;     (expect (= 3 (funcall (oo-rpartial-fn '- 5 2) 10)))))
+
+(describe "with-map!"
+  (it "correctly assigns bang symbols to map values"
+    (expect (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
+    (expect (= 3 (with-map! '(a 1 b 2) (+ !a !b))))))
+
+(describe "lef!"
+  (it "can bind a function symbol to a different function"
+    (expect (= 5 (lef! ((+ #'-)) (+ 10 5)))))
+  (it "can bind symbols to anonymous functions"
+    (expect (= 4 (lef! ((foo (lambda () 4))) (foo)))))
+  (it "stores original function in the symbol `this-fn'"
+    (expect (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
+    (expect (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))))
+
+;; (describe "oo-const-fn"
+;;   (it "returns the constant initialized"
+;;     (expect (equal '(1 2 3) (funcall (oo-const-fn '(1 2 3))))))
+;;   (it "accepts a variable number of arguments"
+;;     (expect (= 4 (funcall (oo-const-fn 4) 1 2)))
+;;     (expect (= 4 (funcall (oo-const-fn 4) 1)))
+;;     (expect (= 4 (funcall (oo-const-fn 4))))))
+
+(describe "for!"
+  (it "properly loops with predicate being (repeat N)"
+    (expect 11 :to-equal (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))
+  (it "destructures if predicate is (MATCH-FORM LIST)"
+    (expect '(3 9) :to-equal (let ((list '((1 2) (4 5)))
+                                   (result nil))
+                               (for! ((a b) list)
+                                 (push (+ a b) result))
+                               (reverse result))))
+  (it "properly loops with predicate being (VAR SEQUENCE)"
+    (expect '(4 3 2 1) :to-equal (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums))
+    (expect '(4 3 2 1) :to-equal (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums))
+    (expect '(111 108 108 101 104) :to-equal (let (chars) (for! (char "hello") (push char chars)) chars)))
+  (it "properly loops with predicate being (VAR INTEGER)"
+    (expect '(0 1 2 3) :to-equal (let (n) (for! (x 4) (collecting! n x)) n))
+    (expect 11 :to-equal (let ((n 1)) (for! (x 10) (cl-incf n)) n)))
+  (it "propertly loops with predicate being INTEGER"
+    (expect 11 :to-equal (let ((n 1)) (for! 10 (cl-incf n)) n))))
+
+(describe "oo-wrap-forms"
+  (it "wrap forms around body"
+    (expect (equal '(when 1 (save-excursion foo))
+                   (oo-wrap-forms '((when 1) (save-excursion)) '(foo))))))
+
+(describe "awhen!"
+  (it "binds `it' to the result of condition"
+    (expect (= 2 (awhen! 1 (+ it it))))))
+
+(describe "alet!"
+  (it "binds `it' to the result of the first argument"
+    (expect (= 2 (alet! 1 (+ it it))))))
+
+(describe "let!"
+  (it "binds variables to values just like let*"
+    (expect (= 3 (let! ((a 1) (b 2)) (+ a b)))))
+  (it "can bind functions to symbols"
+    (expect (= 3 (let! ((#'foo (lambda (a b) (+ a b)))) (foo 1 2))))
+    (expect (= 1 (let! ((:flet foo #'car)) (foo '(1)))))
+    (expect (= 1 (let! ((:noflet foo #'car)) (foo '(1)))))
+    (expect (= 2 (let! ((:flet foo (a) (+ a a))) (foo 1)))))
+  (describe "match forms"
+    (it "destructures a \"normal\" match-form"
+      (expect (= 1 (let! (((foo) '(1 2 3 4))) 1)))
+      (expect (equal '(1 2 3) (let! (((a b . c) '(1 2 . 3))) (list a b c))))
+      (expect (equal '(1 1 2) (let! ((foo 1) ((a b) '(1 2))) (list foo a b)))))
+    (it "correctly destructures `&as' match-forms"
+      (expect (equal '((1 . 2) 1 2) (let! (((&as foo (a . b)) '(1 . 2))) (list foo a b)))))
+    ;; (it "correctly destructures `&map' match-forms")
+    (it "destructures a match-form containing a vector"
+      (expect (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
+                                    (list foo a b c d)))))))
+
+;; (describe "oo-or-fn"
+;;   (it "returns non-nil if any of functions match"
+;;     (expect (funcall (oo-or-fn #'stringp #'integerp) "foo"))
+;;     (expect (funcall (oo-or-fn #'stringp #'integerp) 4)))
+;;   (it "return nil if none of the functions match"
+;;     (expect (not (funcall (oo-or-fn #'stringp #'integerp) 'a)))
+;;     (expect (not (funcall (oo-or-fn #'stringp #'integerp) 4.5)))))
+
+(provide '01-base-lib-test)

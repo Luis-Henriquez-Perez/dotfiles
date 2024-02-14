@@ -1,0 +1,38 @@
+* base files
+Within the base files there is =01-base-lib= which is loaded second only to
+=00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
+is a basic library of generic convenience macros and functions I can rely on
+before package installation occurs.  However =03=
+* lisp directory structure
+The lisp directory has three kinds of files.
+=D= represents an integer from =0= to =9=.  Emacs loads file in lexigraphical
+order by default.  I use this naming system to define the order in which the
+file should be loaded so that I do not have to.
+
+- DD-base-NAME
+These files are for my emacs setup.  The do not depend on external features
+(however, this might change).
+
+- DD-init-FEATURE
+Init files are loaded after bases files.  They are loaded during emacs startup
+and contains code to setup a package's initialization.  The are "safe" to load
+immediately because in general they should only be adding hooks/advices and
+setting variables.  They setup =FEATURE= for loading, or customize variables
+pertaining to feature, but do not actually load =FEATURE=.
+
+- DD-config-FEATURE
+There are files that need to be loaded after said feature is loaded.  These
+files are not "safe" to load during startup because they rely on
+macros/functions/variables from FEATURE.  Evaluation them would either result in
+an error for trying to use FEATURE stuff without FEATURE being loaded yet; or it
+would inadvertently load FEATURE.
+
+* why divide features into config and init files?
+Honestly, it was a hard decision for me to make. It means that for packages with
+a very simple configuration, I will probably end up with a lot of really small
+files.  Also in terms of performance, it is preferable to load one big file over
+many small ones because there is a small overhead to opening files.  So why am I
+doing it?  Well, it is possible to combine the init and config files into just
+one file.  But then I would be forced to write non-declarative code.  I would
+potentiall need to wrap large blocks of code with =eval-after-load= or use
+something like =use-package=--which I do not like.
