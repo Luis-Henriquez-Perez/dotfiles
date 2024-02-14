@@ -18,6 +18,7 @@
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help
 ;; Eldev commands to locate them.
+;; (setq eldev-project-source-dirs "lisp")
 (eldev-add-loading-roots 'build "lisp")
 (eldev-add-loading-roots 'bootstrap "lisp")
 (eldev-add-loading-roots 'test "lisp")
@@ -47,7 +48,16 @@
   (setq-default elpa-bootstrap-p t)
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
-  (load (expand-file-name "init.el" eldev-real-user-emacs-directory)))
+  ;; (add-to-list 'load-path (expand-file-name "lisp/" eldev-real-user-emacs-directory))
+  ;; Any time I try to add to the `load-path' something from my
+  ;; `user-emacs-directory', remember to use `eldev-real-user-emacs-directory'
+  ;; instead.
+  ;; (let ((user-emacs-directory eldev-real-user-emacs-directory))
+  ;;   (load (expand-file-name "init.el" eldev-real-user-emacs-directory)))
+  ;; (cl-letf ((symbol-function #'add-to-list) (lambda ())
+  ;;           (symbol-function #'locate-user-emacs-file (lambda ())))
+  ;;   )
+  )
 
 ;; We want to run this before any build command. This is also needed
 ;; for `flyspell-eldev` to be aware of packages installed via

@@ -32,8 +32,8 @@
 ;;
 ;;
 ;;; Code:
-(opt! no-littering-etc-directory oo-etc-dir)
-(opt! no-littering-var-directory oo-var-dir)
+(setq no-littering-etc-directory oo-etc-dir)
+(setq no-littering-var-directory oo-var-dir)
 
 (require 'no-littering)
 ;;; provide

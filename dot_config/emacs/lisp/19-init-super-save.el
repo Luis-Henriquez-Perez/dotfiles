@@ -1,4 +1,4 @@
-;;; init.el --- Custom configuration -*- lexical-binding: t; -*-
+;;; 19-init-super-save.el --- Custom configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -49,5 +49,5 @@
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
 ;;; provide
-(provide '18-init-super-save)
-;;; 18-init-super-save.el ends here
+(provide '19-init-super-save)
+;;; 19-init-super-save.el ends here

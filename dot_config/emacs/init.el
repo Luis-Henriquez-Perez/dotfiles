@@ -53,7 +53,7 @@
 ;; (defhook! emacs-startup-hook&load-config-files ()
 ;;   "Load the code for the lisp files."
 ;;   (flet! feature (-compose #'file-name-sans-extension #'file-name-nondirectory))
-;;   (for! (file (directory-files oo-lisp-dir t))
+;;   (for! (file (directory-files oo-config-dir t))
 ;;     (oo-call-after-load (feature file) file)))
 ;;; provide init
 (provide 'init)
