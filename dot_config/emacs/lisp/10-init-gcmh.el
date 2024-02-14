@@ -1,11 +1,10 @@
-;;; 10-init-gcmh.el --- initialize gcmh -*- lexical-binding: t; -*-
+;;; 10-init-gcmh.el --- initialize `gcmh' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
 ;; Created: 14 Feb 2024
 ;;

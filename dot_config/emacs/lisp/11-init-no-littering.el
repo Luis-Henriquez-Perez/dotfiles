@@ -5,9 +5,8 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
 ;;
-;; Created: 14 Jan 2024
+;; Created: 14 Feb 2024
 ;;
 ;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
 ;;
@@ -31,8 +30,6 @@
 ;;
 ;;; Commentary:
 ;;
-;; These are my personal Emacs configurations.  Please refer to the
-;; README for information on how to run and modify them.
 ;;
 ;;; Code:
 (opt! no-littering-etc-directory oo-etc-dir)

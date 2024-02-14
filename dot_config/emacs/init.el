@@ -42,28 +42,19 @@
 ;;;; setup load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load base libraries
-(require 'oo-base-lib)
-(require 'oo-base-settings)
-(require 'oo-base-custom)
-;;;; startup variables
-;;;;; disable garbage collection until I'm done with startup
-;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
-;; very big number, essentially disables garbage collection.  The garbage
-;; collection is later reset to a reasonable value.
-(startup-set! gc-cons-threshold most-positive-fixnum)
-
-;; This is the percentage of the heap before.
-(startup-set! gc-cons-percentage 0.8)
-;;;;; don't search for whenever a package is loaded
-(startup-set! file-name-handler-alist nil)
-;;;;; prevent flashing of unstyled modeline
-;; Don't render the modeline on startup.  For one thing, the startup looks
-;; better without flashing stuff on the screen.  Additionally, the more that's
-;; saved on rendering, the faster the startup.
-(startup-set! mode-line-format nil set-default)
-;;;; package installation
-(require 'oo-init-package)
-(package-install-selected-packages t)
+(require '00-base-settings)
+(require '01-base-vars)
+(require '02-base-lib)
+(require '03-init-package)
+(require '04-base-custom)
+;;; load all init files
+;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
+;;; load config files
+;; (defhook! emacs-startup-hook&load-config-files ()
+;;   "Load the code for the lisp files."
+;;   (flet! feature (-compose #'file-name-sans-extension #'file-name-nondirectory))
+;;   (for! (file (directory-files oo-lisp-dir t))
+;;     (oo-call-after-load (feature file) file)))
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
