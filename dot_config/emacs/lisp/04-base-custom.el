@@ -63,7 +63,6 @@
   "Return a function that will report error instead of raising an error."
   (oo-condition-case-fn fn :action (apply-partially #'oo-report-error fn)))
 ;;;; oo-add-hook
-(info! "run ")
 ;; No anonymous hooks allowed.
 (defun oo-add-hook (hook fsym &optional depth local)
   "Generate a function from FSYM and add it to HOOK.
@@ -77,8 +76,6 @@ Unlike `add-hook'."
   (if (and function hook)
       (remove-hook hook fsym)
     (remove-hook (oo-get-hook fsym) fsym)))
-;;;; oo-hook-p
-(defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; oo-hook
 (defun oo-hook (fsym)
   "Return the hook symbol specified by FSYM."
@@ -86,6 +83,8 @@ Unlike `add-hook'."
   (alet (symbol-name fsym)
     (string-match "\\(.+\\)&.+" it)
     (intern (match-string 1 it))))
+;;;; oo-hook-p
+(defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; defhook!
 (defmacro defhook! (name args &rest body)
   "Add function to hook as specified by NAME.

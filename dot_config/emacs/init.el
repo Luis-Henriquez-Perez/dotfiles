@@ -7,7 +7,7 @@
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "29.1"))
 ;;
-;; Created: 08 Jan 2021
+;; Created: 02 Feb 2024
 ;;
 ;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
 ;;

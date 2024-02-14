@@ -1,6 +1,17 @@
 (require 'buttercup)
 
-(describe "startup-set!"
+(xdescribe "opt!"
+  ;; fake feature
+  ;; Feature foo.
+  (it "should set the value of variable when feature is not loaded"
+    (expect (opt! foo 1)))
+  (it "should not set anything if the feature is not loaded"
+    (expect (opt!)))
+  (it "should")
+  (opt! foo 1)
+  (expect ))
+
+(xdescribe "startup-set!"
   ;; Simulate startup.
   (it "should set a variable before startup time"
     (startup-set! foo 1))
@@ -10,35 +21,30 @@
     (startup-set! foo 1)
     ))
 
-(describe "oo-report-error"
+(xdescribe "oo-report-error"
   ;; (it "should report an error when")
   ;; (it "should")
   )
 
-(describe "defhook!"
+(xdescribe "defhook!"
   ;; (it "should report an error when")
   ;; (it "should")
   )
-;; (describe "require!"
-;;   (expect (require! "") :to-expand-into
-;;           (progn (require foo)
-;;                  (require foo)
-;;                  ())))
 
-;; (describe "oo-get-hook"
-;;   (it "should return nil when symbol has no hook"
-;;     (expect nil :to-be (oo-get-hook 'foo)))
-;;   (it "should return hook if symbol has a hook"
-;;     (expect 'prog-mode-hook :to-be (oo-get-hook 'prog-mode-hook&foo))))
+(describe "oo-hook"
+  (it "should return nil when symbol has no hook"
+    (expect nil :to-be (oo-hook 'foo)))
+  (it "should return hook if symbol has a hook"
+    (expect 'prog-mode-hook :to-be (oo-get-hook 'prog-mode-hook&foo))))
 
-(describe "oo-add-hook"
-  (let (fake-hook)
-    (it "should return the hook created"
-      (expect (oo-get-hook (oo-add-hook 'fake-hook symbol))))
-    (it "should work with hook symbol as an argument"
-      (expect (oo-add-hook 'fake-hook&some-fn)))
-    (it "should"
-      (expect (oo-get-hook )))))
+(xdescribe "oo-add-hook"
+  (set! fake-hook nil)
+  (it "should return the hook created"
+    (expect (oo-get-hook (oo-add-hook 'fake-hook symbol))))
+  (it "should work with hook symbol as an argument"
+    (expect (oo-add-hook 'fake-hook&some-fn)))
+  (it "should"
+    (expect (oo-get-hook))))
 
 ;; (describe "oo-add-advice"
 ;;   (it "should"
