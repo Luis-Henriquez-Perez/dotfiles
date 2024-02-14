@@ -1,4 +1,4 @@
-;;; 00-base-settings.el --- Base settings -*- lexical-binding: t; -*-
+;;; 01-base-settings.el --- Base settings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -163,7 +163,7 @@ At the end of `emacs-statup-hook' set VAR back to its original VALUE."
 (setq redisplay-skip-fontification-on-input t)
 ;;;; don't update things on the screen as frequently
 ;; This variable is.
-;; https://github.com/hlissner/doom-emacs/blob/01aadd8900be45f912124d9d815d8790f540d38c/core/core.el#L177
+;; https://github.com/hlissner/doom-emacs/blob/01aadd8901be45f912124d9d815d8790f540d38c/core/core.el#L177
 (setq idle-update-delay 1)
 ;;;; don't make backups
 (setq make-backup-files nil)
@@ -250,5 +250,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
 
 ;;; provide
-(provide '00-base-settings)
-;;; 00-base-settings.el ends here
+(provide '01-base-settings)
+;;; 01-base-settings.el ends here

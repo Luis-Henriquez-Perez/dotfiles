@@ -1,6 +1,6 @@
-;;; 01-base-vars.el --- Variables -*- lexical-binding: t; -*-
+;;; 00-base-vars.el --- Variables -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2005-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
@@ -106,5 +106,5 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL's value should be
 reset to OLD-VALUE by calling SETTER with SYMBOL and OLD-VALUE.")
 ;;; provide
-(provide '01-base-vars)
-;;; 01-base-vars.el ends here
+(provide '00-base-vars)
+;;; 00-base-vars.el ends here
