@@ -42,12 +42,7 @@
 (opt! savehist-file (concat oo-cache-dir "savehist"))
 
 (cl-pushnew 'register-alist savehist-additional-variables)
-;; savehist-save@AR@remove-properties-from-kill-ring
-;; savehist-save@AW@remove-properties-from-kill-ring
-;; savehist-save@BW@remove-properties-from-kill-ring
-;; savehist-save@B@remove-properties-from-kill-ring
-;; savehist-save@A@remove-properties-from-kill-ring
-(defadvice! savehist-save@B@remove-kill-ring-properties ()
+(defadvice! savehist-save@BFremove-kill-ring-properties ()
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;; provide
 (provide '19-init-savehist)

@@ -6,6 +6,16 @@
 ;; One thing I wish was mentioned in the post is that to run any of the shell
 ;; commands for =eldev=, the =eldev= executable needs to be in your path.
 ;;; eldev
+;; A very important note, d12frosted did not use package.el for eldev, he only
+;; used straight.el or elpaca.  The issue with using it with your emacs config
+;; if you use package.el is that eldev also uses package.el.  So you need to
+;; tell it not to use it when you're loading your project somehow.  Honestly,
+;; you might just have to declare all your packages to eldev as dependencies.
+;; It is kind of tricky because for testing eldev uses its own.  And I want to
+;; note this is not eldev's fault as eldev is designed to manage packages and
+;; it's wrong for packages to install other packages when they're loaded.  In
+;; theory -X option could be used for.
+(setq user-emacs-directory eldev-real-user-emacs-directory)
 ;;;; tell =eldev= where to load
 (setq eldev-project-main-file "init.el")
 ;; Eldev seems to be looking recursively in directories for any file named
@@ -21,6 +31,7 @@
 ;; (setq eldev-project-source-dirs "lisp")
 (eldev-add-loading-roots 'build "lisp")
 (eldev-add-loading-roots 'bootstrap "lisp")
+(eldev-add-loading-roots 'bootstrap "straight")
 (eldev-add-loading-roots 'test "lisp")
 ;; Tell eldev that I need the tests directory in the load-path for running tests.
 (eldev-add-loading-roots 'test "tests")
@@ -28,7 +39,7 @@
 (setq eldev-dwim t)
 ;; Eldev changes this to something else.  I need it so my init file will load
 ;; the proper things.
-(setq user-emacs-directory eldev-real-user-emacs-directory)
+;; (cl-pushnew (expand-file-name "packages/" eldev-real-user-emacs-directory) package-directory-list)
 ;; (setf eldev-project-source-dirs "lisp")
 ;;;; specify test directory
 ;; There are dependencies for testing and linting phases, they should
@@ -45,15 +56,22 @@
 ;; get proper load-path in all phases.
 (defun elpa-bootstrap ()
   "Bootstrap personal configurations."
+  (message "BOOTSTRAPPING!")
+  (message "BOOTSTRAPPING!")
+  (message "BOOTSTRAPPING!")
+  (message "BOOTSTRAPPING!")
+  (message "BOOTSTRAPPING!")
   (setq-default elpa-bootstrap-p t)
   (setq-default load-prefer-newer t)
   (eldev--inject-loading-roots 'bootstrap)
-  ;; (add-to-list 'load-path (expand-file-name "lisp/" eldev-real-user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "lisp/" eldev-real-user-emacs-directory))
+  (add-to-list 'load-path (expand-file-name "straight/" eldev-real-user-emacs-directory))
+  (load (expand-file-name "init.el" eldev-real-user-emacs-directory))
   ;; Any time I try to add to the `load-path' something from my
   ;; `user-emacs-directory', remember to use `eldev-real-user-emacs-directory'
   ;; instead.
   ;; (let ((user-emacs-directory eldev-real-user-emacs-directory))
-  ;;   (load (expand-file-name "init.el" eldev-real-user-emacs-directory)))
+  ;;   )
   ;; (cl-letf ((symbol-function #'add-to-list) (lambda ())
   ;;           (symbol-function #'locate-user-emacs-file (lambda ())))
   ;;   )

@@ -527,29 +527,32 @@ body)."
     (setq int (when (equal 'interactive (car-safe (car-safe body))) (pop body)))
     (list (cl-remove-if (if show-nils #'ignore #'null) (list doc decls int)) body)))
 
-(defmacro defmacro! (name arglist &rest body)
+;; It is easier to tests functions that return a value rather than macros.  So I
+;; prefer writing a helper that returns the macro body as data as opposed to
+;; doing the expansion directly in the macro.
+(defun oo--definer-body (definer definer-args)
+  (let! (((name arglist . body) definer-args)
+         ((metadata body) (oo-defun-components body))
+         (symbols (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
+    (oo-wrap-forms `((,definer ,name ,arglist ,@metadata)
+                     (block! ,name (exclude! ,@symbols)))
+                   body)))
+
+(defmacro defmacro! (&rest args)
   "Same as `defmacro!' but wrap body with `block!'.
 NAME, ARGLIST and BODY are the same as `defmacro!'.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (let! (((metadata body) (oo-defun-components body))
-         (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
-    `(cl-defmacro ,name ,arglist
-       ,@metadata
-       (block! ,name (exclude! ,@args) ,@body))))
+  (oo--definer-body 'defmacro args))
 
-(defmacro defun! (name arglist &rest body)
+(defmacro defun! (&rest args)
   "Same as `defun' but wrap body with `block!'.
 NAME, ARGS and BODY are the same as in `defun'.
 
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (let! (((metadata body) (oo-defun-components body))
-         (args (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
-    `(cl-defun ,name ,arglist
-       ,@metadata
-       (block! ,name (exclude! ,@args) ,@body))))
+  (oo--definer-body 'defun args))
 ;;;; looping
 ;; There is a huge question of whether to automatically wrap loops with
 ;; =block!=, but I decided to.
@@ -611,18 +614,6 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
-;;; with-elapsed-time!
-(require 'benchmark)
-(defmacro with-elapsed-time! (&rest forms)
-  (let* ((elapsed-time (cl-gensym "elapsed-time"))
-         (forms (macroexp-progn forms)))
-    `(let ((,elapsed-time (benchmark-run ,forms)))
-       (message "Evaluation time of %S: %.06f seconds" ',forms (car ,elapsed-time)))))
-;;; logsym!
-(defmacro logsym! (sym)
-  `(if (boundp ',sym)
-       (message "%s -> %S" ',sym (symbol-value ',sym))
-     (message "symbol %s is not bound" ',sym)))
 ;;; provide
 (provide '02-base-lib)
 ;;; 02-base-lib.el ends here

@@ -1,0 +1,93 @@
+;; Use straight.el.
+
+;;; Bootstrap straight
+(setq straight-vc-git-default-clone-depth 1)
+(setq straight-recipes-gnu-elpa-use-mirror t)
+;; (setq straight-check-for-modifications '(check-on-save find-when-checking))
+(setq straight-check-for-modifications nil)
+(setq use-package-always-defer t)
+(defvar bootstrap-version)
+(let* ((straight-repo-dir
+        (expand-file-name "straight/repos" user-emacs-directory))
+       (bootstrap-file
+        (concat straight-repo-dir "/straight.el/bootstrap.el"))
+       (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (shell-command
+     (concat
+      "mkdir -p " straight-repo-dir " && "
+      "git -C " straight-repo-dir " clone "
+      "https://github.com/raxod502/straight.el.git && "
+      "git -C " straight-repo-dir " checkout 2d407bc")))
+  (load bootstrap-file nil 'nomessage))
+;; This is a variable that has been renamed but straight still refers when
+;; doing :sraight (:no-native-compile t)
+(setq comp-deferred-compilation-black-list nil)
+
+;;; Clone the packages and then set them to proper version
+;; (for! (package packages)
+;;   (straight-vc-clone-package)
+;;   (straight-vc-checkout :commit)
+;;   ;; Then we build the packages.
+;;   )
+;;; Enable the packages
+(straight-use-package 'which-key)
+(straight-use-package 'no-littering)
+(straight-use-package 'grugru)
+(straight-use-package 'rainbow-delimiters)
+(straight-use-package 'goto-chg)
+(straight-use-package 'evil-goggles)
+(straight-use-package 'macrostep)
+(straight-use-package 'evil)
+(straight-use-package 'evil-goggles)
+(straight-use-package 'smartparens)
+(straight-use-package 'lispy)
+(straight-use-package 'lispyville)
+(straight-use-package 'corfu)
+(straight-use-package 'consult)
+(straight-use-package 'burly)
+(straight-use-package 'evil-surround)
+(straight-use-package 'expand-region)
+(straight-use-package 'helm)
+(straight-use-package 'gcmh)
+(straight-use-package 'meow)
+(straight-use-package 'tempel)
+(straight-use-package 'redacted)
+(straight-use-package 'orderless)
+(straight-use-package 'eros)
+(straight-use-package 'eshell-up)
+(straight-use-package 'eshell-z)
+(straight-use-package 'emms)
+(straight-use-package 'xr)
+(straight-use-package 'super-save)
+(straight-use-package 'helm-system-packages)
+(straight-use-package 'fennel-mode)
+(straight-use-package 'dirvish)
+(straight-use-package 'captain)
+(straight-use-package 'org-bookmark-heading)
+(straight-use-package 'outshine)
+(straight-use-package 'cape)
+(straight-use-package 'aggressive-indent)
+(straight-use-package 'ws-butler)
+(straight-use-package 'magit)
+(straight-use-package 'shut-up)
+(straight-use-package 'vertico)
+(straight-use-package 'esup)
+(straight-use-package 'org-superstar)
+(straight-use-package 'org-appear)
+(straight-use-package 'idle-require)
+(straight-use-package 'leuven-theme)
+(straight-use-package 'modus-themes)
+(straight-use-package 'monokai-theme)
+(straight-use-package 'material-theme)
+(straight-use-package 'doom-themes)
+(straight-use-package 'evil-exchange)
+(straight-use-package 'lgr)
+(straight-use-package 'anaphora)
+(straight-use-package 'ace-jump-helm-line)
+(straight-use-package 's)
+(straight-use-package 'standard-themes)
+(straight-use-package '(on :host github :repo "ajgrf/on.el"))
+
+(provide '03-init-straight)
+;;; 03-init-straight.el ends here

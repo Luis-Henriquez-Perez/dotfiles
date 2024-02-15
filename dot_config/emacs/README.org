@@ -1,3 +1,7 @@
+* opinion on external packages
+One one side of the spectrum there is the opinion.
+* naming system of advices
+* naming system of hooks
 * base files
 Within the base files there is =01-base-lib= which is loaded second only to
 =00-base-variables=.  The file =01-base-lib= cannot have external depencies; it

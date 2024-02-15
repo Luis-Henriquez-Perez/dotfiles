@@ -45,7 +45,7 @@
 (require '00-base-vars)
 (require '01-base-settings)
 (require '02-base-lib)
-(require '03-init-package)
+(require '03-init-straight)
 (require '04-base-custom)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")

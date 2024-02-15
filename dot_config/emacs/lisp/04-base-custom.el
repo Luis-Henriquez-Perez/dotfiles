@@ -37,10 +37,14 @@
 ;;
 ;;; Code:
 (require '02-base-lib)
+(require '03-init-straight)
 (require 'anaphora)
 (require 'dash)
 (require 'lgr)
 ;;; logging
+(defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer "*Messages"))
+  "Object used for logging.")
+
 (defmacro info! (msg &rest meta)
   `(lgr-info oo-lgr ,msg ,@meta))
 
@@ -76,15 +80,34 @@ Unlike `add-hook'."
   (if (and function hook)
       (remove-hook hook fsym)
     (remove-hook (oo-get-hook fsym) fsym)))
+;;;; oo-advised
+(defun! oo-advised (fsym)
+  "Return the advised function symbol for FSYM."
+  (declare (pure t) (side-effect-free t))
+  (cl-assert (symbolp fsym))
+  (set! regexp "\\`\\([^[:space:]]+\\)@\\(?:A[FR]\\|B[FUW]\\|F[AR]\\|OV\\)[^[:space:]]+\\'")
+  (alet (symbol-name fsym)
+    (when (string-match "\\(.+\\)&.+" it)
+      (intern (match-string 1 it)))))
 ;;;; oo-hook
 (defun oo-hook (fsym)
-  "Return the hook symbol specified by FSYM."
+  "Return the hook symbol for FSYM."
   (declare (pure t) (side-effect-free t))
+  (cl-assert (symbolp fsym))
   (alet (symbol-name fsym)
-    (string-match "\\(.+\\)&.+" it)
-    (intern (match-string 1 it))))
+    (when (string-match "\\(.+\\)&.+" it)
+      (intern (match-string 1 it)))))
 ;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
+;;;; silently 
+(defun oo-funcall-silently (fn &rest args)
+  "Call FN with ARGS without producing any output."
+  (shut-up (apply fn args)))
+;;;; add advise
+(defun oo-add-advice (symbol how function)
+  (aprog1 (oo-into-symbol hook '& fsym)
+    (fset it (oo-report-error-fn fsym))
+    (add-hook hook it depth local)))
 ;;;; defhook!
 ;; (defmacro defhook! (name args &rest body)
 ;;   "Add function to hook as specified by NAME.
@@ -92,7 +115,7 @@ Unlike `add-hook'."
 ;;   (let! hook (oo-hook name))
 ;;   (cl-assert hook t "%s is not a hook symbol" hook)
 ;;   `(prog1 name
-;;      (fset name ,)
+;;      (fset name (oo-condition-case-fn))
 ;;      (add-hook hook name)))
 ;; (require 'lgr)
 ;; ;;; require
@@ -110,8 +133,7 @@ Unlike `add-hook'."
 ;; ;;     (collecting! body `(require ',feature)))
 ;; ;;   (macroexp-progn body))
 ;; ;;; logging
-;; (defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer oo-log-buffer))
-;;   "Object used for logging.")
+
 ;; ;;;; advice
 ;; ;;;; expire
 ;; (defun oo-set-expire (fsym &optional when-fn)

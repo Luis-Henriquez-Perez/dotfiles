@@ -104,19 +104,20 @@
 (cl-pushnew 'evil-exchange package-selected-packages)
 (cl-pushnew 'lgr package-selected-packages)
 (cl-pushnew 'anaphora package-selected-packages)
+;; (cl-pushnew 'buttercup package-selected-packages)
 
 (cl-pushnew '(on :url "https://github.com/ajgrf/on.el") package-vc-selected-packages)
 
-(logsym! package--initialized)
-(logsym! package--archive-contents)
-(logsym! package-enable-at-startup)
+;; (logsym! package--initialized)
+;; (logsym! package--archive-contents)
+;; (logsym! package-enable-at-startup)
 
 ;; The function `package-install-selected-packages' does not activate the
 ;; packages which causes a problem fo rme.
 (unless (bound-and-true-p package--initialized)
   (package-initialize))
 
-(logsym! package--initialized)
+;; (logsym! package--initialized)
 
 (unless package-archive-contents
   (package-refresh-contents))

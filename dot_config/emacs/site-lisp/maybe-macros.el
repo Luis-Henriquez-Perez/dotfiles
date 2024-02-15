@@ -317,3 +317,39 @@ arguments FN will be called with."
 (defun oo-buffer-contents (buffer)
   (with-current-buffer (get-buffer buffer)
     (buffer-string)))
+;;;; advice abbrev alist
+(defvar oo-how-alist '(("AR" . :around)
+                       ("AF" . :after)
+                       ("BF" . :before)
+                       ("BU" . :before-until)
+                       ("OV" . :override)
+                       ("BW" . :before-while)
+                       ("FA" . :filter-args)
+                       ("FR" . :filter-return)))
+;;;; oo-advise-components
+(def oo-advice-symbol-regexp ())
+(defvar oo-hook-symbol-regexp ())
+(defun oo-advice-components (fsym)
+  "Return."
+  (declare (pure t) (side-effect-free t))
+  (s-match regexp (symbol-name fsym)))
+;;;; oo-or-fn 
+(describe "oo-or-fn"
+  (it "returns non-nil if any of functions match"
+    (expect (funcall (oo-or-fn #'stringp #'integerp) "foo"))
+    (expect (funcall (oo-or-fn #'stringp #'integerp) 4)))
+  (it "return nil if none of the functions match"
+    (expect (not (funcall (oo-or-fn #'stringp #'integerp) 'a)))
+    (expect (not (funcall (oo-or-fn #'stringp #'integerp) 4.5)))))
+;;; with-elapsed-time!
+(require 'benchmark)
+(defmacro with-elapsed-time! (&rest forms)
+  (let* ((elapsed-time (cl-gensym "elapsed-time"))
+         (forms (macroexp-progn forms)))
+    `(let ((,elapsed-time (benchmark-run ,forms)))
+       (message "Evaluation time of %S: %.06f seconds" ',forms (car ,elapsed-time)))))
+;;; logsym!
+(defmacro logsym! (sym)
+  `(if (boundp ',sym)
+       (message "%s -> %S" ',sym (symbol-value ',sym))
+     (message "symbol %s is not bound" ',sym)))
