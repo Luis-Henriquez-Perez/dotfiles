@@ -269,43 +269,82 @@ Collect symbols matching REGEXP in BODY and let bind them to."
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;;; let!
-;; This is really messy lol.  I am sure there is a better way to do this.
-;; Basically, I am saying add a comma to all the symbols, but replace certain
-;; patterns with and record these patterns for me.  I would rather do this with
-;; an iterator.
-(defun oo--match-form-wrappers (match-form)
-  "Return the pcase syntax representation of MATCH-FORM.
-MATCH-FORM is a nested form of lists, vectors, and symbols."
-  (cl-labels ((fn (wrappers tree)
-                (pcase tree
-                  ((pred null)
-                   (list wrappers nil))
-                  ((and sym (pred symbolp))
-                   (list wrappers (list '\, sym)))
-                  (`(&as ,whole ,parts)
-                   (alet! (cl-gensym "&as")
-                     (list `((let! ((,whole ,it)
-                                    (,parts ,it))))
-                           (list '\, it))))
-                  (`(,(or '&map '&alist '&plist '&hash) ,map)
-                   (alet! (cl-gensym "&map")
-                     (list `((let ((,it ,map))) (with-map! ,it))
-                           (list '\, it))))
-                  ((pred listp)
-                   (pcase-let* ((`(,wrappers1 ,tree1) (fn nil (car tree)))
-                                (`(,wrappers2 ,tree2) (fn nil (cdr tree))))
-                     (list (append wrappers wrappers1 wrappers2)
-                           (cons tree1 tree2))))
-                  ((pred vectorp)
-                   (alet! (mapcar (apply-partially #'fn wrappers) (append tree))
-                     (list (apply #'append (mapcar #'car it))
-                           (vconcat (mapcan #'cdr it))))))))
-    (pcase-let* ((`(,wrappers ,pcase-mf) (fn nil match-form)))
-      (pcase pcase-mf
-        (`(,(and comma (guard (equal '\, comma))) ,(and symbol (pred symbolp)))
-         (list wrappers symbol))
-        (_
-         (list wrappers (list '\` pcase-mf)))))))
+;; (defun oo-tree-map-nodes (pred fun tree)
+;;   "Same as `-tree-map-nodes', but works for improper lists."
+;;   (cond ((funcall pred tree)
+;;          (funcall fun tree))
+;;         ((consp tree)
+;;          (cons (oo-tree-map-nodes pred fun (car tree))
+;;                (oo-tree-map-nodes pred fun (cdr tree))))
+;;         (t
+;;          tree)))
+
+(defun oo-tree-map-nodes (pred fn tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+         (funcall fn tree))
+        ((consp tree)
+         (cons (oo-tree-map-nodes pred fn (car tree))
+               (oo-tree-map-nodes pred fn (cdr tree))))
+        ((vectorp tree)
+         `[,@(mapcar (apply-partially #'oo-tree-map-nodes pred fn)
+                     (append tree nil))])
+        (t
+         tree)))
+
+(defun oo--to-pcase (match-form)
+  "Return MATCH-FORM as pcase syntax.
+MATCH form is a potentially nested structure of only list, vectors and symbols."
+  (if (symbolp match-form)
+      match-form
+    (cl-flet ((true-symbolp (o) (and o (symbolp o)))
+              (add-comma (o) (list '\, o)))
+      (list '\` (oo-tree-map-nodes #'true-symbolp #'add-comma match-form)))))
+
+(defvar oo--destruc-alist '((oo--&as-mf-p . oo--&as-mf-destruc)))
+
+(defun oo--&as-mf-p (form)
+  "Return non-nil if FORM is an `&as' match form pattern."
+  (pcase form
+    (`(,(or '&as '&whole) ,(and (pred symbolp) whole) ,part)
+     t)
+    (_
+     nil)))
+
+(defun oo--&as-mf-destruc (as-match-form value)
+  "Return friendly bindings."
+  (pcase-let* ((`(&as ,whole ,parts) as-match-form)
+               (gsym (cl-gensym "&as")))
+    `((,gsym ,value)
+      (,whole ,gsym)
+      (,parts ,gsym))))
+
+(defun oo--mf-match-p (match-form)
+  "Return non-nil if FORM matches any special match forms."
+  (cl-some (lambda (pred) (funcall pred match-form))
+           (mapcar #'car oo--destruc-alist)))
+
+(defun oo--mf-destruc (match-form value)
+  "Return"
+  (cl-flet ((match-p (pcase-lambda (`(,pred . ,_)) (funcall pred match-form))))
+    (pcase-let ((`(,_ . ,destruc-fn) (cl-find-if #'match-p oo--destruc-alist)))
+      (funcall destruc-fn match-form value))))
+
+(defun oo--mf-replace (match-form value)
+  "Return list of bindings."
+  (list  value)
+  (let (other-bindings)
+    (cl-flet ((replace (lambda (mf)
+                         (cl-with-gensyms (mf-value)
+                           (appending! other-bindings (oo--mf-destruc mf mf-value))
+                           mf-value))))
+      `((,(oo-tree-map-nodes #'oo--mf-match-p #'replace match-form) ,value)
+        ,@other-bindings))))
+
+(defun oo--to-pcase-let (match-form value)
+  "Return BINDINGS."
+  (mapcar (pcase-lambda (`(,mf ,val)) (list (oo--to-pcase mf) val))
+          (oo--mf-replace match-form value)))
 
 (defun oo--let-bind (bind)
   "Return a list of wrappers for binding BIND."
@@ -323,8 +362,7 @@ MATCH-FORM is a nested form of lists, vectors, and symbols."
     (`(,(or ':noflet :nflet) ,(and fn (pred symbolp)) ,lambda)
      `((lef! ((,fn ,lambda)))))
     (`(,(and mf (or (pred listp) (pred vectorp))) ,value)
-     (pcase-let ((`(,wrappers ,pcase-mf) (oo--match-form-wrappers mf)))
-       `((pcase-let* ((,pcase-mf ,value))) ,@wrappers)))
+     `((pcase-let* ,(oo--to-pcase-let mf value))))
     (_
      (error "Unknown predicate %S" bind))))
 
@@ -531,11 +569,13 @@ body)."
 ;; prefer writing a helper that returns the macro body as data as opposed to
 ;; doing the expansion directly in the macro.
 (defun oo--definer-body (definer definer-args)
+  "Return the form for DEFINER.
+Meant to be used in `defmacro!' and `defun!'."
   (let! (((name arglist . body) definer-args)
          ((metadata body) (oo-defun-components body))
          (symbols (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
     (oo-wrap-forms `((,definer ,name ,arglist ,@metadata)
-                     (block! ,name (exclude! ,@symbols)))
+                     (block! (exclude! ,@symbols)))
                    body)))
 
 (defmacro defmacro! (&rest args)
@@ -614,6 +654,19 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
           (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
+;;;; set!
+(defmacro set! (pattern value)
+  "Like `pcase-setq' but use the syntax of `let!'."
+  (if (symbolp pattern)
+      `(setq ,pattern ,value)
+    ;; Damn I did not realize I need to know the gensym values.  I need to make
+    ;; sure not to bind the gensym values.
+    (let* ((binds (oo--to-pcase-let pattern value))
+           (all (flatten-list (mapcar #'car binds)))
+           (non-gensyms (cl-remove-if-not #'symbolp (flatten-list pattern)))
+           (gensyms (cl-set-difference all non-gensyms)))
+      `(let ,gensyms
+         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
 (provide '02-base-lib)
 ;;; 02-base-lib.el ends here

@@ -125,7 +125,7 @@
 ;; This is kind of what `package-install-selected-packages' does, but it
 ;; messages and stuff and it does not show which package is not available, which
 ;; I did not like.
-(for! (package package-selected-packages)
+(dolist (package package-selected-packages)
   (unless (package-installed-p package)
     (if (assq package package-archive-contents)
         (package-install package 'dont-select)

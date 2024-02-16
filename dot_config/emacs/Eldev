@@ -36,7 +36,7 @@
 ;; Tell eldev that I need the tests directory in the load-path for running tests.
 (eldev-add-loading-roots 'test "tests")
 ;; Provides the ability to intelligently inference from commands.
-(setq eldev-dwim t)
+;; (setq eldev-dwim t)
 ;; Eldev changes this to something else.  I need it so my init file will load
 ;; the proper things.
 ;; (cl-pushnew (expand-file-name "packages/" eldev-real-user-emacs-directory) package-directory-list)
@@ -61,12 +61,12 @@
   (message "BOOTSTRAPPING!")
   (message "BOOTSTRAPPING!")
   (message "BOOTSTRAPPING!")
-  (setq-default elpa-bootstrap-p t)
-  (setq-default load-prefer-newer t)
-  (eldev--inject-loading-roots 'bootstrap)
-  (add-to-list 'load-path (expand-file-name "lisp/" eldev-real-user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "straight/" eldev-real-user-emacs-directory))
-  (load (expand-file-name "init.el" eldev-real-user-emacs-directory))
+  ;; (setq-default elpa-bootstrap-p t)
+  ;; (setq-default load-prefer-newer t)
+  ;; (eldev--inject-loading-roots 'bootstrap)
+  ;; (add-to-list 'load-path (expand-file-name "lisp/" eldev-real-user-emacs-directory))
+  ;; (add-to-list 'load-path (expand-file-name "straight/" eldev-real-user-emacs-directory))
+  ;; (load (expand-file-name "init.el" eldev-real-user-emacs-directory))
   ;; Any time I try to add to the `load-path' something from my
   ;; `user-emacs-directory', remember to use `eldev-real-user-emacs-directory'
   ;; instead.

@@ -48,7 +48,7 @@
       (while (and bindings (sequencep (car-safe (car-safe bindings))))
         (push `(seq-let ,@(pop bindings)) wrappers))
       (awhen! (take-while! (oo-non-nil-symbol-p (car-safe (car-safe bindings))) bindings)
-        (push `(let* ,it) wrappers)))
+              (push `(let* ,it) wrappers)))
     (oo-wrap-forms (reverse wrappers) body)))
 ;; Simple symbols, using this function can save me having to provide a string for
 ;; =format=.
@@ -59,17 +59,17 @@
 
 ;; Convert patterns to pcase patterns
 ;; Essentially, I am just mapping.
-;; (defun oo-seq-map-nodes (pred fn tree)
-;;   "Same as `-tree-map-nodes', but works for improper lists."
-;;   (cond ((funcall pred tree)
-;;          (funcall fn tree))
-;;         ((consp tree)
-;;          (cons (oo-tree-map-nodes pred fn (car tree))
-;;                (oo-tree-map-nodes pred fn (cdr tree))))
-;;         ((vectorp tree)
-;;          (seq-into (oo-tree-map-nodes pred fn (seq-into tree 'list)) 'vector))
-;;         (t
-;;          tree)))
+(defun oo-seq-map-nodes (pred fn tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+         (funcall fn tree))
+        ((consp tree)
+         (cons (oo-tree-map-nodes pred fn (car tree))
+               (oo-tree-map-nodes pred fn (cdr tree))))
+        ((vectorp tree)
+         (seq-into (oo-tree-map-nodes pred fn (seq-into tree 'list)) 'vector))
+        (t
+         tree)))
 
 ;;;; function transformers
 ;; (defun oo-notfn (fn)
@@ -353,3 +353,41 @@ arguments FN will be called with."
   `(if (boundp ',sym)
        (message "%s -> %S" ',sym (symbol-value ',sym))
      (message "symbol %s is not bound" ',sym)))
+
+;; This is really messy lol.  I am sure there is a better way to do this.
+;; Basically, I am saying add a comma to all the symbols, but replace certain
+;; patterns with and record these patterns for me.  I would rather do this with
+;; an iterator.
+(defun oo--match-form-wrappers (match-form)
+  "Return the pcase syntax representation of MATCH-FORM.
+MATCH-FORM is a nested form of lists, vectors, and symbols."
+  (cl-labels ((fn (wrappers tree)
+                (pcase tree
+                  ((pred null)
+                   (list wrappers nil))
+                  ((and sym (pred symbolp))
+                   (list wrappers (list '\, sym)))
+                  (`(&as ,whole ,parts)
+                   (alet! (cl-gensym "&as")
+                     (list `((let! ((,whole ,it)
+                                    (,parts ,it))))
+                           (list '\, it))))
+                  (`(,(or '&map '&alist '&plist '&hash) ,map)
+                   (alet! (cl-gensym "&map")
+                     (list `((let ((,it ,map))) (with-map! ,it))
+                           (list '\, it))))
+                  ((pred listp)
+                   (pcase-let* ((`(,wrappers1 ,tree1) (fn nil (car tree)))
+                                (`(,wrappers2 ,tree2) (fn nil (cdr tree))))
+                     (list (append wrappers wrappers1 wrappers2)
+                           (cons tree1 tree2))))
+                  ((pred vectorp)
+                   (alet! (mapcar (apply-partially #'fn wrappers) (append tree))
+                     (list (apply #'append (mapcar #'car it))
+                           (vconcat (mapcan #'cdr it))))))))
+    (pcase-let* ((`(,wrappers ,pcase-mf) (fn nil match-form)))
+      (pcase pcase-mf
+        (`(,(and comma (guard (equal '\, comma))) ,(and symbol (pred symbolp)))
+         (list wrappers symbol))
+        (_
+         (list wrappers (list '\` pcase-mf)))))))
