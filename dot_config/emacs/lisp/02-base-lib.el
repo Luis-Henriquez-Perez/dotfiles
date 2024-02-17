@@ -47,37 +47,12 @@
 ;; Most elisp predicate functions end in by "-p" to denote that they return
 ;; non-nil if a condition is true.  Many of the predicate functions provided by
 ;; =cl-lib= do not follow this convention.
-(defalias 'oo-all-p 'cl-every)
-(defalias 'oo-every-p 'cl-every)
-(defalias 'oo-always-p 'cl-every)
-(defalias 'oo-none-p 'cl-notany)
-(defalias 'oo-never-p 'cl-notany)
-(defalias 'oo-some-p 'cl-notevery)
-(defalias 'oo-select #'cl-remove-if-not)
-(defalias 'oo-filter #'cl-remove-if-not)
-(defalias 'oo-true #'always)
-(defalias 'oo-false #'ignore)
 ;;;; helpers
 (defun oo-cons-cell-p (obj)
   "Return non-nil only if OBJ is a cons-cell."
   (declare (pure t) (side-effect-free t))
   (and (consp obj)
        (not (listp (cdr obj)))))
-
-(defun oo-proper-list-p (obj)
-  "Return non-nil only if OBJ is a proper list.
-A proper list is defined as a sequence of cons cells ending with nil."
-  (declare (pure t) (side-effect-free t))
-  (and (listp obj)
-       (or (null obj)
-           (null (cdr-safe (last obj))))))
-
-(defun oo-improper-list-p (obj)
-  "Return non-nil only if OBJ is not a proper list.
-See `oo-proper-list-p'."
-  (declare (pure t) (side-effect-free t))
-  (and (listp obj)
-       (cdr-safe (last obj))))
 
 (defun oo-snoc (list elt &rest elts)
   "Append ELT and ELTS (if provided) to the end of LIST."
@@ -126,8 +101,6 @@ List markers are symbols that begin with `&' such as are `&rest' and
   (declare (indent 1))
   `(let ((it ,expr)) ,@body))
 ;;;; functional
-(defalias 'oo-partial-fn 'apply-partially)
-
 (defun oo-if-fn (condition-fn if-fn else-fn)
   "Return a function that returns."
   (lambda (&rest args) (if (funcall condition-fn)
@@ -245,6 +218,13 @@ SETTER is the same as in `appending!'."
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   (alet! `(:test ,test :test-not ,test-not :key ,key)
     `(,setter ,place (cl-union ,place ,list ,@it))))
+;;;; pcase-match 
+(defmacro pcase-match! (expr value)
+  "Return non-nil if EXPR matches VALUE.
+EXPR is a `pcase-style' expression."
+  `(pcase ,value
+     (,expr t)
+     (_ nil)))
 ;;;; map!
 (defun oo--map-let-binds (map body regexp &optional use-keywords)
   "Return a list of let-bindings for MAP.
@@ -269,16 +249,8 @@ Collect symbols matching REGEXP in BODY and let bind them to."
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;;; let!
-;; (defun oo-tree-map-nodes (pred fun tree)
-;;   "Same as `-tree-map-nodes', but works for improper lists."
-;;   (cond ((funcall pred tree)
-;;          (funcall fun tree))
-;;         ((consp tree)
-;;          (cons (oo-tree-map-nodes pred fun (car tree))
-;;                (oo-tree-map-nodes pred fun (cdr tree))))
-;;         (t
-;;          tree)))
-
+;; I want `oo-tree-map-nodes' to be more flexible.  I want it to accept maybe an
+;; alist of (PRED . FN) as opposed to a PRED, FN.
 (defun oo-tree-map-nodes (pred fn tree)
   "Same as `-tree-map-nodes', but works for improper lists."
   (cond ((funcall pred tree)
@@ -314,7 +286,7 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
 (defun oo--&as-mf-destruc (as-match-form value)
   "Return friendly bindings."
   (pcase-let* ((`(&as ,whole ,parts) as-match-form)
-               (gsym (cl-gensym "&as")))
+               (gsym (cl-gensym "special-&as-match-form")))
     `((,gsym ,value)
       (,whole ,gsym)
       (,parts ,gsym))))
@@ -655,18 +627,24 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
 ;;;; set!
+(defun oo--get-symbols (pattern)
+  (cl-flet* ((not-wanted-p (it) (member it '(\` \,))))
+    (cl-remove-if #'not-wanted-p (delete-dups (flatten-list pattern)))))
+
 (defmacro set! (pattern value)
   "Like `pcase-setq' but use the syntax of `let!'."
   (if (symbolp pattern)
       `(setq ,pattern ,value)
     ;; Damn I did not realize I need to know the gensym values.  I need to make
     ;; sure not to bind the gensym values.
-    (let* ((binds (oo--to-pcase-let pattern value))
-           (all (flatten-list (mapcar #'car binds)))
-           (non-gensyms (cl-remove-if-not #'symbolp (flatten-list pattern)))
+    ;; I need flatten to also work for vectors.
+    (let! ((binds (oo--to-pcase-let pattern value))
+           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo--get-symbols pattern)))
+           (all (oo--get-symbols (mapcar #'car binds)))
            (gensyms (cl-set-difference all non-gensyms)))
       `(let ,gensyms
-         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
+         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq)
+                                  binds))))))
 ;;; provide
 (provide '02-base-lib)
 ;;; 02-base-lib.el ends here
