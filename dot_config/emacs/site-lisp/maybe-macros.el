@@ -391,3 +391,39 @@ MATCH-FORM is a nested form of lists, vectors, and symbols."
          (list wrappers symbol))
         (_
          (list wrappers (list '\` pcase-mf)))))))
+;;; 
+(defun oo-proper-list-p (obj)
+  "Return non-nil only if OBJ is a proper list.
+A proper list is defined as a sequence of cons cells ending with nil."
+  (declare (pure t) (side-effect-free t))
+  (and (listp obj)
+       (or (null obj)
+           (null (cdr-safe (last obj))))))
+
+(defun oo-improper-list-p (obj)
+  "Return non-nil only if OBJ is not a proper list.
+See `oo-proper-list-p'."
+  (declare (pure t) (side-effect-free t))
+  (and (listp obj)
+       (cdr-safe (last obj))))
+
+(defun oo--tree-do (alist tree accum)
+  "Perform action on TREE according to ALIST."
+  (list tree accum)
+  ;; (while alist
+  ;;   ())
+  ;; (cl-find-if (pcase-lambda (`(,pred)) (funcall pred tree)) alist)
+  )
+
+(defun oo--tree-do-recurse-list (alist tree)
+  (cons (oo--tree-do alist (car tree))
+        (oo--tree-do alist (cdr tree))))
+
+(defun oo--tree-do-recurse-vector (alist tree)
+  `[,@(mapcar (apply-partially #'oo--tree-do alist tree)
+              (append tree nil))])
+;; (cons #'symbolp #'oo--tree-collect-symbol)
+;; (cons #'vectorp #'oo--tree-do-recurse-vector)
+;; (cons #'listp #'oo--tree-do-recurse-list)
+;; (cons #'always #'identity)
+

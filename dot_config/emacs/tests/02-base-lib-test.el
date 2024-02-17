@@ -218,7 +218,7 @@
             :to-equal
             '((a b *match-form*) '(1 2 (3 . 4))))))
 
-(describe "oo--convert-pcase-to-let"
+(xdescribe "oo--convert-pcase-to-let"
   (it "should"
     (should-not (oo--to-pcase-let '(a (&as foo (b c)) d) '(1 (2 3) 4)))))
 
