@@ -233,7 +233,7 @@ Collect symbols matching REGEXP in BODY and let bind them to."
          (let-binds `((,mapsym ,map)))
          (name nil)
          (key nil))
-    (dolist (obj (flatten-list body))
+    (dolist (obj (flatten-tree body))
       (when (and obj
                  (symbolp obj)
                  (setq name (symbol-name obj))
@@ -398,8 +398,7 @@ DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
      (adjoining! (map-elt data :let) (list name (cl-gensym (symbol-name name))))
      (list data rest))
     (`(set! ,match-form ,value . ,(and plist (guard t)))
-     (alet! (map-elt plist :init)
-       (pushing! (map-elt data :let) (list match-form it)))
+     (pushing! (map-elt data :let) (list match-form (map-elt plist :init)))
      (list data `(setq ,match-form ,value)))
     (`((,(or 'stub! 'flet!) . ,args) . ,rest)
      (let! (((data1 rest) (oo--parse-block nil rest)))
@@ -515,16 +514,17 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
     (pcase-dolist (`(,sym . ,rest) bindings)
       (setq orig-fn (gensym "orig-fn"))
       (push `(,orig-fn (when (fboundp #',sym) (symbol-function #',sym))) binds)
-      (alet! (pcase rest
-               (`(,fn . nil)
-                `(lambda (&rest args)
-                   (let ((this-fn ,orig-fn))
-                     (apply ,fn args))))
-               (`(,args . ,function-body)
-                `(lambda ,args
-                   (let ((this-fn ,orig-fn))
-                     ,@function-body))))
-        (push `((symbol-function #',sym) ,it) binds)))
+      (push (list (symbol-function #',sym)
+                  (pcase rest
+                    (`(,fn . nil)
+                     `(lambda (&rest args)
+                        (let ((this-fn ,orig-fn))
+                          (apply ,fn args))))
+                    (`(,args . ,function-body)
+                     `(lambda ,args
+                        (let ((this-fn ,orig-fn))
+                          ,@function-body)))))
+            binds))
     `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (body &optional show-nils)
@@ -545,7 +545,7 @@ body)."
 Meant to be used in `defmacro!' and `defun!'."
   (let! (((name arglist . body) definer-args)
          ((metadata body) (oo-defun-components body))
-         (symbols (cl-remove-if #'oo-list-marker-p (flatten-list arglist))))
+         (symbols (cl-remove-if #'oo-list-marker-p (flatten-tree arglist))))
     (oo-wrap-forms `((,definer ,name ,arglist ,@metadata)
                      (block! (exclude! ,@symbols)))
                    body)))
@@ -627,9 +627,14 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
                     (funcall this-fn file noerror t nosuffix must-suffix))))
      ,@body))
 ;;;; set!
-(defun oo--get-symbols (pattern)
-  (cl-flet* ((not-wanted-p (it) (member it '(\` \,))))
-    (cl-remove-if #'not-wanted-p (delete-dups (flatten-list pattern)))))
+(defun! oo--get-symbols (pattern)
+  (when-let (flattened (flatten-tree pattern))
+    (delete-dups (append (thread-last (cl-remove-if-not #'vectorp flattened)
+                                      (mapcar (lambda (it) (seq-into it 'list)))
+                                      (apply #'append)
+                                      (oo--get-symbols))
+                         (cl-remove-if (lambda (it) (or (vectorp it) (member it '(\` \,))))
+                                       flattened)))))
 
 (defmacro set! (pattern value)
   "Like `pcase-setq' but use the syntax of `let!'."
@@ -643,8 +648,16 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
            (all (oo--get-symbols (mapcar #'car binds)))
            (gensyms (cl-set-difference all non-gensyms)))
       `(let ,gensyms
-         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq)
-                                  binds))))))
+         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
+;;;; threading macros 
+(defmacro alet>>! (&rest forms)
+  `(set! it (thread-last ,@forms)))
+(defmacro alet>! (&rest forms)
+  `(set! it (thread-first ,@forms)))
+(defmacro let>>! (pattern &rest forms)
+  `(set! ,pattern (thread-last ,@forms)))
+(defmacro let>! (pattern &rest forms)
+  `(set! ,pattern (thread-first ,@forms)))
 ;;; provide
 (provide '02-base-lib)
 ;;; 02-base-lib.el ends here
