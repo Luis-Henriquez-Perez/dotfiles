@@ -427,3 +427,41 @@ See `oo-proper-list-p'."
 ;; (cons #'listp #'oo--tree-do-recurse-list)
 ;; (cons #'always #'identity)
 
+;; I want to use this to implement `block!'.
+(defun oo--traverse-tree (tree)
+  (let ((stack (list (list tree)))
+        (node nil)
+        (nodes nil))
+    (while stack
+      (cond ((car stack)
+             (setq node (pop (car stack)))
+             (push node nodes)
+             (when (listp node) (push node stack)))
+            (t
+             (pop stack))))
+    (nreverse nodes)))
+
+(oo--traverse-tree '(a (b c) d))
+
+((a (b c) d) a (b c) b c d)
+
+;; => ((a (b c) d) a (b c) b c d)
+
+(oo--traverse-tree '(a (b c) d))
+
+(defun -tree-map-nodes-iter (pred fun tree)
+  "Call FUN on each node of TREE that satisfies PRED iteratively.
+
+If PRED returns nil, continue descending down this node.  If PRED
+returns non-nil, apply FUN to this node and do not descend
+further."
+  (let ((stack (list tree))
+        (nodes nil))
+    (while stack
+      (let ((node (pop stack)))
+        (if (funcall pred node)
+            (push (funcall fun node) nodes)
+          (when (listp node)
+            (dolist (child node)
+              (push child stack))))))
+    (nreverse nodes)))

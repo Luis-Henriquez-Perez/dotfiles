@@ -628,6 +628,7 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
      ,@body))
 ;;;; set!
 (defun! oo--get-symbols (pattern)
+  "Return."
   (when-let (flattened (flatten-tree pattern))
     (delete-dups (append (thread-last (cl-remove-if-not #'vectorp flattened)
                                       (mapcar (lambda (it) (seq-into it 'list)))
@@ -651,12 +652,18 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
          ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;;; threading macros 
 (defmacro alet>>! (&rest forms)
+  "Bind the result of `thread-last' on FORMS to `it'."
   `(set! it (thread-last ,@forms)))
 (defmacro alet>! (&rest forms)
+  "Bind the result of `thread-first' on FORMS to `it'."
   `(set! it (thread-first ,@forms)))
 (defmacro let>>! (pattern &rest forms)
+  "Bind the result of `thread-last' on FORMS to PATTERN.
+See `set!'."
   `(set! ,pattern (thread-last ,@forms)))
 (defmacro let>! (pattern &rest forms)
+  "Bind the result of `thread-first' on FORMS to PATTERN.
+See `set!'."
   `(set! ,pattern (thread-first ,@forms)))
 ;;; provide
 (provide '02-base-lib)

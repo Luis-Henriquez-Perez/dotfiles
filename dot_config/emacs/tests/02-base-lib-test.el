@@ -252,10 +252,27 @@
     (expect (oo--definer-body 'defun '(foo (a) 2))
             :to-equal '(defun foo (a) (block! (exclude! a) 2)))))
 
+(describe "oo--get-symbols"
+  (it "gets the symbols from"
+    (expect (oo--get-symbols '(,a ,b [,c ,d])) :to-have-same-items-as '(a b c d))
+    (expect (oo--get-symbols '(,a ,b ,c ,d)) :to-have-same-items-as '(a b c d))
+    (expect (oo--get-symbols '(a b [c d])) :to-have-same-items-as '(a b c d))
+    (expect (oo--get-symbols '(a b c d)) :to-have-same-items-as '(a b c d))))
+
 (describe "set!"
   (it "should act like `setq' when given a symbol"
-    (expect 1 :to-be (let (a) (set! a 1) 1)))
-  (xit "should be able to destructure arguments passed in."
-    (expect '(1 2) :to-be (let (a b) (set! (a b) '(1 2)) (list a b)))))
+    (expect (let (a) (set! a 1) 1) :to-be 1))
+  (it "should be able to destructure arguments passed in."
+    (expect (let (a b c) (set! (a (b . c)) '(1 (3 . 4)))))
+    (expect (let (a b) (set! (a b) '(1 2)) (list a b)) :to-equal '(1 2)))
+  (it "should work with vectors as well")
+  (it "should be able to use special patterns"
+    (expect (let (a b c)
+              (set! (a (&as foo (b . c))) '(1 (3 . 4)))
+              (list a b c foo))
+            :to-equal
+            '(1 3 4 (3 . 4)))))
+
+(describe "alet>>!")
 
 (provide '02-base-lib-test)
