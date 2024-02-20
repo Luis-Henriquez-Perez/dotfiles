@@ -192,7 +192,7 @@
 ;;        ,@resets)))
 ;;;;; Suppressing unecessary messages
 ;; There are tons of compilation messages which is one of the complaints with
-;; the package.el.  The idea is if we do not. 
+;; the package.el.  The idea is if we do not.
 
 ;; Funny thing is I actually do not know which packages were.
 ;; The idea is to use this macro to determine whether.
@@ -333,7 +333,7 @@ arguments FN will be called with."
   "Return."
   (declare (pure t) (side-effect-free t))
   (s-match regexp (symbol-name fsym)))
-;;;; oo-or-fn 
+;;;; oo-or-fn
 (describe "oo-or-fn"
   (it "returns non-nil if any of functions match"
     (expect (funcall (oo-or-fn #'stringp #'integerp) "foo"))
@@ -391,7 +391,7 @@ MATCH-FORM is a nested form of lists, vectors, and symbols."
          (list wrappers symbol))
         (_
          (list wrappers (list '\` pcase-mf)))))))
-;;; 
+;;;
 (defun oo-proper-list-p (obj)
   "Return non-nil only if OBJ is a proper list.
 A proper list is defined as a sequence of cons cells ending with nil."
@@ -465,3 +465,13 @@ further."
             (dolist (child node)
               (push child stack))))))
     (nreverse nodes)))
+;;;; pcase-match
+(defmacro pcase-match! (expr value)
+  "Return non-nil if EXPR matches VALUE.
+EXPR is a `pcase-style' expression."
+  `(pcase ,value
+     (,expr t)
+     (_ nil)))
+;;;; oo-matches-p
+(defun oo-matches-p (pattern value)
+  "Return non-nil if PATTERN matches VALUE.")

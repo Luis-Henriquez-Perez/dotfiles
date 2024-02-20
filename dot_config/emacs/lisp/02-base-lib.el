@@ -54,11 +54,6 @@
   (and (consp obj)
        (not (listp (cdr obj)))))
 
-(defun oo-snoc (list elt &rest elts)
-  "Append ELT and ELTS (if provided) to the end of LIST."
-  (declare (pure t) (side-effect-free t))
-  (append list (list elt) elts))
-
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
 FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
@@ -69,7 +64,7 @@ ensure the result is syntactically valid."
   (setq wrappers (reverse wrappers))
   (setq forms (append (pop wrappers) forms))
   (dolist (wrapper wrappers)
-    (setq forms (oo-snoc wrapper forms)))
+    (setq forms (append wrapper (list forms))))
   forms)
 
 (defun oo-into-string (&rest args)
@@ -153,7 +148,7 @@ SETTER is the symbol of the macro or function used to do the setting."
 (cl-defmacro collecting! (place item &key (setter 'setf))
   "Affix ITEM to the end of PLACE.
 SETTER is the same as in `appending!'."
-  `(,setter ,place (oo-snoc ,place ,item)))
+  `(,setter ,place (append ,place (list ,item))))
 
 (defalias 'snocing! 'collecting!)
 (defalias 'affixing! 'collecting!)
@@ -218,13 +213,6 @@ SETTER is the same as in `appending!'."
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   (alet! `(:test ,test :test-not ,test-not :key ,key)
     `(,setter ,place (cl-union ,place ,list ,@it))))
-;;;; pcase-match 
-(defmacro pcase-match! (expr value)
-  "Return non-nil if EXPR matches VALUE.
-EXPR is a `pcase-style' expression."
-  `(pcase ,value
-     (,expr t)
-     (_ nil)))
 ;;;; map!
 (defun oo--map-let-binds (map body regexp &optional use-keywords)
   "Return a list of let-bindings for MAP.
@@ -644,7 +632,7 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
     ;; Damn I did not realize I need to know the gensym values.  I need to make
     ;; sure not to bind the gensym values.
     ;; I need flatten to also work for vectors.
-    (let! ((binds (oo--to-pcase-let pattern value))
+    (let* ((binds (oo--to-pcase-let pattern value))
            (non-gensyms (cl-remove-if #'oo-list-marker-p (oo--get-symbols pattern)))
            (all (oo--get-symbols (mapcar #'car binds)))
            (gensyms (cl-set-difference all non-gensyms)))
@@ -660,10 +648,12 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 (defmacro let>>! (pattern &rest forms)
   "Bind the result of `thread-last' on FORMS to PATTERN.
 See `set!'."
+  (declare (indent 1))
   `(set! ,pattern (thread-last ,@forms)))
 (defmacro let>! (pattern &rest forms)
   "Bind the result of `thread-first' on FORMS to PATTERN.
 See `set!'."
+  (declare (indent 1))
   `(set! ,pattern (thread-first ,@forms)))
 ;;; provide
 (provide '02-base-lib)
