@@ -501,8 +501,8 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
   (let (binds orig-fn)
     (pcase-dolist (`(,sym . ,rest) bindings)
       (setq orig-fn (gensym "orig-fn"))
-      (push `(,orig-fn (when (fboundp #',sym) (symbol-function #',sym))) binds)
-      (push (list (symbol-function #',sym)
+      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
+      (push (list `(symbol-function ',sym)
                   (pcase rest
                     (`(,fn . nil)
                      `(lambda (&rest args)
