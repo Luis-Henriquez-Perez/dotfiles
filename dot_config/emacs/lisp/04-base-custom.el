@@ -68,12 +68,12 @@
   (oo-condition-case-fn fn :action (apply-partially #'oo-report-error fn)))
 ;;;; oo-add-hook
 ;; No anonymous hooks allowed.
-(defun oo-add-hook (hook fsym &optional depth local)
+(defun! oo-add-hook (hook fsym &optional depth local)
   "Generate a function from FSYM and add it to HOOK.
 Unlike `add-hook'."
-  (aprog1 (oo-into-symbol hook '& fsym)
-    (fset it (oo-report-error-fn fsym))
-    (add-hook hook it depth local)))
+  (aprog! (intern (format "%s&%s" hook fsym)))
+  (fset it (oo-report-error-fn fsym))
+  (add-hook hook it depth local))
 ;;;; remove hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
@@ -86,17 +86,17 @@ Unlike `add-hook'."
   (declare (pure t) (side-effect-free t))
   (cl-assert (symbolp fsym))
   (set! regexp "\\`\\([^[:space:]]+\\)@\\(?:A[FR]\\|B[FUW]\\|F[AR]\\|OV\\)[^[:space:]]+\\'")
-  (alet (symbol-name fsym)
-    (when (string-match "\\(.+\\)&.+" it)
-      (intern (match-string 1 it)))))
+  (aset! (symbol-name fsym))
+  (when (string-match "\\(.+\\)&.+" it)
+    (intern (match-string 1 it))))
 ;;;; oo-hook
-(defun oo-hook (fsym)
+(defun! oo-hook (fsym)
   "Return the hook symbol for FSYM."
   (declare (pure t) (side-effect-free t))
   (cl-assert (symbolp fsym))
-  (alet (symbol-name fsym)
-    (when (string-match "\\(.+\\)&.+" it)
-      (intern (match-string 1 it)))))
+  (alet! (symbol-name fsym))
+  (when (string-match "\\(.+\\)&.+" it)
+    (intern (match-string 1 it))))
 ;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; silently 
@@ -104,10 +104,11 @@ Unlike `add-hook'."
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
 ;;;; add advise
-(defun oo-add-advice (symbol how function)
-  (aprog1 (oo-into-symbol hook '& fsym)
-    (fset it (oo-report-error-fn fsym))
-    (add-hook hook it depth local)))
+(defun! oo-add-advice (symbol how fsym)
+  (aprog! (intern (format "%s@%s%s" symbol how fsym)))
+  (fset it (oo-report-error-fn fsym))
+  ;; (add-hook hook it depth local)
+  )
 ;;;; defhook!
 ;; (defmacro defhook! (name args &rest body)
 ;;   "Add function to hook as specified by NAME.

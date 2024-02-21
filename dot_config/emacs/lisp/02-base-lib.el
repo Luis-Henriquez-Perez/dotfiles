@@ -35,25 +35,12 @@
 ;; to only rely on built-in Emacs packages so that they can be loaded into any
 ;; script and also to make.
 ;;;; require built-in packages
-;; I need it to help me with pattern matching.
 (require 'seq)
 (require 'pcase)
-;; It has several useful functions and macros.
 (require 'subr-x)
 (require 'map)
 (require 'cl-lib)
-;;;; aliases
-;; Make symbols with consistent naming conventions to elisp predicate functions.
-;; Most elisp predicate functions end in by "-p" to denote that they return
-;; non-nil if a condition is true.  Many of the predicate functions provided by
-;; =cl-lib= do not follow this convention.
 ;;;; helpers
-(defun oo-cons-cell-p (obj)
-  "Return non-nil only if OBJ is a cons-cell."
-  (declare (pure t) (side-effect-free t))
-  (and (consp obj)
-       (not (listp (cdr obj)))))
-
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
 FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
@@ -66,6 +53,13 @@ ensure the result is syntactically valid."
   (dolist (wrapper wrappers)
     (setq forms (append wrapper (list forms))))
   forms)
+
+(defun oo-list-marker-p (obj)
+  "Return non-nil if OBJ is a list marker.
+List markers are symbols that begin with `&' such as are `&rest' and
+`&optional'."
+  (declare (pure t) (side-effect-free t))
+  (char-equal ?& (seq-first (symbol-name obj))))
 
 (defun oo-into-string (&rest args)
   "Return ARGS as a string."
@@ -81,39 +75,7 @@ ensure the result is syntactically valid."
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
-;;;; special symbols
-(defun oo-list-marker-p (obj)
-  "Return non-nil if OBJ is a list marker.
-List markers are symbols that begin with `&' such as are `&rest' and
-`&optional'."
-  (declare (pure t) (side-effect-free t))
-  (char-equal ?& (seq-first (symbol-name obj))))
-;;;; anaphoric macros
-;; I used the [[][anaphora]] package for these macros, but in reality they are
-;; trivial to write on my own.
-(defmacro alet! (expr &rest body)
-  "Bind the result of EXPR to `it' during BODY."
-  (declare (indent 1))
-  `(let ((it ,expr)) ,@body))
-;;;; functional
-(defun oo-if-fn (condition-fn if-fn else-fn)
-  "Return a function that returns."
-  (lambda (&rest args) (if (funcall condition-fn)
-                           (apply if-fn args)
-                         (apply else-fn args))))
-
-(defun oo-when-fn (condition-fn body-fn)
-  "Return a function that returns."
-  (oo-if-fn condition-fn body-fn #'ignore))
-
-(defun oo-after-fn (fn after-fn)
-  "Return fn"
-  (lambda (args) (prog1 (apply fn args) (apply after-fn args))))
-
-(defun oo-before-fn (fn)
-  "Return"
-  (lambda (args) (funcall before-fn args) (apply fn args)))
-
+;;;; oo-condition-case-fn
 ;; One thing is the fact that because it is a function it can be composed and
 ;; chained.  Another is I can swap in and out the =condition-case= body and handlers
 ;; without having to write out the whole =condition-case= form.  Even though the
@@ -189,8 +151,7 @@ SETTER is the same as in `appending!'"
   "Set PLACE to the value of `(cl-adjoin ITEM PLACE)'.
 SETTER is the same as in `appending!'.  KEY, TEST, TEST-NOT are the same as in
 `cl-adjoin'."
-  (alet! `(:test ,test :test-not ,test-not :key ,key)
-    `(,setter ,place (cl-adjoin ,item ,place ,@it))))
+  `(,setter ,place (cl-adjoin ,item ,place :test ,test :test-not ,test-not :key ,key)))
 
 ;; I know =push= already exists.  But I want a variant of push that can be used
 ;; with the =block!= macro.
@@ -211,12 +172,34 @@ SETTER is the same as in `appending!'."
 (cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
   "Set PLACE to the union of PLACE and LIST.
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
-  (alet! `(:test ,test :test-not ,test-not :key ,key)
-    `(,setter ,place (cl-union ,place ,list ,@it))))
+  `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
+;;;; lef!
+(defmacro lef! (bindings &rest body)
+  "Bind each symbol in BINDINGS to its corresponding function during BODY.
+BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
+bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
+each of BINDINGS if the symbol is an existing function symbol let-bind the
+original function to `this-fn', otherwise bind `this-fn' to nil."
+  (let (binds orig-fn)
+    (pcase-dolist (`(,sym . ,rest) bindings)
+      (setq orig-fn (gensym "orig-fn"))
+      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
+      (push (list `(symbol-function ',sym)
+                  (pcase rest
+                    (`(,fn . nil)
+                     `(lambda (&rest args)
+                        (let ((this-fn ,orig-fn))
+                          (apply ,fn args))))
+                    (`(,args . ,function-body)
+                     `(lambda ,args
+                        (let ((this-fn ,orig-fn))
+                          ,@function-body)))))
+            binds))
+    `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; map!
 (defun oo--map-let-binds (map body regexp &optional use-keywords)
-  "Return a list of let-bindings for MAP.
-Collect symbols matching REGEXP in BODY and let bind them to."
+  "Return a list of let-bindings for `with-map!'.
+Collect symbols matching REGEXP in BODY into an alist."
   (let* ((mapsym (cl-gensym "map"))
          (let-binds `((,mapsym ,map)))
          (name nil)
@@ -352,60 +335,101 @@ Let bind function."
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
 ;;;; block!
-(defun oo-ing-symbol-p (obj)
-  "Return non-nil of OBJ is an ing macro symbol.
-Examples of such symbols include `appending!' and `collecting!'."
-  (and (symbolp obj) (string-match-p "ing!\\'" (symbol-name obj))))
-
-(defun oo--parse-block (data tree)
-  "Return an updated list of (DATA TREE) based on contents of TREE.
-DATA is a plist.  Tree is a list of forms.  For how a tree is interpreted see
+;;;;; helpers 
+(defun oo--parse-block (data forms)
+  "Return an updated list of (DATA FORMS) based on contents of FORMS.
+DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
 `block!'."
-  (pcase tree
+  (pcase forms
     (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
-     (list data tree))
-    (`(,(and loop (or 'for! 'while 'dolist! 'dolist)) ,pred . ,body)
-     (pcase-let* ((`(,data1 ,tree) (oo--parse-block nil body)))
+     (list data forms))
+    (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist)) ,pred . ,body)
+     (pcase-let* ((`(,data1 ,forms) (oo--parse-block nil body)))
        (list (map-merge-with 'plist #'append data data1)
-             `(catch 'break! (,loop ,pred (catch 'continue! ,@tree))))))
-    (`(,(and name (pred oo-ing-symbol-p)) ,symbol . ,(guard t))
-     (alet! (cl-case name
-              ((maxing! maximizing!) most-negative-fixnum)
-              ((minning! minimizing!) most-positive-fixnum)
-              (counting! 0))
-       (adjoining! (map-elt data :let)
-                   (list symbol it) :test #'equal :key #'car))
-     (list data tree))
+             `(catch 'break! (,loop ,pred (catch 'continue! ,@forms))))))
+    (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
+     (let ((value (cl-case name
+                    ((maxing! maximizing!) most-negative-fixnum)
+                    ((minning! minimizing!) most-positive-fixnum)
+                    (counting! 0))))
+       (adjoining! (map-elt data :let) (list symbol value) :test #'equal :key #'car))
+     (list data forms))
     (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
      (appending! (map-elt data :wrappers) wrappers)
      (list data rest))
     (`((,(or 'without! 'exclude!) . ,symbols) . ,rest)
      (appending! (map-elt data :no-let) symbols)
      (list data rest))
-    (`((gensym! ,(and name (pred symbolp))) . ,rest)
-     (adjoining! (map-elt data :let) (list name (cl-gensym (symbol-name name))))
-     (list data rest))
+    (`(,(or 'aset! 'alet! 'aset> 'aset>>) ,value)
+     (adjoining! (map-elt data :let) (list 'it nil))
+     (list data forms))
+    (`((,(or 'aprog1! 'aprog!) ,value) . ,rest)
+     (adjoining! (map-elt data :let) (list 'it nil))
+     (list data `(prog1 (setq it ,value) ,@rest)))
+    (`(gensym! ,(and name (pred symbolp)))
+     (adjoining! (map-elt data :let) (list name nil))
+     (list data forms))
     (`(set! ,match-form ,value . ,(and plist (guard t)))
      (pushing! (map-elt data :let) (list match-form (map-elt plist :init)))
      (list data `(setq ,match-form ,value)))
     (`((,(or 'stub! 'flet!) . ,args) . ,rest)
      (let! (((data1 rest) (oo--parse-block nil rest)))
        (list (map-merge 'plist data data1) `((cl-flet ((,@args)) ,@rest)))))
-    ;; This is my own variant that takes the original function.  I name it.
     (`((,(or 'nflet! 'noflet!) . ,args) . ,rest)
      (let! (((data1 rest) (oo--parse-block nil rest)))
        (list (map-merge 'plist data data1) `((lef! ((,@args)) ,@rest)))))
-    ((and (pred listp) (pred (not oo-cons-cell-p)) (pred (not null)))
-     (pcase-let ((`(,data1 ,tree1) (oo--parse-block nil (car tree)))
-                 (`(,data2 ,tree2) (oo--parse-block nil (cdr tree))))
+    ((and (pred listp) (pred (not null)) (guard (listp (cdr forms))))
+     (pcase-let ((`(,data1 ,forms1) (oo--parse-block nil (car forms)))
+                 (`(,data2 ,forms2) (oo--parse-block nil (cdr forms))))
        (list (map-merge-with 'plist #'append data data1 data2)
-             (cons tree1 tree2))))
+             (cons forms1 forms2))))
     (_
-     (list data tree))))
+     (list data forms))))
+;;;;; helpers
+(defmacro return! (&optional value)
+  "Cause `block!' to exit and return VALUE.
+See `block!'."
+  `(throw 'return! ,value))
 
+(defmacro break! (&optional value)
+  "Exit the current loop and return VALUE.
+See `block!'."
+  `(throw 'break! ,value))
+
+(defmacro continue! ()
+  "Skip the current iteration of loop.
+See `block!'."
+  `(throw 'continue! nil))
+(defalias 'skip! 'continue!)
+
+(defmacro exclude! (&rest _)
+  "Signal to `block!' not to let bind VARS.
+See `block!'.")
+(defalias 'without! 'exclude!)
+
+(defmacro stub! (name args &rest body)
+  "Define a local function definition with `cl-flet'.
+NAME, ARGS and BODY are the same as in `defun'.
+Must be used in `block!'."
+  (declare (indent defun))
+  (ignore name args body))
+(defmacro aprog1! (_))
+(defmacro aset! (value)
+  `(setq it ,value))
+(defalias 'alet! 'aset!)
+(defalias 'flet! 'stub!)
+(defalias 'noflet! 'stub!)
+(defalias 'nflet! 'stub!)
+;;;;; main macro
 (defmacro block! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
+
+- (alet! VALUE)
+- (aset! VALUE)
+- (aset>! VALUE)
+- (aset>>! VALUE)
+Let bind the symbol `it' to VALUE.
 
 - (set! SYM _ [:init EXPR])
 Let bind SYM to nil.  If :init VAL is specified, let BIND SYM to EXPR.
@@ -424,7 +448,7 @@ INGMAC is a macro ending in \"ing!\" such as `appending!', `pushing!',
 `collecting!', etc.
 
 - (gensym! SYM)
-Let bind SYM to (gensym \"SYM\").
+Let bind SYM to nil.
 
 - (wrap! . WRAPPERS)
 Surround block body with WRAPPERS. WRAPPERS is as in `oo-wrap-forms'.
@@ -444,7 +468,7 @@ Wrap subsequent forms with `(cl-flet ((NAME ARGS . BODY)))'.
 - (nflet! NAME ARGS . BODY)
 Wrap subsequent forms with `(lef! ((NAME ARGS)))'.
 
--(LOOP ...)
+- (LOOP ...)
 Wrap the loop with `(catch \\='break!) and its body.
 with `(catch \\='continue!)'. LOOP can be `for!',
 `dolist', `dolist!' or `while'.
@@ -459,61 +483,6 @@ Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
          (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
          (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
     (oo-wrap-forms wrappers body)))
-
-(defmacro return! (&optional value)
-  "Cause `block!' to exit and return VALUE.
-See `block!'."
-  `(throw 'return! ,value))
-
-(defmacro break! (&optional value)
-  "Exit the current loop and return VALUE.
-See `block!'."
-  `(throw 'break! ,value))
-
-(defmacro continue! ()
-  "Skip the current iteration of loop.
-See `block!'."
-  `(throw 'continue! nil))
-
-(defalias 'skip! 'continue!)
-
-(defmacro exclude! (&rest _)
-  "Signal to `block!' not to let bind VARS.
-See `block!'.")
-(defalias 'without! 'exclude!)
-
-(defmacro stub! (name args &rest body)
-  "Define a local function definition with `cl-flet'.
-NAME, ARGS and BODY are the same as in `defun'.
-Must be used in `block!'."
-  (declare (indent defun))
-  (ignore name args body))
-(defalias 'flet! 'stub!)
-(defalias 'noflet! 'stub!)
-(defalias 'nflet! 'stub!)
-;;;; lef!
-(defmacro lef! (bindings &rest body)
-  "Bind each symbol in BINDINGS to its corresponding function during BODY.
-BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
-bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
-each of BINDINGS if the symbol is an existing function symbol let-bind the
-original function to `this-fn', otherwise bind `this-fn' to nil."
-  (let (binds orig-fn)
-    (pcase-dolist (`(,sym . ,rest) bindings)
-      (setq orig-fn (gensym "orig-fn"))
-      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
-      (push (list `(symbol-function ',sym)
-                  (pcase rest
-                    (`(,fn . nil)
-                     `(lambda (&rest args)
-                        (let ((this-fn ,orig-fn))
-                          (apply ,fn args))))
-                    (`(,args . ,function-body)
-                     `(lambda ,args
-                        (let ((this-fn ,orig-fn))
-                          ,@function-body)))))
-            binds))
-    `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; defmacro! and defun!
 (defun oo-defun-components (body &optional show-nils)
   "Divide defun body, BODY, into its components.
@@ -553,7 +522,7 @@ NAME, ARGS and BODY are the same as in `defun'.
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
   (oo--definer-body 'defun args))
-;;;; looping
+;;;; for!
 ;; There is a huge question of whether to automatically wrap loops with
 ;; =block!=, but I decided to.
 (defmacro for! (loop-struct &rest body)
@@ -593,30 +562,10 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 
 (defalias 'dolist! 'for!)
 (defalias 'loop! 'for!)
-;;;; quiet!
-;; TODO: make it so that I can specify regular expressions of messages.
-;; I copied much of the bod of this from the =shut-up= package.  I really wanted
-;; to just use that package but the problem is that I need this macro
-;; beforehand, specifically for package installation with =package.el=.  The
-;; =shut-up= package does a bit more because it puts the messages in a different
-;; buffer, but I won't go into that yet--not when and until I think I need it.
-(defmacro quiet! (&rest body)
-  "Suppress message output during BODY."
-  `(let! ((standard-output #'ignore)
-          (#'message #'ignore)
-          (#'write-region
-           ;; Wish there was a way not to have to specify all the arguments
-           ;; twice.  Well see if I find one or one day thing of one.
-           ;; complicating things is that some of the arguments are optional.
-           (lambda (start end fname &optional append visit lockname mustbenew)
-             (unless visit (setq visit 'no-message))
-             (funcall this-fn start end fname append visit lockname mustbenew)))
-          (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
-                    (funcall this-fn file noerror t nosuffix must-suffix))))
-     ,@body))
 ;;;; set!
 (defun! oo--get-symbols (pattern)
-  "Return."
+  "Return list of symbols in PATTERN.
+PATTERN is a match form."
   (when-let (flattened (flatten-tree pattern))
     (delete-dups (append (thread-last (cl-remove-if-not #'vectorp flattened)
                                       (mapcar (lambda (it) (seq-into it 'list)))
@@ -639,18 +588,18 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
       `(let ,gensyms
          ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;;; threading macros 
-(defmacro alet>>! (&rest forms)
+(defmacro aset>>! (&rest forms)
   "Bind the result of `thread-last' on FORMS to `it'."
   `(set! it (thread-last ,@forms)))
-(defmacro alet>! (&rest forms)
+(defmacro aset>! (&rest forms)
   "Bind the result of `thread-first' on FORMS to `it'."
   `(set! it (thread-first ,@forms)))
-(defmacro let>>! (pattern &rest forms)
+(defmacro set>>! (pattern &rest forms)
   "Bind the result of `thread-last' on FORMS to PATTERN.
 See `set!'."
   (declare (indent 1))
   `(set! ,pattern (thread-last ,@forms)))
-(defmacro let>! (pattern &rest forms)
+(defmacro set>! (pattern &rest forms)
   "Bind the result of `thread-first' on FORMS to PATTERN.
 See `set!'."
   (declare (indent 1))
