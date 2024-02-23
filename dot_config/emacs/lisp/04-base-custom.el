@@ -71,23 +71,26 @@
 (defun! oo-add-hook (hook fsym &optional depth local)
   "Generate a function from FSYM and add it to HOOK.
 Unlike `add-hook'."
-  (aprog! (intern (format "%s&%s" hook fsym)))
-  (fset it (oo-report-error-fn fsym))
+  (aprog1! (intern (format "%s&%s" hook fsym)))
+  ;; (fset it (oo-report-error-fn fsym))
+  (fset it fsym)
   (add-hook hook it depth local))
-;;;; remove hook
+(defalias 'oo-generate-hook 'oo-add-hook)
+(defalias 'oo-gen-hook 'oo-add-hook)
+;;;; oo-remove-hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
   (if (and function hook)
       (remove-hook hook fsym)
-    (remove-hook (oo-get-hook fsym) fsym)))
+    (remove-hook (oo-hook fsym) fsym)))
 ;;;; oo-advised
 (defun! oo-advised (fsym)
   "Return the advised function symbol for FSYM."
   (declare (pure t) (side-effect-free t))
   (cl-assert (symbolp fsym))
   (set! regexp "\\`\\([^[:space:]]+\\)@\\(?:A[FR]\\|B[FUW]\\|F[AR]\\|OV\\)[^[:space:]]+\\'")
-  (aset! (symbol-name fsym))
-  (when (string-match "\\(.+\\)&.+" it)
+  (alet! (symbol-name fsym))
+  (when (string-match regexp it)
     (intern (match-string 1 it))))
 ;;;; oo-hook
 (defun! oo-hook (fsym)
@@ -103,12 +106,12 @@ Unlike `add-hook'."
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;;;; add advise
+;;;; add-advice
 (defun! oo-add-advice (symbol how fsym)
+  "Generate a new advice."
   (aprog! (intern (format "%s@%s%s" symbol how fsym)))
   (fset it (oo-report-error-fn fsym))
-  ;; (add-hook hook it depth local)
-  )
+  (advice-add symbol how it))
 ;;;; defhook!
 ;; (defmacro defhook! (name args &rest body)
 ;;   "Add function to hook as specified by NAME.
@@ -158,12 +161,6 @@ Unlike `add-hook'."
 ;;   "Add "
 ;;   )
 ;; ;;; opt!
-;; ;;;; set unbound symbols
-;; (defvar oo-unbound-symbol-alist nil
-;;   "An alist mapping an unbound symbol to an expression.
-;; This alist is checked by the hook `after-load-functions&set-bound-symbols' for
-;; any symbols that are now bound.")
-
 ;; ;; I'll note that I push all the forms into a list and evaluate them all in the
 ;; ;; body of one lambda as opposed to evaluating one lambda per form.  This is
 ;; ;; important because lambda calls have an overhead that adds up.  It is far less
@@ -181,7 +178,13 @@ Unlike `add-hook'."
 ;;   (when exprs (funcall `(lambda () ,@exprs))))
 
 ;; (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
-;; ;;;; opt!
+;;; customize variables
+;;;; oo-unbound-symbol-alist
+(defvar oo-unbound-symbol-alist nil
+  "An alist mapping an unbound symbol to an expression.
+This alist is checked by the hook `after-load-functions&set-bound-symbols' for
+any symbols that are now bound.")
+;;;; opt!
 ;; (defmacro! opt! (symbol value)
 ;;   "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
 ;; This is like `setq' but it is meant for configuring variables."

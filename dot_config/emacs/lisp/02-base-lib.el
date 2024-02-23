@@ -334,6 +334,100 @@ Bind function via.
 Let bind function."
   (declare (indent 1))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
+;;;; set!
+(defun oo--mf-flatten (pattern)
+  "Same as `flatten-tree' but also flattens vectors."
+  (let ((stack (list (append pattern nil)))
+        (symbols nil)
+        (node nil))
+    (while stack
+      (if (car stack)
+          (progn (setq node (pop (car stack)))
+                 (cond ((symbolp node)
+                        (cl-pushnew node symbols))
+                       ((nlistp (cdr-safe node))
+                        (push (list (car node) (cdr node)) stack))
+                       ((listp node)
+                        (push node stack))
+                       ((vectorp node)
+                        (push (append node nil) stack))))
+        (pop stack)))
+    symbols))
+
+(defun oo--set-flatten (pattern)
+  "Same as `oo--mf-flatten' but do not include `,' or backquotes in output."
+  (cl-set-difference (oo--mf-flatten pattern) '(\, \`)))
+
+(defmacro set! (pattern value)
+  "Like `pcase-setq' but use the syntax of `let!'."
+  (if (symbolp pattern)
+      `(setq ,pattern ,value)
+    ;; Damn I did not realize I need to know the gensym values.  I need to make
+    ;; sure not to bind the gensym values.
+    ;; I need flatten to also work for vectors.
+    (let* ((binds (oo--to-pcase-let pattern value))
+           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo--set-flatten pattern)))
+           (all (oo--set-flatten (mapcar #'car binds)))
+           (gensyms (cl-set-difference all non-gensyms)))
+      `(let ,gensyms
+         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
+;;;; threading macros 
+(defmacro aset>>! (&rest forms)
+  "Bind the result of `thread-last' on FORMS to `it'."
+  `(set! it (thread-last ,@forms)))
+(defmacro aset>! (&rest forms)
+  "Bind the result of `thread-first' on FORMS to `it'."
+  `(set! it (thread-first ,@forms)))
+(defmacro set>>! (pattern &rest forms)
+  "Bind the result of `thread-last' on FORMS to PATTERN.
+See `set!'."
+  (declare (indent 1))
+  `(set! ,pattern (thread-last ,@forms)))
+(defmacro set>! (pattern &rest forms)
+  "Bind the result of `thread-first' on FORMS to PATTERN.
+See `set!'."
+  (declare (indent 1))
+  `(set! ,pattern (thread-first ,@forms)))
+;;;; for!
+;; There is a huge question of whether to automatically wrap loops with
+;; =block!=, but I decided to.
+(defmacro for! (loop-struct &rest body)
+  "A generic looping macro and drop-in replacement for `dolist'.
+BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
+take the following forms:
+
+- n
+- (repeat n)
+Evaluate BODY N times where n is an integer equal to or greater than zero.
+
+- (VAR NUMBER)
+Same as `dotimes'.
+
+- (MATCH-FORM SEQUENCE)
+Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
+`let!'."
+  (declare (indent 1))
+  (pcase loop-struct
+    ((or `(repeat ,n) (and n (pred integerp)))
+     `(dotimes (_ ,n) ,@body))
+    (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
+     (cl-with-gensyms (elt)
+       `(for! (,elt ,list)
+          (let! ((,match-form ,elt))
+            ,@body))))
+    (`(,(and elt (pred symbolp)) ,list)
+     (cl-once-only (list)
+       `(cond ((listp ,list)
+               (dolist (,elt ,list) ,@body))
+              ((sequencep ,list)
+               (seq-doseq (,elt ,list) ,@body))
+              ((integerp ,list)
+               (dotimes (,elt ,list) ,@body))
+              (t
+               (error "Unknown list predicate: %S" ',loop-struct)))))))
+
+(defalias 'dolist! 'for!)
+(defalias 'loop! 'for!)
 ;;;; block!
 ;;;;; helpers 
 (defun oo--parse-block (data forms)
@@ -354,24 +448,30 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
                     (counting! 0))))
        (adjoining! (map-elt data :let) (list symbol value) :test #'equal :key #'car))
      (list data forms))
-    (`((,(or 'with! 'wrap!) . ,(and wrappers (pred listp))) . ,rest)
+    (`(,(or 'with! 'wrap!) . ,(and wrappers (pred listp)))
      (appending! (map-elt data :wrappers) wrappers)
-     (list data rest))
-    (`((,(or 'without! 'exclude!) . ,symbols) . ,rest)
-     (appending! (map-elt data :no-let) symbols)
-     (list data rest))
+     (list data nil))
+    (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
+     (unioning! (map-elt data :nolet) symbols)
+     (list data nil))
     (`(,(or 'aset! 'alet! 'aset> 'aset>>) ,value)
      (adjoining! (map-elt data :let) (list 'it nil))
      (list data forms))
     (`((,(or 'aprog1! 'aprog!) ,value) . ,rest)
-     (adjoining! (map-elt data :let) (list 'it nil))
-     (list data `(prog1 (setq it ,value) ,@rest)))
-    (`(gensym! ,(and name (pred symbolp)))
-     (adjoining! (map-elt data :let) (list name nil))
+     (cl-pushnew (list 'it nil) (map-elt data :let) :test #'equal :key #'car)
+     (pcase-let ((`(,data1 ,body) (oo--parse-block nil rest)))
+       (list (append data data1) `((prog1 (setq it ,value) ,@body)))))
+    (`(gensym! . ,(and names (guard (cl-every #'symbolp names))))
+     (dolist (name names)
+       (cl-pushnew (list name nil) (map-elt data :let) :key #'car :test #'equal))
      (list data forms))
-    (`(set! ,match-form ,value . ,(and plist (guard t)))
-     (pushing! (map-elt data :let) (list match-form (map-elt plist :init)))
-     (list data `(setq ,match-form ,value)))
+    (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
+     (dolist (sym (oo--set-flatten pattern))
+       (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
+     (list data forms))
+    (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
+     (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
+     (list data `(setq ,sym ,value)))
     (`((,(or 'stub! 'flet!) . ,args) . ,rest)
      (let! (((data1 rest) (oo--parse-block nil rest)))
        (list (map-merge 'plist data data1) `((cl-flet ((,@args)) ,@rest)))))
@@ -396,6 +496,10 @@ See `block!'."
 See `block!'."
   `(throw 'break! ,value))
 
+(defmacro gensym! (sym &rest syms)
+  (macroexp-progn (mapcar (lambda (sym) `(setq ,sym (cl-gensym (symbol-name ',sym))))
+                          (cons sym syms))))
+
 (defmacro continue! ()
   "Skip the current iteration of loop.
 See `block!'."
@@ -414,6 +518,7 @@ Must be used in `block!'."
   (declare (indent defun))
   (ignore name args body))
 (defmacro aprog1! (_))
+(defalias 'aprog! 'aprog1!)
 (defmacro aset! (value)
   `(setq it ,value))
 (defalias 'alet! 'aset!)
@@ -522,88 +627,6 @@ NAME, ARGS and BODY are the same as in `defun'.
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
   (oo--definer-body 'defun args))
-;;;; for!
-;; There is a huge question of whether to automatically wrap loops with
-;; =block!=, but I decided to.
-(defmacro for! (loop-struct &rest body)
-  "A generic looping macro and drop-in replacement for `dolist'.
-BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
-take the following forms:
-
-- n
-- (repeat n)
-Evaluate BODY N times where n is an integer equal to or greater than zero.
-
-- (VAR NUMBER)
-Same as `dotimes'.
-
-- (MATCH-FORM SEQUENCE)
-Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
-`let!'."
-  (declare (indent 1))
-  (pcase loop-struct
-    ((or `(repeat ,n) (and n (pred integerp)))
-     `(dotimes (_ ,n) ,@body))
-    (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
-     (cl-with-gensyms (elt)
-       `(for! (,elt ,list)
-          (let! ((,match-form ,elt))
-            ,@body))))
-    (`(,(and elt (pred symbolp)) ,list)
-     (cl-once-only (list)
-       `(cond ((listp ,list)
-               (dolist (,elt ,list) ,@body))
-              ((sequencep ,list)
-               (seq-doseq (,elt ,list) ,@body))
-              ((integerp ,list)
-               (dotimes (,elt ,list) ,@body))
-              (t
-               (error "Unknown list predicate: %S" ',loop-struct)))))))
-
-(defalias 'dolist! 'for!)
-(defalias 'loop! 'for!)
-;;;; set!
-(defun! oo--get-symbols (pattern)
-  "Return list of symbols in PATTERN.
-PATTERN is a match form."
-  (when-let (flattened (flatten-tree pattern))
-    (delete-dups (append (thread-last (cl-remove-if-not #'vectorp flattened)
-                                      (mapcar (lambda (it) (seq-into it 'list)))
-                                      (apply #'append)
-                                      (oo--get-symbols))
-                         (cl-remove-if (lambda (it) (or (vectorp it) (member it '(\` \,))))
-                                       flattened)))))
-
-(defmacro set! (pattern value)
-  "Like `pcase-setq' but use the syntax of `let!'."
-  (if (symbolp pattern)
-      `(setq ,pattern ,value)
-    ;; Damn I did not realize I need to know the gensym values.  I need to make
-    ;; sure not to bind the gensym values.
-    ;; I need flatten to also work for vectors.
-    (let* ((binds (oo--to-pcase-let pattern value))
-           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo--get-symbols pattern)))
-           (all (oo--get-symbols (mapcar #'car binds)))
-           (gensyms (cl-set-difference all non-gensyms)))
-      `(let ,gensyms
-         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
-;;;; threading macros 
-(defmacro aset>>! (&rest forms)
-  "Bind the result of `thread-last' on FORMS to `it'."
-  `(set! it (thread-last ,@forms)))
-(defmacro aset>! (&rest forms)
-  "Bind the result of `thread-first' on FORMS to `it'."
-  `(set! it (thread-first ,@forms)))
-(defmacro set>>! (pattern &rest forms)
-  "Bind the result of `thread-last' on FORMS to PATTERN.
-See `set!'."
-  (declare (indent 1))
-  `(set! ,pattern (thread-last ,@forms)))
-(defmacro set>! (pattern &rest forms)
-  "Bind the result of `thread-first' on FORMS to PATTERN.
-See `set!'."
-  (declare (indent 1))
-  `(set! ,pattern (thread-first ,@forms)))
 ;;; provide
 (provide '02-base-lib)
 ;;; 02-base-lib.el ends here

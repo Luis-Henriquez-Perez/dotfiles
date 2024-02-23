@@ -22,15 +22,14 @@
     (startup-set! foo 1)
     ))
 
-(xdescribe "oo-report-error"
+(xdescribe "oo-report-error-fn"
   (it "should report an error when")
-  (it "should")
-  )
+  (it "should"))
 
 (xdescribe "defhook!"
   ;; (it "should report an error when")
-  ;; (it "should")
-  )
+  (it "should"
+    (oo-add-hook)))
 
 (xdescribe "oo-advice-parts"
   (it "should return nil when symbol has no advice"
@@ -41,8 +40,8 @@
 (describe "oo-advised"
   (it "should return nil when symbol has no advice"
     (expect nil :to-be (oo-advised 'foo)))
-  (it "should return advice if symbol has a hook"
-    (expect 'recentf-mode :to-be (oo-advised 'recentf-mode@OVsuppress-output))))
+  (it "should return function advised if called on an advice symbol"
+    (expect (oo-advised 'recentf-mode@OVsuppress-output) :to-be 'recentf-mode)))
 
 (describe "oo-hook"
   (it "should return nil when symbol has no hook"
@@ -51,40 +50,41 @@
     (expect 'prog-mode-hook :to-be (oo-hook 'prog-mode-hook&foo))))
 
 (xdescribe "oo-add-hook"
-  (set! fake-hook nil)
-  (set! oo-errors nil)
-  (f)
-  (set! return-value (oo-add-hook 'fake-hook symbol))
-  (it "should return the hook created"
-    (expect 'fake-hook&))
-  (it "should work with hook symbol as an argument"
-    (expect (oo-add-hook 'fake-hook&some-fn)))
-  (it "should not raise an error instead logging it to oo-errors"
-    (run-hooks 'fake-hook)
-    (expect)))
+  (block! nil
+    (gensym! fake-hook fake-fn)
+    (set! expected-name (format "%s&%s" fake-hook fake-fn))
+    (cl-progv (list fake-hook) (list nil)
+      (set! hook-sym (oo-add-hook fake-hook fake-fn))
+      (it "should return the new hook symbol"
+        (expect (symbolp hook-sym))
+        (expect (symbol-name hook-sym) :to-equal expected-name))
+      ;; (describe "oo-remove-hook"
+      ;;   (it "should also infer hook if named"
+      ;;     (expect (oo-remove-hook hook-sym)))
+      ;;   (it "should remove hook normally when given"
+      ;;     (expect (oo-remove-hook 'foo-mode-hook #'fake-fn))))
+      )))
 
-;; (describe "oo-add-advice"
-;;   (it "should"
-;;     (expect))
-;;   (it ""
-;;     (expect)))
+;; (xdescribe "oo-add-advice"
+;;   (set! fake-hook (cl-gensym "fake-hook"))
+;;   (set! oo-errors nil)
+;;   (cl-progv (list fake-hook) (list nil)
+;;     (set! return-value (oo-add-advice))
+;;     (expect return-value :to-equal ')
+;;     (should (symbol-value fake-hook))))
 
-;; (describe "oo-remove-hook"
-;;   (it "should also infer hook if named"
-;;     (expect (oo-remove-hook 'foo-mode-hook&)))
-;;   (it "should remove hook normally"
-;;     (expect (oo-remove-hook 'foo-mode-hook #'foo))))
 
-;; (describe "oo-advice"
-;;   (it "should return the advice"
-;;     (expect (oo-advice 'some-fn@funcall-quietly) :to-be 'funcall-quietly))
-;;   (it "should"
-;;     (expect nil :to-be (oo-advice 'some-fn))))
 
-;; (describe "oo-remove-advice"
-;;   (it "should remove advice normally"
-;;     (expect (oo-remove-advice)))
-;;   (it "should also infer if advice is named"
-;;     (expect (oo-remove-advice 'some-fn@funcall-quietly))))
+(xdescribe "oo-advice"
+  (it "should return the advice"
+    (expect (oo-advice 'some-fn@funcall-quietly) :to-be 'funcall-quietly))
+  (it "should"
+    (expect nil :to-be (oo-advice 'some-fn))))
+
+(xdescribe "oo-remove-advice"
+  (it "should remove advice normally"
+    (expect (oo-remove-advice)))
+  (it "should also infer if advice is named"
+    (expect (oo-remove-advice 'some-fn@funcall-quietly))))
 
 (provide '04-base-custom-test)

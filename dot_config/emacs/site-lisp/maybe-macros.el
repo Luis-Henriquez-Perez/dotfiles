@@ -475,3 +475,61 @@ EXPR is a `pcase-style' expression."
 ;;;; oo-matches-p
 (defun oo-matches-p (pattern value)
   "Return non-nil if PATTERN matches VALUE.")
+;;;; functional
+(defun oo-if-fn (condition-fn if-fn else-fn)
+  "Return a function that returns."
+  (lambda (&rest args) (if (funcall condition-fn)
+                           (apply if-fn args)
+                         (apply else-fn args))))
+
+(defun oo-when-fn (condition-fn body-fn)
+  "Return a function that returns."
+  (oo-if-fn condition-fn body-fn #'ignore))
+
+(defun oo-after-fn (fn after-fn)
+  "Return fn"
+  (lambda (args) (prog1 (apply fn args) (apply after-fn args))))
+
+(defun oo-before-fn (fn)
+  "Return"
+  (lambda (args) (funcall before-fn args) (apply fn args)))
+;;;; quiet!
+;; TODO: make it so that I can specify regular expressions of messages.
+;; I copied much of the bod of this from the =shut-up= package.  I really wanted
+;; to just use that package but the problem is that I need this macro
+;; beforehand, specifically for package installation with =package.el=.  The
+;; =shut-up= package does a bit more because it puts the messages in a different
+;; buffer, but I won't go into that yet--not when and until I think I need it.
+(defmacro quiet! (&rest body)
+  "Suppress message output during BODY."
+  `(let! ((standard-output #'ignore)
+          (#'message #'ignore)
+          (#'write-region
+           ;; Wish there was a way not to have to specify all the arguments
+           ;; twice.  Well see if I find one or one day thing of one.
+           ;; complicating things is that some of the arguments are optional.
+           (lambda (start end fname &optional append visit lockname mustbenew)
+             (unless visit (setq visit 'no-message))
+             (funcall this-fn start end fname append visit lockname mustbenew)))
+          (#'load (lambda (fn file noerror nomsg nosuffix must-suffix)
+                    (funcall this-fn file noerror t nosuffix must-suffix))))
+     ,@body))
+;;;; conversion
+;; (defun oo-ing-symbol-p (obj)
+;;   "Return non-nil of OBJ is an ing macro symbol.
+;; Examples of such symbols include `appending!' and `collecting!'."
+;;   (and (symbolp obj)
+;;        (string-match-p "ing!\\'" (symbol-name obj))))
+
+(defun oo-symbol-match-p (regexp sym)
+  "Return non-nil only if symbol SYM matches REGEXP."
+  (and (symbolp sym)
+       (string-match-p regexp (symbol-name sym))))
+;;;; =cl-prov= variant of =cl-flet=
+
+;; For testing and guaranteeing that I do not overwrite an existing function, I
+;; want to bind the function value of a gensym.  I could use `cl-letf' and know
+;; that the symbol that I choose will be rebound, but if that function that I
+;; choose is in the body of `cl-letf' then I will be overwritting it.  By
+;; choosing a silly name like `foo' you minimize that chance, but there is still
+;; a chance.

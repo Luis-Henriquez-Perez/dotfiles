@@ -36,10 +36,17 @@
 (require 'buttercup)
 (require '02-base-lib)
 
-;; (buttercup-define-matcher :to-expand-into (form expansion)
-;;   (if (equal (macroexpand-1 form) expansion)
-;;       t
-;;     (cons nil (format ""))))
+(describe "oo--mf-flatten"
+  (it "should flatten 2d lists"
+    (expect (oo--mf-flatten '(a b c d)) :to-have-same-items-as '(a b c d)))
+  (it "should flatten nested lists"
+    (expect (oo--mf-flatten '(a (b g) (c (e f)) d)) :to-have-same-items-as
+            '(a b g c e f d)))
+  (it "should flatten vectors"
+    (expect (oo--mf-flatten '(a [b c] d)) :to-have-same-items-as '(a b c d))
+    (expect (oo--mf-flatten '[a [b c] d]) :to-have-same-items-as '(a b c d))
+    (expect (oo--mf-flatten '[a b c d]) :to-have-same-items-as '(a b c d))))
+
 (describe "oo-condition-case-fn"
   (let ((fn (oo-condition-case-fn (lambda (n) (/ 8 (- n 4))) :action (lambda (&rest _) 'foo))))
     (it "should behave like function when"
@@ -57,7 +64,7 @@
     ;; (expect 1 :to-equal (catch 'foo (throw 'foo 1) 2))
     (expect nil :to-equal (catch 'continue! (continue!) 7))))
 
-(describe "oo--parse-block"
+(xdescribe "oo--parse-block"
   (expect '(:let ((a nil) (b nil))) :to-equal (car (oo--parse-block nil '((set! a 1) (set! b 2))))))
 
 (describe "collecting!"
@@ -71,44 +78,56 @@
 (describe "block!"
   (cl-flet* ((parse (apply-partially #'oo--parse-block nil))
              (body (body) (cadr (parse body)))
-             (let-binds (body) (plist-get (car (parse body)) :let))
+             (let-binds (body) (map-elt (car (parse body)) :let))
              (let-syms (body) (mapcar #'car (let-binds body)))
              (lvalue (sym body) (car (map-elt (let-binds body) sym))))
-    (it "wraps loops with a `continue!' catch block"
+    (it "binds symbols to generated symbols when using `gensym!'"
+      (expect (let-syms '((gensym! foo bar baz))) :to-have-same-items-as '(foo bar baz)))
+    (it "ignores quoted forms"
+      (expect nil :to-equal (let-binds '('(foo))))
+      (expect '('(foo)) :to-equal (body '('(foo)))))
+    (it "skips the rest of the loop body if `continue!' is invoked"
       (expect '(0 2) :to-equal (block! (for! (n 3)
                                          (and (= 1 n) (continue!))
                                          (collecting! nums n))
                                  nums)))
-    (it "returns when `return!' is invoked"
+    (it "exits body when `return!' is invoked."
       (expect 2 :to-be (block! (when t (return! 2)) 3)))
-    (it "wraps the for loops with a break"
+    (it "exits from loops when `break!' is invoked"
       (expect '(nums) :to-equal (let-syms '(block! nil (for! (i 3) (collecting! nums i)) nums)))
       (expect 2 :to-be (block! 2))
       (expect 2 :to-be (catch 'break! (break! 2) 4))
       (expect 2 :to-equal (block! (for! (n 10) (return! 2)) 3))
       (expect 2 :to-be (block! nil (for! (x 3) (when (= x 2) (break! x)))))
       (expect 5 :to-equal (block! nil (for! (i 10) (when (= 5 i) (break! 5))))))
-    (it "ignores quoted forms"
-      (expect nil :to-equal (let-binds '('(foo))))
-      (expect '('(foo)) :to-equal (body '('(foo)))))
     (it "does not bind symbols marked for exclusion"
-      (expect (not (let-syms '((exclude! a) (set! a 1)))))
-      (expect (not (let-syms '((exclude! a) (counting! a 1))))))
-    (it "binds symbols specified by `maxing!' to `most-negative-fixnum'"
+      (expect (let-syms '((exclude! a) (set! a 1))) :to-be nil)
+      (expect (let-syms '((exclude! a) (counting! a 1))) :to-be nil))
+    (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
       (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
       (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
-    (it "binds symbols specified by `counting!' to 0"
+    (it "binds symbol specified by `counting!' to 0"
       (expect 0 :to-be (lvalue 'a '((counting! a 1)))))
-    (it "binds symbols specified by `minning!' to `most-positive-fixnum'"
+    (it "binds symbol specified by `minning!' to `most-positive-fixnum'"
       (expect most-positive-fixnum :to-be (lvalue 'a '((minimizing! a 1))))
       (expect most-positive-fixnum :to-be (lvalue 'a '((minning! a 1)))))
-    (it "binds symbols specified by set! to nil"
-      (expect '(a b) :to-equal (let-syms '((set! a 1) (set! b 2)))))
-    (it "binds symbols specified by other ING macros to nil"
+    (it "binds symbol specified by other ING macros to nil"
       (expect '(a) :to-equal (let-syms '((collecting! a 1))))
       (expect '(a) :to-equal (let-syms '((appending! a 1))))
       (expect '(a) :to-equal (let-syms '((prepending! a 1))))
       (expect '(a) :to-equal (let-syms '((maxing! a 1)))))
+    (it "binds symbol specified by set! to nil"
+      (expect (let-syms '((set! a 1) (set! b 2))) :to-equal '(a b)))
+    (it "binds the symbols in match-form specified by `set!' to nil"
+      (expect (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))) :to-equal '(a b c d)))
+    (it "binds `it' to value specified by `alet!' or `aset!'."
+      (pcase-let* ((`(,data ,body) (oo--parse-block nil '(alet! (+ 1 1)))))
+        (should (equal (map-elt data :let) '((it nil))))))
+    (it "binds it to value specified by `aprog1'"
+      (let ((form '((aprog1! (+ 1 1)) 2 3)))
+        (expect (body form) :to-equal '((prog1 (setq it (+ 1 1)) 2 3)))
+        ;; (expect (not (let-syms form)))
+        (expect (let-syms form) :to-contain 'it)))
     (it "wraps subsequent forms with lef!"
       (expect 10 :to-equal (block! nil (stub! plus (a b) (+ a (* 2 b))) (plus 6 2)))
       (expect 10 :to-equal (block! nil (flet! plus #'+) (plus 5 5)))
@@ -252,12 +271,12 @@
     (expect (oo--definer-body 'defun '(foo (a) 2))
             :to-equal '(defun foo (a) (block! (exclude! a) 2)))))
 
-(describe "oo--get-symbols"
-  (it "gets the symbols from"
-    (expect (oo--get-symbols '(,a ,b [,c ,d])) :to-have-same-items-as '(a b c d))
-    (expect (oo--get-symbols '(,a ,b ,c ,d)) :to-have-same-items-as '(a b c d))
-    (expect (oo--get-symbols '(a b [c d])) :to-have-same-items-as '(a b c d))
-    (expect (oo--get-symbols '(a b c d)) :to-have-same-items-as '(a b c d))))
+;; (describe "oo--get-symbols"
+;;   (it "gets the symbols from"
+;;     (expect (oo--get-symbols '(,a ,b [,c ,d])) :to-have-same-items-as '(a b c d))
+;;     (expect (oo--get-symbols '(,a ,b ,c ,d)) :to-have-same-items-as '(a b c d))
+;;     (expect (oo--get-symbols '(a b [c d])) :to-have-same-items-as '(a b c d))
+;;     (expect (oo--get-symbols '(a b c d)) :to-have-same-items-as '(a b c d))))
 
 (describe "set!"
   (it "should act like `setq' when given a symbol"
@@ -265,7 +284,8 @@
   (it "should be able to destructure arguments passed in."
     (expect (let (a b c) (set! (a (b . c)) '(1 (3 . 4)))))
     (expect (let (a b) (set! (a b) '(1 2)) (list a b)) :to-equal '(1 2)))
-  (it "should work with vectors as well")
+  (it "should work with vectors as well"
+    (expect (let (a b c) (set! [a b c] [1 2 3]) (list a b c)) :to-equal '(1 2 3)))
   (it "should be able to use special patterns"
     (expect (let (a b c)
               (set! (a (&as foo (b . c))) '(1 (3 . 4)))
