@@ -12,10 +12,11 @@
     (require 'smartparens)
     (smartparens-strict-mode 1)))
 
-(oo-add-hook 'text-mode-hook 'smartparens-mode)
+(oo-add-hook 'text-mode-hook #'smartparens-mode)
 
 (oo-add-hook 'prog-mode-hook #'smartparens-mode)
 
 (oo-bind 'oo-toggle-map "s" #'smartparens-mode)
 
 (provide '19-init-smartparens)
+;; 19-init-smartparens.el ends here
