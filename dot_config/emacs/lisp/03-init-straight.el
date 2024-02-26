@@ -87,6 +87,9 @@
 (straight-use-package 'ace-jump-helm-line)
 (straight-use-package 's)
 (straight-use-package 'standard-themes)
+(straight-use-package 'benchmark-init)
+(straight-use-package 'general)
+(straight-use-package 'dashboard)
 (straight-use-package '(on :host github :repo "ajgrf/on.el"))
 
 (provide '03-init-straight)

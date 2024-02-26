@@ -42,6 +42,8 @@
   (it "should flatten nested lists"
     (expect (oo--mf-flatten '(a (b g) (c (e f)) d)) :to-have-same-items-as
             '(a b g c e f d)))
+  (it "should flatten improper lists"
+    (expect (oo--mf-flatten '(a b . c)) :to-have-same-items-as '(a b c)))
   (it "should flatten vectors"
     (expect (oo--mf-flatten '(a [b c] d)) :to-have-same-items-as '(a b c d))
     (expect (oo--mf-flatten '[a [b c] d]) :to-have-same-items-as '(a b c d))
@@ -101,8 +103,13 @@
       (expect 2 :to-be (block! nil (for! (x 3) (when (= x 2) (break! x)))))
       (expect 5 :to-equal (block! nil (for! (i 10) (when (= 5 i) (break! 5))))))
     (it "does not bind symbols marked for exclusion"
-      (expect (let-syms '((exclude! a) (set! a 1))) :to-be nil)
-      (expect (let-syms '((exclude! a) (counting! a 1))) :to-be nil))
+      (expect (parse '((exclude! a) (set! a 1))) :to-equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))))
+      (expect (macroexpand-1 '(block! (exclude! a) (set! a 1)))
+              :to-equal
+              '(catch 'return! (let nil nil (setq a 1))))
+      ;; (expect (let-syms '((exclude! a) (set! a 1))) :to-equal nil)
+      ;; (expect (let-syms '((exclude! a) (counting! a 1))) :to-equal nil)
+      )
     (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
       (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
       (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
@@ -242,8 +249,8 @@
     (should-not (oo--to-pcase-let '(a (&as foo (b c)) d) '(1 (2 3) 4)))))
 
 (describe "let!"
-  (xit "allow binding to be vector if only one pattern"
-    (expect '(3 4) :to-be (let! [(a b) '(3 4)] (list a b))))
+  (it "allow binding to be vector if only one pattern"
+    (expect '(3 4) :to-equal (let! [(a b) '(3 4)] (list a b))))
   (it "binds variables to values just like let*"
     (expect (= 3 (let! ((a 1) (b 2)) (+ a b)))))
   (it "can bind functions to symbols"
@@ -282,6 +289,8 @@
   (it "should act like `setq' when given a symbol"
     (expect (let (a) (set! a 1) 1) :to-be 1))
   (it "should be able to destructure arguments passed in."
+    ;; Works with improper lists.
+    (expect (let (a b c) (set! (a b . c) '(1 3 . 4)) (list a b c)) :to-equal '(1 2 4))
     (expect (let (a b c) (set! (a (b . c)) '(1 (3 . 4)))))
     (expect (let (a b) (set! (a b) '(1 2)) (list a b)) :to-equal '(1 2)))
   (it "should work with vectors as well"

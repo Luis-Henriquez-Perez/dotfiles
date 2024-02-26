@@ -49,11 +49,13 @@
 
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()
   "Boost garbage collection settings to `gcmh-high-cons-threshold"
+  (require 'gcmh)
   (setq gc-cons-threshold gcmh-high-cons-threshold))
 
 (defhook! minibuffer-exit-hook&decrease-garbage-collection ()
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   :append t
+  (require 'gcmh)
   (setq gc-cons-threshold gcmh-low-cons-threshold))
 ;;; provide
 (provide '10-init-gcmh)

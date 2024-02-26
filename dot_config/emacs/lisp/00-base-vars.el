@@ -38,13 +38,12 @@
 
 In a nutshell, it's just a value of $HOME.")
 
-(defconst oo-config-dir (file-name-as-directory
-                         (or (getenv "XDG_CONFIG_HOME")
-                             (concat oo-home-dir ".config")))
+(defconst oo-xdg-config-dir (file-name-as-directory
+                             (or (getenv "XDG_CONFIG_HOME")
+                                 (concat oo-home-dir ".config")))
   "The root directory for personal configurations.")
 
-(defconst oo-emacs-dir (file-name-as-directory
-                        (expand-file-name "emacs/" oo-config-dir))
+(defconst oo-emacs-dir (file-name-as-directory (expand-file-name "emacs/" oo-xdg-config-dir))
   "The path to this Emacs directory.")
 
 ;; (defconst path-local-dir (concat (file-name-as-directory
@@ -68,12 +67,16 @@ In a nutshell, it's just a value of $HOME.")
 (defconst oo-etc-dir (expand-file-name "etc/" user-emacs-directory)
   "Directory where.")
 
-;; (defvaralias 'oo-config-dir 'oo-etc-dir)
+(make-directory oo-etc-dir t)
+
+(defvaralias 'oo-config-dir 'oo-etc-dir)
 
 (defconst oo-var-dir (expand-file-name "var/" user-emacs-directory)
   "Directory where")
 
-;; (defvaralias 'oo-data-dir 'oo-var-dir)
+(make-directory oo-var-dir t)
+
+(defvaralias 'oo-data-dir 'oo-var-dir)
 ;;; store errors that occur in hooks and advices
 ;; This is influenced by the excellent stackoverflow on
 ;; [[https://emacs.stackexchange.com/questions/669/how-to-gracefully-handle-errors-in-init-file][how-to-gracefully-handle-errors-in-init-file]].  The idea is that I don't want

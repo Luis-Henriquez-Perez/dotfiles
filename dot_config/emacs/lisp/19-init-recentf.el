@@ -40,7 +40,7 @@
 
 (opt! recentf-max-saved-items 700)
 
-(opt! recentf-save-file (concat oo-cache-dir "recentf"))
+(opt! recentf-save-file (expand-file-name oo-data-dir "recentf"))
 
 (opt! recentf-auto-cleanup (* 60 10))
 
@@ -55,13 +55,13 @@
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 
 ;; TODO: Add back =adjoin!= if I removed it.
-(cl-pushnew recentf-filename-handlers #'abbreviate-file-name)
+(opt! recentf-filename-handlers (cl-adjoin #'abbreviate-file-name recentf-filename-handlers))
 
-(cl-pushnew recentf-filename-handlers #'substring-no-properties)
+(opt! recentf-filename-handlers (cl-adjoin #'substring-no-properties recentf-filename-handlers))
 
-(cl-pushnew recentf-exclude (recentf-expand-file-name no-littering-var-directory))
+(opt! recentf-exclude (cl-adjoin (recentf-expand-file-name oo-config-dir) recentf-exclude))
 
-(cl-pushnew recentf-exclude (recentf-expand-file-name no-littering-etc-directory))
+(opt! recentf-exclude (cl-adjoin (recentf-expand-file-name oo-data-dir) recentf-exclude))
 ;;; provide
-(provide '18-init-recentf)
-;;; 18-init-recentf ends here
+(provide '19-init-recentf)
+;;; 19-init-recentf ends here

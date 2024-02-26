@@ -47,6 +47,17 @@
 (require '02-base-lib)
 (require '03-init-straight)
 (require '04-base-custom)
+(require '05-base-bind)
+(require '06-base-leaders)
+(require '10-init-gcmh)
+(require '11-init-no-littering)
+(require '12-init-benchmark-init)
+(require '19-init-super-save)
+(require '19-init-vertico)
+(require '19-init-which-key)
+(require '19-init-evil)
+(require '19-init-dashboard)
+(require '19-init-recentf)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files

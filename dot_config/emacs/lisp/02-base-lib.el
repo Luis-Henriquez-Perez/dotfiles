@@ -319,6 +319,7 @@ This is like `let*' but it has two more kinds of possible bindings.
 
 - (let! ((MATCH-FORM VALUE)) . BODY)
 MATCH-FORM a nested form of vectors, list and non-nil symbols.
+- (let!)
 
 - (let! ((:lef foo FUNCTION)) . BODY)
 - (let! ((:noflet foo FUNCTION)) . BODY)
@@ -333,25 +334,30 @@ Bind function via.
 - (let! ((:flet SYMBOL FN)) . BODY)
 Let bind function."
   (declare (indent 1))
+  (when (vectorp bindings)
+    (setq bindings `((,(aref bindings 0) ,(aref bindings 1)))))
   (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
 ;;;; set!
 (defun oo--mf-flatten (pattern)
   "Same as `flatten-tree' but also flattens vectors."
-  (let ((stack (list (append pattern nil)))
+  (let ((stack (list (if (vectorp pattern) (append pattern nil) pattern)))
         (symbols nil)
         (node nil))
     (while stack
-      (if (car stack)
-          (progn (setq node (pop (car stack)))
-                 (cond ((symbolp node)
-                        (cl-pushnew node symbols))
-                       ((nlistp (cdr-safe node))
-                        (push (list (car node) (cdr node)) stack))
-                       ((listp node)
-                        (push node stack))
-                       ((vectorp node)
-                        (push (append node nil) stack))))
-        (pop stack)))
+      (cond ((null (car stack))
+             (pop stack))
+            ((listp (car stack))
+             (setq node (pop (car stack)))
+             (cond ((symbolp node)
+                    (cl-pushnew node symbols))
+                   ((nlistp (cdr-safe node))
+                    (push (list (car node) (cdr node)) stack))
+                   ((listp node)
+                    (push node stack))
+                   ((vectorp node)
+                    (push (append node nil) stack))))
+            (t
+             (cl-pushnew (pop stack) symbols))))
     symbols))
 
 (defun oo--set-flatten (pattern)
@@ -425,6 +431,9 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
                (dotimes (,elt ,list) ,@body))
               (t
                (error "Unknown list predicate: %S" ',loop-struct)))))))
+
+;; (defmacro each! (list &rest body)
+;;   `(for! (it ,list) ,@body))
 
 (defalias 'dolist! 'for!)
 (defalias 'loop! 'for!)
