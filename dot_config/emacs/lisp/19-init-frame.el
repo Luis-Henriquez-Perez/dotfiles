@@ -23,3 +23,4 @@
 (opt! window-divider-default-bottom-width 7)
 
 (provide '19-init-frame)
+;; 19-init-frame.el ends here

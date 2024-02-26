@@ -227,6 +227,17 @@ bound and setting them to the result of evaluating expr."
   (when exprs (funcall `(lambda () ,@exprs))))
 
 ;; (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
+;;; popup
+;; I don't yet know where to put this function.  So for now, here it goes.
+(defun oo-popup-at-bottom (regexp)
+  "Open buffers at bottom that match regexp."
+  (alet `(,regexp
+          (display-buffer-at-bottom)
+          (side bottom)
+          (slot 1)
+          (window-height 0.5)
+          (window-parameters ((no-other-window t))))
+    (push it display-buffer-alist)))
 ;;; customize variables
 ;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil
