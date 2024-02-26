@@ -45,7 +45,7 @@
 (require '00-base-vars)
 (require '01-base-settings)
 (require '02-base-lib)
-(require '03-init-straight)
+(require '03-init-elpaca)
 (require '04-base-custom)
 (require '05-base-bind)
 (require '06-base-leaders)
@@ -58,9 +58,16 @@
 (require '19-init-evil)
 (require '19-init-dashboard)
 (require '19-init-recentf)
+(require '19-init-smartparens)
+(require '19-init-rainbow-delimiters)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files
+(oo-call-after-load 'evil #'require '20-config-evil)
+(oo-call-after-load 'helm #'require '20-config-helm)
+(oo-call-after-load 'abbrev #'require '20-config-abbrev)
+(oo-call-after-load 'grugru #'require '20-config-grugru)
+(oo-call-after-load 'smartparens #'require '20-config-smartparens)
 ;; (defhook! emacs-startup-hook&load-config-files ()
 ;;   "Load the code for the lisp files."
 ;;   (flet! feature (-compose #'file-name-sans-extension #'file-name-nondirectory))

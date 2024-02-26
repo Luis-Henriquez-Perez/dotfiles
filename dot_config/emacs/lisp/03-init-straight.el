@@ -23,7 +23,6 @@
 ;; This is a variable that has been renamed but straight still refers when
 ;; doing :sraight (:no-native-compile t)
 (setq comp-deferred-compilation-black-list nil)
-
 ;;; Clone the packages and then set them to proper version
 ;; (for! (package packages)
 ;;   (straight-vc-clone-package)

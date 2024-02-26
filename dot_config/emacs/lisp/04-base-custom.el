@@ -37,7 +37,6 @@
 ;;
 ;;; Code:
 (require '02-base-lib)
-(require '03-init-straight)
 (require 'anaphora)
 (require 'dash)
 (require 'lgr)
@@ -103,7 +102,7 @@ ERROR is either a void-variable or void-function error."
   "Generate a new advice."
   ;; Allow for alternate arguments.
   (aprog! (intern (format "%s@%s%s" symbol how fsym)))
-  (fset it (oo-report-error-fn fsym))
+  (fset it fsym)
   (advice-add symbol how it))
 ;;;; defadvice! 
 (defmacro defadvice! (name args &rest body)

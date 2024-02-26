@@ -74,12 +74,13 @@
 ;; Wait longer.
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
+(elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
+                 :files (:defaults "extensions/vertico-buffer.el" "extensions/vertico-quick.el" "extensions/vertico-directory.el")))
 (elpaca which-key)
 (elpaca no-littering)
 (elpaca grugru)
 (elpaca rainbow-delimiters)
 (elpaca goto-chg)
-(elpaca evil-goggles)
 (elpaca macrostep)
 (elpaca evil)
 (elpaca evil-goggles)
@@ -114,7 +115,6 @@
 (elpaca ws-butler)
 (elpaca magit)
 (elpaca shut-up)
-(elpaca vertico)
 (elpaca esup)
 (elpaca org-superstar)
 (elpaca org-appear)
@@ -128,9 +128,15 @@
 (elpaca lgr)
 (elpaca anaphora)
 (elpaca ace-jump-helm-line)
+(elpaca s)
+(elpaca standard-themes)
+(elpaca benchmark-init)
+(elpaca general)
+(elpaca dashboard)
+(elpaca evil-easymotion)
 (elpaca (on :host github :repo "ajgrf/on.el"))
 ;;; process
 (elpaca-process-queues)
 (elpaca-wait)
 ;;; provide
-(provide 'oo-init-elpaca)
+(provide '03-init-elpaca)

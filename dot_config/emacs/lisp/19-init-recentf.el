@@ -59,9 +59,9 @@
 
 (opt! recentf-filename-handlers (cl-adjoin #'substring-no-properties recentf-filename-handlers))
 
-(opt! recentf-exclude (cl-adjoin (recentf-expand-file-name oo-config-dir) recentf-exclude))
+(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
 
-(opt! recentf-exclude (cl-adjoin (recentf-expand-file-name oo-data-dir) recentf-exclude))
+(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-data-dir)) recentf-exclude))
 ;;; provide
 (provide '19-init-recentf)
 ;;; 19-init-recentf ends here

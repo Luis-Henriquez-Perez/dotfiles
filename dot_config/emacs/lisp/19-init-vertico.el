@@ -1,12 +1,12 @@
-;; (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
+(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
 (oo-add-hook 'emacs-startup-hook #'vertico-mode)
 
-;; (oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 
-;; (opt! vertico-quick1 "asdf")
-;; (opt! vertico-quick2 "jkl;")
+(opt! vertico-quick1 "asdf")
+(opt! vertico-quick2 "jkl;")
 
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
