@@ -60,6 +60,9 @@
 (require '19-init-recentf)
 (require '19-init-smartparens)
 (require '19-init-rainbow-delimiters)
+(require '19-init-frame)
+(require '19-init-avy)
+(require '19-init-savehist)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files

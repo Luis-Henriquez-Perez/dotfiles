@@ -88,12 +88,31 @@ ERROR is either a void-variable or void-function error."
   "Return a function that will report error instead of raising an error."
   (oo-condition-case-fn fn :action (lambda (e &rest _) (oo-report-error fn e))))
 ;;; advices
+;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
+;;;; oo-advice-how 
+(defvar oo-advice-how-alist '((BF . :before)
+                              (AF . :after)
+                              (AR . :around)
+                              (OV . :override)
+                              (AU . :after-until)
+                              (BU . :before-until)
+                              (FA . :filter-args)
+                              (FR . :filter-return))
+  "An alist whose elements are of the form.")
+;;;; oo-advice-components
+(defun! oo-advice-components (fsym)
+  ;; "Return a list of."
+  (set! rx (rx-to-string `(seq (group (one-or-more (not space)))
+                               "@"
+                               (group (or ,@(mapcar (-compose #'symbol-name #'car) oo-advice-how-alist)))      
+                               (group (one-or-more (not space))))))
+  (awhen (string-match regexp (symbol-name fsym))
+    (list (match-string 1) (match-string 2) (match-string 3))))
 ;;;; oo-advised
 (defun! oo-advised (fsym)
   "Return the advised function symbol for FSYM."
   (declare (pure t) (side-effect-free t))
   (cl-assert (symbolp fsym))
-  (set! regexp "\\`\\([^[:space:]]+\\)@\\(?:A[FR]\\|B[FUW]\\|F[AR]\\|OV\\)[^[:space:]]+\\'")
   (aset! (symbol-name fsym))
   (when (string-match regexp it)
     (intern (match-string 1 it))))
@@ -105,12 +124,12 @@ ERROR is either a void-variable or void-function error."
   (fset it fsym)
   (advice-add symbol how it))
 ;;;; defadvice! 
-(defmacro defadvice! (name args &rest body)
-  ;; Make sure advice has proper components.
-  (let! [(symbol how _) (oo-advice-components name)]
-    `(progn
-       (fset name (lambda ,args ,@body))
-       (oo-advice-add name))))
+(defmacro! defadvice! (name args &rest body)
+  "Define an advice."
+  (set! (symbol how _) (oo-advice-components name))
+  `(progn
+     (fset name (lambda ,args ,@body))
+     (advice-add symbol how name)))
 ;;;; silently 
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."

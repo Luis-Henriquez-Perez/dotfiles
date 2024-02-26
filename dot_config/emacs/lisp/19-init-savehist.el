@@ -34,12 +34,15 @@
 ;; README for information on how to run and modify them.
 ;;
 ;;; Code:
+(require 'on)
+
 (oo-add-hook 'on-first-input-hook #'savehist-mode)
 
 (opt! savehist-save-minibuffer-history t)
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
-(opt! savehist-file (concat oo-cache-dir "savehist"))
+;; This should be already taken care of by no-littering.
+(opt! savehist-file (expand-file-name "savehist" oo-data-dir))
 
 (cl-pushnew 'register-alist savehist-additional-variables)
 (defadvice! savehist-save@BFremove-kill-ring-properties ()
