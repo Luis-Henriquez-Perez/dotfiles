@@ -31,7 +31,7 @@
 (opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
 ;;; org-id
 (opt! org-id-track-globally t)
-(opt! org-id-locations-file (concat oo-cache-dir "org-id-locations"))
+(opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
 
 ;; The way I see it, if I can have a universally unique identifier that also tells
 ;; me the date my headline was created; we hit two birds with one stone.  That way I
@@ -39,22 +39,21 @@
 (opt! org-id-method 'ts)
 
 (opt! org-id-link-to-org-use-id t)
-
 ;;; org-src
 (oo-popup-at-bottom "\\*Org Src")
 
-(set! org-edit-src-persistent-message nil)
+(opt! org-edit-src-persistent-message nil)
 
-(adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
+;; (adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
 
-(adjoin! org-src-lang-modes '("lua" . lua))
+;; (adjoin! org-src-lang-modes '("lua" . lua))
 
-(set! org-src-ask-before-returning-to-edit-buffer nil)
+(opt! org-src-ask-before-returning-to-edit-buffer nil)
 
-(set! org-src-preserve-indentation t)
-(set! org-edit-src-content-indentation 0)
+(opt! org-src-preserve-indentation t)
+(opt! org-edit-src-content-indentation 0)
 
-(set! org-src-window-setup 'plain)
+(opt! org-src-window-setup 'plain)
 
 (oo-bind :alt #'org-edit-src-code #'oo-dwim-edit-src-code)
 (oo-bind :h "," #'org-edit-src-code :localleader t)

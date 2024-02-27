@@ -40,6 +40,19 @@
 (require 'anaphora)
 (require 'dash)
 (require 'lgr)
+;;; oo-first-success
+;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
+;; These functions take a predicate and a list and they return the first element of
+;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
+;; predicate and the list, but instead it returns the first non-nil return value of
+;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
+;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
+;; to =t=. The name of this function is inspired by a similar function designed for
+;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
+(defun! oo-first-success (fn list)
+  "Return the first non-nil (fn x) in LIST, else nil."
+  (--each-while list (not (set! success (funcall fn it))))
+  success)
 ;;; logging
 (defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer "*Messages"))
   "Object used for logging.")

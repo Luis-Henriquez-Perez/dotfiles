@@ -64,13 +64,12 @@
 (require '19-init-avy)
 (require '19-init-savehist)
 (require '19-init-helpful)
+(require '19-init-eshell)
+(require '19-init-org)
+(require '19-init-consult)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files
-;; (comment!
-;;  (defhook! hook&what-it-does (hook-args)
-;;    [special args]))
-
 (defhook! emacs-startup-hook&setup-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
