@@ -122,6 +122,7 @@
 (elpaca org-superstar)
 (elpaca org-appear)
 (elpaca idle-require)
+(elpaca marginalia)
 (elpaca leuven-theme)
 (elpaca modus-themes)
 (elpaca monokai-theme)

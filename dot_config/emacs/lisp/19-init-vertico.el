@@ -1,7 +1,13 @@
+(require 'on)
+
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
-(oo-add-hook 'emacs-startup-hook #'vertico-mode)
+;; Try to split up loading.
+(defhook! emacs-startup-hook&require-vertico ()
+  (require 'vertico nil t))
+
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
 
 (oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 

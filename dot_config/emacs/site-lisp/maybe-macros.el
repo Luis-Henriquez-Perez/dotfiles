@@ -225,23 +225,6 @@
 ;;    (apply fn args)))
 ;; (advice-add #'package-vc-install :around #'oo-message-only-fail-pass)
 
-;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
-;; These functions take a predicate and a list and they return the first element of
-;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
-;; predicate and the list, but instead it returns the first non-nil return value of
-;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
-;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
-;; to =t=. The name of this function is inspired by a similar function designed for
-;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
-;; (defun oo-first-success (fn list)
-;;   "Return the first non-nil (fn x) in LIST, else nil."
-;;   (while (and list (funcall fn )))
-;;   success
-;;   ;; (--each-while list (not (let! success (funcall fn it))))
-;;   ;; success
-;;   )
-
-;;
 ;;; Base Library
 ;; This is an initiative to remove external dependencies from the base functions
 ;; and macros that I use for my configuration.  Let me explain my reasoning.
@@ -533,3 +516,6 @@ EXPR is a `pcase-style' expression."
 ;; choose is in the body of `cl-letf' then I will be overwritting it.  By
 ;; choosing a silly name like `foo' you minimize that chance, but there is still
 ;; a chance.
+;; (comment!
+;;  (defhook! hook&what-it-does (hook-args)
+;;    [special args]))
