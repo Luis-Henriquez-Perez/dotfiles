@@ -34,7 +34,7 @@
 (eldev-add-loading-roots 'bootstrap "straight")
 (eldev-add-loading-roots 'test "lisp")
 ;; Tell eldev that I need the tests directory in the load-path for running tests.
-(eldev-add-loading-roots 'test "tests")
+(eldev-add-loading-roots 'test "test")
 ;; Provides the ability to intelligently inference from commands.
 ;; (setq eldev-dwim t)
 ;; Eldev changes this to something else.  I need it so my init file will load

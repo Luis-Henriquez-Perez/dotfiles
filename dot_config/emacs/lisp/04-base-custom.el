@@ -120,7 +120,9 @@ ERROR is either a void-variable or void-function error."
                                (group (or ,@(mapcar (-compose #'symbol-name #'car) oo-advice-how-alist)))      
                                (group (one-or-more (not space))))))
   (awhen (string-match regexp (symbol-name fsym))
-    (list (match-string 1) (match-string 2) (match-string 3))))
+    (list (intern (match-string 1))
+          (intern (match-string 2))
+          (match-string 3))))
 ;;;; oo-advised
 (defun! oo-advised (fsym)
   "Return the advised function symbol for FSYM."
@@ -132,14 +134,20 @@ ERROR is either a void-variable or void-function error."
 ;;;; add-advice
 (defun! oo-add-advice (symbol how fsym &optional props)
   "Generate a new advice."
-  ;; Allow for alternate arguments.
-  (aprog! (intern (format "%s@%s%s" symbol how fsym)))
-  (fset it fsym)
-  (advice-add symbol how it))
+  (set! how-name (rassoc how oo-advice-how-alist))
+  (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
+    (fset it fsym)
+    (advice-add symbol how it)))
 ;;;; defadvice! 
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
-  (set! (symbol how _) (oo-advice-components name))
+  (set! (symbol how-name _) (oo-advice-components name))
+  ;; (cl-assert )
+  (set! how (assoc how-name oo-advice-how-alist))
+  ;; (when (vectorp (car body))
+  ;;   (aset! (append (pop body) nil))
+  ;;   (set! params (list (map-elt it :depth)
+  ;;                      (map-elt it :local))))
   `(progn
      (fset name (lambda ,args ,@body))
      (advice-add symbol how name)))

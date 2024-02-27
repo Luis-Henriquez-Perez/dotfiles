@@ -1,4 +1,3 @@
-(require '04-base-custom)
 (require 'buttercup)
 
 (xdescribe "opt!"

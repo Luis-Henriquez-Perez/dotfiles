@@ -290,7 +290,7 @@
     (expect (let (a) (set! a 1) 1) :to-be 1))
   (it "should be able to destructure arguments passed in."
     ;; Works with improper lists.
-    (expect (let (a b c) (set! (a b . c) '(1 3 . 4)) (list a b c)) :to-equal '(1 2 4))
+    (expect (let (a b c) (set! (a b . c) '(1 3 . 4)) (list a b c)) :to-equal '(1 3 4))
     (expect (let (a b c) (set! (a (b . c)) '(1 (3 . 4)))))
     (expect (let (a b) (set! (a b) '(1 2)) (list a b)) :to-equal '(1 2)))
   (it "should work with vectors as well"
