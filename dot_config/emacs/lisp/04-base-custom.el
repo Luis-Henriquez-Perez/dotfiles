@@ -115,14 +115,11 @@ ERROR is either a void-variable or void-function error."
 ;;;; oo-advice-components
 (defun! oo-advice-components (fsym)
   ;; "Return a list of."
-  (set! rx (rx-to-string `(seq (group (one-or-more (not space)))
-                               "@"
-                               (group (or ,@(mapcar (-compose #'symbol-name #'car) oo-advice-how-alist)))      
-                               (group (one-or-more (not space))))))
-  (awhen (string-match regexp (symbol-name fsym))
-    (list (intern (match-string 1))
-          (intern (match-string 2))
-          (match-string 3))))
+  (set! rx "\\(?:\\([^[:space:]]+\\)@\\(\\(?:A[FRU]\\|B[FU]\\|F[AR]\\|OV\\)\\)\\([^[:space:]]+\\)\\)")
+  (set! name (symbol-name fsym))
+  (flet! group (-compose #'intern (-rpartial #'match-string name)))
+  (awhen (string-match rx name)
+    (mapcar #'group (number-sequence 1 3))))
 ;;;; oo-advised
 (defun! oo-advised (fsym)
   "Return the advised function symbol for FSYM."

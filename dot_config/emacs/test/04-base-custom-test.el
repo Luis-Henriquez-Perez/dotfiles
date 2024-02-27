@@ -1,4 +1,5 @@
 (require 'buttercup)
+(require 'init)
 
 (xdescribe "opt!"
   ;; fake feature
@@ -85,5 +86,11 @@
     (expect (oo-remove-advice)))
   (it "should also infer if advice is named"
     (expect (oo-remove-advice 'some-fn@funcall-quietly))))
+
+(describe "oo-advice-components"
+  (it "should return nil if a symbol is not an advice symbol"
+    (expect (oo-advice-components 'not-advice) :to-be nil))
+  (it "should return (ADVISEE ADVICE-ABBREV FUNCTION) if given an advice symbol"
+    (expect (oo-advice-components 'advisee@FAfunction) :to-equal '(advisee FA function))))
 
 (provide '04-base-custom-test)
