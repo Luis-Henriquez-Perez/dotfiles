@@ -302,6 +302,6 @@
             :to-equal
             '(1 3 4 (3 . 4)))))
 
-(describe "alet>>!")
+;; (describe "alet>>!")
 
 (provide '02-base-lib-test)

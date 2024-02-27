@@ -37,11 +37,11 @@
   (it "should return advice if symbol has a hook"
     (expect (recentf-mode OV suppress-output) :to-be (oo-advice-parts 'recentf-mode@OVsuppress-output))))
 
-(describe "oo-advised"
-  (it "should return nil when symbol has no advice"
-    (expect nil :to-be (oo-advised 'foo)))
-  (it "should return function advised if called on an advice symbol"
-    (expect (oo-advised 'recentf-mode@OVsuppress-output) :to-be 'recentf-mode)))
+;; (describe "oo-advised"
+;;   (it "should return nil when symbol has no advice"
+;;     (expect nil :to-be (oo-advised 'foo)))
+;;   (it "should return function advised if called on an advice symbol"
+;;     (expect (oo-advised 'recentf-mode@OVsuppress-output) :to-be 'recentf-mode)))
 
 (describe "oo-hook"
   (it "should return nil when symbol has no hook"
@@ -72,8 +72,6 @@
 ;;     (set! return-value (oo-add-advice))
 ;;     (expect return-value :to-equal ')
 ;;     (should (symbol-value fake-hook))))
-
-
 
 (xdescribe "oo-advice"
   (it "should return the advice"

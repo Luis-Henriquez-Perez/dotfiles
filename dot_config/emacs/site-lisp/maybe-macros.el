@@ -519,3 +519,7 @@ EXPR is a `pcase-style' expression."
 ;; (comment!
 ;;  (defhook! hook&what-it-does (hook-args)
 ;;    [special args]))
+(rx-to-string `(seq (group (one-or-more (not space)))
+                    "@"
+                    (group (or ,@(mapcar (-compose #'symbol-name #'car) oo-advice-how-alist)))      
+                    (group (one-or-more (not space)))))

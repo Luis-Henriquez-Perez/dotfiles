@@ -121,13 +121,13 @@ ERROR is either a void-variable or void-function error."
   (awhen (string-match rx name)
     (mapcar #'group (number-sequence 1 3))))
 ;;;; oo-advised
-(defun! oo-advised (fsym)
-  "Return the advised function symbol for FSYM."
-  (declare (pure t) (side-effect-free t))
-  (cl-assert (symbolp fsym))
-  (aset! (symbol-name fsym))
-  (when (string-match regexp it)
-    (intern (match-string 1 it))))
+;; (defun! oo-advised (fsym)
+;;   "Return the advised function symbol for FSYM."
+;;   (declare (pure t) (side-effect-free t))
+;;   (cl-assert (symbolp fsym))
+;;   (aset! (symbol-name fsym))
+;;   (when (string-match regexp it)
+;;     (intern (match-string 1 it))))
 ;;;; add-advice
 (defun! oo-add-advice (symbol how fsym &optional props)
   "Generate a new advice."
@@ -139,15 +139,10 @@ ERROR is either a void-variable or void-function error."
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
   (set! (symbol how-name _) (oo-advice-components name))
-  ;; (cl-assert )
-  (set! how (assoc how-name oo-advice-how-alist))
-  ;; (when (vectorp (car body))
-  ;;   (aset! (append (pop body) nil))
-  ;;   (set! params (list (map-elt it :depth)
-  ;;                      (map-elt it :local))))
+  (set! how (cdr (assoc how-name oo-advice-how-alist)))
   `(progn
-     (fset name (lambda ,args ,@body))
-     (advice-add symbol how name)))
+     (fset ',name (lambda ,args (block! ,@body)))
+     (advice-add ',symbol ,how ',name)))
 ;;;; silently 
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
@@ -160,7 +155,6 @@ ERROR is either a void-variable or void-function error."
 Unlike `add-hook'."
   (aprog1! (intern (format "%s&%s" hook fsym)))
   (fset it (oo-report-error-fn fsym))
-  ;; (fset it fsym)
   (add-hook hook it depth local))
 (defalias 'oo-generate-hook 'oo-add-hook)
 (defalias 'oo-gen-hook 'oo-add-hook)
@@ -247,8 +241,6 @@ bound and setting them to the result of evaluating expr."
            (pushing! updated elt))))
   (setq oo-unbound-symbol-alist (nreverse updated))
   (when exprs (funcall `(lambda () ,@exprs))))
-
-;; (add-hook 'after-load-functions #'after-load-functions&set-bound-symbols)
 ;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)

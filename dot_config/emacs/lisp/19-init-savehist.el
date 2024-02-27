@@ -43,8 +43,9 @@
 (opt! savehist-file (expand-file-name "savehist" oo-data-dir))
 
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-;; (defadvice! savehist-save@BFremove-kill-ring-properties ()
-;;   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+
+(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
+  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;; provide
 (provide '19-init-savehist)
 ;;; 19-init-savehist.el ends here
