@@ -16,7 +16,7 @@
     (setq completion-styles '(orderless))
     (setq completion-category-defaults nil)
     (setq completion-category-overrides '((file (styles partial-completion))))
-    (aset! (orderless-strict-leading-initialism orderless-initialism orderless-regexp))
+    (aset! '(orderless-strict-leading-initialism orderless-initialism orderless-regexp))
     (set! orderless-matching-styles it)))
 
 (oo-popup-at-bottom "\\*Vertico")

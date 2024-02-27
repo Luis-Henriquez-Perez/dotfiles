@@ -63,19 +63,25 @@
 (require '19-init-frame)
 (require '19-init-avy)
 (require '19-init-savehist)
+(require '19-init-helpful)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files
-(oo-call-after-load 'evil #'require '20-config-evil)
-(oo-call-after-load 'helm #'require '20-config-helm)
-(oo-call-after-load 'abbrev #'require '20-config-abbrev)
-(oo-call-after-load 'grugru #'require '20-config-grugru)
-(oo-call-after-load 'smartparens #'require '20-config-smartparens)
-;; (defhook! emacs-startup-hook&load-config-files ()
-;;   "Load the code for the lisp files."
-;;   (flet! feature (-compose #'file-name-sans-extension #'file-name-nondirectory))
-;;   (for! (file (directory-files oo-config-dir t))
-;;     (oo-call-after-load (feature file) file)))
+;; (comment!
+;;  (defhook! hook&what-it-does (hook-args)
+;;    [special args]))
+
+(defhook! emacs-startup-hook&setup-config-files ()
+  "Load the code for the lisp files."
+  [:depth 10]
+  (set! regexp "\\`20-config-\\(.+\\)")
+  (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
+  (flet! feature (-compose #'intern #'feature-name))
+  (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
+  (for! (file (directory-files (locate-user-emacs-file "lisp/") t regexp))
+    (set! feature (feature file))
+    (set! package (package file))
+    (oo-call-after-load package #'require feature file nil)))
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here

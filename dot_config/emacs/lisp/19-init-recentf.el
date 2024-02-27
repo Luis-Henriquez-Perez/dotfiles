@@ -1,4 +1,4 @@
-;;; 18-init-recentf.el --- Custom configuration -*- lexical-binding: t; -*-
+;;; 19-init-recentf.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -30,8 +30,6 @@
 ;;
 ;;; Commentary:
 ;;
-;; These are my personal Emacs configurations.  Please refer to the
-;; README for information on how to run and modify them.
 ;;
 ;;; Code:
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
@@ -59,9 +57,9 @@
 
 (opt! recentf-filename-handlers (cl-adjoin #'substring-no-properties recentf-filename-handlers))
 
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
+;; (opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
 
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-data-dir)) recentf-exclude))
+;; (opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-data-dir)) recentf-exclude))
 ;;; provide
 (provide '19-init-recentf)
 ;;; 19-init-recentf ends here

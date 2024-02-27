@@ -163,14 +163,18 @@ Unlike `add-hook'."
 ;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; defhook!
-(defmacro defhook! (name args &rest body)
+(defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (set! hook (oo-hook name))
   (cl-assert hook t "%s is not a hook symbol" hook)
+  (when (vectorp (car body))
+    (aset! (append (pop body) nil))
+    (set! params (list (map-elt it :depth)
+                       (map-elt it :local))))
   `(prog1 ',name
      (fset ',name (lambda ,args (block! ,@body)))
-     (add-hook ',hook ',name)))
+     (add-hook ',hook ',name ,@params)))
 ;; ;;; require
 ;; ;; This macro is to satisfy the compiler but also not have to list all the files
 ;; ;; I want.

@@ -1,4 +1,4 @@
-;;; 19-savehist-save.el --- Custom configuration -*- lexical-binding: t; -*-
+;;; 19-init-helpful.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -32,19 +32,11 @@
 ;;
 ;;
 ;;; Code:
-(require 'on)
 
-(oo-add-hook 'on-first-input-hook #'savehist-mode)
+(oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
+(oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
+(oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
+(oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
 
-(opt! savehist-save-minibuffer-history t)
-(opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(opt! savehist-autosave-interval (* 60 5))
-;; This should be already taken care of by no-littering.
-(opt! savehist-file (expand-file-name "savehist" oo-data-dir))
-
-(opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-;; (defadvice! savehist-save@BFremove-kill-ring-properties ()
-;;   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
-;;; provide
-(provide '19-init-savehist)
-;;; 19-init-savehist.el ends here
+(provide '19-init-helpful)
+;; 19-init-helpful.el ends here

@@ -17,16 +17,16 @@
 
 (defun oo-set-default-evil-cursors (&rest _)
   "Set the evil cursors."
-  (set! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
-  (set! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
-  (set! evil-normal-state-cursor '(box "DarkGoldenrod2"))
-  (set! evil-visual-state-cursor '((hollow) "dark gray"))
-  (set! evil-operator-state-cursor '((hbar . 10) "hot pink"))
-  (set! evil-replace-state-cursor '(box "chocolate"))
-  (set! evil-motion-state-cursor '(box "plum3")))
+  (opt! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
+  (opt! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
+  (opt! evil-normal-state-cursor '(box "DarkGoldenrod2"))
+  (opt! evil-visual-state-cursor '((hollow) "dark gray"))
+  (opt! evil-operator-state-cursor '((hbar . 10) "hot pink"))
+  (opt! evil-replace-state-cursor '(box "chocolate"))
+  (opt! evil-motion-state-cursor '(box "plum3")))
 
-(oo-add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
-(oo-add-advice #'load-theme :after #'oo-set-default-evil-cursors)
+(add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
+(advice-add 'load-theme :after #'oo-set-default-evil-cursors)
 
 (defvar oo-escape-hook nil
   "Hook run after escaping.")

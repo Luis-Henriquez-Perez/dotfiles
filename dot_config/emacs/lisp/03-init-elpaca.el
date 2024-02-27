@@ -76,6 +76,7 @@
 ;;; recipes
 (elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
                  :files (:defaults "extensions/vertico-buffer.el" "extensions/vertico-quick.el" "extensions/vertico-directory.el")))
+(elpaca evil-cleverparens)
 (elpaca which-key)
 (elpaca no-littering)
 (elpaca grugru)
@@ -87,7 +88,8 @@
 (elpaca smartparens)
 (elpaca lispy)
 (elpaca lispyville)
-(elpaca corfu)
+(elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref "a59c41d"
+               :files (:defaults "extensions/corfu-history.el" "extensions/corfu-quick.el")))
 (elpaca consult)
 (elpaca burly)
 (elpaca evil-surround)
@@ -99,6 +101,7 @@
 (elpaca redacted)
 (elpaca orderless)
 (elpaca eros)
+(elpaca helpful)
 (elpaca eshell-up)
 (elpaca eshell-z)
 (elpaca emms)
