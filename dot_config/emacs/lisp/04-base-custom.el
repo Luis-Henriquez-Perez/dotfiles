@@ -182,7 +182,7 @@ NAME should be a hook symbol."
   (cl-assert hook t "%s is not a hook symbol" hook)
   (when (vectorp (car body))
     (aset! (append (pop body) nil))
-    (set! params (list (map-elt it :depth)
+    (set! params (list (or (map-elt it :depth) (map-elt it :append))
                        (map-elt it :local))))
   `(prog1 ',name
      (fset ',name (lambda ,args (block! ,@body)))
@@ -226,21 +226,6 @@ NAME should be a hook symbol."
 ;;   "Add "
 ;;   )
 ;; ;;; opt!
-;; I'll note that I push all the forms into a list and evaluate them all in the
-;; body of one lambda as opposed to evaluating one lambda per form.  This is
-;; important because lambda calls have an overhead that adds up.  It is far less
-;; costly to invoke one lambda over N lambdas.
-(defhook! after-load-functions&set-bound-symbols (&rest _)
-  "Set symbols that have been bound to the result of their corresponding expr.
-Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
-bound and setting them to the result of evaluating expr."
-  (for! ((&as elt (symbol . expr)) oo-unbound-symbol-alist)
-    (cond ((boundp symbol)
-           (pushing! exprs `(set! ,symbol ,expr)))
-          (t
-           (pushing! updated elt))))
-  (setq oo-unbound-symbol-alist (nreverse updated))
-  (when exprs (funcall `(lambda () ,@exprs))))
 ;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
@@ -322,20 +307,43 @@ EXPRS in (CDR CONDITION) is met."
   (aset! (gensym "oo-after-load-fn-"))
   (fset it (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
   (oo--call-after-load expr it))
+
+;; (defun oo-require-after-load (feature &optional file)
+;;   ()
+;;   (oo--call-after-load))
 ;;; customize variables
 ;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil
   "An alist mapping an unbound symbol to an expression.
 This alist is checked by the hook `after-load-functions&set-bound-symbols' for
 any symbols that are now bound.")
+;;;; after-load-functions
+;; I'll note that I push all the forms into a list and evaluate them all in the
+;; body of one lambda as opposed to evaluating one lambda per form.  This is
+;; important because lambda calls have an overhead that adds up.  It is far less
+;; costly to invoke one lambda over N lambdas.
+(defhook! after-load-functions&set-bound-symbols (&rest _)
+  "Set symbols that have been bound to the result of their corresponding expr.
+Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
+bound and setting them to the result of evaluating expr."
+  (for! ((&as elt (symbol . expr)) oo-unbound-symbol-alist)
+    (cond ((boundp symbol)
+           (pushing! exprs `(opt! ,symbol ,expr)))
+          (t
+           (pushing! updated elt))))
+  (setq oo-unbound-symbol-alist (nreverse updated))
+  (when exprs (funcall `(lambda () ,@exprs))))
 ;;;; opt!
+;; The reason this needs to be a macro is because `value' might not be evaluated
+;; immediately.
+;; TODO: need better error handling for when value producess an error.
 (defmacro! opt! (symbol value)
   "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
 This is like `setq' but it is meant for configuring variables."
   (gensym! value-var)
   `(if (not (boundp ',symbol))
        (push (cons ',symbol ',value) oo-unbound-symbol-alist)
-     (let ((,value-var ,value))
+     (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
        (aif (get ',symbol 'custom-set)
            (funcall it ',symbol ,value-var)
          (with-no-warnings (setq ,symbol ,value-var))))))

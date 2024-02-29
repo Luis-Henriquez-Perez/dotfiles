@@ -14,24 +14,6 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
-
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
-
-;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
-
-(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
-
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
-
 (defun! oo-copyright-license (file title commentary)
   (format str file title commentar))
 
@@ -142,45 +124,6 @@
 ;;   ;; If the `provide' line is not present add it or if does not match the
 ;;   ;; feature that is supposed to be provided, change it to do so.
 ;;   )
-;;;;; disable old themes before enabling new ones
-;; We end up with remants of the faces of old themes when we load a new
-;; one.  For this reason, I make sure to disable any enabled themes before applying
-;; a new theme.
-
-;; When you load a theme you'll end up with quite a surprise.  And it
-;; stacks as well when working on a big configuration change I didn't
-;; have this code and I could literally backtrack the themes.
-
-;; Don't know why deleting the previous theme before enabling a new
-;; one isn't the default behavior.  When would anyone want to layer
-;; the colors of one theme on top of an older one.
-(defadvice! load-theme@ARdisable-old-themes (orig-fn &rest args)
-  "Disable old themes before loading new ones."
-  (mapc #'disable-theme custom-enabled-themes)
-  (apply orig-fn args))
-
-(defhook! after-init-hook&load-theme ()
-  "Load `modus-operandi' theme."
-  (when (display-graphic-p)
-    (load-theme 'modus-operandi :no-confirm nil)))
-;;; bindings
-(oo-bind :nm "+" #'text-scale-increase)
-(oo-bind :nm "-" #'text-scale-decrease)
-;;; initial buffer choice
-(defvar oo-initial-buffer-choice-hook nil
-  "Hook run to choose initial buffer.
-Each hook should return either a buffer to be displayed or a boolean.
-For what buffer is displayed in the case of a boolean see
-`initial-buffer-choice'.")
-
-(defun oo-run-initial-buffer-choice-hook ()
-  "Run `oo-initial-buffer-choice-hook'."
-  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
-              (get-buffer-create "*scratch*"))
-    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
-
-(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
-
 ;;; TODO: when switching to scratch buffer, set it to emacs-lisp-mode
 ;;; provide
 (provide '99-uncategorized)

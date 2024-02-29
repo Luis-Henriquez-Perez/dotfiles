@@ -99,7 +99,7 @@ ALIST is an alist of (FN . ARGS).")
 
 (defun! oo-call-undefined-state-functions (&rest _)
   "Call the functions."
-  (for! ((state . alist) oo-undefined-state-functions)
+  (for! ((&as item (state . alist)) oo-undefined-state-functions)
     ;; If the state is a keyword and the letter matches the first letter of an
     ;; existing evil state, then eval the bindings.
     (if (or (and (keywordp state) (oo-evil-state state))
