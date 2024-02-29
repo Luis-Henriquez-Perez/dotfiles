@@ -63,5 +63,17 @@
 (oo-bind 'org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 (oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 (oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+;;; Org-capture
+(oo-popup-at-bottom "CAPTURE[^z-a]+")
+
+(oo-bind 'oo-quick-map "j" #'org-capture :wk "capture")
+(oo-bind 'oo-app-map "a" #'org-capture :wk "capture")
+(oo-bind 'oo-app-map "j" #'org-capture :wk "capture")
+
+(opt! org-archive-save-context-info nil)
+
+(opt! org-archive-location (concat org-directory "archive.org::"))
+
+(oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
 
 (provide '19-init-org)

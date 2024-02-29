@@ -1,6 +1,6 @@
 ;;; 02-base-lib.el --- main library -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024, Luis Henriquez <luis@luishp.xyz>
 ;;
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>

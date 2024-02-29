@@ -252,6 +252,76 @@ bound and setting them to the result of evaluating expr."
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
+;;; repeat
+(defun! oo-repeat-list (n fn &rest args)
+  (dotimes (_ n)
+    (pushing! new (apply fn args)))
+  (nreverse new))
+;;; my own after-load-alist
+(defvar oo-after-load-list (make-hash-table)
+  "Hash-table with functions to run when features are loaded.
+Each key is the feature to load as a symbol.  Each value is a list of functions
+to call when the feature is loaded.")
+
+(defhook! after-load-functions&call-after-load-functions (_)
+  "Call any functions."
+  (set! unloaded (hash-table-keys oo-after-load-list))
+  (set! able-to-load (cl-intersection unloaded features))
+  (dolist (feature able-to-load)
+    (appending! functions (gethash feature oo-after-load-list))
+    (remhash feature oo-after-load-list))
+  (let ((gc-cons-threshold most-positive-fixnum)
+        (gc-cons-percentage 0.7))
+    (mapc #'funcall functions)))
+
+(defun oo--call-after-load (expr fn)
+  "Call FN after EXPR is met."
+  (pcase expr
+    (`(:or . ,exprs)
+     (--each exprs (apply #'oo--call-after-load it fn)))
+    (`(:and . ,exprs)
+     (apply #'oo--call-after-load exprs fn))
+    ((or (pred null) (and (pred symbolp) (pred featurep)))
+     (funcall fn))
+    (`(,expr . ,exprs)
+     (apply #'oo--call-after-load expr #'oo--call-after-load exprs fn))
+    ((and feature (pred symbolp))
+     (pushing! (gethash feature oo-after-load-list) fn))
+    (_
+     (error "invalid condition `%S'" condition))))
+
+(defun oo-only-once-fn (fn)
+  "Return a function behaves the same as FN the first time it is called.
+In any subsequent calls, it does nothing and returns nil."
+  (let ((first-call-p t))
+    (lambda (&rest args)
+      (when first-call-p
+        (setq first-call-p nil)
+        (apply fn args)))))
+
+;; This macro is designed with the following goals in mind.
+;; 1 - use one generic macro for most binding needs
+;; 2 - log the variables I set and when they are being set
+;; You'll get a warning when trying to bind a symbol that hasn't been defined yet.
+;; So it's best to bind a package symbol only after the package has been loaded.
+;; 3 - stop worrying about variables that haven't been bound
+;; 4 - stop worrying about whether a variable is a custom variable or not
+;; Some variables are custom variables.  Meaning they have some function that.
+(defun! oo-call-after-load (expr fn &rest args)
+  "Call FN with ARGS after EXPR resolves.
+EXPR can be a feature (symbol), a list of CONDITIONS, a list whose CAR is
+either `:or' or `:and' and whose CDR is a list of EXPRS.  If CONDITION is a
+feature, call FN with ARGS if feature has already been provided; otherwise,
+behave similarly to `eval-after-load'.  If EXPR is a list of
+EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
+EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
+If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
+EXPRS in (CDR CONDITION) is met."
+  ;; Create a symbol for FN.
+  ;; I am confused about what the naming should look like.
+  (aset! (gensym "oo-after-load-fn-"))
+  (fset it (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
+  (oo--call-after-load expr it))
 ;;; customize variables
 ;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil

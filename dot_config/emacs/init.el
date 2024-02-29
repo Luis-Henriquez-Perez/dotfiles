@@ -1,4 +1,4 @@
-;;; init.el --- Custom configuration -*- lexical-binding: t; -*-
+;;; init.el --- Custom configuration  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
 ;;
@@ -67,6 +67,7 @@
 (require '19-init-eshell)
 (require '19-init-org)
 (require '19-init-consult)
+(require '99-uncategorized)
 ;;; load all init files
 ;; (require! "lisp/[[:digit:]][[:digit:]].+\\.el")
 ;;; load config files

@@ -135,8 +135,8 @@
 (elpaca s)
 (elpaca standard-themes)
 (elpaca benchmark-init)
-(elpaca general)
 (elpaca dashboard)
+(elpaca github-theme)
 (elpaca evil-easymotion)
 (elpaca (on :host github :repo "ajgrf/on.el"))
 ;;; process
