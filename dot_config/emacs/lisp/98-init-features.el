@@ -73,6 +73,10 @@
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
 (oo-bind 'oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
 
+;; TODO: oo-bind should already do this for me.
+(autoload #'chezmoi-find "chezmoi")
+(autoload #'chezmoi-write "chezmoi")
+(autoload #'chezmoi-open-other "chezmoi")
 (oo-bind 'oo-dotfile-map "f" #'chezmoi-find)
 ;; I use the command =chezmoi-write= the most so far.  It syncs the current file
 ;; with its corresponding chezmoi file.  If called while in the target file, it
