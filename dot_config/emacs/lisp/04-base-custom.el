@@ -131,7 +131,7 @@ ERROR is either a void-variable or void-function error."
 ;;;; add-advice
 (defun! oo-add-advice (symbol how fsym &optional props)
   "Generate a new advice."
-  (set! how-name (rassoc how oo-advice-how-alist))
+  (set! how-name (car (rassoc how oo-advice-how-alist)))
   (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
     (fset it fsym)
     (advice-add symbol how it)))
