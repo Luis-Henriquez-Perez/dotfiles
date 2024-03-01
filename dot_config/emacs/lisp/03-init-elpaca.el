@@ -84,7 +84,6 @@
 (elpaca goto-chg)
 (elpaca macrostep)
 (elpaca evil)
-(elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
 (elpaca evil-goggles)
 (elpaca smartparens)
 (elpaca lispy)
