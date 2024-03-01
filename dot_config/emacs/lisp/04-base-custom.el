@@ -138,6 +138,7 @@ ERROR is either a void-variable or void-function error."
 ;;;; defadvice! 
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
+  (declare (indent defun))
   (set! (symbol how-name _) (oo-advice-components name))
   (set! how (cdr (assoc how-name oo-advice-how-alist)))
   `(progn
@@ -178,6 +179,7 @@ Unlike `add-hook'."
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
+  (declare (indent defun))
   (set! hook (oo-hook name))
   (cl-assert hook t "%s is not a hook symbol" hook)
   (when (vectorp (car body))

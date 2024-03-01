@@ -2,5 +2,5 @@
 
 (oo-add-hook 'dired-mode-hook #'dired-omit-mode)
 
-(set! dired-recursive-copies 'always)
-(set! dired-recursive-deletes 'always)
+(opt! dired-recursive-copies 'always)
+(opt! dired-recursive-deletes 'always)

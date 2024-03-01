@@ -36,6 +36,73 @@
 ;;; Code:
 (require 'on)
 ;;; initialize features
+;;;; dired
+(oo-bind 'oo-app-map "d" #'dired)
+;;;;; map =h= to =dired-up-directory=
+;; I do not want to keep pressing =^= for the common action of going up the
+;; directory.
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
+(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
+;;;; dirvish
+(oo-bind :alt #'dired #'dirvish)
+
+(opt! dirvish-use-mode-line nil)
+
+(opt! dirvish-attributes '(file-size subtree-state))
+
+(opt! dirvish-default-layout nil)
+
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+
+(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+;; By default hide details.
+(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+(opt! dired-recursive-copies 'always)
+(opt! dired-recursive-deletes 'always)
+;;;; ws-butler
+(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
+;;;; chezmoi
+;; First thing to do is trigger chezmoi commands via bindings.  One of the key
+;; concepts needed with chezmoi is the concept of source state and target state.
+;; Source state is the version-controlled file that chezmoi.  Target state is
+;; the file that is written to the users filesystem to reflect.
+;;;;; create a leader map for dotfile actions
+(defvar oo-dotfile-map (make-sparse-keymap))
+(define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
+(oo-bind 'oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
+
+(oo-bind 'oo-dotfile-map "f" #'chezmoi-find)
+;; I use the command =chezmoi-write= the most so far.  It syncs the current file
+;; with its corresponding chezmoi file.  If called while in the target file, it
+;; applies the changes in the target file to the source file and vice versa.
+;; Only caveat is that if there is a more recent change in the "other" file,
+;; then you have to use a prefix command to make sure you want to override those
+;; changes.
+(oo-bind 'oo-dotfile-map "w" #'chezmoi-write)
+;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
+;; homerow for QWERTY keyboards.
+(oo-bind 'oo-dotfile-map "d" #'chezmoi-write)
+;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
+;; it does something different depending on whether your in the source file or
+;; the target file.  If you are in the source file, you open the target file and
+;; vice versa.
+(oo-bind 'oo-dotfile-map "o" #'chezmoi-open-other)
+;;;;; TODO maybe have a way to sync all files
+;; I will be honest.  Sometimes I forget which target files I have edited and I
+;; want to sync them to make sure to.
+;;;;;;; TODO automatically use =chezmoi= to write files
+;; I need the command to write the source from the target.  The command
+;; =chezmoi-apply= does this but I would like it to do it automatically if I am
+;; already editing a target-file.
+
+;; (add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
+;; Additionally I may do some auto-commit stuff.  Who knows?
+;;;; macrostep
+(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
+(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
+(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
 ;;;; gcmh
 (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 
@@ -136,7 +203,8 @@
 (oo-bind 'corfu-map :ieg "C-k" #'corfu-previous)
 (oo-bind 'corfu-map :ieg "C-p" #'corfu-previous)
 
-(opt! corfu-quick1 "abcdefghijklmnopqrstuvxyz")
+(opt! corfu-quick1 "ajskdlgh")
+(opt! corfu-quick2 "ajskdlgh")
 
 (oo-add-hook 'prog-mode-hook #'corfu-mode)
 (oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
@@ -150,7 +218,7 @@
 (opt! corfu-auto-prefix 1)
 
 (opt! corfu-bar-width 0)
-;;;; dashboard 
+;;;; dashboard
 (defhook! oo-initial-buffer-choice-hook&make-dashboard ()
   (when (require 'dashboard nil t)
     (aprog1 (get-buffer-create dashboard-buffer-name)
@@ -195,7 +263,7 @@
 ;; well.
 (oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
 
-;;;; evil 
+;;;; evil
 (oo-add-hook 'emacs-startup-hook #'evil-mode)
 
 ;; Don't load everything at once.
@@ -219,13 +287,13 @@
 (oo-add-hook 'prog-mode-hook #'evil-surround-mode)
 
 (oo-add-hook 'text-mode-hook #'evil-surround-mode)
-;;;; evil-cleverparens 
+;;;; evil-cleverparens
 (oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 
 (oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
-;;;; evil-operator 
+;;;; evil-operator
 (oo-bind :n "gr" #'evil-operator-eval)
-;;;; evil-easymotion 
+;;;; evil-easymotion
 (autoload #'oo-goto-beginning-of-word "evil-easymotion")
 (autoload #'oo-goto-end-of-word "evil-easymotion")
 (autoload #'oo-goto-char "evil-easymotion")
@@ -233,10 +301,10 @@
 (oo-bind :nv "w" #'oo-goto-beginning-of-word)
 (oo-bind :nv "e" #'oo-goto-end-of-word)
 (oo-bind :nv "f" #'oo-goto-char)
-;;;; expand-region 
+;;;; expand-region
 (oo-bind :v "V" #'er/contract-region)
 (oo-bind :v "v" #'er/expand-region)
-;;;; lispy 
+;;;; lispy
 (oo-bind :v "E" #'lispy-eval-and-replace)
 
 (oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
@@ -264,12 +332,12 @@
 ;; The default value is 6.
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-bottom-width 7)
-;;;; helpful 
+;;;; helpful
 (oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
 (oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
 (oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
 (oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
-;;;; idle-require 
+;;;; idle-require
 (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
 
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
@@ -367,12 +435,15 @@
 
 (oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
 
-;;;; rainbow-delimiters 
+
+(opt! evilem-style 'at)
+(opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+;;;; rainbow-delimiters
 (oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
 
 (opt! rainbow-delimiters-max-face-count 9)
-;;;; recentf 
+;;;; recentf
 (opt! recentf-filename-handlers '(file-truename))
 
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
@@ -391,7 +462,7 @@
 ;; TODO: Add back =adjoin!= if I removed it.
 (opt! recentf-filename-handlers (cl-adjoin #'abbreviate-file-name recentf-filename-handlers))
 
-(opt! recentf-filename-handlers (cl-adjoin #'substring-no-properties recentf-filename-handlers))
+(opt! recentf-filename-handlers (cl-adjoin 'substring-no-properties recentf-filename-handlers))
 
 (opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
 
@@ -521,7 +592,7 @@ For what buffer is displayed in the case of a boolean see
     (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
 
 (setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
-;;;; general hooks 
+;;;; general hooks
 (oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
 
 (oo-add-hook 'prog-mode-hook #'hs-minor-mode)
@@ -544,6 +615,9 @@ For what buffer is displayed in the case of a boolean see
 (oo-bind 'oo-toggle-map "r" #'read-only-mode)
 (oo-bind 'oo-toggle-map "t" #'load-theme)
 (oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
+
+(oo-bind 'oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
+(oo-bind 'oo-toggle-map "P" #'profiler-stop)
 ;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new
 ;; one.  For this reason, I make sure to disable any enabled themes before applying
