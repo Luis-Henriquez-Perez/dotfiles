@@ -35,10 +35,6 @@
 ;; README for information on how to run and modify them.
 ;;
 ;;; Code:
-;;; emacs
-;; For now I put everything in a single file.  The reason I choose to
-;; do this is because it is simply easier for me with the knowledge I
-;; have about compiling than having to consider loading order and
 ;;;; setup load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load base libraries
@@ -50,7 +46,7 @@
 (require '05-base-bind)
 (require '06-base-leaders)
 (require '98-init-features)
-;;; load config files
+;;;; load config files
 (defhook! emacs-startup-hook&setup-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
