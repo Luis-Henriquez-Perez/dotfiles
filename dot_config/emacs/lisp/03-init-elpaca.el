@@ -109,6 +109,7 @@
 (elpaca super-save)
 (elpaca helm-system-packages)
 (elpaca fennel-mode)
+(elpaca embark)
 (elpaca (outli :fetcher github :repo "jdtsmith/outli"))
 (elpaca dirvish)
 ;; (elpaca (dirvish :files (:defaults "extensions/")))

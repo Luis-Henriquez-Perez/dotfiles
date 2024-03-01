@@ -553,8 +553,6 @@
 (oo-bind 'vertico-map :i [backtab] #'vertico-previous)
 
 (oo-bind 'vertico-map :i "C-o" #'embark-act)
-(oo-bind 'vertico-map :i "C-o" #'embark-collect)
-(oo-bind 'vertico-map :n "C-o" #'embark-collect)
 ;;;; which-key
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 
