@@ -309,10 +309,6 @@ EXPRS in (CDR CONDITION) is met."
   (aset! (gensym "oo-after-load-fn-"))
   (fset it (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
   (oo--call-after-load expr it))
-
-;; (defun oo-require-after-load (feature &optional file)
-;;   ()
-;;   (oo--call-after-load))
 ;;; customize variables
 ;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil

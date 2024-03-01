@@ -309,11 +309,15 @@
 
 (oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
 ;;;; frame
-(defun oo-set-window-divider-face (&rest _)
+;; TODO: Figure out how to set this based on the color of the theme.
+(defhook! after-init-hook&set-window-divider-face ()
   "Set the window divider face."
+  [:depth 11]
   (set-face-foreground 'window-divider "black"))
 
-(oo-add-hook 'after-init-hook #'oo-set-window-divider-face :depth 11)
+(defadvice! load-theme@AFset-window-divider-face (&rest _)
+  "Set the window divider face."
+  (set-face-foreground 'window-divider "black"))
 
 ;; TODO: The display flickers when setting the initial theme.  Maybe this is
 ;; inevitable.  But maybe this has to do with me either disabling the previous
@@ -598,8 +602,6 @@ For what buffer is displayed in the case of a boolean see
 (oo-add-hook 'prog-mode-hook #'hs-minor-mode)
 
 (oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
 
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 
