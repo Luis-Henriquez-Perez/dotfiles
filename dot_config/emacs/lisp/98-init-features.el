@@ -614,6 +614,8 @@ For what buffer is displayed in the case of a boolean see
 (oo-add-hook 'text-mode-hook #'visual-line-mode)
 
 (oo-add-hook 'text-mode-hook #'auto-fill-mode)
+
+(oo-add-hook 'text-mode-hook #'abbrev-mode)
 ;;;; bindings
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)
