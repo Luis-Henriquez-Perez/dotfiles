@@ -97,6 +97,7 @@
 (elpaca helm)
 (elpaca gcmh)
 (elpaca meow)
+(elpaca humanoid-themes)
 (elpaca tempel)
 (elpaca redacted)
 (elpaca orderless)

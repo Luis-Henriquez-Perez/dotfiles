@@ -63,8 +63,9 @@ Evaluate and remove from all elements of `oo-after-keymap-alist'."
            (pushing! remaining item))))
   (setq oo-after-keymap-alist (nreverse remaining)))
 
-(add-hook 'emacs-startup-hook #'oo-call-after-keymap-functions)
-(add-hook 'after-load-functions #'oo-call-after-keymap-functions)
+(defhook! emacs-startup-hook&setup-call-after-keymap-fns ()
+  (oo-call-after-keymap-functions)
+  (oo-add-hook 'after-load-functions #'oo-call-after-keymap-functions))
 ;;;;;;; oo-call-after-evil-state
 (defun! oo-evil-state (evil-keyword)
   "Return the state that corresponds to the state keyword."
