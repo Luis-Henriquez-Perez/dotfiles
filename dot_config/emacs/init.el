@@ -35,6 +35,30 @@
 ;; README for information on how to run and modify them.
 ;;
 ;;; Code:
+;;;; startup
+;;;;; values
+(defvar oo-old-values nil
+  "A plist of whose keys are symbols and values are their old.")
+;;;;; startup variables
+;;;;;; disable garbage collection until I'm done with startup
+;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
+;; very big number, essentially disables garbage collection.  The garbage
+;; collection is later reset to a reasonable value.
+(setf (plist-get oo-old-values 'gc-cons-threshold) gc-cons-threshold)
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; This is the percentage of the heap before.
+(setf (plist-get oo-old-values 'gc-cons-percentage) gc-cons-percentage)
+(setq gc-cons-percentage 0.8)
+;;;;;; don't search for whenever a package is loaded
+(setf (plist-get oo-old-values 'file-name-handler-alist) file-name-handler-alist)
+(setq file-name-handler-alist nil)
+;;;;;; prevent flashing of unstyled modeline
+;; Don't render the modeline on startup.  For one thing, the startup looks
+;; better without flashing stuff on the screen.  Additionally, the more that's
+;; saved on rendering, the faster the startup.
+(setf (plist-get oo-old-values 'mode-line-format) mode-line-format)
+(setq-default mode-line-format nil)
 ;;;; setup load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load base libraries
@@ -58,6 +82,16 @@
     (set! feature (feature file))
     (set! package (package file))
     (oo-call-after-load package #'require feature file nil)))
+;;;; restore values
+;; This should be either the last or close to the last thing that happens.
+;; Furthermore, its important that this hook is run and therefore that previous
+;; hooks dont produce an error.
+(defhook! emacs-startup-hook&restore-startup-values ()
+  [:depth 91]
+  (setq gc-cons-threshold (plist-get oo-old-values 'gc-cons-threshold))
+  (setq gc-cons-percentage (plist-get oo-old-values 'gc-cons-percentage))
+  (setq file-name-handler-alist (plist-get oo-old-values 'file-name-handler-alist))
+  (setq-default mode-line-format (plist-get oo-old-values 'mode-line-format)))
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here

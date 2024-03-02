@@ -102,11 +102,6 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;;; log buffer
 (defvar oo-log-buffer (get-buffer-create "*oo-log*")
   "Buffer where information should be logged.")
-;;; values
-(defvar oo-old-values-alist nil
-  "An alist that contains symbols I want to \"reset\" after startup.
-Each element is of the form (SYMBOL OLD-VALUE SETTER).  SYMBOL's value should be
-reset to OLD-VALUE by calling SETTER with SYMBOL and OLD-VALUE.")
 ;;; provide
 (provide '00-base-vars)
 ;;; 00-base-vars.el ends here

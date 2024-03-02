@@ -33,30 +33,6 @@
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
-;;; startup
-(defmacro startup-set! (symbol value &optional setter)
-  "Set SYMBOL to VALUE using SETTER.
-At the end of `emacs-statup-hook' set VAR back to its original VALUE."
-  `(unless after-init-time
-     (setf (alist-get ',symbol oo-old-values-alist)
-           (list ,symbol #',setter))
-     (funcall (or #',setter #'set) ',symbol ,value)))
-;;;; startup variables
-;;;;; disable garbage collection until I'm done with startup
-;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
-;; very big number, essentially disables garbage collection.  The garbage
-;; collection is later reset to a reasonable value.
-(startup-set! gc-cons-threshold most-positive-fixnum)
-
-;; This is the percentage of the heap before.
-(startup-set! gc-cons-percentage 0.8)
-;;;;; don't search for whenever a package is loaded
-(startup-set! file-name-handler-alist nil)
-;;;;; prevent flashing of unstyled modeline
-;; Don't render the modeline on startup.  For one thing, the startup looks
-;; better without flashing stuff on the screen.  Additionally, the more that's
-;; saved on rendering, the faster the startup.
-(startup-set! mode-line-format nil set-default)
 ;;;; save bookmark file in my cache
 ;; (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
 ;;;; by default do not wrap lines
