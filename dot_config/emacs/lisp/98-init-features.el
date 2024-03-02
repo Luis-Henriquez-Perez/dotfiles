@@ -35,7 +35,9 @@
 ;;
 ;;; Code:
 (require 'on)
-;;; initialize features
+;;; feature-specific customization
+;;;; denote
+(opt! denote-file-type 'text)
 ;;;; dired
 (oo-bind 'oo-app-map "d" #'dired)
 ;;;;; map =h= to =dired-up-directory=
@@ -61,6 +63,22 @@
 
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
+;;;; magit
+(defmacro! defafter! (name expr &rest body)
+  (declare (indent defun))
+  ;; (set! fn (intern (format "oo-after-load/%s" name)))
+  (oo-call-after-load ',expr (lambda () (block! ,@body))))
+
+;; (eval-after-load 'magit '(progn
+;;                            (message "FOO") (require 'evil-magit) (evil-magit-init)))
+;; For some reason this isn't working.
+;; (defafter! enable-evil-magit (evil magit-status)
+;;   (message "LOADING AND ENABLING")
+;;   (message "magit-blob-mode-bound->%S" (boundp 'magit-blob-mode-map))
+;;   (message "evil is enabled: %S" (featurep 'evil))
+;;   (message "magit-status is enabled: %S" (featurep 'magit-status))
+;;   (require 'evil-magit)
+;;   (evil-magit-init))
 ;;;; ws-butler
 (oo-add-hook 'prog-mode-hook #'ws-butler-mode)
 ;;;; chezmoi
@@ -107,34 +125,35 @@
 (oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
 (oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
 (oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
-;;;; gcmh
-(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+;; ;;;; gcmh
+;; (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 
-(opt! gcmh-idle-delay 'auto)
+;; (opt! gcmh-idle-delay 'auto)
 
-(opt! gcmh-high-cons-threshold (* 8 1024 1024))
+;; (opt! gcmh-high-cons-threshold (* 8 1024 1024))
 
-(opt! gcmh-low-cons-threshold (* 4 1024 1024))
+;; (opt! gcmh-low-cons-threshold (* 4 1024 1024))
 
-;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
-;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
-;; primarily doing searches for variables and functions.  There are alot of
-;; variables and functions so this can certainly get computationally expensive.  To
-;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
-;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
-(defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
+;; ;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
+;; ;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
+;; ;; primarily doing searches for variables and functions.  There are alot of
+;; ;; variables and functions so this can certainly get computationally expensive.  To
+;; ;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
+;; ;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
+;; (defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
 
-(defhook! minibuffer-setup-hook&increase-garbage-collection ()
-  "Boost garbage collection settings to `gcmh-high-cons-threshold"
-  [:depth 10]
-  (require 'gcmh)
-  (setq gc-cons-threshold gcmh-high-cons-threshold))
+;; (defhook! minibuffer-setup-hook&increase-garbage-collection ()
+;;   "Boost garbage collection settings to `gcmh-high-cons-threshold"
+;;   [:depth 10]
+;;   (when (require 'gcmh nil t)
+;;     (setq gc-cons-threshold gcmh-high-cons-threshold)))
 
-(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
-  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-  [:depth 90]
-  (require 'gcmh)
-  (setq gc-cons-threshold gcmh-low-cons-threshold))
+;; (defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+;;   [:depth 90]
+;;   (require 'gcmh)
+;;   (when (require 'gcmh nil t)
+;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
 ;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
@@ -330,8 +349,8 @@
 ;; settings and see if this flickering can be avoided.
 (oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 
-(add-hook 'emacs-startup-hook
-          (lambda (&rest _) (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)))
+;; (add-hook 'emacs-startup-hook
+;;           (lambda (&rest _) (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)))
 
 ;; You can either use =right-only= to place window dividers on the right of each
 ;; window.  Or =bottom-only= to place them just on the bottom.
@@ -522,7 +541,6 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
-
 ;;;; vertico
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
@@ -663,5 +681,10 @@ For what buffer is displayed in the case of a boolean see
   "Split window below and select the window created with the split."
   (interactive)
   (select-window (split-window-below)))
+;;;; eval binding
+;; I evaluate things so often and even in non-emacs
+(defvar oo-eval-map (make-sparse-keymap))
+(define-prefix-command 'oo-eval-prefix-command 'oo-eval-map)
+(oo-bind 'oo-leader-map "e" #'oo-eval-prefix-command :wk "eval")
 ;;; provide
 (provide '98-init-features)

@@ -250,16 +250,16 @@ NAME should be a hook symbol."
 Each key is the feature to load as a symbol.  Each value is a list of functions
 to call when the feature is loaded.")
 
-(defhook! after-load-functions&call-after-load-functions (_)
-  "Call any functions."
-  (set! unloaded (hash-table-keys oo-after-load-list))
-  (set! able-to-load (cl-intersection unloaded features))
-  (dolist (feature able-to-load)
-    (appending! functions (gethash feature oo-after-load-list))
-    (remhash feature oo-after-load-list))
-  (let ((gc-cons-threshold most-positive-fixnum)
-        (gc-cons-percentage 0.7))
-    (mapc #'funcall functions)))
+;; (defhook! after-load-functions&call-after-load-functions (_)
+;;   "Call any functions."
+;;   (set! unloaded (hash-table-keys oo-after-load-list))
+;;   (set! able-to-load (cl-intersection unloaded features))
+;;   (dolist (feature able-to-load)
+;;     (appending! functions (gethash feature oo-after-load-list))
+;;     (remhash feature oo-after-load-list))
+;;   (let ((gc-cons-threshold most-positive-fixnum)
+;;         (gc-cons-percentage 0.7))
+;;     (mapc #'funcall functions)))
 
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
@@ -273,7 +273,9 @@ to call when the feature is loaded.")
     (`(,expr . ,exprs)
      (apply #'oo--call-after-load expr #'oo--call-after-load exprs fn))
     ((and feature (pred symbolp))
-     (pushing! (gethash feature oo-after-load-list) fn))
+     (eval-after-load feature `(funcall #',fn))
+     ;; (pushing! (gethash feature oo-after-load-list) fn)
+     )
     (_
      (error "invalid condition `%S'" condition))))
 
