@@ -588,7 +588,7 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 `dolist', `dolist!' or `while'.
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
-  (declare (indent 1))
+  (declare (indent 0))
   (let! (((data body) (oo--parse-block nil body))
          ;; lets is an alist.
          (lets (map-elt data :let))

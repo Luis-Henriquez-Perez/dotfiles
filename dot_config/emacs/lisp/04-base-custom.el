@@ -120,14 +120,6 @@ ERROR is either a void-variable or void-function error."
   (flet! group (-compose #'intern (-rpartial #'match-string name)))
   (awhen (string-match rx name)
     (mapcar #'group (number-sequence 1 3))))
-;;;; oo-advised
-;; (defun! oo-advised (fsym)
-;;   "Return the advised function symbol for FSYM."
-;;   (declare (pure t) (side-effect-free t))
-;;   (cl-assert (symbolp fsym))
-;;   (aset! (symbol-name fsym))
-;;   (when (string-match regexp it)
-;;     (intern (match-string 1 it))))
 ;;;; add-advice
 (defun! oo-add-advice (symbol how fsym &optional props)
   "Generate a new advice."
@@ -189,45 +181,6 @@ NAME should be a hook symbol."
   `(prog1 ',name
      (fset ',name (lambda ,args (block! ,@body)))
      (add-hook ',hook ',name ,@params)))
-;; ;;; require
-;; ;; This macro is to satisfy the compiler but also not have to list all the files
-;; ;; I want.
-;; ;; (defun oo--require-symbols (regexp dir)
-;; ;;   (mapcar (-compose #'intern #'file-name-sans-extension)
-;; ;;           (directory-files dir nil regexp)))
-
-;; ;; (defmacro! require! (regexp)
-;; ;;   (flet! files (directory-files dir nil regexp))
-;; ;;   (let! body nil)
-;; ;;   (let! symbols (funcall (-rpartial #'oo--require-symbols dir) regexp))
-;; ;;   (for! (feature symbols)
-;; ;;     (collecting! body `(require ',feature)))
-;; ;;   (macroexp-progn body))
-;; ;;; logging
-
-;; ;;;; advice
-;; ;;;; expire
-;; (defun oo-set-expire (fsym &optional when-fn)
-;;   "Set hook to expire."
-;;   (pcase symbol
-;;     ((pred oo-advice)
-;;      (fset fsym (oo-after-fn advice #'oo-remove-advice fsym)))
-;;     ((pred oo-hook)
-;;      (fset fsym (oo-after-fn hook #'oo-remove-hook fsym)))
-;;     (_ (error "%s fsym is neither a hook nor a an advice"))))
-;; ;;;; generate advice function
-;; (defun oo-get-advised (fsym)
-;;   "Return advised.")
-
-;; (defalias 'oo-advised 'oo-get-advised)
-;; (defalias 'oo-advice-p 'oo-get-advice)
-
-;; (defun oo-remove-advice ())
-
-;; (defun oo-add-advice ()
-;;   "Add "
-;;   )
-;; ;;; opt!
 ;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
@@ -239,28 +192,7 @@ NAME should be a hook symbol."
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;;; repeat
-(defun! oo-repeat-list (n fn &rest args)
-  (dotimes (_ n)
-    (pushing! new (apply fn args)))
-  (nreverse new))
 ;;; my own after-load-alist
-(defvar oo-after-load-list (make-hash-table)
-  "Hash-table with functions to run when features are loaded.
-Each key is the feature to load as a symbol.  Each value is a list of functions
-to call when the feature is loaded.")
-
-;; (defhook! after-load-functions&call-after-load-functions (_)
-;;   "Call any functions."
-;;   (set! unloaded (hash-table-keys oo-after-load-list))
-;;   (set! able-to-load (cl-intersection unloaded features))
-;;   (dolist (feature able-to-load)
-;;     (appending! functions (gethash feature oo-after-load-list))
-;;     (remhash feature oo-after-load-list))
-;;   (let ((gc-cons-threshold most-positive-fixnum)
-;;         (gc-cons-percentage 0.7))
-;;     (mapc #'funcall functions)))
-
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
@@ -271,11 +203,11 @@ to call when the feature is loaded.")
     ((or (pred null) (and (pred symbolp) (pred featurep)))
      (funcall fn))
     (`(,expr . ,exprs)
-     (apply #'oo--call-after-load expr #'oo--call-after-load exprs fn))
+     (oo--call-after-load expr (apply-partially #'oo--call-after-load exprs fn)))
     ((and feature (pred symbolp))
-     (eval-after-load feature `(funcall #',fn))
-     ;; (pushing! (gethash feature oo-after-load-list) fn)
-     )
+     (if (featurep feature)
+         (funcall fn)
+       (eval-after-load feature fn)))
     (_
      (error "invalid condition `%S'" condition))))
 
