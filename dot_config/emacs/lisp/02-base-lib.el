@@ -86,17 +86,20 @@ List markers are symbols that begin with `&' such as are `&rest' and
 ;; that way it would be truly analogous to =funcall=. However, then the signature
 ;; would ambiguous if =function= has arguments that are the same as keys specified by
 ;; =&key=.
-(cl-defun oo-condition-case-fn (fn &key (handlers 'error) (action #'ignore))
+(defun oo-condition-case-fn (fn action &optional handlers)
   "Return a function that calls ACTION when errors matching HANDLERS are raised.
 ACTION is a function with three arguments the error object, FN and the list of
 arguments FN will be called with."
   ;; To be honest I'm not sure if I need to make a gensym for the variable
   ;; `err'.  I do it just in case.
+  (cl-callf or handlers 'error)
+  (cl-callf or action #'ignore)
   (cl-with-gensyms (err)
     `(lambda (&rest args)
        (condition-case ,err
            (apply #',fn args)
          (,handlers (funcall #',action ,err #',fn args))))))
+(defalias 'oo-cond-case-fn 'oo-condition-case-fn)
 ;;;; setting
 (cl-defmacro appending! (place list &key (setter 'setf))
   "Append LIST to the end of PLACE.
