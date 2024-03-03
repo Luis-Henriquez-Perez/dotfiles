@@ -47,6 +47,52 @@
   "Return the first non-nil (fn x) in LIST, else nil."
   (--each-while list (not (set! success (funcall fn it))))
   success)
+;;;; oo-once-only-fn
+(defun oo-only-once-fn (fn)
+  "Return a function behaves the same as FN the first time it is called.
+After the first call, it does nothing and returns nil.  Note that this function
+must be evaluated with `lexical-binding' enabled."
+  (let ((first-call-p t))
+    (lambda (&rest args)
+      (when first-call-p
+        (setq first-call-p nil)
+        (apply fn args)))))
+;;;; autoloading
+;; I tried making this as a macro called [[][catch-autoloads!]] but I ran in to
+;; some issues.  First, my initial implementation ran into infinite recursion
+;; during macroexpansion.  And then after I fixed that I had problems with lexical
+;; binding.
+(defun! oo-autoload-function (fn)
+  "Call FN with ARGS trying to load features of any undefined symbols.
+If an void-function or void-variable error is raised try to guess the parent
+feature."
+  (oo-cond-case-fn fn #'oo-autoload-action-function '(void-function void-variable)))
+
+(defun! oo-candidate-features (fn)
+  "Return a list of candidate features for FN.
+FN is a function symbol.  Look in the load path for names that match features."
+  (set! fname (symbol-name fn))
+  (for! (path load-path)
+    (set>>! base
+      (directory-file-name path)
+      (file-name-nondirectory)
+      (file-name-sans-extension))
+    (when (s-prefix-p base fname)
+      (pushing! candidates (intern base))))
+  (seq-sort-by (-compose #'length #'symbol-name) #'> candidates))
+
+(defun! oo-autoload-action-function (error function args)
+  "Try guess if feature is bound.
+ERROR is either a void-variable or void-function error."
+  (set! (type symbol . rest) error)
+  (cl-assert (member type '(void-variable void-function)))
+  (set! bound-fn (cl-case type (void-variable #'boundp) (void-function #'fboundp)))
+  (set! candidates (oo-candidate-features symbol))
+  (for! (feature candidates)
+    (require feature nil t)
+    (when (funcall bound-fn symbol)
+      (return! (apply #'oo-funcall-autoload function args))))
+  (signal (car error) (cdr error)))
 ;;;; logging
 (defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer "*Messages"))
   "Object used for logging.")
@@ -62,29 +108,6 @@
 
 (defmacro fatal! (msg &rest meta)
   `(lgr-fatal oo-lgr ,msg ,@meta))
-;;;; autoloading
-;; I tried making this as a macro called [[][catch-autoloads!]] but I ran in to
-;; some issues.  First, my initial implementation ran into infinite recursion
-;; during macroexpansion.  And then after I fixed that I had problems with lexical
-;; binding.
-(defun! oo-autoload-function (fn)
-  "Call FN with ARGS trying to load features of any undefined symbols.
-If an void-function or void-variable error is raised try to guess the parent
-feature."
-  (oo-condition-case-fn fn :handlers '(void-function void-variable) :action #'oo-autoload-action-function))
-
-(defun! oo-autoload-action-function (error function args)
-  "Try guess if feature is bound.
-ERROR is either a void-variable or void-function error."
-  (set! (type symbol . rest) error)
-  (cl-assert (member type '(void-variable void-function)))
-  (set! bound-fn (cl-case type (void-variable #'boundp) (void-function #'fboundp)))
-  (set! candidates (oo-candidate-features symbol))
-  (for! (feature candidates)
-    (require feature nil t)
-    (when (funcall bound-fn symbol)
-      (return! (apply #'oo-funcall-autoload function args))))
-  (signal (car error) (cdr error)))
 ;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
@@ -93,7 +116,7 @@ ERROR is either a void-variable or void-function error."
 
 (defun oo-report-error-fn (fn)
   "Return a function that will report error instead of raising an error."
-  (oo-condition-case-fn fn :action (lambda (e &rest _) (oo-report-error fn e))))
+  (oo-condition-case-fn fn (lambda (e &rest _) (oo-report-error fn e))))
 ;;;; advices
 ;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
 ;;;;; oo-advice-how
@@ -105,10 +128,12 @@ ERROR is either a void-variable or void-function error."
                               (BU . :before-until)
                               (FA . :filter-args)
                               (FR . :filter-return))
-  "An alist whose elements are of the form.")
+  "An alist of (HOW-ABBREV . HOW).
+HOW is the same as in `advice-add'.  HOW-ABBREV is the abbreviation used in
+advice names for HOW.")
 ;;;;; oo-advice-components
 (defun! oo-advice-components (fsym)
-  ;; "Return a list of."
+  "Return a list of."
   (set! rx "\\(?:\\([^[:space:]]+\\)@\\(\\(?:A[FRU]\\|B[FU]\\|F[AR]\\|OV\\)\\)\\([^[:space:]]+\\)\\)")
   (set! name (symbol-name fsym))
   (flet! group (-compose #'intern (-rpartial #'match-string name)))
@@ -186,7 +211,7 @@ NAME should be a hook symbol."
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;;;; my own after-load-alist
+;;;; oo-call-after-load
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
@@ -204,15 +229,6 @@ NAME should be a hook symbol."
        (eval-after-load feature fn)))
     (_
      (error "invalid condition `%S'" condition))))
-
-(defun oo-only-once-fn (fn)
-  "Return a function behaves the same as FN the first time it is called.
-In any subsequent calls, it does nothing and returns nil."
-  (let ((first-call-p t))
-    (lambda (&rest args)
-      (when first-call-p
-        (setq first-call-p nil)
-        (apply fn args)))))
 
 ;; This macro is designed with the following goals in mind.
 ;; 1 - use one generic macro for most binding needs
@@ -232,18 +248,20 @@ EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
 EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
-  ;; Create a symbol for FN.
-  ;; I am confused about what the naming should look like.
-  (aset! (gensym "oo-after-load-fn-"))
-  (fset it (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
+  (aset! (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
   (oo--call-after-load expr it))
-;;; customize variables
-;;;; oo-unbound-symbol-alist
+
+;; (defmacro! defafter! (name expr &rest body)
+;;   (declare (indent defun))
+;;   (set! fn (intern (format "oo-after-load/%s" name)))
+;;   (oo-call-after-load ',expr (lambda () (block! ,@body))))
+;;;; customize variables
+;;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil
   "An alist mapping an unbound symbol to an expression.
 This alist is checked by the hook `after-load-functions&set-bound-symbols' for
 any symbols that are now bound.")
-;;;; after-load-functions
+;;;;; after-load-functions
 ;; I'll note that I push all the forms into a list and evaluate them all in the
 ;; body of one lambda as opposed to evaluating one lambda per form.  This is
 ;; important because lambda calls have an overhead that adds up.  It is far less
