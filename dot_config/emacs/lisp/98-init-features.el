@@ -498,6 +498,8 @@
 
 (opt! evilem-style 'at)
 (opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+;;;;; miscellaneous
+(opt! org-hide-emphasis-markers t)
 ;;;; rainbow-delimiters
 (oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
