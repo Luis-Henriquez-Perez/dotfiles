@@ -5,13 +5,6 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
-;; Package-Requires: ((emacs "29.1"))
-;;
-;; Created: 08 Jan 2021
-;;
-;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
-;;
-;; License: GPLv3
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

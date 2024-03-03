@@ -6,12 +6,6 @@
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz>
 ;; Version: 0.1
 ;;
-;; Created: 02 Jan 2024
-;;
-;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
-;;
-;; License: GPLv3
-;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation, either version 3 of the
@@ -40,7 +34,7 @@
 (require 'anaphora)
 (require 'dash)
 (require 'lgr)
-;;; oo-first-success
+;;;; oo-first-success
 ;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
 ;; These functions take a predicate and a list and they return the first element of
 ;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
@@ -53,7 +47,7 @@
   "Return the first non-nil (fn x) in LIST, else nil."
   (--each-while list (not (set! success (funcall fn it))))
   success)
-;;; logging
+;;;; logging
 (defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer "*Messages"))
   "Object used for logging.")
 
@@ -68,7 +62,7 @@
 
 (defmacro fatal! (msg &rest meta)
   `(lgr-fatal oo-lgr ,msg ,@meta))
-;;; autoloading
+;;;; autoloading
 ;; I tried making this as a macro called [[][catch-autoloads!]] but I ran in to
 ;; some issues.  First, my initial implementation ran into infinite recursion
 ;; during macroexpansion.  And then after I fixed that I had problems with lexical
@@ -91,7 +85,7 @@ ERROR is either a void-variable or void-function error."
     (when (funcall bound-fn symbol)
       (return! (apply #'oo-funcall-autoload function args))))
   (signal (car error) (cdr error)))
-;;; reporting errors
+;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
   (error! "%s raised an %s error because of %s" fn (car error) (cdr error))
@@ -100,9 +94,9 @@ ERROR is either a void-variable or void-function error."
 (defun oo-report-error-fn (fn)
   "Return a function that will report error instead of raising an error."
   (oo-condition-case-fn fn :action (lambda (e &rest _) (oo-report-error fn e))))
-;;; advices
+;;;; advices
 ;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
-;;;; oo-advice-how 
+;;;;; oo-advice-how
 (defvar oo-advice-how-alist '((BF . :before)
                               (AF . :after)
                               (AR . :around)
@@ -112,7 +106,7 @@ ERROR is either a void-variable or void-function error."
                               (FA . :filter-args)
                               (FR . :filter-return))
   "An alist whose elements are of the form.")
-;;;; oo-advice-components
+;;;;; oo-advice-components
 (defun! oo-advice-components (fsym)
   ;; "Return a list of."
   (set! rx "\\(?:\\([^[:space:]]+\\)@\\(\\(?:A[FRU]\\|B[FU]\\|F[AR]\\|OV\\)\\)\\([^[:space:]]+\\)\\)")
@@ -120,14 +114,14 @@ ERROR is either a void-variable or void-function error."
   (flet! group (-compose #'intern (-rpartial #'match-string name)))
   (awhen (string-match rx name)
     (mapcar #'group (number-sequence 1 3))))
-;;;; add-advice
+;;;;; add-advice
 (defun! oo-add-advice (symbol how fsym &optional props)
   "Generate a new advice."
   (set! how-name (car (rassoc how oo-advice-how-alist)))
   (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
     (fset it fsym)
     (advice-add symbol how it)))
-;;;; defadvice! 
+;;;;; defadvice!
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
   (declare (indent defun))
@@ -136,12 +130,12 @@ ERROR is either a void-variable or void-function error."
   `(progn
      (fset ',name (lambda ,args (block! ,@body)))
      (advice-add ',symbol ,how ',name)))
-;;;; silently 
+;;;;; silently
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;;; hooks
-;;;; oo-add-hook
+;;;; hooks
+;;;;; oo-add-hook
 ;; No anonymous hooks allowed.
 (defun! oo-add-hook (hook fsym &optional depth local)
   "Generate a function from FSYM and add it to HOOK.
@@ -151,13 +145,13 @@ Unlike `add-hook'."
   (add-hook hook it depth local))
 (defalias 'oo-generate-hook 'oo-add-hook)
 (defalias 'oo-gen-hook 'oo-add-hook)
-;;;; oo-remove-hook
+;;;;; oo-remove-hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
   (if (and function hook)
       (remove-hook hook fsym)
     (remove-hook (oo-hook fsym) fsym)))
-;;;; oo-hook
+;;;;; oo-hook
 (defun! oo-hook (fsym)
   "Return the hook symbol for FSYM."
   (declare (pure t) (side-effect-free t))
@@ -165,9 +159,9 @@ Unlike `add-hook'."
   (alet! (symbol-name fsym))
   (when (string-match "\\(.+\\)&.+" it)
     (intern (match-string 1 it))))
-;;;; oo-hook-p
+;;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
-;;;; defhook!
+;;;;; defhook!
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
@@ -181,7 +175,7 @@ NAME should be a hook symbol."
   `(prog1 ',name
      (fset ',name (lambda ,args (block! ,@body)))
      (add-hook ',hook ',name ,@params)))
-;;; popup
+;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
   "Open buffers at bottom that match regexp."
@@ -192,7 +186,7 @@ NAME should be a hook symbol."
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;;; my own after-load-alist
+;;;; my own after-load-alist
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
@@ -265,7 +259,7 @@ bound and setting them to the result of evaluating expr."
            (pushing! updated elt))))
   (setq oo-unbound-symbol-alist (nreverse updated))
   (when exprs (funcall `(lambda () ,@exprs))))
-;;;; opt!
+;;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
 ;; TODO: need better error handling for when value producess an error.
