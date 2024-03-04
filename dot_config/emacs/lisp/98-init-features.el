@@ -576,6 +576,9 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
+;;;; captain
+(oo-add-hook 'prog-mode-hook #'captain-mode)
+(oo-add-hook 'text-mode-hook #'captain-mode)
 ;;;; vertico
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
