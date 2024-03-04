@@ -103,14 +103,15 @@
 (cl-pushnew 'doom-themes package-selected-packages)
 (cl-pushnew 'evil-exchange package-selected-packages)
 (cl-pushnew 'lgr package-selected-packages)
+(cl-pushnew 'ef-themes package-selected-packages)
+(cl-pushnew 'benchmark-init package-selected-packages)
+;; (cl-pushnew 'embark package-selected-packages)
 (cl-pushnew 'anaphora package-selected-packages)
 ;; (cl-pushnew 'buttercup package-selected-packages)
 
+(cl-pushnew '(evil-magit :url "https://github.com/emacs-evil/evil-magit") package-vc-selected-packages)
+(cl-pushnew '(outli :url "https://github.com/jdtsmith/outli") package-vc-selected-packages)
 (cl-pushnew '(on :url "https://github.com/ajgrf/on.el") package-vc-selected-packages)
-
-;; (logsym! package--initialized)
-;; (logsym! package--archive-contents)
-;; (logsym! package-enable-at-startup)
 
 ;; The function `package-install-selected-packages' does not activate the
 ;; packages which causes a problem fo rme.
