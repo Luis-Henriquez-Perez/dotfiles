@@ -110,7 +110,7 @@
 ;;;; disable cursor blinking
 ;; By default the cursor blinks.  The point is so that it is easier to find on the
 ;; screen.  Usually, however, I have no trouble finding it so I disable it.
-(blink-cursor-mode -1)
+;; (blink-cursor-mode -1)
 ;;;; move files to trash instead of deleting them
 ;; By default Emacs actually deletes files.  By setting this to t, you tell Emacs
 ;; to move a file to trash instead of actually deleting it.  This is better because
