@@ -2,6 +2,12 @@
 (require 'buttercup)
 (require 'init)
 
+(describe "oo-first-success"
+  (it "should return nil if (fn elt) is never non-nil"
+    (expect (oo-first-success #'not '(1 2 3 4))))
+  (it "should return the first non-nil (fn elt) in list"
+    (expect (oo-first-success #'not '(1 2 3 nil 4)) :to-equal t)))
+
 (xdescribe "opt!"
   (block!
     (it "should set the value of variable variable is unbound"

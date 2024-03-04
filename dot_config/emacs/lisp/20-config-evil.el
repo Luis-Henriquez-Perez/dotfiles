@@ -1,3 +1,4 @@
+;;;; minibuffer
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
 
@@ -14,7 +15,7 @@
   (when (bound-and-true-p evil-mode)
     (evil-change-state oo-evil-state-before-minibuffer)
     (setq oo-evil-state-before-minibuffer nil)))
-
+;;;; cursors
 (defun oo-set-default-evil-cursors (&rest _)
   "Set the evil cursors."
   (opt! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
@@ -27,7 +28,7 @@
 
 (add-hook 'evil-mode-hook #'oo-set-default-evil-cursors)
 (advice-add 'load-theme :after #'oo-set-default-evil-cursors)
-
+;;;; escape
 (defvar oo-escape-hook nil
   "Hook run after escaping.")
 
