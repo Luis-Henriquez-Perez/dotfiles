@@ -131,6 +131,7 @@
 (elpaca standard-themes)
 (elpaca super-save)
 (elpaca tempel)
+(elpaca transpose-frame)
 (elpaca vc-auto-commit)
 (elpaca which-key)
 (elpaca ws-butler)
