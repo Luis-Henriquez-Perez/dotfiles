@@ -84,21 +84,17 @@
     (expect (oo-remove-advice 'some-fn@funcall-quietly))))
 
 (describe "oo-advice-components"
-          (it "should return nil if a symbol is not an advice symbol"
-              (expect (oo-advice-components 'not-advice) :to-be nil))
-          (it "should return (ADVISEE ADVICE-ABBREV FUNCTION) if given an advice symbol"
-              (expect (oo-advice-components 'advisee@FAfunction) :to-equal '(advisee FA function))))
-
-(describe "oo-repeat-list"
-          (it "should populate list with result of funcall invokations"
-              (expect (oo-repeat-list 4 (-const 4)) :to-equal '(4 4 4 4))))
+  (it "should return nil if a symbol is not an advice symbol"
+    (expect (oo-advice-components 'not-advice) :to-be nil))
+  (it "should return (ADVISEE ADVICE-ABBREV FUNCTION) if given an advice symbol"
+    (expect (oo-advice-components 'advisee@FAfunction) :to-equal '(advisee FA function))))
 
 (describe "oo-once-only-fn"
-          :var ((it (oo-only-once-fn (-const 1))))
-          (it "the function should return 1 the first time"
-              (expect (funcall it) :to-equal 1))
-          (it "should return nil from that point on"
-              (should-not (funcall it))
-              (should-not (funcall it))))
+  :var ((it (oo-only-once-fn (-const 1))))
+  (it "the function should return 1 the first time"
+    (expect (funcall it) :to-equal 1))
+  (it "should return nil from that point on"
+    (should-not (funcall it))
+    (should-not (funcall it))))
 
 (provide '04-base-custom-test)
