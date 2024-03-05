@@ -1,13 +1,13 @@
 #+begin_html
 <h1 align="center">dotfiles</h1>
-<p align="center">
-  <a href="https://github.com/d12frosted/environment/actions?query=workflow%3ACI">
-    <img src="https://github.com/d12frosted/environment/workflows/CI/badge.svg" alt="CI Status Badge">
-  </a>
-  <a href="https://github.com/d12frosted/environment/actions?query=workflow%3AEmacs">
-    <img src="https://github.com/d12frosted/environment/workflows/Emacs/badge.svg" alt="Emacs Status Badge">
-  </a>
-</p>
+# <p align="center">
+#   <a href="https://github.com/d12frosted/environment/actions?query=workflow%3ACI">
+#     <img src="https://github.com/d12frosted/environment/workflows/CI/badge.svg" alt="CI Status Badge">
+#   </a>
+#   <a href="https://github.com/d12frosted/environment/actions?query=workflow%3AEmacs">
+#     <img src="https://github.com/d12frosted/environment/workflows/Emacs/badge.svg" alt="Emacs Status Badge">
+#   </a>
+# </p>
 #+end_html
 * dotfiles
 These are my dotfiles.  They are managed with [[chezmoi]].
