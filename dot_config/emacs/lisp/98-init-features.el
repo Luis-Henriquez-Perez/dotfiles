@@ -36,39 +36,9 @@
 ;;; Code:
 (require 'on)
 ;;; feature-specific customization
-;;;; emms
-(opt! emms-player-list '(emms-player-mpv))
-(opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
-(opt! emms-directory (expand-file-name "emms/" oo-var-dir))
-;; (require 'emms-player-mpv)
-;;;; denote
-(opt! denote-file-type 'text)
-;;;; dired
-(oo-bind 'oo-app-map "d" #'dired)
-;;;;; map =h= to =dired-up-directory=
-;; I do not want to keep pressing =^= for the common action of going up the
-;; directory.
-(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
-;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
-(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
-;;;; dirvish
-(oo-bind :alt #'dired #'dirvish)
-
-(opt! dirvish-use-mode-line nil)
-
-(opt! dirvish-attributes '(file-size subtree-state))
-
-(opt! dirvish-default-layout nil)
-
-(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
-
-(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
-;; By default hide details.
-(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
-
-(opt! dired-recursive-copies 'always)
-(opt! dired-recursive-deletes 'always)
 ;;;; ace-window
+;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
+(opt! sgml-basic-offset 4);;;; ace-window
 ;;;;; swap
 (set! aw-swap-invert t)
 ;;;;; set the keys used by ace-window
@@ -101,24 +71,34 @@
 ;; But I can do something similar, but much faster with.  This is a case where =s= is
 ;; mnemonic and easy to press.
 (oo-bind 'oo-window-map "s" #'ace-swap-window :wk "swap")
-;;;; magit
-(defmacro! defafter! (name expr &rest body)
-  (declare (indent defun))
-  ;; (set! fn (intern (format "oo-after-load/%s" name)))
-  (oo-call-after-load ',expr (lambda () (block! ,@body))))
+;;;; avy
+(opt! avy-style 'pre)
 
-;; (eval-after-load 'magit '(progn
-;;                            (message "FOO") (require 'evil-magit) (evil-magit-init)))
-;; For some reason this isn't working.
-;; (defafter! enable-evil-magit (evil magit-status)
-;;   (message "LOADING AND ENABLING")
-;;   (message "magit-blob-mode-bound->%S" (boundp 'magit-blob-mode-map))
-;;   (message "evil is enabled: %S" (featurep 'evil))
-;;   (message "magit-status is enabled: %S" (featurep 'magit-status))
-;;   (require 'evil-magit)
-;;   (evil-magit-init))
-;;;; ws-butler
-(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
+(opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+
+(opt! avy-background nil)
+
+(opt! avy-timeout-seconds 0.3)
+;;;; benchmark-init
+(require 'benchmark-init)
+
+(benchmark-init/activate)
+;; To disable collection of benchmark data after init is done.
+(oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
+;;;; burly
+;;;;; leader bindings
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
+;;;;; save window configuration with =b= or =S=
+;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
+;; necessary to reproduce the current window configuration.  I can then restore the
+;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+;;;; captain
+(oo-add-hook 'prog-mode-hook #'captain-mode)
+(oo-add-hook 'text-mode-hook #'captain-mode)
 ;;;; chezmoi
 ;; First thing to do is trigger chezmoi commands via bindings.  One of the key
 ;; concepts needed with chezmoi is the concept of source state and target state.
@@ -159,69 +139,6 @@
 
 ;; (add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
 ;; Additionally I may do some auto-commit stuff.  Who knows?
-;;;; macrostep
-(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
-(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
-(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
-;; ;;;; gcmh
-;; (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
-
-;; (opt! gcmh-idle-delay 'auto)
-
-;; (opt! gcmh-high-cons-threshold (* 8 1024 1024))
-
-;; (opt! gcmh-low-cons-threshold (* 4 1024 1024))
-
-;; ;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
-;; ;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
-;; ;; primarily doing searches for variables and functions.  There are alot of
-;; ;; variables and functions so this can certainly get computationally expensive.  To
-;; ;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
-;; ;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
-;; (defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
-
-;; (defhook! minibuffer-setup-hook&increase-garbage-collection ()
-;;   "Boost garbage collection settings to `gcmh-high-cons-threshold"
-;;   [:depth 10]
-;;   (when (require 'gcmh nil t)
-;;     (setq gc-cons-threshold gcmh-high-cons-threshold)))
-
-;; (defhook! minibuffer-exit-hook&decrease-garbage-collection ()
-;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-;;   [:depth 90]
-;;   (require 'gcmh)
-;;   (when (require 'gcmh nil t)
-;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
-;;;; no-littering
-(setq no-littering-etc-directory oo-etc-dir)
-(setq no-littering-var-directory oo-var-dir)
-
-(require 'no-littering)
-;;;; benchmark-init
-(require 'benchmark-init)
-
-(benchmark-init/activate)
-;; To disable collection of benchmark data after init is done.
-(oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
-;;;; avy
-(opt! avy-style 'pre)
-
-(opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-
-(opt! avy-background nil)
-
-(opt! avy-timeout-seconds 0.3)
-;;;; burly
-;;;;; leader bindings
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
-;;;;; save window configuration with =b= or =S=
-;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
-;; necessary to reproduce the current window configuration.  I can then restore the
-;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 ;;;; consult
 (opt! consult-preview-key nil)
 
@@ -300,6 +217,38 @@
 (opt! dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 
 (opt! dashboard-center-content t)
+;;;; denote
+(opt! denote-file-type 'text)
+;;;; dired
+(oo-bind 'oo-app-map "d" #'dired)
+;;;;; map =h= to =dired-up-directory=
+;; I do not want to keep pressing =^= for the common action of going up the
+;; directory.
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
+(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
+;;;; dirvish
+(oo-bind :alt #'dired #'dirvish)
+
+(opt! dirvish-use-mode-line nil)
+
+(opt! dirvish-attributes '(file-size subtree-state))
+
+(opt! dirvish-default-layout nil)
+
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+
+(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+;; By default hide details.
+(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+(opt! dired-recursive-copies 'always)
+(opt! dired-recursive-deletes 'always)
+;;;; emms
+(opt! emms-player-list '(emms-player-mpv))
+(opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
+(opt! emms-directory (expand-file-name "emms/" oo-var-dir))
+;; (require 'emms-player-mpv)
 ;;;; eshell
 ;;;;; miscellaneous
 (oo-bind 'oo-app-map "e" #'eshell)
@@ -344,16 +293,10 @@
 (opt! evil-move-beyond-eol nil)
 
 (opt! evil-search-wrap nil)
-;;;; evil-surround
-(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
-
-(oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;;; evil-cleverparens
 (oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 
 (oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
-;;;; evil-operator
-(oo-bind :n "gr" #'evil-operator-eval)
 ;;;; evil-easymotion
 (autoload #'oo-goto-beginning-of-word "evil-easymotion")
 (autoload #'oo-goto-end-of-word "evil-easymotion")
@@ -362,13 +305,15 @@
 (oo-bind :nv "w" #'oo-goto-beginning-of-word)
 (oo-bind :nv "e" #'oo-goto-end-of-word)
 (oo-bind :nv "f" #'oo-goto-char)
+;;;; evil-operator
+(oo-bind :n "gr" #'evil-operator-eval)
+;;;; evil-surround
+(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
+
+(oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;;; expand-region
 (oo-bind :v "V" #'er/contract-region)
 (oo-bind :v "v" #'er/expand-region)
-;;;; lispy
-(oo-bind :v "E" #'lispy-eval-and-replace)
-
-(oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
 ;;;; frame
 ;; TODO: Figure out how to set this based on the color of the theme.
 (defhook! after-init-hook&set-window-divider-face ()
@@ -402,6 +347,8 @@
 (oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
 (oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
 (oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
+;;;; highlight-quoted
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 ;;;; idle-require
 (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
 
@@ -410,6 +357,10 @@
 (opt! idle-require-load-break 5)
 
 (opt! idle-require-idle-delay 10)
+;;;; lispy
+(oo-bind :v "E" #'lispy-eval-and-replace)
+
+(oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
 ;;;; lispyville
 (oo-bind :n "g," #'lispyville-comment-or-uncomment)
 (oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
@@ -421,6 +372,60 @@
 (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
 
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+;;;; macrostep
+(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
+(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
+(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+;; ;;;; gcmh
+;; (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+
+;; (opt! gcmh-idle-delay 'auto)
+
+;; (opt! gcmh-high-cons-threshold (* 8 1024 1024))
+
+;; (opt! gcmh-low-cons-threshold (* 4 1024 1024))
+
+;; ;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
+;; ;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
+;; ;; primarily doing searches for variables and functions.  There are alot of
+;; ;; variables and functions so this can certainly get computationally expensive.  To
+;; ;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
+;; ;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
+;; (defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
+
+;; (defhook! minibuffer-setup-hook&increase-garbage-collection ()
+;;   "Boost garbage collection settings to `gcmh-high-cons-threshold"
+;;   [:depth 10]
+;;   (when (require 'gcmh nil t)
+;;     (setq gc-cons-threshold gcmh-high-cons-threshold)))
+
+;; (defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+;;   [:depth 90]
+;;   (require 'gcmh)
+;;   (when (require 'gcmh nil t)
+;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
+;;;; magit
+(defmacro! defafter! (name expr &rest body)
+  (declare (indent defun))
+  ;; (set! fn (intern (format "oo-after-load/%s" name)))
+  (oo-call-after-load ',expr (lambda () (block! ,@body))))
+
+;; (eval-after-load 'magit '(progn
+;;                            (message "FOO") (require 'evil-magit) (evil-magit-init)))
+;; For some reason this isn't working.
+;; (defafter! enable-evil-magit (evil magit-status)
+;;   (message "LOADING AND ENABLING")
+;;   (message "magit-blob-mode-bound->%S" (boundp 'magit-blob-mode-map))
+;;   (message "evil is enabled: %S" (featurep 'evil))
+;;   (message "magit-status is enabled: %S" (featurep 'magit-status))
+;;   (require 'evil-magit)
+;;   (evil-magit-init))
+;;;; no-littering
+(setq no-littering-etc-directory oo-etc-dir)
+(setq no-littering-var-directory oo-var-dir)
+
+(require 'no-littering)
 ;;;; org
 ;;;;; org-superstar
 (oo-add-hook 'org-mode-hook #'org-superstar-mode)
@@ -505,6 +510,8 @@
 (opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 ;;;;; miscellaneous
 (opt! org-hide-emphasis-markers t)
+;;;; outli
+(oo-add-hook 'prog-mode-hook #'outli-mode)
 ;;;; rainbow-delimiters
 (oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
@@ -581,9 +588,6 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
-;;;; captain
-(oo-add-hook 'prog-mode-hook #'captain-mode)
-(oo-add-hook 'text-mode-hook #'captain-mode)
 ;;;; vertico
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
@@ -622,8 +626,6 @@
 (oo-bind 'vertico-map :i [backtab] #'vertico-previous)
 
 (oo-bind 'vertico-map :i "C-o" #'embark-act)
-;;;; outli
-(oo-add-hook 'prog-mode-hook #'outli-mode)
 ;;;; which-key
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 
@@ -641,11 +643,9 @@
 (opt! which-key-show-operator-state-maps t)
 
 (opt! which-key-show-prefix 'top)
-;;;; highlight-quoted
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
-;;;; HTML indentation
-;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
-(opt! sgml-basic-offset 4)
+;;;; ws-butler
+(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
+
 ;;; uncategorized
 ;;;; initial buffer choice
 (defvar oo-initial-buffer-choice-hook nil
