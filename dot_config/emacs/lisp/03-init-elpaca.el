@@ -132,6 +132,7 @@
 (elpaca s)
 (elpaca shut-up)
 (elpaca smartparens)
+(elpaca ssh-agency)
 (elpaca standard-themes)
 (elpaca super-save)
 (elpaca tempel)
