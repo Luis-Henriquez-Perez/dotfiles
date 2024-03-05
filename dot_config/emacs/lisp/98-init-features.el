@@ -411,6 +411,7 @@
   ;; (set! fn (intern (format "oo-after-load/%s" name)))
   (oo-call-after-load ',expr (lambda () (block! ,@body))))
 
+(oo-call-after-load '(evil magit) #'evil-magit-init)
 ;; (eval-after-load 'magit '(progn
 ;;                            (message "FOO") (require 'evil-magit) (evil-magit-init)))
 ;; For some reason this isn't working.
