@@ -36,14 +36,15 @@
 ;;; Code:
 (require 'on)
 ;;; feature-specific customization
-;;;; ace-window
+;;;; unknown
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
-(opt! sgml-basic-offset 4);;;; ace-window
+(opt! sgml-basic-offset 4)
+;;;; ace-window
 ;;;;; swap
-(set! aw-swap-invert t)
+(opt! aw-swap-invert t)
 ;;;;; set the keys used by ace-window
 ;; The character z conflicts.
-(set! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
+(opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
 ;;;;; select a window with =w=, =j= or =o=
 ;; There are commands such as.  I do not need these commands.  After moving left,
 ;; right, up or down some direction once, the effort needed to traverse a window
