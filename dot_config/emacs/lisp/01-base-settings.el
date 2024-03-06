@@ -43,8 +43,6 @@
 ;; with =show-parens-mode= at the same time.  This isn't needed if I have
 ;; =show-parens-mode= already enabled.
 (setq blink-matching-paren nil)
-;;;; save bookmark file in my cache
-;; (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
 ;;;; by default do not wrap lines
 ;; When a line is too long to be displayed in the screen do not wrap it around;
 ;; just let the rest of the line go out of view (with an indicator that there is
