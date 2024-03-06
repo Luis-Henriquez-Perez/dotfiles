@@ -612,8 +612,7 @@
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
 
-(opt! orderless-matching-styles '(orderless-flex
-                                  orderless-initialism
+(opt! orderless-matching-styles '(orderless-initialism
                                   orderless-regexp))
 
 (defhook! vertico-mode-hook&enable-orderless ()
