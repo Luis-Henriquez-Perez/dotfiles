@@ -575,6 +575,10 @@
 
 (oo-add-hook 'prog-mode-hook #'smartparens-mode)
 
+(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
+
+(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
+
 (oo-bind 'oo-toggle-map "s" #'smartparens-mode)
 ;;;; supersave
 (oo-add-hook 'on-first-file-hook #'super-save-mode)
