@@ -33,6 +33,16 @@
 ;; that I don't like. I specifically place them at the forefront of my configuration
 ;; to ensure that they will always be evaluated regardless of what unexpected error
 ;; should occur afterwards.
+;;;; do not auto-enable =show-paren-mode= in editing modes
+;; By default =show-paren-mode= is enabled in all editing mode (non-special
+;; modes).  I want to control when to enable this mode normally--as in, add it to
+;; hooks myself if I want it enabled.  Therefore, I disable it here.
+(setq show-paren-predicate nil)
+;;;; disable the blinking of matching parentheses
+;; This made scrolling the cursor really slow.  Maybe because it was enabled
+;; with =show-parens-mode= at the same time.  This isn't needed if I have
+;; =show-parens-mode= already enabled.
+(setq blink-matching-paren nil)
 ;;;; save bookmark file in my cache
 ;; (setq-default bookmark-default-file (expand-file-name "bookmarks" oo-cache-dir))
 ;;;; by default do not wrap lines
