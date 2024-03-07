@@ -100,6 +100,7 @@
 (elpaca evil-surround)
 (elpaca expand-region)
 (elpaca fennel-mode)
+(elpaca filladapt)
 (elpaca fit-text-scale)
 (elpaca gcmh)
 (elpaca git-gutter)
