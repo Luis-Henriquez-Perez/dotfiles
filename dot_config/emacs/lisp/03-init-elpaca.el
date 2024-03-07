@@ -69,17 +69,16 @@
 ;;; recipes
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
-;; TODO: add bindings for lorem ipsum.
 (elpaca ah)
+;; TODO: add bindings for lorem ipsum.
 (elpaca anaphora)
 (elpaca benchmark-init)
 (elpaca burly)
 (elpaca buttercup)
-(elpaca cape)
+;; (elpaca cape)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
 (elpaca chezmoi)
 (elpaca consult)
-(elpaca consult-embark)
 (elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref ...))
 (elpaca dashboard)
 (elpaca dirvish)
