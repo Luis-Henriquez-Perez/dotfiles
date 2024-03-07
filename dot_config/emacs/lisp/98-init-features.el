@@ -39,6 +39,12 @@
 ;;;; unknown
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (opt! sgml-basic-offset 4)
+;;;; abbrev
+;; Do not write/read abbrevs from a file.  I would rather just evaluate theme
+;; every time with `20-config-abbrev.el'.
+(advice-add #'read-abbrev-file :around #'ignore)
+(advice-add #'write-abbrev-file :around #'ignore)
+(advice-add #'abbrev--possibly-save :around #'ignore)
 ;;;; ace-window
 ;;;;; swap
 (opt! aw-swap-invert t)

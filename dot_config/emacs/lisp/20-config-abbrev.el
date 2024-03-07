@@ -107,8 +107,6 @@
 
 (define-global-abbrev "ive" "I have")
 
-(define-global-abbrev "docstring" "doc-string")
-(define-global-abbrev "docstrings" "doc-strings")
 (define-global-abbrev "dstr" "doc-string")
 (define-global-abbrev "dstrs" "doc-strings")
 
