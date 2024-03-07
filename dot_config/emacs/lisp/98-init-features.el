@@ -414,22 +414,7 @@
 ;;   (when (require 'gcmh nil t)
 ;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
 ;;;; magit
-(defmacro! defafter! (name expr &rest body)
-  (declare (indent defun))
-  ;; (set! fn (intern (format "oo-after-load/%s" name)))
-  (oo-call-after-load ',expr (lambda () (block! ,@body))))
-
 (oo-call-after-load '(evil magit) #'evil-magit-init)
-;; (eval-after-load 'magit '(progn
-;;                            (message "FOO") (require 'evil-magit) (evil-magit-init)))
-;; For some reason this isn't working.
-;; (defafter! enable-evil-magit (evil magit-status)
-;;   (message "LOADING AND ENABLING")
-;;   (message "magit-blob-mode-bound->%S" (boundp 'magit-blob-mode-map))
-;;   (message "evil is enabled: %S" (featurep 'evil))
-;;   (message "magit-status is enabled: %S" (featurep 'magit-status))
-;;   (require 'evil-magit)
-;;   (evil-magit-init))
 ;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
