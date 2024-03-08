@@ -140,6 +140,10 @@
 ;;;; fix spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
+(define-global-abbrev "edting" "editing")
+
+(define-global-abbrev "alread" "already")
+
 (define-global-abbrev "htats" "that is")
 
 (define-global-abbrev "whehther" "whether")
