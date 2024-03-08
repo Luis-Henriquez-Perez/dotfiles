@@ -1,23 +1,5 @@
 (require '02-base-lib)
 
-;; I have written several functions whose last arguments are =FN= and =&rest args= such
-;; as [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]] and [[file:snapshots/_helpful_function__oo-call-after-keymap_.png][oo-call-after-keymap]].  And when I was trying to compose
-;; these functions together in the body of multiple =oo-bind= functions I realized
-;; that composing more than two of such functions produced a very long line.  The
-;; line would have several sharp quoted functions. And I found it difficult to read
-;; and understand what's going on.  Usually, I try to imagine what I want and when
-;; I did that I found myself writing a [[file:snapshots/_helpful_macro__thread-last_.png][thread-last]] form. This is similar to
-;; [[file:snapshots/_helpful_macro__thread-last_.png][thread-last]] and [[file:snapshots/_helpful_macro__->>_.png][->>]].  Except it is designed for functions that need a function
-;; symbol and function arguments as their arguments such as [[file:snapshots/_helpful_function__funcall_.png][funcall]] and
-;; [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]].
-(defmacro! thread-partial! (&rest body)
-  (flet! sharpquote (obj) `(function ,obj))
-  (flet! sharpquote-first (obj) (cons (sharpquote (car obj)) (cdr obj)))
-  (append (-last-item body)
-          (apply #'append (reverse (mapcar #'sharpquote-first (-butlast body))))))
-
-(defalias '-partial-> 'thread-partial!)
-(defalias '-p-> 'thread-partial!)
 ;;;;;;; oo-call-after-keymap
 ;; I want the ability to be able to bind keys in keymaps without having to always
 ;; consider whether the keymap is bound yet or not; and without always having to
