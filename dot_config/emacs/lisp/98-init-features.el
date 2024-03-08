@@ -607,6 +607,11 @@
 (opt! orderless-matching-styles '(orderless-initialism
                                   orderless-regexp))
 
+(setq vertico-buffer-display-action
+      '(display-buffer-in-direction
+        (direction . below)
+        (window-height . ,(+ 3 vertico-count))))
+
 (defhook! vertico-mode-hook&enable-orderless ()
   (when (require 'orderless nil t)
     (setq completion-styles '(orderless))
