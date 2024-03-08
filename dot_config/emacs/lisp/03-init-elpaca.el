@@ -70,8 +70,8 @@
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
-;; TODO: add bindings for lorem ipsum.
 (elpaca anaphora)
+;; TODO: add bindings for lorem ipsum.
 (elpaca benchmark-init)
 (elpaca burly)
 ;; Eldev complains about `buttercup' already being loaded.  So I have to think
