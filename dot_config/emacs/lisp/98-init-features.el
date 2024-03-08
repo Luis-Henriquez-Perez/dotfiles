@@ -189,8 +189,8 @@
 (oo-bind 'corfu-map :ieg "C-k" #'corfu-previous)
 (oo-bind 'corfu-map :ieg "C-p" #'corfu-previous)
 
-(opt! corfu-quick1 "ajskdlgh")
-(opt! corfu-quick2 "ajskdlgh")
+(opt! corfu-quick1 "ajskdlghty")
+(opt! corfu-quick2 "ajskdlghty")
 
 (oo-add-hook 'prog-mode-hook #'corfu-mode)
 (oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
