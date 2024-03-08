@@ -5,11 +5,6 @@
 ;; Author: Luis Henriquez <luis@luishp.xyz.io>
 ;; Maintainer: Luis Henriquez <luis@luishp.xyz.io>
 ;;
-;; Created: 05 Feb 2024
-;;
-;;
-;; License: GPLv3
-;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation, either version 3 of the
@@ -28,7 +23,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file contains tests for `oo-base-lib'.
+;; This file contains tests for `02-base-lib'.
 ;;
 ;;; Code:
 ;; [[https://scripter.co/quick-intro-to-emacs-lisp-regression-testing/][quick-intro-to-emacs-lisp-regression-testing]]
@@ -302,6 +297,5 @@
             :to-equal
             '(1 3 4 (3 . 4)))))
 
-;; (describe "alet>>!")
-
 (provide '02-base-lib-test)
+;;; 02-base-lib-test.el ends here

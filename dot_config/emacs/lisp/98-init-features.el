@@ -36,6 +36,9 @@
 ;;; Code:
 (require 'on)
 ;;; feature-specific customization
+;;;; re-builder
+;; By default, use `rx' syntax.  It is my preferred syntax.
+(opt! reb-re-syntax 'rx)
 ;;;; unknown
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (opt! sgml-basic-offset 4)
