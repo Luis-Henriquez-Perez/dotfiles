@@ -74,8 +74,12 @@
 (elpaca anaphora)
 (elpaca benchmark-init)
 (elpaca burly)
-(elpaca buttercup)
-;; (elpaca cape)
+;; Eldev complains about `buttercup' already being loaded.  So I have to think
+;; about how I will go about installing it for normal usage.  In any case the
+;; only reason I want it is for proper indenting and syntax highlighting when I
+;; am actually editing my test files.
+;; (elpaca buttercup)
+(elpaca cape)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
 (elpaca chezmoi)
 (elpaca consult)
