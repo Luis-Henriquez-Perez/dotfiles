@@ -1,5 +1,7 @@
+(require '90-wikipedia-common-mispellings)
 ;;; abbrevs
-;;;; multiple word abbrevs 
+;; TODO: make some abbrevs get capitalized.
+;;;; multiple word abbrevs
 (define-global-abbrev "imho" "in my humble opinion")
 
 (define-global-abbrev "imo" "in my opinion")
