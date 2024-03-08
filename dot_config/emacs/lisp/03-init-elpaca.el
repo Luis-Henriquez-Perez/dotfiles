@@ -87,6 +87,7 @@
 (elpaca dashboard)
 (elpaca dirvish)
 (elpaca doom-themes)
+(elpaca eat)
 (elpaca ef-themes)
 (elpaca embark)
 (elpaca emms)
