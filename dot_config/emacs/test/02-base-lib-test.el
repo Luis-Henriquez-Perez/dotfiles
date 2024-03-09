@@ -1,4 +1,4 @@
-;;; 02-base-lib-test.el --- `oo-base-library' tests   -*- lexical-binding: t; -*-
+;;; 02-base-lib-test.el --- test `02-base-lib.el' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz.io>
 ;;

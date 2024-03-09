@@ -523,3 +523,23 @@ EXPR is a `pcase-style' expression."
                     "@"
                     (group (or ,@(mapcar (-compose #'symbol-name #'car) oo-advice-how-alist)))      
                     (group (one-or-more (not space)))))
+
+(rx-to-string '(: (group (: bol ";;;;" blank (0+ any) eol "\n"))
+                  (0+ (or (: bol (** 0 3 ";") (not ";") (0+ any) eol)
+                          (: bol (>= 5 ";") (0+ any) eol)
+                          (: bol (not ";") (0+ any) eol)
+                          "\n"))))
+
+(defun! oo-sort-level-2-headings ()
+  "Sort level 2 headings and their contents alphabetically by heading name."
+  (interactive)
+  (set! rx "\\(?:\\(\\(?:^;;;;[[:blank:]].*$\\)\n\\)\\(?:^;\\{0,3\\}[^;].*$\\|^;\\{5,\\}.*$\\|^[^;].*$\\|\n\\)*\\)")
+  (save-excursion
+    (goto-char (point-min))
+    (sort-regexp-fields nil rx "\\1" (point) (point-max))))
+
+(save-excursion (sort-regexp-fields nil "\\(?:(elpaca (?\\([^ )]+\\).*$\\)" "\\1" (point-min) (point-max)))
+
+(defun oo/do-replace ()
+  (interactive)
+  (replace-regexp-in-region "\\(.+\\)->\\(.+\\)$" "(define-global-abbrev \"\1\" \"\2\")" (point-min) (point-max)))
