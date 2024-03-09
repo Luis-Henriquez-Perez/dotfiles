@@ -36,6 +36,14 @@
 ;;; Code:
 (require 'on)
 ;;; feature-specific customization
+;;;; evil-textobj-line
+;; TODO: create an abbrev to today's date.
+;; TODO: there needs to be a standard for setting today.
+;; While I was writing a code that would automate adding package headers to
+;; files, I wanted to surround each line with quotes and that is when I thought
+;; I would like a line text-object.
+(oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
+(oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
 (opt! reb-re-syntax 'rx)
