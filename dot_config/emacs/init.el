@@ -1,17 +1,14 @@
-;;; init.el --- Custom configuration  -*- lexical-binding: t; -*-
+;;; init.el --- My emacs configuration  -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Maintainer: Luis Henriquez-Perez <luis@luishp.xyz>
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "29.1"))
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
 ;;
-;; Created: 02 Feb 2024
-;;
-;; URL: https://github.com/Luis-Henriquez-Perez/dotfiles
-;;
-;; License: GPLv3
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -27,11 +24,9 @@
 ;; along with this program. If not, see
 ;; <http://www.gnu.org/licenses/>.
 ;;
-;; This file is not part of GNU Emacs.
-;;
 ;;; Commentary:
 ;;
-;; These are my personal Emacs configurations.  Please refer to the
+;; This is my personal emacs configuration.  Please refer to the
 ;; README for information on how to run and modify them.
 ;;
 ;;; Code:
