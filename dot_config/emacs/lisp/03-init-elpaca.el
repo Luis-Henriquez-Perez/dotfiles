@@ -67,6 +67,7 @@
 ;; Wait longer.
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
+(elpaca evil-textobj-line)
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
