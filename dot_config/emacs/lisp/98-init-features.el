@@ -1,14 +1,11 @@
-;;; 98-init-features.el --- initialize features  -*- lexical-binding: t; -*-
+;;; 98-init-features.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
-;; Version: 0.1
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
 ;;
-;; Created: 14 Feb 2024
-;;
-;; License: GPLv3
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -21,10 +18,7 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see
-;; <http://www.gnu.org/licenses/>.
-;;
-;; This file is not part of GNU Emacs.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;; Commentary:
 ;;

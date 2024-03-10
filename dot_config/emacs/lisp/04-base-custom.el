@@ -1,10 +1,11 @@
-;;; 04-base-custom.el --- Tools to config features -*- lexical-binding: t; -*-
+;;; 04-base-custom.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
-;; Version: 0.1
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
+;;
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -17,18 +18,17 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see
-;; <http://www.gnu.org/licenses/>.
-;;
-;; This file is not part of GNU Emacs.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;; Commentary:
 ;;
+;; TODO: add commentary
+;;
+;;; Code:
 ;; This file contains functions and macros directly used for customizing Emacs
 ;; by which I mean for doing things like adding hooks, adding advices, and
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
-;;
 ;;; Code:
 (require '02-base-lib)
 (require 'anaphora)

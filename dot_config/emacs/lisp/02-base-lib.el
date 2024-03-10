@@ -1,10 +1,11 @@
-;;; 02-base-lib.el --- main library -*- lexical-binding: t; -*-
+;;; 02-base-lib.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2024, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
-;; Version: 0.1
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles
+;;
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -17,17 +18,15 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see
-;; <http://www.gnu.org/licenses/>.
-;;
-;; This file is not part of GNU Emacs.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;;; Commentary:
 ;;
-;;; Code:
 ;; This is the primary set of functions and macro I use to.  They are designed
 ;; to only rely on built-in Emacs packages so that they can be loaded into any
 ;; script and also to make.
+;;
+;;; Code:
 ;;;; require built-in packages
 (require 'seq)
 (require 'pcase)

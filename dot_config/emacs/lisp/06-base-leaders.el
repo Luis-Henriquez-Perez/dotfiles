@@ -1,4 +1,31 @@
-;;;;;;; create a keymap that overrides most other keymaps
+;;; 06-base-leaders.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;
+;; Copyright (c) 2024 Free Software Foundation, Inc.
+;;
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
+;;
+;; This file is not part of GNU Emacs.
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation, either version 3 of the
+;; License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
+;;
+;;; Commentary:
+;;
+;; TODO: add commentary
+;;
+;;; Code:
+;;;; create a keymap that overrides most other keymaps
 ;; Creating a minor mode to hold the leader map allows us to toggle our leader
 ;; bindings on or off.
 
@@ -26,7 +53,7 @@
 ;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
 ;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
 (pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
-;;;;;;; base leaders
+;;;; base leaders
 ;; This file provides leaders keys for evil and non-evil states and it binds
 ;; these leader keys.
 
@@ -116,8 +143,8 @@
 
 (adjoining! oo-binding-fns #'oo--bind-localleader)
 
-;;;;; keybindings
-;;;;;; setup leader maps
+;;;; keybindings
+;;;;; setup leader maps
 (defvar oo-toggle-map (make-sparse-keymap))
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
 (oo-bind 'oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
@@ -198,12 +225,12 @@
 (oo-bind oo-help-map "h" #'describe-variable)
 (oo-bind oo-help-map "C" #'describe-char)
 (oo-bind oo-help-map "k" #'describe-key)
-;;;;;; maximize a window with =M=
+;;;;; maximize a window with =M=
 ;; Of course sometimes you want to focus on a window more than others.  Typically
 ;; this is handled with =edwina= because it makes the master window take up more than
 ;; =50%= of the width--by default =55%= (see [[file:snapshots/_helpful_variable__edwina-mfact_.png][edwina-mfact]]).
 (oo-bind 'oo-window-map "M" #'maximize-window :wk "maximize")
-;;;;;; splitting windows
+;;;;; splitting windows
 ;; I'm unsure about whether to have any bindings splitting windows.  Since =edwina=
 ;; automates the way I split windows I do not use these splitting commands much.
 ;; However, I'm not so sure whether I should remove them entirely.
@@ -211,27 +238,29 @@
 (oo-bind 'oo-window-map "h" #'split-window-vertically :wk "hsplit")
 ;; (oo-bind 'oo-window-map "V" #'oo-split-window-right-and-focus :wk "vsplit+focus")
 ;; (oo-bind 'oo-window-map "v" #'oo-split-window-below-and-focus :wk "split+focus")
-;;;;;; undo changes to window configuration with =u=
+;;;;; undo changes to window configuration with =u=
 ;; There's a global mode called [[https://www.emacswiki.org/emacs/WinnerMode#:~:text=Winner%20Mode%20is%20a%20global%20minor%20mode%20that,included%20in%20GNU%20Emacs%2C%20and%20documented%20as%20winner-mode.][winner-mode]] that allow you to undo changes to
 ;; your window configuration.
 (oo-bind 'oo-window-map "u" #'winner-undo :wk "undo")
-;;;;;; delete a window with =D= or =d=
+;;;;; delete a window with =D= or =d=
 ;; The letter =d= is both mnemonic for deleting windows and it is easy to press
 ;; because its own the home key.
 (oo-bind 'oo-window-map "d" #'delete-window :wk "delete")
 (oo-bind 'oo-window-map "D" #'delete-other-windows :wk "delete others")
-;;;;;; open a new window with =k=
+;;;;; open a new window with =k=
 ;; This binding overlaps with.  My reasoning is you can think of it as opening a
 ;; new window.
 (oo-bind 'oo-window-map "k" #'display-buffer :wk "open")
-;;;;;; bind =TAB= to toggle children in =outshine-mode=
+;;;;; bind =TAB= to toggle children in =outshine-mode=
 ;; I need a way of folding headings.  This is a quick fix until I can
 ;; adapt the headline state I wrote about into a generic outline state.
 ;; (oo-bind 'outshine-mode-map :n "TAB" #'outline-toggle-children)
-;;;;;; similarly bind =TAB= to =outline-cycle= in =outli-mode=
+;;;;; similarly bind =TAB= to =outline-cycle= in =outli-mode=
 ;; (oo-bind 'outli-mode-map :n "TAB" #'outline-cycle)
 ;; (oo-bind 'outli-mode-map :n "TAB" #'outline-toggle-children)
-;;;;;; binding for =eval-expression=
+;;;;; binding for =eval-expression=
 ;; I used to call this the eval leader map, but I do not know.
 ;; (oo-bind "e" #'eval-expression)
+;;; provide
 (provide '06-base-leaders)
+;;; 06-base-leaders.el ends here

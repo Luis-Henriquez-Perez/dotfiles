@@ -1,10 +1,11 @@
-;;; 01-base-settings.el --- Base settings -*- lexical-binding: t; -*-
+;;; 01-base-settings.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
-;; Version: 0.1
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
+;;
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -17,11 +18,13 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see
-;; <http://www.gnu.org/licenses/>.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
-;; This file is not part of GNU Emacs.
+;;; Commentary:
 ;;
+;; TODO: add commentary
+;;
+;;; Code:
 ;;; settings
 ;; Here lies a collection of built-in settings that I want to take effect
 ;; immediately.  Many of them have to do with disabling default Emacs behaviors
@@ -227,7 +230,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; https://stackoverflow.com/questions/35658509/gnu-emacs-how-to-disable-prompt-to-save-modified-buffer-on-exit
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
-
 ;;; provide
 (provide '01-base-settings)
 ;;; 01-base-settings.el ends here

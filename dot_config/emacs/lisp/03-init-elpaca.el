@@ -1,10 +1,11 @@
-;;; oo-elpaca-lib.el --- elpaca setup -*- lexical-binding: t; -*-
+;;; 03-init-elpaca.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
-;; Copyright (c) 2015-2022, Luis Henriquez <luis@luishp.xyz>
+;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez <luis@luishp.xyz>
-;; Maintainer: Luis Henriquez <luis@luishp.xyz>
-;; Version: 0.1
+;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
+;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
+;;
+;; This file is not part of GNU Emacs.
 ;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -17,11 +18,13 @@
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with this program. If not, see
-;; <http://www.gnu.org/licenses/>.
+;; along with this program. If not, see <http://www.gnu.org/licenses/>.
 ;;
-;; This file is not part of GNU Emacs.
+;;; Commentary:
 ;;
+;; This is where I use elpaca to install all of my packages.
+;;
+;;; Code:
 ;;; requirements
 (require '02-base-lib)
 ;;; bootstrap
