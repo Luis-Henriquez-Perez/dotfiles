@@ -26,9 +26,9 @@
 ;;
 ;;; Code:
 (require '90-wikipedia-common-mispellings)
-;;; abbrevs
+;;;; abbrevs
 ;; TODO: make some abbrevs get capitalized.
-;;;; multiple word abbrevs
+;;;;; multiple word abbrevs
 (define-global-abbrev "imho" "in my humble opinion")
 
 (define-global-abbrev "imo" "in my opinion")
@@ -42,11 +42,11 @@
 (define-global-abbrev "idk" "I do not know")
 
 (define-global-abbrev "gonna" "going to")
-;;;; capitalize words 
+;;;;; capitalize words
 (define-global-abbrev "i" "I")
 
 (define-global-abbrev "luis" "Luis")
-;;;; abbrevs
+;;;;; abbrevs
 (define-global-abbrev "tbh" "to be honest")
 
 (define-global-abbrev "qwerty" "QWERTY")
@@ -94,7 +94,7 @@
 (define-global-abbrev "evaled" "evaluated")
 
 (define-global-abbrev "imma" "I am going to")
-;;;; expand common abbreviations in english
+;;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
 
 (define-global-abbrev "youve" "you have")
@@ -164,7 +164,7 @@
 (define-global-abbrev "coudnt" "could not")
 
 (define-global-abbrev "couldnt" "could not")
-;;;; fix spelling mistakes
+;;;;; fix spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
 (define-global-abbrev "edting" "editing")
@@ -210,7 +210,6 @@
 (define-global-abbrev "eachother" "each other")
 
 (define-global-abbrev "propogate" "propagate")
-
 ;;; provide
 (provide '20-config-abbrev)
 ;;; 20-config-abbrev.el ends here
