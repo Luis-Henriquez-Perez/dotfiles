@@ -45,9 +45,14 @@
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (opt! sgml-basic-offset 4)
 ;;;; abbrev
-;; Do not write/read abbrevs from a file.  I would rather just evaluate them
-;; every time with `20-config-abbrev.el'.  In other words, do not make abbrevs
-;; stateful.
+;; Use only global abbrevs.
+;; Out with the complication of multiple abbrev tables and inheritance and
+;; whatnot.  Instead I prefer to use a function (see `20-config-abbrev.el').
+(opt! only-global-abbrevs t)
+;; Do not write/read abbrevs from a file.  I would rather just define them
+;; every time with `20-config-abbrev.el' than to save them in the abbrev file.
+;; It is more consistent with my config that way.  I especially do not want two
+;; different files that code for the same thing.
 (advice-add #'read-abbrev-file :around #'ignore)
 (advice-add #'write-abbrev-file :around #'ignore)
 (advice-add #'abbrev--possibly-save :around #'ignore)

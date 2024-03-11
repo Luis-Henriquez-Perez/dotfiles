@@ -37,7 +37,8 @@
 ;;
 ;;; Code:
 (require '04-base-custom)
-;; (require '90-wikipedia-common-mispellings)
+;; TODO: figure out a better way to handle misspellings.
+;; (require '90-wikipedia-common-misspellings)
 ;;;; abbrevs
 ;; TODO: make some abbrevs get capitalized.
 ;;;;; set abbrevs my way
@@ -58,9 +59,6 @@
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
 ;; (abbrev-table-put prog-mode-abbrev-table :enable-function #'oo--in-string-or-comment-p)
-
-;; Fuck the complication of multiple abbrev tables and inheritence and whatnot, just use a function.
-(setq only-global-abbrevs t)
 
 ;; This is meant for use
 (defun oo--abbrev-enable-fn ()
