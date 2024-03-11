@@ -310,6 +310,14 @@ This is like `setq' but it is meant for configuring variables."
 
 (defalias '-partial-> 'thread-partial!)
 (defalias '-p-> 'thread-partial!)
+
+(defun! oo--in-string-or-comment-p ()
+  "Return 'string if point is in a string, 'comment if in a comment, nil otherwise."
+  (interactive)
+  (set! ppss (syntax-ppss))
+  (cond ((nth 3 ppss) 'string)   ; Inside a string
+        ((nth 4 ppss) 'comment)  ; Inside a comment
+        (t nil)))
 ;;; provide
 (provide '04-base-custom)
 ;;; 04-base-custom.el ends here
