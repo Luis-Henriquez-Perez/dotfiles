@@ -70,22 +70,21 @@
 ;; Wait longer.
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
-(elpaca evil-textobj-line)
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
 (elpaca anaphora)
 (elpaca benchmark-init)
-;; TODO: add bindings for lorem ipsum.
 (elpaca burly)
 (elpaca buttercup)
+(elpaca cape)
+;; TODO: add bindings for lorem ipsum.
+(elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
+(elpaca chezmoi)
 ;; Eldev complains about `buttercup' already being loaded.  So I have to think
 ;; about how I will go about installing it for normal usage.  In any case the
 ;; only reason I want it is for proper indenting and syntax highlighting when I
 ;; am actually editing my test files.
-(elpaca cape)
-(elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
-(elpaca chezmoi)
 (elpaca consult)
 (elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref ...))
 (elpaca dashboard)
@@ -106,6 +105,7 @@
 (elpaca evil-goggles)
 (elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
 (elpaca evil-surround)
+(elpaca evil-textobj-line)
 (elpaca expand-region)
 (elpaca fennel-mode)
 (elpaca filladapt)
@@ -134,6 +134,7 @@
 (elpaca modus-themes)
 (elpaca monokai-theme)
 (elpaca no-littering)
+(elpaca notmuch)
 (elpaca (on :host github :repo "ajgrf/on.el"))
 (elpaca orderless)
 (elpaca org-appear)
@@ -150,6 +151,7 @@
 (elpaca standard-themes)
 (elpaca super-save)
 (elpaca tempel)
+(elpaca tempel-collection)
 (elpaca transpose-frame)
 (elpaca treepy)
 (elpaca vc-auto-commit)
