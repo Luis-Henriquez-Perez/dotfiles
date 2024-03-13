@@ -32,9 +32,14 @@
 
 (describe "oo-first-success"
   (it "should return nil if (fn elt) is never non-nil"
-    (expect (oo-first-success #'not '(1 2 3 4))))
+    (expect (oo-first-success #'not '(1 2 3 4)) :to-be nil))
   (it "should return the first non-nil (fn elt) in list"
     (expect (oo-first-success #'not '(1 2 3 nil 4)) :to-equal t)))
+
+(describe "oo-candidate-features"
+  (it "should return a list of candidate features"
+    (expect (oo-candidate-features )))
+  (oo-candidate-features 'evil-insert-state))
 
 (xdescribe "opt!"
   (block!
