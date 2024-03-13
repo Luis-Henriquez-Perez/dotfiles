@@ -68,11 +68,11 @@ If an void-function or void-variable error is raised try to guess the parent
 feature."
   (oo-cond-case-fn fn #'oo-autoload-action-function '(void-function void-variable)))
 
-(defun! oo-candidate-features (fn)
+(defun! oo-candidate-features (fn paths)
   "Return a list of candidate features for FN.
-FN is a function symbol.  Look in the load path for names that match features."
+FN is a function symbol."
   (set! fname (symbol-name fn))
-  (for! (path load-path)
+  (for! (path paths)
     (set>>! base
       (directory-file-name path)
       (file-name-nondirectory)
@@ -87,7 +87,7 @@ ERROR is either a void-variable or void-function error."
   (set! (type symbol . rest) error)
   (cl-assert (member type '(void-variable void-function)))
   (set! bound-fn (cl-case type (void-variable #'boundp) (void-function #'fboundp)))
-  (set! candidates (oo-candidate-features symbol))
+  (set! candidates (oo-candidate-features symbol load-path))
   (for! (feature candidates)
     (require feature nil t)
     (when (funcall bound-fn symbol)
