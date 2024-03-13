@@ -27,7 +27,7 @@
 ;;; Code:
 (require '02-base-lib)
 
-;;;;;;; oo-call-after-keymap
+;;;; oo-call-after-keymap
 ;; I want the ability to be able to bind keys in keymaps without having to always
 ;; consider whether the keymap is bound yet or not; and without always having to
 ;; write non-declarative code such as ~(after! evil (evil-define-key* ...))~.  The
@@ -75,7 +75,7 @@ Evaluate and remove from all elements of `oo-after-keymap-alist'."
 (defhook! emacs-startup-hook&setup-call-after-keymap-fns ()
   (oo-call-after-keymap-functions)
   (oo-add-hook 'after-load-functions #'oo-call-after-keymap-functions))
-;;;;;;; oo-call-after-evil-state
+;;;; oo-call-after-evil-state
 (defun! oo-evil-state (evil-keyword)
   "Return the state that corresponds to the state keyword."
   (flet! letter (state) (seq-first (symbol-name state)))
@@ -139,7 +139,7 @@ STATE is either a state, list of states or an evil state keyword."
                  (alist-get state oo-undefined-state-functions)))))
   (set! fn (-partial #'load-state-maybe function args))
   (oo-call-after-load 'evil #'mapc fn (-list states)))
-;;;;;;; binding keys
+;;;; binding keys
 ;; Inspired by [[https://stackoverflow.com/questions/16090517/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
 ;; bindings for commands giving me a flexible and robust experience with key
 ;; bindings.  By "condition bindings" I mean key bindings that can invoke a
