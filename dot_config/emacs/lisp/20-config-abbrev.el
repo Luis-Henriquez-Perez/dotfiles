@@ -22,8 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; At first I thought that abbrev mode is obsoleted by things like yasnippet or
-;; tempel, but after considering it I realized that it is very useful.  With
+;; At first I thought that abbrev-mode is obsoleted by things like yasnippet or
+;; tempel, but after considering it I realized that it is very useful.  The
+;; greatest weakness of abbrev is also its greatest strength--namely, the
+;; ability to automatically expand.  With
 ;; this file I want to squeeze the most out of abbrev.
 ;;
 ;; GOTCHAs:
@@ -36,46 +38,68 @@
 ;;    modes--not the case.
 ;;
 ;;; Code:
-(require '04-base-custom)
 ;; TODO: figure out a better way to handle misspellings.
 ;; (require '90-wikipedia-common-misspellings)
+(require '04-base-custom)
 ;;;; abbrevs
-;; TODO: make some abbrevs get capitalized.
+;;;;; only use global abbrevs
+;; Use only global abbrevs.  At first I had tried using mode-specific abbrevs,
+;; but I encounted problems.  I found it much easier to just make them all
+;; global abbrevs and to specify an "enable-function" if I want to be
+;; conditional based on the mode.
+(opt! only-global-abbrevs t)
+;;;;; do not save abbrevs to a file (use this file instead)
+;; Do not write/read abbrevs from a file.  I would rather just define them
+;; here than to save them in the abbrev file.
+;; It is more consistent with my config that way.  I especially do not want two
+;; different files that code for the same thing.
+(advice-add #'read-abbrev-file :around #'ignore)
+(advice-add #'write-abbrev-file :around #'ignore)
+(advice-add #'abbrev--possibly-save :around #'ignore)
 ;;;;; set abbrevs my way
-;; This heading is written with multiple considerations.  First, I do not want
-;; any of my abbrevs to be saved, to achieve this I advised the functions that
-;; write the abbrev file.  But better perhaps
-;; is to use the system keyword in abbrev properties.  On second thought, I
-;; would rather guarantee that advising.
-;; Use the enable function.
-;; 1. add abbrevs in prog-mode and text-mode specifically
-;; 2. do not save the abbrevs to a file
-;; 3. and for prog-mode, only expand abbrevs in comments
-;; (abbrev-table-put text-mode-abbrev-table :system t)
-;; (abbrev-table-put prog-mode-abbrev-table :system t)
-;; Ultimately i decided that it is *much* easier and simpler to just use global
-;; abbrevs, but make a conditional enable function.
-
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
-;; (abbrev-table-put prog-mode-abbrev-table :enable-function #'oo--in-string-or-comment-p)
-
 ;; This is meant for use
 (defun oo--abbrev-enable-fn ()
   "Return non-nil if abbrevs should be enabled."
   (or (not (derived-mode-p 'prog-mode))
       (oo--in-string-or-comment-p)))
-
-(abbrev-table-put global-abbrev-table :enable-function #'oo--abbrev-enable-fn)
-;;;;; deal with problem of non-capitalization of mutliple words
+;;;;; extend abbrev syntax
+;; Allow the use of periods, colons, and underscores in global abbrevs.  The
+;; point of doing this is to let me name certain abbrevs with easy to remember,
+;; intuitive names while also preventing name clashes with the preceding
+;; punctuation.
+(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.:_]?[[:alpha:]]+\\)")
+;;;;; general
+;; Most often, I want the abbrevs I define to be expanded in either plain text
+;; or in programming language comments.
+(defun oo-text-abbrev (abbrev expansion)
+  "Define an abbreviation."
+  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--abbrev-enable-fn))
+;;;;; TODO: deal with problem of non-capitalization of mutliple words
 ;; When an abbrev expands to multiple words the initial word does not get
 ;; capitalized with captain.  But it does work when abbrev expands to just one
 ;; word.  So the first question is how to go about solving this problem.  As is
 ;; the case in emacs, there are multiple ways.  One way is changing the value
 ;; of.  The other way is using a hook for a multi-word expansion.  The hook would.
-(defun oo-text-abbrev (abbrev expansion)
-  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--abbrev-enable-fn))
-;;;;; multiple word abbrevs
+;;;;; TODO: title this heading properly
+(oo-text-abbrev ".name" "Luis Henriquez-Perez")
+(defun oo--insert-time (format-string &optional timezone)
+  (insert (format-time-string format-string timezone)))
+(define-abbrev global-abbrev-table ".year" "" (-partial #'oo--insert-time "%Y"))
+(define-abbrev global-abbrev-table ".monthday" "" (-partial #'oo--insert-time "%d"))
+(define-abbrev global-abbrev-table ".mday" "" (-partial #'oo--insert-time "%d"))
+(define-abbrev global-abbrev-table ".month" "" (-partial #'oo--insert-time "%m"))
+(define-abbrev global-abbrev-table ".minute" "" (-partial #'oo--insert-time "%M"))
+(define-abbrev global-abbrev-table ".sec" "" (-partial #'oo--insert-time "%S"))
+(define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
+;;;;; capitalize
+(oo-text-abbrev "i" "I")
+
+(oo-text-abbrev "luis" "Luis")
+;;;;; abbrevs
+(oo-text-abbrev ".mail" "luis@luishp.xyz")
+
 (oo-text-abbrev "imho" "in my humble opinion")
 
 (oo-text-abbrev "imo" "in my opinion")
@@ -89,11 +113,11 @@
 (oo-text-abbrev "idk" "I do not know")
 
 (oo-text-abbrev "gonna" "going to")
-;;;;; capitalize words
-(oo-text-abbrev "i" "I")
 
-(oo-text-abbrev "luis" "Luis")
-;;;;; abbrevs
+(oo-text-abbrev "otc" "on the contrary")
+
+(oo-text-abbrev "st" "sometimes")
+
 (oo-text-abbrev "tbh" "to be honest")
 
 (oo-text-abbrev "qwerty" "QWERTY")
@@ -141,6 +165,18 @@
 (oo-text-abbrev "evaled" "evaluated")
 
 (oo-text-abbrev "imma" "I am going to")
+
+;; From https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/
+
+(oo-text-abbrev "hw" "however")
+
+(oo-text-abbrev "otoh" "on the other hand")
+
+(oo-text-abbrev "ohter" "other")
+
+(oo-text-abbrev "fe" "for example")
+
+(oo-text-abbrev "fi" "for instance")
 ;;;;; expand common abbreviations in english
 ;; Should I never use abbreviations.
 
@@ -211,9 +247,11 @@
 (oo-text-abbrev "coudnt" "could not")
 
 (oo-text-abbrev "couldnt" "could not")
-;;;;; fix spelling mistakes
+;;;;; spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
+(oo-text-abbrev "frst" "first")
+
 (oo-text-abbrev "edting" "editing")
 
 (oo-text-abbrev "alread" "already")
@@ -257,6 +295,16 @@
 (oo-text-abbrev "eachother" "each other")
 
 (oo-text-abbrev "propogate" "propagate")
+(oo-text-abbrev "pakcage" "package")
+(oo-text-abbrev "pakcages" "packages")
+;;;;; emacs-lisp-mode
+;; Problems.
+;; 1. the template starts with a space
+;; 2. I am having trouble with the keybindings
+(alet (lambda () (and (equal major-mode 'emacs-lisp-mode)
+                      (not (oo--in-string-or-comment-p))))
+  (define-abbrev global-abbrev-table ".let" "" (lambda () (tempel-insert 'let) (evil-insert-state 1)) :enable-function it)
+  (define-abbrev global-abbrev-table ".fun" "" (-partial #'tempel-insert 'fun) :enable-function it))
 ;;; provide
 (provide '20-config-abbrev)
 ;;; 20-config-abbrev.el ends here
