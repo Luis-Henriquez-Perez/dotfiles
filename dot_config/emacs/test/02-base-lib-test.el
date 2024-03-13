@@ -45,8 +45,8 @@
     (expect (oo--mf-flatten '[a b c d]) :to-have-same-items-as '(a b c d))))
 
 (describe "oo-condition-case-fn"
-  (let ((fn (oo-condition-case-fn (lambda (n) (/ 8 (- n 4))) :action (lambda (&rest _) 'foo))))
-    (it "should behave like function when"
+  (let ((fn (oo-condition-case-fn (lambda (n) (/ 8 (- n 4))) (lambda (&rest _) 'foo))))
+    (it "should behave like function when no error occurs"
       (expect 2 :to-be (funcall fn 8)))
     (it "should invoke action function when there is an error"
       (expect 'foo :to-be (funcall fn 4)))))
