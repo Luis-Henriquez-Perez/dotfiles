@@ -71,29 +71,27 @@
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
 ;; This adds extra operators for evaluating.
-(elpaca markdown-mode)
-(elpaca evil-extra-operator)
-(elpaca evil-textobj-syntax)
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
 (elpaca anaphora)
 (elpaca benchmark-init)
 (elpaca burly)
-;; (elpaca buttercup)
+(elpaca buttercup)
 (elpaca cape)
-;; TODO: add bindings for lorem ipsum.
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
 (elpaca chezmoi)
+;; (elpaca consult)
+(elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref ...))
+;; TODO: add bindings for lorem ipsum.
+(elpaca dashboard)
+(elpaca dirvish)
 ;; Eldev complains about `buttercup' already being loaded.  So I have to think
 ;; about how I will go about installing it for normal usage.  In any case the
 ;; only reason I want it is for proper indenting and syntax highlighting when I
 ;; am actually editing my test files.
-(elpaca consult)
-(elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref ...))
-(elpaca dashboard)
-(elpaca dirvish)
 (elpaca doom-themes)
+(elpaca dumb-jump)
 (elpaca eat)
 (elpaca ef-themes)
 (elpaca embark)
@@ -106,10 +104,12 @@
 (elpaca evil-cleverparens)
 (elpaca evil-easymotion)
 (elpaca evil-exchange)
+(elpaca evil-extra-operator)
 (elpaca evil-goggles)
 (elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
 (elpaca evil-surround)
 (elpaca evil-textobj-line)
+(elpaca evil-textobj-syntax)
 (elpaca expand-region)
 (elpaca fennel-mode)
 (elpaca filladapt)
@@ -133,6 +133,7 @@
 (elpaca macrostep)
 (elpaca magit)
 (elpaca marginalia)
+(elpaca markdown-mode)
 (elpaca material-theme)
 (elpaca meow)
 (elpaca modus-themes)
