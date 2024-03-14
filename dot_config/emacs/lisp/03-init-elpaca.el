@@ -71,7 +71,12 @@
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
 ;; This adds extra operators for evaluating.
-(elpaca ace-jump-helm-line)
+;; Eldev complains about `buttercup' already being loaded.  So I have to think
+;; about how I will go about installing it for normal usage.  In any case the
+;; only reason I want it is for proper indenting and syntax highlighting when I
+;; am actually editing my test files.
+;; TODO: add bindings for lorem ipsum.
+;; (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
 (elpaca anaphora)
@@ -81,21 +86,18 @@
 (elpaca cape)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
 (elpaca chezmoi)
-;; (elpaca consult)
+(elpaca consult)
 (elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github :ref ...))
-;; TODO: add bindings for lorem ipsum.
 (elpaca dashboard)
 (elpaca dirvish)
-;; Eldev complains about `buttercup' already being loaded.  So I have to think
-;; about how I will go about installing it for normal usage.  In any case the
-;; only reason I want it is for proper indenting and syntax highlighting when I
-;; am actually editing my test files.
 (elpaca doom-themes)
 (elpaca dumb-jump)
 (elpaca eat)
 (elpaca ef-themes)
+(elpaca elfeed)
 (elpaca embark)
 (elpaca emms)
+(elpaca erefactor)
 (elpaca eros)
 (elpaca eshell-up)
 (elpaca eshell-z)
