@@ -268,6 +268,9 @@
 (opt! emms-directory (expand-file-name "emms/" oo-var-dir))
 ;; (require 'emms-player-mpv)
 ;;;; eshell
+(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
+
+(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
 ;;;;; miscellaneous
 (oo-bind 'oo-app-map "e" #'eshell)
 
