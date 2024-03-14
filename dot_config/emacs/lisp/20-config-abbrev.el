@@ -98,6 +98,16 @@
 
 (oo-text-abbrev "luis" "Luis")
 ;;;;; abbrevs
+(oo-text-abbrev "ig" "instagram configuration")
+
+(oo-text-abbrev "econf" "emacs configuration")
+
+(oo-text-abbrev "kbdm" "keyboard macro")
+
+(oo-text-abbrev "kbdms" "keyboard macros")
+
+(oo-text-abbrev "msw" "Microsoft Windows")
+
 (oo-text-abbrev ".mail" "luis@luishp.xyz")
 
 (oo-text-abbrev "imho" "in my humble opinion")
