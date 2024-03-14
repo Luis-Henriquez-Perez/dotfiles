@@ -70,13 +70,17 @@
 ;; Wait longer.
 (setq elpaca-wait-interval 0.2)
 ;;; recipes
+;; This adds extra operators for evaluating.
+(elpaca markdown-mode)
+(elpaca evil-extra-operator)
+(elpaca evil-textobj-syntax)
 (elpaca ace-jump-helm-line)
 (elpaca aggressive-indent)
 (elpaca ah)
 (elpaca anaphora)
 (elpaca benchmark-init)
 (elpaca burly)
-(elpaca buttercup)
+;; (elpaca buttercup)
 (elpaca cape)
 ;; TODO: add bindings for lorem ipsum.
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
