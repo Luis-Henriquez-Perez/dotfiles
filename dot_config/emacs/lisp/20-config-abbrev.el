@@ -260,6 +260,8 @@
 ;;;;; spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
+(oo-text-abbrev "onw" "own")
+
 (oo-text-abbrev "frst" "first")
 
 (oo-text-abbrev "edting" "editing")
