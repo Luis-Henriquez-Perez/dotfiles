@@ -76,7 +76,8 @@
 ;; only reason I want it is for proper indenting and syntax highlighting when I
 ;; am actually editing my test files.
 ;; TODO: add bindings for lorem ipsum.
-;; (elpaca ace-jump-helm-line)
+(elpaca ace-jump-helm-line)
+(elpaca ace-link)
 (elpaca aggressive-indent)
 (elpaca ah)
 (elpaca anaphora)
