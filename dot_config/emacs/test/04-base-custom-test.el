@@ -38,8 +38,7 @@
 
 (describe "oo-candidate-features"
   (it "should return a list of candidate features"
-    (expect (oo-candidate-features )))
-  (oo-candidate-features 'evil-insert-state))
+    (expect (oo-candidate-features 'evil-insert-state fake-path))))
 
 (xdescribe "opt!"
   (block!

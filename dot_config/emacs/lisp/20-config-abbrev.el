@@ -98,7 +98,13 @@
 
 (oo-text-abbrev "luis" "Luis")
 ;;;;; abbrevs
-(oo-text-abbrev "ig" "instagram configuration")
+(oo-text-abbrev "dsl" "Domain-Specific-Language")
+
+(oo-text-abbrev "fn" "function")
+
+(oo-text-abbrev "fns" "functions")
+
+(oo-text-abbrev "ig" "instagram")
 
 (oo-text-abbrev "econf" "emacs configuration")
 
