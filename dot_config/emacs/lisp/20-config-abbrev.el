@@ -69,7 +69,7 @@
 ;; point of doing this is to let me name certain abbrevs with easy to remember,
 ;; intuitive names while also preventing name clashes with the preceding
 ;; punctuation.
-(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.:_]?[[:alpha:]]+\\)")
+(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.]?[[:alpha:]]+\\)")
 ;;;;; general
 ;; Most often, I want the abbrevs I define to be expanded in either plain text
 ;; or in programming language comments.
