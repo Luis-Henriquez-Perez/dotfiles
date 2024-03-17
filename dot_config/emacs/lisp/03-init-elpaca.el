@@ -76,6 +76,7 @@
 ;; only reason I want it is for proper indenting and syntax highlighting when I
 ;; am actually editing my test files.
 ;; TODO: add bindings for lorem ipsum.
+;; (elpaca aas)
 (elpaca ace-jump-helm-line)
 (elpaca ace-link)
 (elpaca aggressive-indent)
@@ -85,6 +86,7 @@
 (elpaca burly)
 (elpaca buttercup)
 (elpaca cape)
+(elpaca caps-lock)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
 (elpaca chezmoi)
 (elpaca consult)
