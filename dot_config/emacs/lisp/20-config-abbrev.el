@@ -62,20 +62,6 @@
 ;; intuitive names while also preventing name clashes with the preceding
 ;; punctuation.
 (abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.]?[[:alpha:]]+\\)")
-;;;;; set abbrevs my way
-;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
-;; could interfere with function names.
-;; This is meant for use
-(defun oo--enable-text-mode-abbrev-p ()
-  "Return non-nil when text-mode abbrevs should be enabled."
-  (or (derived-mode-p 'text-mode)
-      (oo--in-string-or-comment-p)))
-;;;;; general
-;; Most often, I want the abbrevs I define to be expanded in either plain text
-;; or in programming language comments.
-(defun oo-text-abbrev (abbrev expansion)
-  "Define an abbreviation."
-  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--enable-text-mode-abbrev-p))
 ;;;;; TODO: deal with problem of non-capitalization of mutliple words
 ;; When an abbrev expands to multiple words the initial word does not get
 ;; capitalized with captain.  But it does work when abbrev expands to just one
@@ -93,12 +79,30 @@
 (define-abbrev global-abbrev-table ".minute" "" (-partial #'oo--insert-time "%M"))
 (define-abbrev global-abbrev-table ".sec" "" (-partial #'oo--insert-time "%S"))
 (define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
-;;;;; abbrevs
+;;;;; text abbrevs
+;; These are abbreviations that I want to be using.
+;;;;;; general
+;; Most often, I want the abbrevs I define to be expanded in either plain text
+;; or in programming language comments.
+(defun oo-text-abbrev (abbrev expansion)
+  "Define an abbreviation."
+  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--enable-text-mode-abbrev-p))
+;;;;;; set abbrevs my way
+;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
+;; could interfere with function names.
+;; This is meant for use
+(defun oo--enable-text-mode-abbrev-p ()
+  "Return non-nil when text-mode abbrevs should be enabled."
+  (or (derived-mode-p 'text-mode)
+      (oo--in-string-or-comment-p)))
 ;;;;;; capitalization
 (oo-text-abbrev "i" "I")
 
 (oo-text-abbrev "luis" "Luis")
 ;;;;;; generic
+(oo-text-abbrev "idlk" "I do not like")
+(oo-text-abbrev "ilk" "I like")
+(oo-text-abbrev "auly" "automatically")
 (oo-text-abbrev "dsl" "Domain-Specific-Language")
 
 (oo-text-abbrev "fn" "function")
@@ -262,7 +266,7 @@
 (oo-text-abbrev "coudnt" "could not")
 
 (oo-text-abbrev "couldnt" "could not")
-;;;;; spelling mistakes
+;;;;;; spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
 (oo-text-abbrev "onw" "own")
@@ -314,6 +318,36 @@
 (oo-text-abbrev "propogate" "propagate")
 (oo-text-abbrev "pakcage" "package")
 (oo-text-abbrev "pakcages" "packages")
+(oo-text-abbrev "motn" "more often than not")
+(oo-text-abbrev "itc" "in that case")
+;;;;; TODO: fix first word in string is not expanded by abbrev
+;; This is because the abbrev sees.
+;;;;; adjust start location in strings
+;; This should only need to be active in prog-mode.
+;; (defadvice! abbrev--default-expand@ARadjust-start-location (expand-fn)
+;;   "fe"
+;;   (if-not! (and (equal 'string (oo--enable-text-mode-abbrev-p))
+;;                 (looking-back (rx "\"" (group (1+ (not white))) (* space)) (line-beginning-position)))
+;;       (funcall expand-fn)
+;;     (set! name (match-string-no-properties 1))
+;;     (set! symbol (intern name))
+;;     (set! start (match-beginning 1))
+;;     (set! end (match-end 1))
+;;     (set! ret (list symbol name start end))
+;;     (message "adjusting...%S" ret)
+;;     ;; (nflet! abbrev--before-point (-const ret))
+;;     (funcall expand-fn)))
+;;;;; automatically add period
+;; I do not like manually adding periods to the end of sentences; particularly
+;; when I have
+(defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
+  "Replace"
+  (prog1 (funcall expand-fn)
+    (cond ((not (oo--enable-text-mode-abbrev-p)))
+          ((looking-back "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
+           (replace-match "\\1.\\2\\3" nil nil nil 0))
+          ((looking-back (rx (: (group word) (>= 2 space))))
+           (replace-match "\\1.")))))
 ;;;;; emacs-lisp-mode
 (defun oo--enable-emacs-lisp-mode-abbrev-p ()
   "Return non-nil if elisp mode abbrev should be enabled."
