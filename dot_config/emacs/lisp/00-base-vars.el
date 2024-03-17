@@ -39,24 +39,9 @@ In a nutshell, it's just a value of $HOME.")
 (defconst oo-emacs-dir (file-name-as-directory (expand-file-name "emacs/" oo-xdg-config-dir))
   "The path to this Emacs directory.")
 
-;; (defconst path-local-dir (concat (file-name-as-directory
-;;                                   (or (getenv "XDG_CACHE_HOME")
-;;                                       (concat oo-home-dir ".cache")))
-;;                                  "emacs/")
-;;   "The root directory for local Emacs files.
-
-;; Use this as permanent storage for files that are safe to share
-;; across systems.")
-
-;; (defconst oo-etc-dir (concat oo-local-dir "etc/")
-;;   "Directory for non-volatile storage.
-
-;; Use this for files that don't change much, like servers binaries,
-;; external dependencies or long-term shared data.")
-
 (defconst oo-lisp-dir (expand-file-name "lisp/" user-emacs-directory)
   "Directory where")
-;;; uniform location to store files
+;;;; uniform location to store files
 (defconst oo-etc-dir (expand-file-name "etc/" user-emacs-directory)
   "Directory where.")
 
@@ -92,9 +77,9 @@ HOOK-OR-ADVICE.")
 (defvar oo-debug-p (or (getenv "DEBUG") init-file-debug)
   "When non-nil print debug messages.
 The --debug-init flag and setting the DEBUG envar will enable this at startup.")
-;;; log buffer
-(defvar oo-log-buffer (get-buffer-create "*oo-log*")
-  "Buffer where information should be logged.")
+;; ;;; log buffer
+;; (defvar oo-log-buffer (get-buffer-create "*oo-log*")
+;;   "Buffer where information should be logged.")
 ;;; provide
 (provide '00-base-vars)
 ;;; 00-base-vars.el ends here
