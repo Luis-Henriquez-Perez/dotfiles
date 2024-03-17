@@ -56,6 +56,12 @@
 (advice-add #'read-abbrev-file :around #'ignore)
 (advice-add #'write-abbrev-file :around #'ignore)
 (advice-add #'abbrev--possibly-save :around #'ignore)
+;;;;; extend abbrev syntax to use "."
+;; Allow the use of periods, colons, and underscores in global abbrevs.  The
+;; point of doing this is to let me name certain abbrevs with easy to remember,
+;; intuitive names while also preventing name clashes with the preceding
+;; punctuation.
+(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.]?[[:alpha:]]+\\)")
 ;;;;; set abbrevs my way
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
@@ -64,12 +70,6 @@
   "Return non-nil when text-mode abbrevs should be enabled."
   (or (derived-mode-p 'text-mode)
       (oo--in-string-or-comment-p)))
-;;;;; extend abbrev syntax
-;; Allow the use of periods, colons, and underscores in global abbrevs.  The
-;; point of doing this is to let me name certain abbrevs with easy to remember,
-;; intuitive names while also preventing name clashes with the preceding
-;; punctuation.
-(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.]?[[:alpha:]]+\\)")
 ;;;;; general
 ;; Most often, I want the abbrevs I define to be expanded in either plain text
 ;; or in programming language comments.
@@ -93,11 +93,12 @@
 (define-abbrev global-abbrev-table ".minute" "" (-partial #'oo--insert-time "%M"))
 (define-abbrev global-abbrev-table ".sec" "" (-partial #'oo--insert-time "%S"))
 (define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
-;;;;; capitalize
+;;;;; abbrevs
+;;;;;; capitalization
 (oo-text-abbrev "i" "I")
 
 (oo-text-abbrev "luis" "Luis")
-;;;;; abbrevs
+;;;;;; generic
 (oo-text-abbrev "dsl" "Domain-Specific-Language")
 
 (oo-text-abbrev "fn" "function")
@@ -157,7 +158,7 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
-;; (oo-text-abbrev "config" "configuration")
+(oo-text-abbrev "config" "configuration")
 (oo-text-abbrev "obv" "obviously")
 
 (oo-text-abbrev "appr" "appropriate")
@@ -193,8 +194,6 @@
 (oo-text-abbrev "fe" "for example")
 
 (oo-text-abbrev "fi" "for instance")
-;;;;; expand common abbreviations in english
-;; Should I never use abbreviations.
 
 (oo-text-abbrev "youve" "you have")
 
@@ -243,7 +242,7 @@
 (oo-text-abbrev "ribe" "describe")
 
 (oo-text-abbrev "iff" "if and only if")
-
+;;;;;; apostrophe avoiding
 (oo-text-abbrev "whats" "what is")
 
 (oo-text-abbrev "havent" "have not")
@@ -333,6 +332,12 @@
 ;; 2. I am having trouble with the keybindings
 (define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
 (define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+;;;;; eshell
+(defun oo--enable-eshell-mode-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (equal major-mode 'eshell-mode))
+
+;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;; provide
 (provide '20-config-abbrev)
 ;;; 20-config-abbrev.el ends here
