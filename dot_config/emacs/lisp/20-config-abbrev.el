@@ -60,9 +60,9 @@
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
 ;; This is meant for use
-(defun oo--abbrev-enable-fn ()
-  "Return non-nil if abbrevs should be enabled."
-  (or (not (derived-mode-p 'prog-mode))
+(defun oo--enable-text-mode-abbrev-p ()
+  "Return non-nil when text-mode abbrevs should be enabled."
+  (or (derived-mode-p 'text-mode)
       (oo--in-string-or-comment-p)))
 ;;;;; extend abbrev syntax
 ;; Allow the use of periods, colons, and underscores in global abbrevs.  The
@@ -75,7 +75,7 @@
 ;; or in programming language comments.
 (defun oo-text-abbrev (abbrev expansion)
   "Define an abbreviation."
-  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--abbrev-enable-fn))
+  (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo--enable-text-mode-abbrev-p))
 ;;;;; TODO: deal with problem of non-capitalization of mutliple words
 ;; When an abbrev expands to multiple words the initial word does not get
 ;; capitalized with captain.  But it does work when abbrev expands to just one
@@ -316,13 +316,23 @@
 (oo-text-abbrev "pakcage" "package")
 (oo-text-abbrev "pakcages" "packages")
 ;;;;; emacs-lisp-mode
+(defun oo--enable-emacs-lisp-mode-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (and (equal major-mode 'emacs-lisp-mode)
+       (not (oo--in-string-or-comment-p))))
+
+(defun oo--abbrev-insert-snippet (snippet-name)
+  (tempel-insert snippet-name)
+  ;; Delete the last space.
+  (delete-backward-char 1)
+  ;; Ensure we're in insert state.
+  (when (bound-and-true-p evil-mode)
+    (evil-insert-state 1)))
 ;; Problems.
 ;; 1. the template starts with a space
 ;; 2. I am having trouble with the keybindings
-(alet (lambda () (and (equal major-mode 'emacs-lisp-mode)
-                      (not (oo--in-string-or-comment-p))))
-  (define-abbrev global-abbrev-table ".let" "" (lambda () (tempel-insert 'let) (evil-insert-state 1)) :enable-function it)
-  (define-abbrev global-abbrev-table ".fun" "" (-partial #'tempel-insert 'fun) :enable-function it))
+(define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+(define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
 ;;; provide
 (provide '20-config-abbrev)
 ;;; 20-config-abbrev.el ends here
