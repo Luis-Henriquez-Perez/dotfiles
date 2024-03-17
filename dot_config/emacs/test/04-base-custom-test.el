@@ -36,9 +36,17 @@
   (it "should return the first non-nil (fn elt) in list"
     (expect (oo-first-success #'not '(1 2 3 nil 4)) :to-equal t)))
 
+;; The problem is that `it' expands to a function.  For sure I am conflicted
+;; about using `buttercup' because it does not allow me to let bind
+;; freely since `it' and `expect' expand to functions.  Instead I have to use
+;; its own Domain-Specific-Language mechanism for defining variables which I do
+;; not like.  Whereas if I were just using `ert' I could just have `should'
+;; forms arbitrarily nested within the lisp forms.
 (describe "oo-candidate-features"
+  :var ((fake-path '("a/b/c/evil" "a/b/c/helm" "a/b/c/ivy")))
+  ;; Build a list of fake package paths.
   (it "should return a list of candidate features"
-    (expect (oo-candidate-features 'evil-insert-state fake-path))))
+    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-be nil)))
 
 (xdescribe "opt!"
   (block!
