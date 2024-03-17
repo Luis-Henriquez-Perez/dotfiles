@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is my configuration for eshell.
 ;;
 ;;; Code:
 (require 'eshell-z)
