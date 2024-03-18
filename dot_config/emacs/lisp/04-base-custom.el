@@ -104,7 +104,7 @@ ERROR is either a void-variable or void-function error."
       (return! (apply #'oo-funcall-autoload function args))))
   (signal (car error) (cdr error)))
 ;;;; logging
-(defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer "*Messages"))
+(defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
   "Object used for logging.")
 
 (defmacro info! (msg &rest meta)
