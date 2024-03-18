@@ -90,6 +90,7 @@
 (oo-text-abbrev "i" "I")
 (oo-text-abbrev "luis" "Luis")
 ;;;;;; generic
+(oo-text-abbrev "configs" "configurations")
 (oo-text-abbrev "espace" "escape")
 (oo-text-abbrev "ijwi" "I just want it")
 (oo-text-abbrev "ijw" "I just want")
