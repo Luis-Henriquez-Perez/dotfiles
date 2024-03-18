@@ -156,9 +156,11 @@
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
-
-;; (add-hook 'after-save-hook #'oo-chezmoi-maybe-write-file)
-;; Additionally I may do some auto-commit stuff.  Who knows?
+(defhook! after-save-hook&chezmoi-write-maybe (&rest _)
+  (when (aand (require 'chezmoi nil t)
+              (buffer-file-name)
+              (chezmoi-target-file it))
+    (with-demoted-errors "error:%S" (chezmoi-write))))
 ;;;; consult
 (opt! consult-preview-key nil)
 
