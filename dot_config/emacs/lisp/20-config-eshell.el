@@ -27,7 +27,20 @@
 ;;; Code:
 (require 'eshell-z)
 (require 'eshell-up)
+
 ;;;; TODO: configure eshell prompt
+(autoload 'epe-theme-lambda "eshell-prompt-extras")
+(opt! eshell-highlight-prompt nil)
+(opt! eshell-prompt-function 'epe-theme-lambda)
+;; (oo-text-abbrev "incs" "increase")
+;; (oo-text-abbrev "decs" "deccrease")
+;;;; boost eshell history-size
+;; Increase the history size from 128 to 1000.
+(opt! eshell-history-size 1000)
+;;;; run eat inside of eshell
+;; For `eat-eshell-mode'.
+;; (oo-add-hook 'eshell-load-hook #'eat-eshell-mode)
+;;;;
 ;;; provide
 (provide '20-config-eshell)
 ;;; 20-config-eshell.el ends here
