@@ -227,8 +227,13 @@
 (oo-text-abbrev "motn" "more often than not")
 (oo-text-abbrev "itc" "in that case")
 ;;;;; automatically add period
-;; I do not like manually adding periods to the end of sentences; particularly
-;; when I have
+;; I do not like manually adding periods to the end of sentences.  Having moved
+;; from using one space after a sentence to two, I find it particularl daunting
+;; to type period, space, space whenever I am ending one sentence and starting a
+;; new one.  With this customization when I type space, space, following a word
+;; it is converted into period space space.  Additionally, if I end a sentence
+;; line with two spaces and I press ESC, the trailing two spaces are replaced
+;; with a period.
 (defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
   "Add a period when necessary."
   (prog1 (funcall expand-fn)
