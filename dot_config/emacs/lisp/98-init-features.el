@@ -36,6 +36,8 @@
 ;; While I was writing a code that would automate adding package headers to
 ;; files, I wanted to surround each line with quotes and that is when I thought
 ;; I would like a line text-object.
+(autoload #'evil-inner-line "evil-textobj-line")
+(autoload #'evil-a-line "evil-textobj-line")
 (oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
 (oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;; re-builder
