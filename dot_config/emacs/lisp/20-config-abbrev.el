@@ -179,6 +179,7 @@
 (oo-text-abbrev "ik" "I know")
 (oo-text-abbrev "ribe" "describe")
 (oo-text-abbrev "iff" "if and only if")
+(oo-text-abbrev "addd" "additionally")
 ;;;;;; apostrophe avoiding
 (oo-text-abbrev "whats" "what is")
 (oo-text-abbrev "havent" "have not")
