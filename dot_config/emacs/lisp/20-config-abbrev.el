@@ -179,98 +179,85 @@
 (oo-text-abbrev "iff" "if and only if")
 ;;;;;; apostrophe avoiding
 (oo-text-abbrev "whats" "what is")
-
 (oo-text-abbrev "havent" "have not")
-
 (oo-text-abbrev "didnt" "did not")
-
 (oo-text-abbrev "shouldnt" "should not")
-
 (oo-text-abbrev "isnt" "is not")
-
 (oo-text-abbrev "youre" "you are")
-
 (oo-text-abbrev "wouldnt" "would not")
-
 (oo-text-abbrev "woudnt" "would not")
-
 (oo-text-abbrev "coudnt" "could not")
-
 (oo-text-abbrev "couldnt" "could not")
 ;;;;;; spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
 (oo-text-abbrev "onw" "own")
-
 (oo-text-abbrev "frst" "first")
-
 (oo-text-abbrev "edting" "editing")
-
 (oo-text-abbrev "alread" "already")
-
 (oo-text-abbrev "htats" "that is")
-
 (oo-text-abbrev "whehther" "whether")
-
 (oo-text-abbrev "somehting" "something")
-
 (oo-text-abbrev "hte" "the")
-
 (oo-text-abbrev "te" "the")
-
 (oo-text-abbrev "th" "the")
-
 (oo-text-abbrev "ot" "to")
-
 (oo-text-abbrev "wnat" "want")
-
 (oo-text-abbrev "stoped" "stopped")
-
 ;; Man, `completion-at-point-functions' is such a long variable name huh?
 ;; I definitely do not recommend writing all that out yourself.
 (oo-text-abbrev "capfs" "completion-at-point-functions")
-
 (oo-text-abbrev "suprise" "surprise")
-
 (oo-text-abbrev "functoin" "function")
-
 (oo-text-abbrev "refect" "reflect")
-
 (oo-text-abbrev "dint" "did not")
-
 (oo-text-abbrev "actioin" "action")
-
 (oo-text-abbrev "actioins" "actions")
-
 (oo-text-abbrev "orignal" "original")
 (oo-text-abbrev "eachother" "each other")
+(oo-text-abbrev "dn" "do not")
+(oo-text-abbrev "dsn" "does not")
+(oo-text-abbrev "fsr" "for some reason")
 (oo-text-abbrev "propogate" "propagate")
 (oo-text-abbrev "pakcage" "package")
 (oo-text-abbrev "pakcages" "packages")
 (oo-text-abbrev "motn" "more often than not")
 (oo-text-abbrev "itc" "in that case")
-;;;;; TODO: fix first word in string is not expanded by abbrev
-;; This is because the abbrev sees.
-;;;;; adjust start location in strings
+;;;;; TODO: adjust start location in strings
+;; Although abbrev is expanding in strings.
 ;; This should only need to be active in prog-mode.
 ;; (defadvice! abbrev--default-expand@ARadjust-start-location (expand-fn)
-;;   "fe"
-;;   (if-not! (and (equal 'string (oo--enable-text-mode-abbrev-p))
-;;                 (looking-back (rx "\"" (group (1+ (not white))) (* space)) (line-beginning-position)))
-;;       (funcall expand-fn)
-;;     (set! name (match-string-no-properties 1))
-;;     (set! symbol (intern name))
-;;     (set! start (match-beginning 1))
-;;     (set! end (match-end 1))
-;;     (set! ret (list symbol name start end))
-;;     (message "adjusting...%S" ret)
-;;     ;; (nflet! abbrev--before-point (-const ret))
-;;     (funcall expand-fn)))
+;;   (cond ((not (equal 'string (oo--enable-text-mode-abbrev-p)))
+;;          (funcall expand-fn))
+;;         ((not (looking-back (rx "\"" (group (1+ (not white))) (* space))
+;;                             (line-beginning-position)))
+;;          (funcall expand-fn))
+;;         (t
+;;          (funcall expand-fn)
+;;          ;; This does not work for some reason.  Instead, what I will do is put
+;;          ;; the stuff into a buffer.
+;;          ;; (set! name (match-string 1))
+;;          ;; (message "name-> %S" name)
+;;          ;; (set! expansion (save-match-data
+;;          ;;                   (with-temp-buffer
+;;          ;;                     (insert name)
+;;          ;;                     (expand-region-abbrevs (point-min) (point-max) t)
+;;          ;;                     (buffer-string))))
+;;          ;; (replace-match expansion nil nil nil 1)
+;;          ;; (message "adjusting...%S" ret)
+;;          ;; (set! name (match-string 1))
+;;          ;; (set! symbol (intern name))
+;;          ;; (set! start (match-beginning 1))
+;;          ;; (set! end (match-end 1))
+;;          ;; (set! ret (list symbol name start end))
+;;          ;; (apply #'abbrev-insert ret)
+;;          ;; (nflet! abbrev--before-point (-const ret))
+;;          )))
 ;;;;; automatically add period
 ;; I do not like manually adding periods to the end of sentences; particularly
 ;; when I have
 (defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
-  "Replace"
+  "Add a period when necessary."
   (prog1 (funcall expand-fn)
     (cond ((not (oo--enable-text-mode-abbrev-p)))
           ((looking-back "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
