@@ -224,6 +224,11 @@
 (oo-bind oo-help-map "h" #'describe-variable)
 (oo-bind oo-help-map "C" #'describe-char)
 (oo-bind oo-help-map "k" #'describe-key)
+;;;;; eval binding
+;; I evaluate things so often and even in non-emacs
+(defvar oo-eval-map (make-sparse-keymap))
+(define-prefix-command 'oo-eval-prefix-command 'oo-eval-map)
+(oo-bind 'oo-leader-map "e" #'oo-eval-prefix-command :wk "eval")
 ;;;;; maximize a window with =M=
 ;; Of course sometimes you want to focus on a window more than others.  Typically
 ;; this is handled with =edwina= because it makes the master window take up more than
