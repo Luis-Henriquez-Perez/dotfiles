@@ -210,6 +210,11 @@
 (oo-add-hook 'prog-mode-hook #'corfu-mode)
 (oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
 
+;; TODO: make it so moving on a candidate if I press espace insert that candidate.
+(opt! corfu-preview-current t)
+
+(opt! corfu-preselect-first t)
+
 (opt! corfu-quit-at-boundary nil)
 
 (opt! corfu-auto t)
