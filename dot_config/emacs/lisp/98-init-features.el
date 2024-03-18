@@ -748,3 +748,4 @@ For what buffer is displayed in the case of a boolean see
   (select-window (split-window-below)))
 ;;; provide
 (provide '98-init-features)
+;;; 98-init-features.el ends here
