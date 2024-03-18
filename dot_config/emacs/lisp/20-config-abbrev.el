@@ -86,17 +86,6 @@
   "Return non-nil when text-mode abbrevs should be enabled."
   (or (derived-mode-p 'text-mode)
       (oo--in-string-or-comment-p)))
-;;;;;; TODO: title this heading properly
-(oo-text-abbrev ".name" "Luis Henriquez-Perez")
-(defun oo--insert-time (format-string &optional timezone)
-  (insert (format-time-string format-string timezone)))
-(define-abbrev global-abbrev-table ".year" "" (-partial #'oo--insert-time "%Y"))
-(define-abbrev global-abbrev-table ".monthday" "" (-partial #'oo--insert-time "%d"))
-(define-abbrev global-abbrev-table ".mday" "" (-partial #'oo--insert-time "%d"))
-(define-abbrev global-abbrev-table ".month" "" (-partial #'oo--insert-time "%m"))
-(define-abbrev global-abbrev-table ".minute" "" (-partial #'oo--insert-time "%M"))
-(define-abbrev global-abbrev-table ".sec" "" (-partial #'oo--insert-time "%S"))
-(define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
 ;;;;;; capitalization
 (oo-text-abbrev "i" "I")
 (oo-text-abbrev "luis" "Luis")
