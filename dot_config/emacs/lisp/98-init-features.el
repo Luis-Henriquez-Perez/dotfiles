@@ -746,10 +746,5 @@ For what buffer is displayed in the case of a boolean see
   "Split window below and select the window created with the split."
   (interactive)
   (select-window (split-window-below)))
-;;;; eval binding
-;; I evaluate things so often and even in non-emacs
-(defvar oo-eval-map (make-sparse-keymap))
-(define-prefix-command 'oo-eval-prefix-command 'oo-eval-map)
-(oo-bind 'oo-leader-map "e" #'oo-eval-prefix-command :wk "eval")
 ;;; provide
 (provide '98-init-features)
