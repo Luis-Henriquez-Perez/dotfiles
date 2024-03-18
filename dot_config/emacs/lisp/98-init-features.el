@@ -53,6 +53,12 @@
 ;;;; unknown
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (opt! sgml-basic-offset 4)
+;;;; dabbrev
+(opt! dabbrev-check-all-buffers nil)
+;;;; ah
+(require 'ah)
+;; (oo-add-hook 'after-init-hook #'ah-mode)
+(ah-mode 1)
 ;;;; ace-window
 ;;;;; swap
 (opt! aw-swap-invert t)
