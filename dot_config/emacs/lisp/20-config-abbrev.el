@@ -97,154 +97,85 @@
 (define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
 ;;;;;; capitalization
 (oo-text-abbrev "i" "I")
-
 (oo-text-abbrev "luis" "Luis")
 ;;;;;; generic
 (oo-text-abbrev "idlk" "I do not like")
 (oo-text-abbrev "ilk" "I like")
 (oo-text-abbrev "auly" "automatically")
 (oo-text-abbrev "dsl" "Domain-Specific-Language")
-
 (oo-text-abbrev "fn" "function")
-
 (oo-text-abbrev "fns" "functions")
-
 (oo-text-abbrev "ig" "instagram")
-
 (oo-text-abbrev "econf" "emacs configuration")
-
 (oo-text-abbrev "kbdm" "keyboard macro")
-
 (oo-text-abbrev "kbdms" "keyboard macros")
-
 (oo-text-abbrev "msw" "Microsoft Windows")
-
 (oo-text-abbrev ".mail" "luis@luishp.xyz")
-
 (oo-text-abbrev "imho" "in my humble opinion")
-
 (oo-text-abbrev "imo" "in my opinion")
-
 (oo-text-abbrev "fyi" "for your information")
-
 (oo-text-abbrev "lmk" "let me know")
-
 (oo-text-abbrev "afaik" "as far as I know")
-
 (oo-text-abbrev "idk" "I do not know")
-
 (oo-text-abbrev "gonna" "going to")
-
 (oo-text-abbrev "otc" "on the contrary")
-
 (oo-text-abbrev "st" "sometimes")
-
 (oo-text-abbrev "tbh" "to be honest")
-
 (oo-text-abbrev "qwerty" "QWERTY")
-
 (oo-text-abbrev "ngl" "not going to lie")
-
 (oo-text-abbrev "tfb" "to be frank")
-
 (oo-text-abbrev "ndo" "window")
-
 (oo-text-abbrev "tis" "it is")
-
 (oo-text-abbrev "amly" "automatically")
-
 (oo-text-abbrev "rn" "right now")
-
 (oo-text-abbrev "bly" "probably")
-
 (oo-text-abbrev "lk" "like")
-
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
 (oo-text-abbrev "config" "configuration")
 (oo-text-abbrev "obv" "obviously")
-
 (oo-text-abbrev "appr" "appropriate")
-
 (oo-text-abbrev "ofc" "of course")
-
 (oo-text-abbrev "ok" "O.K.")
-
 (oo-text-abbrev "iis" "it's")
-
 (oo-text-abbrev "bc" "because")
-
 (oo-text-abbrev "iow" "in other words")
-
 (oo-text-abbrev "uun" "up until now")
-
 (oo-text-abbrev "exwm" "EXWM")
-
 (oo-text-abbrev "fe" "for example")
-
 (oo-text-abbrev "evaled" "evaluated")
-
 (oo-text-abbrev "imma" "I am going to")
-
 ;; From https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/
-
 (oo-text-abbrev "hw" "however")
-
 (oo-text-abbrev "otoh" "on the other hand")
-
 (oo-text-abbrev "ohter" "other")
-
 (oo-text-abbrev "fe" "for example")
-
 (oo-text-abbrev "fi" "for instance")
-
 (oo-text-abbrev "youve" "you have")
-
 (oo-text-abbrev "youd" "you would")
-
 (oo-text-abbrev "il" "I will")
-
 (oo-text-abbrev "theres" "there is")
-
 (oo-text-abbrev "itss" "it is")
-
 (oo-text-abbrev "im" "I am")
-
 (oo-text-abbrev "illl" "I will")
-
 (oo-text-abbrev "cant" "cannot")
-
 (oo-text-abbrev "idd" "I would")
-
 (oo-text-abbrev "dont" "do not")
-
 (oo-text-abbrev "wontt" "will not")
-
 (oo-text-abbrev "doesnt" "does not")
-
 ;; Not sure I actually want this abbrev because =wont= is actually a word. 
 ;; (oo-text-abbrev "wont" nil)
-
 (oo-text-abbrev "thats" "that is")
-
 (oo-text-abbrev "u" "you")
-
 (oo-text-abbrev "ul" "you'll")
-
 (oo-text-abbrev "dont" "do not")
-
 (oo-text-abbrev "dnt" "don't")
-
 (oo-text-abbrev "ive" "I have")
-
 (oo-text-abbrev "dstr" "doc-string")
 (oo-text-abbrev "dstrs" "doc-strings")
-
 (oo-text-abbrev "ik" "I know")
-
 (oo-text-abbrev "ribe" "describe")
-
 (oo-text-abbrev "iff" "if and only if")
 ;;;;;; apostrophe avoiding
 (oo-text-abbrev "whats" "what is")
@@ -312,9 +243,7 @@
 (oo-text-abbrev "actioins" "actions")
 
 (oo-text-abbrev "orignal" "original")
-
 (oo-text-abbrev "eachother" "each other")
-
 (oo-text-abbrev "propogate" "propagate")
 (oo-text-abbrev "pakcage" "package")
 (oo-text-abbrev "pakcages" "packages")
