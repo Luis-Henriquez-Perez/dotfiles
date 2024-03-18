@@ -47,9 +47,11 @@
 (grugru-define-global 'symbol '("inner" "outer"))
 
 ;;;; emacs-lisp
-
 (grugru-define-on-major-mode '(emacs-lisp) 'word '("let" "let*" "let!" "-let"))
 
+(grugru-define-on-major-mode '(emacs-lisp) 'word '(abbrev-table-put abbrev-table-get))
+
+(grugru-define-on-major-mode '(emacs-lisp) 'word '(gethash puthash))
 ;;; provide
 (provide '20-config-grugru)
 ;;; 20-config-grugru.el ends here
