@@ -543,3 +543,33 @@ EXPR is a `pcase-style' expression."
 (defun oo/do-replace ()
   (interactive)
   (replace-regexp-in-region "\\(.+\\)->\\(.+\\)$" "(define-global-abbrev \"\1\" \"\2\")" (point-min) (point-max)))
+;;;;; TODO: adjust start location in strings
+;; Although abbrev is expanding in strings.
+;; This should only need to be active in prog-mode.
+;; (defadvice! abbrev--default-expand@ARadjust-start-location (expand-fn)
+;;   (cond ((not (equal 'string (oo--enable-text-mode-abbrev-p)))
+;;          (funcall expand-fn))
+;;         ((not (looking-back (rx "\"" (group (1+ (not white))) (* space))
+;;                             (line-beginning-position)))
+;;          (funcall expand-fn))
+;;         (t
+;;          (funcall expand-fn)
+;;          ;; This does not work for some reason.  Instead, what I will do is put
+;;          ;; the stuff into a buffer.
+;;          ;; (set! name (match-string 1))
+;;          ;; (message "name-> %S" name)
+;;          ;; (set! expansion (save-match-data
+;;          ;;                   (with-temp-buffer
+;;          ;;                     (insert name)
+;;          ;;                     (expand-region-abbrevs (point-min) (point-max) t)
+;;          ;;                     (buffer-string))))
+;;          ;; (replace-match expansion nil nil nil 1)
+;;          ;; (message "adjusting...%S" ret)
+;;          ;; (set! name (match-string 1))
+;;          ;; (set! symbol (intern name))
+;;          ;; (set! start (match-beginning 1))
+;;          ;; (set! end (match-end 1))
+;;          ;; (set! ret (list symbol name start end))
+;;          ;; (apply #'abbrev-insert ret)
+;;          ;; (nflet! abbrev--before-point (-const ret))
+;;          )))
