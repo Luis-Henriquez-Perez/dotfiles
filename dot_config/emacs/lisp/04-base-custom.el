@@ -321,6 +321,8 @@ This is like `setq' but it is meant for configuring variables."
 (defalias '-partial-> 'thread-partial!)
 (defalias '-p-> 'thread-partial!)
 
+;; This function is used by captain and abbrev.  Instead of redefining it twice,
+;; I prefer to place it here.
 (defun! oo--in-string-or-comment-p ()
   "Return 'string if point is in a string, 'comment if in a comment, nil otherwise."
   (interactive)
