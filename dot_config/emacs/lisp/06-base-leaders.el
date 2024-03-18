@@ -142,7 +142,6 @@
     (oo--resolve-binding fns metadata)))
 
 (adjoining! oo-binding-fns #'oo--bind-localleader)
-
 ;;;; keybindings
 ;;;;; setup leader maps
 (defvar oo-toggle-map (make-sparse-keymap))

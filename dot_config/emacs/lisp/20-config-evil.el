@@ -73,7 +73,6 @@
 
 (oo-bind :n "J" #'evil-scroll-page-down)
 (oo-bind :n "K" #'evil-scroll-page-up)
-
 ;;; provide
 (provide '20-config-evil)
 ;;; 20-config-evil.el ends here
