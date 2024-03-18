@@ -61,7 +61,9 @@
 ;; point of doing this is to let me name certain abbrevs with easy to remember,
 ;; intuitive names while also preventing name clashes with the preceding
 ;; punctuation.
-(abbrev-table-put global-abbrev-table :regexp "\\(?:^\\|[[:space:]]\\)\\(?1:[.]?[[:alpha:]]+\\)")
+;; (abbrev-table-put global-abbrev-table :regexp "\\(?:\\`\\|^\\|[[:space:]]\\)\\(?1:\\.?[[:alpha:]]+\\)")
+;; Do not adjust the abbrev syntax yet.
+;; (abbrev-table-put global-abbrev-table :regexp nil)
 ;;;;; TODO: deal with problem of non-capitalization of mutliple words
 ;; When an abbrev expands to multiple words the initial word does not get
 ;; capitalized with captain.  But it does work when abbrev expands to just one
