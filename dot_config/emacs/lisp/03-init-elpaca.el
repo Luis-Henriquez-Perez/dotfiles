@@ -77,6 +77,7 @@
 ;; am actually editing my test files.
 ;; TODO: add bindings for lorem ipsum.
 ;; (elpaca aas)
+(elpaca edwina)
 (elpaca pcre2el)
 (elpaca eshell-prompt-extras)
 (elpaca ace-jump-helm-line)
