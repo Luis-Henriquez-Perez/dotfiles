@@ -24,10 +24,10 @@
 ;;
 ;; At first glance I thought that aas was obviously better than abbrev because
 ;; it expands.  However, looking at the issue more closely makes it more and
-;; more unclear. 
-;; 
+;; more unclear.
+;;
 ;; A discussion of the subtle differences between abbrev and `aas':
-;; 
+;;
 ;; 1. overriding snippets
 ;; A consequence of expanding snippets immediately is that they can override
 ;; another snippet.  For instance, using abbrev you could have BLANK1 and BLANK2
@@ -35,7 +35,7 @@
 ;; would type in ";" and it would immediately expand into ";; ".  Whereas with
 ;; abbrev, the expansion is triggered by a space, thereby giving you a way to
 ;; differentiate the two.
-;; 
+;;
 ;; 2. residue space
 ;; When using abbrev you end up with a residue space when
 ;; expanding snippets.  I am sure it is not hard to fix this but it does suggest
