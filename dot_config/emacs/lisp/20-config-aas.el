@@ -49,6 +49,11 @@
 ;; 4.
 ;; You cannot write the same kind of abbrevs.
 ;;
+;; TODO: find a use-case for aas in combination with abbrev
+;; One thing you can do is use aas in combination with abbrev.  You can use
+;; abbrev to handle most of the abbrevs.  One idea is to use it in cases where a
+;; space might interfere with the abbrev itself.
+;;
 ;;; Code:
 (require '04-base-custom)
 ;;;; replace two spaces with a period
