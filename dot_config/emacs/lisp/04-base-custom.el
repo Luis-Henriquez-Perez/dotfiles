@@ -58,53 +58,11 @@ must be evaluated with `lexical-binding' enabled."
       (when first-call-p
         (setq first-call-p nil)
         (apply fn args)))))
-;;;; if-not!
-;; More often than not when I am using `if', the default else clause is simpler than
-;; the then clause.  And in that case I end up having to wrap the then clause in
-;; a `progn'. I want to invert the else clause and the if clause so I do not
-;; need to include the extra `progn' in that case.  I also considered just
-;; writing a macro that expands to an `if' with the then and else reversed, but
-;; I think it might be confusing.
-(defmacro if-not! (cond then &rest else)
-  (declare (indent 2))
-  `(if (not ,cond) ,then ,@else))
-;;;; autoloading
-;; I tried making this as a macro called [[][catch-autoloads!]] but I ran in to
-;; some issues.  First, my initial implementation ran into infinite recursion
-;; during macroexpansion.  And then after I fixed that I had problems with lexical
-;; binding.
-(defun! oo-autoload-function (fn)
-  "Call FN with ARGS trying to load features of any undefined symbols.
-If an void-function or void-variable error is raised try to guess the parent
-feature."
-  (oo-cond-case-fn fn #'oo-autoload-action-function '(void-function void-variable)))
-
-(defun! oo-candidate-features (fn paths)
-  "Return a list of candidate features for FN.
-FN is a function symbol."
-  (set! fname (symbol-name fn))
-  (for! (path paths)
-    (set>>! base
-      (directory-file-name path)
-      (file-name-nondirectory)
-      (file-name-sans-extension))
-    (when (s-prefix-p base fname)
-      (pushing! candidates (intern base))))
-  (seq-sort-by (-compose #'length #'symbol-name) #'> candidates))
-
-(defun! oo-autoload-action-function (error function args)
-  "Try guess if feature is bound.
-ERROR is either a void-variable or void-function error."
-  (set! (type symbol . rest) error)
-  (cl-assert (member type '(void-variable void-function)))
-  (set! bound-fn (cl-case type (void-variable #'boundp) (void-function #'fboundp)))
-  (set! candidates (oo-candidate-features symbol load-path))
-  (for! (feature candidates)
-    (require feature nil t)
-    (when (funcall bound-fn symbol)
-      (return! (apply #'oo-funcall-autoload function args))))
-  (signal (car error) (cdr error)))
 ;;;; logging
+;; TODO: figure out how to change the log format
+;; I do not really utilize the logging enough yet because I need to understand
+;; `lgr' more.  I considered removing the package, but I still got it to work.
+;; And logging a little is better than nothing.
 (defvar oo-lgr (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
   "Object used for logging.")
 
@@ -119,6 +77,16 @@ ERROR is either a void-variable or void-function error."
 
 (defmacro fatal! (msg &rest meta)
   `(lgr-fatal oo-lgr ,msg ,@meta))
+;;;; if-not!
+;; More often than not when I am using `if', the default else clause is simpler than
+;; the then clause.  And in that case I end up having to wrap the then clause in
+;; a `progn'. I want to invert the else clause and the if clause so I do not
+;; need to include the extra `progn' in that case.  I also considered just
+;; writing a macro that expands to an `if' with the then and else reversed, but
+;; I think it might be confusing.
+(defmacro if-not! (cond then &rest else)
+  (declare (indent 2))
+  `(if (not ,cond) ,then ,@else))
 ;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
@@ -261,11 +229,15 @@ If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
   (aset! (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
   (oo--call-after-load expr it))
-
-;; (defmacro! defafter! (name expr &rest body)
-;;   (declare (indent defun))
-;;   (set! fn (intern (format "oo-after-load/%s" name)))
-;;   (oo-call-after-load ',expr (lambda () (block! ,@body))))
+;;;; defafter!
+(defmacro! defafter! (name expr &rest body)
+  "Define a function that is called after EXPR is resolved.
+EXPR is the same as in `oo-call-after-load'.  BODY is enclosed in
+`block!'."
+  (declare (indent defun))
+  (set! fn (intern (format "oo-after-load/%s" name)))
+  (fset fn (oo-report-error-fn (lambda () (block! ,@body))))
+  (oo-call-after-load ',expr ',fn))
 ;;;; customize variables
 ;;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil
