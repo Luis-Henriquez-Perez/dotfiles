@@ -65,6 +65,7 @@
 (require '05-base-bind)
 (require '06-base-leaders)
 (require '98-init-features)
+(require '90-keybindings)
 ;;;; load config files
 (defhook! emacs-startup-hook&setup-config-files ()
   "Load the code for the lisp files."
