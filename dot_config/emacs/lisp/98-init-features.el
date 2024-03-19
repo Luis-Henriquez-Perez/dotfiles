@@ -343,15 +343,21 @@
 
 (oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
 ;;;; evil-easymotion
-(autoload #'oo-goto-beginning-of-word "evil-easymotion")
-(autoload #'oo-goto-end-of-word "evil-easymotion")
-(autoload #'oo-goto-char "evil-easymotion")
+;; The problem with these keys is that they interfere with keyboard macros.  Let
+;; me explain--when you use avy, it is not necessarily the case that the
+;; following keys have the same letter.  For keyboard macros to work you need
+;; keys to exhibit predictable behaviors.  I do not want to get rid of these
+;; keys entirely, but I have to consider more carfully on how I will re-add them
+;; to my configuration.
+;; (autoload #'oo-goto-beginning-of-word "evil-easymotion")
+;; (autoload #'oo-goto-end-of-word "evil-easymotion")
+;; (autoload #'oo-goto-char "evil-easymotion")
 
-(oo-bind :nv "w" #'oo-goto-beginning-of-word)
-(oo-bind :nv "e" #'oo-goto-end-of-word)
-(oo-bind :nv "f" #'oo-goto-char)
+;; (oo-bind :nv "w" #'oo-goto-beginning-of-word)
+;; (oo-bind :nv "e" #'oo-goto-end-of-word)
+;; (oo-bind :nv "f" #'oo-goto-char)
 ;;;; evil-operator
-(oo-bind :n "gr" #'evil-operator-eval)
+;; (oo-bind :n "gr" #'evil-operator-eval)
 ;;;; evil-surround
 (oo-add-hook 'prog-mode-hook #'evil-surround-mode)
 

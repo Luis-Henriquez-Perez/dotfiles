@@ -1,3 +1,12 @@
+;;;; set initial font
+;; I do not want to be setting the font as I am now every single time.
+;; https://www.reddit.com/r/emacs/comments/xybrtw/what_is_the_most_appropriate_way_to_set_fonts_in/
+;; (set-frame-font)
+;; (cond ((x-list-fonts "Courier Prime")
+;;        (set-frame-font "Courier Prime"))
+;;       (()
+;;        (set-frame-font "Iosevka Extended 12" nil t)))
+
 (defun oo-tree-map-nodes (pred fun tree)
   "Same as `-tree-map-nodes', but works for improper lists."
   (cond ((funcall pred tree)
