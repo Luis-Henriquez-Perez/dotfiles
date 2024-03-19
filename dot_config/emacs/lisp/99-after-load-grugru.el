@@ -1,4 +1,4 @@
-;;; after-load-grugru.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-grugru.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -53,5 +53,5 @@
 
 (grugru-define-on-major-mode '(emacs-lisp) 'word '(gethash puthash))
 ;;; provide
-(provide 'after-load-grugru)
-;;; after-load-grugru.el ends here
+(provide '99-after-load-grugru)
+;;; 99-after-load-grugru.el ends here

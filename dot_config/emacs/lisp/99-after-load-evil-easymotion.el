@@ -1,4 +1,4 @@
-;;; after-load-evil-easymotion.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-evil-easymotion.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -102,5 +102,5 @@
                     (function point-min))
 
 ;;; provide
-(provide 'after-load-evil-easymotion)
-;;; after-load-evil-easymotion.el ends here
+(provide '99-after-load-evil-easymotion)
+;;; 99-after-load-evil-easymotion.el ends here

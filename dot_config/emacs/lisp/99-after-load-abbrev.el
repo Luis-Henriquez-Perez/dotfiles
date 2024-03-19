@@ -1,4 +1,4 @@
-;;; after-load-abbrev.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-abbrev.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -273,5 +273,5 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;; provide
-(provide 'after-load-abbrev)
-;;; after-load-abbrev.el ends here
+(provide '99-after-load-abbrev)
+;;; 99-after-load-abbrev.el ends here

@@ -1,4 +1,4 @@
-;;; after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,13 +25,11 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;; TODO: integrate with =defhook= once I figure out how that is going to work.
-;; TODO: I need to figure out how to lazy require chezmoi and f.  I get the
-;; error that the features have not been loaded.
-(defhook! after-save-hook&chezmoi-maybe-write-file ()
-  (set! file (expand-file-name (buffer-file-name)))
-  (when (and file (member file (mapcar #'expand-file-name (chezmoi-managed))))
-    (chezmoi-write file)))
+;;;; tempel
+(oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
+(oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
+(oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
+(oo-bind 'tempel-map :ieg [backtab] #'tempel-previous)
 ;;; provide
-(provide 'after-load-chezmoi)
-;;; after-load-chezmoi.el ends here
+(provide '99-after-load-tempel)
+;;; 99-after-load-tempel.el ends here

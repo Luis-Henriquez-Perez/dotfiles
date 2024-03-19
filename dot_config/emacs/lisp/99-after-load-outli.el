@@ -1,4 +1,4 @@
-;;; after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-outli.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,11 +25,12 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;;;; tempel
-(oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
-(oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
-(oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
-(oo-bind 'tempel-map :ieg [backtab] #'tempel-previous)
+;; TODO: figure out how to make this a named advice.
+(advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
+
+;; TODO: set the style for all configs.
+(setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
+
 ;;; provide
-(provide 'after-load-tempel)
-;;; after-load-tempel.el ends here
+(provide '99-after-load-outli)
+;;; 99-after-load-outli.el ends here

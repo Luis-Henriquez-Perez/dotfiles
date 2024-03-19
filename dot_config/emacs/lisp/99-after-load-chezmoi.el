@@ -1,4 +1,4 @@
-;;; after-load-outli.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,12 +25,13 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;; TODO: figure out how to make this a named advice.
-(advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
-
-;; TODO: set the style for all configs.
-(setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
-
+;; TODO: integrate with =defhook= once I figure out how that is going to work.
+;; TODO: I need to figure out how to lazy require chezmoi and f.  I get the
+;; error that the features have not been loaded.
+(defhook! after-save-hook&chezmoi-maybe-write-file ()
+  (set! file (expand-file-name (buffer-file-name)))
+  (when (and file (member file (mapcar #'expand-file-name (chezmoi-managed))))
+    (chezmoi-write file)))
 ;;; provide
-(provide 'after-load-outli)
-;;; after-load-outli.el ends here
+(provide '99-after-load-chezmoi)
+;;; 99-after-load-chezmoi.el ends here

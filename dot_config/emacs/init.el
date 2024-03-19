@@ -69,7 +69,7 @@
 (defhook! emacs-startup-hook&setup-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
-  (set! regexp "\\`after-load-\\(.+\\)")
+  (set! regexp "\\`99-after-load-\\(.+\\)")
   (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
   (flet! feature (-compose #'intern #'feature-name))
   (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
