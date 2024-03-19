@@ -269,6 +269,7 @@
 ;; I do not want to keep pressing =^= for the common action of going up the
 ;; directory.
 (oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+
 ;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
 (oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
 ;;;; dirvish
@@ -279,8 +280,6 @@
 (opt! dirvish-attributes '(file-size subtree-state))
 
 (opt! dirvish-default-layout nil)
-
-(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
 
 (oo-add-hook 'dired-mode-hook #'dired-omit-mode)
 ;; By default hide details.
@@ -319,7 +318,6 @@
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
 (oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
-
 ;;;; evil
 (oo-add-hook 'emacs-startup-hook #'evil-mode)
 
