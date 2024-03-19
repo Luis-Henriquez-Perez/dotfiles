@@ -585,3 +585,91 @@ EXPR is a `pcase-style' expression."
 ;; (define-abbrev global-abbrev-table ".minute" "" (-partial #'oo--insert-time "%M"))
 ;; (define-abbrev global-abbrev-table ".sec" "" (-partial #'oo--insert-time "%S"))
 ;; (define-abbrev global-abbrev-table ".second" "" (-partial #'oo--insert-time "%S"))
+
+;;;; aas
+;; (oo-add-hook 'emacs-startup-hook #'aas-global-mode)
+;; (require 'aas)
+;; (aas-set-snippets 'global
+;;   "fifo" "first in first out"
+;;   "filo" "first in last out"
+;;   ";--" "—"
+;;   ";->" "→")
+;;;; autoloading
+;; I tried making this as a macro called [[][catch-autoloads!]] but I ran in to
+;; some issues.  First, my initial implementation ran into infinite recursion
+;; during macroexpansion.  And then after I fixed that I had problems with lexical
+;; binding.
+(defun! oo-autoload-function (fn)
+  "Call FN with ARGS trying to load features of any undefined symbols.
+If an void-function or void-variable error is raised try to guess the parent
+feature."
+  (oo-cond-case-fn fn #'oo-autoload-action-function '(void-function void-variable)))
+
+(defun! oo-candidate-features (fn paths)
+  "Return a list of candidate features for FN.
+FN is a function symbol."
+  (set! fname (symbol-name fn))
+  (for! (path paths)
+    (set>>! base
+      (directory-file-name path)
+      (file-name-nondirectory)
+      (file-name-sans-extension))
+    (when (s-prefix-p base fname)
+      (pushing! candidates (intern base))))
+  (seq-sort-by (-compose #'length #'symbol-name) #'> candidates))
+
+(defun! oo-try-autoload-on-error (function)
+  "Call function.
+Try guess if feature is bound.
+ERROR is either a void-variable or void-function error."
+  (set! (type symbol . rest) error)
+  (cl-assert (member type '(void-variable void-function)))
+  (set! bound-fn (cl-case type (void-variable #'boundp) (void-function #'fboundp)))
+  (set! candidates (oo-candidate-features symbol load-path))
+  (for! (candidate candidates)
+    (require candidate nil t)
+    (when (funcall bound-fn symbol)
+      ;; Try calling the function again until.
+      (return! (oo-funcall-autoload function))))
+  (signal (car error) (cdr error)))
+;;;; setup
+;; Generic configuration macro.
+;; (defmacro defsetup! (key args &rest body)
+;;   (declare (indent defun)))
+
+;; (defmacro setup! (key &rest args)
+;;   "A cross-configuration macro."
+;;   (apply setup-fn key args))
+
+;; (setup! :popup bottom)
+;; (defsetup! :popup (place regexp)
+;;   "Open buffers at bottom that match regexp."
+;;   `(alet (,regexp
+;;           (display-buffer-at-bottom)
+;;           (side bottom)
+;;           (slot 1)
+;;           (window-height 0.5)
+;;           (window-parameters ((no-other-window t))))
+;;      (push it display-buffer-alist)))
+
+;; (defun tempel-setup-capf ()
+;;   ;; Add the Tempel Capf to `completion-at-point-functions'.
+;;   ;; `tempel-expand' only triggers on exact matches. Alternatively use
+;;   ;; `tempel-complete' if you want to see all matches, but then you
+;;   ;; should also configure `tempel-trigger-prefix', such that Tempel
+;;   ;; does not trigger too often when you don't expect it. NOTE: We add
+;;   ;; `tempel-expand' *before* the main programming mode Capf, such
+;;   ;; that it will be tried first.
+;;   (pushing! completion-at-point-functions #'tempel-complete :setter setq-local)
+;;   (setq-local completion-at-point-functions
+;;               (cons #'tempel-expand
+;;                     completion-at-point-functions)))
+;; (defun oo-elisp-capf ()
+;;   (cape-wrap-super #'tempel-complete #'elisp-completion-at-point))
+
+;; (setq-local completion-at-point-functions (list #'oo-elisp-capf t))
+
+;; ;; (collecting-hook! conf-mode-hook&setup-tempel-capf #'tempel-complete)
+;; (add-hook 'conf-mode-hook 'tempel-setup-capf)
+;; (add-hook 'prog-mode-hook 'tempel-setup-capf)
+;; (add-hook 'text-mode-hook 'tempel-setup-capf)
