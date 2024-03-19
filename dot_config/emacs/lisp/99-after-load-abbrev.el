@@ -91,6 +91,7 @@
 (oo-text-abbrev "luis" "Luis")
 ;;;;;; generic
 ;; (oo-text-abbrev ";;" ".")
+(oo-text-abbrev "owoto" "one way or the other")
 (oo-text-abbrev "configs" "configurations")
 (oo-text-abbrev "espace" "escape")
 (oo-text-abbrev "ijwi" "I just want it")
@@ -140,6 +141,7 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
+(oo-text-abbrev "dat" "that")
 (oo-text-abbrev "incs" "increase")
 (oo-text-abbrev "decs" "deccrease")
 (oo-text-abbrev "config" "configuration")
