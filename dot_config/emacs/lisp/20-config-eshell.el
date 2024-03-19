@@ -57,12 +57,12 @@
 (eshell/alias "d" "dired $1")
 ;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
 ;; TODO: Allow arguments to commands.  I ommited them for the sake o.
-(eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test}")
-(eshell/alias "etest" "{cd $user-emacs-directory; eldev -d test}")
-(eshell/alias "emacs-compile" "{cd $user-emacs-directory; eldev -d compile}")
-(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile}")
-(eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval}")
-(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval}")
+(eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
+(eshell/alias "etest" "{cd $user-emacs-directory; eldev -d test $1}")
+(eshell/alias "emacs-compile" "{cd $user-emacs-directory; eldev -d compile $1}")
+(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile $1}")
+(eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
+(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
 ;; (eshell/alias "update-wallpaper" "")
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
