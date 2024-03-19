@@ -63,6 +63,7 @@
 (eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile}")
 (eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval}")
 (eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval}")
+;; (eshell/alias "update-wallpaper" "")
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use
