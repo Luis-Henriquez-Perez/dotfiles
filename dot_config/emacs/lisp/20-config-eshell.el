@@ -51,11 +51,17 @@
 ;; have the physical buffer contents.
 (eshell/alias "clear" "eshell/clear t")
 (eshell/alias "ff" "find-file $1")
+(eshell/alias "open" "find-file $1")
 ;; (eshell/alias "emacs" "find-file $1")
 ;; (eshell/alias "ee" "find-file-other-window $1")
 ;; (eshell/alias "gd" "magit-diff-unstaged")
 ;; (eshell/alias "gds" "magit-diff-staged")
 (eshell/alias "d" "dired $1")
+;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
+;; TODO: Allow arguments to commands.  I ommited them for the sake o.
+(eshell/alias "etest" "{cd $user-emacs-directory; eldev -d test}")
+(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile}")
+(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval}")
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use
