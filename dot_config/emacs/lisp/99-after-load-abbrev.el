@@ -140,6 +140,8 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
+(oo-text-abbrev "incs" "increase")
+(oo-text-abbrev "decs" "deccrease")
 (oo-text-abbrev "config" "configuration")
 (oo-text-abbrev "obv" "obviously")
 (oo-text-abbrev "appr" "appropriate")
