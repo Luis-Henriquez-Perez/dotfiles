@@ -65,6 +65,12 @@
 (eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile $1}")
 (eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
 (eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
+
+(eshell/alias "install" "sudo pacman -S --no-confirm $1")
+;; (eshell/alias "install" "sudo pacman -S --no-confirm $1")
+
+;; TODO: Do not show me descriptions when searching...
+(eshell/alias "search" "pacman -Ss $1")
 ;; (eshell/alias "update-wallpaper" "")
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
