@@ -31,7 +31,7 @@
                     (lambda nil
                       (interactive)
                       "Jump to beginning of word at current buffer." nil
-                      (block! nil
+                      (block!
                         (set! regexp
                               (rx
                                (or
@@ -59,7 +59,7 @@
                     (lambda nil
                       (interactive)
                       "Jump to the end of word in the current buffer." nil
-                      (block! nil
+                      (block!
                         (set! regexp
                               (rx
                                (1+ alnum)))
@@ -81,9 +81,8 @@
                     (lambda nil
                       (interactive)
                       "Jump to the character in current buffer." nil
-                      (block! nil
-                        (with!
-                         (save-match-data))
+                      (block!
+                        (with! (save-match-data))
                         (when
                             (save-excursion
                               (goto-char
