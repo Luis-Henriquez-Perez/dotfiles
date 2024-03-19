@@ -33,6 +33,7 @@
 (require '02-base-lib)
 (require 'anaphora)
 (require 'dash)
+(require 's)
 (require 'lgr)
 ;;;; oo-first-success
 ;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].

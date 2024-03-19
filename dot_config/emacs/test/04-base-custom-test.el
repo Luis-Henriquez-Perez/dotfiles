@@ -42,11 +42,15 @@
 ;; its own Domain-Specific-Language mechanism for defining variables which I do
 ;; not like.  Whereas if I were just using `ert' I could just have `should'
 ;; forms arbitrarily nested within the lisp forms.
-(xdescribe "oo-candidate-features"
+(describe "oo-candidate-features"
   :var ((fake-path '("a/b/c/evil" "a/b/c/helm" "a/b/c/ivy")))
   ;; Build a list of fake package paths.
   (it "should return a list of candidate features"
-    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-be nil)))
+    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil)))
+  (push "a/b/c/evil-horse" fake-path)
+  (push "a/b/c/evil-mouse-state" fake-path)
+  (it "should sort the resulting list by shortest"
+    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil))))
 
 (describe "if-not!"
   (it "should invert the places of then and else"
