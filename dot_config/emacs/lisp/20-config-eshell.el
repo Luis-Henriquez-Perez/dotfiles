@@ -55,6 +55,8 @@
 (eshell/alias "ffow" "find-file-other-window $1")
 (eshell/alias "open" "find-file $1")
 (eshell/alias "d" "dired $1")
+;; https://howardism.org/Technical/Emacs/eshell-why.html
+(eshell/alias "less" "view-file $1")
 ;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
 ;; TODO: Allow arguments to commands.  I ommited them for the sake o.
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
