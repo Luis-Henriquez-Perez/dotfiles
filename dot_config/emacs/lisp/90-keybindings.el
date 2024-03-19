@@ -28,4 +28,31 @@
 ;;; Code:
 ;;;; leaders
 ;;;; window-map
-(provide '90-key-bindings)
+;;;; bindings
+(oo-bind :nm "+" #'text-scale-increase)
+(oo-bind :nm "-" #'text-scale-decrease)
+
+(oo-bind 'oo-toggle-map "r" #'read-only-mode)
+(oo-bind 'oo-toggle-map "t" #'load-theme)
+(oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
+
+(oo-bind 'oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
+(oo-bind 'oo-toggle-map "P" #'profiler-stop)
+;;;; evil-textobj-line
+;; TODO: create an abbrev to today's date.
+;; TODO: there needs to be a standard for setting today.
+;; While I was writing a code that would automate adding package headers to
+;; files, I wanted to surround each line with quotes and that is when I thought
+;; I would like a line text-object.
+(autoload #'evil-inner-line "evil-textobj-line")
+(autoload #'evil-a-line "evil-textobj-line")
+(oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
+(oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
+;;;; evil operators
+(autoload 'evil-operator-eval "evil-extra-operator")
+(autoload 'evil-operator-eval-replace "evil-extra-operator")
+(oo-bind 'oo-leader-map "er" #'evil-operator-eval-replace :wk "eval and replace")
+(oo-bind 'oo-leader-map "ee" #'evil-operator-eval :wk "eval")
+;;; provide
+(provide '90-keybindings)
+;;; 90-keybindings.el ends here
