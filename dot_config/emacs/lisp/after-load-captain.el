@@ -1,4 +1,4 @@
-;;; 20-config-captain.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-captain.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -68,5 +68,5 @@
   (setq-local captain-predicate #'oo--in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;; provide
-(provide '20-config-captain)
-;;; 20-config-captain.el ends here
+(provide 'after-load-captain)
+;;; after-load-captain.el ends here

@@ -1,4 +1,4 @@
-;;; 20-config-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -26,11 +26,10 @@
 ;;
 ;;; Code:
 ;;;;;; tempel
-
 (oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
 (oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
 (oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
 (oo-bind 'tempel-map :ieg [backtab] #'tempel-previous)
 ;;; provide
-(provide '20-config-tempel)
-;;; 20-config-tempel.el ends here
+(provide 'after-load-tempel)
+;;; after-load-tempel.el ends here

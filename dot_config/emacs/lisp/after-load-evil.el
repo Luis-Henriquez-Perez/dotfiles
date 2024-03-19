@@ -1,4 +1,4 @@
-;;; 20-config-evil.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-evil.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -74,5 +74,5 @@
 (oo-bind :n "J" #'evil-scroll-page-down)
 (oo-bind :n "K" #'evil-scroll-page-up)
 ;;; provide
-(provide '20-config-evil)
-;;; 20-config-evil.el ends here
+(provide 'after-load-evil)
+;;; after-load-evil.el ends here

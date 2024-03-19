@@ -1,4 +1,4 @@
-;;; 20-config-helm.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-helm.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -43,5 +43,5 @@
 (oo-bind :ie 'helm-map "C-;" #'ace-jump-helm-line)
 
 ;;; provide
-(provide '20-config-helm)
-;;; 20-config-helm.el ends here
+(provide 'after-load-helm)
+;;; after-load-helm.el ends here

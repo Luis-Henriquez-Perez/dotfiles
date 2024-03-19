@@ -1,4 +1,4 @@
-;;; 20-config-aas.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-aas.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -294,5 +294,5 @@
 (aas-set-snippets 'global :cond #'oo--aas-text-enable-p "pakcage" "package")
 (aas-set-snippets 'global :cond #'oo--aas-text-enable-p "pakcages" "packages")
 ;;; provide
-(provide '20-config-aas)
-;;; 20-config-aas.el ends here
+(provide 'after-load-aas)
+;;; after-load-aas.el ends here

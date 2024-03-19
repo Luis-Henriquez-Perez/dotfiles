@@ -1,4 +1,4 @@
-;;; 20-config-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,5 +33,5 @@
   (when (and file (member file (mapcar #'expand-file-name (chezmoi-managed))))
     (chezmoi-write file)))
 ;;; provide
-(provide '20-config-chezmoi)
-;;; 20-config-chezmoi.el ends here
+(provide 'after-load-chezmoi)
+;;; after-load-chezmoi.el ends here

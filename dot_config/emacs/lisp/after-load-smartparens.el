@@ -1,4 +1,4 @@
-;;; 20-config-smartparens.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-smartparens.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -34,5 +34,5 @@
 
 (require 'smartparens-config)
 ;;; provide
-(provide '20-config-smartparens)
-;;; 20-config-smartparens.el ends here
+(provide 'after-load-smartparens)
+;;; after-load-smartparens.el ends here

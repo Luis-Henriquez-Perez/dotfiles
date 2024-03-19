@@ -1,4 +1,4 @@
-;;; 20-config-em-alias.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; after-load-em-alias.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -62,5 +62,5 @@
 (eshell/alias "update-email" "mbsync -a")
 ;; (eshell/alias "update-wallpaper" "")
 ;;; provide
-(provide '20-config-em-alias)
-;;; 20-config-em-alias.el ends here
+(provide 'after-load-em-alias)
+;;; after-load-em-alias.el ends here

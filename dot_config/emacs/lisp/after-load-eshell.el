@@ -1,4 +1,4 @@
-;;; 20-config-eshell.el --- configuration for eshell -*- lexical-binding: t; -*-
+;;; after-load-eshell.el --- configuration for eshell -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -64,5 +64,5 @@
 ;;   )
 ;; (eshell/alias "clear" )
 ;;; provide
-(provide '20-config-eshell)
-;;; 20-config-eshell.el ends here
+(provide 'after-load-eshell)
+;;; after-load-eshell.el ends here
