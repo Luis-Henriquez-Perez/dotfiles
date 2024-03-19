@@ -1,4 +1,4 @@
-;;; 20-config-eshell.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 20-config-eshell.el --- configuration for eshell -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -41,37 +41,6 @@
 ;; For `eat-eshell-mode'.
 ;; (oo-add-hook 'eshell-load-hook #'eat-eshell-mode)
 ;;;;
-;;;; aliases
-;; https://olddeuteronomy.github.io/post/eshell-aliases-and-prompt/
-;; https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
-;; (eshell/alias "e" "find-file $1")
-;; For now do this, but I just really want to scroll up.  I do not want to
-;; actually delete the buffer contents.  I mean I guess its O.K. since the
-;; contents should be saved in eshell-history, but its more secure to actuall
-;; have the physical buffer contents.
-(eshell/alias "clear" "eshell/clear t")
-(eshell/alias "ff" "find-file $1")
-(eshell/alias "ffow" "find-file-other-window $1")
-(eshell/alias "ffow" "find-file-other-window $1")
-(eshell/alias "open" "find-file $1")
-(eshell/alias "d" "dired $1")
-;; https://howardism.org/Technical/Emacs/eshell-why.html
-(eshell/alias "less" "view-file $1")
-;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
-;; TODO: Allow arguments to commands.  I ommited them for the sake o.
-(eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
-(eshell/alias "etest" "{cd $user-emacs-directory; eldev -d test $1}")
-(eshell/alias "emacs-compile" "{cd $user-emacs-directory; eldev -d compile $1}")
-(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile $1}")
-(eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
-(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
-
-(eshell/alias "install" "sudo pacman -S --no-confirm $1")
-;; (eshell/alias "install" "sudo pacman -S --no-confirm $1")
-
-;; TODO: Do not show me descriptions when searching...
-(eshell/alias "search" "pacman -Ss $1")
-;; (eshell/alias "update-wallpaper" "")
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use
