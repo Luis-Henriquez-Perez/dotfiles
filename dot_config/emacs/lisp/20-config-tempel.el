@@ -26,11 +26,11 @@
 ;;
 ;;; Code:
 ;;;;;; tempel
-(oo-bind 'tempel-map :ie "C-j" #'tempel-next)
-(oo-bind 'tempel-map :ie "C-k" #'tempel-previous)
-(oo-bind 'tempel-map :ie "TAB" #'tempel-next)
-(oo-bind 'tempel-map :ie [backtab] #'tempel-previous)
 
+(oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
+(oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
+(oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
+(oo-bind 'tempel-map :ieg [backtab] #'tempel-previous)
 ;;; provide
 (provide '20-config-tempel)
 ;;; 20-config-tempel.el ends here
