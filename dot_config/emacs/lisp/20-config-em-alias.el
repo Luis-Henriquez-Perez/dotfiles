@@ -56,6 +56,7 @@
 
 ;; TODO: Do not show me descriptions when searching...
 (eshell/alias "search" "pacman -Ss $1")
+(eshell/alias "search-quiet" "pacman -Ssq $1")
 
 (eshell/alias "update-system" "sudo pacman -Syu")
 (eshell/alias "update-email" "mbsync -a")
