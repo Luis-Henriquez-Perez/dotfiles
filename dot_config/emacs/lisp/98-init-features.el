@@ -548,48 +548,6 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
-;;;; vertico
-(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
-;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
-
-;; Try to split up loading.
-(defhook! emacs-startup-hook&require-vertico ()
-  (require 'vertico nil t))
-
-(oo-add-hook 'on-first-input-hook #'vertico-mode)
-
-(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
-
-(opt! vertico-quick1 "asdf")
-(opt! vertico-quick2 "jkl;")
-
-(opt! vertico-count-format '("%-6s " . "%2$s"))
-(opt! vertico-count 15)
-
-(opt! orderless-matching-styles '(orderless-initialism
-                                  orderless-regexp))
-
-(setq vertico-buffer-display-action
-      '(display-buffer-in-direction
-        (direction . below)
-        (window-height . ,(+ 3 vertico-count))))
-
-(defhook! vertico-mode-hook&enable-orderless ()
-  (when (require 'orderless nil t)
-    (setq completion-styles '(orderless))
-    (setq completion-category-defaults nil)
-    (setq completion-category-overrides '((file (styles partial-completion))))))
-
-(oo-popup-at-bottom "\\*Vertico")
-
-(oo-bind 'vertico-map :i "TAB" #'vertico-next)
-(oo-bind 'vertico-map :i "C-k" #'vertico-previous)
-(oo-bind 'vertico-map :i "C-j" #'vertico-next)
-(oo-bind 'vertico-map :i ";" #'vertico-quick-exit)
-(oo-bind 'vertico-map :i "C-;" #'vertico-quick-exit)
-(oo-bind 'vertico-map :i [backtab] #'vertico-previous)
-
-(oo-bind 'vertico-map :i "C-o" #'embark-act)
 ;;;; which-key
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 
@@ -609,7 +567,10 @@
 (opt! which-key-show-prefix 'top)
 ;;;; ws-butler
 (oo-add-hook 'prog-mode-hook #'ws-butler-mode)
+;;;; vertico
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
 
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 ;;; uncategorized
 ;;;; initial buffer choice
 (defvar oo-initial-buffer-choice-hook nil
