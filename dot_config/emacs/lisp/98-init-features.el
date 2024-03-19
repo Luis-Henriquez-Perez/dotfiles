@@ -707,6 +707,10 @@ For what buffer is displayed in the case of a boolean see
 
 (oo-add-hook 'prog-mode-hook #'hs-minor-mode)
 
+;; This outputs the message and causes a slight delay when opening a file in
+;; prog-mode for the first time.
+;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+
 (oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
 
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
