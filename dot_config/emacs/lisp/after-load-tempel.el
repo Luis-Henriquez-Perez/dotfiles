@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;;;;;; tempel
+;;;; tempel
 (oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
 (oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
 (oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
