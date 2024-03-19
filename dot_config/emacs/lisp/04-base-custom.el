@@ -58,6 +58,16 @@ must be evaluated with `lexical-binding' enabled."
       (when first-call-p
         (setq first-call-p nil)
         (apply fn args)))))
+;;;; if-not!
+;; More often than not when I am using `if', the default else clause is simpler than
+;; the then clause.  And in that case I end up having to wrap the then clause in
+;; a `progn'. I want to invert the else clause and the if clause so I do not
+;; need to include the extra `progn' in that case.  I also considered just
+;; writing a macro that expands to an `if' with the then and else reversed, but
+;; I think it might be confusing.
+(defmacro if-not! (cond then &rest else)
+  (declare (indent 2))
+  `(if (not ,cond) ,then ,@else))
 ;;;; logging
 ;; TODO: figure out how to change the log format
 ;; I do not really utilize the logging enough yet because I need to understand
@@ -77,16 +87,6 @@ must be evaluated with `lexical-binding' enabled."
 
 (defmacro fatal! (msg &rest meta)
   `(lgr-fatal oo-lgr ,msg ,@meta))
-;;;; if-not!
-;; More often than not when I am using `if', the default else clause is simpler than
-;; the then clause.  And in that case I end up having to wrap the then clause in
-;; a `progn'. I want to invert the else clause and the if clause so I do not
-;; need to include the extra `progn' in that case.  I also considered just
-;; writing a macro that expands to an `if' with the then and else reversed, but
-;; I think it might be confusing.
-(defmacro if-not! (cond then &rest else)
-  (declare (indent 2))
-  `(if (not ,cond) ,then ,@else))
 ;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
@@ -96,6 +96,10 @@ must be evaluated with `lexical-binding' enabled."
 (defun oo-report-error-fn (fn)
   "Return a function that will report error instead of raising an error."
   (oo-condition-case-fn fn (lambda (e &rest _) (oo-report-error fn e))))
+;;;; silently
+(defun oo-funcall-silently (fn &rest args)
+  "Call FN with ARGS without producing any output."
+  (shut-up (apply fn args)))
 ;;;; advices
 ;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
 ;;;;; oo-advice-how
@@ -134,10 +138,6 @@ advice names for HOW.")
   `(progn
      (fset ',name (lambda ,args (block! ,@body)))
      (advice-add ',symbol ,how ',name)))
-;;;;; silently
-(defun oo-funcall-silently (fn &rest args)
-  "Call FN with ARGS without producing any output."
-  (shut-up (apply fn args)))
 ;;;; hooks
 ;;;;; oo-add-hook
 ;; No anonymous hooks allowed.
