@@ -25,6 +25,18 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+;;;; settings
+;; By default =evil= displays the current state in the echo area.  I think some
+;; indicator for the current state is necessary but I don't want to do it via
+;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
+;; modeline as well.
+(opt! evil-echo-state nil)
+
+(opt! evil-move-cursor-back nil)
+
+(opt! evil-move-beyond-eol nil)
+
+(opt! evil-search-wrap nil)
 ;;;; minibuffer
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
@@ -73,6 +85,11 @@
 
 (oo-bind :n "J" #'evil-scroll-page-down)
 (oo-bind :n "K" #'evil-scroll-page-up)
+;;;; uncategorized
+;;;;; evil-surround
+(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
+
+(oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;; provide
 (provide '99-after-load-evil)
 ;;; 99-after-load-evil.el ends here

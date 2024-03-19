@@ -27,14 +27,29 @@
 ;;; Code:
 (require 'eshell-z)
 (require 'eshell-up)
+;;;; open eshell at bottom
+(oo-popup-at-bottom "\\*eshell")
+;;;; hooks
+(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
 
+(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
+;;;; prevent eshell from printing out messages on load
+;; Eshell prints various messages about loading modules.  These messages
+;; originate from the function [[][eshell-unload-all-modules]].  I would rather
+;; not see these messages.
+(oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
+;; At first I thought the culprit was this function, but I was wrong.  The
+;; printing comes from =eshell-mode=.  In any case, however, I silence it as
+;; well.
+(oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
 ;;;; TODO: configure eshell prompt
 (autoload 'epe-theme-lambda "eshell-prompt-extras")
+(opt! eshell-banner-message "")
 (opt! eshell-highlight-prompt nil)
 (opt! eshell-prompt-function 'epe-theme-lambda)
-;; (oo-text-abbrev "incs" "increase")
-;; (oo-text-abbrev "decs" "deccrease")
-;;;; boost eshell history-size
+;;;; eshell history
+(opt! eshell-hist-ignoredups t)
+;; boost eshell history-size
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
 ;;;; clear

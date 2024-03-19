@@ -39,7 +39,7 @@
 ;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
 ;; because the maps are overridden by evil.  In order for them to work, we need
 ;; to boost give the maps greater precedence.
-(defafter! make-corfu-map-an-overriding-map (evil corfu)
+(defafter! make-corfu-map-an-overriding-map (evil)
   "Make `corfu-map' into an overriding map."
   (evil-make-overriding-map corfu-map)
   (advice-add 'corfu--setup :after 'evil-normalize-keymaps)

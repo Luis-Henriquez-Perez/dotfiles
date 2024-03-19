@@ -252,35 +252,7 @@
 ;;;; orglink
 (oo-add-hook 'prog-mode-hook #'orglink-mode)
 ;;;; eshell
-;;;;; hooks
-(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
-
-(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
-;; run eat inside of eshell
-;; For `eat-eshell-mode'.
-(oo-add-hook 'eshell-load-hook #'eat-eshell-mode)
-;;;;; miscellaneous
 (oo-bind 'oo-app-map "e" #'eshell)
-
-(oo-popup-at-bottom "\\*eshell")
-;;;;; specify locations for files
-;; (setq eshell-directory-name (concat oo-cache-dir "eshell/"))
-
-;; (set! eshell-history-file-name (concat eshell-directory-name "history"))
-;;;;; don't display a banner message
-(opt! eshell-banner-message "")
-;;;;; eshell history
-(opt! eshell-hist-ignoredups t)
-;;;;; prevent eshell from printing out messages on load
-;; Eshell prints various messages about loading modules.  These messages
-;; originate from the function [[][eshell-unload-all-modules]].  I would rather
-;; not see these messages.
-(oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
-
-;; At first I thought the culprit was this function, but I was wrong.  The
-;; printing comes from =eshell-mode=.  In any case, however, I silence it as
-;; well.
-(oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
 ;;;; evil
 (oo-add-hook 'emacs-startup-hook #'evil-mode)
 
@@ -289,18 +261,6 @@
 (defhook! after-init-hook&load-evil ()
   [:depth 10]
   (require 'evil nil t))
-
-;; By default =evil= displays the current state in the echo area.  I think some
-;; indicator for the current state is necessary but I don't want to do it via
-;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
-;; modeline as well.
-(opt! evil-echo-state nil)
-
-(opt! evil-move-cursor-back nil)
-
-(opt! evil-move-beyond-eol nil)
-
-(opt! evil-search-wrap nil)
 ;;;; evil-cleverparens
 (oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 
@@ -321,10 +281,6 @@
 ;; (oo-bind :nv "f" #'oo-goto-char)
 ;;;; evil-operator
 ;; (oo-bind :n "gr" #'evil-operator-eval)
-;;;; evil-surround
-(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
-
-(oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;;; expand-region
 (oo-bind :v "V" #'er/contract-region)
 (oo-bind :v "v" #'er/expand-region)
