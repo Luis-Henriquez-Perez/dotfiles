@@ -37,10 +37,6 @@
 ;;;; boost eshell history-size
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
-;;;; run eat inside of eshell
-;; For `eat-eshell-mode'.
-;; (oo-add-hook 'eshell-load-hook #'eat-eshell-mode)
-;;;;
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use

@@ -292,10 +292,16 @@
 (opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
 (opt! emms-directory (expand-file-name "emms/" oo-var-dir))
 ;; (require 'emms-player-mpv)
+;;;; orglink
+(oo-add-hook 'prog-mode-hook #'orglink-mode)
 ;;;; eshell
+;;;;; hooks
 (oo-add-hook 'eshell-mode-hook #'abbrev-mode)
 
 (oo-add-hook 'eshell-mode-hook #'smartparens-mode)
+;; run eat inside of eshell
+;; For `eat-eshell-mode'.
+(oo-add-hook 'eshell-load-hook #'eat-eshell-mode)
 ;;;;; miscellaneous
 (oo-bind 'oo-app-map "e" #'eshell)
 
