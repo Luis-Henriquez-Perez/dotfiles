@@ -32,21 +32,6 @@
 ;;; feature-specific customization
 ;;;; notmuch
 (opt! notmuch-sort-oldest-first nil)
-;;;; evil operators
-(autoload 'evil-operator-eval "evil-extra-operator")
-(autoload 'evil-operator-eval-replace "evil-extra-operator")
-(oo-bind 'oo-leader-map "er" #'evil-operator-eval-replace :wk "eval and replace")
-(oo-bind 'oo-leader-map "ee" #'evil-operator-eval :wk "eval")
-;;;; evil-textobj-line
-;; TODO: create an abbrev to today's date.
-;; TODO: there needs to be a standard for setting today.
-;; While I was writing a code that would automate adding package headers to
-;; files, I wanted to surround each line with quotes and that is when I thought
-;; I would like a line text-object.
-(autoload #'evil-inner-line "evil-textobj-line")
-(autoload #'evil-a-line "evil-textobj-line")
-(oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
-(oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
 (opt! reb-re-syntax 'rx)
@@ -377,95 +362,6 @@
 ;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
 ;;;; magit
 (oo-call-after-load '(evil magit) #'evil-magit-init)
-;;;; no-littering
-(setq no-littering-etc-directory oo-etc-dir)
-(setq no-littering-var-directory oo-var-dir)
-
-(require 'no-littering)
-;;;; org
-;;;;; org-superstar
-(oo-add-hook 'org-mode-hook #'org-superstar-mode)
-
-(opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
-
-(opt! org-superstar-leading-bullet ?\s)
-
-(opt! org-superstar-special-todo-items t)
-;;;;; org-appear
-(oo-add-hook 'org-mode-hook #'org-appear-mode)
-
-(opt! org-appear-autolinks t)
-;;;;; org-refile
-(opt! org-refile-allow-creating-parent-nodes t)
-
-;; The variable =org-refile-targets= specifies the places from which information is
-;; taken to create the list of possible refile targets.  So, for example,
-(opt! org-refile-targets '((oo-directory-files :maxlevel . 10)))
-
-(opt! org-outline-path-complete-in-steps nil)
-
-(opt! org-refile-use-cache nil)
-
-;; Without this setting, you can't actually refile to a generic file with refiling;
-;; you can only refile to existing headings within that file.  The way I use
-;; refiling, I'm refiling to files most of the time.
-(opt! org-refile-use-outline-path 'file)
-
-;; Although it is possible to have a parent headline that also has a source
-;; block, I prefer not to.  I guess it is a stylistic thing.
-(opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
-;;;;; org-id
-(opt! org-id-track-globally t)
-(opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
-
-;; The way I see it, if I can have a universally unique identifier that also tells
-;; me the date my headline was created; we hit two birds with one stone.  That way I
-;; never need a =date-created= property.
-(opt! org-id-method 'ts)
-
-(opt! org-id-link-to-org-use-id t)
-;;;;; org-src
-(oo-popup-at-bottom "\\*Org Src")
-
-(opt! org-edit-src-persistent-message nil)
-
-;; (adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
-
-;; (adjoin! org-src-lang-modes '("lua" . lua))
-
-(opt! org-src-ask-before-returning-to-edit-buffer nil)
-
-(opt! org-src-preserve-indentation t)
-(opt! org-edit-src-content-indentation 0)
-
-(opt! org-src-window-setup 'plain)
-
-(oo-bind :alt #'org-edit-src-code #'oo-dwim-edit-src-code)
-(oo-bind :h "," #'org-edit-src-code :localleader t)
-;; (oo-bind 'org-mode-map "e" #'org-edit-src-code)
-                                        ;(oo-bind ':h "es" #'org-edit-src-code :wk "source block" :localleader t)
-
-(oo-bind 'org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-(oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-(oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-;;;;; org-capture
-(oo-popup-at-bottom "CAPTURE[^z-a]+")
-
-(oo-bind 'oo-quick-map "j" #'org-capture :wk "capture")
-(oo-bind 'oo-app-map "a" #'org-capture :wk "capture")
-(oo-bind 'oo-app-map "j" #'org-capture :wk "capture")
-
-(opt! org-archive-save-context-info nil)
-
-(opt! org-archive-location (concat org-directory "archive.org::"))
-
-(oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
-
-
-(opt! evilem-style 'at)
-(opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-;;;;; miscellaneous
-(opt! org-hide-emphasis-markers t)
 ;;;; outli
 (oo-add-hook 'prog-mode-hook #'outli-mode)
 ;;;; rainbow-delimiters
@@ -608,16 +504,6 @@ For what buffer is displayed in the case of a boolean see
 (oo-add-hook 'text-mode-hook #'abbrev-mode)
 
 (oo-add-hook 'prog-mode-hook #'abbrev-mode)
-;;;; bindings
-(oo-bind :nm "+" #'text-scale-increase)
-(oo-bind :nm "-" #'text-scale-decrease)
-
-(oo-bind 'oo-toggle-map "r" #'read-only-mode)
-(oo-bind 'oo-toggle-map "t" #'load-theme)
-(oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
-
-(oo-bind 'oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
-(oo-bind 'oo-toggle-map "P" #'profiler-stop)
 ;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new
 ;; one.  For this reason, I make sure to disable any enabled themes before applying
