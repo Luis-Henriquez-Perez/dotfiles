@@ -4,16 +4,23 @@ because it is short and something that I thought would not likely to be the
 prefix for an emacs package.  Oh, and I thought that the characters =oo= were
 smooth an easy to read as opposed to something like =xx= which I had tried prior.
 I do not know why I did not do just a single =o= though I remember having thought
-about it.  A while afterwards.
+about it.  A while later when I was writing this I wanted some gimmick as I see
+several configurations have like [[][spacemacs]], [[][doom emacs]].
 * points focus
-These are the things I valued as I wrote this configuration.
+These are the things I valued as I wrote this configuration.  The things I
+thought about while writing them and that influenced.
 ** performance
-When I was desiding how to structure my configuration I thought of the most
+When I was deciding how to structure my configuration I thought of the most
 performant setup.
 ** expressive library
 ** tests
+I will be honest, I hate writing tests, but I cannot deny that they are crucial
+for any non-trivial program--and my configuration, with its complex macros such
+as [[][block!]] is such a program.  When something goes wrong I atleast have a
+crutch to fallback on.  And indeed I have found many bugs and many unexpected
+behaviors while writing and executing tests.
 ** does it actually improve my productivity?
-It is very important to keep this in mind.
+It is very important to keep this in mind.  It is so easy to.
 * technical details
 In general terms, to boost minimize emacs startup you want to load as much of your
 configuration as possible with =eval-after-load= (or some variant), minimizing the
@@ -22,7 +29,6 @@ that are evaluated at startup to be comprised of setting or declaring variables,
 defining functions and macros, or setting hooks--all cheap operations.  This in
 mind,
 ** lisp directory structure
-
 The lisp directory has three kinds of files. D= represents an integer from =0= to
 =9=.  Emacs loads file in lexigraphical order by default.  I use this naming
 system for two things.  One is I want to make sure that I never accidentally use
@@ -45,7 +51,11 @@ There are files that need to be loaded after said feature is loaded.  These
 files are not "safe" to load during startup because they rely on
 macros/functions/variables from FEATURE.  Evaluation them would either result in
 an error for trying to use FEATURE stuff without FEATURE being loaded yet; or it
-would inadvertently load FEATURES and perform computations pre-emptively.
+would inadvertently load FEATURES and perform computations pre-emptively.  I
+prefix them with =99= to ensure--or at least greatly increase the likelihood--that
+the name will not clash with some external or built-in feature.  The number is
+also choosen to be larger than the other kinds of files bcause these should be
+loaded later than these.
 ** base files
 Within the base files there is =01-base-lib= which is loaded second only to
 =00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
