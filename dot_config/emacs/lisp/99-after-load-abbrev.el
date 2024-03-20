@@ -95,6 +95,7 @@
 ;; (oo-text-abbrev ";;" ".")
 
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "readme" "README")
 (oo-text-abbrev "sdnt" "should not")
 (oo-text-abbrev "cme" "come")
 (oo-text-abbrev "imed" "immediately")
