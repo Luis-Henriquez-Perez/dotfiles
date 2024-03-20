@@ -1,4 +1,4 @@
-;;; 99-after-load-idle-magit.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-magit.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,5 +28,5 @@
 ;;;; magit
 (oo-call-after-load 'evil #'evil-magit-init)
 ;;; provide
-(provide '99-after-load-idle-magit)
-;;; 99-after-load-idle-magit.el ends here
+(provide '99-after-load-magit)
+;;; 99-after-load-magit.el ends here
