@@ -28,8 +28,6 @@
 (opt! savehist-save-minibuffer-history t)
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
-;; This should be already taken care of by no-littering.
-(opt! savehist-file (expand-file-name "savehist" oo-data-dir))
 
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
 
