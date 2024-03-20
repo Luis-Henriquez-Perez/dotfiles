@@ -80,13 +80,8 @@
 (oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
 (oo-bind :n "gl" #'lispyville-comment-and-clone-dwim)
 
-;; (oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
-;; (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
-
-;;;; macrostep
-(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
-(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
-(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+(oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
+(oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
 ;;;; evil-easymotion
 ;; The problem with these keys is that they interfere with keyboard macros.  Let
 ;; me explain--when you use avy, it is not necessarily the case that the
@@ -134,24 +129,7 @@
 ;; the target file.  If you are in the source file, you open the target file and
 ;; vice versa.
 (oo-bind 'oo-dotfile-map "o" #'chezmoi-open-other)
-;;;; helpful
-(oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
-(oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
-(oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
-(oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
 ;;;; consult
-(opt! consult-preview-key nil)
-
-(opt! consult-fontify-preserve nil)
-
-(defun! oo-display-buffer ()
-  (interactive)
-  (require 'consult)
-  (set! consult--buffer-display #'display-buffer)
-  (call-interactively #'consult-buffer))
-
-(oo-bind :alt #'display-buffer #'oo-display-buffer)
-
 (oo-bind 'oo-find-map "k" #'consult-bookmark :wk "bookmark")
 (oo-bind 'oo-find-map "b" #'consult-bookmark :wk "bookmark")
 
@@ -172,6 +150,22 @@
 (oo-bind :alt #'man #'consult-man :feature 'consult)
 
 (oo-bind 'oo-miscellany-map "l" #'consult-bookmark)
+
+(opt! consult-preview-key nil)
+
+(opt! consult-fontify-preserve nil)
+
+(defun! oo-display-buffer ()
+  (interactive)
+  (require 'consult)
+  (set! consult--buffer-display #'display-buffer)
+  (call-interactively #'consult-buffer))
+
+(oo-bind :alt #'display-buffer #'oo-display-buffer)
+;;;; macrostep
+(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
+(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
+(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
 ;;; provide
 (provide '90-keybindings)
 ;;; 90-keybindings.el ends here
