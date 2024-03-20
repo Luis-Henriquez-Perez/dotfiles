@@ -144,6 +144,7 @@
 (oo-text-abbrev "dat" "that")
 (oo-text-abbrev "incs" "increase")
 (oo-text-abbrev "decs" "deccrease")
+;; TODO: Add a condition preventng it from expanding if I am writing a file path.
 (oo-text-abbrev "config" "configuration")
 (oo-text-abbrev "obv" "obviously")
 (oo-text-abbrev "appr" "appropriate")
