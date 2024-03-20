@@ -97,7 +97,7 @@
              ;; the end if there is one.  We will re-add it now.
              (goto-char (point-max))
              (insert (format ";;; provide\n(provide '%s)\n%s" feature footer-commentary)))))))
-
+;;;###autoload
 (defun oo/ensure-provide ()
   (interactive)
   (oo-ensure-provide (buffer-file-name)))
@@ -144,20 +144,10 @@
           (goto-char (match-end 0))
         (insert ";;; Code:\n")))))
 
+;;;###autoload
 (defun oo/ensure-file-header ()
   (interactive)
   (oo-ensure-file-header))
-
-;; (defun eshell/eboilerplate (file &rest files)
-;;   (mapc #'oo-ensure-file-header (cons file files))
-;;   (mapc #'oo-ensure-file-header (cons file files)))
-
-;; (defalias 'eshell/emacs-boilerplate 'eshell/eboilerplate)
-
-;; (defun oo/ensure-boilerplate ()
-;;   "Ensure that."
-;;   (interactive)
-;;   (mapc () files))
 ;;; TODO: when switching to scratch buffer, set it to emacs-lisp-mode
 ;;; provide
 (provide 'xx-package-boilerplate)
