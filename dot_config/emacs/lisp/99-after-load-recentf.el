@@ -34,6 +34,7 @@
 
 (oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
+(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
 (opt! recentf-filename-handlers '(file-truename))
 

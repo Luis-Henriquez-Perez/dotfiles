@@ -131,7 +131,6 @@ For what buffer is displayed in the case of a boolean see
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
-(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 ;;;; feature-specific customization
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
