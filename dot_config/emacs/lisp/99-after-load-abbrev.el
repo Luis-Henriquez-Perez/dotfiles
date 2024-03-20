@@ -90,7 +90,14 @@
 (oo-text-abbrev "i" "I")
 (oo-text-abbrev "luis" "Luis")
 ;;;;;; generic
+;; This will not work because ";" is not a work constituent.  I need to use
+;; `aas' for this or come up with some other solution.
 ;; (oo-text-abbrev ";;" ".")
+
+;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "cme" "come")
+(oo-text-abbrev "imed" "immediately")
+(oo-text-abbrev "cesly" "successfully")
 (oo-text-abbrev "owoto" "one way or the other")
 (oo-text-abbrev "configs" "configurations")
 (oo-text-abbrev "espace" "escape")
