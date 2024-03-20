@@ -30,6 +30,12 @@
 (require 'buttercup)
 (require 'init)
 
+(describe "oo-advice-components"
+  (it "should return nil if a symbol is not an advice symbol"
+    (expect (oo-advice-components 'not-advice) :to-be nil))
+  (it "should return (ADVISEE ADVICE-ABBREV FUNCTION) if given an advice symbol"
+    (expect (oo-advice-components 'advisee@FAfunction) :to-equal '(advisee FA function))))
+
 (describe "oo-first-success"
   (it "should return nil if (fn elt) is never non-nil"
     (expect (oo-first-success #'not '(1 2 3 4)) :to-be nil))
@@ -49,97 +55,90 @@
     (expect (if-not! nil 0 1) :to-equal 0)
     (expect (if-not! t 0 1) :to-equal 1)))
 
-;; (xdescribe "oo-autoload-action-function"
-;;   (it "should call a function"))
-
-(xdescribe "opt!"
-  (block!
-    (it "should set the value of variable variable is unbound"
-      (expect (opt! foo 1)))
-    (it "should not set anything if the feature is not loaded"
-      (opt! two 2)
-      (expect two))
-    (it "should have added to the")
-    (it "should n")
-    (opt! foo 1)
-    (expect )))
-
-(xdescribe "oo-report-error-fn"
-  (it "should report an error when")
-  (it "should"))
-
-(xdescribe "defhook!"
-  ;; (it "should report an error when")
-  (it "should"
-    (oo-add-hook)))
-
 (describe "oo-hook"
   (it "should return nil when symbol has no hook"
     (expect nil :to-be (oo-hook 'foo)))
   (it "should return hook if symbol has a hook"
     (expect 'prog-mode-hook :to-be (oo-hook 'prog-mode-hook&foo))))
 
-;; (ert-deftest oo-add-hook--)
-(describe "oo-add-hook"
-  ;; (oo-add-hook 'test-hook #'foo)
-  ;; (expect )
-  ;; (block!
-  ;;   (gensym! fake-hook fake-fn)
-  ;;   (set! expected-name (format "%s&%s" fake-hook fake-fn))
-  ;;   (cl-progv (list fake-hook) (list nil)
-  ;;     (set! hook-sym (oo-add-hook fake-hook fake-fn))
-  ;;     (it "should return the new hook symbol"
-  ;;       (expect (symbolp hook-sym))
-  ;;       (expect (symbol-name hook-sym) :to-equal expected-name))
-  ;;     ;; (describe "oo-remove-hook"
-  ;;     ;;   (it "should also infer hook if named"
-  ;;     ;;     (expect (oo-remove-hook hook-sym)))
-  ;;     ;;   (it "should remove hook normally when given"
-  ;;     ;;     (expect (oo-remove-hook 'foo-mode-hook #'fake-fn))))
-  ;;     ))
-  )
+;; (xdescribe "oo-add-hook"
+;;   ;; (oo-add-hook 'test-hook #'foo)
+;;   ;; (expect )
+;;   ;; (block!
+;;   ;;   (gensym! fake-hook fake-fn)
+;;   ;;   (set! expected-name (format "%s&%s" fake-hook fake-fn))
+;;   ;;   (cl-progv (list fake-hook) (list nil)
+;;   ;;     (set! hook-sym (oo-add-hook fake-hook fake-fn))
+;;   ;;     (it "should return the new hook symbol"
+;;   ;;       (expect (symbolp hook-sym))
+;;   ;;       (expect (symbol-name hook-sym) :to-equal expected-name))
+;;   ;;     ;; (describe "oo-remove-hook"
+;;   ;;     ;;   (it "should also infer hook if named"
+;;   ;;     ;;     (expect (oo-remove-hook hook-sym)))
+;;   ;;     ;;   (it "should remove hook normally when given"
+;;   ;;     ;;     (expect (oo-remove-hook 'foo-mode-hook #'fake-fn))))
+;;   ;;     ))
+;;   )
 
-(xdescribe "oo-add-advice"
-  (set! fake-hook (cl-gensym "fake-hook"))
-  (set! oo-errors nil)
-  (cl-progv (list fake-hook) (list nil)
-    (set! return-value (oo-add-advice))
-    (expect return-value :to-equal ')
-    (should (symbol-value fake-hook))))
+;; (xdescribe "oo-autoload-action-function"
+;;   (it "should call a function"))
 
-(xdescribe "oo-advice"
-  (it "should return the advice"
-    (expect (oo-advice 'some-fn@funcall-quietly) :to-be 'funcall-quietly))
-  (it "should"
-    (expect nil :to-be (oo-advice 'some-fn))))
+;; (xdescribe "oo-add-advice"
+;;   (set! fake-hook (cl-gensym "fake-hook"))
+;;   (set! oo-errors nil)
+;;   (cl-progv (list fake-hook) (list nil)
+;;     (set! return-value (oo-add-advice))
+;;     (expect return-value :to-equal ')
+;;     (should (symbol-value fake-hook))))
 
-(xdescribe "oo-remove-advice"
-  (it "should remove advice normally"
-    (expect (oo-remove-advice)))
-  (it "should also infer if advice is named"
-    (expect (oo-remove-advice 'some-fn@funcall-quietly))))
+;; (xdescribe "oo-advice"
+;;   (it "should return the advice"
+;;     (expect (oo-advice 'some-fn@funcall-quietly) :to-be 'funcall-quietly))
+;;   (it "should"
+;;     (expect nil :to-be (oo-advice 'some-fn))))
 
-(describe "oo-advice-components"
-  (it "should return nil if a symbol is not an advice symbol"
-    (expect (oo-advice-components 'not-advice) :to-be nil))
-  (it "should return (ADVISEE ADVICE-ABBREV FUNCTION) if given an advice symbol"
-    (expect (oo-advice-components 'advisee@FAfunction) :to-equal '(advisee FA function))))
+;; (xdescribe "oo-remove-advice"
+;;   (it "should remove advice normally"
+;;     (expect (oo-remove-advice)))
+;;   (it "should also infer if advice is named"
+;;     (expect (oo-remove-advice 'some-fn@funcall-quietly))))
 
-;; The problem is that `it' expands to a function.  For sure I am conflicted
-;; about using `buttercup' because it does not allow me to let bind
-;; freely since `it' and `expect' expand to functions.  Instead I have to use
-;; its own Domain-Specific-Language mechanism for defining variables which I do
-;; not like.  Whereas if I were just using `ert' I could just have `should'
-;; forms arbitrarily nested within the lisp forms.
-(xdescribe "oo-candidate-features"
-  :var ((fake-path '("a/b/c/evil" "a/b/c/helm" "a/b/c/ivy")))
-  ;; Build a list of fake package paths.
-  (it "should return a list of candidate features"
-    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil)))
-  (push "a/b/c/evil-horse" fake-path)
-  (push "a/b/c/evil-mouse-state" fake-path)
-  (it "should sort the resulting list by shortest"
-    (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil))))
+;; ;; The problem is that `it' expands to a function.  For sure I am conflicted
+;; ;; about using `buttercup' because it does not allow me to let bind
+;; ;; freely since `it' and `expect' expand to functions.  Instead I have to use
+;; ;; its own Domain-Specific-Language mechanism for defining variables which I do
+;; ;; not like.  Whereas if I were just using `ert' I could just have `should'
+;; ;; forms arbitrarily nested within the lisp forms.
+;; (xdescribe "oo-candidate-features"
+;;   :var ((fake-path '("a/b/c/evil" "a/b/c/helm" "a/b/c/ivy")))
+;;   ;; Build a list of fake package paths.
+;;   (it "should return a list of candidate features"
+;;     (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil)))
+;;   (push "a/b/c/evil-horse" fake-path)
+;;   (push "a/b/c/evil-mouse-state" fake-path)
+;;   (it "should sort the resulting list by shortest"
+;;     (expect (oo-candidate-features 'evil-insert-state fake-path) :to-equal '(evil))))
+
+;; (xdescribe "opt!"
+;;   (block!
+;;     (it "should set the value of variable variable is unbound"
+;;       (expect (opt! foo 1)))
+;;     (it "should not set anything if the feature is not loaded"
+;;       (opt! two 2)
+;;       (expect two))
+;;     (it "should have added to the")
+;;     (it "should n")
+;;     (opt! foo 1)
+;;     (expect )))
+
+;; (xdescribe "oo-report-error-fn"
+;;   (it "should report an error when")
+;;   (it "should"))
+
+;; (xdescribe "defhook!"
+;;   ;; (it "should report an error when")
+;;   (it "should"
+;;     (oo-add-hook)))
 
 (provide '04-base-custom-test)
 ;;; 04-base-custom-test.el ends here
