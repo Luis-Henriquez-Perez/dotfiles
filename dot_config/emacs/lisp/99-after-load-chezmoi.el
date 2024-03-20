@@ -25,13 +25,23 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;; TODO: integrate with =defhook= once I figure out how that is going to work.
-;; TODO: I need to figure out how to lazy require chezmoi and f.  I get the
-;; error that the features have not been loaded.
-(defhook! after-save-hook&chezmoi-maybe-write-file ()
-  (set! file (expand-file-name (buffer-file-name)))
-  (when (and file (member file (mapcar #'expand-file-name (chezmoi-managed))))
-    (chezmoi-write file)))
+;;;; chezmoi
+;; First thing to do is trigger chezmoi commands via bindings.  One of the key
+;; concepts needed with chezmoi is the concept of source state and target state.
+;; Source state is the version-controlled file that chezmoi.  Target state is
+;; the file that is written to the users filesystem to reflect.
+;;;;; TODO maybe have a way to sync all files
+;; I will be honest.  Sometimes I forget which target files I have edited and I
+;; want to sync them to make sure to.
+;;;;;;; TODO automatically use =chezmoi= to write files
+;; I need the command to write the source from the target.  The command
+;; =chezmoi-apply= does this but I would like it to do it automatically if I am
+;; already editing a target-file.
+(defhook! after-save-hook&chezmoi-write-maybe (&rest _)
+  (when (aand (require 'chezmoi nil t)
+              (buffer-file-name)
+              (chezmoi-target-file it))
+    (with-demoted-errors "error:%S" (chezmoi-write))))
 ;;; provide
 (provide '99-after-load-chezmoi)
 ;;; 99-after-load-chezmoi.el ends here

@@ -60,6 +60,8 @@
 
 (eshell/alias "update-system" "sudo pacman -Syu")
 (eshell/alias "update-email" "mbsync -a")
+;; chezmoi apply ~/.config/emacs/lisp
+;; chezmoi apply ~/.configuration/
 ;; (eshell/alias "update-wallpaper" "")
 ;;; provide
 (provide '99-after-load-em-alias)
