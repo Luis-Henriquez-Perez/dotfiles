@@ -267,18 +267,19 @@
   (and (equal major-mode 'emacs-lisp-mode)
        (not (oo--in-string-or-comment-p))))
 
-(defun oo--abbrev-insert-snippet (snippet-name)
-  (tempel-insert snippet-name)
-  ;; Delete the last space.
-  (delete-backward-char 1)
-  ;; Ensure we're in insert state.
-  (when (bound-and-true-p evil-mode)
-    (evil-insert-state 1)))
+;; (defun oo--abbrev-insert-snippet (snippet-name)
+;;   (tempel-insert snippet-name)
+;;   ;; Delete the last space.
+;;   (delete-backward-char 1)
+;;   ;; Ensure we're in insert state.
+;;   (when (bound-and-true-p evil-mode)
+;;     (evil-insert-state 1)))
 ;; Problems.
 ;; 1. the template starts with a space
 ;; 2. I am having trouble with the keybindings
-(define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
-(define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+;; (define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+;; (define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+(define-abbrev global-abbrev-table "todo" ";; TODO:" nil :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
 ;;;;; eshell
 (defun oo--enable-eshell-mode-abbrev-p ()
   "Return non-nil if elisp mode abbrev should be enabled."
