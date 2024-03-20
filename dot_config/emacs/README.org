@@ -1,19 +1,21 @@
 * emacs
 OO emacs is an involved emacs configuration.
 * points focus
+These are the things I valued as I wrote this configuration.
 ** performance
+When I was desiding how to structure my configuration I thought of the most
+performant setup.
 ** expressive library
 ** tests
+** does it actually improve my productivity?
+It is very important to keep this in mind.
 * technical details
-This is a basic implementation.
-** naming
-*** naming system of advices
-*** naming system of hooks
-** base files
-Within the base files there is =01-base-lib= which is loaded second only to
-=00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
-is a basic library of generic convenience macros and functions I can rely on
-before package installation occurs.  However =03=
+In general terms, to boost minimize emacs startup you want to load as much of your
+configuration as possible with =eval-after-load= (or some variant), minimizing the
+lisp code that is evaluated at startup.  You want the bulk of the lisp forms
+that are evaluated at startup to be comprised of setting or declaring variables,
+defining functions and macros, or setting hooks--all cheap operations.  This in
+mind,
 ** lisp directory structure
 
 The lisp directory has three kinds of files. D= represents an integer from =0= to
@@ -39,6 +41,14 @@ files are not "safe" to load during startup because they rely on
 macros/functions/variables from FEATURE.  Evaluation them would either result in
 an error for trying to use FEATURE stuff without FEATURE being loaded yet; or it
 would inadvertently load FEATURES and perform computations pre-emptively.
+** base files
+Within the base files there is =01-base-lib= which is loaded second only to
+=00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
+is a basic library of generic convenience macros and functions I can rely on
+before package installation occurs.  However =03=
+** naming
+*** naming system of advices
+*** naming system of hooks
 ** commentary on process
 It is hard to know how to structure things and where to put them.  There are
 always benefits and drawbacks to structuring a configuration one way over the
