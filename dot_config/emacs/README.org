@@ -1,17 +1,26 @@
-* opinion on external packages
-One one side of the spectrum there is the opinion.
-* naming system of advices
-* naming system of hooks
-* base files
+* emacs
+OO emacs is an involved emacs configuration.
+* points focus
+** performance
+** expressive library
+** tests
+* technical details
+This is a basic implementation.
+** naming
+*** naming system of advices
+*** naming system of hooks
+** base files
 Within the base files there is =01-base-lib= which is loaded second only to
 =00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
 is a basic library of generic convenience macros and functions I can rely on
 before package installation occurs.  However =03=
-* lisp directory structure
-The lisp directory has three kinds of files.
-=D= represents an integer from =0= to =9=.  Emacs loads file in lexigraphical
-order by default.  I use this naming system to define the order in which the
-file should be loaded so that I do not have to.
+** lisp directory structure
+
+The lisp directory has three kinds of files. D= represents an integer from =0= to
+=9=.  Emacs loads file in lexigraphical order by default.  I use this naming
+system for two things.  One is I want to make sure that I never accidentally use
+the name of a built-in feature or a package feature, prefixing my filles with a
+two digit number almost guarantees that the name will not be.
 
 - DD-base-NAME
 These files are for my emacs setup.  The do not depend on external features
@@ -30,18 +39,9 @@ files are not "safe" to load during startup because they rely on
 macros/functions/variables from FEATURE.  Evaluation them would either result in
 an error for trying to use FEATURE stuff without FEATURE being loaded yet; or it
 would inadvertently load FEATURES and perform computations pre-emptively.
-* commentary on process
+** commentary on process
 It is hard to know how to structure things and where to put them.  There are
 always benefits and drawbacks to structuring a configuration one way over the
 other.  For example, should you put all the keybindings in one file, or should
 you segregate them, dividing them by package.  There is no right answer.  It all
 depends on whether.  Ultimately, you need to decide one way or the other.
-* why divide features into config and init files?
-Honestly, it was a hard decision for me to make. It means that for packages with
-a very simple configuration, I will probably end up with a lot of really small
-files.  Also in terms of performance, it is preferable to load one big file over
-many small ones because there is a small overhead to opening files.  So why am I
-doing it?  Well, it is possible to combine the init and config files into just
-one file.  But then I would be forced to write non-declarative code.  I would
-potentiall need to wrap large blocks of code with =eval-after-load= or use
-something like =use-package=--which I do not like.
