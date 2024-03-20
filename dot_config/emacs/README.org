@@ -1,5 +1,10 @@
 * emacs
-OO emacs is an involved emacs configuration.
+OO emacs is an involved emacs configuration.  I chose the prefix "oo" that I use
+because it is short and something that I thought would not likely to be the
+prefix for an emacs package.  Oh, and I thought that the characters =oo= were
+smooth an easy to read as opposed to something like =xx= which I had tried prior.
+I do not know why I did not do just a single =o= though I remember having thought
+about it.  A while afterwards.
 * points focus
 These are the things I valued as I wrote this configuration.
 ** performance
