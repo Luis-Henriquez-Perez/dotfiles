@@ -32,21 +32,11 @@
 ;;;; core
 ;; These are fundamental, essential.  They should be moved into a more core
 ;; file.
-;;;;; ah
-(require 'ah)
-;; (oo-add-hook 'after-init-hook #'ah-mode)
-(ah-mode 1)
 ;;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
 
 (require 'no-littering)
-;;;;; benchmark-init
-;; (require 'benchmark-init)
-
-;; (benchmark-init/activate)
-;; ;; To disable collection of benchmark data after init is done.
-;; (oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;;;;; initial buffer choice
 (defvar oo-initial-buffer-choice-hook nil
   "Hook run to choose initial buffer.
@@ -78,10 +68,10 @@ For what buffer is displayed in the case of a boolean see
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
 ;;;;; enable default theme - modus-operandi
-;; (defhook! after-init-hook&load-theme ()
-;;   "Load `modus-operandi' theme."
-;;   (when (display-graphic-p)
-;;     (load-theme 'modus-operandi :no-confirm nil)))
+(defhook! after-init-hook&load-theme ()
+  "Load `modus-operandi' theme."
+  (when (display-graphic-p)
+    (load-theme 'modus-operandi :no-confirm nil)))
 ;;;; hooks
 ;; I had been organizing the init file by packages and that is not entirely
 ;; useless but I think maybe an abstraction in which I look at what is happening

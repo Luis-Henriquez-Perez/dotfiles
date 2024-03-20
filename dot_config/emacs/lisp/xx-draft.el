@@ -703,3 +703,14 @@ ERROR is either a void-variable or void-function error."
 (oo-text-abbrev ";plus" "+")
 (oo-text-abbrev ";minus" "=")
 (oo-text-abbrev ";eq" "=")
+
+;;;;; benchmark-init
+(require 'benchmark-init)
+
+(benchmark-init/activate)
+;; To disable collection of benchmark data after init is done.
+(oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
+
+;;;;; ah
+(require 'ah)
+(ah-mode 1)
