@@ -31,8 +31,7 @@
 ;; cannot profile bindings as easily.
 ;;
 ;;; Code:
-;;;; leaders
-;;;; window-map
+(require '06-base-leaders)
 ;;;; bindings
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)
@@ -110,6 +109,69 @@
 (oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 
 (oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
+;;;; create a leader map for dotfile actions
+(defvar oo-dotfile-map (make-sparse-keymap))
+(define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
+(oo-bind 'oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
+
+;; TODO: oo-bind should already do this for me.
+(autoload #'chezmoi-find "chezmoi")
+(autoload #'chezmoi-write "chezmoi")
+(autoload #'chezmoi-open-other "chezmoi")
+(oo-bind 'oo-dotfile-map "f" #'chezmoi-find)
+;; I use the command =chezmoi-write= the most so far.  It syncs the current file
+;; with its corresponding chezmoi file.  If called while in the target file, it
+;; applies the changes in the target file to the source file and vice versa.
+;; Only caveat is that if there is a more recent change in the "other" file,
+;; then you have to use a prefix command to make sure you want to override those
+;; changes.
+(oo-bind 'oo-dotfile-map "w" #'chezmoi-write)
+;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
+;; homerow for QWERTY keyboards.
+(oo-bind 'oo-dotfile-map "d" #'chezmoi-write)
+;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
+;; it does something different depending on whether your in the source file or
+;; the target file.  If you are in the source file, you open the target file and
+;; vice versa.
+(oo-bind 'oo-dotfile-map "o" #'chezmoi-open-other)
+;;;; helpful
+(oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
+(oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
+(oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
+(oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
+;;;; consult
+(opt! consult-preview-key nil)
+
+(opt! consult-fontify-preserve nil)
+
+(defun! oo-display-buffer ()
+  (interactive)
+  (require 'consult)
+  (set! consult--buffer-display #'display-buffer)
+  (call-interactively #'consult-buffer))
+
+(oo-bind :alt #'display-buffer #'oo-display-buffer)
+
+(oo-bind 'oo-find-map "k" #'consult-bookmark :wk "bookmark")
+(oo-bind 'oo-find-map "b" #'consult-bookmark :wk "bookmark")
+
+(oo-bind 'oo-find-map "s" #'consult-line :wk "line")
+(oo-bind 'oo-find-map "l" #'consult-line :wk "line")
+
+(oo-bind 'oo-find-map "h" #'consult-outline :wk "outline")
+(oo-bind 'oo-find-map "h" #'consult-org-heading :wk "heading")
+
+(oo-bind :alt #'switch-to-buffer #'consult-buffer :feature 'consult)
+(oo-bind :alt #'yank-pop #'consult-yank-pop :feature 'consult)
+(oo-bind :alt #'apropos #'consult-apropos :feature 'consult)
+(oo-bind :alt #'man #'consult-man :feature 'consult)
+
+(oo-bind :alt #'switch-to-buffer #'consult-buffer :feature 'consult)
+(oo-bind :alt #'yank-pop #'consult-yank-pop :feature 'consult)
+(oo-bind :alt #'apropos #'consult-apropos :feature 'consult)
+(oo-bind :alt #'man #'consult-man :feature 'consult)
+
+(oo-bind 'oo-miscellany-map "l" #'consult-bookmark)
 ;;; provide
 (provide '90-keybindings)
 ;;; 90-keybindings.el ends here

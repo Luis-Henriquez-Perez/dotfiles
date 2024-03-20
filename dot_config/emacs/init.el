@@ -63,7 +63,6 @@
 (require '03-init-elpaca)
 (require '04-base-custom)
 (require '05-base-bind)
-(require '06-base-leaders)
 (require '98-init-features)
 (require '90-keybindings)
 ;;;; load config files
