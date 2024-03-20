@@ -29,14 +29,82 @@
 ;;
 ;;; Code:
 (require 'on)
-;;; feature-specific customization
+;;;; ah
+(require 'ah)
+;; (oo-add-hook 'after-init-hook #'ah-mode)
+(ah-mode 1)
 ;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
 
 (require 'no-littering)
-;;;; notmuch
-(opt! notmuch-sort-oldest-first nil)
+;;;; benchmark-init
+(require 'benchmark-init)
+
+(benchmark-init/activate)
+;; To disable collection of benchmark data after init is done.
+(oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
+;;; hooks
+;; I had been organizing the init file by packages and that is not entirely
+;; useless but I think maybe an abstraction in which I look at what is happening
+;; when as opposed to the configuration for over 50 individual packages.  The
+;; focus is now on what is happening in my configuration as opposed to the many
+;; individual configurations.
+;;;; on-first-file-hook
+(oo-add-hook 'on-first-file-hook #'super-save-mode)
+;;;; on-first-input-hook
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
+(oo-add-hook 'on-first-input-hook #'savehist-mode)
+;;;; emacs-lisp-mode-hook
+(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+;;;; reb-mode-hook
+(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
+;;;; prog-mode-hook
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+;; This outputs the message and causes a slight delay when opening a file in
+;; prog-mode for the first time.
+;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
+(oo-add-hook 'prog-mode-hook #'abbrev-mode)
+(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(oo-add-hook 'prog-mode-hook #'corfu-mode)
+(oo-add-hook 'prog-mode-hook #'outli-mode)
+(oo-add-hook 'prog-mode-hook #'smartparens-mode)
+(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
+(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
+(oo-add-hook 'prog-mode-hook #'captain-mode)
+(oo-add-hook 'prog-mode-hook #'orglink-mode)
+;;;; text-mode-hook
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
+(oo-add-hook 'text-mode-hook #'abbrev-mode)
+(oo-add-hook 'text-mode-hook #'captain-mode)
+(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
+(oo-add-hook 'text-mode-hook #'smartparens-mode)
+;;;; after-init-hook
+;; Don't load everything at once.
+;; (oo-require-hook 'after-init-hook 'evil)
+(defhook! after-init-hook&load-evil ()
+  [:depth 10]
+  (require 'evil nil t))
+;; TODO: The display flickers when setting the initial theme.  Maybe this is
+;; inevitable.  But maybe this has to do with me either disabling the previous
+;; theme first or the order of setting the window-divider, or maybe I can
+;; specify the default theme to load beforehand.  I need to play around with
+;; settings and see if this flickering can be avoided.
+(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
+;;;; emacs-startup-hook
+(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+(oo-add-hook 'emacs-startup-hook #'evil-mode)
+(oo-add-hook 'emacs-startup-hook #'which-key-mode)
+(oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+;;; feature-specific customization
 ;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
 (opt! reb-re-syntax 'rx)
@@ -45,71 +113,6 @@
 (opt! sgml-basic-offset 4)
 ;;;; dabbrev
 (opt! dabbrev-check-all-buffers nil)
-;;;; ah
-(require 'ah)
-;; (oo-add-hook 'after-init-hook #'ah-mode)
-(ah-mode 1)
-;;;; ace-window
-;;;;; swap
-(opt! aw-swap-invert t)
-;;;;; set the keys used by ace-window
-;; The character z conflicts.
-(opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
-;;;;; select a window with =w=, =j= or =o=
-;; There are commands such as.  I do not need these commands.  After moving left,
-;; right, up or down some direction once, the effort needed to traverse a window
-;; using directional window movement commands greatly increases.  The command
-;; [[file:snapshots/_helpful_command__ace-window][ace-window]] in contrast scales really well with a greater number of
-;; windows.  And it only loses slightly to directional window commands when moving
-;; one time.
-
-;; The command [[file:snapshots/_helpful_command__ace-window_.png][ace-window]] leverages [[https://github.com/abo-abo/avy][avy]] to select a window.  It assigns each window
-;; a character (I'm using [[][letters]] close to the homerow) which it displays on
-;; the upper right-hand corner of windows. I've found that
-;; ace-window is the quickest way possible to switch focus form one live window to
-;; another.
-
-;; The mnemonic bind is =w= and the quick bindings--which I will likely use most
-;; often--are =o= and =j=.
-(oo-bind 'oo-window-map "w" #'ace-window :wk "select")
-(oo-bind 'oo-window-map "j" #'ace-window :wk "select")
-(oo-bind 'oo-window-map "o" #'ace-window :wk "select")
-;;;;; swap two windows with =s=
-;; Often when I want to switch focus from my main window to one of its
-;; subsidiaries; I will want to swap buffers from the two windows.
-;; Actually, =edwina= does provide functions to do this: namely
-;; [[_helpful_command__edwina-swap-next-window_.png][edwina-swap-next-window]] and [[file:snapshots/_helpful_command__edwina-swap-previous-window_.png][edwina-swap-previous-window]].
-;; But I can do something similar, but much faster with.  This is a case where =s= is
-;; mnemonic and easy to press.
-(oo-bind 'oo-window-map "s" #'ace-swap-window :wk "swap")
-;;;; avy
-(opt! avy-style 'pre)
-
-(opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-
-(opt! avy-background nil)
-
-(opt! avy-timeout-seconds 0.3)
-;;;; benchmark-init
-(require 'benchmark-init)
-
-(benchmark-init/activate)
-;; To disable collection of benchmark data after init is done.
-(oo-add-hook 'after-init-hook 'benchmark-init/deactivate)
-;;;; burly
-;;;;; leader bindings
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
-;;;;; save window configuration with =b= or =S=
-;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
-;; necessary to reproduce the current window configuration.  I can then restore the
-;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-;;;; captain
-(oo-add-hook 'prog-mode-hook #'captain-mode)
-(oo-add-hook 'text-mode-hook #'captain-mode)
 ;;;; chezmoi
 ;; First thing to do is trigger chezmoi commands via bindings.  One of the key
 ;; concepts needed with chezmoi is the concept of source state and target state.
@@ -185,15 +188,14 @@
 (oo-bind :alt #'man #'consult-man :feature 'consult)
 
 (oo-bind 'oo-miscellany-map "l" #'consult-bookmark)
-;;;; corfu
-(oo-add-hook 'prog-mode-hook #'corfu-mode)
 ;;;; dashboard
 (defhook! oo-initial-buffer-choice-hook&make-dashboard ()
   (when (require 'dashboard nil t)
     (aprog1 (get-buffer-create dashboard-buffer-name)
       (with-current-buffer it
         (dashboard-insert-startupify-lists)))))
-
+;; If I do not put these variables here, they miss timing.
+(message "setting up dashboard")
 (defun oo-dashboard-init-info (&rest _)
   (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
 
@@ -208,72 +210,6 @@
 (opt! dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 
 (opt! dashboard-center-content t)
-;;;; denote
-(opt! denote-file-type 'text)
-;;;; dired
-(oo-bind 'oo-app-map "d" #'dired)
-;;;;; map =h= to =dired-up-directory=
-;; I do not want to keep pressing =^= for the common action of going up the
-;; directory.
-(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
-
-;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
-(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
-;;;; dirvish
-(oo-bind :alt #'dired #'dirvish)
-
-(opt! dirvish-use-mode-line nil)
-
-(opt! dirvish-attributes '(file-size subtree-state))
-
-(opt! dirvish-default-layout nil)
-
-(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
-;; By default hide details.
-(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
-
-(opt! dired-recursive-copies 'always)
-(opt! dired-recursive-deletes 'always)
-;;;; emms
-(opt! emms-player-list '(emms-player-mpv))
-(opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
-(opt! emms-directory (expand-file-name "emms/" oo-var-dir))
-;; (require 'emms-player-mpv)
-;;;; orglink
-(oo-add-hook 'prog-mode-hook #'orglink-mode)
-;;;; eshell
-(oo-bind 'oo-app-map "e" #'eshell)
-;;;; evil
-(oo-add-hook 'emacs-startup-hook #'evil-mode)
-
-;; Don't load everything at once.
-;; (oo-require-hook 'after-init-hook 'evil)
-(defhook! after-init-hook&load-evil ()
-  [:depth 10]
-  (require 'evil nil t))
-;;;; evil-cleverparens
-(oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-
-(oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
-;;;; evil-easymotion
-;; The problem with these keys is that they interfere with keyboard macros.  Let
-;; me explain--when you use avy, it is not necessarily the case that the
-;; following keys have the same letter.  For keyboard macros to work you need
-;; keys to exhibit predictable behaviors.  I do not want to get rid of these
-;; keys entirely, but I have to consider more carfully on how I will re-add them
-;; to my configuration.
-;; (autoload #'oo-goto-beginning-of-word "evil-easymotion")
-;; (autoload #'oo-goto-end-of-word "evil-easymotion")
-;; (autoload #'oo-goto-char "evil-easymotion")
-
-;; (oo-bind :nv "w" #'oo-goto-beginning-of-word)
-;; (oo-bind :nv "e" #'oo-goto-end-of-word)
-;; (oo-bind :nv "f" #'oo-goto-char)
-;;;; evil-operator
-;; (oo-bind :n "gr" #'evil-operator-eval)
-;;;; expand-region
-(oo-bind :v "V" #'er/contract-region)
-(oo-bind :v "v" #'er/expand-region)
 ;;;; frame
 ;; TODO: Figure out how to set this based on the color of the theme.
 (defhook! after-init-hook&set-window-divider-face ()
@@ -284,13 +220,6 @@
 (defadvice! load-theme@AFset-window-divider-face (&rest _)
   "Set the window divider face."
   (set-face-foreground 'window-divider "black"))
-
-;; TODO: The display flickers when setting the initial theme.  Maybe this is
-;; inevitable.  But maybe this has to do with me either disabling the previous
-;; theme first or the order of setting the window-divider, or maybe I can
-;; specify the default theme to load beforehand.  I need to play around with
-;; settings and see if this flickering can be avoided.
-(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 
 ;; (add-hook 'emacs-startup-hook
 ;;           (lambda (&rest _) (oo-add-advice #'load-theme :after #'oo-set-window-divider-face)))
@@ -307,171 +236,16 @@
 (oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
 (oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
 (oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
-;;;; highlight-quoted
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 ;;;; idle-require
-(oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
-
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 
 (opt! idle-require-load-break 5)
 
 (opt! idle-require-idle-delay 10)
-;;;; lispy
-(oo-bind :v "E" #'lispy-eval-and-replace)
-
-(oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
 ;;;; lispyville
-(oo-bind :n "g," #'lispyville-comment-or-uncomment)
-(oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
-(oo-bind :n "gl" #'lispyville-comment-and-clone-dwim)
-
-(oo-add-hook 'prog-mode-hook #'lispyville-mode)
-
-(oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
-(oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
-
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
-;;;; macrostep
-(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
-(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
-(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
-;; ;;;; gcmh
-;; (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
-
-;; (opt! gcmh-idle-delay 'auto)
-
-;; (opt! gcmh-high-cons-threshold (* 8 1024 1024))
-
-;; (opt! gcmh-low-cons-threshold (* 4 1024 1024))
-
-;; ;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
-;; ;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
-;; ;; primarily doing searches for variables and functions.  There are alot of
-;; ;; variables and functions so this can certainly get computationally expensive.  To
-;; ;; keep things snappy I increase boost the [[helpvar:gc-cons-threshold][gc-cons-threshold]] just before I enter
-;; ;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
-;; (defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
-
-;; (defhook! minibuffer-setup-hook&increase-garbage-collection ()
-;;   "Boost garbage collection settings to `gcmh-high-cons-threshold"
-;;   [:depth 10]
-;;   (when (require 'gcmh nil t)
-;;     (setq gc-cons-threshold gcmh-high-cons-threshold)))
-
-;; (defhook! minibuffer-exit-hook&decrease-garbage-collection ()
-;;   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-;;   [:depth 90]
-;;   (require 'gcmh)
-;;   (when (require 'gcmh nil t)
-;;     (setq gc-cons-threshold gcmh-low-cons-threshold)))
 ;;;; magit
 (oo-call-after-load '(evil magit) #'evil-magit-init)
-;;;; outli
-(oo-add-hook 'prog-mode-hook #'outli-mode)
-;;;; rainbow-delimiters
-(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
-
-(opt! rainbow-delimiters-max-face-count 9)
-;;;; recentf
-(opt! recentf-filename-handlers '(file-truename))
-
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
-
-;; TODO: Figure out why this is an error with eldev eval.
-;; For some reason this gives an error when I use eldev eval. I have to figure
-;; out what eldev is doing here.
-(oo-add-hook 'kill-emacs-hook #'recentf-save-list)
-
-(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
-
-(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
-
-;; TODO: Add back =adjoin!= if I removed it.
-(opt! recentf-filename-handlers (cl-adjoin #'abbreviate-file-name recentf-filename-handlers))
-
-(opt! recentf-filename-handlers (cl-adjoin 'substring-no-properties recentf-filename-handlers))
-
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
-
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-data-dir)) recentf-exclude))
-;;;; savehist
-(oo-add-hook 'on-first-input-hook #'savehist-mode)
-
-(opt! savehist-save-minibuffer-history t)
-(opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(opt! savehist-autosave-interval (* 60 5))
-;; This should be already taken care of by no-littering.
-(opt! savehist-file (expand-file-name "savehist" oo-data-dir))
-
-(opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-
-(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
-  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
-;;;; smartparens
-(opt! sp-highlight-wrap-tag-overlay nil)
-
-(opt! sp-highlight-pair-overlay nil)
-
-(opt! sp-highlight-wrap-overlay nil)
-
-(opt! sp-show-pair-delay 0.2)
-
-(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
-  "Enable `smartparens-mode' in the minibuffer."
-  (when (memq this-command '(eval-expression evil-ex))
-    (require 'smartparens)
-    (smartparens-strict-mode 1)))
-
-(oo-add-hook 'text-mode-hook #'smartparens-mode)
-
-(oo-add-hook 'prog-mode-hook #'smartparens-mode)
-
-(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
-
-(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
-
-(oo-bind 'oo-toggle-map "s" #'smartparens-mode)
-;;;; supersave
-(oo-add-hook 'on-first-file-hook #'super-save-mode)
-
-;; The default auto-saving feature in emacs saves after a certain number of
-;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
-;; the middle of typing and you've just hit the number of characters that trigger a
-;; save, you could experience a lag, particularly if you are dealing with a large
-;; file being saved.  Instead of doing this, [[https://github.com/bbatsov/super-save][super-save]] saves buffers during idle
-;; time and after certain commands like [[helpfn:switch-to-buffer][switch-to-buffer]] (see [[helpvar:super-save-triggers][super-save-triggers]]).
-;; Note that this is the same strategy employed by [[id:c550f82a-9608-47e6-972b-eca460015e3c][idle-require]] to load packages.
-;; Saving files like this reduces the likelihood of user delays.
-(opt! super-save-auto-save-when-idle t)
-;; Save after 5 seconds of idle time.
-(opt! super-save-idle-duration 5)
-;;;; which-key
-(oo-add-hook 'emacs-startup-hook #'which-key-mode)
-
-(opt! which-key-sort-uppercase-first nil)
-(opt! which-key-max-display-columns nil)
-(opt! which-key-add-column-padding 1)
-(opt! which-key-min-display-lines 1)
-(opt! which-key-side-window-slot -10)
-(opt! which-key-sort-order #'which-key-prefix-then-key-order)
-(opt! which-key-popup-type 'side-window)
-(opt! which-key-idle-delay 0.8)
-;; (opt! line-spacing 3 :hook which-key-init-buffer-hook :local t)
-
-(opt! which-key-show-transient-maps t)
-(opt! which-key-show-operator-state-maps t)
-
-(opt! which-key-show-prefix 'top)
-;;;; ws-butler
-(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
-;;;; vertico
-(oo-add-hook 'on-first-input-hook #'vertico-mode)
-
-(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 ;;; uncategorized
 ;;;; initial buffer choice
 (defvar oo-initial-buffer-choice-hook nil
@@ -487,28 +261,6 @@ For what buffer is displayed in the case of a boolean see
     (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
 
 (setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
-;;;; general hooks
-(oo-add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
-
-;; This outputs the message and causes a slight delay when opening a file in
-;; prog-mode for the first time.
-;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
-
-(oo-add-hook 'prog-mode-hook 'auto-fill-mode)
-
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
-
-(oo-add-hook 'text-mode-hook #'abbrev-mode)
-
-(oo-add-hook 'prog-mode-hook #'abbrev-mode)
 ;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new
 ;; one.  For this reason, I make sure to disable any enabled themes before applying

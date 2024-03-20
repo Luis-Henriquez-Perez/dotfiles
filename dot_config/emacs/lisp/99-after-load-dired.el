@@ -1,4 +1,4 @@
-;;; 99-after-load-dashboard.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-dired.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,6 +25,30 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+;;;; dired
+(oo-bind 'oo-app-map "d" #'dired)
+;;;;; map =h= to =dired-up-directory=
+;; I do not want to keep pressing =^= for the common action of going up the
+;; directory.
+(oo-bind 'dired-mode-map :nm "h" #'dired-up-directory)
+
+;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
+(oo-bind 'dired-mode-map :nm "l" #'dired-find-file)
+;;;; dirvish
+(oo-bind :alt #'dired #'dirvish)
+
+(opt! dirvish-use-mode-line nil)
+
+(opt! dirvish-attributes '(file-size subtree-state))
+
+(opt! dirvish-default-layout nil)
+
+(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+;; By default hide details.
+(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+(opt! dired-recursive-copies 'always)
+(opt! dired-recursive-deletes 'always)
 ;;; provide
-(provide '99-after-load-dashboard)
-;;; 99-after-load-dashboard.el ends here
+(provide '99-after-load-dired)
+;;; 99-after-load-dired.el ends here

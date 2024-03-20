@@ -24,13 +24,18 @@ immediately because in general they should only be adding hooks/advices and
 setting variables.  They setup =FEATURE= for loading, or customize variables
 pertaining to feature, but do not actually load =FEATURE=.
 
-- DD-config-FEATURE
+- 99-after-load-FEATURE
 There are files that need to be loaded after said feature is loaded.  These
 files are not "safe" to load during startup because they rely on
 macros/functions/variables from FEATURE.  Evaluation them would either result in
 an error for trying to use FEATURE stuff without FEATURE being loaded yet; or it
-would inadvertently load FEATURE.
-
+would inadvertently load FEATURES and perform computations pre-emptively.
+* commentary on process
+It is hard to know how to structure things and where to put them.  There are
+always benefits and drawbacks to structuring a configuration one way over the
+other.  For example, should you put all the keybindings in one file, or should
+you segregate them, dividing them by package.  There is no right answer.  It all
+depends on whether.  Ultimately, you need to decide one way or the other.
 * why divide features into config and init files?
 Honestly, it was a hard decision for me to make. It means that for packages with
 a very simple configuration, I will probably end up with a lot of really small

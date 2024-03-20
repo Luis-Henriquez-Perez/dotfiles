@@ -77,6 +77,7 @@
 ;; am actually editing my test files.
 ;; TODO: add bindings for lorem ipsum.
 ;; (elpaca aas)
+(elpaca (once :host github :repo "emacs-magus/once"))
 (elpaca orglink)
 (elpaca edwina)
 (elpaca pcre2el)

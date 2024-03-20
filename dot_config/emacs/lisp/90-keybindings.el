@@ -23,7 +23,12 @@
 ;;; Commentary:
 ;;
 ;; I realized it is really useful to be able to see keybindings all on their
-;; own.  Also I want the ability to profile keybindings also.
+;; own.  Also I want the ability to profile keybindings also and that is *much*
+;; easier to do when all my bindings are in one file.  However, the main reason
+;; is the former--it is just easier.  Then again though, I do not know.  Maybe
+;; instead of devoting an individual file for this I should just use something
+;; like =annalist= to record and display the information to me.  But then I
+;; cannot profile bindings as easily.
 ;;
 ;;; Code:
 ;;;; leaders
@@ -53,6 +58,58 @@
 (autoload 'evil-operator-eval-replace "evil-extra-operator")
 (oo-bind 'oo-leader-map "er" #'evil-operator-eval-replace :wk "eval and replace")
 (oo-bind 'oo-leader-map "ee" #'evil-operator-eval :wk "eval")
+;;;; smartparens
+(oo-bind 'oo-toggle-map "s" #'smartparens-mode)
+;;;; burly
+;;;;; leader bindings
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
+;;;;; save window configuration with =b= or =S=
+;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
+;; necessary to reproduce the current window configuration.  I can then restore the
+;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+;;;; expand-region
+(oo-bind :v "V" #'er/contract-region)
+(oo-bind :v "v" #'er/expand-region)
+;;;; eshell
+(oo-bind 'oo-app-map "e" #'eshell)
+;;;; lispyville
+(oo-bind :n "g," #'lispyville-comment-or-uncomment)
+(oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
+(oo-bind :n "gl" #'lispyville-comment-and-clone-dwim)
+
+;; (oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
+;; (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
+
+;;;; macrostep
+(oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
+(oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
+(oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+;;;; evil-easymotion
+;; The problem with these keys is that they interfere with keyboard macros.  Let
+;; me explain--when you use avy, it is not necessarily the case that the
+;; following keys have the same letter.  For keyboard macros to work you need
+;; keys to exhibit predictable behaviors.  I do not want to get rid of these
+;; keys entirely, but I have to consider more carfully on how I will re-add them
+;; to my configuration.
+;; (autoload #'oo-goto-beginning-of-word "evil-easymotion")
+;; (autoload #'oo-goto-end-of-word "evil-easymotion")
+;; (autoload #'oo-goto-char "evil-easymotion")
+
+;; (oo-bind :nv "w" #'oo-goto-beginning-of-word)
+;; (oo-bind :nv "e" #'oo-goto-end-of-word)
+;; (oo-bind :nv "f" #'oo-goto-char)
+;;;; lispy
+(oo-bind :v "E" #'lispy-eval-and-replace)
+
+(oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
+;;;; evil-cleverparens
+(oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+
+(oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
 ;;; provide
 (provide '90-keybindings)
 ;;; 90-keybindings.el ends here

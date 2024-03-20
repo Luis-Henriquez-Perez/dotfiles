@@ -1,4 +1,4 @@
-;;; 99-after-load-dashboard.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; 99-after-load-notmuch.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(opt! notmuch-sort-oldest-first nil)
 ;;; provide
-(provide '99-after-load-dashboard)
-;;; 99-after-load-dashboard.el ends here
+(provide '99-after-load-notmuch)
+;;; 99-after-load-notmuch.el ends here

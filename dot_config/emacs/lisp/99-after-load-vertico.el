@@ -26,6 +26,8 @@
 ;;
 ;;; Code:
 ;;;; vertico
+
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
