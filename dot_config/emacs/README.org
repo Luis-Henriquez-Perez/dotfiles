@@ -1,34 +1,37 @@
-* emacs
+* infinity emacs
 OO emacs is an involved emacs configuration.  I chose the prefix "oo" that I use
 because it is short and something that I thought would not likely to be the
 prefix for an emacs package.  Oh, and I thought that the characters =oo= were
 smooth an easy to read as opposed to something like =xx= which I had tried prior.
 I do not know why I did not do just a single =o= though I remember having thought
-about it.  A while later when I was writing this I wanted some gimmick as I see
-several configurations have like [[][spacemacs]], [[][doom emacs]].
-* points focus
+about it.  A while later when I was writing this I wanted some gimmick related
+to the name/main prefix of my configuration as I see
+several configurations have.  Consider [[][spacemacs]] and [[][doom emacs]] for
+example.  Then I thought that two =O=s next to each other kind of look like the
+infinity sign.
+** points focus
 These are the things I valued as I wrote this configuration.  The things I
 thought about while writing them and that influenced.
-** performance
+*** performance
 When I was deciding how to structure my configuration I thought of the most
 performant setup.
-** expressive library
-** tests
+*** expressive library
+*** tests
 I will be honest, I hate writing tests, but I cannot deny that they are crucial
 for any non-trivial program--and my configuration, with its complex macros such
 as [[][block!]] is such a program.  When something goes wrong I atleast have a
 crutch to fallback on.  And indeed I have found many bugs and many unexpected
 behaviors while writing and executing tests.
-** does it actually improve my productivity?
+*** does it actually improve my productivity?
 It is very important to keep this in mind.  It is so easy to.
-* technical details
+** technical details
 In general terms, to boost minimize emacs startup you want to load as much of your
 configuration as possible with =eval-after-load= (or some variant), minimizing the
 lisp code that is evaluated at startup.  You want the bulk of the lisp forms
 that are evaluated at startup to be comprised of setting or declaring variables,
 defining functions and macros, or setting hooks--all cheap operations.  This in
 mind,
-** lisp directory structure
+*** lisp directory structure
 The lisp directory has three kinds of files. D= represents an integer from =0= to
 =9=.  Emacs loads file in lexigraphical order by default.  I use this naming
 system for two things.  One is I want to make sure that I never accidentally use
@@ -56,15 +59,15 @@ prefix them with =99= to ensure--or at least greatly increase the likelihood--th
 the name will not clash with some external or built-in feature.  The number is
 also choosen to be larger than the other kinds of files bcause these should be
 loaded later than these.
-** base files
+*** base files
 Within the base files there is =01-base-lib= which is loaded second only to
 =00-base-variables=.  The file =01-base-lib= cannot have external depencies; it
 is a basic library of generic convenience macros and functions I can rely on
 before package installation occurs.  However =03=
-** naming
-*** naming system of advices
-*** naming system of hooks
-** commentary on process
+*** naming
+**** naming system of advices
+**** naming system of hooks
+*** commentary on process
 It is hard to know how to structure things and where to put them.  There are
 always benefits and drawbacks to structuring a configuration one way over the
 other.  For example, should you put all the keybindings in one file, or should
