@@ -531,6 +531,7 @@ Must be used in `block!'."
 (defalias 'noflet! 'stub!)
 (defalias 'nflet! 'stub!)
 ;;;;; main macro
+(defalias 'progn! 'block!)
 (defmacro block! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
