@@ -8,7 +8,7 @@ about it.  A while later when I was writing this I wanted some gimmick related
 to the name/main prefix of my configuration as I see
 several configurations have.  Consider [[][spacemacs]] and [[][doom emacs]] for
 example.  Then I thought that two =O=s next to each other kind of look like the
-infinity sign.
+infinity sign, hence the name infinity emacs.
 ** points focus
 These are the things I valued as I wrote this configuration.  The things I
 thought about while writing them and that influenced.
@@ -16,6 +16,15 @@ thought about while writing them and that influenced.
 When I was deciding how to structure my configuration I thought of the most
 performant setup.
 *** expressive library
+*** introspectability
+:PROPERTIES:
+:ID:       20240320T203942.131740
+:END:
+I try to avoid errors in hooks and I log messages of what is going on to a log
+buffer.  I want my configuration to be easy to debug and I want it to be easy to
+know what is going on.  Therefore, I want logs of what is happening and when.
+To do this logging I use [[][lgr]]--though I must say I have not completely
+delved into how to use it yet.
 *** tests
 I will be honest, I hate writing tests, but I cannot deny that they are crucial
 for any non-trivial program--and my configuration, with its complex macros such
@@ -23,7 +32,8 @@ as [[][block!]] is such a program.  When something goes wrong I atleast have a
 crutch to fallback on.  And indeed I have found many bugs and many unexpected
 behaviors while writing and executing tests.
 *** does it actually improve my productivity?
-It is very important to keep this in mind.  It is so easy to.
+It is very important to keep this in mind.  It is so easy to.  One of the
+greatest tips I would give to a beginner emacs user is.
 ** technical details
 In general terms, to boost minimize emacs startup you want to load as much of your
 configuration as possible with =eval-after-load= (or some variant), minimizing the
@@ -65,6 +75,7 @@ Within the base files there is =01-base-lib= which is loaded second only to
 is a basic library of generic convenience macros and functions I can rely on
 before package installation occurs.  However =03=
 *** naming
+I want all my functions to be named.
 **** naming system of advices
 **** naming system of hooks
 *** commentary on process
