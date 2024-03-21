@@ -166,6 +166,11 @@
 (oo-bind 'emacs-lisp-mode-map "me" #'macrostep-expand :localleader t :wk "expand")
 (oo-bind 'emacs-lisp-mode-map "mc" #'macrostep-collapse :localleader t :wk "collapse")
 (oo-bind 'emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+;;;; helpful
+(oo-bind :alt #'describe-function #'helpful-callable :feature 'helpful)
+(oo-bind :alt #'describe-command  #'helpful-command  :feature 'helpful)
+(oo-bind :alt #'describe-variable #'helpful-variable :feature 'helpful)
+(oo-bind :alt #'describe-key      #'helpful-key      :feature 'helpful)
 ;;; provide
 (provide '90-keybindings)
 ;;; 90-keybindings.el ends here
