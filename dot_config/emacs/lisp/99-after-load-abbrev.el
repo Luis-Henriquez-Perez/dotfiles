@@ -95,6 +95,11 @@
 ;; (oo-text-abbrev ";;" ".")
 
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "hv" "have")
+(oo-text-abbrev "desiding" "deciding")
+(oo-text-abbrev "pkgs" "packages")
+(oo-text-abbrev "pkg" "package")
+(oo-text-abbrev "ftmp" "for the most part")
 (oo-text-abbrev "readme" "README")
 (oo-text-abbrev "sdnt" "should not")
 (oo-text-abbrev "cme" "come")
@@ -150,7 +155,9 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
+(oo-text-abbrev "ko" "K.O.")
 (oo-text-abbrev "dat" "that")
+(oo-text-abbrev "incc" "increase")
 (oo-text-abbrev "incs" "increase")
 (oo-text-abbrev "decs" "deccrease")
 ;; TODO: Add a condition preventng it from expanding if I am writing a file path.
