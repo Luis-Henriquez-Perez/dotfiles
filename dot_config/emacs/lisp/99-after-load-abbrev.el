@@ -155,6 +155,10 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
+(oo-text-abbrev "ur" "your")
+(oo-text-abbrev "wiht" "with")
+(oo-text-abbrev "ith" "with")
+(oo-text-abbrev "abilit" "ability")
 (oo-text-abbrev "ko" "K.O.")
 (oo-text-abbrev "dat" "that")
 (oo-text-abbrev "incc" "increase")
