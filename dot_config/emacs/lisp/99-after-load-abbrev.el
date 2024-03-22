@@ -144,6 +144,10 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+(oo-text-abbrev "comptia" "CompTIA")
+(oo-text-abbrev "gt" "get")
+(oo-text-abbrev "wev" "whatever")
+(oo-text-abbrev "jbos" "jobs")
 (oo-text-abbrev "prevl" "previously")
 (oo-text-abbrev "prev" "previous")
 (oo-text-abbrev "ivs" "I have seen")
