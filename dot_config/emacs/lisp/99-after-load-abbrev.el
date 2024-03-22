@@ -86,15 +86,83 @@
   "Return non-nil when text-mode abbrevs should be enabled."
   (or (derived-mode-p 'text-mode)
       (oo--in-string-or-comment-p)))
-;;;;;; capitalization
+;;;;; automatically add period
+;; I do not like manually adding periods to the end of sentences.  Having moved
+;; from using one space after a sentence to two, I find it particularl daunting
+;; to type period, space, space whenever I am ending one sentence and starting a
+;; new one.  With this customization when I type space, space, following a word
+;; it is converted into period space space.  Additionally, if I end a sentence
+;; line with two spaces and I press ESC, the trailing two spaces are replaced
+;; with a period.
+(defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
+  "Add a period when necessary."
+  (prog1 (funcall expand-fn)
+    (cond ((not (oo--enable-text-mode-abbrev-p)))
+          ((looking-back "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
+           (replace-match "\\1.\\2\\3" nil nil nil 0))
+          ((looking-back (rx (: (group word) (>= 2 space))))
+           (replace-match "\\1.")))))
+;;;;; emacs-lisp-mode
+;;;;;; callable names
+;; Function names.
+(defun oo--expand-emacs-lisp-mode-funcall-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (and (equal major-mode 'emacs-lisp-mode)
+       (not (oo--in-string-or-comment-p))
+       (save-match-data (looking-back (rx (or "(function\s" "#'" "(") (1+ letter) (0+ space)) 1))))
+
+;; TODO: maybe it is better just to have these as snippets.
+(define-abbrev global-abbrev-table "efn" "expand-file-name" nil :enable-function
+  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
+
+(define-abbrev global-abbrev-table "wcb" "with-current-buffer" nil :enable-function
+  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
+
+(defun oo--enable-emacs-lisp-mode-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (and (equal major-mode 'emacs-lisp-mode)
+       (not (oo--in-string-or-comment-p))))
+
+;; (defalias 'oo--)
+;; (defun oo--abbrev-insert-snippet (snippet-name)
+;;   (tempel-insert snippet-name)
+;;   ;; Delete the last space.
+;;   (delete-backward-char 1)
+;;   ;; Ensure we're in insert state.
+;;   (when (bound-and-true-p evil-mode)
+;;     (evil-insert-state 1)))
+;; Problems.
+;; 1. the template starts with a space
+;; 2. I am having trouble with the keybindings
+;; (define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+;; (define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+(define-abbrev global-abbrev-table "todo" ";; TODO:" nil :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
+;;;;; eshell
+(defun oo--enable-eshell-mode-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (equal major-mode 'eshell-mode))
+
+;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
+;;;;; all abbrevs
+(oo-text-abbrev "prevl" "previously")
+(oo-text-abbrev "prev" "previous")
+(oo-text-abbrev "ivs" "I have seen")
+(oo-text-abbrev "rxp" "regular expression")
+(oo-text-abbrev "lins" "lines")
+;; I thought that this could be a bad abbrev because it is too much line a
+;; spelling mistake of =the=, but then I thought if I do misspell "the" it is
+;; very unlikely I will do so by pressing =t= again.
+(oo-text-abbrev "tht" "thought")
 (oo-text-abbrev "i" "I")
 (oo-text-abbrev "luis" "Luis")
-;;;;;; generic
 ;; This will not work because ";" is not a work constituent.  I need to use
 ;; `aas' for this or come up with some other solution.
 ;; (oo-text-abbrev ";;" ".")
-
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "ivb" "I have been")
+(oo-text-abbrev "werent" "were not")
+(oo-text-abbrev "rly" "really")
+(oo-text-abbrev "aagp" "at any given point")
 (oo-text-abbrev "begn" "beginning")
 (oo-text-abbrev "idt" "I do not think")
 (oo-text-abbrev "arent" "are not")
@@ -266,63 +334,6 @@
 (oo-text-abbrev "pakcages" "packages")
 (oo-text-abbrev "motn" "more often than not")
 (oo-text-abbrev "itc" "in that case")
-;;;;; automatically add period
-;; I do not like manually adding periods to the end of sentences.  Having moved
-;; from using one space after a sentence to two, I find it particularl daunting
-;; to type period, space, space whenever I am ending one sentence and starting a
-;; new one.  With this customization when I type space, space, following a word
-;; it is converted into period space space.  Additionally, if I end a sentence
-;; line with two spaces and I press ESC, the trailing two spaces are replaced
-;; with a period.
-(defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
-  "Add a period when necessary."
-  (prog1 (funcall expand-fn)
-    (cond ((not (oo--enable-text-mode-abbrev-p)))
-          ((looking-back "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
-           (replace-match "\\1.\\2\\3" nil nil nil 0))
-          ((looking-back (rx (: (group word) (>= 2 space))))
-           (replace-match "\\1.")))))
-;;;;; emacs-lisp-mode
-;;;;;; callable names
-;; Function names.
-(defun oo--expand-emacs-lisp-mode-funcall-abbrev-p ()
-  "Return non-nil if elisp mode abbrev should be enabled."
-  (and (equal major-mode 'emacs-lisp-mode)
-       (not (oo--in-string-or-comment-p))
-       (save-match-data (looking-back (rx (or "(function\s" "#'" "(") (1+ letter) (0+ space)) 1))))
-
-;; TODO: maybe it is better just to have these as snippets.
-(define-abbrev global-abbrev-table "efn" "expand-file-name" nil :enable-function
-  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
-
-(define-abbrev global-abbrev-table "wcb" "with-current-buffer" nil :enable-function
-  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
-
-(defun oo--enable-emacs-lisp-mode-abbrev-p ()
-  "Return non-nil if elisp mode abbrev should be enabled."
-  (and (equal major-mode 'emacs-lisp-mode)
-       (not (oo--in-string-or-comment-p))))
-
-;; (defalias 'oo--)
-;; (defun oo--abbrev-insert-snippet (snippet-name)
-;;   (tempel-insert snippet-name)
-;;   ;; Delete the last space.
-;;   (delete-backward-char 1)
-;;   ;; Ensure we're in insert state.
-;;   (when (bound-and-true-p evil-mode)
-;;     (evil-insert-state 1)))
-;; Problems.
-;; 1. the template starts with a space
-;; 2. I am having trouble with the keybindings
-;; (define-abbrev global-abbrev-table ".let" "" (-partial #'oo--abbrev-insert-snippet 'let) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
-;; (define-abbrev global-abbrev-table ".fun" "" (-partial #'oo--abbrev-insert-snippet 'fun) :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
-(define-abbrev global-abbrev-table "todo" ";; TODO:" nil :enable-function #'oo--enable-emacs-lisp-mode-abbrev-p)
-;;;;; eshell
-(defun oo--enable-eshell-mode-abbrev-p ()
-  "Return non-nil if elisp mode abbrev should be enabled."
-  (equal major-mode 'eshell-mode))
-
-;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;; provide
 (provide '99-after-load-abbrev)
 ;;; 99-after-load-abbrev.el ends here
