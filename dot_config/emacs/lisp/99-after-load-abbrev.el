@@ -95,6 +95,7 @@
 ;; (oo-text-abbrev ";;" ".")
 
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "begn" "beginning")
 (oo-text-abbrev "idt" "I do not think")
 (oo-text-abbrev "arent" "are not")
 (oo-text-abbrev "ting" "thing")
@@ -212,8 +213,8 @@
 (oo-text-abbrev "dont" "do not")
 (oo-text-abbrev "dnt" "don't")
 (oo-text-abbrev "ive" "I have")
-(oo-text-abbrev "dstr" "doc-string")
-(oo-text-abbrev "dstrs" "doc-strings")
+;; (oo-text-abbrev "dstr" "doc-string")
+;; (oo-text-abbrev "dstrs" "doc-strings")
 (oo-text-abbrev "ik" "I know")
 (oo-text-abbrev "ribe" "describe")
 (oo-text-abbrev "iff" "if and only if")
@@ -282,11 +283,27 @@
           ((looking-back (rx (: (group word) (>= 2 space))))
            (replace-match "\\1.")))))
 ;;;;; emacs-lisp-mode
+;;;;;; callable names
+;; Function names.
+(defun oo--expand-emacs-lisp-mode-funcall-abbrev-p ()
+  "Return non-nil if elisp mode abbrev should be enabled."
+  (and (equal major-mode 'emacs-lisp-mode)
+       (not (oo--in-string-or-comment-p))
+       (save-match-data (looking-back (rx (or "(function\s" "#'" "(") (1+ letter) (0+ space)) 1))))
+
+;; TODO: maybe it is better just to have these as snippets.
+(define-abbrev global-abbrev-table "efn" "expand-file-name" nil :enable-function
+  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
+
+(define-abbrev global-abbrev-table "wcb" "with-current-buffer" nil :enable-function
+  #'oo--expand-emacs-lisp-mode-funcall-abbrev-p)
+
 (defun oo--enable-emacs-lisp-mode-abbrev-p ()
   "Return non-nil if elisp mode abbrev should be enabled."
   (and (equal major-mode 'emacs-lisp-mode)
        (not (oo--in-string-or-comment-p))))
 
+;; (defalias 'oo--)
 ;; (defun oo--abbrev-insert-snippet (snippet-name)
 ;;   (tempel-insert snippet-name)
 ;;   ;; Delete the last space.
