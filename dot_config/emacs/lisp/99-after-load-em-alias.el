@@ -36,7 +36,7 @@
 ;; have the physical buffer contents.
 (eshell/alias "clear" "eshell/clear t")
 (eshell/alias "ff" "find-file $1")
-(eshell/alias "ffow" "find-file-other-window $1")
+(eshell/alias "fo" "find-file-other-window $1")
 (eshell/alias "ffow" "find-file-other-window $1")
 (eshell/alias "open" "find-file $1")
 (eshell/alias "d" "dired $1")
