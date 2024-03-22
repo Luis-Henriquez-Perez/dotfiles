@@ -95,6 +95,9 @@
 ;; (oo-text-abbrev ";;" ".")
 
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "idt" "I do not think")
+(oo-text-abbrev "arent" "are not")
+(oo-text-abbrev "ting" "thing")
 (oo-text-abbrev "ned" "need")
 (oo-text-abbrev "dir" "directory")
 (oo-text-abbrev "ull" "you will")
