@@ -105,6 +105,7 @@
 (elpaca ef-themes)
 (elpaca elfeed)
 (elpaca embark)
+(elpaca embark-consult)
 (elpaca emms)
 (elpaca erefactor)
 (elpaca eros)
