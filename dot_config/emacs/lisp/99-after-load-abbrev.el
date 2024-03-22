@@ -95,6 +95,10 @@
 ;; (oo-text-abbrev ";;" ".")
 
 ;; TODO: move to spell-fixing abbrev.
+(oo-text-abbrev "ned" "need")
+(oo-text-abbrev "dir" "directory")
+(oo-text-abbrev "ull" "you will")
+(oo-text-abbrev "spst" "supposed")
 (oo-text-abbrev "hv" "have")
 (oo-text-abbrev "desiding" "deciding")
 (oo-text-abbrev "pkgs" "packages")
@@ -155,6 +159,7 @@
 ;; I want the word =config= to stay the same too much for this to be useful.
 ;; Right now it is frankly more of an impediment for me than something that
 ;; helps me.
+(oo-text-abbrev "questioin" "question")
 (oo-text-abbrev "ur" "your")
 (oo-text-abbrev "wiht" "with")
 (oo-text-abbrev "ith" "with")
