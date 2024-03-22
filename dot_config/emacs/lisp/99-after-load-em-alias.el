@@ -51,6 +51,20 @@
 (eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
 (eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
 
+;; TODO: figure out a naming system for these commands
+;; TODO: write a command for publishing to blog.  This is preliminary.
+;; The publish command has to be called from the emacs directory.  I want to be
+;; able to type "publish" and have it publish my blog.  Now as I am writing this
+;; I feel like its cool if I had a command to publish and push to github.  Maybe
+;; something like "update-website"?
+
+;; [[info:eshell#Dollars Expansion][eshell#Dollars Expansion]]
+
+;; I am not 100% sure I need to switch to the html directory first.
+;; TODO: Determine why the exit-code fo this is non-zero.  Potentially give it
+;; an exit-code of 0.
+(eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
+
 (eshell/alias "install" "sudo pacman -S --no-confirm $1")
 ;; (eshell/alias "install" "sudo pacman -S --no-confirm $1")
 
