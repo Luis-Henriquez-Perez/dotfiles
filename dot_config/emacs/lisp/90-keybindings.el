@@ -89,13 +89,22 @@
 ;; keys to exhibit predictable behaviors.  I do not want to get rid of these
 ;; keys entirely, but I have to consider more carfully on how I will re-add them
 ;; to my configuration.
-;; (autoload #'oo-goto-beginning-of-word "evil-easymotion")
-;; (autoload #'oo-goto-end-of-word "evil-easymotion")
-;; (autoload #'oo-goto-char "evil-easymotion")
+;; TODO: Maybe make more direct or add support for autoloading in the lisp
+;; directory.  Right now this loads easymotion which causes these functons to be
+;; define by me with `eval-after-load'.
+(autoload #'oo-evilem-bow "evil-easymotion")
+(autoload #'oo-evilem-eow "evil-easymotion")
+(autoload #'oo-evilem-goto-char "evil-easymotion")
+(autoload #'oo-evilem-goto-bol "evil-easymotion")
 
-;; (oo-bind :nv "w" #'oo-goto-beginning-of-word)
-;; (oo-bind :nv "e" #'oo-goto-end-of-word)
-;; (oo-bind :nv "f" #'oo-goto-char)
+;; TODO: Do not use these bindings for keyboard macros where the originals might
+;; be more useful.
+(oo-bind :nv "w" #'oo-evilem-bow)
+(oo-bind :nv "e" #'oo-evilem-eow)
+(oo-bind :nv "W" #'oo-evilem-boW)
+(oo-bind :nv "E" #'oo-evilem-eoW)
+(oo-bind :nv "f" #'oo-evilem-char)
+(oo-bind :nv "b" #'oo-evilem-bol)
 ;;;; lispy
 (oo-bind :v "E" #'lispy-eval-and-replace)
 
