@@ -139,7 +139,7 @@ This is a wrapper around `evilem-make-motion'."
   (save-match-data
     (when (save-excursion (goto-char (1+ (point))) (re-search-forward regexp nil t nil))
       (goto-char (match-beginning 1)))))
-;;;; goto a character
+;;;; a character
 (defemotion! oo-evilem-char (char)
   "Jump to a character in current visible buffer."
   :bind ((char (read-char "Char: ")))
