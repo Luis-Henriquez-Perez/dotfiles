@@ -64,6 +64,7 @@
 ;; TODO: Determine why the exit-code fo this is non-zero.  Potentially give it
 ;; an exit-code of 0.
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
+(eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 
 (eshell/alias "install" "sudo pacman -S --no-confirm $1")
 ;; (eshell/alias "install" "sudo pacman -S --no-confirm $1")
