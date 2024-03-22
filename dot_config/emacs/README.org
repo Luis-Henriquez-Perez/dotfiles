@@ -6,7 +6,7 @@ smooth an easy to read as opposed to something like =xx= which I had tried prior
 I do not know why I did not do just a single =o= though I remember having thought
 about it.  A while later when I was writing this I wanted some gimmick related
 to the name/main prefix of my configuration as I see
-several configurations have.  Consider [[][spacemacs]] and [[][doom emacs]] for
+several configurations have.  Consider [[https://github.com/syl20bnr/spacemacs][spacemacs]] and [[https://github.com/doomemacs/doomemacs][doom emacs]] for
 example.  Then I thought that two =O=s next to each other kind of look like the
 infinity sign, hence the name infinity emacs.
 ** points focus
