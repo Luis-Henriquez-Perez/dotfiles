@@ -205,21 +205,22 @@
 (oo-text-abbrev "dont" "do not")
 (oo-text-abbrev "wontt" "will not")
 (oo-text-abbrev "doesnt" "does not")
-;; Not sure I actually want this abbrev because =wont= is actually a word. 
+;; Not sure I actually want this abbrev because =wont= is actually a word.
 ;; (oo-text-abbrev "wont" nil)
 (oo-text-abbrev "thats" "that is")
 (oo-text-abbrev "u" "you")
 (oo-text-abbrev "ul" "you'll")
 (oo-text-abbrev "dont" "do not")
 (oo-text-abbrev "dnt" "don't")
+(oo-text-abbrev "wo" "without")
 (oo-text-abbrev "ive" "I have")
 ;; (oo-text-abbrev "dstr" "doc-string")
 ;; (oo-text-abbrev "dstrs" "doc-strings")
 (oo-text-abbrev "ik" "I know")
+(oo-text-abbrev "plx" "complex")
 (oo-text-abbrev "ribe" "describe")
 (oo-text-abbrev "iff" "if and only if")
 (oo-text-abbrev "addd" "additionally")
-;;;;;; apostrophe avoiding
 (oo-text-abbrev "weve" "we have")
 (oo-text-abbrev "whats" "what is")
 (oo-text-abbrev "havent" "have not")
@@ -231,7 +232,6 @@
 (oo-text-abbrev "woudnt" "would not")
 (oo-text-abbrev "coudnt" "could not")
 (oo-text-abbrev "couldnt" "could not")
-;;;;;; spelling mistakes
 ;; These abbrevs are focused on spelling mistakes.
 ;; Here I focus on fixing unambiguous spelling mistakes.
 (oo-text-abbrev "onw" "own")
