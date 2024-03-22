@@ -78,6 +78,8 @@
 ;; TODO: add bindings for lorem ipsum.
 ;; (elpaca aas)
 ;; (elpaca (once :host github :repo "emacs-magus/once"))
+(elpaca sly)
+(elpaca cider)
 (elpaca orglink)
 ;; (elpaca edwina)
 (elpaca pcre2el)
