@@ -73,6 +73,7 @@ List markers are symbols that begin with `&' such as are `&rest' and
 (defun oo-shuffle (list)
   "Return list with its elements shuffled."
   ;; I got this from online.  Me, I would not use `cl-loop'.
+  ;; https://stackoverflow.com/questions/49490551/how-to-shuffle-list-in-lisp
   ;; TODO: revise loop so it can do this from...downto stuff.
   (cl-loop for i from (length list) downto 2
            do (cl-rotatef (elt list (random i))
