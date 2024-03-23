@@ -171,6 +171,7 @@ This is a wrapper around `evilem-make-motion'."
   "Jump to the end of a WORD in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
+  :collect-postprocess #'oo--evilem-sort-by-match
   (set! regexp "\\(?:\\`\\|[^[:blank:]]+\\)\\([[:word:]]\\)")
   (and (re-search-forward regexp nil t nil)
        (goto-char (match-beginning 1))))
