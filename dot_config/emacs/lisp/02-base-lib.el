@@ -176,6 +176,7 @@ BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
 bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
 each of BINDINGS if the symbol is an existing function symbol let-bind the
 original function to `this-fn', otherwise bind `this-fn' to nil."
+  (declare (indent 1))
   (let (binds orig-fn)
     (pcase-dolist (`(,sym . ,rest) bindings)
       (setq orig-fn (gensym "orig-fn"))
