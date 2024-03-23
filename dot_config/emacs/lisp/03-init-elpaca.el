@@ -109,7 +109,7 @@
 (elpaca embark)
 (elpaca embark-consult)
 (elpaca emms)
-(elpaca erefactor)
+;; (elpaca erefactor)
 (elpaca eros)
 (elpaca eshell-up)
 (elpaca eshell-z)
