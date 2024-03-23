@@ -146,6 +146,8 @@
 ;;;;; all abbrevs
 ;; This is a common abbrev for "by the way" but I feel like I do not really use
 ;; that phrase unless I am texting.
+(oo-text-abbrev "dfl" "default")
+(oo-text-abbrev "dflt" "default")
 (oo-text-abbrev "difr" "differ")
 (oo-text-abbrev "btw" "between")
 (oo-text-abbrev "dif" "difference")
