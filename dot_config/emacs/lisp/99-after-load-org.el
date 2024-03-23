@@ -103,9 +103,6 @@
 (opt! org-archive-location (concat org-directory "archive.org::"))
 
 (oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
-
-(opt! evilem-style 'at)
-(opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 ;;;;; miscellaneous
 (opt! org-hide-emphasis-markers t)
 ;;; provide

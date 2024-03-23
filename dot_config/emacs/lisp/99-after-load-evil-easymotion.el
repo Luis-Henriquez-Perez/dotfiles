@@ -97,6 +97,11 @@
 ;;   "Return MOTION-FUNCTION."
 ;;   (oo-before-fn motion-fn (-partial #'goto-char (end-of-overlay)))
 ;;   (oo-if-fn #'in-overlay-p it motion-function))
+;;;; set the evilem-keys
+;; The package `evil-easymotion' has its own style and keys separate from avy
+;; keys.
+(opt! evilem-style 'at)
+(opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 ;;;; more appropriate sort function
 ;; TODO: The reason that the letters are inconsistent is because the default
 ;; sorting function assigns values based on the /character distance/ not the
