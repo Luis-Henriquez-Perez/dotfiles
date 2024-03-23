@@ -144,6 +144,11 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+;; This is a common abbrev for "by the way" but I feel like I do not really use
+;; that phrase unless I am texting.
+(oo-text-abbrev "btw" "between")
+(oo-text-abbrev "dif" "difference")
+(oo-text-abbrev "diff" "difference")
 (oo-text-abbrev "htat" "that")
 (oo-text-abbrev "rnt" "are not")
 (oo-text-abbrev "arent" "are not")
