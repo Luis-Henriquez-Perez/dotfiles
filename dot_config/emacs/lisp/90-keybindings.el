@@ -92,10 +92,12 @@
 ;; TODO: Maybe make more direct or add support for autoloading in the lisp
 ;; directory.  Right now this loads easymotion which causes these functons to be
 ;; define by me with `eval-after-load'.
-(autoload #'oo-evilem-bow "evil-easymotion")
-(autoload #'oo-evilem-eow "evil-easymotion")
-(autoload #'oo-evilem-goto-char "evil-easymotion")
-(autoload #'oo-evilem-goto-bol "evil-easymotion")
+(autoload #'evilem-motion-beginning-of-word "evil-easymotion")
+(autoload #'evilem-motion-beginning-of-WORD "evil-easymotion")
+(autoload #'evilem-motion-end-of-word "evil-easymotion")
+(autoload #'evilem-motion-end-of-WORD "evil-easymotion")
+(autoload #'evilem-motion-char "evil-easymotion")
+(autoload #'evilem-motion-beginning-of-line "evil-easymotion")
 
 ;; TODO: Do not use these bindings for keyboard macros where the originals might
 ;; be more useful.
