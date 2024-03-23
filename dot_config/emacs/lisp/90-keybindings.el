@@ -104,8 +104,8 @@
 (oo-bind :nv "W" #'evilem-motion-beginning-of-WORD)
 (oo-bind :nv "e" #'evilem-motion-end-of-word)
 (oo-bind :nv "E" #'evilem-motion-end-of-WORD)
-(oo-bind :nv "f" #'oo-evilem-char)
-(oo-bind :nv "b" #'oo-evilem-bol)
+(oo-bind :nv "f" #'evilem-motion-char)
+(oo-bind :nv "b" #'evilem-motion-beginning-of-line)
 ;;;; lispy
 (oo-bind :v "E" #'lispy-eval-and-replace)
 
