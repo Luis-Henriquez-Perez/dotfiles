@@ -88,10 +88,9 @@
 ;; following keys have the same letter.  For keyboard macros to work you need
 ;; keys to exhibit predictable behaviors.  I do not want to get rid of these
 ;; keys entirely, but I have to consider more carfully on how I will re-add them
-;; to my configuration.
-;; TODO: Maybe make more direct or add support for autoloading in the lisp
-;; directory.  Right now this loads easymotion which causes these functons to be
-;; define by me with `eval-after-load'.
+;; to my configuration.  TODO: Maybe make more direct or add support for
+;; autoloading in the lisp directory.  Right now this loads easymotion which
+;; causes these functons to be define by me with `eval-after-load'.
 (autoload #'evilem-motion-beginning-of-word "evil-easymotion")
 (autoload #'evilem-motion-beginning-of-WORD "evil-easymotion")
 (autoload #'evilem-motion-end-of-word "evil-easymotion")

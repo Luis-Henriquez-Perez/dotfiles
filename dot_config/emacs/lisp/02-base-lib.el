@@ -377,15 +377,15 @@ Let bind function."
 ;;;; threading macros 
 (defmacro aset>>! (&rest forms)
   "Bind the result of `thread-last' on FORMS to `it'."
-  `(set! it (thread-last ,@forms)))
+  `(set! it (thread-last it ,@forms)))
 (defmacro aset>! (&rest forms)
   "Bind the result of `thread-first' on FORMS to `it'."
-  `(set! it (thread-first ,@forms)))
+  `(set! it (thread-first it ,@forms)))
 (defmacro set>>! (pattern &rest forms)
   "Bind the result of `thread-last' on FORMS to PATTERN.
 See `set!'."
   (declare (indent 1))
-  `(set! ,pattern (thread-last ,@forms)))
+  `(set! ,var (thread-last ,var ,@forms)))
 (defmacro set>! (pattern &rest forms)
   "Bind the result of `thread-first' on FORMS to PATTERN.
 See `set!'."
