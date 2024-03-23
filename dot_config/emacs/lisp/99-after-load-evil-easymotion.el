@@ -23,7 +23,7 @@
 ;;; Commentary:
 ;;
 ;; This is my configuration for `evil-easymotion'.  Here I define commands for
-;; jumping to points.  replace the default evil motions =w=, =e=, =E=, =W=
+;; jumping to points and  replace the default evil motions =w=, =e=, =E=, =W=
 ;; with more useful counterparts.
 ;;
 ;; The README of `evil-easymotion' suggests that by default motions should
@@ -140,9 +140,6 @@ This is a wrapper around `evilem-make-motion'."
   (set! regexp "\\(?:\\`\\|[^[:word:]]+\\)\\([[:word:]]\\)[[:word:]]*")
   (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
        (goto-char (match-beginning 1))))
-
-;; There is a bug with `evilem-make-motion' where the arguments are not in the
-;; proper order.
 ;;;; beginning of WORD
 (defemotion! evilem-motion-beginning-of-WORD ()
   "Jump to the beginning of a WORD in the current visible buffer."
@@ -176,7 +173,7 @@ This is a wrapper around `evilem-make-motion'."
   (set! regexp "\\(?:\\`\\|[^[:blank:]]+\\)\\([[:word:]]\\)")
   (and (re-search-forward regexp nil t nil)
        (goto-char (match-beginning 1))))
-;;;; go to a parentheses
+;;;; parentheses
 ;; TODO: how to find current form?
 (defemotion! oo-evilem-open-paren ()
   "Jump to opening parenthesis in current form."
@@ -185,7 +182,7 @@ This is a wrapper around `evilem-make-motion'."
   (set! regexp "(")
   (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
        (goto-char (match-beginning 0))))
-;;;; beginning-of-line
+;;;; first non-whitespace character in line
 ;; TODO: screenshot the difference between this with and without the
 ;; postprocess.
 (defemotion! evilem-motion-beginning-of-line ()
