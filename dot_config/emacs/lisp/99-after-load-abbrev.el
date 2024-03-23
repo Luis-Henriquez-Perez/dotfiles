@@ -144,6 +144,12 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+(oo-text-abbrev "rnt" "are not")
+(oo-text-abbrev "arent" "are not")
+(oo-text-abbrev "tt" "the")
+(oo-text-abbrev "len" "length")
+(oo-text-abbrev "bf" "length")
+(oo-text-abbrev "af" "length")
 (oo-text-abbrev "oft" "often")
 (oo-text-abbrev "dsnt" "does not")
 (oo-text-abbrev "ihb" "I had been")
