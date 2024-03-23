@@ -99,10 +99,11 @@
 
 ;; TODO: Do not use these bindings for keyboard macros where the originals might
 ;; be more useful.
-(oo-bind :nv "w" #'oo-evilem-bow)
-(oo-bind :nv "e" #'oo-evilem-eow)
-(oo-bind :nv "W" #'oo-evilem-boW)
-(oo-bind :nv "E" #'oo-evilem-eoW)
+;; Note: these are *not* the same as
+(oo-bind :nv "w" #'evilem-motion-beginning-of-word)
+(oo-bind :nv "W" #'evilem-motion-beginning-of-WORD)
+(oo-bind :nv "e" #'evilem-motion-end-of-word)
+(oo-bind :nv "E" #'evilem-motion-end-of-WORD)
 (oo-bind :nv "f" #'oo-evilem-char)
 (oo-bind :nv "b" #'oo-evilem-bol)
 ;;;; lispy
