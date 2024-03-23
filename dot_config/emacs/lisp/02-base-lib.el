@@ -70,15 +70,26 @@ List markers are symbols that begin with `&' such as are `&rest' and
   (apply #'oo-into-symbol ":" args))
 
 ;; This function is extremely useful for testing things.
+;; (defun oo-shuffle (list)
+;;   "Return list with its elements shuffled."
+;;   ;; I got this from online.  Me, I would not use `cl-loop'.
+;;   ;; https://stackoverflow.com/questions/49490551/how-to-shuffle-list-in-lisp
+;;   ;; TODO: revise loop so it can do this from...downto stuff.
+;;   (cl-loop for i from (length list) downto 2
+;;            do (cl-rotatef (elt list (random i))
+;;                           (elt list (1- i))))
+;;   list)
 (defun oo-shuffle (list)
-  "Return list with its elements shuffled."
-  ;; I got this from online.  Me, I would not use `cl-loop'.
-  ;; https://stackoverflow.com/questions/49490551/how-to-shuffle-list-in-lisp
-  ;; TODO: revise loop so it can do this from...downto stuff.
-  (cl-loop for i from (length list) downto 2
-           do (cl-rotatef (elt list (random i))
-                          (elt list (1- i))))
-  list)
+  "Return a shuffled copy of LIST using the Fisher-Yates shuffle algorithm."
+  (let ((copy (copy-sequence list))
+        (n (length list)))
+    (while (> n 1)
+      (setq n (1- n))
+      (let ((swap (random n))
+            (temp (elt copy n)))
+        (setf (elt copy n) (elt copy swap))
+        (setf (elt copy swap) temp)))
+    copy))
 ;;;; oo-condition-case-fn
 ;; One thing is the fact that because it is a function it can be composed and
 ;; chained.  Another is I can swap in and out the =condition-case= body and handlers
