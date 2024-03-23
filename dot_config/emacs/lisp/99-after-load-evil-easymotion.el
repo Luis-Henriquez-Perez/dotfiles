@@ -42,7 +42,10 @@
 ;; list of candidates because it simply does not make sense to have it in there.
 ;; I am not going to use `evil-easymotion' to "move" to the same exact point I
 ;; am on; and even if I change my mind and I do want to stay I will just cancel
-;; the motion.
+;; the motion.  The default sort function is fine if your only going
+;; forward--which is from what I have seen how most people use
+;; `evil-easymotion'--but if as I am you can go before point as well then it is
+;; not the same thing.
 ;;
 ;; 4. I customize the way the `evilem-keys' are assigned with the points by
 ;; changing the order in which they are sorted.  It is important that the
@@ -94,7 +97,7 @@
 ;;   "Return MOTION-FUNCTION."
 ;;   (oo-before-fn motion-fn (-partial #'goto-char (end-of-overlay)))
 ;;   (oo-if-fn #'in-overlay-p it motion-function))
-;;;; better sort function
+;;;; more appropriate sort function
 ;; TODO: The reason that the letters are inconsistent is because the default
 ;; sorting function assigns values based on the /character distance/ not the
 ;; distance in words.  So if there is a long word.  What I need to do is sort by
