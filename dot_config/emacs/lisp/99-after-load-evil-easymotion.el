@@ -184,10 +184,13 @@ This is a wrapper around `evilem-make-motion'."
   (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
        (goto-char (match-beginning 0))))
 ;;;; beginning-of-line
+;; TODO: screenshot the difference between this with and without the
+;; postprocess.
 (defemotion! evilem-motion-beginning-of-line ()
   "Jump to the beginning of line in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
+  :collect-postprocess #'oo--evilem-sort-by-match
   (interactive)
   (set! regexp "^[[:space:]]*\\(.\\)")
   (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
