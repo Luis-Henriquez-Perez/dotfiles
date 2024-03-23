@@ -146,6 +146,11 @@
 ;;;;; all abbrevs
 ;; This is a common abbrev for "by the way" but I feel like I do not really use
 ;; that phrase unless I am texting.
+(oo-text-abbrev "tse" "these")
+(oo-text-abbrev "usu" "usually")
+(oo-text-abbrev "iprac" "in practice")
+(oo-text-abbrev "efy" "efficiency")
+(oo-text-abbrev "evr" "everything")
 (oo-text-abbrev "sen" "seen")
 (oo-text-abbrev "wat" "what")
 (oo-text-abbrev "dfl" "default")
