@@ -23,7 +23,7 @@
 ;;; Commentary:
 ;;
 ;; This is my configuration for `evil-easymotion'.  Here I define commands for
-;; jumping to points.  I replace the default evil motions =w=, =e=, =E=, =W=
+;; jumping to points.  replace the default evil motions =w=, =e=, =E=, =W=
 ;; with more useful counterparts.
 ;;
 ;; The README of `evil-easymotion' suggests that by default motions should
@@ -99,11 +99,19 @@
 (defun! oo--evilem-sort-by-match (points)
   "Return points sorted by match occurance.
 This is as opposed to character length."
-  (->> points
-       (-remove (-compose (-partial #'= (point)) #'car))
-       (-sort (-on (-partial #'< (point)) #'car))
-       (-separate (-on (-partial #'< (point)) #'car))
-       (apply #'-interleave)))
+  (set! before (length points))
+  (set! point (point))
+  (set! points (-remove (-compose (-partial #'= point) #'car) points))
+  (set! points (-sort (-on (-partial #'< point) #'car) points))
+  (set! (less-than greater-than) (-separate (-on (-partial #'< point) #'car) points))
+  ;; Interleave the points.  I really wish that I could use dash's `-interleave'
+  ;; but if the interleaved lists are not the same size.
+  (while (or less-than greater-than)
+    (when less-than
+      (pushing! interleaved (pop less-than)))
+    (when greater-than
+      (pushing! interleaved (pop greater-than))))
+  (nreverse interleaved))
 ;;;; improve scope
 ;; Something similar is used in doom.
 (put 'visible 'bounds-of-thing-at-point (lambda () (cons (window-start) (window-end))))
@@ -129,23 +137,21 @@ This is a wrapper around `evilem-make-motion'."
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
   (set! regexp "\\(?:\\`\\|[^[:word:]]+\\)\\([[:word:]]\\)[[:word:]]*")
-  (save-match-data
-    (when (save-excursion (forward-char) (re-search-forward regexp nil t nil))
-      (goto-char (match-beginning 1)))))
+  (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
+       (goto-char (match-beginning 1))))
 
-;; There is a bug with `evilem-make-motion' where the author does not write the
-;; arguments in the proper order.  Specifically, the
+;; There is a bug with `evilem-make-motion' where the arguments are not in the
+;; proper order.
 ;;;; beginning of WORD
 (defemotion! evilem-motion-beginning-of-WORD ()
   "Jump to the beginning of a WORD in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
-  (set! regexp (rx (seq (or bos (* (not word))) (group word) (* (not space)))))
-  (save-match-data
-    (when (save-excursion (forward-char)
-                          (re-search-forward regexp nil t nil))
-      (goto-char (match-beginning 1)))))
+  (set! regexp "\\(?:\\`\\|[^[:word:]]*\\)\\([[:word:]]\\)[^[:space:]]*")
+  (and (save-excursion (forward-char)
+                       (re-search-forward regexp nil t nil))
+       (goto-char (match-beginning 1))))
 ;;;; end of word
 (defemotion! evilem-motion-end-of-word ()
   "Jump to the beginning of a word in the current visible buffer."
@@ -153,23 +159,21 @@ This is a wrapper around `evilem-make-motion'."
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
   (set! regexp "[[:alnum:]]+")
-  (save-match-data
-    ;; I need to ensure that the regexp does not match the word on top of the
-    ;; current point.
-    ;; TODO: Fix capitalization rules, current at the top of the sentence above
-    ;; was capitalized but should not be.
-    (when (save-excursion (forward-char)
-                          (re-search-forward regexp nil t nil))
-      (goto-char (1- (match-end 0))))))
+  ;; I need to ensure that the regexp does not match the word on top of the
+  ;; current point.
+  ;; TODO: Fix capitalization rules, current at the top of the sentence above
+  ;; was capitalized but should not be.
+  (and (save-excursion (forward-char)
+                       (re-search-forward regexp nil t nil))
+       (goto-char (1- (match-end 0)))))
 ;;;; end of WORD
 (defemotion! evilem-motion-end-of-WORD ()
   "Jump to the end of a WORD in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
   (set! regexp "\\(?:\\`\\|[^[:blank:]]+\\)\\([[:word:]]\\)")
-  (save-match-data
-    (when (re-search-forward regexp nil t nil)
-      (goto-char (match-beginning 1)))))
+  (and (re-search-forward regexp nil t nil)
+       (goto-char (match-beginning 1))))
 ;;;; go to a parentheses
 ;; TODO: how to find current form?
 (defemotion! oo-evilem-open-paren ()
@@ -177,9 +181,8 @@ This is a wrapper around `evilem-make-motion'."
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
   (set! regexp "(")
-  (save-match-data
-    (when (save-excursion (goto-char (1+ (point))) (re-search-forward regexp nil t nil))
-      (goto-char (match-beginning 0)))))
+  (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
+       (goto-char (match-beginning 0))))
 ;;;; beginning-of-line
 (defemotion! evilem-motion-beginning-of-line ()
   "Jump to the beginning of line in the current visible buffer."
@@ -187,20 +190,20 @@ This is a wrapper around `evilem-make-motion'."
   :scope 'visible
   (interactive)
   (set! regexp "^[[:space:]]*\\(.\\)")
-  (save-match-data
-    (when (save-excursion (goto-char (1+ (point))) (re-search-forward regexp nil t nil))
-      (goto-char (match-beginning 1)))))
+  (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
+       (goto-char (match-beginning 1))))
 ;;;; a character
+;; TODO: I might be able to use `evil-find-char' for this one, but I might not
+;; do it because this already works well.
 (defemotion! evilem-motion-char (char)
   "Jump to a character in current visible buffer."
   :bind ((char (read-char "Char: ")))
   :initial-point #'window-start
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
-  (save-match-data
-    (when (save-excursion (goto-char (1+ (point)))
-                          (re-search-forward (rx-to-string (char-to-string char)) nil t nil))
-      (goto-char (1- (match-end 0))))))
+  (and (save-excursion (forward-char)
+                       (re-search-forward (rx-to-string (char-to-string char)) nil t nil))
+       (goto-char (match-beginning 0))))
 ;;; provide
 (provide '99-after-load-evil-easymotion)
 ;;; 99-after-load-evil-easymotion.el ends here
