@@ -116,7 +116,7 @@
 (elpaca esup)
 (elpaca evil)
 (elpaca evil-cleverparens)
-(elpaca evil-easymotion :fetcher github :repo "Luis-Henriquez-Perez/evil-easymotion")
+(elpaca (evil-easymotion :fetcher github :repo "Luis-Henriquez-Perez/evil-easymotion"))
 (elpaca evil-exchange)
 (elpaca evil-extra-operator)
 (elpaca evil-goggles)
