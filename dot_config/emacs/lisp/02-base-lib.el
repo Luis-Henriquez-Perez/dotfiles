@@ -68,6 +68,16 @@ List markers are symbols that begin with `&' such as are `&rest' and
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
+
+;; This function is extremely useful for testing things.
+(defun oo-shuffle (list)
+  "Return list with its elements shuffled."
+  ;; I got this from online.  Me, I would not use `cl-loop'.
+  ;; TODO: revise loop so it can do this from...downto stuff.
+  (cl-loop for i from (length list) downto 2
+           do (cl-rotatef (elt list (random i))
+                          (elt list (1- i))))
+  list)
 ;;;; oo-condition-case-fn
 ;; One thing is the fact that because it is a function it can be composed and
 ;; chained.  Another is I can swap in and out the =condition-case= body and handlers
