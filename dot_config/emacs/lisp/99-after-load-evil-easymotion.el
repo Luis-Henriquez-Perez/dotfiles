@@ -26,59 +26,58 @@
 ;; jumping to points and  replace the default evil motions =w=, =e=, =E=, =W=
 ;; with more useful counterparts.
 ;;
+;; Let me go over specifically what I do.
+;;
+;; 1. I create `evil-easymotion' commands that are similar but not the same as the
+;; following commands: `evil-forward-word-begin'.  They differ in that they.
+;;
+;; 2. Instead of using the default scope I change the scope to the visible window
+;; and make the point collection start from the start of the visible window
+;; instead of the current point which is the default.  This is my preference and
+;; it allows me to reduce the amount of movement commands I use for jumping back
+;; and forth from words and it reduces the mental overhead of deciding whether
+;; to go forward or backward.
+;;
+;; 3. In the new sort function I provide `', I remove the current point from the
+;; list of candidates because it simply does not make sense to have it in there.
+;; I am not going to use `evil-easymotion' to "move" to the same exact point I
+;; am on; and even if I change my mind and I do want to stay I will just cancel
+;; the motion.
+;;
+;; 4. I customize the way the `evilem-keys' are assigned with the points by
+;; changing the order in which they are sorted.  It is important that the
+;; `evilem-keys' are assigned in a consistent order to candidates so that these
+;; commands may be used in keyboard macros.
+;;
+;; one important consideration is keyboard macros.  I do not think that choosing
+;; with easymotion goes well with keyboard macros because the characters might
+;; change positions..
+;; TODO: Exclude the current point from the set because obviously I do not want
+;; to jump to the place I am already at.
+;;
 ;; The README of `evil-easymotion' suggests that by default motions should
 ;; ignore overlays but that did not seem to be the case for me.  But I need to
 ;; figure out how to tell.  Thus far I have only been able to tell by the lag in
 ;; large org files.
 ;;
-;; one important consideration is keyboard macros.  I do not think that choosing
-;; with easymotion goes well with keyboard macros because the characters might
-;; change positions..
-;; Some thing I should keep track of is overlays.  If point is in an overlay,
-;; get out of it.  Also I do not know if this is as useful in keyboard macros.
-;;
-;; Note that you will see the idiom (save-excursion (goto-char (1+ (point))))
-;; often.  that is because.
-;; TODO: I want to maybe make a macro for defining these functions but I do not
-;; know if its worth.  The `evil-easymotion' could be simplified into one
-;; "defun-like"
 ;; TODO: if the there is a word at the very beginning of the buffer this does
 ;; not match it because then it would not be able to advance to the next points.
 ;; as in, I would need to start at point -1 but that position does not exist.
 ;; It is not a massive deal because it is not often your at the top of the
 ;; window and there is a word right at the beginning of the buffer but I would
 ;; like to fix it.
-;; I might need to provide another function to use for point collection.
 ;; TODO: captain does not work well in comments.  Captain uses the
 ;; `sentence-at-point' function I think so I just think that function does not
 ;; work in comments.
 ;;
-;; TODO: Exclude the current point from the set because obviously I do not want
-;; to jump to the place I am already at.
-;;
 ;; TODO: find a function that returns the point at the top of the window (not
 ;; the top of the buffer).  I should be using that instead of `point-min'.
-;;
-;; Gotcha.
-;; TODO: The reason that the letters are inconsistent is because the default
-;; sorting function assigns values based on the /character distance/ not the
-;; distance in words.  So if there is a long word.  What I need to do is sort by
-;; word distance.
-;;
-;; 0. Remove the current point from points
-;; 1. sort the points by distance from the main point
-;; 2. separate the points into points less than origin and points greater than it
-;; 3. interleave the points
 ;;
 ;; On another note, the `:point-collection' key for `evilem-make-motion' will
 ;; let me insert the point at the beginning of the buffer.  Alternatively, I
 ;; could specify another function that just gets that one point if it's at the
 ;; top of the window.  That function can also choose to sort the points so I can
 ;; sort them based on.
-;; (defun oo--evilem-include-first-point (points)
-;;   "Return"
-;;   (if ())
-;;   (cons ()))
 ;;
 ;;; Code:
 (require 'rx)
@@ -96,6 +95,15 @@
 ;;   (oo-before-fn motion-fn (-partial #'goto-char (end-of-overlay)))
 ;;   (oo-if-fn #'in-overlay-p it motion-function))
 ;;;; better sort function
+;; TODO: The reason that the letters are inconsistent is because the default
+;; sorting function assigns values based on the /character distance/ not the
+;; distance in words.  So if there is a long word.  What I need to do is sort by
+;; word distance.
+;;
+;; 0. Remove the current point from points
+;; 1. sort the points by distance from the main point
+;; 2. separate the points into points less than origin and points greater than it
+;; 3. interleave the points
 (defun! oo--evilem-sort-by-match (points)
   "Return points sorted by match occurance.
 This is as opposed to character length."
