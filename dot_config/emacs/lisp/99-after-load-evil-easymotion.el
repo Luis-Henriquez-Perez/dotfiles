@@ -105,7 +105,8 @@ This is as opposed to character length."
   (set! points (-sort (-on (-partial #'< point) #'car) points))
   (set! (less-than greater-than) (-separate (-on (-partial #'< point) #'car) points))
   ;; Interleave the points.  I really wish that I could use dash's `-interleave'
-  ;; but if the interleaved lists are not the same size.
+  ;; but if the interleaved lists are not the same size the extra values are
+  ;; thrown away.
   (while (or less-than greater-than)
     (when less-than
       (pushing! interleaved (pop less-than)))
