@@ -67,6 +67,11 @@
 (require '90-keybindings)
 ;;;; load config files
 (defhook! emacs-startup-hook&setup-config-files ()
+;;;; load after-load files
+;; The "after-load" files contain customizations that should be enabled after a
+;; package has been loaded.  These files are usually more meaty than the init
+;; files.
+(defhook! emacs-startup-hook&register-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
   (set! regexp "\\`99-after-load-\\(.+\\)")
