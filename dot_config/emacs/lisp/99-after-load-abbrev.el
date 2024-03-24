@@ -144,6 +144,7 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+(oo-text-abbrev "esp" "especially")
 ;; This clashes with the word "ill" but I barely use that word.  In the rare
 ;; event where I do need to use it I will unexpand it.
 (oo-text-abbrev "ill" "I will")
@@ -178,6 +179,7 @@
 (oo-text-abbrev "gt" "get")
 (oo-text-abbrev "wev" "whatever")
 (oo-text-abbrev "jbos" "jobs")
+(oo-text-abbrev "theyll" "they will")
 (oo-text-abbrev "prevl" "previously")
 (oo-text-abbrev "prev" "previous")
 (oo-text-abbrev "ivs" "I have seen")
@@ -290,6 +292,7 @@
 (oo-text-abbrev "evaled" "evaluated")
 (oo-text-abbrev "imma" "I am going to")
 ;; From https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/
+(oo-text-abbrev "iwt" "I want to")
 (oo-text-abbrev "hw" "however")
 (oo-text-abbrev "otoh" "on the other hand")
 (oo-text-abbrev "ohter" "other")
@@ -308,7 +311,7 @@
 (oo-text-abbrev "wontt" "will not")
 (oo-text-abbrev "doesnt" "does not")
 ;; Not sure I actually want this abbrev because =wont= is actually a word.
-;; (oo-text-abbrev "wont" nil)
+(oo-text-abbrev "wont" nil)
 (oo-text-abbrev "thats" "that is")
 (oo-text-abbrev "u" "you")
 (oo-text-abbrev "ul" "you'll")
@@ -316,8 +319,6 @@
 (oo-text-abbrev "dnt" "don't")
 (oo-text-abbrev "wo" "without")
 (oo-text-abbrev "ive" "I have")
-;; (oo-text-abbrev "dstr" "doc-string")
-;; (oo-text-abbrev "dstrs" "doc-strings")
 (oo-text-abbrev "ik" "I know")
 (oo-text-abbrev "plx" "complex")
 (oo-text-abbrev "ribe" "describe")
