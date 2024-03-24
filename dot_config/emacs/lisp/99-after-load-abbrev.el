@@ -294,6 +294,7 @@
 ;; From https://sachachua.com/blog/2015/01/developing-emacs-micro-habits-text-automation/
 (oo-text-abbrev "iwt" "I want to")
 (oo-text-abbrev "hw" "however")
+(oo-text-abbrev "ths" "this")
 (oo-text-abbrev "otoh" "on the other hand")
 (oo-text-abbrev "kinda" "kind of")
 (oo-text-abbrev "ohter" "other")
