@@ -144,6 +144,9 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+;; This clashes with the word "ill" but I barely use that word.  In the rare
+;; event where I do need to use it I will unexpand it.
+(oo-text-abbrev "ill" "I will")
 ;; This is a common abbrev for "by the way" but I feel like I do not really use
 ;; that phrase unless I am texting.
 (oo-text-abbrev "exand" "expand")
