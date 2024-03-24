@@ -66,7 +66,7 @@
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 
-(eshell/alias "install" "sudo pacman -S --no-confirm $1")
+(eshell/alias "install" "sudo pacman -S --noconfirm $1")
 ;; (eshell/alias "install" "sudo pacman -S --no-confirm $1")
 
 ;; TODO: Do not show me descriptions when searching...
