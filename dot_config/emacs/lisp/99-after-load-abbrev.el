@@ -295,6 +295,7 @@
 (oo-text-abbrev "iwt" "I want to")
 (oo-text-abbrev "hw" "however")
 (oo-text-abbrev "otoh" "on the other hand")
+(oo-text-abbrev "kinda" "kind of")
 (oo-text-abbrev "ohter" "other")
 (oo-text-abbrev "fe" "for example")
 (oo-text-abbrev "fi" "for instance")
