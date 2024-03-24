@@ -50,7 +50,6 @@
            :publishing-function org-publish-attachment)
           ("blog"
            :components ("pages" "static")))))
-(org-publish "blog" t)
 ;;; provide
 (provide '99-after-load-ox-publish)
 ;;; 99-after-load-ox-publish.el ends here
