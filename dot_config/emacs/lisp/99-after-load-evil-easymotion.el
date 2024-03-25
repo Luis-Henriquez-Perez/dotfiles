@@ -162,7 +162,12 @@ This is a wrapper around `evilem-make-motion'."
   :initial-point #'window-start
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
-  (evil-forward-WORD-begin 1))
+  (set! blank-rx (rx (or bol (1+ white)) (group (not white))))
+  (set! rx (rx (: bow (group word) (* (not white)) eow)))
+  (and (re-search-forward blank-rx nil t nil)
+       (goto-char (match-beginning 0))
+       (re-search-forward rx nil t nil)
+       (goto-char (match-beginning 1))))
 ;;;; end of word
 (defemotion! evilem-motion-end-of-word ()
   "Jump to the beginning of a word in the current visible buffer."
