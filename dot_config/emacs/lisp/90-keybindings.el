@@ -97,7 +97,9 @@
 ;; TODO: Maybe make an operator for eval print.
 ;; TODO: Make evil use symbol object instead of word object in lisp code.
 
-;; I feel like the eval operator is so important that it should have =gg=.
+;; I feel like the eval operator is so important that it should have =gg=.  I
+;; use this a lot more than the original =gg= binding for going to the beginning
+;; of buffer.
 (oo-bind :nv "g g" #'evil-operator-eval)
 (oo-bind :nv "g j" #'evil-operator-eval-replace)
 
