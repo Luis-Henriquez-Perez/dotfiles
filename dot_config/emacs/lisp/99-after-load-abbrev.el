@@ -144,6 +144,7 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+(oo-text-abbrev "alth" "although")
 (oo-text-abbrev "esp" "especially")
 ;; This clashes with the word "ill" but I barely use that word.  In the rare
 ;; event where I do need to use it I will unexpand it.
