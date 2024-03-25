@@ -74,8 +74,8 @@ must be evaluated with `lexical-binding' enabled."
 ;; `lgr' more.  I considered removing the package, but I still got it to work.
 ;; And logging a little is better than nothing.
 (defvar oo-lgr (progn! (set! logger (lgr-get-logger "oo"))
-                       (set! log-buffer (get-buffer "*lgr*"))
-                       (lgr-appender-buffer :buffer log-buffer))
+                       (set! log-buffer (get-buffer-create "*lgr*"))
+                       (lgr-add-appender (lgr-get-logger "oo") (lgr-appender-buffer :buffer log-buffer)))
   "Object used for logging.")
 
 (defmacro info! (msg &rest meta)
