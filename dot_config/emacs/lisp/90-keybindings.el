@@ -94,6 +94,7 @@
 (autoload #'evil-operator-eval-replace "evil-extra-operator")
 ;; =g a= is a bit easier to press than =g e= on a QWERTY keyboard.
 ;; TODO: Maybe make an operator for eval print.
+;; TODO: Make evil use symbol object instead of word object in lisp code.
 (oo-bind :nv "g a" #'evil-operator-eval)
 (oo-bind :nv "g e" #'evil-operator-eval)
 (oo-bind :nv "g r" #'evil-operator-eval-replace)
