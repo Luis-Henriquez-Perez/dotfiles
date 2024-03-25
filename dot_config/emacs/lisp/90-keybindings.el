@@ -32,57 +32,9 @@
 ;;
 ;;; Code:
 (require '06-base-leaders)
-;;;; bindings
-(oo-bind :nm "+" #'text-scale-increase)
-(oo-bind :nm "-" #'text-scale-decrease)
-
-(oo-bind 'oo-toggle-map "r" #'read-only-mode)
-(oo-bind 'oo-toggle-map "t" #'load-theme)
-(oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
-
-(oo-bind 'oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
-(oo-bind 'oo-toggle-map "P" #'profiler-stop)
-;;;; evil-textobj-line
-;; TODO: create an abbrev to today's date.
-;; TODO: there needs to be a standard for setting today.
-;; While I was writing a code that would automate adding package headers to
-;; files, I wanted to surround each line with quotes and that is when I thought
-;; I would like a line text-object.
-(autoload #'evil-inner-line "evil-textobj-line")
-(autoload #'evil-a-line "evil-textobj-line")
-(oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
-(oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
-;;;; evil operators
-(autoload 'evil-operator-eval "evil-extra-operator")
-(autoload 'evil-operator-eval-replace "evil-extra-operator")
-(oo-bind 'oo-leader-map "er" #'evil-operator-eval-replace :wk "eval and replace")
-(oo-bind 'oo-leader-map "ee" #'evil-operator-eval :wk "eval")
-;;;; smartparens
-(oo-bind 'oo-toggle-map "s" #'smartparens-mode)
-;;;; burly
-;;;;; leader bindings
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
-;;;;; save window configuration with =b= or =S=
-;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
-;; necessary to reproduce the current window configuration.  I can then restore the
-;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
-(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-;;;; expand-region
-(oo-bind :v "V" #'er/contract-region)
-(oo-bind :v "v" #'er/expand-region)
-;;;; eshell
-(oo-bind 'oo-app-map "e" #'eshell)
-;;;; lispyville
-(oo-bind :n "g," #'lispyville-comment-or-uncomment)
-(oo-bind :n "gc" #'lispyville-comment-and-clone-dwim)
-(oo-bind :n "gl" #'lispyville-comment-and-clone-dwim)
-
-(oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
-(oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
-;;;; evil-easymotion
+;; TODO: Maybe use easymotion for h and l.  Kind of controversion will admit.
+;;;; level 1 evil bindings
+;;;;; w W e E f b - evil motions
 ;; The problem with these keys is that they interfere with keyboard macros.  Let
 ;; me explain--when you use avy, it is not necessarily the case that the
 ;; following keys have the same letter.  For keyboard macros to work you need
@@ -107,14 +59,83 @@
 (oo-bind :nv "E" #'evilem-motion-end-of-WORD)
 (oo-bind :nv "f" #'evilem-motion-char)
 (oo-bind :nv "b" #'evilem-motion-beginning-of-line)
+;;;;; +/- increasing text-size
+(oo-bind :nm "+" #'text-scale-increase)
+(oo-bind :nm "-" #'text-scale-decrease)
+;;;;; l as a textobj for line
+;; TODO: create an abbrev to today's date.
+;; TODO: there needs to be a standard for setting today.
+;; While I was writing a code that would automate adding package headers to
+;; files, I wanted to surround each line with quotes and that is when I thought
+;; I would like a line text-object.
+(autoload #'evil-inner-line "evil-textobj-line")
+(autoload #'evil-a-line "evil-textobj-line")
+(oo-bind 'evil-inner-text-objects-map "l" #'evil-inner-line)
+(oo-bind 'evil-outer-text-objects-map "l" #'evil-a-line)
+;;;;; form textobject
+;; TODO: Figure out how to do this only in lisp modes.  Although now that I
+;; think about it I think I have used this in non-lisp modes as well.
+(oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+(oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
+;;;;; v and V to expand/contract region
+(oo-bind :v "V" #'er/contract-region)
+(oo-bind :v "v" #'er/expand-region)
+;;;;; use TAB to complete a word
+(oo-bind :i "TAB" #'completion-at-point)
+;;;;; bind =H= and =L=
+;; I find these bindings more useful on an everyday basis.
+(oo-bind :n "H" #'evil-first-non-blank)
+(oo-bind :n "L" #'evil-last-non-blank)
+;;;;; g is kind of like the main prefix key of vim
+;; The =g= prefix contains lots of things including the beginning of buffer.
+;; I will use =ge= as the eval operator because especially in an interactive
+;; editor like emacs being able to eval on demand is very important.
+(autoload #'evil-operator-eval "evil-extra-operator")
+(autoload #'evil-operator-eval-replace "evil-extra-operator")
+;; =g a= is a bit easier to press than =g e= on a QWERTY keyboard.
+;; TODO: Maybe make an operator for eval print.
+(oo-bind :nv "g a" #'evil-operator-eval)
+(oo-bind :nv "g e" #'evil-operator-eval)
+(oo-bind :nv "g r" #'evil-operator-eval-replace)
+(oo-bind :nv "g j" #'evil-operator-eval)
+(oo-bind :nv "g k" #'evil-operator-eval-replace)
+
+(oo-bind :nv "g c" #'lispyville-comment-or-uncomment)
+(oo-bind :nv "g l" #'lispyville-comment-and-clone-dwim)
+
+;; Add textobj syntax operator.  This is very interesting.
+(autoload #'evil-i-syntax "evil-textobj-syntax")
+(autoload #'evil-a-syntax "evil-textobj-syntax")
+(oo-bind 'evil-inner-text-objects-map "h" #'evil-i-syntax)
+(oo-bind 'evil-outer-text-objects-map "h" #'evil-a-syntax)
+
+;; toggle-map
+(oo-bind 'oo-toggle-map "r" #'read-only-mode)
+(oo-bind 'oo-toggle-map "t" #'load-theme)
+(oo-bind 'oo-toggle-map "d" #'toggle-debug-on-error)
+
+(oo-bind 'oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
+(oo-bind 'oo-toggle-map "P" #'profiler-stop)
+(oo-bind 'oo-toggle-map "s" #'smartparens-mode)
+;;;; burly
+;;;;; leader bindings
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-find-map "j" #'burly-open-bookmark)
+;;;;; save window configuration with =b= or =S=
+;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
+;; necessary to reproduce the current window configuration.  I can then restore the
+;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
+(oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+;;;; eshell
+(oo-bind 'oo-app-map "e" #'eshell)
 ;;;; lispy
-(oo-bind :v "E" #'lispy-eval-and-replace)
+(oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
+(oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
+;; (oo-bind :v "E" #'lispy-eval-and-replace)
 
 (oo-bind 'emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
-;;;; evil-cleverparens
-(oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-
-(oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
 ;;;; create a leader map for dotfile actions
 (defvar oo-dotfile-map (make-sparse-keymap))
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
