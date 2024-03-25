@@ -103,6 +103,9 @@
 (oo-bind :nv "g c" #'lispyville-comment-or-uncomment)
 (oo-bind :nv "g l" #'lispyville-comment-and-clone-dwim)
 
+(oo-bind :nv "g x" #'evil-exchange)
+(oo-bind :nv "g X" #'evil-exchange-cancel)
+
 ;; Add textobj syntax operator.  This is very interesting.
 (autoload #'evil-i-syntax "evil-textobj-syntax")
 (autoload #'evil-a-syntax "evil-textobj-syntax")
