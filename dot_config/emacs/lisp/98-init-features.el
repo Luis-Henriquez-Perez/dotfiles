@@ -98,7 +98,7 @@ For what buffer is displayed in the case of a boolean see
 (oo-add-hook 'prog-mode-hook 'auto-fill-mode)
 (oo-add-hook 'prog-mode-hook #'abbrev-mode)
 (oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-(oo-add-hook 'prog-mode-hook #'corfu-mode)
+;; (oo-add-hook 'prog-mode-hook #'corfu-mode)
 (oo-add-hook 'prog-mode-hook #'outli-mode)
 (oo-add-hook 'prog-mode-hook #'smartparens-mode)
 (oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
