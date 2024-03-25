@@ -154,7 +154,7 @@ This is a wrapper around `evilem-make-motion'."
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
   (set! regexp "\\(?:\\`\\|[^[:word:]]+\\)\\([[:word:]]\\)[[:word:]]*")
-  (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
+  (and (re-search-forward regexp nil t nil)
        (goto-char (match-beginning 1))))
 ;;;; beginning of WORD
 (defemotion! evilem-motion-beginning-of-WORD ()
