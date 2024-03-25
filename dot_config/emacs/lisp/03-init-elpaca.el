@@ -94,6 +94,7 @@
 ;; (elpaca benchmark-init)
 (elpaca burly)
 ;; (elpaca buttercup)
+(elpaca cyberpunk-theme)
 (elpaca minimal-theme)
 (elpaca cape)
 (elpaca caps-lock)
