@@ -26,6 +26,8 @@
 ;;
 ;;; Code:
 ;;;; lispyville
+;; Do not bind any keys by default.
+(opt! lispyville-key-theme nil)
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 ;;; provide
 (provide '99-after-load-lispyville)
