@@ -50,15 +50,16 @@
 (autoload #'evilem-motion-char "evil-easymotion")
 (autoload #'evilem-motion-beginning-of-line "evil-easymotion")
 
+;; TODO: Create an evil operator to narrow to a region.
 ;; TODO: Do not use these bindings for keyboard macros where the originals might
 ;; be more useful.
-;; Note: these are *not* the same as
-(oo-bind :nvo "w" #'evilem-motion-beginning-of-word)
-(oo-bind :nvo "W" #'evilem-motion-beginning-of-WORD)
-(oo-bind :nvo "e" #'evilem-motion-end-of-word)
-(oo-bind :nvo "E" #'evilem-motion-end-of-WORD)
+(oo-bind :nv "w" #'evilem-motion-beginning-of-word)
+(oo-bind :nv "W" #'evilem-motion-beginning-of-WORD)
+(oo-bind :nv "e" #'evilem-motion-end-of-word)
+(oo-bind :nv "E" #'evilem-motion-end-of-WORD)
 (oo-bind :nvo "f" #'evilem-motion-char)
-(oo-bind :nvo "b" #'evilem-motion-beginning-of-line)
+(oo-bind :nvo "H" #'evilem-motion-beginning-of-line)
+;; (oo-bind :nvo "L" #'evilem-motion-end-of-line)
 ;;;;; +/- increasing text-size
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)
