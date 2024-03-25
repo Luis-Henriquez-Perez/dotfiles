@@ -95,17 +95,24 @@
 ;; =g a= is a bit easier to press than =g e= on a QWERTY keyboard.
 ;; TODO: Maybe make an operator for eval print.
 ;; TODO: Make evil use symbol object instead of word object in lisp code.
-(oo-bind :nv "g a" #'evil-operator-eval)
-(oo-bind :nv "g e" #'evil-operator-eval)
-(oo-bind :nv "g r" #'evil-operator-eval-replace)
-(oo-bind :nv "g j" #'evil-operator-eval)
-(oo-bind :nv "g k" #'evil-operator-eval-replace)
+
+;; I feel like the eval operator is so important that it should have =gg=.
+(oo-bind :nv "g g" #'evil-operator-eval)
+(oo-bind :nv "g j" #'evil-operator-eval-replace)
 
 (oo-bind :nv "g c" #'lispyville-comment-or-uncomment)
 (oo-bind :nv "g l" #'lispyville-comment-and-clone-dwim)
 
-(oo-bind :nv "g x" #'evil-exchange)
-(oo-bind :nv "g X" #'evil-exchange-cancel)
+(oo-bind :nv "g a" #'evil-exchange)
+(oo-bind :nv "g A" #'evil-exchange-cancel)
+;; TODO: consider switching =f= and =g=.  I feel that I will use =g= more than
+;; =f=.
+
+;; These two actually are bound the other way around, but in my opinion I need to
+;; go from downcase to upcase more than from upcase to downcase.  So I would
+;; rather the lowercase you be for upcasing.
+(oo-bind :nv "g u" #'evil-upcase)
+(oo-bind :nv "g U" #'evil-downcase)
 
 ;; Add textobj syntax operator.  This is very interesting.
 (autoload #'evil-i-syntax "evil-textobj-syntax")
