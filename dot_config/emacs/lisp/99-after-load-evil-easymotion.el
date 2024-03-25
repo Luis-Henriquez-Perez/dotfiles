@@ -162,10 +162,7 @@ This is a wrapper around `evilem-make-motion'."
   :initial-point #'window-start
   :scope 'visible
   :collect-postprocess #'oo--evilem-sort-by-match
-  (set! regexp "\\(?:\\`\\|[^[:word:]]*\\)\\([[:word:]]\\)[^[:space:]]*")
-  (and (save-excursion (forward-char)
-                       (re-search-forward regexp nil t nil))
-       (goto-char (match-beginning 1))))
+  (evil-forward-WORD-begin 1))
 ;;;; end of word
 (defemotion! evilem-motion-end-of-word ()
   "Jump to the beginning of a word in the current visible buffer."
