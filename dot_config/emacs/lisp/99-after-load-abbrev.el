@@ -144,6 +144,8 @@
 
 ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
+(oo-text-abbrev "asap" "A.S.A.P.")
+(oo-text-abbrev "econf" "emacs configuration")
 (oo-text-abbrev "alth" "although")
 (oo-text-abbrev "esp" "especially")
 ;; This clashes with the word "ill" but I barely use that word.  In the rare
@@ -151,6 +153,7 @@
 (oo-text-abbrev "ill" "I will")
 ;; This is a common abbrev for "by the way" but I feel like I do not really use
 ;; that phrase unless I am texting.
+(oo-text-abbrev "imd" "immediately")
 (oo-text-abbrev "exand" "expand")
 (oo-text-abbrev "ppet" "snippet")
 (oo-text-abbrev "tse" "these")
