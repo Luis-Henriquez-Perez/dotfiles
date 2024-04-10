@@ -1,0 +1,16 @@
+# Well, this is one thing that could be a bit akward to write with org.  The
+# main reason is that org doesn't have a way of dynamically adding values to a
+# file based on system information.  It is similar to noweb so in theory it
+# could fairly easily be added.  I would propose a no-web syntax.
+[user]
+    name = Luis Henriquez-Perez
+    email = luis@luishp.xyz
+    signingkey = C3F33DA91721A6B7365FBF668DAA027F8C199794
+
+[gpg]
+    program = /usr/bin/gpg
+
+[github]
+    user = Luis-Henriquez-Perez
+[push]
+    autoSetupRemote = true
