@@ -1,0 +1,38 @@
+// I need to make sure that this file opens in css-mode.  Rofi is configured in
+// css syntax.  Rofi is very much like a completion framework in Emacs such as
+// helm, vertico, ivy, etc.  It is like the equivalent of those but for a non emacs
+// user--or someone who does not want to encapsulate emacs into everything.
+// Honestly, I am considering using helm in a separate frame instead of rofi.  I
+// think helm I the only completion framework I know that can open in separate
+// frames because it is independent of the minibuffer.
+
+// Again, not sure if i will use this alot because tbh emacs completing
+// frameworks such as ivy, helm, and vertico are simply better and more
+// configurable.  Though I do not want to be unfair and understate the advantage
+// of rofi---namely that it does not depend on emacs.  It is fast and has good
+// defaults.  The one thing that prevents me from using helm the way I described
+// is that I am not sure how good it is for me to use emacs for everything.
+
+// Since this theme has a floating upper component its harder to get it to show
+// on the bottom.
+//@theme "/usr/share/rofi/themes/paper-float.rasi"
+
+// @theme "/usr/share/rofi/themes/paper.rasi"
+
+// I think this has to be first, or it will override your future settings.
+@theme "/usr/share/rofi/themes/Paper.rasi"
+
+configuration {
+   hide-scrollbar: true;
+   hide-sidebar: true;
+   show-icons: true;
+   icon-theme: "Papirus";
+}
+
+window {
+// https://davatorium.github.io/rofi/guides/Positioning/theme3-positioning/
+//    location: south;
+   location: south;
+   width: 100%;
+
+}

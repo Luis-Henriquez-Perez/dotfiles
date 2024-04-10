@@ -1,0 +1,37 @@
+#!/bin/sh
+
+## xprofile
+# The =xprofile= is that is conventially used to execute commands at the start of
+# the xsession before the window manager is loaded.  I should mention this is not
+# a crazy hardset rule.  I could execute these commands in [[][]] or [[][]].
+# The system's xprofile [[/etc/xprofile]]
+
+### remap caps-lock with escape
+# I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
+# the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
+# that escape is used often to get out of states.
+setxkbmap -option caps:escape
+
+### start the picom daemon
+# The compositor.  See [[][the config]].
+picom &
+
+### start dunst
+# For notifications...
+# dunst &
+
+### start mcron
+# See ~/.config/jobs.guile
+mcron &
+
+### start emacsclient
+# TODO: fix that this took a long time.  It is definitely noticeable, the
+# difference taken to startup with emacs starting as a daemon beforehand.  It is
+# still worth doing it because I am going to startup emacs anyway.
+# emacs --daemon
+
+### set the wallpaper for the first time
+# I am not sure whether to do this here or not.  It is possible to do this in
+# awesome or stumpwm itself but I do not want to do it ever time for ever window
+# manager.  This script sets the current wallpaper.
+~/scripts/set-wallpaper.sh

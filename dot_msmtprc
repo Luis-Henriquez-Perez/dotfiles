@@ -1,0 +1,6 @@
+account luishp
+host mail.privateemail.com
+from luis@luishp.xyz
+port 465
+user luis@luishp.xyz
+passwordeval "pass email/luis@luishp.xyz | head -n 1"
