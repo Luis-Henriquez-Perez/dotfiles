@@ -43,23 +43,23 @@
 ;; to my configuration.  TODO: Maybe make more direct or add support for
 ;; autoloading in the lisp directory.  Right now this loads easymotion which
 ;; causes these functons to be define by me with `eval-after-load'.
-(autoload #'evilem-motion-beginning-of-word "evil-easymotion")
-(autoload #'evilem-motion-beginning-of-WORD "evil-easymotion")
-(autoload #'evilem-motion-end-of-word "evil-easymotion")
-(autoload #'evilem-motion-end-of-WORD "evil-easymotion")
-(autoload #'evilem-motion-char "evil-easymotion")
-(autoload #'evilem-motion-beginning-of-line "evil-easymotion")
+(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion")
+(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion")
+(autoload #'oo-evilem-motion-end-of-word "evil-easymotion")
+(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion")
+(autoload #'oo-evilem-motion-char "evil-easymotion")
+(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion")
 
 ;; TODO: Create an evil operator to narrow to a region.
 ;; TODO: Do not use these bindings for keyboard macros where the originals might
 ;; be more useful.
-(oo-bind :nv "w" #'evilem-motion-beginning-of-word)
-(oo-bind :nv "W" #'evilem-motion-beginning-of-WORD)
-(oo-bind :nv "e" #'evilem-motion-end-of-word)
-(oo-bind :nv "E" #'evilem-motion-end-of-WORD)
-(oo-bind :nvo "f" #'evilem-motion-char)
-(oo-bind :nvo "H" #'evilem-motion-beginning-of-line)
-;; (oo-bind :nvo "L" #'evilem-motion-end-of-line)
+(oo-bind :nv "w" #'oo-evilem-motion-beginning-of-word)
+(oo-bind :nv "W" #'oo-evilem-motion-beginning-of-WORD)
+(oo-bind :nv "e" #'oo-evilem-motion-end-of-word)
+(oo-bind :nv "E" #'oo-evilem-motion-end-of-WORD)
+(oo-bind :nvo "f" #'oo-evilem-motion-char)
+(oo-bind :nvo "H" #'oo-evilem-motion-beginning-of-line)
+;; (oo-bind :nvo "L" #'oo-evilem-motion-end-of-line)
 ;;;;; +/- increasing text-size
 (oo-bind :nm "+" #'text-scale-increase)
 (oo-bind :nm "-" #'text-scale-decrease)

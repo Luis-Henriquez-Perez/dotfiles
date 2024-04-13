@@ -148,7 +148,7 @@ This is a wrapper around `evilem-make-motion'."
     (appending! map (list (pop body) (pop body))))
   `(evilem-make-motion ,name (lambda () ,docstring (interactive) ,@body) ,@map))
 ;;;; beginning of word
-(defemotion! evilem-motion-beginning-of-word ()
+(defemotion! oo-evilem-motion-beginning-of-word ()
   "Jump to the beginning of a word in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
@@ -157,7 +157,7 @@ This is a wrapper around `evilem-make-motion'."
   (and (re-search-forward regexp nil t nil)
        (goto-char (match-beginning 1))))
 ;;;; beginning of WORD
-(defemotion! evilem-motion-beginning-of-WORD ()
+(defemotion! oo-evilem-motion-beginning-of-WORD ()
   "Jump to the beginning of a WORD in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
@@ -169,7 +169,7 @@ This is a wrapper around `evilem-make-motion'."
        (re-search-forward rx nil t nil)
        (goto-char (match-beginning 1))))
 ;;;; end of word
-(defemotion! evilem-motion-end-of-word ()
+(defemotion! oo-evilem-motion-end-of-word ()
   "Jump to the beginning of a word in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
@@ -183,7 +183,7 @@ This is a wrapper around `evilem-make-motion'."
                        (re-search-forward regexp nil t nil))
        (goto-char (1- (match-end 0)))))
 ;;;; end of WORD
-(defemotion! evilem-motion-end-of-WORD ()
+(defemotion! oo-evilem-motion-end-of-WORD ()
   "Jump to the end of a WORD in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
@@ -203,7 +203,7 @@ This is a wrapper around `evilem-make-motion'."
 ;;;; first non-whitespace character in line
 ;; TODO: screenshot the difference between this with and without the
 ;; postprocess.
-(defemotion! evilem-motion-beginning-of-line ()
+(defemotion! oo-evilem-motion-beginning-of-line ()
   "Jump to the beginning of line in the current visible buffer."
   :initial-point #'window-start
   :scope 'visible
@@ -214,7 +214,7 @@ This is a wrapper around `evilem-make-motion'."
 ;;;; a character
 ;; TODO: I might be able to use `evil-find-char' for this one, but I might not
 ;; do it because this already works well.
-(defemotion! evilem-motion-char (char)
+(defemotion! oo-evilem-motion-char (char)
   "Jump to a character in current visible buffer."
   :bind ((char (read-char "Char: ")))
   :initial-point #'window-start
