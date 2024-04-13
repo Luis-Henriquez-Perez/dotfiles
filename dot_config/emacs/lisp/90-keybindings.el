@@ -100,7 +100,7 @@
 ;; I feel like the eval operator is so important that it should have =gg=.  I
 ;; use this a lot more than the original =gg= binding for going to the beginning
 ;; of buffer.
-(oo-bind :nv "g g" #'evil-operator-eval)
+;; (oo-bind :nv "g g" #'evil-operator-eval)
 (oo-bind :nv "g j" #'evil-operator-eval-replace)
 
 ;; The command `lispyville-comment-or-uncomment' lags when commenting or
