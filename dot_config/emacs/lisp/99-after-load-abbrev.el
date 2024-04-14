@@ -267,6 +267,14 @@
 (oo-text-abbrev "prev" "previous")
 (oo-text-abbrev "ivs" "I have seen")
 (oo-text-abbrev "rxp" "regular expression")
+(oo-text-abbrev "rx" "regular expression")
+(oo-text-abbrev "dl" "download")
+(oo-text-abbrev "vc" "version control")
+(oo-text-abbrev "wil" "will")
+(oo-text-abbrev "shiftk" "SHIFT")
+(oo-text-abbrev "nots" "number of times")
+(oo-text-abbrev "num" "number")
+(oo-text-abbrev "f" "of")
 (oo-text-abbrev "lins" "lines")
 ;; I thought that this could be a bad abbrev because it is too much line a
 ;; spelling mistake of =the=, but then I thought if I do misspell "the" it is
