@@ -95,6 +95,8 @@
   (setq gc-cons-percentage (plist-get oo-old-values 'gc-cons-percentage))
   (setq file-name-handler-alist (plist-get oo-old-values 'file-name-handler-alist))
   (setq-default mode-line-format (plist-get oo-old-values 'mode-line-format)))
+;;;; load autoloads
+(require 'oo-autoloads)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
