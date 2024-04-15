@@ -29,6 +29,11 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("hwo" "how")
+    ("tbe" "to be exact")
+    ("chars" "characters")
+    ("heres" "here is")
+    ("hesi" "hesitant")
     ("ex" "example")
     ("xample" "example")
     ("cna" "can")
