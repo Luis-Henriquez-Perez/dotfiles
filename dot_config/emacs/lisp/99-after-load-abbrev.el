@@ -139,6 +139,12 @@
           (list ".var"   "" (oo-tempel-abbrev-def 'var))
           (list ".al"    "" (oo-tempel-abbrev-def 'alias))
           (list ".alias" "" (oo-tempel-abbrev-def 'alias)))))
+;;;;; org
+(defhook! org-mode-hook&define-org-mode-abbrev-table ()
+  "Define the abbrev table."
+  (abbrev-table-put org-mode-abbrev-table :regexp "\\(?:^\\|[	 ]+\\)\\(?1:\\..*\\|.*\\)")
+  (define-abbrev-table 'org-mode-abbrev-table
+    (list (list ".esrc"   "" (oo-tempel-abbrev-def 'elisp)))))
 ;;;;; eshell
 ;; (defun oo--enable-eshell-mode-abbrev-p ()
 ;;   "Return non-nil if elisp mode abbrev should be enabled."
