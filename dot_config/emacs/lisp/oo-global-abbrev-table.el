@@ -29,6 +29,7 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("lize" "realize")
     ("hwo" "how")
     ("tbe" "to be exact")
     ("chars" "characters")
