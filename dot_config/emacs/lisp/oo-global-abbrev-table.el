@@ -29,6 +29,9 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("aloads" "autoloads")
+    ("alods" "autoloads")
+    ("dls" "downloads")
     ("lize" "realize")
     ("hwo" "how")
     ("tbe" "to be exact")
