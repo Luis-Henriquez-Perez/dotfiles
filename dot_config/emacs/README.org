@@ -40,6 +40,10 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
   do in the form of a test.  This helps me not only ensure that any refactoring
   preserves the expected behavior of a function or macro but also it provides me
   with sanity checks in case something goes wrong.
+- *easy and predictable to extend (for me)*
+  It should be easy to add some new functionality to my configuration.  All I
+  should have to do is create a file and load it from the right place.  I should
+  not have to think about it as there should be a standard procedure.
 * Features
 :PROPERTIES:
 :ID:       20240408T163225.997099
