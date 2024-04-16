@@ -1,4 +1,4 @@
-;;; oo-autoloads.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-autoloads.el --- autoloads for lisp directory -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,9 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This file contains the autoloads for lisp directory.  I specifically write
+;; them out by hand because I am not a fan of having to generate a file.  With
+;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
 (autoload #'oo/ensure-provide "xx-package-boilerplate" nil t 'function)
