@@ -29,6 +29,8 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("als" "autoloads")
+    ("al" "autoload")
     ("ootw" "out of the way")
     ("gen" "generate")
     ("aloads" "autoloads")
