@@ -29,6 +29,8 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("iml" "immediately")
+    ("dling" "downloading")
     ("ez" "easy")
     ("fol" "follow")
     ("popl" "populate")
@@ -95,7 +97,7 @@
     ("freql" "frequently")
     ("ifreql" "infrequently")
     ("infreql" "infrequently")
-    ("id" "I would")
+    ("id" "ID")
     ("wan" "want")
     ("idht" "I do not have to")
     ("hvae" "have")
