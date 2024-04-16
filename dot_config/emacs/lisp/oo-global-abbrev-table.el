@@ -29,6 +29,8 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("ez" "easy")
+    ("fol" "follow")
     ("popl" "populate")
     ("als" "autoloads")
     ("al" "autoload")
