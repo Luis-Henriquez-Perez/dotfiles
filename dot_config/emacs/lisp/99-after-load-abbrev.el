@@ -128,10 +128,10 @@
   (define-abbrev-table 'emacs-lisp-mode-abbrev-table
     (list (list "elmk" "emacs-lisp-mode-hook")
           (list "pmk" "prog-mode-hook")
+          (list "gat" "global-abbrev-table")
           (list ".fun"   "" (oo-tempel-abbrev-def 'fun))
           (list ".fn"   "" (oo-tempel-abbrev-def 'fun))
           (list ".todo"  "" (oo-tempel-abbrev-def 'todo))
-          (list  "todo"  "" (oo-tempel-abbrev-def 'todo))
           (list ".const" "" (oo-tempel-abbrev-def 'log))
           (list ".log"   "" (oo-tempel-abbrev-def 'log))
           (list ".let"   "" (oo-tempel-abbrev-def 'let))
