@@ -104,6 +104,7 @@
 
 (oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
 ;;;;; miscellaneous
+(opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
 (provide '99-after-load-org)
