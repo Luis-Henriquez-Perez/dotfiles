@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;;  Populate `global-abbrev-table'.
 ;;
 ;;; Code:
 (require 'abbrev)
