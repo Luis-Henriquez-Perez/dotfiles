@@ -37,16 +37,19 @@
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
-(opt! recentf-filename-handlers '(file-truename))
+(setq recentf-filename-handlers '(file-truename))
 
-;; TODO: Add back =adjoin!= if I removed it.
-(opt! recentf-filename-handlers (cl-adjoin #'abbreviate-file-name recentf-filename-handlers))
+(adjoining! recentf-filename-handlers #'abbreviate-file-name)
+(adjoining! recentf-filename-handlers #'substring-no-properties)
 
-(opt! recentf-filename-handlers (cl-adjoin 'substring-no-properties recentf-filename-handlers))
+(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
+(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
 
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-config-dir)) recentf-exclude))
-
-(opt! recentf-exclude (cl-adjoin (regexp-quote (recentf-expand-file-name oo-data-dir)) recentf-exclude))
+(setq recentf-max-saved-items nil)
+;;;; TODO always keep important files in recentf-list
+(recentf-push (recentf-expand-file-name "~/.local/share/chezmoi/init.el"))
+(recentf-push (recentf-expand-file-name "~/.config/init.el"))
+(recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
 (provide '99-after-load-recentf)
 ;;; 99-after-load-recentf.el ends here
