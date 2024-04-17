@@ -39,7 +39,7 @@
   (format "%s\s" (buffer-name)))
 ;;;; major-mode information
 (defsegment! major-mode ()
-  (format "%s\s" (symbol-name major-mode)))
+  (format "[%s]\s" (capitalize (symbol-name major-mode))))
 ;;;; kbd-macro information
 (defsegment! kbd-macro ()
   (or (and defining-kbd-macro
@@ -51,7 +51,7 @@
   (when (buffer-narrowed-p)
     "NARROWED\s"))
 ;;;; org timer (what I use as pomodoro)
-(defsegment! pomodoro ()
+(defsegment! org-timer ()
   (when (and (featurep 'org))
     ;; (format-time-string "[]")
     ))
@@ -61,19 +61,41 @@
 ;;;; evil-state
 (defsegment! evil-state ()
   (when (bound-and-true-p evil-mode)
-    (format "<%s>\s" evil-state)))
+    (format "%s\s" (string-trim evil-mode-line-tag))))
+;;;; battery
+;; (defsegment! battery ()
+;;   (require 'battery)
+;;   (when (battery-)
+;;     (format "<%s>\s" evil-state)))
 ;;;; modeline
+;; https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
+
+(defun oo-simple-mode-line-render (left right)
+  "Return a string of `window-width' length.
+Containing LEFT, and RIGHT aligned respectively."
+  (let ((available-width
+         (- (window-total-width)
+            (+ (length (format-mode-line left))
+               (length (format-mode-line right))))))
+    (append left
+            (list (format (format "%%%ds" available-width) ""))
+            right)))
+
+
 (progn
   (setq-default mode-line-format
-                '("%e"
-                  ;; oo-modeline-pomodoro-timer
-                  oo-modeline-segment-buffer-name
-                  oo-modeline-segment-major-mode
-                  oo-modeline-segment-evil-state
-                  oo-modeline-segment-narrow
-                  oo-modeline-segment-kbd-macro
-                  ;; oo-modeline-segment-current-time
-                  ))
+                '((:eval
+                   (oo-simple-mode-line-render
+                    ;; Left.
+                    '("%e "
+                      oo-modeline-segment-buffer-name
+                      oo-modeline-segment-major-mode
+                      oo-modeline-segment-evil-state
+                      oo-modeline-segment-narrow
+                      oo-modeline-segment-kbd-macro)
+                    ;; Right.
+                    '("%e"
+                      oo-modeline-segment-current-time)))))
   (setq mode-line-format nil)
   (kill-local-variable 'mode-line-format)
   (force-mode-line-update))
