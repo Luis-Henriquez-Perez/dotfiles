@@ -25,48 +25,58 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-;;;; buffer information
-(defsegment! buffer-name ()
-  :face '((t :background "gray50" :foreground "black"))
-  (buffer-name))
-;;;;  major-mode information
-(defsegment! major-mode ()
-  :face '((t :background "red"))
-  (symbol-name major-mode))
-;;;; kbd-macro information
-(defsegment! kbd-macro ()
-  ;; :face oo-face-face
-  (when defining-kbd-macro
-    "DEFINING KBD MACRO..."))
-;;;; narrowing information
-(defsegment! narrowing ()
-  )
-;;;; modeline
-(progn
-  (setq-default mode-line-format
-                '("%e"
-                  oo-mode-line-kbd-macro-info
-                  oo-mode-line-narrowing-info
-                  oo-mode-line-pomodoro-timer
-                  oo-mode-line-evil-state-info
-                  oo-mode-line-buffer-info
-                  oo-mode-line-mode-info))
-  (setq mode-line-format nil)
-  (kill-local-variable 'mode-line-format)
-  (force-mode-line-update))
 ;;;; macro to generate a modeline segment
 (defmacro! defsegment! (name &rest body)
   "Define a segment for the modeline."
   (declare (indent defun))
-  ;; (set! face )
   (set! fname (intern (format "oo-modeline-segment-%s" name)))
-  ;; Allow setting the face.
-  ;; (set! var (intern (format "oo-modeline-")))
   `(progn
-     ;; (defface ,face ,face-definition)
      (defvar-local ,fname '(:eval (,fname)))
      (put ',fname 'risky-local-variable t)
      (defun ,fname () (progn ,@body))))
+;;;; buffer information
+(defsegment! buffer-name ()
+  (format "%s\s" (buffer-name)))
+;;;; major-mode information
+(defsegment! major-mode ()
+  (format "%s\s" (symbol-name major-mode)))
+;;;; kbd-macro information
+(defsegment! kbd-macro ()
+  (or (and defining-kbd-macro
+           "DEFINING KBD MACRO...\s")
+      (and executing-kbd-macro
+           "EXECUTING KBD MACRO...\s")))
+;;;; narrowing information
+(defsegment! narrow ()
+  (when (buffer-narrowed-p)
+    "NARROWED\s"))
+;;;; org timer (what I use as pomodoro)
+(defsegment! pomodoro ()
+  (when (and (featurep 'org))
+    ;; (format-time-string "[]")
+    ))
+;;;; current-time
+(defsegment! current-time ()
+  (format "%s\s" (current-time-string)))
+;;;; evil-state
+(defsegment! evil-state ()
+  (when (bound-and-true-p evil-mode)
+    (format "<%s>\s" evil-state)))
+;;;; modeline
+(progn
+  (setq-default mode-line-format
+                '("%e"
+                  ;; oo-modeline-pomodoro-timer
+                  oo-modeline-segment-buffer-name
+                  oo-modeline-segment-major-mode
+                  oo-modeline-segment-evil-state
+                  oo-modeline-segment-narrow
+                  oo-modeline-segment-kbd-macro
+                  ;; oo-modeline-segment-current-time
+                  ))
+  (setq mode-line-format nil)
+  (kill-local-variable 'mode-line-format)
+  (force-mode-line-update))
 ;;; provide
 (provide 'oo-modeline)
 ;;; oo-modeline.el ends here
