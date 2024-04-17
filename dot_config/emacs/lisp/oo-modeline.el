@@ -30,46 +30,17 @@
   :face '((t :background "gray50" :foreground "black"))
   (buffer-name))
 ;;;;  major-mode information
-(defsegment! major-mode)
-(defvar-local oo-mode-line-major-mode-info
-    '(:eval (propertize (symbol-name major-mode) 'face 'error)))
-
-(setq-local oo-mode-line-major-mode-info
-            '(:eval (propertize (capitalize (symbol-name major-mode)) 'face 'oo-mode-line-major-mode-info-face)))
-
-(put 'oo-mode-line-mode-info 'risky-local-variable t)
-
-(defface oo-mode-line-major-mode-info-face '((t :background "red" :foreground "pink"))
-  "Face with background for modeline.")
-
-(custom-set-faces 'oo-mode-line-buffer-info-face
-                  '(t :background "gray50" :foreground "white"))
-
-(set-face-attribute 'oo-mode-line-buffer-info-face nil :background "gray50")
-
-(set-face-attribute 'oo-mode-line-major-mode-info-face nil :background "black")
+(defsegment! major-mode ()
+  :face '((t :background "red"))
+  (symbol-name major-mode))
 ;;;; kbd-macro information
-(defvar-local oo-mode-line-kbd-macro-info
-    '(:eval (when defining-kbd-macro )))
-
-(put 'oo-mode-line-mode-info 'risky-local-variable t)
-
-;; I am not sure if there is a benefit to.
-;; well, the benefit would be that I do not have to reset the variable with
-;; `setq-local'.  Instead I can simply change the body of the function and
-;; re-evaluate it.
-(defun oo-modeline-keyboard-macro ()
-  "Return the string."
-  (when defining-kbd-macro
-    "DEFINING KBD MACRO..."))
-
 (defsegment! kbd-macro ()
   ;; :face oo-face-face
   (when defining-kbd-macro
     "DEFINING KBD MACRO..."))
 ;;;; narrowing information
-(defvar-local oo-mode-line-narrowing-info
-    '(:eval (when defining-kbd-macro )))
+(defsegment! narrowing ()
+  )
 ;;;; modeline
 (progn
   (setq-default mode-line-format
