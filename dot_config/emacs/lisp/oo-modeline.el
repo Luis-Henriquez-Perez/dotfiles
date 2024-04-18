@@ -33,7 +33,7 @@
   `(progn
      (defvar-local ,fname '(:eval (,fname)))
      (put ',fname 'risky-local-variable t)
-     (defun ,fname () (progn ,@body))))
+     (defun! ,fname () (progn ,@body))))
 ;;;; buffer information
 (defsegment! buffer-name ()
   (format "%s\s" (buffer-name)))
@@ -63,10 +63,10 @@
   (when (bound-and-true-p evil-mode)
     (format "%s\s" (string-trim evil-mode-line-tag))))
 ;;;; battery
-;; (defsegment! battery ()
-;;   (require 'battery)
-;;   (when (battery-)
-;;     (format "<%s>\s" evil-state)))
+(defsegment! battery ()
+  (require 'battery)
+  (set! percentage (battery-format "%p" (funcall battery-status-function)))
+  (battery-format "87%% " (funcall battery-status-function)))
 ;;;; modeline
 ;; https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
 
@@ -95,7 +95,9 @@ Containing LEFT, and RIGHT aligned respectively."
                       oo-modeline-segment-kbd-macro)
                     ;; Right.
                     '("%e"
-                      oo-modeline-segment-current-time)))))
+                      ;; oo-modeline-segment-battery
+                      ;; oo-modeline-segment-current-time
+                      )))))
   (setq mode-line-format nil)
   (kill-local-variable 'mode-line-format)
   (force-mode-line-update))
