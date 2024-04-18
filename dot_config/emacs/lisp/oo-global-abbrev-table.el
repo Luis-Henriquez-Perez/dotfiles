@@ -29,6 +29,9 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("cur" "current")
+    ("curr" "current")
+    ("onl" "only")
     ("uve" "you have")
     ("revaled" "re-evaluated")
     ("idid" "I did")
