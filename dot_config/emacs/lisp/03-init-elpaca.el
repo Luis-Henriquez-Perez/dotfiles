@@ -37,6 +37,9 @@
 ;; (elpaca aas)
 ;; (elpaca (once :host github :repo "emacs-magus/once"))
 ;; This is temporary--ideally I would want.
+(elpaca yeetube)
+(elpaca beacon)
+(elpaca edwina)
 (elpaca htmlize)
 (elpaca edit-indirect)
 (elpaca annalist)
