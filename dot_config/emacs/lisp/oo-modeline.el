@@ -29,7 +29,7 @@
 (defmacro! defsegment! (name &rest body)
   "Define a segment for the modeline."
   (declare (indent defun))
-  (set! fname (intern (format "oo-modeline-segment-%s" name)))
+  (set! fname (intern (format "oo-mode-line-segment-%s" name)))
   `(progn
      (defvar-local ,fname '(:eval (,fname)))
      (put ',fname 'risky-local-variable t)
@@ -57,7 +57,7 @@
     ))
 ;;;; current-time
 (defsegment! current-time ()
-  (format "%s\s" (current-time-string)))
+  (format-time-string "%m/%d %H:%M\s" ))
 ;;;; evil-state
 (defsegment! evil-state ()
   (when (bound-and-true-p evil-mode)
@@ -65,8 +65,13 @@
 ;;;; battery
 (defsegment! battery ()
   (require 'battery)
-  (set! percentage (battery-format "%p" (funcall battery-status-function)))
-  (battery-format "87%% " (funcall battery-status-function)))
+  (set! status (funcall battery-status-function))
+  (set! percentage (thread-last (battery-format "%p" status)
+                                (string-to-number)
+                                (round)))
+  (set! discharging-p (equal "discharging" (battery-format "%B" status)))
+  (when (and discharging (< percentage 60))
+    (format "%s%%% " percentage)))
 ;;;; modeline
 ;; https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
 
@@ -92,9 +97,8 @@ Containing LEFT, and RIGHT aligned respectively."
                       oo-modeline-segment-kbd-macro)
                     ;; Right.
                     '("%e"
-                      ;; oo-modeline-segment-battery
-                      ;; oo-modeline-segment-current-time
-                      )))))
+                      oo-modeline-segment-battery
+                      oo-modeline-segment-current-time)))))
   (setq mode-line-format nil)
   (kill-local-variable 'mode-line-format)
   (force-mode-line-update))
