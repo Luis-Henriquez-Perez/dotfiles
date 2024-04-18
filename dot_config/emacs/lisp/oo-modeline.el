@@ -70,16 +70,13 @@
 ;;;; modeline
 ;; https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
 
-(defun oo-simple-mode-line-render (left right)
+(defun! oo-simple-mode-line-render (left right)
   "Return a string of `window-width' length.
 Containing LEFT, and RIGHT aligned respectively."
-  (let ((available-width
-         (- (window-total-width)
-            (+ (length (format-mode-line left))
-               (length (format-mode-line right))))))
-    (append left
-            (list (format (format "%%%ds" available-width) ""))
-            right)))
+  (set! lt (format-mode-line left))
+  (set! rt (format-mode-line right))
+  (set! width (- (window-total-width) (+ (length lt) (length rt))))
+  (append left (list (format (format "%%%ds" width) "")) right))
 
 
 (progn
