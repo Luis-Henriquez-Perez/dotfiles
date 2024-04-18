@@ -45,12 +45,6 @@
 (require 'oo-global-abbrev-table)
 (require 'oo-wikipedia-misspellings-table)
 ;;;; abbrevs
-;;;;; only use global abbrevs
-;; Use only global abbrevs.  At first I had tried using mode-specific abbrevs,
-;; but I encounted problems.  I found it much easier to just make them all
-;; global abbrevs and to specify an "enable-function" if I want to be
-;; conditional based on the mode.
-(opt! only-global-abbrevs t)
 ;;;;; do not save abbrevs to a file (use this file instead)
 ;; Do not write/read abbrevs from a file.  I would rather just define them
 ;; here than to save them in the abbrev file.
