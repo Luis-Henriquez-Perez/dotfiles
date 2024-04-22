@@ -105,8 +105,9 @@
 (defsegment! vc-branch ()
   (when buffer-file-name
     (require 'vc)
-    (let ((backend (vc-backend buffer-file-name)))
-      (string-trim (substring vc-mode (+ (if (eq backend 'Hg) 2 3) 2))))))
+    (aand (vc-backend buffer-file-name)
+          (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
+          (string-trim it))))
 ;;;; default directory
 (defsegment! directory ()
   (abbreviate-file-name default-directory))
