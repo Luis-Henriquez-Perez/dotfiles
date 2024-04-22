@@ -22,9 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Configuration for vertico.
 ;;
 ;;; Code:
+(require 'vertico)
 ;;;; vertico
 
 (oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
