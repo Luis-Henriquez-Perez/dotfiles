@@ -29,6 +29,7 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("coll" "collection")
     ("hadnt" "had not")
     ("suces" "success")
     ("sucess" "success")
