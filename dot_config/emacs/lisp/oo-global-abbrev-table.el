@@ -42,6 +42,7 @@
     ("ath" "anything")
     ("corsor" "cursor")
     ("sdb" "should not be")
+    ("rihgt" "right")
     ("shdnt" "should not")
     ("aycs" "as you can see")
     ("twisi" "the way I see it")
