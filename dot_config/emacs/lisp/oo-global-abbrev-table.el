@@ -29,6 +29,16 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("utube" "youtube")
+    ("hav" "have")
+    ("ootq" "out of the question")
+    ("tte" "to this end")
+    ("wasnt" "was not")
+    ("ult" "ultimate")
+    ("ultl" "ultimately")
+    ("aia" "all in all")
+    ("soly" "solely")
+    ("idwt" "I do not want to")
     ("coll" "collection")
     ("hadnt" "had not")
     ("suces" "success")
