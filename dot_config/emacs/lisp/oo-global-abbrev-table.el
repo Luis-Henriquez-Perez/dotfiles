@@ -29,6 +29,8 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("hwat" "what")
+    ("sep" "separate")
     ("utube" "youtube")
     ("hav" "have")
     ("ootq" "out of the question")
