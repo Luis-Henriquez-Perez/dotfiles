@@ -176,8 +176,7 @@
                     oo-mode-line-segment-narrow
                     oo-mode-line-segment-kbd-macro
                     oo-mode-line-segment-emms)
-                  '("%e"
-                    oo-mode-line-segment-vc-branch
+                  '(oo-mode-line-segment-vc-branch
                     oo-mode-line-segment-org-timer
                     oo-mode-line-segment-battery
                     oo-mode-line-segment-current-time)))))
