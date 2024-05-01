@@ -89,7 +89,7 @@
    ["manual"      (.. terminal " -e man awesome")]
    ["edit config" (.. editor-cmd " " awesome.conffile)]
    ["restart"     awesome.restart]
-   ["quit"        awesome.quit]])
+   ["quit"        (fn [] (awesome.quit))]])
 
 (local mymainmenu
   (awful.menu
