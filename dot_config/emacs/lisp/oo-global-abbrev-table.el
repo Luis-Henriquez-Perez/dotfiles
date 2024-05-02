@@ -29,6 +29,11 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("tss" "timestamps")
+    ("ts" "timestamp")
+    ("obj" "object")
+    ("oop" "object-oriented-programming")
+    ("ood" "object-oriented-design")
     ("hwat" "what")
     ("sep" "separate")
     ("utube" "youtube")
