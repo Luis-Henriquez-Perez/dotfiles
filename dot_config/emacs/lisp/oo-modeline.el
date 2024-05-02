@@ -157,8 +157,8 @@
   "Return the rendered modeline."
   (set! lt (string-join (-remove #'string-empty-p (mapcar #'format-mode-line left)) "\s"))
   (set! rt (string-join (-remove #'string-empty-p (mapcar #'format-mode-line right)) "\s"))
-  (set! width (max (- (window-total-width) (+ (length lt) (length rt)) 2) 0))
-  (concat "\s" lt (make-string width 32) rt "\s"))
+  (set! width (- (window-total-width) (+ (length lt) (length rt)) 2) 0)
+  (concat "\s" lt (make-string (max width 0) 32) rt "\s"))
 
 ;; Update every minute.
 (defvar oo-mode-line-update-timer nil)
