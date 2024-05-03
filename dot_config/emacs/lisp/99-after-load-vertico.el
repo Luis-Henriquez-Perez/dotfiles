@@ -72,14 +72,13 @@
 ;; Orderless should be just at.
 (setq completion-in-region-function
       (lambda (&rest args)
-        (let ((orderless-matching-styles '(+orderless-exact)))
-          (apply (if vertico-mode
-                     #'consult-completion-in-region
-                   #'completion--in-region)
-                 args))))
+        (apply (if vertico-mode
+                   #'consult-completion-in-region
+                 #'completion--in-region)
+               args)))
 
-(defun +orderless-exact (component)
-  `(: bos (literal ,component)))
+;; (defun +orderless-exact (component)
+;;   `(: bos (literal ,component)))
 ;;; provide
 (provide '99-after-load-vertico)
 ;;; 99-after-load-vertico.el ends here
