@@ -31,28 +31,29 @@
 ;;
 ;;; Code:
 ;;;; startup
-;;;;; values
-(defvar oo-old-values nil
-  "A plist of whose keys are symbols and values are their old.")
 ;;;;; set startup variables
+(defvar oo-symbol-values-alist nil)
+(defun oo-record-value (symbol)
+  (push (cons symbol (symbol-value symbol)) oo-symbol-values-alist))
+(defun oo-restore-value (symbol)
+  (set symbol (alist-get symbol oo-symbol-values-alist)))
 ;;;;;; disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
 ;; very big number, essentially disables garbage collection.  The garbage
 ;; collection is later reset to a reasonable value.
-(setf (plist-get oo-old-values 'gc-cons-threshold) gc-cons-threshold)
+;; https://medium.com/@danielorihuelarodriguez/optimize-emacs-start-up-time-ae314201e04f
+;; https://news.ycombinator.com/item?id=39127859
+;; https://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold most-positive-fixnum)
-
 ;; This is the percentage of the heap before.
-(setf (plist-get oo-old-values 'gc-cons-percentage) gc-cons-percentage)
 (setq gc-cons-percentage 0.8)
 ;;;;;; don't search for whenever a package is loaded
-(setf (plist-get oo-old-values 'file-name-handler-alist) file-name-handler-alist)
+(oo-record-value 'file-name-handler-alist)
 (setq file-name-handler-alist nil)
 ;;;;;; prevent flashing of unstyled modeline
 ;; Don't render the modeline on startup.  For one thing, the startup looks
 ;; better without flashing stuff on the screen.  Additionally, the more that's
 ;; saved on rendering, the faster the startup.
-(setf (plist-get oo-old-values 'mode-line-format) mode-line-format)
 (setq-default mode-line-format nil)
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
@@ -89,12 +90,41 @@
 ;; This should be either the last or close to the last thing that happens.
 ;; Furthermore, its important that this hook is run and therefore that previous
 ;; hooks dont produce an error.
+(defun! oo-lower-garbage-collection ()
+  "Lower garbage collection until it reaches default values."
+  ;; This is a sanity check to ensure.
+  (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
+  (if (minibuffer-window-active-p (minibuffer-window))
+      (run-with-timer 5 nil #'oo-lower-garbage-collection)
+    (cl-decf gc-cons-threshold (* 4 1024 1024))
+    (cl-decf gc-cons-percentage 0.1)
+    (cond ((= gc-cons-threshold (* 8 1024 1024))
+           ;; (message "Done...gc-cons-threshold -> 8MB")
+           (setq gc-cons-percentage 0.4))
+          (t
+           (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
+
 (defhook! emacs-startup-hook&restore-startup-values ()
   [:depth 91]
-  (setq gc-cons-threshold (plist-get oo-old-values 'gc-cons-threshold))
-  (setq gc-cons-percentage (plist-get oo-old-values 'gc-cons-percentage))
-  (setq file-name-handler-alist (plist-get oo-old-values 'file-name-handler-alist))
-  (setq-default mode-line-format (plist-get oo-old-values 'mode-line-format)))
+  (oo-restore-value 'file-name-handler-alist)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection)
+  (require 'oo-modeline))
+
+;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
+(defhook! minibuffer-setup-hook&increase-garbage-collection ()
+  "Boost garbage collection settings to `gcmh-high-cons-threshold'."
+  [:depth 10]
+  (oo-record-value 'gc-cons-threshold)
+  (oo-record-value 'gc-cons-percentage)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (setq gc-cons-percentage 0.8))
+
+(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+  [:depth 90]
+  (oo-restore-value 'gc-cons-threshold)
+  (oo-restore-value 'gc-cons-percentage))
 ;;;; load autoloads
 (require 'oo-autoloads)
 ;;; provide init
