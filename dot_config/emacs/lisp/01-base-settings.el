@@ -231,6 +231,21 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; https://stackoverflow.com/questions/35658509/gnu-emacs-how-to-disable-prompt-to-save-modified-buffer-on-exit
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
 ;; https://stackoverflow.com/questions/6762686/prevent-emacs-from-asking-modified-buffers-exist-exit-anyway
+;;;; uncategorized
+;; if you don't use RTL ever, this could improve perf
+;; https://news.ycombinator.com/item?id=39127859
+(setq-default bidi-display-reordering 'left-to-right)
+(setq-default bidi-paragraph-direction 'left-to-right)
+(setq-default bidi-inhibit-bpa t)
+
+;; improves terminal emulator (vterm/eat) throughput
+(setq read-process-output-max (* 2 1024 1024))
+(setq process-adaptive-read-buffering nil)
+(setq fast-but-imprecise-scrolling t)
+(setq redisplay-skip-fontification-on-input t)
+(setq inhibit-compacting-font-caches t)
+
+(setq idle-update-delay 1.0)
 ;;; provide
 (provide '01-base-settings)
 ;;; 01-base-settings.el ends here
