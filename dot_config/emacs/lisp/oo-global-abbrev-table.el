@@ -29,6 +29,7 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("ayme" "as you might expect")
     ("tss" "timestamps")
     ("ts" "timestamp")
     ("obj" "object")
