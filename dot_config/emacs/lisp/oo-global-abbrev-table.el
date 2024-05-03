@@ -29,6 +29,7 @@
 
 (define-abbrev-table 'global-abbrev-table
   '(("configing" "configuring")
+    ("aume" "as you might expect")
     ("ayme" "as you might expect")
     ("tss" "timestamps")
     ("ts" "timestamp")
@@ -165,7 +166,7 @@
     ("cann" "cannot")
     ("icj" "I can just")
     ("ic" "I can")
-    ("ure" "you're")
+    ("ure" "you are")
     ("lhp" "Luis Henriquez-Perez")
     ("noly" "not only")
     ("specy" "specifically")
