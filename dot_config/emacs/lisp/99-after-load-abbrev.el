@@ -84,67 +84,6 @@
   "Return non-nil when text-mode abbrevs should be enabled."
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
-;;;;; automatically add period
-;; I do not like manually adding periods to the end of sentences.  Having moved
-;; from using one space after a sentence to two, I find it particularl daunting
-;; to type period, space, space whenever I am ending one sentence and starting a
-;; new one.  With this customization when I type space, space, following a word
-;; it is converted into period space space.  Additionally, if I end a sentence
-;; line with two spaces and I press ESC, the trailing two spaces are replaced
-;; with a period.
-(defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
-  "Add a period when necessary."
-  (prog1 (funcall expand-fn)
-    (unless (not (oo-enable-global-abbrev-p))
-      (set! eol (line-beginning-position -1))
-      (set! rx "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
-      (cond ((looking-back rx eol)
-             (replace-match "\\1.\\2\\3" nil nil nil 0))
-            ((looking-back "\\([[:word:]]\\)[[:space:]]\\{2,\\}" eol)
-             (replace-match "\\1."))))))
-;;;;; emacs-lisp-mode
-;;;;;; callable names
-(defun oo-tempel-abbrev-def (name)
-  "Return a function that expands.."
-  (require 'tempel nil t)
-  (require 'tempel-collection nil t)
-  (let ((template (cdr (assoc name (tempel--templates))))
-        (hook (make-symbol (format "tempel--%s-abbrev-snippet" name))))
-    (fset hook (apply-partially #'tempel--abbrev-hook (symbol-name name) template))
-    (put hook 'no-self-insert t)
-    hook))
-
-;; TODO abstract hooking, feature loading and advising.
-;; For some reason this only works when I invoke it after `emacs-lisp-mode-hook'
-(defhook! emacs-lisp-mode-hook&define-emacs-lisp-mode-abbrev-table ()
-  "Define the abbrev table."
-  (abbrev-table-put emacs-lisp-mode-abbrev-table :regexp "\\(?:^\\|[	 ]+\\)\\(?1:\\..*\\|.*\\)")
-  (define-abbrev-table 'emacs-lisp-mode-abbrev-table
-    (list (list "elmk" "emacs-lisp-mode-hook")
-          (list "pmk" "prog-mode-hook")
-          (list "gat" "global-abbrev-table")
-          (list ".fun"   "" (oo-tempel-abbrev-def 'fun))
-          (list ".fn"   "" (oo-tempel-abbrev-def 'fun))
-          (list ".todo"  "" (oo-tempel-abbrev-def 'todo))
-          (list ".const" "" (oo-tempel-abbrev-def 'log))
-          (list ".log"   "" (oo-tempel-abbrev-def 'log))
-          (list ".let"   "" (oo-tempel-abbrev-def 'let))
-          (list ".p"     "" (oo-tempel-abbrev-def 'pt))
-          (list ".var"   "" (oo-tempel-abbrev-def 'var))
-          (list ".al"    "" (oo-tempel-abbrev-def 'alias))
-          (list ".alias" "" (oo-tempel-abbrev-def 'alias)))))
-;;;;; org
-(defhook! org-mode-hook&define-org-mode-abbrev-table ()
-  "Define the abbrev table."
-  (abbrev-table-put org-mode-abbrev-table :regexp "\\(?:^\\|[	 ]+\\)\\(?1:\\..*\\|.*\\)")
-  (define-abbrev-table 'org-mode-abbrev-table
-    (list (list ".esrc"   "" (oo-tempel-abbrev-def 'elisp)))))
-;;;;; eshell
-;; (defun oo--enable-eshell-mode-abbrev-p ()
-;;   "Return non-nil if elisp mode abbrev should be enabled."
-;;   (equal major-mode 'eshell-mode))
-
-;; ;; (define-abbrev global-abbrev-table ".edir" "~/.config/emacs/" :enable-function #'oo--enable-eshell-mode-abbrev-p)
 ;;;;; all abbrevs
 (abbrev-table-put global-abbrev-table :enable-function #'oo-enable-global-abbrev-p)
 (abbrev-table-put oo-wikipedia-misspellings-table :enable-function #'oo-enable-global-abbrev-p)
