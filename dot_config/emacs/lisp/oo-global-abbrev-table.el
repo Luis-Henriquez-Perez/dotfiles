@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("configing" "configuring")
+  '(("vs" "versus")
+    ("mor" "more")
+    ("configing" "configuring")
     ("aume" "as you might expect")
     ("ayme" "as you might expect")
     ("tss" "timestamps")
