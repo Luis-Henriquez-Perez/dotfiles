@@ -181,28 +181,10 @@
                     oo-mode-line-segment-battery
                     oo-mode-line-segment-current-time)))))
 
-;; Apply modeline to existing buffers.  Maybe I should do this lazily.
-(alet '((:eval
-         (oo-mode-line-render
-          '("%e"
-            oo-mode-line-segment-buffer-name
-            oo-mode-line-segment-major-mode
-            ;; To be honest not sure if I need evil-state.
-            ;; oo-mode-line-segment-evil-state
-            oo-mode-line-segment-directory
-            oo-mode-line-segment-narrow
-            oo-mode-line-segment-kbd-macro
-            oo-mode-line-segment-emms)
-          '(oo-mode-line-segment-vc-branch
-            oo-mode-line-segment-org-timer
-            oo-mode-line-segment-battery
-            oo-mode-line-segment-current-time))))
-  (kill-local-variable 'mode-line-format)
-  ;; Update modelines in all buffers.
-  (dolist (buffer (buffer-list))
-    (with-current-buffer buffer
-      (setq mode-line-format it)))
-  (setq-default mode-line-format it))
+;; TODO: Maybe do this lazily.
+(dolist (buffer (buffer-list))
+  (with-current-buffer buffer
+    (setq mode-line-format (default-value 'mode-line-format))))
 ;;; provide
 (provide 'oo-modeline)
 ;;; oo-modeline.el ends here
