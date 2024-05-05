@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("vs" "versus")
+  '(("freq" "frequency")
+    ("pertubed" "perturbed")
+    ("si" "is")
+    ("vs" "versus")
     ("mor" "more")
     ("configing" "configuring")
     ("aume" "as you might expect")
