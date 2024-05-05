@@ -83,6 +83,8 @@
 (eshell/alias "update-system" "sudo pacman -Syu")
 (eshell/alias "update-email" "mbsync -a")
 (eshell/alias "list-wifi" "nmcli dev wifi list")
+(eshell/alias "up" "eshell-up $1")
+(eshell/alias "pk" "eshell-up-peek $1")
 ;; chezmoi apply ~/.config/emacs/lisp
 ;; chezmoi apply ~/.configuration/
 ;; (eshell/alias "update-wallpaper" "")
