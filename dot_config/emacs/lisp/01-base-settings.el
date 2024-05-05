@@ -246,6 +246,16 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq inhibit-compacting-font-caches t)
 
 (setq idle-update-delay 1.0)
+;;;;; do not save abbrevs to a file
+;; Do not write/read abbrevs from a file.
+(setq save-abbrevs nil)
+(advice-add #'read-abbrev-file :around #'ignore)
+(advice-add #'write-abbrev-file :around #'ignore)
+(advice-add #'abbrev--possibly-save :around #'ignore)
+;; (setq abbrev-file-name null-device)
+;; By default Emacs calls this function on startup.  Thus if there is an
+;; existing abbrev file it will.
+(advice-add #'quietly-read-abbrev-file :around #'ignore)
 ;;; provide
 (provide '01-base-settings)
 ;;; 01-base-settings.el ends here

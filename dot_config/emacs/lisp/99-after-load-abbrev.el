@@ -45,15 +45,6 @@
 (require 'oo-global-abbrev-table)
 (require 'oo-wikipedia-misspellings-table)
 ;;;; abbrevs
-;;;;; do not save abbrevs to a file (use this file instead)
-;; Do not write/read abbrevs from a file.  I would rather just define them
-;; here than to save them in the abbrev file.
-;; It is more consistent with my config that way.  I especially do not want two
-;; different files that code for the same thing.
-(opt! save-abbrevs nil)
-(advice-add #'read-abbrev-file :around #'ignore)
-(advice-add #'write-abbrev-file :around #'ignore)
-(advice-add #'abbrev--possibly-save :around #'ignore)
 ;;;;; extend abbrev syntax to use "."
 ;; Allow the use of periods, colons, and underscores in global abbrevs.  The
 ;; point of doing this is to let me name certain abbrevs with easy to remember,
