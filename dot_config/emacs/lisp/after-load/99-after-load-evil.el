@@ -37,6 +37,8 @@
 (opt! evil-move-beyond-eol nil)
 
 (opt! evil-search-wrap nil)
+
+(opt! evil-visualstar/persistent t)
 ;;;; minibuffer
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
@@ -83,7 +85,7 @@
 (oo-bind :n "J" #'evil-scroll-page-down)
 (oo-bind :n "K" #'evil-scroll-page-up)
 ;;;; load evil-org-headline-state
-(oo-call-after-load 'org #'require '70-evil-org-headline-state)
+;; (oo-call-after-load 'org #'require '70-evil-org-headline-state)
 ;;;;; evil-surround
 (oo-add-hook 'prog-mode-hook #'evil-surround-mode)
 

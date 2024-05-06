@@ -75,11 +75,11 @@
 (defhook! emacs-startup-hook&register-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
-  (set! regexp "\\`99-after-load-\\(.+\\)")
+  (set! regexp "\\`after-load-\\(.+\\)")
   (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
   (flet! feature (-compose #'intern #'feature-name))
   (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
-  (for! (file (directory-files (locate-user-emacs-file "lisp/") t regexp))
+  (for! (file (directory-files (locate-user-emacs-file "lisp/after-load/") t))
     (set! feature (feature file))
     (set! package (package file))
     ;; TODO: require features only if the have not been required yet to avoid
