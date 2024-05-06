@@ -1,4 +1,4 @@
-;;; 99-after-load-avy.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-avy.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,5 +33,5 @@
 
 (opt! avy-timeout-seconds 0.3)
 ;;; provide
-(provide '99-after-load-avy)
-;;; 99-after-load-avy.el ends here
+(provide 'oo-after-load-avy)
+;;; oo-after-load-avy.el ends here

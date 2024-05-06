@@ -1,4 +1,4 @@
-;;; 99-after-load-smartparens.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-smartparens.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -48,5 +48,5 @@
 
 (require 'smartparens-config)
 ;;; provide
-(provide '99-after-load-smartparens)
-;;; 99-after-load-smartparens.el ends here
+(provide 'oo-after-load-smartparens)
+;;; oo-after-load-smartparens.el ends here

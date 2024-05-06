@@ -1,4 +1,4 @@
-;;; 99-after-load-which-key.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-which-key.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -40,5 +40,5 @@
 
 (opt! which-key-show-prefix 'top)
 ;;; provide
-(provide '99-after-load-which-key)
-;;; 99-after-load-which-key.el ends here
+(provide 'oo-after-load-which-key)
+;;; oo-after-load-which-key.el ends here

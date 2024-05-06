@@ -1,4 +1,4 @@
-;;; 99-after-load-vertico.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-vertico.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -80,5 +80,5 @@
 ;; (defun +orderless-exact (component)
 ;;   `(: bos (literal ,component)))
 ;;; provide
-(provide '99-after-load-vertico)
-;;; 99-after-load-vertico.el ends here
+(provide 'oo-after-load-vertico)
+;;; oo-after-load-vertico.el ends here

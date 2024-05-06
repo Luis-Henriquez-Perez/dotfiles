@@ -1,4 +1,4 @@
-;;; 99-after-load-outli.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-outli.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,5 +33,5 @@
 (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 
 ;;; provide
-(provide '99-after-load-outli)
-;;; 99-after-load-outli.el ends here
+(provide 'oo-after-load-outli)
+;;; oo-after-load-outli.el ends here

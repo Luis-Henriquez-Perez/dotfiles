@@ -1,4 +1,4 @@
-;;; 99-after-load-gcmh.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-gcmh.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -41,5 +41,5 @@
 ;; the minibuffer, and restore it to it's original value a few seconds after it's closed.
 ;; (defvaralias 'minibuffer-enter-hook 'minibuffer-setup-hook)
 ;;; provide
-(provide '99-after-load-gcmh)
-;;; 99-after-load-gcmh.el ends here
+(provide 'oo-after-load-gcmh)
+;;; oo-after-load-gcmh.el ends here

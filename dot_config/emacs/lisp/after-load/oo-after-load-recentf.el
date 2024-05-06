@@ -1,4 +1,4 @@
-;;; 99-after-load-recentf.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-recentf.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -51,5 +51,5 @@
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
 (recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
-(provide '99-after-load-recentf)
-;;; 99-after-load-recentf.el ends here
+(provide 'oo-after-load-recentf)
+;;; oo-after-load-recentf.el ends here

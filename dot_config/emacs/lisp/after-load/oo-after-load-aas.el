@@ -1,4 +1,4 @@
-;;; 99-after-load-aas.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-aas.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -62,5 +62,5 @@
            (oo-in-string-or-comment-p))
        (not (minibuffer-window-active-p (minibuffer-window)))))
 ;;; provide
-(provide '99-after-load-aas)
-;;; 99-after-load-aas.el ends here
+(provide 'oo-after-load-aas)
+;;; oo-after-load-aas.el ends here

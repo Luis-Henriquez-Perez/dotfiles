@@ -1,4 +1,4 @@
-;;; 99-after-load-ox-publish.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-ox-publish.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -51,5 +51,5 @@
           ("blog"
            :components ("pages" "static")))))
 ;;; provide
-(provide '99-after-load-ox-publish)
-;;; 99-after-load-ox-publish.el ends here
+(provide 'oo-after-load-ox-publish)
+;;; oo-after-load-ox-publish.el ends here

@@ -1,4 +1,4 @@
-;;; 99-after-load-eshell.el --- configuration for eshell -*- lexical-binding: t; -*-
+;;; oo-after-load-eshell.el --- configuration for eshell -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -77,5 +77,5 @@
 ;;   )
 ;; (eshell/alias "clear" )
 ;;; provide
-(provide '99-after-load-eshell)
-;;; 99-after-load-eshell.el ends here
+(provide 'oo-after-load-eshell)
+;;; oo-after-load-eshell.el ends here

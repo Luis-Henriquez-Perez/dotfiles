@@ -1,4 +1,4 @@
-;;; 99-after-load-corfu.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-corfu.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -65,5 +65,5 @@
 
 (opt! corfu-bar-width 0)
 ;;; provide
-(provide '99-after-load-corfu)
-;;; 99-after-load-corfu.el ends here
+(provide 'oo-after-load-corfu)
+;;; oo-after-load-corfu.el ends here

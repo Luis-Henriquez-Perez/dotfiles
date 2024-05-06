@@ -1,4 +1,4 @@
-;;; 99-after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -43,5 +43,5 @@
               (chezmoi-target-file it))
     (with-demoted-errors "error:%S" (chezmoi-write))))
 ;;; provide
-(provide '99-after-load-chezmoi)
-;;; 99-after-load-chezmoi.el ends here
+(provide 'oo-after-load-chezmoi)
+;;; oo-after-load-chezmoi.el ends here

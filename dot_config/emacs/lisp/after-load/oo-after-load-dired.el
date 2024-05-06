@@ -1,4 +1,4 @@
-;;; 99-after-load-dired.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-dired.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -57,5 +57,5 @@
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
 ;;; provide
-(provide '99-after-load-dired)
-;;; 99-after-load-dired.el ends here
+(provide 'oo-after-load-dired)
+;;; oo-after-load-dired.el ends here

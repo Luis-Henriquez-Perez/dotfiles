@@ -1,4 +1,4 @@
-;;; 99-after-load-em-alias.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-em-alias.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -123,5 +123,5 @@
 ;; convert -delay 5 -loop 0 thumbnail*.png animation.gif
 ;; maim -i $(xdotool getactivewindow) screenshot.png
 ;;; provide
-(provide '99-after-load-em-alias)
-;;; 99-after-load-em-alias.el ends here
+(provide 'oo-after-load-em-alias)
+;;; oo-after-load-em-alias.el ends here

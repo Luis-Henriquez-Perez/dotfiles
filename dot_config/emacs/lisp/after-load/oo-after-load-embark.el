@@ -1,4 +1,4 @@
-;;; 99-after-load-embark.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-embark.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -26,5 +26,5 @@
 ;;
 ;;; Code:
 ;;; provide
-(provide '99-after-load-embark)
-;;; 99-after-load-embark.el ends here
+(provide 'oo-after-load-embark)
+;;; oo-after-load-embark.el ends here

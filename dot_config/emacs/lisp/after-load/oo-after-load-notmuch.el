@@ -1,4 +1,4 @@
-;;; 99-after-load-notmuch.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-notmuch.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -27,5 +27,5 @@
 ;;; Code:
 (opt! notmuch-sort-oldest-first nil)
 ;;; provide
-(provide '99-after-load-notmuch)
-;;; 99-after-load-notmuch.el ends here
+(provide 'oo-after-load-notmuch)
+;;; oo-after-load-notmuch.el ends here

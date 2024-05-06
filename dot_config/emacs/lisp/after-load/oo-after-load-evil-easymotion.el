@@ -1,4 +1,4 @@
-;;; 99-after-load-evil-easymotion.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-evil-easymotion.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -225,5 +225,5 @@ This is a wrapper around `evilem-make-motion'."
                        (re-search-forward (rx-to-string (char-to-string char)) nil t nil))
        (goto-char (match-beginning 0))))
 ;;; provide
-(provide '99-after-load-evil-easymotion)
-;;; 99-after-load-evil-easymotion.el ends here
+(provide 'oo-after-load-evil-easymotion)
+;;; oo-after-load-evil-easymotion.el ends here

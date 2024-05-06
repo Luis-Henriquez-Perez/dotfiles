@@ -1,4 +1,4 @@
-;;; 99-after-load-outline.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-outline.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -38,5 +38,5 @@
 ;;         :tag ""
 ;;         )
 ;;; provide
-(provide '99-after-load-outline)
-;;; 99-after-load-outline.el ends here
+(provide 'oo-after-load-outline)
+;;; oo-after-load-outline.el ends here

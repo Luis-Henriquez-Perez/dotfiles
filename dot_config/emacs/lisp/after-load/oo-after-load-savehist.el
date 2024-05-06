@@ -1,4 +1,4 @@
-;;; 99-after-load-savehist.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-savehist.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -34,5 +34,5 @@
 (defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;; provide
-(provide '99-after-load-savehist)
-;;; 99-after-load-savehist.el ends here
+(provide 'oo-after-load-savehist)
+;;; oo-after-load-savehist.el ends here

@@ -1,4 +1,4 @@
-;;; 99-after-load-org.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-org.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -107,5 +107,5 @@
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
-(provide '99-after-load-org)
-;;; 99-after-load-org.el ends here
+(provide 'oo-after-load-org)
+;;; oo-after-load-org.el ends here

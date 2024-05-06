@@ -1,4 +1,4 @@
-;;; 99-after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -35,5 +35,5 @@
   "Make `tempel-map' into an overriding map."
   (evil-make-overriding-map tempel-map))
 ;;; provide
-(provide '99-after-load-tempel)
-;;; 99-after-load-tempel.el ends here
+(provide 'oo-after-load-tempel)
+;;; oo-after-load-tempel.el ends here

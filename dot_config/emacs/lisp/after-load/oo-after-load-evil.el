@@ -1,4 +1,4 @@
-;;; 99-after-load-evil.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-evil.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -91,5 +91,5 @@
 
 (oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;; provide
-(provide '99-after-load-evil)
-;;; 99-after-load-evil.el ends here
+(provide 'oo-after-load-evil)
+;;; oo-after-load-evil.el ends here

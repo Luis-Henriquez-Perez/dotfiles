@@ -1,4 +1,4 @@
-;;; 99-after-load-super-save.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-super-save.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -38,5 +38,5 @@
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
 ;;; provide
-(provide '99-after-load-super-save)
-;;; 99-after-load-super-save.el ends here
+(provide 'oo-after-load-super-save)
+;;; oo-after-load-super-save.el ends here

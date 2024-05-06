@@ -1,4 +1,4 @@
-;;; 99-after-load-lispyville.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-lispyville.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -30,5 +30,5 @@
 (opt! lispyville-key-theme nil)
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 ;;; provide
-(provide '99-after-load-lispyville)
-;;; 99-after-load-lispyville.el ends here
+(provide 'oo-after-load-lispyville)
+;;; oo-after-load-lispyville.el ends here

@@ -1,4 +1,4 @@
-;;; 99-after-load-helm.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-helm.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -43,5 +43,5 @@
 (oo-bind :ie 'helm-map "C-;" #'ace-jump-helm-line)
 
 ;;; provide
-(provide '99-after-load-helm)
-;;; 99-after-load-helm.el ends here
+(provide 'oo-after-load-helm)
+;;; oo-after-load-helm.el ends here

@@ -1,4 +1,4 @@
-;;; 99-after-load-idle-require.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-idle-require.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,5 +28,5 @@
 ;;;;; idle-require
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 ;;; provide
-(provide '99-after-load-idle-require)
-;;; 99-after-load-idle-require.el ends here
+(provide 'oo-after-load-idle-require)
+;;; oo-after-load-idle-require.el ends here

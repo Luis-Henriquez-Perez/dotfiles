@@ -1,4 +1,4 @@
-;;; 99-after-load-emms.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-emms.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -39,5 +39,5 @@
 ;; TODO: Add a way of setting the volume without having to repeat the lower
 ;; volume command, `emms-volume-lower'.
 ;;; provide
-(provide '99-after-load-emms)
-;;; 99-after-load-emms.el ends here
+(provide 'oo-after-load-emms)
+;;; oo-after-load-emms.el ends here

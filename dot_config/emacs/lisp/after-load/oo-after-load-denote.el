@@ -1,4 +1,4 @@
-;;; 99-after-load-denote.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-denote.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,5 +28,5 @@
 ;;;; denote
 (opt! denote-file-type 'text)
 ;;; provide
-(provide '99-after-load-denote)
-;;; 99-after-load-denote.el ends here
+(provide 'oo-after-load-denote)
+;;; oo-after-load-denote.el ends here

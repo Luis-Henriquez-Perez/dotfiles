@@ -1,4 +1,4 @@
-;;; 99-after-load-ace-window.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-ace-window.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -32,5 +32,5 @@
 ;; The character z conflicts.
 (opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
 ;;; provide
-(provide '99-after-load-ace-window)
-;;; 99-after-load-ace-window.el ends here
+(provide 'oo-after-load-ace-window)
+;;; oo-after-load-ace-window.el ends here
