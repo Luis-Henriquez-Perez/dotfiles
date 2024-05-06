@@ -1,4 +1,4 @@
-;;; 99-after-load-abbrev.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-abbrev.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -82,5 +82,5 @@
 (alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-wikipedia-misspellings-table)
   (abbrev-table-put global-abbrev-table :parents it))
 ;;; provide
-(provide '99-after-load-abbrev)
-;;; 99-after-load-abbrev.el ends here
+(provide 'oo-after-load-abbrev)
+;;; oo-after-load-abbrev.el ends here
