@@ -1,2 +1,0 @@
-(setq denote-dir)
-(setq)
