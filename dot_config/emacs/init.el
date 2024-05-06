@@ -75,17 +75,17 @@
 (defhook! emacs-startup-hook&register-config-files ()
   "Load the code for the lisp files."
   [:depth 10]
-  (set! regexp "\\`after-load-\\(.+\\)")
+  (set! regexp "\\`oo-after-load-\\(.+\\)")
   (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
   (flet! feature (-compose #'intern #'feature-name))
   (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
-  (for! (file (directory-files (locate-user-emacs-file "lisp/after-load/") t))
-    (set! feature (feature file))
+  (for! (file (directory-files (locate-user-emacs-file "lisp/after-load/") t regexp))
     (set! package (package file))
+    (set! feature (feature file))
     ;; TODO: require features only if the have not been required yet to avoid
     ;; loading them twice.  Most of the time it should not matter but better to
     ;; be precise.
-    (oo-call-after-load package #'require feature)))
+    (oo-call-after-load package #'require feature file)))
 ;;;; restore startup values
 ;; This should be either the last or close to the last thing that happens.
 ;; Furthermore, its important that this hook is run and therefore that previous
@@ -99,7 +99,6 @@
     (cl-decf gc-cons-threshold (* 4 1024 1024))
     (cl-decf gc-cons-percentage 0.1)
     (cond ((= gc-cons-threshold (* 8 1024 1024))
-           ;; (message "Done...gc-cons-threshold -> 8MB")
            (setq gc-cons-percentage 0.4))
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
