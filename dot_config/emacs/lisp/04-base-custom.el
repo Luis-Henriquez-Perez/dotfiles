@@ -30,7 +30,6 @@
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
 ;;; Code:
-(require '02-base-lib)
 (require 'anaphora)
 (require 'dash)
 (require 's)

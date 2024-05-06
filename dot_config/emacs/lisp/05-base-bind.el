@@ -25,7 +25,6 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require '02-base-lib)
 
 ;;;; oo-call-after-keymap
 ;; I want the ability to be able to bind keys in keymaps without having to always
