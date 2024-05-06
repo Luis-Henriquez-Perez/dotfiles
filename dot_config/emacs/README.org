@@ -94,3 +94,28 @@ for me to cite everything.  But I do want to mention [[https://github.com/d12fro
 from which I took influence as to using eldev, as well as the file structure.
 And I also want to mention [[https://github.com/doomemacs/doomemacs][Doom Emacs]] from which this README is based on and
 from which a lot of code in my configuration was inspired.
+* roadmap
+:PROPERTIES:
+:ID:       20240410T155100.874569
+:END:
+This is a roadmap for what I need of get done to go up a version.
+** 0.2
+:PROPERTIES:
+:ID:       20240410T154926.870213
+:END:
+*** TODO there should not be any compiler warnings anymore
+:PROPERTIES:
+:ID:       20240410T154944.800073
+:END:
+*** TODO all functions and macros should have a test
+:PROPERTIES:
+:ID:       20240410T155016.682063
+:END:
+*** TODO a keybinding macro, =bind!= that binds my keys
+:PROPERTIES:
+:ID:       20240410T155525.987034
+:END:
+*** TODO should be able to reproduce dotfiles on another machine with one command
+:PROPERTIES:
+:ID:       20240410T155808.253874
+:END:
