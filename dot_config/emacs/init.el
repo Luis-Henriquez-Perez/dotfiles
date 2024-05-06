@@ -82,9 +82,6 @@
   (for! (file (directory-files (locate-user-emacs-file "lisp/after-load/") t regexp))
     (set! package (package file))
     (set! feature (feature file))
-    ;; TODO: require features only if the have not been required yet to avoid
-    ;; loading them twice.  Most of the time it should not matter but better to
-    ;; be precise.
     (oo-call-after-load package #'require feature file)))
 ;;;; restore startup values
 ;; This should be either the last or close to the last thing that happens.
