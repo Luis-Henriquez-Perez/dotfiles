@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("freq" "frequency")
+  '(("tmmw" "to make matters worse")
+    ("freq" "frequency")
     ("pertubed" "perturbed")
     ("si" "is")
     ("vs" "versus")
