@@ -28,7 +28,12 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("tmmw" "to make matters worse")
+  '(("movo" "moreover")
+    ("dandylion" "dandelion")
+    ("dandylions" "dandelions")
+    ("bev" "bird's-eye view")
+    ("thot" "thought")
+    ("tmmw" "to make matters worse")
     ("freq" "frequency")
     ("pertubed" "perturbed")
     ("si" "is")
