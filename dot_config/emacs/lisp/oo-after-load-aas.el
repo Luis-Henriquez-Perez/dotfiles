@@ -55,7 +55,7 @@
 ;; space might interfere with the abbrev itself.
 ;;
 ;;; Code:
-(require '04-base-custom)
+(require 'oo-base)
 ;;;; replace two spaces with a period
 (defun oo--aas-text-enable-p ()
   (and (or (derived-mode-p 'text-mode)
