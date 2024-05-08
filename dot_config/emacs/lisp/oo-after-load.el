@@ -1,4 +1,4 @@
-;;; oo-after-load.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,15 +22,11 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Register files that needs to be loaded lazily.
 ;;
 ;;; Code:
 (require 'oo-base)
 ;;;; lazy-load after-load files
-;; The "after-load" files contain customizations that should be enabled after a
-;; package has been loaded.  These files are usually more meaty than the init
-;; files.
-;; Tell the `load-path'.
 (progn!
   (set! regexp "\\`oo-after-load-\\(.+\\)")
   (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
