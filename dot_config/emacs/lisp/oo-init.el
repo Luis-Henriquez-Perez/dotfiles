@@ -1,4 +1,4 @@
-;;; oo-init.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is everything that needs to be evaluated immediately on startup.
 ;;
 ;;; Code:
 (require 'oo-base)
@@ -46,6 +46,22 @@ For what buffer is displayed in the case of a boolean see
     (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
 
 (setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
+;;;; disable old themes before enabling new ones
+;; We end up with remants of the faces of old themes when we load a new
+;; one.  For this reason, I make sure to disable any enabled themes before applying
+;; a new theme.
+
+;; When you load a theme you'll end up with quite a surprise.  And it
+;; stacks as well when working on a big configuration change I didn't
+;; have this code and I could literally backtrack the themes.
+
+;; Don't know why deleting the previous theme before enabling a new
+;; one isn't the default behavior.  When would anyone want to layer
+;; the colors of one theme on top of an older one.
+(defadvice! load-theme@ARdisable-old-themes (orig-fn &rest args)
+  "Disable old themes before loading new ones."
+  (mapc #'disable-theme custom-enabled-themes)
+  (apply orig-fn args))
 ;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()
