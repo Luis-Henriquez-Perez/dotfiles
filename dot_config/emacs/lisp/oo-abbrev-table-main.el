@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("abut" "about")
+  '(("imm" "immediately")
+    ("evv" "everything")
+    ("abut" "about")
     ("movo" "moreover")
     ("dandylion" "dandelion")
     ("dandylions" "dandelions")
