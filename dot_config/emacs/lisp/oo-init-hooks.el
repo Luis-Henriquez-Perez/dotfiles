@@ -104,7 +104,7 @@
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
 (defhook! emacs-lisp-mode-hook&require-macros ()
-  (require 'oo-macros))
+  (require 'oo-base-macros))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here
