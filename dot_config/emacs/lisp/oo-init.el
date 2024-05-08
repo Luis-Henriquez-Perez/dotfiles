@@ -29,7 +29,7 @@
 (require 'oo-init-no-littering)
 (require 'oo-init-abbrev)
 (require 'oo-init-dashboard)
-(require 'oo-init-savehist)
+(require 'oo-init-recentf)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; initial buffer choice
