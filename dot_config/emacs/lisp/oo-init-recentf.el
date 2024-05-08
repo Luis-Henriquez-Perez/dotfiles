@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `recentf'.
 ;;
 ;;; Code:
 (require 'oo-base)
