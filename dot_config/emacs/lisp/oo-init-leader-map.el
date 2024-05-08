@@ -62,11 +62,11 @@
   "The localleader prefix key for major-mode specific commands.")
 
 (defvar oo-leader-map (make-sparse-keymap))
-(define-prefix-command 'oo-leader-prefix-command 'oo-leader-map)
+(define-prefix-command 'oo-leader-map-command 'oo-leader-map)
 
-(define-key oo-override-mode-map oo-emacs-leader-key 'oo-leader-map)
+(define-key oo-override-mode-map (kbd oo-emacs-leader-key) 'oo-leader-map-command)
 
-(define-key oo-override-mode-map (kbd "SPC") 'execute-extended-command)
+(define-key oo-leader-map (kbd "SPC") 'execute-extended-command)
 ;;;; setup leader maps
 (defvar oo-toggle-map (make-sparse-keymap))
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
@@ -148,6 +148,10 @@
 (define-key oo-help-map "h" #'describe-variable)
 (define-key oo-help-map "C" #'describe-char)
 (define-key oo-help-map "k" #'describe-key)
+
+;; (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+;; (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+;; (oo-bind 'oo-find-map "j" #'burly-open-bookmark)
 ;;; provide
 (provide 'oo-init-leader-map)
 ;;; oo-init-leader-map.el ends here
