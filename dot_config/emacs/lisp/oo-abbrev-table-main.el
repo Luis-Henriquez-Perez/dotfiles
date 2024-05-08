@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("misc" "miscellaneous")
+  '(("fnames" "filenames")
+    ("misc" "miscellaneous")
     ("imm" "immediately")
     ("evv" "everything")
     ("abut" "about")
