@@ -257,6 +257,15 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; By default Emacs calls this function on startup.  Thus if there is an
 ;; existing abbrev file it will.
 (advice-add #'quietly-read-abbrev-file :around #'ignore)
+;;;;; feature-specific customization
+;;;;; re-builder
+;; By default, use `rx' syntax.  It is my preferred syntax.
+(setq reb-re-syntax 'rx)
+;;;;; unknown
+;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
+(setq sgml-basic-offset 4)
+;;;;; dabbrev
+(setq dabbrev-check-all-buffers nil)
 ;;; provide
 (provide 'oo-base-settings)
 ;;; oo-base-settings.el ends here

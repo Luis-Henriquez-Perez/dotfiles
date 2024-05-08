@@ -39,10 +39,8 @@
   (for! (file (directory-files (locate-user-emacs-file "lisp") t regexp))
     (set! package (package file))
     (set! feature (feature file))
-    (cond ((featurep package)
-           (message "Package %s is available." package feature))
+    (cond ((featurep package))
           (t
-           (message "Package %s is not loaded, deferring %s..." package feature)
            (oo-call-after-load package #'require feature)))))
 ;;; provide
 (provide 'oo-after-load)

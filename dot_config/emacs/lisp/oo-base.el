@@ -31,6 +31,8 @@
 (require 'oo-base-packages)
 (require 'oo-base-requirements)
 (require 'oo-base-lib)
+(require 'oo-base-bind)
+(require 'oo-base-leaders)
 ;;; provide
 (provide 'oo-base)
 ;;; oo-base.el ends here

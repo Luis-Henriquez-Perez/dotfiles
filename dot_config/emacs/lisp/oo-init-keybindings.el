@@ -25,7 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-init-leader-map)
+(require 'oo-base)
+;; (oo-call-after-load 'evil #'require 'oo-init-evil-keybindings)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
