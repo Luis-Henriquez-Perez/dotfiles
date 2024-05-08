@@ -78,29 +78,6 @@
 ;; The default value is 6.
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-bottom-width 7)
-;;;; set initial font
-(progn!
-  (aset! (or (font-spec :name "Martian Mono Nerd Font"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 14)
-             (font-spec :name "Nimbus Mono PS"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "Iosevka Comfy Wide"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "SpaceMono Nerd Font"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "iMWritingMono Nerd Font Mono"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)))
-  (set-face-attribute 'default nil :font it))
 ;;;; custom functions
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."

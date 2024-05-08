@@ -36,12 +36,16 @@
   (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
   (flet! feature (-compose #'intern #'feature-name))
   (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
+  (flet! log-require (feature &rest args)
+    (when oo-debug-p
+      (message "Loading %s..." feature))
+    (apply #'require feature args))
   (for! (file (directory-files (locate-user-emacs-file "lisp") t regexp))
     (set! package (package file))
     (set! feature (feature file))
     (cond ((featurep package))
           (t
-           (oo-call-after-load package #'require feature)))))
+           (oo-call-after-load package #'log-require feature)))))
 ;;; provide
 (provide 'oo-after-load)
 ;;; oo-after-load.el ends here
