@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("imm" "immediately")
+  '(("misc" "miscellaneous")
+    ("imm" "immediately")
     ("evv" "everything")
     ("abut" "about")
     ("movo" "moreover")
