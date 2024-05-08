@@ -1,4 +1,4 @@
-;;; 04-base-custom.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-lib.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -30,10 +30,9 @@
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
 ;;; Code:
-(require 'anaphora)
-(require 'dash)
-(require 's)
-(require 'lgr)
+(require 'oo-base-utils)
+(require 'oo-base-requirements)
+(eval-when-compile (require 'oo-base-macros))
 ;;;; oo-first-success
 ;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
 ;; These functions take a predicate and a list and they return the first element of
@@ -220,5 +219,5 @@ bound and setting them to the result of evaluating expr."
   (setq oo-unbound-symbol-alist (nreverse updated))
   (when exprs (funcall `(lambda () ,@exprs))))
 ;;; provide
-(provide '04-base-custom)
-;;; 04-base-custom.el ends here
+(provide 'oo-base-lib)
+;;; oo-base-lib.el ends here

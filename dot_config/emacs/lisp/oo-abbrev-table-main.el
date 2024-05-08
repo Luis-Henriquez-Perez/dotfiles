@@ -1,4 +1,4 @@
-;;; oo-main-abbrev-table.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-abbrev-table-main.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("movo" "moreover")
+  '(("abut" "about")
+    ("movo" "moreover")
     ("dandylion" "dandelion")
     ("dandylions" "dandelions")
     ("bev" "bird's-eye view")
@@ -425,8 +426,6 @@
     ("ot" "to")
     ("wnat" "want")
     ("stoped" "stopped")
-    ;; Man, `completion-at-point-functions' is such a long variable name huh?
-    ;; I definitely do not recommend writing all that out yourself.
     ("capfs" "completion-at-point-functions")
     ("suprise" "surprise")
     ("functoin" "function")
@@ -445,5 +444,5 @@
     ("prob" "problem")
     ("dered" "considered")))
 ;;; provide
-(provide 'oo-global-abbrev-table)
-;;; oo-main-abbrev-table.el ends here
+(provide 'oo-abbrev-table-main)
+;;; oo-abbrev-table-main.el ends here

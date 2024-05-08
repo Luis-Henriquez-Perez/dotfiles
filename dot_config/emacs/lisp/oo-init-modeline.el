@@ -186,5 +186,5 @@
   (with-current-buffer buffer
     (setq mode-line-format (default-value 'mode-line-format))))
 ;;; provide
-(provide 'oo-modeline)
-;;; oo-modeline.el ends here
+(provide 'oo-init-modeline)
+;;; oo-init-modeline.el ends here

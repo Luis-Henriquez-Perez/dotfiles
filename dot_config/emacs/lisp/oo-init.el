@@ -1,4 +1,4 @@
-;;; oo-after-load-dashboard.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,6 +25,27 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'oo-base)
+(require 'oo-init-no-littering)
+(require 'oo-init-abbrev)
+(require 'oo-init-dashboard)
+(require 'oo-init-savehist)
+(require 'oo-init-hooks)
+(require 'oo-init-keybindings)
+;;;;; initial buffer choice
+(defvar oo-initial-buffer-choice-hook nil
+  "Hook run to choose initial buffer.
+Each hook should return either a buffer to be displayed or a boolean.
+For what buffer is displayed in the case of a boolean see
+`initial-buffer-choice'.")
+
+(defun oo-run-initial-buffer-choice-hook ()
+  "Run `oo-initial-buffer-choice-hook'."
+  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
+              (get-buffer-create "*scratch*"))
+    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
+
+(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
 ;;; provide
-(provide 'oo-after-load-dashboard)
-;;; oo-after-load-dashboard.el ends here
+(provide 'oo-init)
+;;; oo-init.el ends here

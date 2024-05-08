@@ -1,4 +1,4 @@
-;;; oo-macros.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,13 +28,13 @@
 ;; easy to compile them away as opposed to intermingling them with functions.
 ;;
 ;;; Code:
-(require 'oo-utilities)
-(require 'oo-ing-macros)
-(require 'oo-let-macro)
-(require 'oo-looping-macros)
-(require 'oo-map-macro)
-(require 'oo-progn-macro)
-(require 'oo-definer-macros)
+(require 'oo-base-utils)
+(require 'oo-base-macros-ing)
+(require 'oo-base-macros-let)
+(require 'oo-base-macros-looping)
+(require 'oo-base-macros-map)
+(require 'oo-base-macros-progn)
+(require 'oo-base-macros-definers)
 ;;;;; if-not!
 ;; More often than not when I am using `if', the default else clause is simpler than
 ;; the then clause.  And in that case I end up having to wrap the then clause in
@@ -112,5 +112,5 @@ This is like `setq' but it is meant for configuring variables."
 (defalias '-partial-> 'thread-partial!)
 (defalias '-p-> 'thread-partial!)
 ;;; provide
-(provide 'oo-macros)
-;;; oo-macros.el ends here
+(provide 'oo-base-macros)
+;;; oo-base-macros.el ends here

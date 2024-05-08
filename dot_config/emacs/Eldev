@@ -33,7 +33,8 @@
                            "lisp/90-keybindings.el"
                            "lisp/98-init-features.el"
                            "lisp/99-after-load-*.el"
-                           "lisp/70-evil-org-headline-state.el"))
+                           ;; "lisp/70-evil-org-headline-state.el"
+                           ))
 ;; (setq eldev-test-fileset '("tests/all-tests.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help

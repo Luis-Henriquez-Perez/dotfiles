@@ -1,4 +1,4 @@
-;;; 03-init-elpaca.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-elpaca.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -154,5 +154,5 @@
 (elpaca-process-queues)
 (elpaca-wait)
 ;;; provide
-(provide '03-init-elpaca)
-;;; 03-init-elpaca.el ends here
+(provide 'oo-init-elpaca)
+;;; oo-init-elpaca.el ends here

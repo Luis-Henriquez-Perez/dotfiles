@@ -1,4 +1,4 @@
-;;; 01-base-settings.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-settings.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -146,7 +146,7 @@
 (setq redisplay-skip-fontification-on-input t)
 ;;;; don't update things on the screen as frequently
 ;; This variable is.
-;; https://github.com/hlissner/doom-emacs/blob/01aadd8901be45f912124d9d815d8790f540d38c/core/core.el#L177
+;; https://github.com/hlissner/doom-emacs/blob/ooaadd89oobe45f912124d9d815d8790f540d38c/core/core.el#L177
 (setq idle-update-delay 1)
 ;;;; don't make backups
 (setq make-backup-files nil)
@@ -247,8 +247,9 @@ end-of-buffer signals; pass the rest to the default handler."
 
 (setq idle-update-delay 1.0)
 ;;;;; do not save abbrevs to a file
-;; Do not write/read abbrevs from a file.
-(setq save-abbrevs nil)
+;; Do not manage abbrevs for me.
+;; Do not prompt me for saving abbrevs.
+;; (setq save-abbrevs 'silently)
 (advice-add #'read-abbrev-file :around #'ignore)
 (advice-add #'write-abbrev-file :around #'ignore)
 (advice-add #'abbrev--possibly-save :around #'ignore)
@@ -257,5 +258,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; existing abbrev file it will.
 (advice-add #'quietly-read-abbrev-file :around #'ignore)
 ;;; provide
-(provide '01-base-settings)
-;;; 01-base-settings.el ends here
+(provide 'oo-base-settings)
+;;; oo-base-settings.el ends here

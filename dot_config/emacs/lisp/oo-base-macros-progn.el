@@ -26,9 +26,9 @@
 ;;
 ;;; Code:
 (require 'cl-lib)
-(require 'oo-utilities)
-(require 'oo-let-macro)
-(require 'oo-ing-macros)
+(require 'oo-base-utils)
+(require 'oo-base-macros-let)
+(require 'oo-base-macros-ing)
 ;;;; block!
 ;;;;; helpers
 (defun oo--parse-block (data forms)
@@ -195,5 +195,5 @@ Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
 (defmacro lambda! (args &rest body)
   `(lambda ,args (progn! ,@body)))
 
-(provide 'oo-progn-macro)
+(provide 'oo-base-macros-progn)
 ;;; oo-progn-macro.el ends here

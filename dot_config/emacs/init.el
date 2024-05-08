@@ -58,35 +58,11 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load requirements
-(require '00-base-vars)
-(require '01-base-settings)
-(require '03-init-elpaca)
-(require 'oo-utilities)
-(eval-when-compile (require 'oo-macros))
-(require 'shut-up)
-(require '04-base-custom)
-(require '05-base-bind)
-(require '98-init-features)
-(require '90-keybindings)
-;;;; lazy-load after-load files
-;; The "after-load" files contain customizations that should be enabled after a
-;; package has been loaded.  These files are usually more meaty than the init
-;; files.
-(defhook! emacs-startup-hook&register-config-files ()
-  "Load the code for the lisp files."
-  [:depth 10]
-  (set! regexp "\\`oo-after-load-\\(.+\\)")
-  (flet! feature-name (-compose #'file-name-sans-extension #'file-name-nondirectory))
-  (flet! feature (-compose #'intern #'feature-name))
-  (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
-  (for! (file (directory-files (locate-user-emacs-file "lisp/after-load/") t regexp))
-    (set! package (package file))
-    (set! feature (feature file))
-    (oo-call-after-load package #'require feature file)))
-;;;; restore startup values
-;; This should be either the last or close to the last thing that happens.
-;; Furthermore, its important that this hook is run and therefore that previous
-;; hooks dont produce an error.
+(require 'oo-init)
+(require 'oo-after-load)
+;; (require 'oo-keybindings)
+;; (require 'oo-autoloads)
+;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
   ;; This is a sanity check to ensure.
@@ -105,7 +81,7 @@
   (oo-restore-value 'file-name-handler-alist)
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection)
-  (require 'oo-modeline))
+  (require 'oo-init-modeline))
 
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()
@@ -121,8 +97,6 @@
   [:depth 90]
   (oo-restore-value 'gc-cons-threshold)
   (oo-restore-value 'gc-cons-percentage))
-;;;; load autoloads
-(require 'oo-autoloads)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here

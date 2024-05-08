@@ -1,4 +1,4 @@
-;;; oo-utilities.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-utils.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -112,5 +112,5 @@ arguments FN will be called with."
           ((nth 4 ppss) 'comment)
           (t nil))))
 ;;; provide
-(provide 'oo-utilities)
-;;; oo-utilities.el ends here
+(provide 'oo-base-utils)
+;;; oo-base-utils.el ends here

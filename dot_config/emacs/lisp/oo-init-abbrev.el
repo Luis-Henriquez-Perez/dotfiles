@@ -1,4 +1,4 @@
-;;; oo-after-load-abbrev.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-abbrevs.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,28 +22,13 @@
 ;;
 ;;; Commentary:
 ;;
-;; At first I thought that abbrev-mode is obsoleted by things like yasnippet or
-;; tempel, but after considering it I realized that it is very useful.  The
-;; greatest weakness of abbrev is also its greatest strength--namely, the
-;; ability to automatically expand.  With
-;; this file I want to squeeze the most out of abbrev.
-;;
-;; GOTCHAs:
-;; 1. (define-abbrev emacs-lisp-mode-abbrev-table ...) doesnt seem to work
-;;    unless youve already enabled emacs-lisp-mode.
-;; 2. (define-abbrev prog-mode-abbrev-table ...) doesnt seem to work at all even
-;;    if you evaluate it after prog-mode has been run.
-;; 3. It is a bit challenging to check a specific abbrev table because
-;; 4. I expected abbrevs in prog-mode-abbrev-table to work in programming
-;;    modes--not the case.
+;; TODO: add commentary
 ;;
 ;;; Code:
-;; TODO: figure out a better way to handle misspellings.
-;; (require '90-wikipedia-common-misspellings)
 (require 'abbrev)
-(require '04-base-custom)
-(require 'oo-global-abbrev-table)
-(require 'oo-wikipedia-misspellings-table)
+(require 'oo-base)
+(require 'oo-abbrev-table-main)
+(require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
 ;;;;; extend abbrev syntax to use "."
 ;; Allow the use of periods, colons, and underscores in global abbrevs.  The
@@ -82,5 +67,5 @@
 (alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-wikipedia-misspellings-table)
   (abbrev-table-put global-abbrev-table :parents it))
 ;;; provide
-(provide 'oo-after-load-abbrev)
-;;; oo-after-load-abbrev.el ends here
+(provide 'oo-init-abbrev)
+;;; oo-init-abbrev.el ends here

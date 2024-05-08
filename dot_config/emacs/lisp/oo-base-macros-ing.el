@@ -1,4 +1,4 @@
-;;; oo-ing-macros.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-ing.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -104,5 +104,5 @@ SETTER is the same as in `appending!'."
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
 ;;; provide
-(provide 'oo-ing-macros)
-;;; oo-ing-macros.el ends here
+(provide 'oo-base-macros-ing)
+;;; oo-base-macros-ing.el ends here

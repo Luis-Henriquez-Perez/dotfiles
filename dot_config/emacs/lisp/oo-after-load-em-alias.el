@@ -105,6 +105,7 @@
 ;;;; miscellaneous
 (eshell/alias "up" "eshell-up $1")
 (eshell/alias "pk" "eshell-up-peek $1")
+(eshell/alias "unpack" "mv $1/* . && rmdir $1")
 ;; rsync -e "ssh -p 65002" -uvr html/ u150683034@195.35.38.189:/home/u150683034/domains/luishp.blog/public_html
 ;; rsync -e 'ssh -p PORT_NUMBER' -uvr html/ username@IP_ADDRESS:/path/to/destination/
 ;; chezmoi apply ~/.config/emacs/lisp

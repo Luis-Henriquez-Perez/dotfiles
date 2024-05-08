@@ -1,4 +1,4 @@
-;;; oo-map-macro.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-map.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,9 +25,9 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-utilities)
-(require 'cl-lib)
-(require 'oo-ing-macros)
+(require 'oo-base-requirements)
+(require 'oo-base-utils)
+(require 'oo-base-macros-ing)
 ;;;; map!
 (defun oo--map-let-binds (map body regexp &optional use-keywords)
   "Return a list of let-bindings for `with-map!'.
@@ -52,5 +52,5 @@ Collect symbols matching REGEXP in BODY into an alist."
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;; provide
-(provide 'oo-map-macro)
-;;; oo-map-macro.el ends here
+(provide 'oo-base-macros-map)
+;;; oo-base-macros-map.el ends here

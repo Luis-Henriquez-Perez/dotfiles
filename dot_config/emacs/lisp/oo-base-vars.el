@@ -1,4 +1,4 @@
-;;; 00-base-vars.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-vars.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -81,5 +81,5 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; (defvar oo-log-buffer (get-buffer-create "*oo-log*")
 ;;   "Buffer where information should be logged.")
 ;;; provide
-(provide '00-base-vars)
-;;; 00-base-vars.el ends here
+(provide 'oo-base-vars)
+;;; oo-base-vars.el ends here

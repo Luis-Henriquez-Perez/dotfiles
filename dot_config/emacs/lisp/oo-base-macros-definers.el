@@ -1,4 +1,4 @@
-;;; oo-definer-macros.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-definers.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-progn-macro)
+(require 'oo-base-macros-progn)
 ;;;; defmacro! and defun!
 (defun oo-defun-components (body &optional show-nils)
   "Divide defun body, BODY, into its components.
@@ -66,5 +66,5 @@ NAME, ARGS and BODY are the same as in `defun'.
   (declare (indent defun) (doc-string 3))
   (oo--definer-body 'defun args))
 ;;; provide
-(provide 'oo-definer-macros)
-;;; oo-definer-macros.el ends here
+(provide 'oo-base-macros-definers)
+;;; oo-base-macros-definers.el ends here

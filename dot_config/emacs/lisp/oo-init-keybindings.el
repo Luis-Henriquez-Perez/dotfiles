@@ -1,4 +1,4 @@
-;;; oo-after-load-savehist.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-keybindings.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,14 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(opt! savehist-save-minibuffer-history t)
-(opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(opt! savehist-autosave-interval (* 60 5))
-
-(opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-
-(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
-  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+(require 'oo-init-leader-map)
 ;;; provide
-(provide 'oo-after-load-savehist)
-;;; oo-after-load-savehist.el ends here
+(provide 'oo-init-keybindings)
+;;; oo-init-keybindings.el ends here

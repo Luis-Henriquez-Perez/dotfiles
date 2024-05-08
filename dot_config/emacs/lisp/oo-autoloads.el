@@ -29,6 +29,21 @@
 ;;; Code:
 (autoload #'oo/ensure-provide "xx-package-boilerplate" nil t 'function)
 (autoload #'oo/ensure-file-header "xx-package-boilerplate" nil t 'function)
+
+;; The problem with these keys is that they interfere with keyboard macros.  Let
+;; me explain--when you use avy, it is not necessarily the case that the
+;; following keys have the same letter.  For keyboard macros to work you need
+;; keys to exhibit predictable behaviors.  I do not want to get rid of these
+;; keys entirely, but I have to consider more carfully on how I will re-add them
+;; to my configuration.  TODO: Maybe make more direct or add support for
+;; autoloading in the lisp directory.  Right now this loads easymotion which
+;; causes these functons to be define by me with `eval-after-load'.
+(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion")
+(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion")
+(autoload #'oo-evilem-motion-end-of-word "evil-easymotion")
+(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion")
+(autoload #'oo-evilem-motion-char "evil-easymotion")
+(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion")
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here
