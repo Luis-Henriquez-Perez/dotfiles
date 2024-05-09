@@ -51,18 +51,17 @@
 ;; ;; or in programming language comments.
 ;; (defun oo-text-abbrev (abbrev expansion)
 ;;   "Define an abbreviation."
-;;   (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo-enable-global-abbrev-p))
+;;   (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo-enable-text-abbrev-p))
 ;;;;;; set abbrevs my way
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
-;; This is meant for use
-(defun oo-enable-global-abbrev-p ()
+(defun oo-enable-text-abbrev-p ()
   "Return non-nil when text-mode abbrevs should be enabled."
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
 ;;;;; all abbrevs
-(abbrev-table-put oo-abbrev-table-main :enable-function #'oo-enable-global-abbrev-p)
-(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'oo-enable-global-abbrev-p)
+(abbrev-table-put oo-abbrev-table-main :enable-function #'oo-enable-text-abbrev-p)
+(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'oo-enable-text-abbrev-p)
 ;; Technically I should insert the parents "safetly" by checking for existing parents.
 (alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-wikipedia-misspellings-table)
   (abbrev-table-put global-abbrev-table :parents it))
