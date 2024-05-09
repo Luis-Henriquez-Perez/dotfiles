@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This contains the core settings and functionality of my configuration.
 ;;
 ;;; Code:
 (require 'oo-base-vars)
