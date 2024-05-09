@@ -30,29 +30,7 @@
 (require 'oo-abbrev-table-main)
 (require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
-;;;;; extend abbrev syntax to use "."
-;; Allow the use of periods, colons, and underscores in global abbrevs.  The
-;; point of doing this is to let me name certain abbrevs with easy to remember,
-;; intuitive names while also preventing name clashes with the preceding
-;; punctuation.
-;; (abbrev-table-put global-abbrev-table :regexp "\\(?:\\`\\|^\\|[[:space:]]\\)\\(?1:\\.?[[:alpha:]]+\\)")
-;; Do not adjust the abbrev syntax yet.
-;; (abbrev-table-put global-abbrev-table :regexp nil)
-;;;;; TODO: deal with problem of non-capitalization of mutliple words
-;; When an abbrev expands to multiple words the initial word does not get
-;; capitalized with captain.  But it does work when abbrev expands to just one
-;; word.  So the first question is how to go about solving this problem.  As is
-;; the case in emacs, there are multiple ways.  One way is changing the value
-;; of.  The other way is using a hook for a multi-word expansion.  The hook would.
-;;;;; text abbrevs
-;; These are abbreviations that I want to be using.
-;;;;;; general
-;; ;; Most often, I want the abbrevs I define to be expanded in either plain text
-;; ;; or in programming language comments.
-;; (defun oo-text-abbrev (abbrev expansion)
-;;   "Define an abbreviation."
-;;   (define-abbrev global-abbrev-table abbrev expansion nil :enable-function #'oo-enable-text-abbrev-p))
-;;;;;; set abbrevs my way
+;;;;; set abbrevs my way
 ;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
 ;; could interfere with function names.
 (defun oo-enable-text-abbrev-p ()
