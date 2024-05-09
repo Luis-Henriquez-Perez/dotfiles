@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'global-abbrev-table
-  '(("fnames" "filenames")
+  '(("initing" "initializing")
+    ("fnames" "filenames")
     ("misc" "miscellaneous")
     ("imm" "immediately")
     ("evv" "everything")
