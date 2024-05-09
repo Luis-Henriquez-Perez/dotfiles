@@ -28,7 +28,7 @@
 ;;; Code:
 (require 'abbrev)
 
-(define-abbrev-table 'oo-wikipedia-misspellings-table
+(define-abbrev-table 'oo-abbrev-table-wikipedia-misspellings
   '(("abandonned" "abandoned")
     ("aberation" "aberration")
     ("abilityes" "abilities")

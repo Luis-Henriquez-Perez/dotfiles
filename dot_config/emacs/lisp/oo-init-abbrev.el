@@ -61,10 +61,10 @@
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
 ;;;;; all abbrevs
-(abbrev-table-put global-abbrev-table :enable-function #'oo-enable-global-abbrev-p)
-(abbrev-table-put oo-wikipedia-misspellings-table :enable-function #'oo-enable-global-abbrev-p)
+(abbrev-table-put oo-abbrev-table-main :enable-function #'oo-enable-global-abbrev-p)
+(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'oo-enable-global-abbrev-p)
 ;; Technically I should insert the parents "safetly" by checking for existing parents.
-(alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-wikipedia-misspellings-table)
+(alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-wikipedia-misspellings-table)
   (abbrev-table-put global-abbrev-table :parents it))
 ;;; provide
 (provide 'oo-init-abbrev)

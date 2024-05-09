@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'abbrev)
 
-(define-abbrev-table 'global-abbrev-table
+(define-abbrev-table 'oo-abbrev-table-main
   '(("initing" "initializing")
     ("fnames" "filenames")
     ("misc" "miscellaneous")
