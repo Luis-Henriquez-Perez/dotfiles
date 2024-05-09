@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;;  Populate `global-abbrev-table'.
+;;  Define my main abbrev table, `oo-abbrev-table-main'.
 ;;
 ;;; Code:
 (require 'abbrev)
