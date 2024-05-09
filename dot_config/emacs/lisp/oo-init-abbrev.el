@@ -31,17 +31,17 @@
 (require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
 ;;;;; set abbrevs my way
-;; Only expand abbreviations in prog-mode string or comments.  Otherwise, they
-;; could interfere with function names.
 (defun oo-enable-text-abbrev-p ()
-  "Return non-nil when text-mode abbrevs should be enabled."
+  "Return non-nil when text abbrevs should be enabled.
+This is when the current major-mode is derived from text-mode or point is in a
+string or comment."
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
 ;;;;; all abbrevs
 (abbrev-table-put oo-abbrev-table-main :enable-function #'oo-enable-text-abbrev-p)
 (abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'oo-enable-text-abbrev-p)
-;; Technically I should insert the parents "safetly" by checking for existing parents.
-(alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-wikipedia-misspellings-table)
+
+(alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-abbrev-table-wikipedia-misspellings)
   (abbrev-table-put global-abbrev-table :parents it))
 ;;; provide
 (provide 'oo-init-abbrev)
