@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("initing" "initializing")
+  '(("dk" "do not know")
+    ("emacss" "Emacs's")
+    ("ess" "essentially")
+    ("sist" "consistent")
+    ("initing" "initializing")
     ("fnames" "filenames")
     ("misc" "miscellaneous")
     ("imm" "immediately")
