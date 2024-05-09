@@ -120,6 +120,10 @@ For what buffer is displayed in the case of a boolean see
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection)
   (require 'oo-init-modeline))
+;;; window divider
+(opt! window-divider-default-bottom-width 7)
+(opt! window-divider-default-right-width 7)
+(opt! window-divider-default-places 'right-only)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
