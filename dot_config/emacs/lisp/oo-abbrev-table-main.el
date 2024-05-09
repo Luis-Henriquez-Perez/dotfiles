@@ -447,7 +447,8 @@
     ("motn" "more often than not")
     ("itc" "in that case")
     ("prob" "problem")
-    ("dered" "considered")))
+    ("dered" "considered"))
+  "My main abbrev table for English text.")
 ;;; provide
 (provide 'oo-abbrev-table-main)
 ;;; oo-abbrev-table-main.el ends here
