@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("dk" "do not know")
+  '(("coments" "comments")
+    ("unes" "unnecessary")
+    ("uness" "unnecessary")
+    ("dk" "do not know")
     ("emacss" "Emacs's")
     ("ess" "essentially")
     ("sist" "consistent")
