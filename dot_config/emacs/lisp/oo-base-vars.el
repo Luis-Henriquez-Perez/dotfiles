@@ -49,8 +49,7 @@ In a nutshell, it's just a value of $HOME.")
 
 (defvaralias 'oo-config-dir 'oo-etc-dir)
 
-(defconst oo-var-dir (expand-file-name "var/" user-emacs-directory)
-  "Directory where")
+(defconst oo-var-dir (expand-file-name "var/" user-emacs-directory))
 
 (make-directory oo-var-dir t)
 
