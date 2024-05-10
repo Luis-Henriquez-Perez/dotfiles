@@ -144,7 +144,7 @@
 (elpaca tempel)
 (elpaca tempel-collection)
 (elpaca transpose-frame)
-(elpaca treepy)
+(elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github :ref "191d84c"))
 (elpaca vc-auto-commit)
 (elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref ...))
 (elpaca which-key)
