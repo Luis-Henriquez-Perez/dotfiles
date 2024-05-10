@@ -28,7 +28,14 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("coments" "comments")
+  '(("hes" "he is")
+    ("impressoin" "impression")
+    ("n" "and")
+    ("wsa" "was")
+    ("var" "variable")
+    ("vars" "variables")
+    ("macroexp" "macro expansion")
+    ("coments" "comments")
     ("unes" "unnecessary")
     ("uness" "unnecessary")
     ("dk" "do not know")
