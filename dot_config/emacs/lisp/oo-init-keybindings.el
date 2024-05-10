@@ -152,6 +152,7 @@
 (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 ;;;; eshell
 (oo-bind 'oo-app-map "e" #'eshell)
+(oo-bind 'oo-app-map "d" #'dirvish)
 ;;;; lispy
 (oo-bind 'lispyville-mode-map :i "SPC" #'lispy-space)
 (oo-bind 'lispyville-mode-map :i ";" #'lispy-comment)
