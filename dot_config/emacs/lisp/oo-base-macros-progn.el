@@ -36,7 +36,7 @@
 (defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
-`block!'."
+`progn!'."
   (pcase forms
     (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
      (list data forms))
