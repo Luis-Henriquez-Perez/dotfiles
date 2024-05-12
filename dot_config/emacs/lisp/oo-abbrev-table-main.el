@@ -28,7 +28,14 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("hes" "he is")
+  '(("arg" "argument")
+    ("2" "two")
+    ("equiv" "equivalent")
+    ("mmend" "recommend")
+    ("b" "be")
+    ("del" "delete")
+    ("desc" "description")
+    ("hes" "he is")
     ("impressoin" "impression")
     ("n" "and")
     ("wsa" "was")
