@@ -25,11 +25,13 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'oo-base-packages)
 (require 'on)
 (require 'anaphora)
 (require 'dash)
 (require 's)
 (require 'lgr)
+(require 'treepy)
 ;;; provide
 (provide 'oo-base-requirements)
 ;;; oo-base-requirements.el ends here
