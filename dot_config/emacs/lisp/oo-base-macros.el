@@ -31,7 +31,7 @@
 (require 'oo-base-utils)
 (require 'oo-base-macros-ing)
 (require 'oo-base-macros-let)
-(require 'oo-base-macros-looping)
+(require 'oo-base-macros-loop)
 (require 'oo-base-macros-map)
 (require 'oo-base-macros-progn)
 (require 'oo-base-macros-definers)

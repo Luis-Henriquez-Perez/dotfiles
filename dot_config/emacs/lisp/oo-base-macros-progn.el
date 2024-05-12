@@ -28,18 +28,19 @@
 (require 'cl-lib)
 (require 'oo-base-utils)
 (require 'oo-base-macros-let)
+(require 'oo-base-macros-loop)
 (require 'oo-base-macros-ing)
 ;;;; block!
 ;;;;; helpers
-(defun oo--parse-block (data forms)
+(defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
 `block!'."
   (pcase forms
     (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
      (list data forms))
-    (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist)) ,pred . ,body)
-     (pcase-let* ((`(,data1 ,forms) (oo--parse-block nil body)))
+    (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist 'dotimes)) ,pred . ,body)
+     (pcase-let* ((`(,data1 ,forms) (oo--parse-progn-bang nil body)))
        (list (map-merge-with 'plist #'append data data1)
              `(catch 'break! (,loop ,pred (catch 'continue! ,@forms))))))
     (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
@@ -60,7 +61,7 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
      (list data forms))
     (`((,(or 'aprog1! 'aprog!) ,value) . ,rest)
      (cl-pushnew (list 'it nil) (map-elt data :let) :test #'equal :key #'car)
-     (pcase-let ((`(,data1 ,body) (oo--parse-block nil rest)))
+     (pcase-let ((`(,data1 ,body) (oo--parse-progn-bang nil rest)))
        (list (append data data1) `((prog1 (setq it ,value) ,@body)))))
     (`(gensym! . ,(and names (guard (cl-every #'symbolp names))))
      (dolist (name names)
@@ -74,14 +75,14 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
      (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
      (list data `(setq ,sym ,value)))
     (`((,(or 'stub! 'flet!) . ,args) . ,rest)
-     (let! (((data1 rest) (oo--parse-block nil rest)))
+     (let! (((data1 rest) (oo--parse-progn-bang nil rest)))
        (list (map-merge 'plist data data1) `((cl-flet ((,@args)) ,@rest)))))
     (`((,(or 'nflet! 'noflet!) . ,args) . ,rest)
-     (let! (((data1 rest) (oo--parse-block nil rest)))
+     (let! (((data1 rest) (oo--parse-progn-bang nil rest)))
        (list (map-merge 'plist data data1) `((lef! ((,@args)) ,@rest)))))
     ((and (pred listp) (pred (not null)) (guard (listp (cdr forms))))
-     (pcase-let ((`(,data1 ,forms1) (oo--parse-block nil (car forms)))
-                 (`(,data2 ,forms2) (oo--parse-block nil (cdr forms))))
+     (pcase-let ((`(,data1 ,forms1) (oo--parse-progn-bang nil (car forms)))
+                 (`(,data2 ,forms2) (oo--parse-progn-bang nil (cdr forms))))
        (list (map-merge-with 'plist #'append data data1 data2)
              (cons forms1 forms2))))
     (_
@@ -127,9 +128,7 @@ Must be used in `block!'."
 (defalias 'noflet! 'stub!)
 (defalias 'nflet! 'stub!)
 ;;;;; main macro
-(defalias 'progn! 'block!)
-
-(defmacro block! (&rest body)
+(defmacro progn! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
 
@@ -183,7 +182,7 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
-  (let! (((data body) (oo--parse-block nil body))
+  (let! (((data body) (oo--parse-progn-bang nil body))
          ;; lets is an alist.
          (lets (map-elt data :let))
          ;; nolets is a list of symbols.
