@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("arg" "argument")
+  '(("ques" "question")
+    ("arg" "argument")
     ("2" "two")
     ("equiv" "equivalent")
     ("mmend" "recommend")
