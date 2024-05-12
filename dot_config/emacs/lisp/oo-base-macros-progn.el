@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 (require 'cl-lib)
+(require 'pcase)
 (require 'oo-base-utils)
 (require 'oo-base-macros-let)
 (require 'oo-base-macros-loop)
