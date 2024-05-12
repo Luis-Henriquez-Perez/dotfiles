@@ -25,17 +25,12 @@
 ;; "./".
 (setq eldev-main-fileset '("./init.el"
                            "./early-init.el"
-                           "lisp/01-base-settings.el"
-                           "lisp/03-init-elpaca.el"
-                           "lisp/04-base-custom.el"
-                           "lisp/05-base-bind.el"
-                           "lisp/06-base-leaders.el"
-                           "lisp/90-keybindings.el"
-                           "lisp/98-init-features.el"
-                           "lisp/99-after-load-*.el"
-                           ;; "lisp/70-evil-org-headline-state.el"
+                           "lisp/oo-after-load*.el"
+                           "lisp/oo-init-*.el"
+                           "lisp/oo-base*.el"
+                           "lisp/oo-abbrev-table*.el"
                            ))
-;; (setq eldev-test-fileset '("tests/all-tests.el"))
+(setq eldev-test-fileset '("test/oo-base*.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help
 ;; Eldev commands to locate them.
