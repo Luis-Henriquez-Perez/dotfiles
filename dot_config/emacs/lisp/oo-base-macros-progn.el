@@ -34,61 +34,48 @@
 (require 'oo-base-macros-ing)
 ;;;; block!
 ;;;;; helpers
+;; There's no function to skip a node and I can't see a quick/clever way to do it
+;; with the existing functions.  I want to be where I would be if I had deleted the
+;; node, but I don't want the node itself to be deleted.  If there is a right node
+;; in the same level skipping is tantamount to [[][treepy-right]].
+(defun treepy-skip (zipper)
+  "Skip the current node."
+  (let ((orig zipper))
+    (while (and (not (treepy-right zipper)) (treepy-up zipper))
+      (setq zipper (treepy-up zipper)))
+    (if (treepy-right zipper)
+        (setq zipper (treepy-right zipper))
+      ;; If we've reached the top level, that means there is no next node.  So
+      ;; let's go back to where we were and go next until we reach the end.
+      (setq zipper orig)
+      (while (not (treepy-end-p zipper))
+        (setq zipper (treepy-next zipper)))
+      zipper)))
+
 (defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
 `progn!'."
-  (pcase forms
-    (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
-     (list data forms))
-    (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist 'dotimes)) ,pred . ,body)
-     (pcase-let* ((`(,data1 ,forms) (oo--parse-progn-bang nil body)))
-       (list (map-merge-with 'plist #'append data data1)
-             `(catch 'break! (,loop ,pred (catch 'continue! ,@forms))))))
-    (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
-     (let ((value (cl-case name
-                    ((maxing! maximizing!) most-negative-fixnum)
-                    ((minning! minimizing!) most-positive-fixnum)
-                    (counting! 0))))
-       (adjoining! (map-elt data :let) (list symbol value) :test #'equal :key #'car))
-     (list data forms))
-    (`(,(or 'with! 'wrap!) . ,(and wrappers (pred listp)))
-     (appending! (map-elt data :wrappers) wrappers)
-     (list data nil))
-    (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
-     (unioning! (map-elt data :nolet) symbols)
-     (list data nil))
-    (`(,(or 'aset! 'alet! 'aset> 'aset>>) ,value)
-     (adjoining! (map-elt data :let) (list 'it nil))
-     (list data forms))
-    (`((,(or 'aprog1! 'aprog!) ,value) . ,rest)
-     (cl-pushnew (list 'it nil) (map-elt data :let) :test #'equal :key #'car)
-     (pcase-let ((`(,data1 ,body) (oo--parse-progn-bang nil rest)))
-       (list (append data data1) `((prog1 (setq it ,value) ,@body)))))
-    (`(gensym! . ,(and names (guard (cl-every #'symbolp names))))
-     (dolist (name names)
-       (cl-pushnew (list name nil) (map-elt data :let) :key #'car :test #'equal))
-     (list data forms))
-    (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
-     (dolist (sym (oo--set-flatten pattern))
-       (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
-     (list data forms))
-    (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
-     (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
-     (list data `(setq ,sym ,value)))
-    (`((,(or 'stub! 'flet!) . ,args) . ,rest)
-     (let! (((data1 rest) (oo--parse-progn-bang nil rest)))
-       (list (map-merge 'plist data data1) `((cl-flet ((,@args)) ,@rest)))))
-    (`((,(or 'nflet! 'noflet!) . ,args) . ,rest)
-     (let! (((data1 rest) (oo--parse-progn-bang nil rest)))
-       (list (map-merge 'plist data data1) `((lef! ((,@args)) ,@rest)))))
-    ((and (pred listp) (pred (not null)) (guard (listp (cdr forms))))
-     (pcase-let ((`(,data1 ,forms1) (oo--parse-progn-bang nil (car forms)))
-                 (`(,data2 ,forms2) (oo--parse-progn-bang nil (cdr forms))))
-       (list (map-merge-with 'plist #'append data data1 data2)
-             (cons forms1 forms2))))
-    (_
-     (list data forms))))
+  (let ((zipper (treepy-list-zip forms))
+        (data nil))
+    (while (not (treepy-end-p zipper))
+      (pcase (treepy-node zipper)
+        (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
+         (setq zipper (treepy-skip zipper)))
+        (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist 'dotimes)) ,pred . ,body)
+         (alet `(catch 'break! (,loop ,pred (catch 'continue! ,@body)))
+           (setq zipper (treepy-replace zipper it)))
+         (for! 9 (setq zipper (treepy-next zipper))))
+        (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
+         (alet (cl-case name
+                 ((maxing! maximizing!) most-negative-fixnum)
+                 ((minning! minimizing!) most-positive-fixnum)
+                 (counting! 0))
+           (adjoining! (map-elt data :let) (list symbol it) :test #'equal :key #'car))
+         (setq zipper (treepy-next zipper)))
+        (_
+         (setq zipper (treepy-next zipper)))))
+    (list data (treepy-node zipper))))
 ;;;;; helpers
 (defmacro return! (&optional value)
   "Cause `block!' to exit and return VALUE.

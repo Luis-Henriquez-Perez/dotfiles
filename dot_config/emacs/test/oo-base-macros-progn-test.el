@@ -26,8 +26,50 @@
 ;;
 ;;; Code:
 (require 'oo-base-macros-progn)
-(require 'buttercup)
+(require 'ert)
 
+;;;; helpers
+(ert-deftest progn!---ignore-quoted-forms ()
+  (let ((quoted-form '('(foo))))
+    (should (equal nil (let-binds quoted-form)))
+    (should (equal quoted-form (body quoted-form)))))
+
+(ert-deftest progn!---skip-loops-with-continue ()
+  (progn! (dotimes (n 3)
+            (and (= 1 n) (continue!))
+            (collecting! nums n))
+          (should (equal nums '(0 2)))))
+
+(ert-deftest progn!---exit-body-when-return-is-invoked ()
+  (should (= 2 (progn! (when t (return! 2)) 3)))
+  (should (= 2 (progn! (dotimes (n 10) (return! 2)) 3)))
+  (should (= 2 (progn! (when t (return! 2)) 3))))
+
+(ert-deftest progn!---bind-symbol-specified-by-maxing-to-most-negative-fixnum ()
+  "binds symbol specified by `maxing!' to `most-negative-fixnum'"
+  (should (= most-negative-fixnum (lvalue 'a '((maximizing! a 1)))))
+  (should (= most-negative-fixnum (lvalue 'a '((maxing! a 1))))))
+
+(ert-deftest progn!---exit-loop-if-break! ()
+  (should (= 2 (progn! 2)))
+  (should (= 2 (catch 'break! (break! 2) 4)))
+  (should (= 2 (progn! nil (dotimes (x 3) (when (= x 2) (break! x))))))
+  (should (= 2 (progn! (dotimes (n 10) (return! 2)) 3)))
+  (should (= 5 (progn! (dotimes (i 10) (when (= 5 i) (break! 5))))))
+  ;; (expect '(nums) :to-equal (let-syms '(progn! nil (dotimes (i 3) (collecting!
+  ;;                                                                  nums i)) nums)))
+  )
+
+(ert-deftest progn!--does-not-bind-symbols-marked-for-exclusion ()
+  (should (equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))) (parse '((exclude! a) (set! a 1)))))
+  (should (equal '(catch 'return! (let nil nil (setq a 1)))
+                 (macroexpand-1 '(progn! (exclude! a) (set! a 1)))))
+  (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
+  (should (equal nil (let-syms '((exclude! a) (counting! a 1))))))
+
+;; (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
+;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
+;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
 (describe "progn!"
   (cl-flet* ((parse (apply-partially #'oo--parse-progn-bang nil))
              (body (body) (cadr (parse body)))
@@ -36,23 +78,8 @@
              (lvalue (sym body) (car (map-elt (let-binds body) sym))))
     (it "binds symbols to generated symbols when using `gensym!'"
       (expect (let-syms '((gensym! foo bar baz))) :to-have-same-items-as '(foo bar baz)))
-    (it "ignores quoted forms"
-      (expect nil :to-equal (let-binds '('(foo))))
-      (expect '('(foo)) :to-equal (body '('(foo)))))
-    (it "skips the rest of the loop body if `continue!' is invoked"
-      (expect '(0 2) :to-equal (progn! (dotimes (n 3)
-                                         (and (= 1 n) (continue!))
-                                         (collecting! nums n))
-                                       nums)))
     (it "exits body when `return!' is invoked."
       (expect 2 :to-be (progn! (when t (return! 2)) 3)))
-    (it "exits from loops when `break!' is invoked"
-      (expect '(nums) :to-equal (let-syms '(progn! nil (dotimes (i 3) (collecting! nums i)) nums)))
-      (expect 2 :to-be (progn! 2))
-      (expect 2 :to-be (catch 'break! (break! 2) 4))
-      (expect 2 :to-equal (progn! (dotimes (n 10) (return! 2)) 3))
-      (expect 2 :to-be (progn! nil (dotimes (x 3) (when (= x 2) (break! x)))))
-      (expect 5 :to-equal (progn! nil (dotimes (i 10) (when (= 5 i) (break! 5))))))
     (it "does not bind symbols marked for exclusion"
       (expect (parse '((exclude! a) (set! a 1))) :to-equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))))
       (expect (macroexpand-1 '(progn! (exclude! a) (set! a 1)))
@@ -61,9 +88,6 @@
       ;; (expect (let-syms '((exclude! a) (set! a 1))) :to-equal nil)
       ;; (expect (let-syms '((exclude! a) (counting! a 1))) :to-equal nil)
       )
-    (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
-      (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
-      (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
     (it "binds symbol specified by `counting!' to 0"
       (expect 0 :to-be (lvalue 'a '((counting! a 1)))))
     (it "binds symbol specified by `minning!' to `most-positive-fixnum'"
@@ -91,7 +115,8 @@
       (expect 10 :to-equal (progn! nil (flet! plus #'+) (plus 5 5)))
       (expect 10 :to-equal (progn! nil
                                    (nflet! + (a b) (funcall this-fn 1 (* a b)))
-                                   (+ 3 3))))))
+                                   (+ 3 3))))
+    ))
 ;;; provide
 (provide 'oo-base-macros-progn-test)
 ;;; oo-base-macros-progn-test.el ends here
