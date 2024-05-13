@@ -111,7 +111,7 @@
   (should (equal '(a b) (let-syms '((set! a 1) (set! b 2))))))
 
 (ert-deftest bind-symbols-in-match-form-specified-by-set-to-nil ()
-  (should (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))) :to-equal '(a b c d)))
+  (should (equal '(a b c d) (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))))))
 
 ;; (ert-deftest bind ()
 ;;   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
@@ -120,7 +120,7 @@
 (ert-deftest bind-to-value-specified-by-aprog1 ()
   (let ((form '((aprog1! (+ 1 1)) 2 3)))
     (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
-    (should (let-syms form) :to-contain 'ert-deftest bind ())))
+    (should (let-syms form) :to-contain 'it bind ())))
 
 (ert-deftest wrap-subsequent-forms-with-letf ()
   "wraps subsequent forms with lef!"
