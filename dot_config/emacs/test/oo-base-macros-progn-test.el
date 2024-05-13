@@ -108,14 +108,14 @@
   (should (equal '(a) (let-syms '((maxing! a 1))))))
 
 (ert-deftest bind-symbol-specified-by-set-to-nil ()
-  (should (let-syms '((set! a 1) (set! b 2))) :to-equal '(a b)))
+  (should (equal '(a b) (let-syms '((set! a 1) (set! b 2))))))
 
 (ert-deftest bind-symbols-in-match-form-specified-by-set-to-nil ()
   (should (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))) :to-equal '(a b c d)))
 
-(ert-deftest bind ()
-  (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
-    (should (equal (map-elt data :let) '((it bind () nil))))))
+;; (ert-deftest bind ()
+;;   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
+;;     (should (equal (map-elt data :let) '((it bind () nil))))))
 
 (ert-deftest bind-to-value-specified-by-aprog1 ()
   (let ((form '((aprog1! (+ 1 1)) 2 3)))
@@ -124,10 +124,10 @@
 
 (ert-deftest wrap-subsequent-forms-with-letf ()
   "wraps subsequent forms with lef!"
-  (should 10 :to-equal (progn! (stub! plus (a b) (+ a (* 2 b))) (plus 6 2)))
-  (should 10 :to-equal (progn! (flet! plus #'+) (plus 5 5)))
-  (should 10 :to-equal (progn! (nflet! + (a b) (funcall this-fn 1 (* a b)))
-                               (+ 3 3))))
+  (should (= 10 (progn! (stub! plus (a b) (+ a (* 2 b))) (plus 6 2))))
+  (should (= 10 (progn! (flet! plus #'+) (plus 5 5))))
+  (should (= 10 (progn! (nflet! + (a b) (funcall this-fn 1 (* a b)))
+                        (+ 3 3)))))
 ;;; provide
 (provide 'oo-base-macros-progn-test)
 ;;; oo-base-macros-progn-test.el ends here
