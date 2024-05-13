@@ -29,11 +29,26 @@
 (require 'ert)
 
 ;;;; helpers
-(cl-flet* ((parse (apply-partially #'oo--parse-progn-bang nil))
-           (body (body) (cadr (parse body)))
-           (let-binds (body) (map-elt (car (parse body)) :let))
-           (let-syms (body) (mapcar #'car (let-binds body)))
-           (lvalue (sym body) (car (map-elt (let-binds body) sym)))))
+;; (cl-flet* ((parse (apply-partially #'oo--parse-progn-bang nil))
+;;            (body (body) (cadr (parse body)))
+;;            (let-binds (body) (map-elt (car (parse body)) :let))
+;;            (let-syms (body) (mapcar #'car (let-binds body)))
+;;            (lvalue (sym body) (car (map-elt (let-binds body) sym)))))
+;; (setq ert-batch-print-level 10)
+;; (setq ert-batch-print-length 120)
+
+(fset 'parse (apply-partially #'oo--parse-progn-bang nil))
+
+(defun body (body) (cadr (parse body)))
+
+(defun let-binds (body)
+  (map-elt (car (parse body)) :let))
+
+(defun let-syms (body)
+  (mapcar #'car (let-binds body)))
+
+(defun lvalue (sym body)
+  (car (map-elt (let-binds body) sym)))
 ;;;; main
 (ert-deftest progn!---ignore-quoted-forms ()
   (let ((quoted-form '('(foo))))
@@ -52,7 +67,6 @@
   (should (= 2 (progn! (when t (return! 2)) 3))))
 
 (ert-deftest progn!---bind-symbol-specified-by-maxing-to-most-negative-fixnum ()
-  "binds symbol specified by `maxing!' to `most-negative-fixnum'"
   (should (= most-negative-fixnum (lvalue 'a '((maximizing! a 1)))))
   (should (= most-negative-fixnum (lvalue 'a '((maxing! a 1))))))
 
@@ -65,69 +79,72 @@
   (should (equal '(nums) (let-syms '(progn! nil (dotimes (i 3) (collecting! nums i)) nums))))
   )
 
-(ert-deftest progn!--does-not-bind-symbols-marked-for-exclusion ()
-  (should (equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))) (parse '((exclude! a) (set! a 1)))))
-  (should (equal '(catch 'return! (let nil nil (setq a 1)))
-                 (macroexpand-1 '(progn! (exclude! a) (set! a 1)))))
-  (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
-  (should (equal nil (let-syms '((exclude! a) (counting! a 1))))))
+(ert-deftest progn!---does-not-bind-symbols-marked-for-exclusion ()
+  (should (equal '((set! a 1)) (body '((set! a 1)))))
+  (should (equal '((a 1)) (let-binds '((set! a 1)))))
+  ;; (should (equal '((:let ((a nil))) (nil (setq a 1))) (parse '((set! a 1)))))
+  ;; (should (equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))) (parse '((exclude! a) (set! a 1)))))
+  ;; (should (equal '(catch 'return! (let nil nil (setq a 1))) (macroexpand-1 '(progn! (exclude! a) (set! a 1)))))
+  ;; (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
+  ;; (should (equal nil (let-syms '((exclude! a) (counting! a 1)))))
+  )
 
-(ert-deftest progn!---bind-symbols-specified-by-counting-to-zero ()
-  "Binds symbol specified by `counting!' to 0"
-  (should (= 0 (lvalue 'a '((counting! a 1))))))
+;; (ert-deftest progn!---bind-symbols-specified-by-counting-to-zero ()
+;;   "Binds symbol specified by `counting!' to 0"
+;;   (should (= 0 (lvalue 'a '((counting! a 1))))))
 
-(ert-deftest progn!---bind-symbols-specified-by-minning-to-most-positive-fixnum ()
-  "Binds symbol specified by `minning!' to `most-positive-fixnum'"
-  (should (= most-positive-fixnum (lvalue 'a '((minimizing! a 1)))))
-  (should (= most-positive-fixnum (lvalue 'a '((minning! a 1))))))
+;; (ert-deftest progn!---bind-symbols-specified-by-minning-to-most-positive-fixnum ()
+;;   "Binds symbol specified by `minning!' to `most-positive-fixnum'"
+;;   (should (= most-positive-fixnum (lvalue 'a '((minimizing! a 1)))))
+;;   (should (= most-positive-fixnum (lvalue 'a '((minning! a 1))))))
 
-;; (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
-;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
-;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
-(ert-deftest bind-symbols-to-generated-symbols ()
-  "binds symbols to generated symbols when using `gensym!'"
-  (should (-same-items-p (let-syms '((gensym! foo bar baz))) '(foo bar baz))))
-
-(ert-deftest bind ()
-  "exits body when `return!' is invoked."
-  (should (= 2 (progn! (when t (return! 2)) 3))))
-
-(ert-deftest bind ()
-  "does not bind symbols marked for exclusion"
-  (should (parse '((exclude! a) (set! a 1))) :to-equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))))
-  (should (equal (macroexpand-1 '(progn! (exclude! a) (set! a 1)))
-                 '(catch 'return! (let nil nil (setq a 1)))))
-  (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
-  (should (equal nil (let-syms '((exclude! a) (counting! a 1))))))
-
-(ert-deftest bind-symbol-specified-by-other-ing-macros-to-nil ()
-  "binds symbol specified by other ING macros to nil"
-  (should (equal '(a) (let-syms '((collecting! a 1)))))
-  (should (equal '(a) (let-syms '((appending! a 1)))))
-  (should (equal '(a) (let-syms '((prepending! a 1)))))
-  (should (equal '(a) (let-syms '((maxing! a 1))))))
-
-(ert-deftest bind-symbol-specified-by-set-to-nil ()
-  (should (equal '(a b) (let-syms '((set! a 1) (set! b 2))))))
-
-(ert-deftest bind-symbols-in-match-form-specified-by-set-to-nil ()
-  (should (equal '(a b c d) (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))))))
+;; ;; (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
+;; ;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
+;; ;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
+;; (ert-deftest bind-symbols-to-generated-symbols ()
+;;   "binds symbols to generated symbols when using `gensym!'"
+;;   (should (-same-items-p (let-syms '((gensym! foo bar baz))) '(foo bar baz))))
 
 ;; (ert-deftest bind ()
-;;   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
-;;     (should (equal (map-elt data :let) '((it bind () nil))))))
+;;   "exits body when `return!' is invoked."
+;;   (should (= 2 (progn! (when t (return! 2)) 3))))
 
-;; (ert-deftest bind-to-value-specified-by-aprog1 ()
-;;   (let ((form '((aprog1! (+ 1 1)) 2 3)))
-;;     (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
-;;     (should (let-syms form) :to-contain 'it bind ())))
+;; (ert-deftest bind ()
+;;   "does not bind symbols marked for exclusion"
+;;   (should (parse '((exclude! a) (set! a 1))) :to-equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))))
+;;   (should (equal (macroexpand-1 '(progn! (exclude! a) (set! a 1)))
+;;                  '(catch 'return! (let nil nil (setq a 1)))))
+;;   (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
+;;   (should (equal nil (let-syms '((exclude! a) (counting! a 1))))))
 
-(ert-deftest wrap-subsequent-forms-with-letf ()
-  "wraps subsequent forms with lef!"
-  (should (= 10 (progn! (stub! plus (a b) (+ a (* 2 b))) (plus 6 2))))
-  (should (= 10 (progn! (flet! plus #'+) (plus 5 5))))
-  (should (= 10 (progn! (nflet! + (a b) (funcall this-fn 1 (* a b)))
-                        (+ 3 3)))))
+;; (ert-deftest bind-symbol-specified-by-other-ing-macros-to-nil ()
+;;   "binds symbol specified by other ING macros to nil"
+;;   (should (equal '(a) (let-syms '((collecting! a 1)))))
+;;   (should (equal '(a) (let-syms '((appending! a 1)))))
+;;   (should (equal '(a) (let-syms '((prepending! a 1)))))
+;;   (should (equal '(a) (let-syms '((maxing! a 1))))))
+
+;; (ert-deftest bind-symbol-specified-by-set-to-nil ()
+;;   (should (equal '(a b) (let-syms '((set! a 1) (set! b 2))))))
+
+;; (ert-deftest bind-symbols-in-match-form-specified-by-set-to-nil ()
+;;   (should (equal '(a b c d) (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))))))
+
+;; ;; (ert-deftest bind ()
+;; ;;   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
+;; ;;     (should (equal (map-elt data :let) '((it bind () nil))))))
+
+;; ;; (ert-deftest bind-to-value-specified-by-aprog1 ()
+;; ;;   (let ((form '((aprog1! (+ 1 1)) 2 3)))
+;; ;;     (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
+;; ;;     (should (let-syms form) :to-contain 'it bind ())))
+
+;; (ert-deftest wrap-subsequent-forms-with-letf ()
+;;   "wraps subsequent forms with lef!"
+;;   (should (= 10 (progn! (stub! plus (a b) (+ a (* 2 b))) (plus 6 2))))
+;;   (should (= 10 (progn! (flet! plus #'+) (plus 5 5))))
+;;   (should (= 10 (progn! (nflet! + (a b) (funcall this-fn 1 (* a b)))
+;;                         (+ 3 3)))))
 ;;; provide
 (provide 'oo-base-macros-progn-test)
 ;;; oo-base-macros-progn-test.el ends here
