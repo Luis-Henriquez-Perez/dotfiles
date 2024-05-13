@@ -62,8 +62,7 @@
   (should (= 2 (progn! nil (dotimes (x 3) (when (= x 2) (break! x))))))
   (should (= 2 (progn! (dotimes (n 10) (return! 2)) 3)))
   (should (= 5 (progn! (dotimes (i 10) (when (= 5 i) (break! 5))))))
-  (should '(nums) :to-equal (let-syms '(progn! nil (dotimes (i 3) (collecting!
-                                                                   nums i)) nums)))
+  (should (equal '(nums) (let-syms '(progn! nil (dotimes (i 3) (collecting! nums i)) nums))))
   )
 
 (ert-deftest progn!--does-not-bind-symbols-marked-for-exclusion ()
@@ -85,47 +84,40 @@
 ;; (it "binds symbol specified by `maxing!' to `most-negative-fixnum'"
 ;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maximizing! a 1))))
 ;;   (expect most-negative-fixnum :to-be (lvalue 'a '((maxing! a 1)))))
-(ert-deftest bind ()
+(ert-deftest bind-symbols-to-generated-symbols ()
   "binds symbols to generated symbols when using `gensym!'"
-  (should (let-syms '((gensym! foo bar baz))) :to-have-same-items-as '(foo bar baz)))
+  (should (-same-items-p (let-syms '((gensym! foo bar baz))) '(foo bar baz))))
 
 (ert-deftest bind ()
   "exits body when `return!' is invoked."
-  (should 2 :to-be (progn! (when t (return! 2)) 3)))
+  (should (= 2 (progn! (when t (return! 2)) 3))))
 
 (ert-deftest bind ()
   "does not bind symbols marked for exclusion"
   (should (parse '((exclude! a) (set! a 1))) :to-equal '((:nolet (a) :let ((a nil))) (nil (setq a 1))))
-  (should (macroexpand-1 '(progn! (exclude! a) (set! a 1)))
-          :to-equal
-          '(catch 'return! (let nil nil (setq a 1))))
-  (should (let-syms '((exclude! a) (set! a 1))) :to-equal nil)
-  (should (let-syms '((exclude! a) (counting! a 1))) :to-equal nil))
+  (should (equal (macroexpand-1 '(progn! (exclude! a) (set! a 1)))
+                 '(catch 'return! (let nil nil (setq a 1)))))
+  (should (equal nil (let-syms '((exclude! a) (set! a 1)))))
+  (should (equal nil (let-syms '((exclude! a) (counting! a 1))))))
 
-(ert-deftest bind ()
+(ert-deftest bind-symbol-specified-by-other-ing-macros-to-nil ()
   "binds symbol specified by other ING macros to nil"
-  (should '(a) :to-equal (let-syms '((collecting! a 1))))
-  (should '(a) :to-equal (let-syms '((appending! a 1))))
-  (should '(a) :to-equal (let-syms '((prepending! a 1))))
-  (should '(a) :to-equal (let-syms '((maxing! a 1)))))
+  (should (equal '(a) (let-syms '((collecting! a 1)))))
+  (should (equal '(a) (let-syms '((appending! a 1)))))
+  (should (equal '(a) (let-syms '((prepending! a 1)))))
+  (should (equal '(a) (let-syms '((maxing! a 1))))))
 
-(ert-deftest bind ()
-  "binds symbol specified by set! to nil"
+(ert-deftest bind-symbol-specified-by-set-to-nil ()
   (should (let-syms '((set! a 1) (set! b 2))) :to-equal '(a b)))
 
-(ert-deftest bind ()
-  "binds the symbols in match-form specified by `set!' to nil"
+(ert-deftest bind-symbols-in-match-form-specified-by-set-to-nil ()
   (should (let-syms '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))) :to-equal '(a b c d)))
 
 (ert-deftest bind ()
-  "binds `ert-deftest bind ()
-      ' to value specified by `alet!' or `aset!'."
   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
     (should (equal (map-elt data :let) '((it bind () nil))))))
 
-(ert-deftest bind ()
-  "binds ert-deftest bind ()
-       to value specified by `aprog1'"
+(ert-deftest bind-to-value-specified-by-aprog1 ()
   (let ((form '((aprog1! (+ 1 1)) 2 3)))
     (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
     (should (let-syms form) :to-contain 'ert-deftest bind ())))
