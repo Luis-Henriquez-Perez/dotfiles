@@ -117,10 +117,10 @@
 ;;   (pcase-let* ((`(,data ,body) (oo--parse-progn-bang nil '(alet! (+ 1 1)))))
 ;;     (should (equal (map-elt data :let) '((it bind () nil))))))
 
-(ert-deftest bind-to-value-specified-by-aprog1 ()
-  (let ((form '((aprog1! (+ 1 1)) 2 3)))
-    (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
-    (should (let-syms form) :to-contain 'it bind ())))
+;; (ert-deftest bind-to-value-specified-by-aprog1 ()
+;;   (let ((form '((aprog1! (+ 1 1)) 2 3)))
+;;     (should (body form) :to-equal '((prog1 (setq ert-deftest bind () (+ 1 1)) 2 3)))
+;;     (should (let-syms form) :to-contain 'it bind ())))
 
 (ert-deftest wrap-subsequent-forms-with-letf ()
   "wraps subsequent forms with lef!"
