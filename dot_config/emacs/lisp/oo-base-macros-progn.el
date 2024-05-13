@@ -73,6 +73,13 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
                  (counting! 0))
            (adjoining! (map-elt data :let) (list symbol it) :test #'equal :key #'car))
          (setq zipper (treepy-next zipper)))
+        ;; (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
+        ;;  (setf (map-elt data :nolet) (cl-union (map-elt data :nolet) symbols))
+        ;;  (setq zipper (treepy-remove zipper)))
+        (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
+         (dolist (sym (oo--set-flatten pattern))
+           (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
+         (setq zipper (treepy-skip zipper)))
         (_
          (setq zipper (treepy-next zipper)))))
     (list data (treepy-node zipper))))
@@ -171,13 +178,13 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
-  (let! (((data body) (oo--parse-progn-bang nil body))
-         ;; lets is an alist.
-         (lets (map-elt data :let))
-         ;; nolets is a list of symbols.
-         (nolets (map-elt data :nolet))
-         (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
-         (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
+  (-let* (((data body) (oo--parse-progn-bang nil body))
+          ;; lets is an alist.
+          (lets (map-elt data :let))
+          ;; nolets is a list of symbols.
+          (nolets (map-elt data :nolet))
+          (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
+          (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
     (oo-wrap-forms wrappers body)))
 
 (defmacro lambda! (args &rest body)
