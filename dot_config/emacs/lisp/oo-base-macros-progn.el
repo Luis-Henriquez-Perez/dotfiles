@@ -32,7 +32,7 @@
 (require 'oo-base-macros-let)
 (require 'oo-base-macros-loop)
 (require 'oo-base-macros-ing)
-;;;; block!
+;;;; progn!
 ;;;;; helpers
 ;; There's no function to skip a node and I can't see a quick/clever way to do it
 ;; with the existing functions.  I want to be where I would be if I had deleted the
@@ -51,6 +51,10 @@
       (while (not (treepy-end-p zipper))
         (setq zipper (treepy-next zipper)))
       zipper)))
+
+(defvar oo--stubber-alist '((flet . cl-flet)
+                            (stub . cl-flet)
+                            (noflet! . lef!)))
 
 (defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
@@ -83,18 +87,25 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
         (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
          (setf (map-elt data :nolet) (cl-union (map-elt data :nolet) symbols))
          (setq zipper (treepy-remove zipper)))
+        (`(,(and (pred (lambda (x) (member x '(nflet! noflet! flet! stub!)))) stub) . ,args)
+         (let* ((macro (or (and (member stub '(nflet! noflet!)) 'lef!)
+                           (and (member stub '(flet! stub!)) 'cl-flet)))
+                (form `(,macro ((,@args)) ,@(treepy-rights zipper))))
+           (setq zipper (treepy-replace zipper form))
+           (while (treepy-right zipper)
+	         (setq zipper (treepy-remove (treepy-right zipper))))))
         (_
          (setq zipper (treepy-next zipper)))))
     (list data (treepy-node zipper))))
 ;;;;; helpers
 (defmacro return! (&optional value)
-  "Cause `block!' to exit and return VALUE.
-See `block!'."
+  "Cause `progn!' to exit and return VALUE.
+See `progn!'."
   `(throw 'return! ,value))
 
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
-See `block!'."
+See `progn!'."
   `(throw 'break! ,value))
 
 (defmacro gensym! (sym &rest syms)
@@ -103,19 +114,19 @@ See `block!'."
 
 (defmacro continue! ()
   "Skip the current iteration of loop.
-See `block!'."
+See `progn!'."
   `(throw 'continue! nil))
 (defalias 'skip! 'continue!)
 
 (defmacro exclude! (&rest _)
-  "Signal to `block!' not to let bind VARS.
-See `block!'.")
+  "Signal to `progn!' not to let bind VARS.
+See `progn!'.")
 (defalias 'without! 'exclude!)
 
 (defmacro stub! (name args &rest body)
   "Define a local function definition with `cl-flet'.
 NAME, ARGS and BODY are the same as in `defun'.
-Must be used in `block!'."
+Must be used in `progn!'."
   (declare (indent defun))
   (ignore name args body))
 (defmacro aprog1! (_))

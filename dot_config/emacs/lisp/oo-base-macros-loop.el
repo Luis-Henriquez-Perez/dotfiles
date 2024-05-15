@@ -30,7 +30,7 @@
 (require 'seq)
 ;;;; for!
 ;; There is a huge question of whether to automatically wrap loops with
-;; =block!=, but I decided to.
+;; =progn!=, but I decided to.
 (defmacro for! (loop-struct &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can

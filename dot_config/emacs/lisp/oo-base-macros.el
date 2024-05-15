@@ -72,7 +72,7 @@ NAME should be a hook symbol."
 (defmacro! defafter! (name expr &rest body)
   "Define a function that is called after EXPR is resolved.
 EXPR is the same as in `oo-call-after-load'.  BODY is enclosed in
-`block!'."
+`progn!'."
   (declare (indent defun))
   `(progn!
      (set! fn (intern (format "oo-after-load%%s" ',name)))
