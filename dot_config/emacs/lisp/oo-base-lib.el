@@ -125,9 +125,9 @@ advice names for HOW.")
 (defun! oo-add-hook (hook fsym &optional depth local)
   "Generate a function from FSYM and add it to HOOK.
 Unlike `add-hook'."
-  (aprog1! (intern (format "%s&%s" hook fsym)))
-  (fset it (oo-report-error-fn fsym))
-  (add-hook hook it depth local))
+  (aprog1 (intern (format "%s&%s" hook fsym))
+    (fset it (oo-report-error-fn fsym))
+    (add-hook hook it depth local)))
 (defalias 'oo-generate-hook 'oo-add-hook)
 (defalias 'oo-gen-hook 'oo-add-hook)
 ;;;;; oo-remove-hook
