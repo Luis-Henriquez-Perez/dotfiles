@@ -56,8 +56,7 @@
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
 `progn!'."
-  (let ((zipper (treepy-list-zip forms))
-        (data nil))
+  (let ((zipper (treepy-list-zip forms)))
     (while (not (treepy-end-p zipper))
       (pcase (treepy-node zipper)
         (`(,(or 'cl-function 'function 'quote 'backquote) . ,_)
@@ -65,7 +64,7 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
         (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist 'dotimes)) ,pred . ,body)
          (alet `(catch 'break! (,loop ,pred (catch 'continue! ,@body)))
            (setq zipper (treepy-replace zipper it)))
-         (for! 9 (setq zipper (treepy-next zipper))))
+         (for! 7 (setq zipper (treepy-next zipper))))
         (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
          (alet (cl-case name
                  ((maxing! maximizing!) most-negative-fixnum)
@@ -73,13 +72,17 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
                  (counting! 0))
            (adjoining! (map-elt data :let) (list symbol it) :test #'equal :key #'car))
          (setq zipper (treepy-next zipper)))
-        ;; (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
-        ;;  (setf (map-elt data :nolet) (cl-union (map-elt data :nolet) symbols))
-        ;;  (setq zipper (treepy-remove zipper)))
+        (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
+         (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
+         (setq zipper (treepy-next zipper))
+         (list data `(setq ,sym ,value)))
         (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
          (dolist (sym (oo--set-flatten pattern))
            (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
-         (setq zipper (treepy-skip zipper)))
+         (setq zipper (treepy-next zipper)))
+        (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
+         (setf (map-elt data :nolet) (cl-union (map-elt data :nolet) symbols))
+         (setq zipper (treepy-remove zipper)))
         (_
          (setq zipper (treepy-next zipper)))))
     (list data (treepy-node zipper))))
