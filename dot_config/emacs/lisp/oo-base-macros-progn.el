@@ -52,9 +52,6 @@
         (setq zipper (treepy-next zipper)))
       zipper)))
 
-(defvar oo--stubber-alist '((flet . cl-flet)
-                            (stub . cl-flet)
-                            (noflet! . lef!)))
 
 (defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
@@ -78,8 +75,8 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
          (setq zipper (treepy-next zipper)))
         (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
          (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
-         (setq zipper (treepy-next zipper))
-         (list data `(setq ,sym ,value)))
+         (setq zipper (treepy-replace zipper `(set! ,sym ,value)))
+         (setq zipper (treepy-next zipper)))
         (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
          (dolist (sym (oo--set-flatten pattern))
            (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
