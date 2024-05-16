@@ -74,7 +74,7 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
            (adjoining! (map-elt data :let) (list symbol it) :test #'equal :key #'car))
          (setq zipper (treepy-next zipper)))
         (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
-         (pushing! (map-elt data :let) (list sym (map-elt plist :init)))
+         (collecting! (map-elt data :let) (list sym (map-elt plist :init)))
          (setq zipper (treepy-replace zipper `(set! ,sym ,value)))
          (setq zipper (treepy-next zipper)))
         (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
