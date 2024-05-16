@@ -85,13 +85,13 @@ EXPR is the same as in `oo-call-after-load'.  BODY is enclosed in
 (defmacro! opt! (symbol value)
   "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
 This is like `setq' but it is meant for configuring variables."
-  (gensym! value-var)
-  `(if (not (boundp ',symbol))
-       (push (cons ',symbol ',value) oo-unbound-symbol-alist)
-     (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
-       (aif (get ',symbol 'custom-set)
-           (funcall it ',symbol ,value-var)
-         (with-no-warnings (setq ,symbol ,value-var))))))
+  (let ((value-var (gensym "value")))
+    `(if (not (boundp ',symbol))
+         (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+       (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
+         (aif (get ',symbol 'custom-set)
+             (funcall it ',symbol ,value-var)
+           (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;;; threading
 ;; I have written several functions whose last arguments are =FN= and =&rest args= such
 ;; as [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]] and [[file:snapshots/_helpful_function__oo-call-after-keymap_.png][oo-call-after-keymap]].  And when I was trying to compose

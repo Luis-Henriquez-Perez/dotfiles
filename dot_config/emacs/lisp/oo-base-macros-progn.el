@@ -1,4 +1,4 @@
-;;; oo-progn-macro.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-progn-macro.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; A macro.
 ;;
 ;;; Code:
 (require 'cl-lib)
@@ -91,6 +91,9 @@ DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
            (setq zipper (treepy-replace zipper form))
            (while (treepy-right zipper)
 	         (setq zipper (treepy-remove (treepy-right zipper))))))
+        (`(gensym! . ,symbols)
+         (appending! (map-elt data :let) symbols)
+         (setq zipper (treepy-skip zipper)))
         (_
          (setq zipper (treepy-next zipper)))))
     (list data (treepy-node zipper))))
@@ -105,15 +108,16 @@ See `progn!'."
 See `progn!'."
   `(throw 'break! ,value))
 
-(defmacro gensym! (sym &rest syms)
-  (macroexp-progn (mapcar (lambda (sym) `(setq ,sym (cl-gensym (symbol-name ',sym))))
-                          (cons sym syms))))
-
 (defmacro continue! ()
   "Skip the current iteration of loop.
 See `progn!'."
   `(throw 'continue! nil))
 (defalias 'skip! 'continue!)
+
+(defmacro gensym! (sym &rest syms)
+  "Set symbol to."
+  (macroexp-progn (mapcar (lambda (sym) `(setq ,sym (cl-gensym (symbol-name ',sym))))
+                          (cons sym syms))))
 
 (defmacro exclude! (&rest _)
   "Signal to `progn!' not to let bind VARS.
@@ -126,8 +130,6 @@ NAME, ARGS and BODY are the same as in `defun'.
 Must be used in `progn!'."
   (declare (indent defun))
   (ignore name args body))
-(defmacro aprog1! (_))
-(defalias 'aprog! 'aprog1!)
 (defmacro aset! (value)
   `(setq it ,value))
 (defalias 'alet! 'aset!)
@@ -138,12 +140,6 @@ Must be used in `progn!'."
 (defmacro progn! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
-
-- (alet! VALUE)
-- (aset! VALUE)
-- (aset>! VALUE)
-- (aset>>! VALUE)
-Let bind the symbol `it' to VALUE.
 
 - (set! SYM _ [:init EXPR])
 Let bind SYM to nil.  If :init VAL is specified, let BIND SYM to EXPR.
