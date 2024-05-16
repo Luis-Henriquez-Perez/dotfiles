@@ -57,7 +57,7 @@ NAME should be a hook symbol."
     (set! params (list (or (map-elt it :depth) (map-elt it :append))
                        (map-elt it :local))))
   `(prog1 ',name
-     (fset ',name (lambda! ,args ,@body))
+     (fset ',name `(lambda ,args (progn! ,@body)))
      (add-hook ',hook ',name ,@params)))
 ;;;;; defadvice!
 (defmacro! defadvice! (name args &rest body)
@@ -66,7 +66,7 @@ NAME should be a hook symbol."
   (set! (symbol how-name _) (oo-advice-components name))
   (set! how (cdr (assoc how-name oo-advice-how-alist)))
   `(progn
-     (fset ',name (lambda! ,args ,@body))
+     (fset ',name `(lambda ,args (progn! ,@body)))
      (advice-add ',symbol ,how ',name)))
 ;;;;; defafter!
 (defmacro! defafter! (name expr &rest body)

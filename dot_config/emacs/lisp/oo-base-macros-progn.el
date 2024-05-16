@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; A macro.
+;; This file provides a macro that takes advantage of the current scope.
 ;;
 ;;; Code:
 (require 'cl-lib)
@@ -34,28 +34,9 @@
 (require 'oo-base-macros-ing)
 ;;;; progn!
 ;;;;; helpers
-;; There's no function to skip a node and I can't see a quick/clever way to do it
-;; with the existing functions.  I want to be where I would be if I had deleted the
-;; node, but I don't want the node itself to be deleted.  If there is a right node
-;; in the same level skipping is tantamount to [[][treepy-right]].
-(defun treepy-skip (zipper)
-  "Skip the current node."
-  (let ((orig zipper))
-    (while (and (not (treepy-right zipper)) (treepy-up zipper))
-      (setq zipper (treepy-up zipper)))
-    (if (treepy-right zipper)
-        (setq zipper (treepy-right zipper))
-      ;; If we've reached the top level, that means there is no next node.  So
-      ;; let's go back to where we were and go next until we reach the end.
-      (setq zipper orig)
-      (while (not (treepy-end-p zipper))
-        (setq zipper (treepy-next zipper)))
-      zipper)))
-
-
 (defun oo--parse-progn-bang (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
-DATA is a plist.  Forms is a list of forms.  For how FORMS is interpreted see
+DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
 `progn!'."
   (let ((zipper (treepy-list-zip forms)))
     (while (not (treepy-end-p zipper))
@@ -130,9 +111,6 @@ NAME, ARGS and BODY are the same as in `defun'.
 Must be used in `progn!'."
   (declare (indent defun))
   (ignore name args body))
-(defmacro aset! (value)
-  `(setq it ,value))
-(defalias 'alet! 'aset!)
 (defalias 'flet! 'stub!)
 (defalias 'noflet! 'stub!)
 (defalias 'nflet! 'stub!)
@@ -186,16 +164,11 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
   (-let* (((data body) (oo--parse-progn-bang nil body))
-          ;; lets is an alist.
           (lets (map-elt data :let))
-          ;; nolets is a list of symbols.
           (nolets (map-elt data :nolet))
           (binds (cl-remove-if (lambda (bind) (member (car bind) nolets)) lets))
           (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
     (oo-wrap-forms wrappers body)))
-
-(defmacro lambda! (args &rest body)
-  `(lambda ,args (progn! ,@body)))
 
 (provide 'oo-base-macros-progn)
 ;;; oo-progn-macro.el ends here
