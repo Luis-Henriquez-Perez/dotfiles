@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file provides a macro that takes advantage of the current scope.
+;; This file provides a macro that makes assumption based on to
 ;;
 ;;; Code:
 (require 'cl-lib)
@@ -80,18 +80,15 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
     (list data (treepy-node zipper))))
 ;;;;; helpers
 (defmacro return! (&optional value)
-  "Cause `progn!' to exit and return VALUE.
-See `progn!'."
+  "Exit `progn!' and return VALUE."
   `(throw 'return! ,value))
 
 (defmacro break! (&optional value)
-  "Exit the current loop and return VALUE.
-See `progn!'."
+  "Exit the current loop and return VALUE."
   `(throw 'break! ,value))
 
 (defmacro continue! ()
-  "Skip the current iteration of loop.
-See `progn!'."
+  "Skip the current iteration of loop."
   `(throw 'continue! nil))
 (defalias 'skip! 'continue!)
 
@@ -101,8 +98,7 @@ See `progn!'."
                           (cons sym syms))))
 
 (defmacro exclude! (&rest _)
-  "Signal to `progn!' not to let bind VARS.
-See `progn!'.")
+  "Signal to `progn!' not to let bind VARS.")
 (defalias 'without! 'exclude!)
 
 (defmacro stub! (name args &rest body)
