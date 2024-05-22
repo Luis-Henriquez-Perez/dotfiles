@@ -141,9 +141,9 @@ Unlike `add-hook'."
   "Return the hook symbol for FSYM."
   (declare (pure t) (side-effect-free t))
   (cl-assert (symbolp fsym))
-  (alet! (symbol-name fsym))
-  (when (string-match "\\(.+\\)&.+" it)
-    (intern (match-string 1 it))))
+  (alet (symbol-name fsym)
+    (when (string-match "\\(.+\\)&.+" it)
+      (intern (match-string 1 it)))))
 ;;;;; oo-hook-p
 (defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; popup
@@ -194,8 +194,8 @@ EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
 EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
-  (aset! (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args))))
-  (oo--call-after-load expr it))
+  (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
+    (oo--call-after-load expr it)))
 ;;;; customize variables
 ;;;;; oo-unbound-symbol-alist
 (defvar oo-unbound-symbol-alist nil

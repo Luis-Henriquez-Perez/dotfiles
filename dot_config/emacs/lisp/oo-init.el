@@ -79,27 +79,27 @@ For what buffer is displayed in the case of a boolean see
   (oo-restore-value 'gc-cons-percentage))
 ;;;; set initial font
 (progn!
-  (aset! (or (font-spec :name "Martian Mono Nerd Font"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 14)
-             (font-spec :name "Nimbus Mono PS"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "Iosevka Comfy Wide"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "SpaceMono Nerd Font"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)
-             (font-spec :name "iMWritingMono Nerd Font Mono"
-                        :weight 'normal
-                        :slant 'normal
-                        :size 15)))
-  (set-face-attribute 'default nil :font it))
+  (alet (or (font-spec :name "Martian Mono Nerd Font"
+                       :weight 'normal
+                       :slant 'normal
+                       :size 14)
+            (font-spec :name "Nimbus Mono PS"
+                       :weight 'normal
+                       :slant 'normal
+                       :size 15)
+            (font-spec :name "Iosevka Comfy Wide"
+                       :weight 'normal
+                       :slant 'normal
+                       :size 15)
+            (font-spec :name "SpaceMono Nerd Font"
+                       :weight 'normal
+                       :slant 'normal
+                       :size 15)
+            (font-spec :name "iMWritingMono Nerd Font Mono"
+                       :weight 'normal
+                       :slant 'normal
+                       :size 15))
+    (set-face-attribute 'default nil :font it)))
 ;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
