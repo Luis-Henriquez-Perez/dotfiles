@@ -65,9 +65,11 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
         (`(,(or 'without! 'exclude!) . ,(and symbols (guard (cl-every #'symbolp symbols))))
          (setf (map-elt data :nolet) (cl-union (map-elt data :nolet) symbols))
          (setq zipper (treepy-remove zipper)))
-        (`(,(and (pred (lambda (x) (member x '(nflet! noflet! flet! stub!)))) stub) . ,args)
+        (`(,(and (pred (lambda (x) (member x '(nflet! noflet! flet! stub! label!
+                                                labels!)))) stub) . ,args)
          (let* ((macro (or (and (member stub '(nflet! noflet!)) 'lef!)
-                           (and (member stub '(flet! stub!)) 'cl-flet)))
+                           (and (member stub '(flet! stub!)) 'cl-flet)
+                           (and (member stub '(label! labels!)) 'cl-labels)))
                 (form `(,macro ((,@args)) ,@(treepy-rights zipper))))
            (setq zipper (treepy-replace zipper form))
            (while (treepy-right zipper)
