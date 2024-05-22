@@ -28,7 +28,14 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("thhe" "the")
+  '(("amt" "amount")
+    ("amoutn" "amount")
+    ("lvl" "level")
+    ("cd" "could")
+    ("cud" "could")
+    ("infor" "information")
+    ("isn" "is not")
+    ("thhe" "the")
     ("ques" "question")
     ("arg" "argument")
     ("2" "two")
