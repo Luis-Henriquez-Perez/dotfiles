@@ -66,7 +66,7 @@ NAME should be a hook symbol."
   (set! (symbol how-name _) (oo-advice-components name))
   (set! how (cdr (assoc how-name oo-advice-how-alist)))
   `(progn
-     (fset ',name `(lambda ,args (progn! ,@body)))
+     (fset ',name (lambda ,args (progn! ,@body)))
      (advice-add ',symbol ,how ',name)))
 ;;;;; defafter!
 (defmacro! defafter! (name expr &rest body)
