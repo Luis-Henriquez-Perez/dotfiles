@@ -47,6 +47,8 @@
 (autoload #'oo-set-font-face "oo-ext-commands")
 (autoload #'oo-split-window-below-and-focus "oo-ext-commands")
 (autoload #'oo-split-window-right-and-focus "oo-ext-commands")
+(autoload #'oo-split-window-right-and-focus "oo-ext-commands")
+(autoload #'oo-blog-new-post "oo-blog-utils")
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here
