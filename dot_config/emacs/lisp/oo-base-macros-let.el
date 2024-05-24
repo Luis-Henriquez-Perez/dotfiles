@@ -29,30 +29,6 @@
 (require 'pcase)
 (require 'oo-base-utils)
 (require 'oo-base-macros-ing)
-;;;; lef!
-(defmacro lef! (bindings &rest body)
-  "Bind each symbol in BINDINGS to its corresponding function during BODY.
-BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
-bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
-each of BINDINGS if the symbol is an existing function symbol let-bind the
-original function to `this-fn', otherwise bind `this-fn' to nil."
-  (declare (indent 1))
-  (let (binds orig-fn)
-    (pcase-dolist (`(,sym . ,rest) bindings)
-      (setq orig-fn (gensym "orig-fn"))
-      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
-      (push (list `(symbol-function ',sym)
-                  (pcase rest
-                    (`(,fn . nil)
-                     `(lambda (&rest args)
-                        (let ((this-fn ,orig-fn))
-                          (apply ,fn args))))
-                    (`(,args . ,function-body)
-                     `(lambda ,args
-                        (let ((this-fn ,orig-fn))
-                          ,@function-body)))))
-            binds))
-    `(cl-letf* ,(nreverse binds) ,@body)))
 ;;;; let!
 ;; I want `oo-tree-map-nodes' to be more flexible.  I want it to accept maybe an
 ;; alist of (PRED . FN) as opposed to a PRED, FN.
