@@ -38,17 +38,17 @@
 ;; to my configuration.  TODO: Maybe make more direct or add support for
 ;; autoloading in the lisp directory.  Right now this loads easymotion which
 ;; causes these functons to be define by me with `eval-after-load'.
-(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion")
-(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion")
-(autoload #'oo-evilem-motion-end-of-word "evil-easymotion")
-(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion")
-(autoload #'oo-evilem-motion-char "evil-easymotion")
-(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion")
-(autoload #'oo-set-font-face "oo-ext-commands")
-(autoload #'oo-split-window-below-and-focus "oo-ext-commands")
-(autoload #'oo-split-window-right-and-focus "oo-ext-commands")
-(autoload #'oo-split-window-right-and-focus "oo-ext-commands")
-(autoload #'oo-blog-new-post "oo-blog-utils")
+(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion" nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion" nil t 'function)
+(autoload #'oo-evilem-motion-end-of-word "evil-easymotion" nil t 'function)
+(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion" nil t 'function)
+(autoload #'oo-evilem-motion-char "evil-easymotion" nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion" nil t 'function)
+(autoload #'oo-set-font-face "oo-ext-commands" nil t 'function)
+(autoload #'oo-split-window-below-and-focus "oo-ext-commands" nil t 'function)
+(autoload #'oo-split-window-right-and-focus "oo-ext-commands" nil t 'function)
+(autoload #'oo-split-window-right-and-focus "oo-ext-commands" nil t 'function)
+(autoload #'oo-blog-new-post "oo-blog-utils" nil t 'function)
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here
