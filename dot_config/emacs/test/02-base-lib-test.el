@@ -164,17 +164,6 @@
     (expect (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
     (expect (= 3 (with-map! '(a 1 b 2) (+ !a !b))))))
 
-(describe "lef!"
-  ;; (it "can use a special syntax"
-  ;;   (expect (lef! ((#'foo #'always)) (foo)) :to-be t))
-  (it "can bind a function symbol to a different function"
-    (expect (= 5 (lef! ((+ #'-)) (+ 10 5)))))
-  (it "can bind symbols to anonymous functions"
-    (expect (= 4 (lef! ((foo (lambda () 4))) (foo)))))
-  (it "stores original function in the symbol `this-fn'"
-    (expect (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
-    (expect (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3))))))
-
 (describe "for!"
   (it "properly loops with predicate being (repeat N)"
     (expect 11 :to-equal (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))

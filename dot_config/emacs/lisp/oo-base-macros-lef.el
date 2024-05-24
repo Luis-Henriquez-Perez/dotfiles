@@ -43,7 +43,8 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
                   (pcase rest
                     (`(,fn . nil)
                      `(lambda (&rest args)
-                        (let ((this-fn ,orig-fn))
+                        (let ((this-fn ,orig-fn)
+                              (this-function ,orig-fn))
                           (apply ,fn args))))
                     (`(,args . ,function-body)
                      `(lambda ,args
