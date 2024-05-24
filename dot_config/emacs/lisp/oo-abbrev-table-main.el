@@ -28,7 +28,12 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("amt" "amount")
+  '(("ooh" "out of hand")
+    ("combi" "combination")
+    ("ingen" "in general")
+    ("gened" "generated")
+    ("aload" "autoload")
+    ("amt" "amount")
     ("amoutn" "amount")
     ("lvl" "level")
     ("cd" "could")
