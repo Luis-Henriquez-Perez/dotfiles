@@ -1,4 +1,4 @@
-;;; oo-base-macros-with-map.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-with-map-bang.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -53,5 +53,5 @@ Collect symbols matching REGEXP in BODY into an alist."
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;; provide
-(provide 'oo-base-macros-with-map)
-;;; oo-base-macros-with-map.el ends here
+(provide 'oo-base-macros-with-map-bang)
+;;; oo-base-macros-with-map-bang.el ends here
