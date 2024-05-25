@@ -30,25 +30,11 @@
 ;;; Code:
 (require 'oo-base-utils)
 (require 'oo-base-macros-ing)
-(require 'oo-base-macros-lef-bang);;; oo-base-macros-lef-bang-test.el -*- lexical-binding: t; -*-
-;; Test for `oo-base-macros-lef-bang'.
-(require 'oo-base-macros-lef-bang)
-(provide 'oo-base-macros-lef-bang-test)
-;;; oo-base-macros-lef-bang-test.el ends here
-;;; oo-base-macros-progn-bang-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
-(require 'oo-base-macros-progn-bang)
-(provide 'oo-base-macros-progn-bang-test)
-;;; oo-base-macros-progn-bang-test.el ends here
-;;; oo-base-macros-with-map-bang-test.el -*- lexical-binding: t; -*-
-;; Test `oo-base-macros-with-map-bang'.
-(require 'oo-base-macros-with-map-bang)
-(provide 'oo-base-macros-with-map-bang-test)
-;;; oo-base-macros-with-map-bang-test.el ends here
-
-(require 'oo-base-macros-let-bang)
 (require 'oo-base-macros-for-bang)
-(require 'oo-base-macros-with-map-bang)
+(require 'oo-base-macros-let-bang)
+(require 'oo-base-macros-lef-bang)
 (require 'oo-base-macros-progn-bang)
+(require 'oo-base-macros-with-map-bang)
 (require 'oo-base-macros-definers)
 ;;;;; if-not!
 ;; More often than not when I am using `if', the default else clause is simpler than
