@@ -38,13 +38,16 @@
                    (for! ((a b) list)
                      (push (+ a b) result))
                    (reverse result)))))
+
 (ert-deftest for!---properly-loops-with-predicate-being-VAR-SEQUENCE ()
   (should (equal '(4 3 2 1) (let (nums) (for! (n '(1 2 3 4)) (push n nums)) nums)))
   (should (equal '(4 3 2 1) (let (nums) (for! (n [1 2 3 4]) (push n nums)) nums)))
   (should (equal '(111 108 108 101 104) (let (chars) (for! (char "hello") (push char chars)) chars))))
+
 (ert-deftest for!---properly-loops-with-predicate-being-VAR-INTEGER ()
   (should (equal '(0 1 2 3) (let (n) (for! (x 4) (collecting! n x)) n)))
   (should (= 11 (let ((n 1)) (for! (x 10) (cl-incf n)) n))))
+
 (ert-deftest for!---propertly-loops-with-predicate-being-INTEGER ()
   (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n))))
 ;;; provide
