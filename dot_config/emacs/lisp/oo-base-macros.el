@@ -1,4 +1,4 @@
-;;; oo-base-macros.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
