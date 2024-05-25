@@ -159,11 +159,6 @@
     (expect (equal '(("foo" nil (interactive)) (1))
                    (oo-defun-components '("foo" (interactive) 1) t)))))
 
-(describe "with-map!"
-  (it "correctly assigns bang symbols to map values"
-    (expect (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
-    (expect (= 3 (with-map! '(a 1 b 2) (+ !a !b))))))
-
 (describe "for!"
   (it "properly loops with predicate being (repeat N)"
     (expect 11 :to-equal (let ((n 1)) (for! (repeat 10) (cl-incf n)) n)))

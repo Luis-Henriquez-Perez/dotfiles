@@ -29,6 +29,7 @@
 ;;
 ;;; Code:
 (require 'oo-base-utils)
+(require 'oo-base-macros-with-map)
 (require 'oo-base-macros-ing)
 (require 'oo-base-macros-lef)
 (require 'oo-base-macros-let)

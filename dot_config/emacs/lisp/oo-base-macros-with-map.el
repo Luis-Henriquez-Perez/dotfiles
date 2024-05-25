@@ -1,4 +1,4 @@
-;;; oo-base-macros-map.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-with-map.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,8 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Provide a macro `with-map!' that let-binds symbols in body based on a regular
+;; expression.
 ;;
 ;;; Code:
 (require 'oo-base-requirements)
@@ -52,5 +53,5 @@ Collect symbols matching REGEXP in BODY into an alist."
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;; provide
-(provide 'oo-base-macros-map)
-;;; oo-base-macros-map.el ends here
+(provide 'oo-base-macros-with-map)
+;;; oo-base-macros-with-map.el ends here
