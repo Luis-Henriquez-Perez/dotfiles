@@ -27,8 +27,8 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'oo/ensure-provide "xx-package-boilerplate" nil t 'function)
-(autoload #'oo/ensure-file-header "xx-package-boilerplate" nil t 'function)
+(autoload #'oo/ensure-provide "oo-ext-package-boilerplate" nil t 'function)
+(autoload #'oo/ensure-file-header "oo-ext-package-boilerplate" nil t 'function)
 
 ;; The problem with these keys is that they interfere with keyboard macros.  Let
 ;; me explain--when you use avy, it is not necessarily the case that the
