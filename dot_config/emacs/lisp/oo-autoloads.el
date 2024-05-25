@@ -27,8 +27,8 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'oo/ensure-provide "oo-ext-package-boilerplate" nil t 'function)
-(autoload #'oo/ensure-file-header "oo-ext-package-boilerplate" nil t 'function)
+(autoload #'oo/ensure-provide "extensions/oo-package-boilerplate" nil t 'function)
+(autoload #'oo/ensure-file-header "extensions/oo-package-boilerplate" nil t 'function)
 
 ;; The problem with these keys is that they interfere with keyboard macros.  Let
 ;; me explain--when you use avy, it is not necessarily the case that the
@@ -44,11 +44,11 @@
 (autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion" nil t 'function)
 (autoload #'oo-evilem-motion-char "evil-easymotion" nil t 'function)
 (autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion" nil t 'function)
-(autoload #'oo-set-font-face "oo-ext-commands" nil t 'function)
-(autoload #'oo-split-window-below-and-focus "oo-ext-commands" nil t 'function)
-(autoload #'oo-split-window-right-and-focus "oo-ext-commands" nil t 'function)
-(autoload #'oo-split-window-right-and-focus "oo-ext-commands" nil t 'function)
-(autoload #'oo-blog-new-post "oo-blog-utils" nil t 'function)
+(autoload #'oo-set-font-face "extensions/oo-commands" nil t 'function)
+(autoload #'oo-split-window-below-and-focus "extensions/oo-commands" nil t 'function)
+(autoload #'oo-split-window-right-and-focus "extensions/oo-commands" nil t 'function)
+(autoload #'oo-split-window-right-and-focus "extensions/oo-commands" nil t 'function)
+(autoload #'oo-blog-new-post "extensions/oo-blog-utils" nil t 'function)
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here

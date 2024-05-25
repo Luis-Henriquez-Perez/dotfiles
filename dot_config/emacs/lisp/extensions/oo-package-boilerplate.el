@@ -148,6 +148,11 @@
 (defun oo/ensure-file-header ()
   (interactive)
   (oo-ensure-file-header))
+
+(defun oo/ensure-boilerplate ()
+  (interactive)
+  (oo-ensure-file-header)
+  (oo-ensure-provide))
 ;;; TODO: when switching to scratch buffer, set it to emacs-lisp-mode
 ;;; provide
 (provide 'xx-package-boilerplate)
