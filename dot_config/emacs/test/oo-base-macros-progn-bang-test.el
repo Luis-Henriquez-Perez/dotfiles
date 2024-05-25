@@ -1,4 +1,4 @@
-;;; oo-base-macros-progn-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-progn-bang-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-base-macros-progn)
+(require 'oo-base-macros-progn-bang)
 (require 'ert)
 
 ;;;; helpers
@@ -124,5 +124,5 @@
   (should (equal '(foo bar baz) (let-binds '((gensym! foo bar baz)))))
   (should (equal '((gensym! foo)) (body '((gensym! foo))))))
 ;;; provide
-(provide 'oo-base-macros-progn-test)
-;;; oo-base-macros-progn-test.el ends here
+(provide 'oo-base-macros-progn-bang-test)
+;;; oo-base-macros-progn-bang-test.el ends here

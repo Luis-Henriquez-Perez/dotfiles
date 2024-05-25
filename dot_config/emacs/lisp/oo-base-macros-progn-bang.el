@@ -29,9 +29,9 @@
 (require 'pcase)
 (require 'oo-base-requirements)
 (require 'oo-base-utils)
-(require 'oo-base-macros-lef)
-(require 'oo-base-macros-let)
-(require 'oo-base-macros-loop)
+(require 'oo-base-macros-lef-bang)
+(require 'oo-base-macros-let-bang)
+(require 'oo-base-macros-for-bang)
 (require 'oo-base-macros-ing)
 ;;;; progn!
 ;;;;; helpers
@@ -169,5 +169,5 @@ Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
           (wrappers `((catch 'return!) (let ,binds) ,@(map-elt data :wrappers))))
     (oo-wrap-forms wrappers body)))
 
-(provide 'oo-base-macros-progn)
+(provide 'oo-base-macros-progn-bang)
 ;;; oo-progn-macro.el ends here

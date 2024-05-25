@@ -1,4 +1,4 @@
-;;; oo-base-macros-lef-test.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-lef-bang-test.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test for `oo-base-macros-lef'.
+;; Test for `oo-base-macros-lef-bang'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-lef)
+(require 'oo-base-macros-lef-bang)
 (require 'ert)
 
 ;; (ert-deftest "can use a special syntax"
@@ -42,5 +42,5 @@
   (should (= 16 (lef! ((+ (lambda (&rest args) (1+ (apply this-fn args))))) (+ 10 5))))
   (should (= 10 (lef! ((+ (x y) (funcall this-fn (* x y) 1))) (+ 3 3)))));;; provide
 
-(provide 'oo-base-macros-lef-test)
-;;; oo-base-macros-lef-test.el ends here
+(provide 'oo-base-macros-lef-bang-test)
+;;; oo-base-macros-lef-bang-test.el ends here

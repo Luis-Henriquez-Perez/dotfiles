@@ -1,4 +1,4 @@
-;;; oo-base-macros-loop.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-for-bang.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,7 +25,7 @@
 ;; Looping macros.
 ;;
 ;;; Code:
-(require 'oo-base-macros-let)
+(require 'oo-base-macros-let-bang)
 (require 'cl-lib)
 (require 'seq)
 ;;;; for!
@@ -72,5 +72,5 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 (defalias 'dolist! 'for!)
 (defalias 'loop! 'for!)
 ;;; provide
-(provide 'oo-base-macros-loop)
-;;; oo-base-macros-loop.el ends here
+(provide 'oo-base-macros-for-bang)
+;;; oo-base-macros-for-bang.el ends here

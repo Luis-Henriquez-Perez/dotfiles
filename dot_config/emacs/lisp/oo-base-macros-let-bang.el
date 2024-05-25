@@ -1,4 +1,4 @@
-;;; oo-base-macros-let.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-let-bang.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -195,5 +195,5 @@ List markers are symbols that begin with `&' such as are `&rest' and
       `(let ,gensyms
          ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
-(provide 'oo-base-macros-let)
-;;; oo-base-macros-let.el ends here
+(provide 'oo-base-macros-let-bang)
+;;; oo-base-macros-let-bang.el ends here

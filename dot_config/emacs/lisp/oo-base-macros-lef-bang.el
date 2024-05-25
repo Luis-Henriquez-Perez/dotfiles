@@ -1,4 +1,4 @@
-;;; oo-base-macros-lef.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-lef-bang.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -54,5 +54,5 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
             binds))
     `(cl-letf* ,(nreverse binds) ,@body)))
 ;;; provide
-(provide 'oo-base-macros-lef)
-;;; oo-base-macros-lef.el ends here
+(provide 'oo-base-macros-lef-bang)
+;;; oo-base-macros-lef-bang.el ends here

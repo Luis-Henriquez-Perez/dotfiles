@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-base-macros-progn)
+(require 'oo-base-macros-progn-bang)
 ;;;; defmacro! and defun!
 (defun oo-defun-components (body &optional show-nils)
   "Divide defun body, BODY, into its components.

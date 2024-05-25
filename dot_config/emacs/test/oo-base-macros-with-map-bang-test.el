@@ -1,4 +1,4 @@
-;;; oo-base-macros-with-map-test.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-with-map-bang-test.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,15 +22,15 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test `oo-base-macros-with-map'.
+;; Test `oo-base-macros-with-map-bang'.
 ;;
 ;;; Code:
 (require 'ert)
-(require 'oo-base-macros-with-map)
+(require 'oo-base-macros-with-map-bang)
 
 (ert-deftest with-map-bang--correctly-assigns-bang-symbols-to-map-values ()
   (should (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
   (should (= 3 (with-map! '(a 1 b 2) (+ !a !b)))))
 ;;; provide
-(provide 'oo-base-macros-with-map-test)
-;;; oo-base-macros-with-map-test.el ends here
+(provide 'oo-base-macros-with-map-bang-test)
+;;; oo-base-macros-with-map-bang-test.el ends here
