@@ -65,12 +65,6 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
                (dotimes (,elt ,list) ,@body))
               (t
                (error "Unknown list predicate: %S" ',loop-struct)))))))
-
-;; (defmacro each! (list &rest body)
-;;   `(for! (it ,list) ,@body))
-
-(defalias 'dolist! 'for!)
-(defalias 'loop! 'for!)
 ;;; provide
 (provide 'oo-base-macros-for-bang)
 ;;; oo-base-macros-for-bang.el ends here
