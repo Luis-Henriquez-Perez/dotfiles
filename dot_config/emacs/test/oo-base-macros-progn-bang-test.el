@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 (require 'oo-base-macros-progn-bang)
-(require 'ert)
 
 ;;;; helpers
 (fset 'parse (apply-partially #'oo--parse-progn-bang nil))
