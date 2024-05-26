@@ -27,6 +27,20 @@
 ;;; Code:
 (require 'oo-base-macros-let-bang)
 
+(ert-deftest oo--mf-flatten---should-flatten-2d-lists ()
+  (should (-same-items-p (oo--mf-flatten '(a b c d)) '(a b c d))))
+
+(ert-deftest oo--mf-flatten---should-flatten-nested-lists ()
+  (should (-same-items-p (oo--mf-flatten '(a (b g) (c (e f)) d)) '(a b g c e f d))))
+
+(ert-deftest oo--mf-flatten---should-flatten-improper-lists ()
+  (should (-same-items-p (oo--mf-flatten '(a b . c)) '(a b c))))
+
+(ert-deftest oo--mf-flatten---should-flatten-vectors ()
+  (should (-same-items-p (oo--mf-flatten '(a [b c] d)) '(a b c d)))
+  (should (-same-items-p (oo--mf-flatten '[a [b c] d]) '(a b c d)))
+  (should (-same-items-p (oo--mf-flatten '[a b c d]) '(a b c d))))
+
 (ert-deftest let!---allow-binding-to-be-vector-if-only-one-pattern ()
   (should (equal '(3 4) (let! [(a b) '(3 4)] (list a b)))))
 
