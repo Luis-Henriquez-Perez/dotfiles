@@ -149,6 +149,7 @@
   (interactive)
   (oo-ensure-file-header))
 
+;;;###autoload
 (defun oo/ensure-boilerplate ()
   (interactive)
   (oo-ensure-file-header)
