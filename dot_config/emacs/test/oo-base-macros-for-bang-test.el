@@ -25,7 +25,6 @@
 ;; Test `oo-base-macros-for-bang'.
 ;;
 ;;; Code:
-(require 'ert)
 (require 'oo-base-macros-for-bang)
 
 (ert-deftest for!---properly-loops-with-predicate-being-repeat-N ()
