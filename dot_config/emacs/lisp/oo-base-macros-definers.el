@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'oo-base-macros-progn-bang)
 ;;;; defmacro! and defun!
-(defun oo-defun-components (body &optional show-nils)
+(defun oo--defun-components (body &optional show-nils)
   "Divide defun body, BODY, into its components.
 The return value should be of the form ((docstring declarations interactive)
 body)."
@@ -44,7 +44,7 @@ body)."
   "Return the form for DEFINER.
 Meant to be used in `defmacro!' and `defun!'."
   (let! (((name arglist . body) definer-args)
-         ((metadata body) (oo-defun-components body))
+         ((metadata body) (oo--defun-components body))
          (symbols (cl-remove-if #'oo-list-marker-p (flatten-tree arglist))))
     (oo-wrap-forms `((,definer ,name ,arglist ,@metadata)
                      (progn! (exclude! ,@symbols)))
