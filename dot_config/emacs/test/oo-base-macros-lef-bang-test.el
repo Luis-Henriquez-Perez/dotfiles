@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 (require 'oo-base-macros-lef-bang)
-(require 'ert)
 
 ;; (ert-deftest "can use a special syntax"
 ;;   (should (lef! ((#'foo #'always)) (foo)) :to-be t))
