@@ -49,7 +49,28 @@
 
 (ert-deftest let!---destructures-a-match-form-containing-a-vector ()
   (should (equal '(1 1 2 9 8) (let! ((foo 1) ([c d] [9 8]) ((a b) '(1 2)))
-                                (list foo a b c d)))));;; provide
+                                (list foo a b c d)))))
 
+(ert-deftest set!---should-act-like-setq-when-given-a-symbol ()
+  (should (= (let (a) (set! a 1) 1) 1)))
+
+(ert-deftest set!---should-be-able-to-destructure-arguments-passed-in ()
+  (should (equal (let (a b c) (set! (a b . c) '(1 3 . 4)) (list a b c)) '(1 3 4)))
+  (should (equal (let (a b c) (set! (a (b . c)) '(1 (3 . 4)))
+                      (list a b c))
+                 '(1 3 4)))
+  (should (equal (let (a b) (set! (a b) '(1 2)) (list a b))
+                 '(1 2))))
+
+(ert-deftest set!---should-work-with-vectors-as-well ()
+  (should (equal (let (a b c) (set! [a b c] [1 2 3]) (list a b c))
+                 '(1 2 3))))
+
+(ert-deftest set!---should-be-able-to-use-special-patterns ()
+  (should (equal (let (a b c)
+                   (set! (a (&as foo (b . c))) '(1 (3 . 4)))
+                   (list a b c foo))
+                 '(1 3 4 (3 . 4)))))
+;;; provide
 (provide 'oo-base-macros-let-bang-test)
 ;;; oo-base-macros-let-bang-test.el ends here
