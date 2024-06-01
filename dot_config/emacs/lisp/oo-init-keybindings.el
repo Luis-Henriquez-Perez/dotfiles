@@ -73,8 +73,8 @@
 (oo-bind 'evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (oo-bind 'evil-outer-text-objects-map "f" #'evil-cp-a-form)
 ;;;;; v and V to expand/contract region
-(oo-bind :v "V" #'er/contract-region)
-(oo-bind :v "v" #'er/expand-region)
+(oo-bind :v "V" #'expreg-contract)
+(oo-bind :v "v" #'expreg-expand)
 ;;;;; use TAB to complete a word
 (oo-bind :i "TAB" #'completion-at-point)
 ;;;;; bind =H= and =L=
