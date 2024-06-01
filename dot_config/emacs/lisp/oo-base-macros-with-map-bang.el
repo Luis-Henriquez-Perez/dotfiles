@@ -50,6 +50,7 @@ Collect symbols matching REGEXP in BODY into an alist."
 
 (defmacro with-map! (map &rest body)
   "Let-bind bang symbols in BODY to corresponding keys in MAP."
+  (declare (indent 1))
   `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;; provide
