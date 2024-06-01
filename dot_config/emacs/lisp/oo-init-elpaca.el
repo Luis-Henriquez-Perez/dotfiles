@@ -99,6 +99,7 @@
 (elpaca fennel-mode)
 (elpaca filladapt)
 (elpaca fit-text-scale)
+(elpaca evil-iedit-state)
 (elpaca gcmh)
 (elpaca git-gutter)
 (elpaca github-theme)
