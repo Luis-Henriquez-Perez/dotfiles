@@ -92,7 +92,7 @@
 (elpaca evil-exchange)
 (elpaca evil-extra-operator)
 (elpaca evil-goggles)
-;; (elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
+(elpaca (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref "f4a8c8d"))
 (elpaca evil-surround)
 (elpaca evil-textobj-line)
 (elpaca evil-textobj-syntax)
