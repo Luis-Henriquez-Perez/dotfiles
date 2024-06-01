@@ -28,7 +28,15 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("alowed" "allowed")
+  '(("nones" "nonessential")
+    ("abt" "about")
+    ("yt" "youtube")
+    ("iadt" "in addition to this")
+    ("tldr" "TLDR")
+    ("mo" "more")
+    ("opt" "option")
+    ("thro" "through")
+    ("alowed" "allowed")
     ("allowd" "allowed")
     ("pefect" "perfect")
     ("negy" "negatively")
