@@ -28,7 +28,13 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("nones" "nonessential")
+  '(("comm" "common")
+    ("corr" "corresponding")
+    ("expr" "expression")
+    ("builtin" "built-in")
+    ("elems" "elements")
+    ("elem" "element")
+    ("nones" "nonessential")
     ("abt" "about")
     ("yt" "youtube")
     ("iadt" "in addition to this")
