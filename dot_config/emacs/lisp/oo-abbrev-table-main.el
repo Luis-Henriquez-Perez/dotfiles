@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("struct" "structure")
+  '(("simul" "simultaneously")
+    ("simultanouesly" "simultaneously")
+    ("struct" "structure")
     ("structs" "structures")
     ("acces" "access")
     ("comm" "common")
