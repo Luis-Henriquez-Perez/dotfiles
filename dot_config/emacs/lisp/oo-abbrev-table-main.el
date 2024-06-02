@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("comm" "common")
+  '(("struct" "structure")
+    ("structs" "structures")
+    ("acces" "access")
+    ("comm" "common")
     ("corr" "corresponding")
     ("expr" "expression")
     ("builtin" "built-in")
