@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("simul" "simultaneously")
+  '(("homogenous" "homogeneous")
+    ("awa" "as well as")
+    ("simul" "simultaneously")
     ("simultanouesly" "simultaneously")
     ("struct" "structure")
     ("structs" "structures")
