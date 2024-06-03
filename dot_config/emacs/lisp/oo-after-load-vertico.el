@@ -36,8 +36,8 @@
 (defhook! emacs-startup-hook&require-vertico ()
   (require 'vertico nil t))
 
-(opt! vertico-quick1 "asdf")
-(opt! vertico-quick2 "jkl;")
+(opt! vertico-quick1 "asdfgh")
+(opt! vertico-quick2 "jkluionm")
 
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
