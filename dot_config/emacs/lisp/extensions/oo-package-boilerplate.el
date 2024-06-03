@@ -149,6 +149,8 @@
   (interactive)
   (oo-ensure-file-header))
 
+;; TODO: create a test file for a file
+
 ;;;###autoload
 (defun oo/ensure-boilerplate ()
   (interactive)

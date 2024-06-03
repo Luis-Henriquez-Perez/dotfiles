@@ -39,6 +39,9 @@ TITLE is a string describing the topic of a post."
   (find-file (oo--blog-post-filename title))
   (insert (format "#+TITLE: %s\n" (capitalize title)))
   (insert (format "#+AUTHOR: Luis Henriquez-Perez\n" (capitalize title))))
+
+;; TODO: maybe a function to go to a post
+;; TODO: automatically evaluate the publish.el file before I publish
 ;;; provide
 (provide 'oo-blog-utils)
 ;;; oo-blog-utils.el ends here

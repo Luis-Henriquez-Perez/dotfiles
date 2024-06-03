@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("homogenous" "homogeneous")
+  '(("val" "value")
+    ("optioinal" "optional")
+    ("homogenous" "homogeneous")
     ("awa" "as well as")
     ("simul" "simultaneously")
     ("simultanouesly" "simultaneously")

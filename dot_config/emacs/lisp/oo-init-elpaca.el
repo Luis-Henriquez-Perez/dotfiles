@@ -118,7 +118,7 @@
 (elpaca lispyville)
 (elpaca lorem-ipsum)
 (elpaca macrostep)
-;; (elpaca magit)
+(elpaca magit)
 (elpaca marginalia)
 (elpaca markdown-mode)
 (elpaca material-theme)
