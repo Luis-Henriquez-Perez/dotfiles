@@ -45,7 +45,7 @@ Collect symbols matching REGEXP in BODY into an alist."
                  (not (assoc obj let-binds)))
         (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
                            (match-string 1 name)))
-        (pushing! let-binds `(,obj (map-elt ,mapsym ',key)))))
+        (push `(,obj (map-elt ,mapsym ',key)) let-binds)))
     (nreverse let-binds)))
 
 (defmacro with-map! (map &rest body)
