@@ -30,8 +30,8 @@
 TITLE is a string describing the topic of a post."
   (set! timestamp (format-time-string "%Y-%m-%d--%H-%M-%S--%N"))
   (set! name (downcase (string-replace "\s" "-" title)))
-  (set! post-dir "~/Documents/blog/org/posts/")
-  (expand-file-name (format "%s--%s.org" timestamp name) post-dir))
+  (set! post-dir "~/Documents/blog/posts/")
+  (expand-file-name (format "%s--%s.html" timestamp name) post-dir))
 
 (defun oo-blog-new-post (title)
   "Create a new blog post."
