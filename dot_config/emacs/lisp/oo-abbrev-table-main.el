@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("elt" "element")
+  '(("sytle" "style")
+    ("elt" "element")
     ("elts" "elements")
     ("gens" "generates")
     ("understandibly" "understandably")
