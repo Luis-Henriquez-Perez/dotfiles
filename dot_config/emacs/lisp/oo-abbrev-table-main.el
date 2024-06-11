@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("sytle" "style")
+  '(("src" "source")
+    ("sytle" "style")
     ("elt" "element")
     ("elts" "elements")
     ("gens" "generates")
