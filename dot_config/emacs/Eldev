@@ -157,3 +157,10 @@
 
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
+
+(eldev-defoption test-no-truncate ()
+  "Do not limit the lisp output for failed tests."
+  :options        (-t --no-truncate)
+  :for-command test
+  (setq ert-batch-print-level nil)
+  (setq ert-batch-print-length nil))
