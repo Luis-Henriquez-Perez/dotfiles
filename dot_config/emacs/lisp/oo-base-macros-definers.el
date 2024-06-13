@@ -74,15 +74,13 @@
     (append (list :name name :arglist arglist)
             (-interleave keys (oo--definer-components-1 body)))))
 
-;; It is easier to tests functions that return a value rather than macros.  So I
-;; prefer writing a helper that returns the macro body as data as opposed to
-;; doing the expansion directly in the macro.
-(defun oo--prognify-body (components)
+(defun oo--prognify-components (components)
   "Return the form for DEFINER.
 Meant to be used in `defmacro!' and `defun!'."
-  (with-map-keywords! components
+  (let! ((body (map-elt components :body))
+         (arglist (map-elt components :arglist)))
     (setf (map-elt components :body)
-          (list (oo--generate-progn-bang-body !body nil (oo--arglist !arglist))))
+          (list (oo--generate-progn-bang-body body nil (oo--arglist arglist))))
     components))
 
 (defun oo--finalize-components (components)
@@ -98,7 +96,7 @@ NAME, ARGLIST and BODY are the same as `defmacro!'.
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (indent defun) (doc-string 3))
   `(defmacro ,@(thread-last (oo--definer-components args)
-                            (oo--prognify-body)
+                            (oo--prognify-components)
                             (oo--finalize-components))))
 
 (defmacro defun! (&rest args)
@@ -108,7 +106,7 @@ NAME, ARGS and BODY are the same as in `defun'.
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
   `(defun ,@(thread-last (oo--definer-components args)
-                         (oo--prognify-body)
+                         (oo--prognify-components)
                          (oo--finalize-components))))
 ;;; provide
 (provide 'oo-base-macros-definers)
