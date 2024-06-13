@@ -22,33 +22,74 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Define definer macros.
 ;;
 ;;; Code:
+(require 'oo-base-macros-with-map-bang)
 (require 'oo-base-macros-progn-bang)
-;;;; defmacro! and defun!
-(defun oo--defun-components (body &optional show-nils)
-  "Divide defun body, BODY, into its components.
-The return value should be of the form ((docstring declarations interactive)
-body)."
-  (let (doc decls int)
-    (setq doc (when (stringp (car-safe body)) (pop body)))
-    (setq decls (when (equal 'declare (car-safe (car-safe body))) (pop body)))
-    (setq int (when (equal 'interactive (car-safe (car-safe body))) (pop body)))
-    (list (cl-remove-if (if show-nils #'ignore #'null) (list doc decls int)) body)))
+
+(defun oo--arglist (arglist)
+  "Return the list of argument symbols in ARGLIST."
+  (cl-remove-if #'oo-list-marker-p (flatten-tree arglist)))
+
+(defun oo--declaration-p (form)
+  "Return non-nil if FORM is a declaration form."
+  (equal 'declare (car-safe form)))
+
+(defun oo--interactive-p (form)
+  "Return non-nil if FORM is an interactive form."
+  (equal 'interactive (car-safe form)))
+
+(defun oo--definer-components-1 (body)
+  "Return (documentation decl interactive-form body) from ORIGINAL-BODY."
+  (pcase body
+    (`(,(and (pred stringp) doc)
+       ,(and (pred oo--declaration-p) decl)
+       ,(and (pred oo--interactive-p) int) . ,rest)
+     (list doc decl int rest))
+    (`(,(and (pred stringp) doc)
+       ,(and (pred oo--declaration-p) decl) . ,rest)
+     (list doc decl nil rest))
+    (`(,(and (pred stringp) doc)
+       ,(and (pred oo--interactive-p) int) . ,rest)
+     (list doc nil int rest))
+    (`(,(and (pred stringp) doc) . ,rest)
+     (list doc nil nil rest))
+    (`(,(and (pred oo--declaration-p) decl)
+       ,(and (pred oo--interactive-p) int) . ,rest)
+     (list nil decl int rest))
+    (`(,(and (pred oo--declaration-p) decl) . ,rest)
+     (list nil decl nil rest))
+    (`(,(and (pred oo--interactive-p) int) . ,rest)
+     (list nil nil int rest))
+    (_
+     (list nil nil nil body))))
+
+(defun oo--definer-components (args)
+  "Return a plist corresponding to the components of `defun'."
+  (let* ((name (pop args))
+         (arglist (pop args))
+         (body args)
+         (keys (list :docstring :declaration :interactive :body)))
+    (append (list :name name :arglist arglist)
+            (-interleave keys (oo--definer-components-1 body)))))
 
 ;; It is easier to tests functions that return a value rather than macros.  So I
 ;; prefer writing a helper that returns the macro body as data as opposed to
 ;; doing the expansion directly in the macro.
-(defun oo--definer-body (definer definer-args)
+(defun oo--prognify-body (components)
   "Return the form for DEFINER.
 Meant to be used in `defmacro!' and `defun!'."
-  (let! (((name arglist . body) definer-args)
-         ((metadata body) (oo--defun-components body))
-         (symbols (cl-remove-if #'oo-list-marker-p (flatten-tree arglist))))
-    (oo-wrap-forms `((,definer ,name ,arglist ,@metadata)
-                     (progn! (exclude! ,@symbols)))
-                   body)))
+  (with-map-keywords! components
+    (setf (map-elt components :body)
+          (list (oo--generate-progn-bang-body !body nil (oo--arglist !arglist))))
+    components))
+
+(defun oo--finalize-components (components)
+  "Return the values of."
+  (with-map-keywords! components
+    (let ((metadata (-non-nil (list !docstring !declaration !interactive))))
+      `(,!name ,!arglist ,@metadata ,@!body))))
 
 (defmacro defmacro! (&rest args)
   "Same as `defmacro!' but wrap body with `progn!'.
@@ -56,7 +97,9 @@ NAME, ARGLIST and BODY are the same as `defmacro!'.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (oo--definer-body 'defmacro args))
+  `(defmacro ,@(thread-last (oo--definer-components args)
+                            (oo--prognify-body)
+                            (oo--finalize-components))))
 
 (defmacro defun! (&rest args)
   "Same as `defun' but wrap body with `progn!'.
@@ -64,7 +107,9 @@ NAME, ARGS and BODY are the same as in `defun'.
 
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
-  (oo--definer-body 'defun args))
+  `(defun ,@(thread-last (oo--definer-components args)
+                         (oo--prognify-body)
+                         (oo--finalize-components))))
 ;;; provide
 (provide 'oo-base-macros-definers)
 ;;; oo-base-macros-definers.el ends here
