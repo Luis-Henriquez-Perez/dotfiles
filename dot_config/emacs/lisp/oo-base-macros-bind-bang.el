@@ -36,73 +36,69 @@
                          oo--bind-step-let-bind
                          oo--bind-step-which-key
                          oo--bind-step-kbd
+                         oo--bind-step-kbd
                          oo--bind-step-evil-bind
                          oo--bind-step-bind)
   "List of functions to be called one by one.")
 
-(defun oo--bind-evil-p (metadata steps)
-  "Return non-nil if.")
-
-(defun oo--bind-step-defer-map (metadata steps)
-  "Defer the"
-  (let ((keymap (gensym "keymap"))
-        (body (oo--bind-steps metadata (cdr steps))))
-    `(let ((,keymap ,(map-elt metadata :keymap)))
-       (if-not! (boundp ,keymap)
+(defun! oo--bind-step-defer-map (metadata steps)
+  (set! map (map-elt metadata keymap))
+  (if (equal map 'global-map)
+      (oo--bind-generate-body metadata (cdr steps))
+    (set! keymap (gensym "keymap"))
+    (set! body (oo--bind-generate-body metadata (cdr steps)))
+    `(let ((,keymap ,map))
+       (if (not (boundp ,keymap))
            (oo-call-after-keymap ,keymap (lambda () ,@body))
          ,@body))))
 
-(defun oo--bind-step-evil-keyword (metadata steps)
-  (cond ((map-elt metadata :evil-keyword)
-         (dolist (letter (oo--evil-state-letters evil-keyword))
-           (let ((metadata metadata))
-             (pushing! forms (oo--bind-steps metadata (cdr steps)))))
-         `(progn ,@(apply #'append forms)))
-        (t
-         (oo--bind-steps metadata (cdr steps)))))
+(defun! oo--bind-step-evil-keyword (metadata steps)
+  (set! evil-keyword (map-elt metadata :evil-keyword))
+  (if (not evil-keyword)
+      (oo--bind-generate-body metadata (cdr steps))
+    (dolist (letter (oo--evil-state-letters evil-keyword))
+      (let ((metadata metadata))
+        (pushing! forms (oo--bind-generate-body metadata (cdr steps)))))
+    `((progn ,@(apply #'append forms)))))
 
-(defun oo--bind-step-kbd (metadata steps)
-  (with-map! metadata
-    (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
-          (oo--bind-steps metadata))))
+(defun oo--bind-let-bind (metadata steps)
+  (for! ((keyword value) metadata)
+    (set! symbol (gensym (seq-rest (symbol-name keyword))))
+    (pushing! new-metadata (list keyword symbol))
+    (pushing! bindings (list symbol value)))
+  `((let ,@(nreverse bindings)
+      ,@(oo--bind-generate-body new-metadata (cdr steps)))))
 
-(defun oo--bind-step-evil-bind (metadata steps)
-  (with-map! metadata
-    (-snoc (oo--bind-steps metadata)
-           `(evil-define-key* ,!states ,!keymap ,!key ,!def))))
-
-(defun! oo--bind-wk-fn (desc)
+(defun! oo--bind-step-which-key (metadata step)
+  (set! which-key (or which-key))
   (set! wk-fn #'which-key-add-keymap-based-replacements)
   `(lambda (keymap key def)
      (oo-call-after-load 'which-key ,wk-fn keymap key ,desc)
      (setq key (if (stringp key) (kbd key) key))
-     (funcall this-fn keymap key def)))
+     (funcall this-fn keymap key def))
+  (if (not which-key)
+      (oo--bind-generate-body new-metadata (cdr steps))
+    `((lef! ()
+        ,@(oo--bind-generate-body new-metadata (cdr steps))))))
 
-(defun oo--bind-step-which-key (metadata)
-  `((lef! ((define-key ,(oo--bind-wk-fn desc)))
-      ,@(oo--bind-steps metadata))))
+;; (defun oo--bind-step-kbd (metadata steps)
+;;   (with-map! metadata
+;;     (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
+;;           (oo--bind-generate-body metadata (cdr steps)))))
 
-(defun oo--bind-step-define-key (metadata)
+(defun oo--bind-step-evil-bind (metadata steps)
   (with-map! metadata
-    (-snoc (oo--bind-steps metadata steps)
-           `(define-key ,!map ,!key ,!def))))
+    (-snoc (oo--bind-generate-body metadata (cdr steps))
+           `(evil-define-key* ,!states ,!keymap ,!key ,!def))))
 
-(defun oo--bind-let-bind (forms)
-  (dolist (item (flatten-list forms))
-    (when (and (symbolp item))
-      (push (list item (map-elt metadata item)) let-binds))))
+(defun oo--bind-step-define-key (metadata steps)
+  (with-map! metadata
+    (-snoc (oo--bind-generate-body metadata (cdr steps))
+           `(define-key ,!map ,!key ,!def))))
 
 (defun oo--bind-steps (metadata)
   "Return binding form."
   (funcall (car oo--bind-steps) metadata (cdr oo--bind-steps)))
-
-(defun! oo--bind-let-fn (metadata form)
-  (for! ((key symbol value) metadata)
-    (collecting! let-binds (list symbol value)))
-  `(let ,let-binds ,@form))
-
-(defun oo--bind-normalize-args (args)
-  "Return binding form.")
 
 (defmacro bind! (&rest args)
   (oo--bind-generate-form oo--bind-steps))
