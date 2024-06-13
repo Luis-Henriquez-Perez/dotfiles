@@ -30,7 +30,7 @@
 (require 'oo-base-utils)
 (require 'oo-base-macros-ing)
 ;;;; map!
-(defun oo--map-let-binds (map body regexp &optional use-keywords)
+(defun oo--generate-with-map-bang-body (map body regexp &optional use-keywords)
   "Return a list of let-bindings for `with-map!'.
 Collect symbols matching REGEXP in BODY into an alist."
   (let* ((mapsym (cl-gensym "map"))
@@ -48,10 +48,16 @@ Collect symbols matching REGEXP in BODY into an alist."
         (push `(,obj (map-elt ,mapsym ',key)) let-binds)))
     (nreverse let-binds)))
 
+(defmacro with-map-keywords! (map &rest body)
+  "Let-bind bang symbols in BODY corresponding to keywords in MAP."
+  (declare (indent 1))
+  `(let* ,(oo--generate-with-map-bang-body map body "!\\([^[:space:]]+\\)" t)
+     ,@body))
+
 (defmacro with-map! (map &rest body)
   "Let-bind bang symbols in BODY to corresponding keys in MAP."
   (declare (indent 1))
-  `(let* ,(oo--map-let-binds map body "!\\([^[:space:]]+\\)" nil)
+  `(let* ,(oo--generate-with-map-bang-body map body "!\\([^[:space:]]+\\)" nil)
      ,@body))
 ;;; provide
 (provide 'oo-base-macros-with-map-bang)
