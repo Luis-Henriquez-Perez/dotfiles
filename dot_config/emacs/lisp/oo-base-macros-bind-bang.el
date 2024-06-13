@@ -31,11 +31,35 @@
 (require 'oo-base-macro)
 ;; The main data structure will be a metadata that I can access.  I will go through
 ;; it via `use-package' style recursion.
-(defvar oo--bind-steps nil
+(defvar oo--bind-steps '(oo--bind-step-defer-map
+                         oo--bind-step-evil-keyword
+                         oo--bind-step-let-bind
+                         oo--bind-step-which-key
+                         oo--bind-step-kbd
+                         oo--bind-step-evil-bind
+                         oo--bind-step-bind)
   "List of functions to be called one by one.")
 
-(defun oo--bind-step-after-evil ()
-  `((oo-call-after-load 'evil (lambda ()))))
+(defun oo--bind-evil-p (metadata steps)
+  "Return non-nil if.")
+
+(defun oo--bind-step-defer-map (metadata steps)
+  "Defer the"
+  (let ((keymap (gensym "keymap"))
+        (body (oo--bind-steps metadata (cdr steps))))
+    `(let ((,keymap ,(map-elt metadata :keymap)))
+       (if-not! (boundp ,keymap)
+           (oo-call-after-keymap ,keymap (lambda () ,@body))
+         ,@body))))
+
+(defun oo--bind-step-evil-keyword (metadata steps)
+  (cond ((map-elt metadata :evil-keyword)
+         (dolist (letter (oo--evil-state-letters evil-keyword))
+           (let ((metadata metadata))
+             (pushing! forms (oo--bind-steps metadata (cdr steps)))))
+         `(progn ,@(apply #'append forms)))
+        (t
+         (oo--bind-steps metadata (cdr steps)))))
 
 (defun oo--bind-step-kbd (metadata steps)
   (with-map! metadata
@@ -54,7 +78,7 @@
      (setq key (if (stringp key) (kbd key) key))
      (funcall this-fn keymap key def)))
 
-(defun oo--bind-step-which-key (metadata steps)
+(defun oo--bind-step-which-key (metadata)
   `((lef! ((define-key ,(oo--bind-wk-fn desc)))
       ,@(oo--bind-steps metadata))))
 
