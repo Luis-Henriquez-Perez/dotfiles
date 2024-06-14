@@ -46,6 +46,7 @@
 (defmacro if-not! (cond then &rest else)
   (declare (indent 2))
   `(if (not ,cond) ,then ,@else))
+(defalias 'nif! 'if-not!)
 ;;;;; defhook!
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
