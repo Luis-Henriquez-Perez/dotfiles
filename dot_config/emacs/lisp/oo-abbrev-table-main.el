@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("src" "source")
+  '(("evaling" "evaluating")
+    ("res" "result")
+    ("src" "source")
     ("sytle" "style")
     ("elt" "element")
     ("elts" "elements")
