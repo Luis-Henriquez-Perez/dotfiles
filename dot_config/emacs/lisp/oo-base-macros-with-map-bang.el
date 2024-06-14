@@ -30,34 +30,42 @@
 (require 'oo-base-utils)
 (require 'oo-base-macros-ing)
 ;;;; map!
-(defun oo--generate-with-map-bang-body (map body regexp &optional use-keywords)
+(defun oo--generate-with-map-body (map body &optional use-keywords-p)
   "Return a list of let-bindings for `with-map!'.
 Collect symbols matching REGEXP in BODY into an alist."
-  (let* ((mapsym (cl-gensym "map"))
+  (let* ((mapsym (gensym "map"))
          (let-binds `((,mapsym ,map)))
          (name nil)
-         (key nil))
+         (symbol nil)
+         (key nil)
+         (key-fn (if use-keywords-p #'oo-into-keyword #'oo-into-symbol)))
     (dolist (obj (flatten-tree body))
       (when (and obj
                  (symbolp obj)
-                 (setq name (symbol-name obj))
-                 (string-match regexp name)
+                 (string-match "\\(!\\{1,2\\}\\)\\([^[:space:]]+\\)"
+                               (symbol-name obj))
                  (not (assoc obj let-binds)))
-        (setq key (funcall (if use-keywords #'oo-into-keyword #'oo-into-symbol)
-                           (match-string 1 name)))
-        (push `(,obj (map-elt ,mapsym ',key)) let-binds)))
+        (setq symbol obj)
+        (setq name (symbol-name symbol))
+        (setq key (funcall key-fn (match-string 2 name)))
+        (if (= 1 (length (match-string 1 name)))
+            (push `(,symbol (map-elt ,mapsym ',key)) let-binds)
+          (push `(,symbol (map-contains-key ,mapsym ',key)) let-binds))))
     (nreverse let-binds)))
 
 (defmacro with-map-keywords! (map &rest body)
   "Let-bind bang symbols in BODY corresponding to keywords in MAP."
   (declare (indent 1))
-  `(let* ,(oo--generate-with-map-bang-body map body "!\\([^[:space:]]+\\)" t)
+  `(let* ,(oo--generate-with-map-body map body :use-keywords)
      ,@body))
 
 (defmacro with-map! (map &rest body)
-  "Let-bind bang symbols in BODY to corresponding keys in MAP."
+  "Let-bind bang symbols in BODY to corresponding keys in MAP.
+Occurrences of !SYMBOL are let-bound to the result of evaluating (map-elt MAP
+SYMBOL).  Occurrences of !!SYMBOL is let-bound to the result of evaluating
+(map-contains-key MAP SYMBOL)."
   (declare (indent 1))
-  `(let* ,(oo--generate-with-map-bang-body map body "!\\([^[:space:]]+\\)" nil)
+  `(let* ,(oo--generate-with-map-body map body)
      ,@body))
 ;;; provide
 (provide 'oo-base-macros-with-map-bang)
