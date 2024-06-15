@@ -28,6 +28,7 @@
 ;; it as a function-based, but for performance ideally it would be macro based.
 ;;
 ;;; Code:
+(require 'seq)
 (require 'oo-base-macros)
 ;; The main data structure will be a metadata that I can access.  I will go through
 ;; it via `use-package' style recursion.
