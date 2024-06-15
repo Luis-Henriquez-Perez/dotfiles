@@ -44,21 +44,6 @@
 (defun oo--map-has-p (map &rest keys)
   "Return non-nil if MAP has all KEYS."
   (-all-p (apply-partially #'map-contains-key map) keys))
-(append (split-string "foo" "" t) nil)
-;; (seq-into "foo" 'list)
-
-;; (102 111 111)
-
-;; ("f" "o" "o")
-
-(defun oo--symbol-characters (symbol)
-  (seq-into (symbol-name symbol) 'list))
-
-;; (defun! oo--evil-keyword-letters (evil-keyword)
-;;   "Return the state that corresponds to the state keyword."
-;;   (flet! letter (state) (seq-first (symbol-name state)))
-;;   (set! target (seq-first (seq-rest (symbol-name evil-keyword))))
-;;   (--first (equal (letter it) target) (map-keys evil-state-properties)))
 
 (defun! oo--bind-step-defer-map (metadata steps)
   (set! map (map-elt metadata :keymap))
@@ -78,20 +63,18 @@
           (t
            (oo--bind-generate-body metadata steps)))))
 
-(defun oo-eval-after-evil-state (state fn)
-  "Call FUNCTION with STATE after evil state is defined.
-STATE can be a state symbol, a string or a character."
-  (aif (cl-find-if (lambda (state) (char-equal ,letter (string-to-char (symbol-name state))))
-                   (map-keys evil-state-properties))
-      (funcall fn state)))
-
 (defun! oo--bind-step-evil-symbol (metadata steps)
   (set! evil-symbol (map-elt metadata :evil-symbol))
   (nif! evil-symbol
       (oo--bind-generate-body metadata steps)
     (dolist (char (seq-into (symbol-name evil-symbol) 'list))
-      (collecting! forms (oo--bind-evil-symbol-form letter))
-      `((oo-eval-after-evil-state ,char (lambda (state) ,@(oo--bind-generate-body)))))))
+      (if (char-equal char ?g)
+          (collecting! forms (oo--bind-generate-body metadata steps))
+        (set! state (gensym "state"))
+        (set! body (oo--bind-generate-body (map-insert metadata :state state) steps))
+        (set! form `(oo-eval-after-evil-state ,char (lambda (,state) ,@body)))
+        (collecting! forms form)))
+    forms))
 
 (defun oo--bind-let-bind (metadata steps)
   (for! ((keyword value) metadata)
@@ -125,18 +108,6 @@ STATE can be a state symbol, a string or a character."
       (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
             (oo--bind-generate-body metadata steps)))))
 
-;; (defun oo--bind-step-evil-states (metadata steps)
-;;   (with-map-keywords! metadata
-;;     (nif! !!states
-;;         ())))
-
-(defun oo--bind-step-evil-bind-letter (metadata steps)
-  `(aif ()
-       ,@(oo--bind-step-evil-bind metadata nil))
-  ;; (--first (equal (letter it) target) (map-keys evil-state-properties))
-  ;; `(if (assoc ))
-  )
-
 (defun oo--bind-step-evil-bind (metadata steps)
   (with-map-keywords! metadata
     (nif! (and !!state !!keymap !!key !!def)
@@ -160,6 +131,7 @@ STATE can be a state symbol, a string or a character."
 ;; ((define-key global-map "d" #'foo))
 ;; (oo--bind-step-bind '(:keymap global-map :key "d" :def #'foo) nil)
 (setq oo--bind-steps '(oo--bind-step-evil oo--bind-step-which-key oo--bind-step-evil-bind oo--bind-step-bind))
+
 (defmacro bind! (&rest args)
   (macroexp-progn (oo--bind-generate-body args oo--bind-steps)))
 
