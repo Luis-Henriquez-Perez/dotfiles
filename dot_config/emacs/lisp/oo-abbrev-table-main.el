@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("evaling" "evaluating")
+  '(("sumes" "assumes")
+    ("evaling" "evaluating")
     ("res" "result")
     ("src" "source")
     ("sytle" "style")
