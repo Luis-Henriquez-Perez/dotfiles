@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("sumes" "assumes")
+  '(("oside" "outside")
+    ("bside" "beside")
+    ("sumes" "assumes")
     ("evaling" "evaluating")
     ("res" "result")
     ("src" "source")
