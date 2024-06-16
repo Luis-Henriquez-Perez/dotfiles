@@ -42,10 +42,6 @@
                          oo--bind-step-bind)
   "List of functions to be called one by one.")
 
-(defun oo--map-has-p (map &rest keys)
-  "Return non-nil if MAP has all KEYS."
-  (-all-p (apply-partially #'map-contains-key map) keys))
-
 (defun! oo--bind-step-defer-map (metadata steps)
   (set! map (map-elt metadata :keymap))
   (set! body (oo--bind-generate-body metadata steps))
@@ -55,35 +51,17 @@
     `(let ((,keymap ,map))
        (oo-call-after-keymap ,keymap (lambda () ,@body)))))
 
-(defun oo--bind-step-evil (metadata steps)
-  (with-map-keywords! metadata
-    (cond (!state
-           `((oo-call-after-load 'evil (lambda () ,@(oo--bind-generate-body metadata steps)))))
-          (!evil-keyword
-           `((oo-call-after-load 'evil (lambda () ,@(oo--bind-step-evil-keyword metadata steps)))))
-          (t
-           (oo--bind-generate-body metadata steps)))))
-
 (defun! oo--bind-step-evil-symbol (metadata steps)
   (set! evil-symbol (map-elt metadata :evil-symbol))
   (nif! evil-symbol
       (oo--bind-generate-body metadata steps)
-    (dolist (char (seq-into (symbol-name evil-symbol) 'list))
+    (dolist (char (append (symbol-name evil-symbol) nil))
       (if (char-equal char ?g)
           (collecting! forms (oo--bind-generate-body metadata steps))
         (set! state (gensym "state"))
         (set! body (oo--bind-generate-body (map-insert metadata :state state) steps))
         (set! form `(oo-eval-after-evil-state ,char (lambda (,state) ,@body)))
-        (collecting! forms form)))
-    forms))
-
-(defun oo--bind-let-bind (metadata steps)
-  (for! ((keyword value) metadata)
-    (set! symbol (gensym (seq-rest (symbol-name keyword))))
-    (pushing! new-metadata (list keyword symbol))
-    (pushing! bindings (list symbol value)))
-  `((let ,@(nreverse bindings)
-      ,@(oo--bind-generate-body new-metadata steps))))
+        (collecting! forms form)))))
 
 ;; The function `which-key-add-keymap-based-replacements' already applies kbd to
 ;; the binding passed in.  This makes it tricky for me to use kbd because I need
@@ -101,13 +79,6 @@
         (oo--bind-generate-body metadata steps)
       `((lef! ((define-key ,fn))
           ,@(oo--bind-generate-body metadata steps))))))
-
-(defun oo--bind-step-kbd (metadata steps)
-  (with-map-keywords! metadata
-    (nif! !!key
-        (oo--bind-generate-body metadata steps)
-      (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
-            (oo--bind-generate-body metadata steps)))))
 
 (defun oo--bind-step-evil-bind (metadata steps)
   (with-map-keywords! metadata
@@ -127,11 +98,13 @@
   "Return binding form."
   (and steps (funcall (car steps) metadata (cdr steps))))
 
-(bind! :which-key "foo" :state normal :keymap global-map :key "d" :def #'foo)
+(bind! :which-key "foo" :evil-state normal :keymap global-map :key "d" :def #'foo)
+(bind! :which-key "foo" :evil-symbol nmi :keymap global-map :key "d" :def #'foo)
+(bind! :which-key "foo" :evil-symbol g :keymap global-map :key "d" :def #'foo)
 ;; (oo--bind-generate-body '(:keymap global-map :key "d" :def #'foo) '(oo--bind-step-bind))
 ;; ((define-key global-map "d" #'foo))
 ;; (oo--bind-step-bind '(:keymap global-map :key "d" :def #'foo) nil)
-(setq oo--bind-steps '(oo--bind-step-evil oo--bind-step-which-key oo--bind-step-evil-bind oo--bind-step-bind))
+(setq oo--bind-steps '(oo--bind-step-evil oo--bind-step-evil-symbol oo--bind-step-which-key oo--bind-step-evil-bind oo--bind-step-bind))
 
 (defmacro bind! (&rest args)
   (macroexp-progn (oo--bind-generate-body args oo--bind-steps)))
