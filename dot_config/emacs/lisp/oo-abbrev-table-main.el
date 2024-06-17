@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("oside" "outside")
+  '(("tbs" "that being said")
+    ("evalu" "evaluation")
+    ("oside" "outside")
     ("bside" "beside")
     ("sumes" "assumes")
     ("evaling" "evaluating")
