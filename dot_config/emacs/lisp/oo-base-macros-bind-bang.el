@@ -32,24 +32,19 @@
 (require 'oo-base-macros)
 ;; The main data structure will be a metadata that I can access.  I will go through
 ;; it via `use-package' style recursion.
-(defvar oo--bind-steps '(
-                         ;; oo--bind-step-defer-map
-                         ;; oo--bind-step-evil-keyword
-                         ;; oo--bind-step-let-bind
-                         ;; oo--bind-step-which-key
-                         ;; oo--bind-step-kbd
+(defvar oo--bind-steps '(oo--bind-step-defer-keymap
+                         oo--bind-step-evil-symbol
+                         oo--bind-step-which-key
                          oo--bind-step-evil-bind
                          oo--bind-step-bind)
   "List of functions to be called one by one.")
 
-(defun! oo--bind-step-defer-map (metadata steps)
-  (set! map (map-elt metadata :keymap))
-  (set! body (oo--bind-generate-body metadata steps))
-  (if (equal map 'global-map)
-      body
-    (set! keymap (gensym "keymap"))
-    `(let ((,keymap ,map))
-       (oo-call-after-keymap ,keymap (lambda () ,@body)))))
+(defun! oo--bind-step-defer-keymap (metadata steps)
+  (with-map-keywords! metadata
+    (if (or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
+        (oo--bind-generate-body metadata steps)
+      (set! body (oo--bind-generate-body metadata steps))
+      `((oo-call-after-keymap ',!keymap (lambda () ,@body))))))
 
 (defun! oo--bind-step-evil-symbol (metadata steps)
   (set! evil-symbol (map-elt metadata :evil-symbol))
@@ -62,6 +57,12 @@
         (set! body (oo--bind-generate-body (map-insert metadata :state state) steps))
         (set! form `(oo-eval-after-evil-state ,char (lambda (,state) ,@body)))
         (collecting! forms form)))))
+
+(defun oo--bind-step-evil-state (metadata steps)
+  (with-map-keywords! metadata
+    (nif! !!state
+        (oo--bind-generate-body metadata steps)
+      `((oo-call-after-evil-state ',!state (lambda (_) ,@(oo--bind-generate-body metadata steps)))))))
 
 ;; The function `which-key-add-keymap-based-replacements' already applies kbd to
 ;; the binding passed in.  This makes it tricky for me to use kbd because I need
@@ -94,17 +95,30 @@
       (-snoc (oo--bind-generate-body metadata steps)
              `(define-key ,!keymap ,!key ,!def)))))
 
+;; (defun oo--bind-step-do-binding (metadata steps)
+;;   (with-map-keywords! metadata
+;;     (nif! (and !!definer !!definer-args)
+;;         (oo--bind-generate-body metadata steps)
+;;       (-snoc (oo--bind-generate-body metadata steps)
+;;              `(funcall #',!definer ,@!definer-args)))))
+
 (defun oo--bind-generate-body (metadata steps)
   "Return binding form."
   (and steps (funcall (car steps) metadata (cdr steps))))
 
 (bind! :which-key "foo" :evil-state normal :keymap global-map :key "d" :def #'foo)
+(bind! :which-key "foo" :state normal :keymap org-mode-map :key "d" :def #'foo)
 (bind! :which-key "foo" :evil-symbol nmi :keymap global-map :key "d" :def #'foo)
 (bind! :which-key "foo" :evil-symbol g :keymap global-map :key "d" :def #'foo)
 ;; (oo--bind-generate-body '(:keymap global-map :key "d" :def #'foo) '(oo--bind-step-bind))
 ;; ((define-key global-map "d" #'foo))
 ;; (oo--bind-step-bind '(:keymap global-map :key "d" :def #'foo) nil)
-(setq oo--bind-steps '(oo--bind-step-evil oo--bind-step-evil-symbol oo--bind-step-which-key oo--bind-step-evil-bind oo--bind-step-bind))
+(setq oo--bind-steps '(oo--bind-step-evil-symbol
+                       oo--bind-step-evil-state
+                       oo--bind-step-defer-keymap
+                       oo--bind-step-which-key
+                       oo--bind-step-evil-bind
+                       oo--bind-step-bind))
 
 (defmacro bind! (&rest args)
   (macroexp-progn (oo--bind-generate-body args oo--bind-steps)))
