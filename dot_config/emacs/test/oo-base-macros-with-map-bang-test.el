@@ -28,9 +28,9 @@
 (require 'ert)
 (require 'oo-base-macros-with-map-bang)
 
-(ert-deftest with-map!--correctly-assigns-bang-symbols-to-map-values ()
-  (should (= 3 (with-map! '((a . 1) (b . 2)) (+ !a !b))))
-  (should (= 3 (with-map! '(a 1 b 2) (+ !a !b)))))
+(ert-deftest with-map! ()
+  (should (= 3 (with-map! '((a . 1) (b . 2)) (and !!a !!b (+ !a !b)))))
+  (should (= 3 (with-map! '(a 1 b 2) (and !!a !!b (+ !a !b))))))
 ;;; provide
 (provide 'oo-base-macros-with-map-bang-test)
 ;;; oo-base-macros-with-map-bang-test.el ends here
