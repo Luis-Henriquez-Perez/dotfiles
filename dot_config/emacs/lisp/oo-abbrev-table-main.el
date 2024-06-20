@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("syms" "symbols")
+  '(("wre" "were")
+    ("ws" "was")
+    ("probs" "problems")
+    ("syms" "symbols")
     ("tbs" "that being said")
     ("evalu" "evaluation")
     ("oside" "outside")
