@@ -105,6 +105,13 @@
 ;; load the `oo-macros' file.
 (defhook! emacs-lisp-mode-hook&require-macros ()
   (require 'oo-base-macros))
+;;;;; enable special font-lock
+(defhook! emacs-lisp-mode-hook&enable-font-lock ()
+  (font-lock-add-keywords
+   'emacs-lisp-mode
+   '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
+      (1 font-lock-keyword-face nil t)
+      (2 font-lock-function-name-face nil t)))))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here
