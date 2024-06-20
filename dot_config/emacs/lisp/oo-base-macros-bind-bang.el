@@ -33,43 +33,44 @@
 ;; `use-package' bind! does not expand into all built-in forms.  That being
 ;; said, this file is designed to be able to be compiled.
 ;;
+;;
+;;
 ;;; Code:
 (require 'seq)
 (require 'oo-base-macros)
 (require 'oo-base-lib)
 
-;; The main data structure will be a metadata that I can access.  I will go through
-;; it via `use-package' style recursion.
 (defvar oo--bind-steps '(oo--bind-step-evil
                          oo--bind-step-defer-keymap
                          oo--bind-step-which-key
                          oo--bind-step-let-bind
                          oo--bind-step-kbd
                          oo--bind-step-bind)
-  "List of functions to be called one by one.")
-
-(defun oo--map-values (map keys)
-  "Return a list of."
-  (mapcar (apply-partially #'map-elt map) keys))
+  "List of functions to be called in order to generate the main body.")
 
 (defun oo--bind-generate-body (metadata steps)
-  "Return the body for `bind!'."
+  "Return the body for `bind!'.
+Call the first step function with METADATA and the remaining step functions.  If
+STEPS is nil, do nothing and return nil."
   (and steps (funcall (car steps) metadata (cdr steps))))
 
-(defun oo--lambda-form (symbols args body)
-  "Return a form that evaluates into a lambda with symbols."
-  (aif (ensure-list symbols)
-      `(list 'lambda ,args (append (list 'let (cl-mapcar #'list ',it (list ,@it))) ',body))
-    `(lambda ,args ,@body)))
-
-;; This was hard.  One of my biggest problems when writing this feature is
+;; One of my biggest problems when writing this feature is
 ;; propogating variables across nested lambdas.  After thinking about it for a
 ;; while there were two was I could think of doing it.  The first was passing in
 ;; the arguments to a lambda.  The second is injecting the bindings into the
 ;; lambda itself.  I choose to use the latter because I could not see how to
 ;; pass in function arguments with symbols.
+(defun oo--lambda-form (symbols args body)
+  "Return a form that evaluates into a lambda with ARGS and BODY.
+In the lambda SYMBOLS are let-bound to their values around BODY."
+  (aif (ensure-list symbols)
+      `(list 'lambda ,args (append (list 'let (cl-mapcar #'list ',it (list ,@it))) ',body))
+    `(lambda ,args ,@body)))
+
 (defun! oo--bind-lambda (args metadata steps)
-  "Return a form that evaluates into a lambda that let-binds."
+  "Return a form that evaluates into a lambda.
+The body of the lambda is the result of.  Any keys in `:env' in METADATA are
+letbound to their values around the BODY of the lambda."
   (set! env (map-elt metadata :env))
   (dolist (key env)
     (collecting! symbols (map-elt metadata key)))
@@ -84,6 +85,7 @@ If METADATA has no keymap return."
       `((oo-call-after-keymap ',!keymap ,(oo--bind-lambda nil metadata steps))))))
 
 (defun! oo--bind-step-evil (metadata steps)
+  "Register keybinding as evil binding."
   (with-map-keywords! metadata
     (cond ((not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
            (oo--bind-generate-body metadata steps))
@@ -128,6 +130,7 @@ If METADATA has no keymap return."
 ;; This is so other functions not just the binding functions can use the
 ;; variables instead of.
 (defun! oo--bind-step-let-bind (metadata steps)
+  "Let bind symbols around body as specified by `:bind-args'."
   (for! (key (map-elt metadata :bind-args))
     (set! value (map-elt metadata key))
     (set! symbol (gensym (seq-rest (symbol-name key))))
@@ -143,7 +146,7 @@ If METADATA has no keymap return."
           (oo--bind-generate-body metadata steps))))
 
 (defun oo--bind-step-bind (metadata steps)
-  "Actually perform the binding."
+  "Call the value of `:bind-fn' with value of `:bind-args'."
   (with-map-keywords! metadata
     (nif! (and !!bind-fn !!bind-args)
         (oo--bind-generate-body metadata steps)
@@ -151,7 +154,9 @@ If METADATA has no keymap return."
       (cons `(,!bind-fn ,@args)
             (oo--bind-generate-body metadata steps)))))
 
-;; I had been considering looping through this, but for now this is fine.
+;; I had been considering looping through the bind arguments to tokenize them
+;; which is probably less verbose than doing it statically like this, but it is
+;; also a bit more involved to code.
 (defun! oo--standardize-args (args)
   "Standardize arguments ARGS for `bind!'."
   (flet! esym (keyword) (intern (seq-rest (symbol-name keyword))))
@@ -172,6 +177,7 @@ If METADATA has no keymap return."
     (_ nil)))
 
 (defmacro! bind! (&rest args)
+  "Bind keys as specified by ARGS."
   (set! metadata (oo--standardize-args args))
   (setf (map-elt metadata :bind-fn) #'define-key)
   (setf (map-elt metadata :bind-args) (list :keymap :key :def))
