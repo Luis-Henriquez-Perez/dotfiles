@@ -40,17 +40,40 @@
 
 ;; The main data structure will be a metadata that I can access.  I will go through
 ;; it via `use-package' style recursion.
-(defvar oo--bind-steps '(oo--bind-step-evil-symbol
-                         oo--bind-step-evil-state
+(defvar oo--bind-steps '(oo--bind-step-evil
                          oo--bind-step-defer-keymap
                          oo--bind-step-which-key
-                         oo--bind-step-evil-bind
+                         oo--bind-step-let-bind
+                         oo--bind-step-kbd
                          oo--bind-step-bind)
   "List of functions to be called one by one.")
+
+(defun oo--map-values (map keys)
+  "Return a list of."
+  (mapcar (apply-partially #'map-elt map) keys))
 
 (defun oo--bind-generate-body (metadata steps)
   "Return the body for `bind!'."
   (and steps (funcall (car steps) metadata (cdr steps))))
+
+(defun oo--lambda-form (symbols args body)
+  "Return a form that evaluates into a lambda with symbols."
+  (aif (ensure-list symbols)
+      `(list 'lambda ,args (append (list 'let (cl-mapcar #'list ',it (list ,@it))) ',body))
+    `(lambda ,args ,@body)))
+
+;; This was hard.  One of my biggest problems when writing this feature is
+;; propogating variables across nested lambdas.  After thinking about it for a
+;; while there were two was I could think of doing it.  The first was passing in
+;; the arguments to a lambda.  The second is injecting the bindings into the
+;; lambda itself.  I choose to use the latter because I could not see how to
+;; pass in function arguments with symbols.
+(defun! oo--bind-lambda (args metadata steps)
+  "Return a form that evaluates into a lambda that let-binds."
+  (set! env (map-elt metadata :env))
+  (dolist (key env)
+    (collecting! symbols (map-elt metadata key)))
+  (oo--lambda-form symbols args (oo--bind-generate-body metadata steps)))
 
 (defun! oo--bind-step-defer-keymap (metadata steps)
   "Defer the evaluation of body until keymap is loaded.
@@ -58,30 +81,33 @@ If METADATA has no keymap return."
   (with-map-keywords! metadata
     (if (or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
         (oo--bind-generate-body metadata steps)
-      (set! body (oo--bind-generate-body metadata steps))
-      `((oo-call-after-keymap ',!keymap (lambda () ,@body))))))
+      `((oo-call-after-keymap ',!keymap ,(oo--bind-lambda nil metadata steps))))))
 
-(defun! oo--bind-step-evil-symbol (metadata steps)
-  "Return"
-  (set! evil-symbol (map-elt metadata :evil-symbol))
-  (nif! evil-symbol
-      (oo--bind-generate-body metadata steps)
-    (dolist (char (append (symbol-name evil-symbol) nil))
-      (if (char-equal char ?g)
-          (collecting! forms (oo--bind-generate-body metadata steps))
-        (set! state (gensym "state"))
-        (set! body (oo--bind-generate-body (map-insert metadata :state state) steps))
-        (set! form `(oo-eval-after-evil-state ,char (lambda (,state) ,@body)))
-        (collecting! forms form)))))
-
-(defun oo--bind-step-evil-state (metadata steps)
-  "Wrap forms with"
+(defun! oo--bind-step-evil (metadata steps)
   (with-map-keywords! metadata
-    (nif! !!state
-        (oo--bind-generate-body metadata steps)
-      (set! state (gensym "state"))
-      (set! metadata (map-insert metadata :state state))
-      `((oo-call-after-evil-state ',!state (lambda (,state) ,@(oo--bind-generate-body metadata steps)))))))
+    (cond ((not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
+           (oo--bind-generate-body metadata steps))
+          ((prog1 nil
+             (setf (map-elt metadata :bind-fn) #'evil-define-key*)
+             (cl-pushnew :evil-state (map-elt metadata :bind-args))))
+          (!!evil-state
+           (set! evil-state (gensym "evil-state"))
+           (setf (map-elt metadata :evil-state) evil-state)
+           (cl-pushnew :evil-state (map-elt metadata :env))
+           `((oo-call-after-evil-state ,!evil-state ,(oo--bind-lambda (list evil-state) metadata steps))))
+          (!evil-symbol
+           (set! evil-state (gensym "evil-state"))
+           (dolist (char (append (symbol-name !evil-symbol) nil))
+             (if (char-equal char ?g)
+                 (prepending! forms (oo--bind-generate-body metadata steps))
+               (let ((metadata metadata))
+                 (set! evil-state (gensym "evil-state"))
+                 (setf (map-elt metadata :evil-state) evil-state)
+                 (cl-pushnew :evil-state (map-elt metadata :env))
+                 (set! lambda (oo--bind-lambda (list evil-state) metadata steps))
+                 (set! form `(oo-eval-after-evil-state ,char ,lambda))
+                 (collecting! forms form))))
+           forms))))
 
 ;; The function `which-key-add-keymap-based-replacements' already applies kbd to
 ;; the binding passed in.  This makes it tricky for me to use kbd because I need
@@ -92,7 +118,6 @@ If METADATA has no keymap return."
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     (set! fn `(lambda (keymap key def)
                 (oo-call-after-load 'which-key ,wk-fn keymap key ,which-key)
-                ;; ,@(oo--bind-step-kbd metadata nil)
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
     (nif! which-key
@@ -100,26 +125,31 @@ If METADATA has no keymap return."
       `((lef! ((define-key ,fn))
           ,@(oo--bind-generate-body metadata steps))))))
 
-(defun oo--bind-step-evil-bind (metadata steps)
-  "Append form for defining evil binding."
+;; This is so other functions not just the binding functions can use the
+;; variables instead of.
+(defun! oo--bind-step-let-bind (metadata steps)
+  (for! (key (map-elt metadata :bind-args))
+    (set! value (map-elt metadata key))
+    (set! symbol (gensym (seq-rest (symbol-name key))))
+    (collecting! let-binds (list symbol value))
+    (set! new-metadata metadata)
+    (setf (map-elt new-metadata key) symbol))
+  `((let ,let-binds ,@(oo--bind-generate-body new-metadata steps))))
+
+(defun oo--bind-step-kbd (metadata steps)
+  "Apply kbd to binding if possible."
   (with-map-keywords! metadata
-    (nif! (and !!state !!keymap !!key !!def)
-        (oo--bind-generate-body metadata steps)
-      (-snoc (oo--bind-generate-body metadata steps)
-             `(evil-define-key* ,!state ,!keymap ,!key ,!def)))))
+    (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
+          (oo--bind-generate-body metadata steps))))
 
 (defun oo--bind-step-bind (metadata steps)
-  ""
+  "Actually perform the binding."
   (with-map-keywords! metadata
-    (nif! (and !!keymap !!key !!def (not !!state))
+    (nif! (and !!bind-fn !!bind-args)
         (oo--bind-generate-body metadata steps)
-      (-snoc (oo--bind-generate-body metadata steps)
-             `(define-key ,!keymap ,!key ,!def)))))
-
-;; (bind! :which-key "foo" :state normal :keymap global-map :key "d" :def #'foo)
-;; (bind! :which-key "foo" :state normal :keymap org-mode-map :key "d" :def #'foo)
-;; (bind! :which-key "foo" :evil-symbol nmi :keymap global-map :key "d" :def #'foo)
-;; (bind! :which-key "foo" :evil-symbol g :keymap global-map :key "d" :def #'foo)
+      (set! args (mapcar (apply-partially #'map-elt metadata) !bind-args))
+      (cons `(,!bind-fn ,@args)
+            (oo--bind-generate-body metadata steps)))))
 
 ;; I had been considering looping through this, but for now this is fine.
 (defun! oo--standardize-args (args)
@@ -137,10 +167,17 @@ If METADATA has no keymap return."
      (cl-list* :keymap keymap :evil-symbol (esym evil-keyword) :key key :def def rest))
     (`(,key ,(and (pred sharp-quoted-p) def) . ,rest)
      (cl-list* :key key :def def rest))
+    ;; (`(:alt ,key ,alt . ,rest)
+    ;;  ())
     (_ nil)))
 
 (defmacro! bind! (&rest args)
-  (macroexp-progn (oo--bind-generate-body (oo--standardize-args args) oo--bind-steps)))
+  (set! metadata (oo--standardize-args args))
+  (setf (map-elt metadata :bind-fn) #'define-key)
+  (setf (map-elt metadata :bind-args) (list :keymap :key :def))
+  (unless (map-elt metadata :keymap)
+    (setf (map-elt metadata :keymap) 'global-map))
+  (macroexp-progn (oo--bind-generate-body metadata oo--bind-steps)))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
