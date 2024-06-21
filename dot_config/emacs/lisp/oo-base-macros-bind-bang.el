@@ -33,7 +33,24 @@
 ;; `use-package' bind! does not expand into all built-in forms.  That being
 ;; said, this file is designed to be able to be compiled.
 ;;
+;; I took effort to allow bind to accept arbitrary forms that it would then eval
+;; to produce its argument.  So for example you could use (concat "d" "e") as a
+;; key and it would work.  I did not consider though that these forms actually
+;; evaluate one time per binding instead of just one time in general which is
+;; probably not good.  Fixing this is actually not immediately obvious because
+;; the forms are not necessarily evaluated at the same time.  In fact it is
+;; possible for every form to be evaluated at a different time.  I would need to
+;; make sure that the arguments from evaluating one form.
 ;;
+;; You need to make sure may conditions are met before binding keys in Emacs.
+;; For one thing, if the keymap you specify does not exist you will get a void
+;; symbol error.  For example, I need to make sure org mode is loaded before I
+;; use (define-key org-mode-map "d" #'foo).  This is only augmented by using
+;; evil-mode: if you use `evil-define-key*' before evil is loaded you will get a
+;; void function error.  Instead, you need to do (eval-after-load 'evil
+;; (evil-define-key* ...)).
+;; Having to consideras well as is possible but tedious and resulting in verbose
+;; forms.
 ;;
 ;;; Code:
 (require 'seq)
@@ -54,7 +71,7 @@ Call the first step function with METADATA and the remaining step functions.  If
 STEPS is nil, do nothing and return nil."
   (and steps (funcall (car steps) metadata (cdr steps))))
 
-;; One of my biggest problems when writing this feature is
+;; One of my biggest problems when writing this feature was
 ;; propogating variables across nested lambdas.  After thinking about it for a
 ;; while there were two was I could think of doing it.  The first was passing in
 ;; the arguments to a lambda.  The second is injecting the bindings into the
@@ -64,7 +81,7 @@ STEPS is nil, do nothing and return nil."
   "Return a form that evaluates into a lambda with ARGS and BODY.
 In the lambda SYMBOLS are let-bound to their values around BODY."
   (aif (ensure-list symbols)
-      `(list 'lambda ,args (append (list 'let (cl-mapcar #'list ',it (list ,@it))) ',body))
+      `(list 'lambda ',args (append (list 'let (cl-mapcar #'list ',it (list ,@it))) ',body))
     `(lambda ,args ,@body)))
 
 (defun! oo--bind-lambda (args metadata steps)
@@ -89,25 +106,22 @@ If METADATA has no keymap return."
   (with-map-keywords! metadata
     (cond ((not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
            (oo--bind-generate-body metadata steps))
-          ((prog1 nil
-             (setf (map-elt metadata :bind-fn) #'evil-define-key*)
-             (cl-pushnew :evil-state (map-elt metadata :bind-args))))
+          ((prog1 nil))
           (!!evil-state
-           (set! evil-state (gensym "evil-state"))
-           (setf (map-elt metadata :evil-state) evil-state)
-           (cl-pushnew :evil-state (map-elt metadata :env))
-           `((oo-call-after-evil-state ,!evil-state ,(oo--bind-lambda (list evil-state) metadata steps))))
+           (setf (map-elt metadata :bind-fn) #'evil-define-key*)
+           (cl-pushnew :evil-state (map-elt metadata :bind-args))
+           `((oo-call-after-load 'evil (lambda () ,@(oo--bind-generate-body metadata steps)))))
           (!evil-symbol
-           (set! evil-state (gensym "evil-state"))
            (dolist (char (append (symbol-name !evil-symbol) nil))
              (if (char-equal char ?g)
-                 (prepending! forms (oo--bind-generate-body metadata steps))
+                 (appending! forms (oo--bind-generate-body metadata steps))
                (let ((metadata metadata))
                  (set! evil-state (gensym "evil-state"))
-                 (setf (map-elt metadata :evil-state) evil-state)
-                 (cl-pushnew :evil-state (map-elt metadata :env))
+                 (setq metadata (map-insert metadata :bind-fn #'evil-define-key*))
+                 (cl-pushnew :evil-state (map-elt metadata :bind-args))
+                 (setq metadata (map-insert metadata :evil-state evil-state))
                  (set! lambda (oo--bind-lambda (list evil-state) metadata steps))
-                 (set! form `(oo-eval-after-evil-state ,char ,lambda))
+                 (set! form `(oo-call-after-evil-state ,char ,lambda))
                  (collecting! forms form))))
            forms))))
 
@@ -135,9 +149,9 @@ If METADATA has no keymap return."
     (set! value (map-elt metadata key))
     (set! symbol (gensym (seq-rest (symbol-name key))))
     (collecting! let-binds (list symbol value))
-    (set! new-metadata metadata)
-    (setf (map-elt new-metadata key) symbol))
-  `((let ,let-binds ,@(oo--bind-generate-body new-metadata steps))))
+    ;; Using `setf' instead of the `setq' and `map-insert' idiom here fails.
+    (setq metadata (map-insert metadata key symbol)))
+  `((let ,let-binds ,@(oo--bind-generate-body metadata steps))))
 
 (defun oo--bind-step-kbd (metadata steps)
   "Apply kbd to binding if possible."

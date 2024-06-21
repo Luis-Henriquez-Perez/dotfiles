@@ -43,6 +43,16 @@
 (defun lvalue (sym body)
   (car (map-elt (let-binds body) sym)))
 ;;;; main
+;; (ert-deftest oo--parse-progn-bang ()
+;;   (should-not (oo--parse-progn-bang nil `(dotimes (n 3)
+;;                                            (and (= 1 n) (continue!))
+;;                                            (collecting! nums n)))))
+
+(ert-deftest oo--generate-progn-body ()
+  (should (equal '(catch 'return! (let nil))  (oo--generate-progn-body nil)))
+  ;; (should-not (oo--generate-progn-body '((+ 1 1))))
+  )
+
 (ert-deftest progn!---ignores-quoted-forms ()
   (let ((quoted-form '('(foo))))
     (should (equal nil (let-binds quoted-form)))

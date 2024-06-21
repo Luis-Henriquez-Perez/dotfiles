@@ -27,6 +27,19 @@
 ;;; Code:
 (require 'oo-base-macros-lef-bang)
 
+;; (defun oo--lef-)
+
+;; (defun oo--lef-if ()
+;;   `(if (fboundp ',sym)
+;;        (oo--lef-anaphoric)
+;;      (oo--lef-anaphoric)))
+
+;; (mapcan #'oo--lef-bind bindings)
+;; (defun oo--lef-fn ())
+
+;; (defun oo--contains-this-fn-p ()
+;;   (member 'this-fn (flatten-list body)))
+
 ;; (ert-deftest "can use a special syntax"
 ;;   (should (lef! ((#'foo #'always)) (foo)) :to-be t))
 (ert-deftest lef!---can-bind-a-function-symbol-to-a-different-function ()
