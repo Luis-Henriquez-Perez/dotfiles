@@ -46,8 +46,11 @@
 
 (grugru-define-global 'symbol '("inner" "outer"))
 
+(grugru-define-global 'symbol '("is" "was"))
 ;;;; emacs-lisp
 (grugru-define-on-major-mode '(emacs-lisp) 'word '("let" "let*" "let!" "-let"))
+
+(grugru-define-on-major-mode '(emacs-lisp) 'symbol '(should should-not))
 
 (grugru-define-on-major-mode '(emacs-lisp) 'word '(abbrev-table-put abbrev-table-get))
 
