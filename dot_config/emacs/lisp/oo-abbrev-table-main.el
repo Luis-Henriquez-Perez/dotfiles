@@ -28,7 +28,13 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("wre" "were")
+  '(("inclinaition" "inclination")
+    ("tring" "trying")
+    ("wanna" "want to")
+    ("effor" "effort")
+    ("undef" "undefined")
+    ("sym" "symbol")
+    ("wre" "were")
     ("ws" "was")
     ("probs" "problems")
     ("syms" "symbols")
@@ -190,7 +196,7 @@
     ("idid" "I did")
     ("tres" "interesting")
     ("ml" "modeline")
-    ("def" "definitely")
+    ;; ("def" "definitely")
     ("docs" "documentation")
     ("doc" "documentation")
     ("nfo" "information")
