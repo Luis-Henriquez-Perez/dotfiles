@@ -86,7 +86,6 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
 
 (defun oo--mf-replace (match-form value)
   "Return list of bindings."
-  (list  value)
   (let (other-bindings)
     (cl-flet ((replace (lambda (mf)
                          (cl-with-gensyms (mf-value)
