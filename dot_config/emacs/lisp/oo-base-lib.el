@@ -196,140 +196,56 @@ If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
   (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
     (oo--call-after-load expr it)))
-;;;; customize variables
-;;;;; oo-unbound-symbol-alist
-(defvar oo-unbound-symbol-alist nil
-  "An alist mapping an unbound symbol to an expression.
-This alist is checked by the hook `after-load-functions&set-bound-symbols' for
-any symbols that are now bound.")
-;;;;; after-load-functions
-;; I'll note that I push all the forms into a list and evaluate them all in the
-;; body of one lambda as opposed to evaluating one lambda per form.  This is
-;; important because lambda calls have an overhead that adds up.  It is far less
-;; costly to invoke one lambda over N lambdas.
-(defhook! after-load-functions&set-bound-symbols (&rest _)
-  "Set symbols that have been bound to the result of their corresponding expr.
-Check each symbol in `oo-unbound-symbol-alist', removing those that have already been
-bound and setting them to the result of evaluating expr."
-  (for! ((&as elt (symbol . expr)) oo-unbound-symbol-alist)
-    (cond ((boundp symbol)
-           (pushing! exprs `(opt! ,symbol ,expr)))
+;;;; oo-after-load-functions-map
+(defvar oo-after-load-functions-map nil
+  "An alist whose elements are (ITEM . FUNCTIONS).
+ITEM is either a symbol or a character (an integer).  FUNCTIONS is a list of
+functions.")
+
+;; So remember with `oo-after-load-functions-map' that we push the elements in so if we
+;; loop through it normally the first item processed is actually the last item
+;; we entered into the list. I personally would expect the items to be processed
+;; in the order I added them.
+(defun! oo-call-after-load-functions (&rest _)
+  "Call functions in `oo-after-load-functions-map' that need to be called.
+Also, update `oo-after-load-functions-map' to reflect functions called."
+  (--each-r oo-after-load-functions-map
+    (set! (item . fns) it)
+    (cond ((and (symbolp item) (boundp item))
+           (-each-r fns #'funcall))
+          ((and (integerp item)
+                ;; TODO: prevent it from calling featurep evil multiple times.
+                (featurep 'evil)
+                (set! state (oo--evil-char-to-state item)))
+           (-each-r fns (-rpartial #'funcall state)))
           (t
-           (pushing! updated elt))))
-  (setq oo-unbound-symbol-alist (nreverse updated))
-  (when exprs (funcall `(lambda () ,@exprs))))
-;;;; oo-call-after-bound
-;; I want the ability to be able to bind keys in keymaps without having to always
-;; consider whether the keymap is bound yet or not; and without always having to
-;; write non-declarative code such as ~(after! evil (evil-define-key* ...))~.  The
-;; function =oo-bind= to be a "smart" binding function that binds keys if and only if
-;; the keymap is bound.  Otherwise, it should defer the bindings until said keymap
-;; exists.  The contents of this headline provides the framework for =oo-bind= to let
-;; me do this.
-(defvar oo-after-keymap-alist nil
-  "An alist whose elements are of the form (KEYMAP . ((FN . ARGS) ...)).
-Each key is a unique keymap symbol.  Every corresponding value is an alist whose
-elements are of the form (FN . ARGS).")
+           (pushing! updated it))))
+  (setq oo-after-load-functions-map updated))
 
-;; This function is similar to [[file:snapshots/_helpful_function__oo-call-after-load_.png][oo-call-after-load]].  It is designed to be used
-;; as the interface for adding stuff into [[id:20231018T175135.214308][oo-after-keymap-alist]].
-(defun oo-call-after-bound (keymap fn &rest args)
-  "Call FN with ARGS after KEYMAP is bound.
-If KEYMAP is already bound call FN with ARGS immediately.
-KEYMAP is a keymap symbol."
-  (cond ((or (not (symbolp keymap)) (boundp keymap))
-         (apply fn args))
-        (t
-         (pushing! (alist-get keymap oo-after-keymap-alist) (cons fn args)))))
+(defun oo-call-after-bound (symbol fn)
+  "Call FN after SYMBOL is bound.
+Call FN immediately if SYMBOL is already bound.  Otherwise, register
+SYMBOL and FN in `oo-after-load-functions-map'."
+  (if (boundp symbol)
+      (funcall fn)
+    (push fn (map-elt oo-after-load-functions-map symbol))))
 
-;; To implement this behavior I add hook function to [[file:snapshots/_helpful_variable__after-load-functions_.png][after-load-functions]], an
-;; abnormally named hook that is run after any file is loaded.  The hook function
-;; evaluates the forms of any item of [[file:snapshots/_helpful_variable__oo-after-keymap-alist_.png][oo-after-keymap-alist]] whose keymap is bound.
+(defun oo--evil-char-to-state (char)
+  "Return state whose first letter is CHAR."
+  (cl-find-if (lambda (state) (= char (string-to-char (symbol-name state))))
+              (mapcar #'car evil-state-properties)))
 
-;; An alternative to creating an alist would be to just add
-;; individual hooks to =after-load-functions= that look something like ~(when (boundp
-;; keymap) (do-binding))~.  However, then =N= function calls would happen during
-;; after-load-functions and in a wasteful way at that because the same keymap would
-;; be checked =N= times where =N= is the number of bindings for said map.  In my
-;; variant only one function call happens--the call to
-;; =oo-call-after-keymap-functions=--and each keymap symbol is checked only once.
-(defun! oo-call-after-keymap-functions (&rest _)
-  "Call the functions whose keymap has been loaded.
-Evaluate and remove from all elements of `oo-after-keymap-alist'."
-  (for! ((&as item (keymap . alist)) oo-after-keymap-alist)
-    (cond ((boundp keymap)
-           (for! ((fn . args) (reverse alist)) (apply fn args)))
-          (t
-           (pushing! remaining item))))
-  (setq oo-after-keymap-alist (nreverse remaining)))
-
-(defhook! emacs-startup-hook&setup-call-after-keymap-fns ()
-  (oo-call-after-keymap-functions)
-  (oo-add-hook 'after-load-functions #'oo-call-after-keymap-functions))
-;;;; oo-call-after-evil-state
-(defun! oo-evil-state (evil-keyword)
-  "Return the state that corresponds to the state keyword."
-  (flet! letter (state) (seq-first (symbol-name state)))
-  (set! target (seq-first (seq-rest (symbol-name evil-keyword))))
-  (--first (equal (letter it) target) (map-keys evil-state-properties)))
-
-;; An evil state is defined whenever [[file:snapshots/_helpful_function__evil-put-property_.png][evil-put-property]] is invoked with
-;; =evil-state-properties= as its first argument.  I know this from the definition of
-;; [[file:snapshots/_helpful_macro__evil-define-state_.png][evil-define-state]].  Therefore, to create the proper hook I add an after advice
-;; to =evil-put-property= that runs =oo-evil-define-state-hook= whenever its first
-;; argument is =evil-state-properties=.  And also from the definition of
-;; =evil-define-state= you can see the second argument of =evil-put-property= is the
-;; evil state.
-(defvar oo-after-define-evil-state-hook nil
-  "Hook run after an evil state is defined.
-Each function in this hook should accept one argument, the state being
-defined.")
-
-(defun! oo-run-after-define-evil-state-hook (var state &rest _)
-  "Detect when an evil state is defined."
-  (when (equal var 'evil-state-properties)
-    (run-hook-with-args 'oo-after-define-evil-state-hook state)))
-
-(oo-add-advice #'evil-put-property :after #'oo-run-after-define-evil-state-hook)
-
-;; This is the same design model as the keymap.
-(defvar oo-undefined-state-functions nil
-  "An alist of (STATE . ALIST) where state is an evil state.
-STATE is either an evil state or an evil state keyword.
-ALIST is an alist of (FN . ARGS).")
-
-(defun! oo-call-undefined-state-functions (&rest _)
-  "Call the functions."
-  (for! ((&as item (state . alist)) oo-undefined-state-functions)
-    ;; If the state is a keyword and the letter matches the first letter of an
-    ;; existing evil state, then eval the bindings.
-    (if (or (and (keywordp state) (oo-evil-state state))
-            (assoc state evil-state-properties))
-        (mapc #'apply alist)
-      (pushing! updated item)))
-  (setq oo-undefined-state-functions (nreverse updated)))
-
-(add-hook 'evil-mode-hook #'oo-call-undefined-state-functions)
-(add-hook 'oo-after-define-evil-state-hook #'oo-call-undefined-state-functions)
-
-;; This function is to help me deal with evil states that are not yet defined, but
-;; I want to register a binding for them.
-
-;; The way I wrote this function is noteworthy.  I can't just wrap it with an
-;; =after!= block as I did initially because it uses the variables =states=, =function=
-;; and =args=.
-(defun! oo-call-after-evil-state (states function &rest args)
-  "Call FUNCTION with ARGS after evil state STATE is defined.
-STATE is either a state, list of states or an evil state keyword."
-  (flet! load-state-maybe (function args state)
-    (cond ((and (keywordp state) (assoc (oo-evil-state state) evil-state-properties))
-           (apply function args))
-          ((assoc state evil-state-properties)
-           (apply function args))
-          ((push (cons function args)
-                 (alist-get state oo-undefined-state-functions)))))
-  (set! fn (-partial #'load-state-maybe function args))
-  (oo-call-after-load 'evil #'mapc fn (-list states)))
+;; These functions and variables have to be outside.  If you provide a symbol
+;; for a nonexistent state evil will actually create a keymap for it.  When you
+;; do define the state that corresponds to the symbol then it will end up
+;; working out and that keymap that was initially created will be used.  This
+;; means I actually do not need this for evil state symbols.  The reason then
+;; that I need this is for the state characters I use to abbrev evil states.
+(defun oo-call-after-evil-state-char (char fn)
+  "Call FN with STATE after evil state is defined."
+  (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
+      (funcall fn it)
+    (push fn (map-elt oo-after-load-functions-map char))))
 ;;; provide
 (provide 'oo-base-lib)
 ;;; oo-base-lib.el ends here

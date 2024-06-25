@@ -118,6 +118,10 @@
   (when (memq this-command '(eval-expression evil-ex))
     (require 'smartparens)
     (smartparens-strict-mode 1)))
+;;;;; after-load-functions
+(defhook! emacs-startup-hook&init-after-load ()
+  (oo-call-after-load-functions)
+  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here

@@ -113,26 +113,18 @@ If there are no more functions, do nothing."
 ;; ;; I need a separate function for this because I need to determine the state on
 ;; ;; the fly once I know it exists.  That is I can't just specify it in
 ;; ;; `oo--bind-state-key' as I would like to because I don't know what it is yet.
-(defun! oo--bind-with-state-key (key metadata)
+(defun! oo--bind-with-state (state metadata)
   "Replace state-key with state."
-  (set! state (oo-evil-state key))
-  (setf (map-elt metadata :state) state)
-  (oo--bind-evil-define-key nil metadata))
+  (oo--bind-evil-define-key nil (map-insert metadata :state state)))
 
 (defun oo--bind-evil-state-keyword (fns metadata)
   (set! state-key (map-elt metadata :state-key))
   (if (not state-key)
       (oo--resolve-binding fns metadata)
-    (set! keys
-          (--> (symbol-name state-key)
-            (seq-rest it)
-            (string-split it "" t)
-            (mapcar #'oo-into-keyword it)))
-    (dolist (key keys)
-      (if (equal key :g)
+    (dolist (char (cdr (append (symbol-name state-key) nil)))
+      (if (= char ?g)
           (oo--resolve-binding fns metadata)
-        (-p-> (oo--bind-with-state-key key metadata)
-              (oo-call-after-evil-state key))))))
+        (oo-call-after-evil-state-char char (-rpartial #'oo--bind-with-state metadata))))))
 
 ;; Part of the reason that =evil= was deferred separately in [[][]] is immediately
 ;; apparent: this function can be written with the assumption that =evil= is already
@@ -153,10 +145,10 @@ If there are no more functions, do nothing."
              (oo--resolve-binding fns metadata))
             ((map-elt metadata :mode)
              (-p-> (oo--do-binding metadata #'evil-define-minor-mode-key :state :mode :key :def)
-                   (oo-call-after-evil-state state)))
+                   (oo-call-after-load 'evil)))
             (t
              (-p-> (oo--do-binding metadata #'evil-define-key* :state :keymap :key :def)
-                   (oo-call-after-evil-state state)))))))
+                   (oo-call-after-load 'evil)))))))
 
 ;; This is the default behavior for binding a key and what I generally will want to
 ;; use if I do not specify a state.

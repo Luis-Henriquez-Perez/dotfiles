@@ -99,7 +99,7 @@ If METADATA has no keymap return."
   (with-map-keywords! metadata
     (if (or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
         (oo--bind-generate-body metadata steps)
-      `((oo-call-after-keymap ',!keymap ,(oo--bind-lambda nil metadata steps))))))
+      `((oo-call-after-bound ',!keymap ,(oo--bind-lambda nil metadata steps))))))
 
 (defun! oo--bind-step-evil (metadata steps)
   "Register keybinding as evil binding."

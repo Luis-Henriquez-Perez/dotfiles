@@ -89,7 +89,8 @@ EXPR is the same as in `oo-call-after-load'.  BODY is enclosed in
 This is like `setq' but it is meant for configuring variables."
   (let ((value-var (gensym "value")))
     `(if (not (boundp ',symbol))
-         (push (cons ',symbol ',value) oo-unbound-symbol-alist)
+         (push '(lambda () (opt! ,symbol ,value))
+               (map-elt oo-after-load-functions-map ',symbol))
        (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
          (aif (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
