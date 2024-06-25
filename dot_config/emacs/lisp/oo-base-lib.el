@@ -197,6 +197,11 @@ EXPRS in (CDR CONDITION) is met."
   (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
     (oo--call-after-load expr it)))
 ;;;; oo-after-load-functions-alist
+;; This alist is meant to call certain functions whenever a file is loaded.  It
+;; is meant for things could happen at any time.  Right now I use it for evil
+;; state characters and knowing when a symbol is defined--specifically keymaps
+;; which I use for keybindings and variable symbols used in `opt!'.
+
 (defvar oo-after-load-functions-alist nil
   "An alist whose elements are (ITEM . FUNCTIONS).
 ITEM is either a symbol or a character (an integer).  FUNCTIONS is a list of
