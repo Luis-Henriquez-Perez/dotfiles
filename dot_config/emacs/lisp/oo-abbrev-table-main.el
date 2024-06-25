@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("inclinaition" "inclination")
+  '(("stup" "setup")
+    ("inclinaition" "inclination")
     ("tring" "trying")
     ("wanna" "want to")
     ("effor" "effort")
