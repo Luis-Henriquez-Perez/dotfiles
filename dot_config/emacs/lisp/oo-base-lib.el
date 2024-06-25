@@ -242,7 +242,7 @@ SYMBOL and FN in `oo-after-load-functions-alist'."
 ;; means I actually do not need this for evil state symbols.  The reason then
 ;; that I need this is for the state characters I use to abbrev evil states.
 (defun oo-call-after-evil-state-char (char fn)
-  "Call FN with STATE after evil state is defined."
+  "Call FN with state after state starting with CHAR is defined."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (alist-get char oo-after-load-functions-alist))))
