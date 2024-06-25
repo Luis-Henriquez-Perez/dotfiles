@@ -112,6 +112,12 @@
    '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
+;;;;; enable smartparens in the minibuffer
+(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here
