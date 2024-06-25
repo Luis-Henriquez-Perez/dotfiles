@@ -119,7 +119,10 @@
     (require 'smartparens)
     (smartparens-strict-mode 1)))
 ;;;;; after-load-functions
-(defhook! emacs-startup-hook&init-after-load ()
+(defhook! emacs-startup-hook&init-after-load-functions ()
+  "Call `oo-call-after-load-functions' once.
+Also add it as a hook to `after-load-functions' so that it is invoked whenever a
+file is loaded."
   (oo-call-after-load-functions)
   (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
 ;;; provide
