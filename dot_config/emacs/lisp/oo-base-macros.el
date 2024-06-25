@@ -90,7 +90,7 @@ This is like `setq' but it is meant for configuring variables."
   (let ((value-var (gensym "value")))
     `(if (not (boundp ',symbol))
          (push '(lambda () (opt! ,symbol ,value))
-               (map-elt oo-after-load-functions-map ',symbol))
+               (alist-get ',symbol oo-after-load-functions-alist))
        (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
          (aif (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)

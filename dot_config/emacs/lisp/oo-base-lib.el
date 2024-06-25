@@ -196,20 +196,20 @@ If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
   (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
     (oo--call-after-load expr it)))
-;;;; oo-after-load-functions-map
-(defvar oo-after-load-functions-map nil
+;;;; oo-after-load-functions-alist
+(defvar oo-after-load-functions-alist nil
   "An alist whose elements are (ITEM . FUNCTIONS).
 ITEM is either a symbol or a character (an integer).  FUNCTIONS is a list of
 functions.")
 
-;; So remember with `oo-after-load-functions-map' that we push the elements in so if we
+;; So remember with `oo-after-load-functions-alist' that we push the elements in so if we
 ;; loop through it normally the first item processed is actually the last item
 ;; we entered into the list. I personally would expect the items to be processed
 ;; in the order I added them.
 (defun! oo-call-after-load-functions (&rest _)
-  "Call functions in `oo-after-load-functions-map' that need to be called.
-Also, update `oo-after-load-functions-map' to reflect functions called."
-  (--each-r oo-after-load-functions-map
+  "Call functions in `oo-after-load-functions-alist' that need to be called.
+Also, update `oo-after-load-functions-alist' to reflect functions called."
+  (--each-r oo-after-load-functions-alist
     (set! (item . fns) it)
     (cond ((and (symbolp item) (boundp item))
            (-each-r fns #'funcall))
@@ -220,15 +220,15 @@ Also, update `oo-after-load-functions-map' to reflect functions called."
            (-each-r fns (-rpartial #'funcall state)))
           (t
            (pushing! updated it))))
-  (setq oo-after-load-functions-map updated))
+  (setq oo-after-load-functions-alist updated))
 
 (defun oo-call-after-bound (symbol fn)
   "Call FN after SYMBOL is bound.
 Call FN immediately if SYMBOL is already bound.  Otherwise, register
-SYMBOL and FN in `oo-after-load-functions-map'."
+SYMBOL and FN in `oo-after-load-functions-alist'."
   (if (boundp symbol)
       (funcall fn)
-    (push fn (map-elt oo-after-load-functions-map symbol))))
+    (push fn (alist-get symbol oo-after-load-functions-alist))))
 
 (defun oo--evil-char-to-state (char)
   "Return state whose first letter is CHAR."
@@ -245,7 +245,7 @@ SYMBOL and FN in `oo-after-load-functions-map'."
   "Call FN with STATE after evil state is defined."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
-    (push fn (map-elt oo-after-load-functions-map char))))
+    (push fn (alist-get char oo-after-load-functions-alist))))
 ;;; provide
 (provide 'oo-base-lib)
 ;;; oo-base-lib.el ends here
