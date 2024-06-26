@@ -32,20 +32,6 @@
 (require 'oo-init-recentf)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
-;;;; initial buffer choice
-(defvar oo-initial-buffer-choice-hook nil
-  "Hook run to choose initial buffer.
-Each hook should return either a buffer to be displayed or a boolean.
-For what buffer is displayed in the case of a boolean see
-`initial-buffer-choice'.")
-
-(defun oo-run-initial-buffer-choice-hook ()
-  "Run `oo-initial-buffer-choice-hook'."
-  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
-              (get-buffer-create "*scratch*"))
-    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
-
-(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
 ;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new
 ;; one.  For this reason, I make sure to disable any enabled themes before applying

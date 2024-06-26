@@ -228,6 +228,20 @@ SYMBOL and FN in `oo-after-load-functions-alist'."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (alist-get char oo-after-load-functions-alist))))
+;;;; initial buffer choice
+(defvar oo-initial-buffer-choice-hook nil
+  "Hook run to choose initial buffer.
+Each hook should return either a buffer to be displayed or a boolean.
+For what buffer is displayed in the case of a boolean see
+`initial-buffer-choice'.")
+
+(defun oo-run-initial-buffer-choice-hook ()
+  "Run `oo-initial-buffer-choice-hook'."
+  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
+              (get-buffer-create "*scratch*"))
+    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
+
+(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
 ;;; provide
 (provide 'oo-base-lib)
 ;;; oo-base-lib.el ends here
