@@ -25,6 +25,7 @@
 ;; This is everything that needs to be evaluated immediately on startup.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'oo-base)
 (require 'oo-init-no-littering)
 (require 'oo-init-abbrev)
