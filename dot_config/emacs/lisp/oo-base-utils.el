@@ -1,4 +1,4 @@
-;;; oo-base-utils.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-utils.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -27,7 +27,41 @@
 ;;; Code:
 ;;;; requirements
 (require 'cl-lib)
-;;;; helpers
+;;;; converting types
+;; These functions try to "do what I mean" when converting from one type to another.
+(defun oo-into-string (&rest args)
+  "Return ARGS as a string."
+  (declare (pure t) (side-effect-free t))
+  (with-output-to-string (mapc #'princ args)))
+(defalias 'oo-to-string 'oo-into-string)
+
+(defun oo-into-symbol (&rest args)
+  "Return an interned symbol from ARGS."
+  (declare (pure t) (side-effect-free t))
+  (intern (apply #'oo-into-string args)))
+(defalias 'oo-to-symbol 'oo-into-symbol)
+
+(defun oo-into-keyword (&rest args)
+  "Return ARGS as a keyword."
+  (declare (pure t) (side-effect-free t))
+  (apply #'oo-into-symbol ":" args))
+(defalias 'oo-to-keyword 'oo-into-keyword)
+;;;; quoting
+(defun oo-quoted-p (form)
+  "Return non-nil if FORM is quoted."
+  (declare (pure t) (side-effect-free t))
+  (equal (car-safe form) 'quote))
+
+(defun oo-sharpquoted-p (form)
+  "Return non-nil if form is sharpquoted."
+  (declare (pure t) (side-effect-free t))
+  (equal (car-safe form) 'function))
+
+(defun oo-ensure-quote (form)
+  "Return quoted form unquoted, otherwise return form."
+  (declare (pure t) (side-effect-free t))
+  (if (oo-quoted-p form) form (macroexp-quote form)))
+;;;; oo-wrap-forms
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
 FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
@@ -40,43 +74,6 @@ ensure the result is syntactically valid."
   (dolist (wrapper wrappers)
     (setq forms (append wrapper (list forms))))
   forms)
-
-(defun oo-into-string (&rest args)
-  "Return ARGS as a string."
-  (declare (pure t) (side-effect-free t))
-  (with-output-to-string (mapc #'princ args)))
-
-(defun oo-into-symbol (&rest args)
-  "Return an interned symbol from ARGS."
-  (declare (pure t) (side-effect-free t))
-  (intern (apply #'oo-into-string args)))
-
-(defun oo-into-keyword (&rest args)
-  "Return ARGS as a keyword."
-  (declare (pure t) (side-effect-free t))
-  (apply #'oo-into-symbol ":" args))
-
-;; This function is extremely useful for testing things.
-;; (defun oo-shuffle (list)
-;;   "Return list with its elements shuffled."
-;;   ;; I got this from online.  Me, I would not use `cl-loop'.
-;;   ;; https://stackoverflow.com/questions/49490551/how-to-shuffle-list-in-lisp
-;;   ;; TODO: revise loop so it can do this from...downto stuff.
-;;   (cl-loop for i from (length list) downto 2
-;;            do (cl-rotatef (elt list (random i))
-;;                           (elt list (1- i))))
-;;   list)
-(defun oo-shuffle (list)
-  "Return a shuffled copy of LIST using the Fisher-Yates shuffle algorithm."
-  (let ((copy (copy-sequence list))
-        (n (length list)))
-    (while (> n 1)
-      (setq n (1- n))
-      (let ((swap (random n))
-            (temp (elt copy n)))
-        (setf (elt copy n) (elt copy swap))
-        (setf (elt copy swap) temp)))
-    copy))
 ;;;; oo-condition-case-fn
 ;; One thing is the fact that because it is a function it can be composed and
 ;; chained.  Another is I can swap in and out the =condition-case= body and handlers
@@ -124,6 +121,59 @@ arguments FN will be called with."
   `(if (not ,cond) ,then ,@else))
 
 (defalias 'nif! 'if-not!)
+;;;; oo-once-only-fn
+(defun oo-only-once-fn (fn)
+  "Return a function behaves the same as FN the first time it is called.
+After the first call, it does nothing and returns nil.  Note that this function
+must be evaluated with `lexical-binding' enabled."
+  (let ((first-call-p t))
+    (lambda (&rest args)
+      (when first-call-p
+        (setq first-call-p nil)
+        (apply fn args)))))
+;;;; oo-funcall-silently
+(defun oo-funcall-silently (fn &rest args)
+  "Call FN with ARGS without producing any output."
+  (shut-up (apply fn arguments)))
+;; With lexical binding you can actually store the values of let-bound variables
+;; in a function by creating a closure.  But it might be useful to.
+;;;; alternate bindings
+;; Inspired by [[https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
+;; bindings for commands giving me a flexible and robust experience with key
+;; bindings.  By "condition bindings" I mean key bindings that can invoke a
+;; particular command based on certain conditions.  For example, =SPC h f=  might
+;; invoke [[file:snapshots/_helpful_command__helpful_callable_.png][helpful-callable]] if the package helpful is present (see [[][]]), otherwise it
+;; would fallback to [[file:snapshots/_helpful_command__describe-function_.png][describe-function]] instead.
+
+;; As opposed to [[file:snapshots/_helpful_special_form__cond_.png][cond]], for example, which requires multiple conditions I designed
+;; this macro to add one condition at a time.  I do not want to be tied to naming
+;; all the conditions at once in general I write my configuration in such a way
+;; that I can augment it incrementally as opposed to building one big block of
+;; code.
+(defvar oo-alternate-commands (make-hash-table)
+  "A hash-table mapping command symbols to a list of command symbols.")
+
+(defun oo-alternate-command-choose-fn (command)
+  "Return command that should be called instead of COMMAND."
+  (or (oo-first-success #'funcall (gethash command oo-alternate-commands))
+      command))
+
+;; (defun! oo-alt-bind (map orig alt &optional condition)
+;;   "Remap keys bound to ORIG so ALT is called if CONDITION returns non-nil.
+;; ORIG and ALT are command symbols.  CONDITION is a function that returns non-nil
+;; when ALT should be invoked instead of ORIG."
+;;   (flet! oo-when-fn (condition fn)
+;;     `(lambda (&rest _) (when (funcall #',condition) #',alt)))
+;;   (push (oo-when-fn (or condition #'always) alt) (gethash orig oo-alternate-commands))
+;;   (define-key map `[remap ,orig] `(menu-item "" ,orig :filter oo-alternate-command-choose-fn)))
+
+;; (defun oo-alt-bind (orig def)
+;;   (let ((,orig ,key)
+;;         (,alt ,def))
+;;     (setq ,key (vconcat (list 'remap ,key)))
+;;     (setq ,def (list 'menu-item "" ,alt :filter #'oo-alternate-command-choose-fn))
+;;     (push ,(oo--lambda-form alt '(&rest ) `(when ,condition ,alt)) (gethash ,orig oo-alternate-commands))
+;;     ,@(oo--bind-generate-body metadata steps)))
 ;;; provide
 (provide 'oo-base-utils)
 ;;; oo-base-utils.el ends here

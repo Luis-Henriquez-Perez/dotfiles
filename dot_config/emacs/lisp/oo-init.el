@@ -122,7 +122,7 @@ For what buffer is displayed in the case of a boolean see
 ;;; window divider
 (opt! window-divider-default-bottom-width 7)
 (opt! window-divider-default-right-width 7)
-(opt! window-divider-default-places 'right-only)
+(opt! window-divider-default-places t)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here

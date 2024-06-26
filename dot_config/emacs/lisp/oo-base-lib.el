@@ -33,29 +33,6 @@
 (require 'oo-base-utils)
 (require 'oo-base-requirements)
 (eval-when-compile (require 'oo-base-macros))
-;;;; oo-first-success
-;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
-;; These functions take a predicate and a list and they return the first element of
-;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
-;; predicate and the list, but instead it returns the first non-nil return value of
-;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
-;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
-;; to =t=. The name of this function is inspired by a similar function designed for
-;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
-(defun! oo-first-success (fn list)
-  "Return the first non-nil (fn x) in LIST, else nil."
-  (--each-while list (not (set! success (funcall fn it))))
-  success)
-;;;; oo-once-only-fn
-(defun oo-only-once-fn (fn)
-  "Return a function behaves the same as FN the first time it is called.
-After the first call, it does nothing and returns nil.  Note that this function
-must be evaluated with `lexical-binding' enabled."
-  (let ((first-call-p t))
-    (lambda (&rest args)
-      (when first-call-p
-        (setq first-call-p nil)
-        (apply fn args)))))
 ;;;; logging
 ;; TODO: figure out how to change the log format
 ;; I do not really utilize the logging enough yet because I need to understand
