@@ -218,7 +218,6 @@ If STATES is specified use evil binding.  If KEYMAP is a symbol."
      (apply #'oo--bind :states states :keymap 'global-map :key key :def def metadata))
     (_
      (error "unknown binding syntax"))))
-
 ;;; provide
 (provide 'oo-base-bind)
 ;;; oo-base-bind.el ends here
