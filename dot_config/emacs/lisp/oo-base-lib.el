@@ -30,6 +30,7 @@
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
 ;;; Code:
+;;;; requirements
 (require 'oo-base-utils)
 (require 'oo-base-requirements)
 (eval-when-compile (require 'oo-base-macros))
