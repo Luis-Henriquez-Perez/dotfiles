@@ -137,43 +137,22 @@ must be evaluated with `lexical-binding' enabled."
   (shut-up (apply fn arguments)))
 ;; With lexical binding you can actually store the values of let-bound variables
 ;; in a function by creating a closure.  But it might be useful to.
-;;;; alternate bindings
-;; Inspired by [[https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
-;; bindings for commands giving me a flexible and robust experience with key
-;; bindings.  By "condition bindings" I mean key bindings that can invoke a
-;; particular command based on certain conditions.  For example, =SPC h f=  might
-;; invoke [[file:snapshots/_helpful_command__helpful_callable_.png][helpful-callable]] if the package helpful is present (see [[][]]), otherwise it
-;; would fallback to [[file:snapshots/_helpful_command__describe-function_.png][describe-function]] instead.
-
-;; As opposed to [[file:snapshots/_helpful_special_form__cond_.png][cond]], for example, which requires multiple conditions I designed
-;; this macro to add one condition at a time.  I do not want to be tied to naming
-;; all the conditions at once in general I write my configuration in such a way
-;; that I can augment it incrementally as opposed to building one big block of
-;; code.
-(defvar oo-alternate-commands (make-hash-table)
-  "A hash-table mapping command symbols to a list of command symbols.")
-
-(defun oo-alternate-command-choose-fn (command)
-  "Return command that should be called instead of COMMAND."
-  (or (oo-first-success #'funcall (gethash command oo-alternate-commands))
-      command))
-
-;; (defun! oo-alt-bind (map orig alt &optional condition)
-;;   "Remap keys bound to ORIG so ALT is called if CONDITION returns non-nil.
-;; ORIG and ALT are command symbols.  CONDITION is a function that returns non-nil
-;; when ALT should be invoked instead of ORIG."
-;;   (flet! oo-when-fn (condition fn)
-;;     `(lambda (&rest _) (when (funcall #',condition) #',alt)))
-;;   (push (oo-when-fn (or condition #'always) alt) (gethash orig oo-alternate-commands))
-;;   (define-key map `[remap ,orig] `(menu-item "" ,orig :filter oo-alternate-command-choose-fn)))
-
-;; (defun oo-alt-bind (orig def)
-;;   (let ((,orig ,key)
-;;         (,alt ,def))
-;;     (setq ,key (vconcat (list 'remap ,key)))
-;;     (setq ,def (list 'menu-item "" ,alt :filter #'oo-alternate-command-choose-fn))
-;;     (push ,(oo--lambda-form alt '(&rest ) `(when ,condition ,alt)) (gethash ,orig oo-alternate-commands))
-;;     ,@(oo--bind-generate-body metadata steps)))
+;;;; oo-first-success
+;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
+;; These functions take a predicate and a list and they return the first element of
+;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
+;; predicate and the list, but instead it returns the first non-nil return value of
+;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
+;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
+;; to =t=. The name of this function is inspired by a similar function designed for
+;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
+(defun oo-first-success (fn list)
+  "Return the first non-nil result of applying FN to an element in LIST."
+  (declare (pure t) (side-effect-free t))
+  (let (success)
+    ;; (while (not ))
+    (--each-while list (not (setq success (funcall fn it))))
+    success))
 ;;; provide
 (provide 'oo-base-utils)
 ;;; oo-base-utils.el ends here
