@@ -1,4 +1,4 @@
-;;; oo-base-macros-bind-bang.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-bind-bang.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -52,15 +52,36 @@
 ;; Having to consideras well as is possible but tedious and resulting in verbose
 ;; forms.
 ;;
+;; With this macro I hope to shorten and homogenize the syntax for keybindings
+;; and to automate boilerplate used in tandem with keybindings.
+;;
+;; I do not know.  I was trying to abstract the actual binding of the key with
+;; keys `:bind-fn' and `:bind-args' but now I do not think it is right.  I
+;; should try to keep the abstraction as simple as possible.  Even as I write
+;; this I look at it with disgust and I want to do it differently but I am
+;; trying to resist that urge because I know.  Still, I do not feel like my
+;; abstraction was the best.  I think that sometimes you have to separate
+;; idealism and practicality.  Right now my idealistic inclination is to change
+;; the abstraction or do something differently but the problem is my code
+;; as bad as it is already works for the most part and changing the abstraction
+;; would almost certainly compromise it is correctness.  At this point in time
+;; rather, I need to be in just get it done mode where I do not focus on the
+;; code making sense in terms of the overarching abstraction but just on getting
+;; it to work.
+;;
 ;;; Code:
 (require 'seq)
-(require 'oo-base-macros)
-(require 'oo-base-lib)
+(require 'oo-base-utils)
+(require 'oo-base-macros-with-map-bang)
+(require 'oo-base-macros-definers)
 
-(defvar oo--bind-steps '(oo--bind-step-evil
+(defvar oo--bind-steps '(oo--bind-step-localleader
+                         oo--bind-step-evil
                          oo--bind-step-defer-keymap
                          oo--bind-step-which-key
                          oo--bind-step-let-bind
+                         oo--bind-step-alt
+                         oo--bind-step-prefix
                          oo--bind-step-kbd
                          oo--bind-step-bind)
   "List of functions to be called in order to generate the main body.")
@@ -104,26 +125,50 @@ If METADATA has no keymap return."
 (defun! oo--bind-step-evil (metadata steps)
   "Register keybinding as evil binding."
   (with-map-keywords! metadata
-    (cond ((not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
-           (oo--bind-generate-body metadata steps))
-          ((prog1 nil))
-          (!!evil-state
-           (setf (map-elt metadata :bind-fn) #'evil-define-key*)
-           (cl-pushnew :evil-state (map-elt metadata :bind-args))
-           `((oo-call-after-load 'evil (lambda () ,@(oo--bind-generate-body metadata steps)))))
-          (!evil-symbol
-           (dolist (char (append (symbol-name !evil-symbol) nil))
-             (if (char-equal char ?g)
-                 (appending! forms (oo--bind-generate-body metadata steps))
-               (let ((metadata metadata))
-                 (set! evil-state (gensym "evil-state"))
-                 (setq metadata (map-insert metadata :bind-fn #'evil-define-key*))
-                 (cl-pushnew :evil-state (map-elt metadata :bind-args))
+    (if (not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
+        (oo--bind-generate-body metadata steps)
+      (prepending! steps
+                   '(oo--bind-step-evil-state
+                     oo--bind-step-evil-symbol))
+      (oo--bind-generate-body metadata steps))))
+
+(defun! oo--bind-step-evil-state (metadata steps)
+  (set! state (map-elt metadata :evil-state))
+  (if (or (not state) (equal 'global state))
+      (oo--bind-generate-body metadata steps)
+    (pushing! steps #'oo--bind-step-evil-signature)
+    (setf (map-elt metadata :evil-state) (oo-ensure-quote state))
+    `((oo-call-after-load 'evil (lambda () ,@(oo--bind-generate-body metadata steps))))))
+
+(defun! oo--bind-step-evil-symbol (metadata steps)
+  (set! evil-symbol (map-elt metadata :evil-symbol))
+  (nif! evil-symbol
+      (oo--bind-generate-body metadata steps)
+    (dolist (char (append (symbol-name evil-symbol) nil))
+      (setf (map-elt metadata :evil-char) char)
+      (appending! forms (oo--bind-step-evil-char metadata steps)))
+    forms))
+
+(defun! oo--bind-step-evil-char (metadata steps)
+  (set! char (map-elt metadata :evil-char))
+  (if (or (not char) (= char ?g))
+      (oo--bind-generate-body metadata steps)
+    (pushing! steps #'oo--bind-step-evil-signature)
+    (set! evil-state (gensym "state"))
                  (setq metadata (map-insert metadata :evil-state evil-state))
                  (set! lambda (oo--bind-lambda (list evil-state) metadata steps))
-                 (set! form `(oo-call-after-evil-state ,char ,lambda))
-                 (collecting! forms form))))
-           forms))))
+    `((oo-call-after-evil-state-char ,char ,lambda))))
+
+(defun! oo--bind-step-evil-signature (metadata steps)
+  (set! mode (map-elt metadata :mode))
+  (set! state (map-elt metadata :evil-state))
+  (cond (mode
+         (setq metadata (map-insert metadata :bind-fn #'evil-define-minor-mode-key))
+         (setq metadata (map-insert metadata :bind-args '(:evil-state :mode :key :def))))
+        (state
+         (setq metadata (map-insert metadata :bind-fn #'evil-define-key*))
+         (setq metadata (map-insert metadata :bind-args '(:evil-state :keymap :key :def)))))
+  (oo--bind-generate-body metadata steps))
 
 ;; The function `which-key-add-keymap-based-replacements' already applies kbd to
 ;; the binding passed in.  This makes it tricky for me to use kbd because I need
@@ -133,11 +178,12 @@ If METADATA has no keymap return."
     (set! which-key (or !which-key !wk !desc))
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     (set! fn `(lambda (keymap key def)
-                (oo-call-after-load 'which-key ,wk-fn keymap key ,which-key)
+                (oo-call-after-load 'which-key #',wk-fn keymap key ,which-key)
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
     (nif! which-key
         (oo--bind-generate-body metadata steps)
+      (setq steps (remove #'oo--bind-step-kbd steps))
       `((lef! ((define-key ,fn))
           ,@(oo--bind-generate-body metadata steps))))))
 
@@ -159,6 +205,47 @@ If METADATA has no keymap return."
     (cons `(setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
           (oo--bind-generate-body metadata steps))))
 
+(defun! oo--bind-step-alt (metadata steps)
+  (nif! (map-elt metadata :alt)
+      (oo--bind-generate-body metadata steps)
+    (set! orig (gensym "original"))
+    (set! alt (gensym "alt"))
+    (set! key (map-elt metadata :key))
+    (set! def (map-elt metadata :def))
+    (set! steps (remove #'oo--bind-step-kbd steps))
+    (set! feature (map-elt metadata :feature))
+    (unless condition
+      (if feature
+          (set! condition `(or (featurep ',feature) (require ',feature nil t)))
+        (set! condition t)))
+    `((let ((,orig ,key)
+            (,alt ,def))
+        (setq ,key (vconcat (list 'remap ,key)))
+        (setq ,def (list 'menu-item "" ,alt :filter #'oo-alternate-command-choose-fn))
+        (push ,(oo--lambda-form alt '(&rest ) `(when ,condition ,alt)) (gethash ,orig oo-alternate-commands))
+        ,@(oo--bind-generate-body metadata steps)))))
+
+(defun! oo--bind-step-prefix (metadata steps)
+  (with-map-keywords! metadata
+    (nif! !prefix
+        (oo--bind-generate-body metadata steps)
+      (cons `(setq ,!key (if (stringp ,!key) (concat ,!prefix ,!key) ,!key))
+            (oo--bind-generate-body metadata steps)))))
+
+(defun! oo--bind-step-localleader (metadata steps)
+  (set! alist '((oo-normal-localleader-short-key . normal)
+                (oo-normal-localleader-key       . normal)
+                (oo-insert-localleader-key       . insert)
+                (oo-insert-localleader-short-key . insert)
+                (oo-emacs-localleader-key        . emacs)
+                (oo-emacs-localleader-key        . global)))
+  (nif! (map-elt metadata :localleader)
+      (oo--bind-generate-body metadata steps)
+    (for! ((leader . state) alist)
+      (alet (map-insert (map-insert metadata :evil-state state) :prefix leader)
+        (appending! forms (oo--bind-generate-body it steps))))
+    forms))
+
 (defun oo--bind-step-bind (metadata steps)
   "Call the value of `:bind-fn' with value of `:bind-args'."
   (with-map-keywords! metadata
@@ -174,20 +261,22 @@ If METADATA has no keymap return."
 (defun! oo--standardize-args (args)
   "Standardize arguments ARGS for `bind!'."
   (flet! esym (keyword) (intern (seq-rest (symbol-name keyword))))
-  (flet! sharp-quoted-p (obj) (equal 'function (car-safe obj)))
   (pcase args
-    (`(,(and (pred symbolp) (pred (not keywordp)) keymap) ,key ,(and (pred sharp-quoted-p) def) . ,rest)
+    (`(,(and (pred symbolp) (pred (not keywordp)) keymap) ,key ,(and (pred oo-sharpquoted-p) def) . ,rest)
      (cl-list* :keymap keymap :key key :def def rest))
-    (`(,(and (pred keywordp) evil-keyword) ,key ,(and (pred sharp-quoted-p) def) . ,rest)
+    (`(,(and (pred keywordp) evil-keyword) ,key ,(and (pred oo-sharpquoted-p) def) . ,rest)
      (cl-list* :keymap 'global-map :evil-symbol (esym evil-keyword) :key key
                :def def rest))
     (`(,(and (pred symbolp) keymap) ,(and (pred keywordp) evil-keyword) ,key
-       ,(and (pred sharp-quoted-p) def) . ,rest)
+       ,(and (pred oo-sharpquoted-p) def) . ,rest)
      (cl-list* :keymap keymap :evil-symbol (esym evil-keyword) :key key :def def rest))
-    (`(,key ,(and (pred sharp-quoted-p) def) . ,rest)
+    (`(,(and (pred keywordp) evil-keyword) ,(and (pred symbolp) keymap) ,key
+       ,(and (pred oo-sharpquoted-p) def) . ,rest)
+     (cl-list* :keymap keymap :evil-symbol (esym evil-keyword) :key key :def def rest))
+    (`(,key ,(and (pred oo-sharpquoted-p) def) . ,rest)
      (cl-list* :key key :def def rest))
-    ;; (`(:alt ,key ,alt . ,rest)
-    ;;  ())
+    (`(:alt ,orig ,alt . ,rest)
+     (cl-list* :alt t :key (macroexp-quote orig) :def (macroexp-quote alt) rest))
     (_ nil)))
 
 (defmacro! bind! (&rest args)
