@@ -70,7 +70,7 @@
                      :slant 'normal
                      :size 15))
   (set-face-attribute 'default nil :font it))
-;;; window divider
+;;;; window divider
 (opt! window-divider-default-bottom-width 7)
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-places t)
