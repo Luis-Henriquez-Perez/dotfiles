@@ -113,6 +113,7 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; enable smartparens in the minibuffer
+;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
   "Enable `smartparens-mode' in the minibuffer."
   (when (memq this-command '(eval-expression evil-ex))
@@ -125,6 +126,41 @@ Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
   (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
+;;;;; minibuffer
+;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
+(defhook! minibuffer-setup-hook&increase-garbage-collection ()
+  "Boost garbage collection settings to `gcmh-high-cons-threshold'."
+  [:depth 10]
+  (oo-record-value 'gc-cons-threshold)
+  (oo-record-value 'gc-cons-percentage)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (setq gc-cons-percentage 0.8))
+
+(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+  [:depth 90]
+  (oo-restore-value 'gc-cons-threshold)
+  (oo-restore-value 'gc-cons-percentage))
+;;;;; garbage collection
+(defun! oo-lower-garbage-collection ()
+  "Lower garbage collection until it reaches default values."
+  ;; This is a sanity check to ensure.
+  (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
+  (if (minibuffer-window-active-p (minibuffer-window))
+      (run-with-timer 5 nil #'oo-lower-garbage-collection)
+    (cl-decf gc-cons-threshold (* 4 1024 1024))
+    (cl-decf gc-cons-percentage 0.1)
+    (cond ((= gc-cons-threshold (* 8 1024 1024))
+           (setq gc-cons-percentage 0.4))
+          (t
+           (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
+
+(defhook! emacs-startup-hook&restore-startup-values ()
+  [:depth 91]
+  (oo-restore-value 'file-name-handler-alist)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection)
+  (require 'oo-init-modeline))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here
