@@ -36,17 +36,6 @@
 (require 'oo-base-macros-progn-bang)
 (require 'oo-base-macros-with-map-bang)
 (require 'oo-base-macros-definers)
-;;;;; if-not!
-;; More often than not when I am using `if', the default else clause is simpler than
-;; the then clause.  And in that case I end up having to wrap the then clause in
-;; a `progn'. I want to invert the else clause and the if clause so I do not
-;; need to include the extra `progn' in that case.  I also considered just
-;; writing a macro that expands to an `if' with the then and else reversed, but
-;; I think it might be confusing.
-(defmacro if-not! (cond then &rest else)
-  (declare (indent 2))
-  `(if (not ,cond) ,then ,@else))
-(defalias 'nif! 'if-not!)
 ;;;;; defhook!
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
