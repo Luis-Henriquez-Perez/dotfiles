@@ -26,15 +26,15 @@
 ;;
 ;;; Code:
 ;; https://github.com/minad/corfu/issues/12
-(oo-bind 'corfu-map :ieg "<tab>"   #'corfu-next)
-(oo-bind 'corfu-map :ieg [backtab] #'corfu-previous)
-(oo-bind 'corfu-map :ieg "S-TAB"   #'corfu-previous)
-(oo-bind 'corfu-map :ieg "C-;"     #'corfu-quick-complete)
-(oo-bind 'corfu-map :ieg "C-j"     #'corfu-next)
-(oo-bind 'corfu-map :ieg "C-k"     #'corfu-previous)
-(oo-bind 'corfu-map :ieg "C-p"     #'corfu-previous)
-(oo-bind 'corfu-map :ieg ";"       #'corfu-quick-complete)
-(oo-bind 'corfu-map :ieg "SPC"     #'corfu-insert)
+(bind! corfu-map :ieg "<tab>"   #'corfu-next)
+(bind! corfu-map :ieg [backtab] #'corfu-previous)
+(bind! corfu-map :ieg "S-TAB"   #'corfu-previous)
+(bind! corfu-map :ieg "C-;"     #'corfu-quick-complete)
+(bind! corfu-map :ieg "C-j"     #'corfu-next)
+(bind! corfu-map :ieg "C-k"     #'corfu-previous)
+(bind! corfu-map :ieg "C-p"     #'corfu-previous)
+(bind! corfu-map :ieg ";"       #'corfu-quick-complete)
+(bind! corfu-map :ieg "SPC"     #'corfu-insert)
 
 ;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
 ;; because the maps are overridden by evil.  In order for them to work, we need

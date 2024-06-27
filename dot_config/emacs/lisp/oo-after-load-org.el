@@ -83,20 +83,20 @@
 
 (opt! org-src-window-setup 'plain)
 
-(oo-bind :alt #'org-edit-src-code #'oo-dwim-edit-src-code)
-(oo-bind :h "," #'org-edit-src-code :localleader t)
-;; (oo-bind 'org-mode-map "e" #'org-edit-src-code)
-                                        ;(oo-bind ':h "es" #'org-edit-src-code :wk "source block" :localleader t)
+(bind! :alt org-edit-src-code oo-dwim-edit-src-code)
+;; (bind! :h "," #'org-edit-src-code :localleader t)
+;; (bind! org-mode-map "e" #'org-edit-src-code)
+;; (bind! :h "es" #'org-edit-src-code :wk "source block" :localleader t)
 
-(oo-bind 'org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-(oo-bind 'org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-(oo-bind 'org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+;; (bind! org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+;; (bind! org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
+;; (bind! org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 ;;;;; org-capture
 (oo-popup-at-bottom "CAPTURE[^z-a]+")
 
-(oo-bind 'oo-quick-map "j" #'org-capture :wk "capture")
-(oo-bind 'oo-app-map "a" #'org-capture :wk "capture")
-(oo-bind 'oo-app-map "j" #'org-capture :wk "capture")
+(bind! oo-quick-map "j" #'org-capture :wk "capture")
+(bind! oo-app-map "a" #'org-capture :wk "capture")
+(bind! oo-app-map "j" #'org-capture :wk "capture")
 
 (opt! org-archive-save-context-info nil)
 

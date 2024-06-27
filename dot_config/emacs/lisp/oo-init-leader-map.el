@@ -149,9 +149,9 @@
 (define-key oo-help-map "C" #'describe-char)
 (define-key oo-help-map "k" #'describe-key)
 
-;; (oo-bind 'oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-;; (oo-bind 'oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-;; (oo-bind 'oo-find-map "j" #'burly-open-bookmark)
+;; (bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+;; (bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+;; (bind! oo-find-map "j" #'burly-open-bookmark)
 ;;; provide
 (provide 'oo-init-leader-map)
 ;;; oo-init-leader-map.el ends here

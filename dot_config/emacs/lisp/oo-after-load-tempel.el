@@ -26,10 +26,10 @@
 ;;
 ;;; Code:
 ;;;; tempel
-(oo-bind 'tempel-map :ieg "C-j" #'tempel-next)
-(oo-bind 'tempel-map :ieg "C-k" #'tempel-previous)
-(oo-bind 'tempel-map :ieg "TAB" #'tempel-next)
-(oo-bind 'tempel-map :ieg [backtab] #'tempel-previous)
+(bind! tempel-map :ieg "C-j" #'tempel-next)
+(bind! tempel-map :ieg "C-k" #'tempel-previous)
+(bind! tempel-map :ieg "TAB" #'tempel-next)
+(bind! tempel-map :ieg [backtab] #'tempel-previous)
 ;;;; make tempel an overriding map
 (defafter! make-tempel-map-an-overriding-map (evil tempel)
   "Make `tempel-map' into an overriding map."

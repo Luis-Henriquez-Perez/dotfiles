@@ -78,12 +78,12 @@
         ((or defining-kbd-macro executing-kbd-macro) nil)
         (t (keyboard-quit))))
 
-(oo-bind :ie [escape] #'evil-force-normal-state)
+(bind! :ie [escape] #'evil-force-normal-state)
 
 (oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
 
-(oo-bind :n "J" #'evil-scroll-page-down)
-(oo-bind :n "K" #'evil-scroll-page-up)
+(bind! :n "J" #'evil-scroll-page-down)
+(bind! :n "K" #'evil-scroll-page-up)
 ;;;; load evil-org-headline-state
 ;; (oo-call-after-load 'org #'require '70-evil-org-headline-state)
 ;;;;; evil-surround
