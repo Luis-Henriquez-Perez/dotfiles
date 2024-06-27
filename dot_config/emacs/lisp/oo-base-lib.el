@@ -24,12 +24,12 @@
 ;;
 ;; Compared to `oo-base-utils' this library has functions that on external
 ;; packages loaded in `oo-base-requirements'.
-;;
-;;; Code:
+
 ;; This file contains functions and macros directly used for customizing Emacs
 ;; by which I mean for doing things like adding hooks, adding advices, and
 ;; setting variables for a particular feature.  Basically tools for configuring
 ;; packages and features.
+;;
 ;;; Code:
 ;;;; requirements
 (require 'oo-base-utils)
