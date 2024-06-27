@@ -173,44 +173,51 @@ If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
   (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
     (oo--call-after-load expr it)))
-;;;; oo-after-load-functions-alist
+;;;; oo-after-load-hash-table
 ;; This alist is meant to call certain functions whenever a file is loaded.  It
 ;; is meant for things could happen at any time.  Right now I use it for evil
 ;; state characters and knowing when a symbol is defined--specifically keymaps
 ;; which I use for keybindings and variable symbols used in `opt!'.
 
-(defvar oo-after-load-functions-alist nil
-  "An alist whose elements are (ITEM . FUNCTIONS).
+(defvar oo-after-load-hash-table (make-hash-table :size 100)
+  "A hash table whose elements are (ITEM . FUNCTIONS).
 ITEM is either a symbol or a character (an integer).  FUNCTIONS is a list of
 functions.")
 
-;; So remember with `oo-after-load-functions-alist' that we push the elements in so if we
+;; So remember with `oo-after-load-hash-table' that we push the elements in so if we
 ;; loop through it normally the first item processed is actually the last item
 ;; we entered into the list. I personally would expect the items to be processed
 ;; in the order I added them.
+
+;; This is actually trickier than it seems.  Before I used to push the elements
+;; I did not touch into a list and simply set the value of
+;; `oo-after-load-hash-table' to that list.  But surprisingly, some
+;; elements of the alist would disappear.  A long while later I realized why: a
+;; side-effect of this looping is modifying the list.  By setting.  Instead, I
+;; need to keep track of the elements I will remove.
 (defun! oo-call-after-load-functions (&rest _)
-  "Call functions in `oo-after-load-functions-alist' that need to be called.
-Also, update `oo-after-load-functions-alist' to reflect functions called."
-  (--each-r oo-after-load-functions-alist
-    (set! (item . fns) it)
-    (cond ((and (symbolp item) (boundp item))
-           (-each-r fns #'funcall))
-          ((and (integerp item)
+  "Call functions in `oo-after-load-hash-table' that need to be called.
+Also, update `oo-after-load-hash-table' to reflect functions called."
+  (--each-r (hash-table-keys oo-after-load-hash-table)
+    (cond ((and (symbolp it) (boundp it))
+           ;; (info! "Symbol `%s' is bound.  Evaluating corresponding forms..." item)
+           (-each-r (gethash it oo-after-load-hash-table) #'funcall)
+           (remhash it oo-after-load-hash-table))
+          ((and (integerp it)
                 ;; TODO: prevent it from calling featurep evil multiple times.
                 (featurep 'evil)
-                (set! state (oo--evil-char-to-state item)))
-           (-each-r fns (-rpartial #'funcall state)))
-          (t
-           (pushing! updated it))))
-  (setq oo-after-load-functions-alist updated))
+                (set! state (oo--evil-char-to-state it)))
+           ;; (info! "Evil %s state is defined.  Evaluating corresponding forms..." state)
+           (-each-r (gethash it oo-after-load-hash-table) (-rpartial #'funcall state))
+           (remhash it oo-after-load-hash-table)))))
 
 (defun oo-call-after-bound (symbol fn)
   "Call FN after SYMBOL is bound.
 Call FN immediately if SYMBOL is already bound.  Otherwise, register
-SYMBOL and FN in `oo-after-load-functions-alist'."
+SYMBOL and FN in `oo-after-load-hash-table'."
   (if (boundp symbol)
       (funcall fn)
-    (push fn (alist-get symbol oo-after-load-functions-alist))))
+    (push fn (gethash symbol oo-after-load-hash-table))))
 
 (defun oo--evil-char-to-state (char)
   "Return state whose first letter is CHAR."
@@ -227,7 +234,7 @@ SYMBOL and FN in `oo-after-load-functions-alist'."
   "Call FN with state after state starting with CHAR is defined."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
-    (push fn (alist-get char oo-after-load-functions-alist))))
+    (push fn (gethash char oo-after-load-hash-table))))
 ;;;; initial buffer choice
 (defvar oo-initial-buffer-choice-hook nil
   "Hook run to choose initial buffer.
