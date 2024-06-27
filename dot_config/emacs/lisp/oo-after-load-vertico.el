@@ -32,9 +32,6 @@
 (oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
-;; Try to split up loading.
-(defhook! emacs-startup-hook&require-vertico ()
-  (require 'vertico nil t))
 
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")
