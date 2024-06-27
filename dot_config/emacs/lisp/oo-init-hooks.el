@@ -161,6 +161,12 @@ file is loaded."
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection)
   (require 'oo-init-modeline))
+;;;;; initial buffer
+(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
+  (when (require 'dashboard nil t)
+    (aprog1 (get-buffer-create dashboard-buffer-name)
+      (with-current-buffer it
+        (dashboard-insert-startupify-lists)))))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here

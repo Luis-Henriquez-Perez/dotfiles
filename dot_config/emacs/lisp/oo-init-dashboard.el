@@ -27,12 +27,6 @@
 ;;; Code:
 (require 'dashboard)
 
-(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-        (dashboard-insert-startupify-lists)))))
-
 ;; If I put dashboard configuration in its own.
 (defun oo-dashboard-init-info (&rest _)
   (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
