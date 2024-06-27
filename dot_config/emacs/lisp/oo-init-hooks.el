@@ -85,9 +85,6 @@
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 (oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
-;; (defhook! emacs-startup-hook&enable-modeline ()
-;;   [:depth 90]
-;;   (require 'oo-init-modeline))
 ;;;;; html-mode
 (oo-add-hook 'html-mode-hook #'emmet-mode)
 ;;;;; enable default theme - modus-operandi
