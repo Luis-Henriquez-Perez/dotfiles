@@ -1,4 +1,4 @@
-;;; oo-init-hooks.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-hooks.el --- initial hooks -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,8 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This file contains all the "base" hooks that trigger all other hooks.  Or in
+;; other words, the hooks that cannot go into "after-load" files.
 ;;
 ;;; Code:
 (require 'oo-base)
