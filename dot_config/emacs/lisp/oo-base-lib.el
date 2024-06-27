@@ -106,8 +106,6 @@ Unlike `add-hook'."
   (aprog1 (intern (format "%s&%s" hook fsym))
     (fset it (oo-report-error-fn fsym))
     (add-hook hook it depth local)))
-(defalias 'oo-generate-hook 'oo-add-hook)
-(defalias 'oo-gen-hook 'oo-add-hook)
 ;;;;; oo-remove-hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
