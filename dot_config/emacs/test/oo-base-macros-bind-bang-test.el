@@ -29,12 +29,6 @@
 ;; (require 'oo-test-utils)
 (require 'oo-base-macros-bind-bang)
 
-;; I need this macro for testing.
-(defmacro without-gensyms! (&rest body)
-  `(lef! ((gensym (lambda (&optional prefix) (or (intern prefix) 'symbol)))
-          (cl-gensym #'gensym))
-     ,@body))
-
 ;; (defmacro pcase-match-p! (pattern matched)
 ;;   `(pcase ,matched
 ;;      (,pattern t)
