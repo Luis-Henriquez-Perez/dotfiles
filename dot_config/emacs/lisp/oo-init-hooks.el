@@ -42,6 +42,16 @@
 ;;;;; emacs-lisp-mode-hook
 (oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+
+;; This adds syntax highlighting for my definer macros such as `defhook!',
+;; `defun!' and `defmacro!'.
+(defhook! emacs-lisp-mode-hook&enable-font-lock ()
+  "Add font lock keywords for definer macros."
+  (font-lock-add-keywords
+   'emacs-lisp-mode
+   '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
+      (1 font-lock-keyword-face nil t)
+      (2 font-lock-function-name-face nil t)))))
 ;;;;; reb-mode-hook
 (oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
 ;;;;; prog-mode-hook
@@ -102,13 +112,6 @@
 ;; load the `oo-macros' file.
 (defhook! emacs-lisp-mode-hook&require-macros ()
   (require 'oo-base-macros))
-;;;;; enable special font-lock
-(defhook! emacs-lisp-mode-hook&enable-font-lock ()
-  (font-lock-add-keywords
-   'emacs-lisp-mode
-   '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
-      (1 font-lock-keyword-face nil t)
-      (2 font-lock-function-name-face nil t)))))
 ;;;;; enable smartparens in the minibuffer
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
