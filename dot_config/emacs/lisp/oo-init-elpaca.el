@@ -151,6 +151,7 @@
 (elpaca which-key)
 (elpaca ws-butler)
 (elpaca xr)
+(elpaca denote)
 ;;; process
 (elpaca-process-queues)
 (elpaca-wait)
