@@ -59,7 +59,7 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
          (collecting! (map-elt data :let) (list sym (map-elt plist :init)))
          (setq zipper (treepy-replace zipper `(set! ,sym ,value)))
          (setq zipper (treepy-next zipper)))
-        (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,value)
+        (`(set! ,(and pattern (or (pred listp) (pred vectorp))) ,_)
          (dolist (sym (oo--set-flatten pattern))
            (cl-pushnew (list sym nil) (map-elt data :let) :test #'equal :key #'car))
          (setq zipper (treepy-next zipper)))
