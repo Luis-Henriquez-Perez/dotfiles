@@ -134,7 +134,7 @@ must be evaluated with `lexical-binding' enabled."
 ;;;; oo-funcall-silently
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
-  (shut-up (apply fn arguments)))
+  (shut-up (apply fn args)))
 ;; With lexical binding you can actually store the values of let-bound variables
 ;; in a function by creating a closure.  But it might be useful to.
 ;;;; oo-first-success
