@@ -103,7 +103,9 @@ arguments FN will be called with."
 ;; This function is used by captain and abbrev.  Instead of redefining it twice,
 ;; I prefer to place it here.
 (defun oo-in-string-or-comment-p ()
-  "Return 'string if point is in a string, 'comment if in a comment, nil otherwise."
+  "Return non-nil if point is in a string or comment.
+Specifically, return the symbol `string' if point is in a string, the symbol
+`comment' if in a comment and nil otherwise."
   (declare (pure t) (side-effect-free t))
   (let ((ppss (syntax-ppss)))
     (cond ((nth 3 ppss) 'string)
