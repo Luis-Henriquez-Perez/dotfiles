@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'chezmoi)
 ;;;; chezmoi
 ;; First thing to do is trigger chezmoi commands via bindings.  One of the key
 ;; concepts needed with chezmoi is the concept of source state and target state.

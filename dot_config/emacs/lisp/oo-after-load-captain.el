@@ -29,6 +29,7 @@
 ;; capitalization rules are different depending on whether your in prog-mode or
 ;; not and whether you are in a doc-string, or comment, or just a normal string.
 (require 'oo-base)
+(require 'captain)
 ;;;; determine where I am
 ;; TODO: generalize regexp with `defun!', `cl-defun', etc.
 (defvar oo-docstring-regexp "(defun[[:blank:]]\\([^[:space:]]+\\)[[:blank:]](\\(.*\\))\n[[:blank:]]*\"")
