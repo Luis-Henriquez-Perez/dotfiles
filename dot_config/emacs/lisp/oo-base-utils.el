@@ -100,8 +100,7 @@ arguments FN will be called with."
          (,handlers (funcall #',action ,err #',fn args))))))
 (defalias 'oo-cond-case-fn 'oo-condition-case-fn)
 ;;;; oo-in-string-or-comment-p
-;; This function is used by captain and abbrev.  Instead of redefining it twice,
-;; I prefer to place it here.
+;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
   "Return non-nil if point is in a string or comment.
 Specifically, return the symbol `string' if point is in a string, the symbol
