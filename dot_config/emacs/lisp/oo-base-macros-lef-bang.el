@@ -45,11 +45,13 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
                      `(lambda (&rest args)
                         (let ((this-fn ,orig-fn)
                               (this-function ,orig-fn))
+                          (ignore this-fn this-function)
                           (apply ,fn args))))
                     (`(,args . ,function-body)
                      `(lambda ,args
                         (let ((this-fn ,orig-fn)
                               (this-function ,orig-fn))
+                          (ignore this-fn this-function)
                           ,@function-body)))))
             binds))
     `(cl-letf* ,(nreverse binds) ,@body)))
