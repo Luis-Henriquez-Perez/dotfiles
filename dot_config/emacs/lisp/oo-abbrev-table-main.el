@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("fror" "for")
+  '(("unness" "unnecessary")
+    ("coment" "comment")
+    ("fror" "for")
     ("stup" "setup")
     ("inclinaition" "inclination")
     ("tring" "trying")
