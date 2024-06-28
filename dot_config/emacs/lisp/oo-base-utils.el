@@ -150,7 +150,6 @@ must be evaluated with `lexical-binding' enabled."
   "Return the first non-nil result of applying FN to an element in LIST."
   (declare (pure t) (side-effect-free t))
   (let (success)
-    ;; (while (not ))
     (--each-while list (not (setq success (funcall fn it))))
     success))
 ;;; provide
