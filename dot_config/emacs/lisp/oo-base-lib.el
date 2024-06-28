@@ -35,6 +35,8 @@
 (require 'oo-base-utils)
 (require 'oo-base-requirements)
 (eval-when-compile (require 'oo-base-macros))
+
+(defvar evil-state-properties)
 ;;;; logging
 ;; TODO: figure out how to change the log format
 ;; I do not really utilize the logging enough yet because I need to understand
