@@ -31,17 +31,17 @@
 (defun oo-dashboard-init-info (&rest _)
   (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
 
-(opt! dashboard-init-info #'oo-dashboard-init-info)
+(setq dashboard-init-info #'oo-dashboard-init-info)
 
-(opt! dashboard-banner-logo-title "Welcome!")
+(setq dashboard-banner-logo-title "Welcome!")
 
-(opt! dashboard-set-footer nil)
+(setq dashboard-set-footer nil)
 
-(opt! dashboard-items nil)
+(setq dashboard-items nil)
 
-(opt! dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
+(setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 
-(opt! dashboard-center-content t)
+(setq dashboard-center-content t)
 ;;; provide
 (provide 'oo-init-dashboard)
 ;;; oo-init-dashboard.el ends here
