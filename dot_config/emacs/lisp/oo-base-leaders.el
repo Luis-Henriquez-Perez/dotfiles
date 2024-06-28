@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+;;;; requirements
+(eval-when-compile (require 'oo-base-macros-bind-bang))
 ;;;; create a keymap that overrides most other keymaps
 ;; Creating a minor mode to hold the leader map allows us to toggle our leader
 ;; bindings on or off.
