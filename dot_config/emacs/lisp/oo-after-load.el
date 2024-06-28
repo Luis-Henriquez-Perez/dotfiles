@@ -33,8 +33,7 @@
   (flet! feature (-compose #'intern #'feature-name))
   (flet! package (file) (alet (feature-name file) (string-match regexp it) (intern (match-string 1 it))))
   (flet! log-require (feature &rest args)
-    (when oo-debug-p
-      (message "Loading %s..." feature))
+    (info! "Loading %s..." feature)
     (apply #'require feature args))
   (for! (file (directory-files (locate-user-emacs-file "lisp") t regexp))
     (set! package (package file))
