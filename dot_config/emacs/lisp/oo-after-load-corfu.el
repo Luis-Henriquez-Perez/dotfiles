@@ -25,6 +25,8 @@
 ;; This is my configuration for corfu.
 ;;
 ;;; Code:
+(require 'corfu)
+
 ;; https://github.com/minad/corfu/issues/12
 (bind! corfu-map :ieg "<tab>"   #'corfu-next)
 (bind! corfu-map :ieg [backtab] #'corfu-previous)
