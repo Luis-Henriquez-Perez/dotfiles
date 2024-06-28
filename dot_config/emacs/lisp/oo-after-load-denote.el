@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'denote)
 ;;;; denote
 (opt! denote-file-type 'text)
 ;;; provide
