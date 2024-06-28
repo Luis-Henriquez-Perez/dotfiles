@@ -218,9 +218,9 @@
 
 (bind! :alt display-buffer oo-display-buffer)
 ;;;; macrostep
-;; (bind! emacs-lisp-mode-map "me" #'macrostep-expand       :localleader t :wk "expand")
-;; (bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
-;; (bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+(bind! emacs-lisp-mode-map "me" #'macrostep-expand       :localleader t :wk "expand")
+(bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
+(bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
 ;;;; helpful
 (bind! :alt describe-function helpful-callable :feature helpful)
 (bind! :alt describe-command  helpful-command  :feature helpful)
