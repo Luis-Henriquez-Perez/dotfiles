@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'dired)
+
 (opt! wdired-confirm-overwrite nil)
 (setq dired-clean-confirm-killing-deleted-buffers nil)
 ;;;; dired
