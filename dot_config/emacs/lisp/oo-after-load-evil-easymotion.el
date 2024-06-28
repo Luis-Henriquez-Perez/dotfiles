@@ -115,7 +115,6 @@
 (defun! oo--evilem-sort-by-match (points)
   "Return points sorted by match occurance.
 This is as opposed to character length."
-  (set! before (length points))
   (set! point (point))
   (set! points (-remove (-compose (-partial #'= point) #'car) points))
   (set! points (-sort (-on (-partial #'< point) #'car) points))
