@@ -60,7 +60,7 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
 (defun oo--&as-mf-p (form)
   "Return non-nil if FORM is an `&as' match form pattern."
   (pcase form
-    (`(,(or '&as '&whole) ,(and (pred symbolp) whole) ,part)
+    (`(,(or '&as '&whole) ,(pred symbolp) ,_)
      t)
     (_
      nil)))
