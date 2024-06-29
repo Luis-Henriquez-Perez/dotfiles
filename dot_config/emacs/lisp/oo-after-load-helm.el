@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'helm)
+
 (set! helm-candidate-number-limit 50)
 
 (oo-popup-at-bottom "\\*Helm")

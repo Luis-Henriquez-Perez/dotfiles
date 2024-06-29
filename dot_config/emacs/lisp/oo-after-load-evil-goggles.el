@@ -1,3 +1,5 @@
+(require 'evil-goggles)
+
 ;; 1. advise all commands used by evil-goggles
 (defvar evil-goggles--commands
   '((evil-delete                :face evil-goggles-delete-face                :switch evil-goggles-enable-delete                :advice evil-goggles--generic-blocking-advice)
