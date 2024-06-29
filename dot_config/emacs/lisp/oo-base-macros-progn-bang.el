@@ -47,7 +47,7 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
         (`(,(and loop (or 'for! 'loop! 'dolist! 'while 'dolist 'dotimes)) ,pred . ,body)
          (alet `(catch 'break! (,loop ,pred (catch 'continue! ,@body)))
            (setq zipper (treepy-replace zipper it)))
-         (for! 7 (setq zipper (treepy-next zipper))))
+         (loop! (repeat 7) (setq zipper (treepy-next zipper))))
         (`(,(and name (pred symbolp) (guard (string-match-p "ing!\\'" (symbol-name name)))) ,symbol . ,(guard t))
          (alet (cl-case name
                  ((maxing! maximizing!) most-negative-fixnum)
