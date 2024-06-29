@@ -152,6 +152,7 @@
 (elpaca ws-butler)
 (elpaca xr)
 (elpaca denote)
+(elpaca loopy)
 ;;; process
 (elpaca-process-queues)
 (elpaca-wait)
