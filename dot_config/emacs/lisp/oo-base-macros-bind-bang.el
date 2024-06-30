@@ -216,6 +216,7 @@ If METADATA has no keymap return."
     (set! def (map-elt metadata :def))
     (set! steps (remove #'oo--bind-step-kbd steps))
     (set! feature (map-elt metadata :feature))
+    (set! condition (map-elt metadata :condition))
     (unless condition
       (if feature
           (set! condition `(or (featurep ',feature) (require ',feature nil t)))
