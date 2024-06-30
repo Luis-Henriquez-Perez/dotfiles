@@ -212,8 +212,6 @@ This is a wrapper around `evilem-make-motion'."
   (and (save-excursion (forward-char) (re-search-forward regexp nil t nil))
        (goto-char (match-beginning 1))))
 ;;;; a character
-;; TODO: I might be able to use `evil-find-char' for this one, but I might not
-;; do it because this already works well.
 (defemotion! oo-evilem-motion-char ()
   "Jump to a character in current visible buffer."
   :bind ((char (read-char "Char: ")))
