@@ -42,9 +42,10 @@
 ;; because the maps are overridden by evil.  In order for them to work, we need
 ;; to boost give the maps greater precedence.
 (with-eval-after-load 'evil
-  (evil-make-overriding-map corfu-map)
-  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps))
+  (with-no-warnings
+    (evil-make-overriding-map corfu-map)
+    (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+    (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)))
 
 (opt! corfu-quick1 "ajskdlghty")
 (opt! corfu-quick2 "ajskdlghty")
