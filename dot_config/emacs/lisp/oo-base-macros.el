@@ -59,16 +59,6 @@ NAME should be a hook symbol."
   `(progn
      (fset ',name (lambda ,args (progn! ,@body)))
      (advice-add ',symbol ,how ',name)))
-;;;;; defafter!
-(defmacro! defafter! (name expr &rest body)
-  "Define a function that is called after EXPR is resolved.
-EXPR is the same as in `oo-call-after-load'.  BODY is enclosed in
-`progn!'."
-  (declare (indent defun))
-  `(progn!
-     (set! fn (intern (format "oo-after-load%%s" ',name)))
-     (fset fn (oo-report-error-fn (lambda! () ,@body)))
-     (oo-call-after-load ',expr ',fn)))
 ;;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
