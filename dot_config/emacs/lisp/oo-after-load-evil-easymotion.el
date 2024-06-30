@@ -214,7 +214,7 @@ This is a wrapper around `evilem-make-motion'."
 ;;;; a character
 ;; TODO: I might be able to use `evil-find-char' for this one, but I might not
 ;; do it because this already works well.
-(defemotion! oo-evilem-motion-char (char)
+(defemotion! oo-evilem-motion-char ()
   "Jump to a character in current visible buffer."
   :bind ((char (read-char "Char: ")))
   :initial-point #'window-start
