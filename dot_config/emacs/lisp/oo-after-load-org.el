@@ -56,7 +56,8 @@
 
 ;; Although it is possible to have a parent headline that also has a source
 ;; block, I prefer not to.  I guess it is a stylistic thing.
-(opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
+;; TODO: Fix `oo-has-source-block-p' is not defined.
+;; (opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
 ;;;;; org-id
 (opt! org-id-track-globally t)
 (opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
