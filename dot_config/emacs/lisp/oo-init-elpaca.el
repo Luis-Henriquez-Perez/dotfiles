@@ -118,7 +118,7 @@
 (elpaca lispyville)
 (elpaca lorem-ipsum)
 (elpaca macrostep)
-(elpaca magit)
+(elpaca (magit :depth nil :tag "v3.3.0"))
 (elpaca marginalia)
 (elpaca markdown-mode)
 (elpaca material-theme)
