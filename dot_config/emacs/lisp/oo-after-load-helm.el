@@ -38,7 +38,7 @@
 
 (bind! helm-map :ie "C-a" #'helm-select-action)
 (bind! helm-map :ie "C-m" #'helm-toggle-visible-mark-forward)
-(bind! helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
+;; (bind! helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
 ;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
 (bind! helm-map :ie "S-TAB" #'helm-mark-current-line)
 
