@@ -32,10 +32,10 @@
 ;; create an advice and add it to all of these functions.
 (defun! oo--load-evil-goggles (fn &rest args)
   ""
-  ;; First load `evil-goggle'.
-  (require 'evil-goggle)
+  ;; First load `evil-goggles'.
+  (require 'evil-goggles)
   ;; This should trigger after blocks.
-  (evil-goggle-mode 1)
+  (evil-goggles-mode 1)
   ;; Then register any command that needs registering.
   ;; (set! commands '((evil-yank                 . lispyville-yank)
   ;;                  (evil-delete               . lispyville-delete)
