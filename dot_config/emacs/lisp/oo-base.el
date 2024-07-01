@@ -27,9 +27,6 @@
 ;;; Code:
 (require 'oo-base-vars)
 (require 'oo-base-settings)
-(require 'oo-base-utils)
-(require 'oo-base-packages)
-(require 'oo-base-requirements)
 (require 'oo-base-lib)
 (require 'oo-base-leaders)
 ;;; provide
