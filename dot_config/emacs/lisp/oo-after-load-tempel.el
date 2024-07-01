@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'tempel)
 ;;;; tempel
 (bind! tempel-map :ieg "C-j" #'tempel-next)
 (bind! tempel-map :ieg "C-k" #'tempel-previous)
