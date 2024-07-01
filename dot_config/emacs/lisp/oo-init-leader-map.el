@@ -39,6 +39,7 @@
 (define-minor-mode oo-override-mode
   "Global minor mode for higher precedence evil keybindings."
   :keymap oo-override-mode-map
+  :group 'oo
   :global t)
 
 (oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
