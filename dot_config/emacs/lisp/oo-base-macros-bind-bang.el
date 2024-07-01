@@ -129,9 +129,7 @@ If METADATA has no keymap return."
   (with-map-keywords! metadata
     (if (not (and !!keymap !!key !!def (or !evil-state !evil-symbol)))
         (oo--bind-generate-body metadata steps)
-      (prepending! steps
-                   '(oo--bind-step-evil-state
-                     oo--bind-step-evil-symbol))
+      (prepending! steps '(oo--bind-step-evil-state oo--bind-step-evil-symbol))
       (oo--bind-generate-body metadata steps))))
 
 (defun! oo--bind-step-evil-state (metadata steps)
