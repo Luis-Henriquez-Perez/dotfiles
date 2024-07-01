@@ -221,6 +221,7 @@
 ;;;;; undo changes to window configuration with =u=
 ;; There's a global mode called [[https://www.emacswiki.org/emacs/WinnerMode#:~:text=Winner%20Mode%20is%20a%20global%20minor%20mode%20that,included%20in%20GNU%20Emacs%2C%20and%20documented%20as%20winner-mode.][winner-mode]] that allow you to undo changes to
 ;; your window configuration.
+(declare-function winner-undo nil)
 (bind! oo-window-map "u" #'winner-undo :wk "undo")
 ;;;;; delete a window with =D= or =d=
 ;; The letter =d= is both mnemonic for deleting windows and it is easy to press
