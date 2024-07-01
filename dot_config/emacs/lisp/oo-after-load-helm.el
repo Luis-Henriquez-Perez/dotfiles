@@ -42,8 +42,7 @@
 ;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
 (bind! helm-map :ie "S-TAB" #'helm-mark-current-line)
 
-(bind! :ie 'helm-map "C-;" #'ace-jump-helm-line)
-
+(bind! helm-map :ie "C-;" #'ace-jump-helm-line)
 ;;; provide
 (provide 'oo-after-load-helm)
 ;;; oo-after-load-helm.el ends here
