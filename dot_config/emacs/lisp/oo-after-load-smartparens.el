@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'smartparens)
+
 (opt! sp-highlight-wrap-tag-overlay nil)
 
 (opt! sp-highlight-pair-overlay nil)
