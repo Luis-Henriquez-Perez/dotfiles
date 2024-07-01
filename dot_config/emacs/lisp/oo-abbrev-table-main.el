@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("bcomp" "byte-compilation")
+  '(("abbrev" "abbreviation")
+    ("bcomp" "byte-compilation")
     ("unness" "unnecessary")
     ("coment" "comment")
     ("fror" "for")
