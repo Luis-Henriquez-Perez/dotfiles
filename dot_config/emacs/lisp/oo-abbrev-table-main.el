@@ -29,8 +29,11 @@
 
 (define-abbrev-table 'oo-abbrev-table-main
   '(("comnt" "comment")
+    ("keybind" "keybinding")
     ("kbind" "keybinding")
+    ("keybinds" "keybindings")
     ("kbinds" "keybindings")
+    ("abbrevs" "abbreviations")
     ("abbrev" "abbreviation")
     ("bcomp" "byte-compilation")
     ("unness" "unnecessary")
