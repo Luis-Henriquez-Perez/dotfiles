@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("paces" "spaces")
+  '(("econfig" "Emacs configuration")
+    ("consec" "consecutive")
+    ("conseq" "consequence")
+    ("paces" "spaces")
     ("beh" "behavior")
     ("comnt" "comment")
     ("keybind" "keybinding")
