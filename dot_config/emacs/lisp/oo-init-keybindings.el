@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 (require 'oo-base)
-;; (oo-call-after-load 'evil #'require 'oo-init-evil-keybindings)
 ;;;; level 1 evil bindings
 ;;;;; w W e E f b - evil motions
 ;; The problem with these keys is that they interfere with keyboard macros.  Let
