@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("abbrev" "abbreviation")
+  '(("kbind" "keybinding")
+    ("kbinds" "keybindings")
+    ("abbrev" "abbreviation")
     ("bcomp" "byte-compilation")
     ("unness" "unnecessary")
     ("coment" "comment")
