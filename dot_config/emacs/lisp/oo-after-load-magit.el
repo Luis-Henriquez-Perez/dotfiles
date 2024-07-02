@@ -27,6 +27,8 @@
 ;;; Code:
 ;;;; magit
 (oo-call-after-load 'evil #'evil-magit-init)
+
+(oo-popup-at-bottom "\\`magit")
 ;;; provide
 (provide 'oo-after-load-magit)
 ;;; oo-after-load-magit.el ends here
