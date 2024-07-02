@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("comnt" "comment")
+  '(("paces" "spaces")
+    ("beh" "behavior")
+    ("comnt" "comment")
     ("keybind" "keybinding")
     ("kbind" "keybinding")
     ("keybinds" "keybindings")
