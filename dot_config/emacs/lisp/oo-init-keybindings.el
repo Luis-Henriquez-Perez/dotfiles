@@ -341,6 +341,17 @@
   (call-interactively #'consult-buffer))
 
 (bind! :alt display-buffer oo-display-buffer)
+;;;;; dired
+;; Dired is very picky about when these bindings happen.  It is the only package
+;; I have had that is that picky.  I have noticed that unlike every other
+;; package I have tried dired bindings do not work by trying to set them when
+;; `dired-mode-map' is bound.  You need to use (eval-after-load 'dired ...).
+;; Also, even if you have the `eval-after-load' it work work from the
+;; `oo-after-load-dired' file--do not ask me why.  Again, only package I have
+;; had this happen with.
+(bind! dired-mode-map :nm "h" #'dired-up-directory)
+
+(bind! dired-mode-map :nm "l" #'dired-find-file)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
