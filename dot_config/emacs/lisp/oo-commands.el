@@ -1,4 +1,4 @@
-;;; oo-ext-commands.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-commands.el --- Generic commands -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,9 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This file contains non-package specific commands that I use generally.
 ;;
 ;;; Code:
+(require 'oo-base)
 ;;;; custom functions
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."
@@ -71,5 +72,5 @@
   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
   (sort-regexp-fields nil rx "\\1" (point-min) (point-max)))
 ;;; provide
-(provide 'oo-ext-commands)
-;;; oo-ext-commands.el ends here
+(provide 'oo-commands)
+;;; oo-commands.el ends here
