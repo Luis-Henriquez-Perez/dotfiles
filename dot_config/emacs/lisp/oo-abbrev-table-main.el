@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("econfig" "Emacs configuration")
+  '(("lexi" "lexicographically")
+    ("econfig" "Emacs configuration")
     ("consec" "consecutive")
     ("conseq" "consequence")
     ("paces" "spaces")
