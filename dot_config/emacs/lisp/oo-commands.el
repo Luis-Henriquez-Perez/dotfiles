@@ -48,7 +48,7 @@
   (interactive)
   (display-buffer (dired user-emacs-directory)))
 
-(defun oo-open-init-file ()
+(defun oo-open-emacs-init-file ()
   "Open init file."
   (interactive)
   (display-buffer (find-file-noselect user-init-file)))
