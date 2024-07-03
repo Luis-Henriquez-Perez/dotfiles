@@ -68,7 +68,6 @@
 (oo-add-hook 'prog-mode-hook #'smartparens-mode)
 (oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
 (oo-add-hook 'prog-mode-hook #'lispyville-mode)
-(oo-add-hook 'prog-mode-hook #'ws-butler-mode)
 (oo-add-hook 'prog-mode-hook #'captain-mode)
 (oo-add-hook 'prog-mode-hook #'orglink-mode)
 ;;;;; text-mode-hook
