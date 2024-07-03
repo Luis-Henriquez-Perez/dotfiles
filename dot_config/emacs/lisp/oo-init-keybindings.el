@@ -311,12 +311,6 @@
 (bind! :nv "g r" #'evil-goto-first-line)
 (bind! :nv "g R" #'evil-goto-line)
 (bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
-;; Add textobj syntax operator.  This is very interesting.
-;; (bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
-;; (bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
-;;;;;; prepend a period to two spaces
-;; https://emacs.stackexchange.com/questions/3941/when-typing-automatically-transform-spc-spc-into-period-spc-spc
-;; (bind! global-map "\s" #'oo-dwim-space)
 ;;;;; alternate bindings
 ;;;;;; helpful
 (bind! :alt describe-function helpful-callable :feature helpful)
