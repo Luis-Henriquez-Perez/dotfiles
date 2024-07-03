@@ -135,8 +135,9 @@
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)
-
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
+
+(bind! oo-window-map "t" #'transpose-frame :wk "transpose")
 (bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 (bind! oo-window-map "w" #'ace-window :wk "select")
@@ -208,6 +209,7 @@
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
 (bind! oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
 
+(bind! oo-toggle-map "i" #'iedit-mode)
 (bind! oo-toggle-map "e" #'eval-expression)
 (bind! oo-toggle-map "f" #'oo-set-font-face)
 (bind! oo-toggle-map "r" #'read-only-mode)
