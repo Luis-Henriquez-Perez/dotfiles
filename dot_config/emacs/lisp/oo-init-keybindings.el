@@ -265,8 +265,9 @@
 (bind! oo-package-map "m" #'elpaca-manager    :wk "manager")
 ;;;;; level 1 bindings
 ;;;;;; lispy
-;; (bind! lispyville-mode-map :i "SPC" #'lispy-space)
-;; (bind! lispyville-mode-map :i ";" #'lispy-comment)
+(bind! lispyville-mode-map :i "SPC" #'lispy-space)
+(bind! lispyville-mode-map :i ";" #'lispy-comment)
+(bind! :i "TAB" #'completion-at-point)
 ;;;;;; miscellaneous
 (bind! :i "A-x" #'execute-extended-command)
 (bind! :i "M-x" #'execute-extended-command)
