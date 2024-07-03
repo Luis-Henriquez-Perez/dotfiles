@@ -41,6 +41,35 @@
   "Split window below and select the window created with the split."
   (interactive)
   (select-window (split-window-below)))
+
+(defun oo-open-emacs-config ()
+  "Open Emacs configuration."
+  (interactive)
+  (display-buffer (dired user-emacs-directory)))
+
+(defun oo-open-init-file ()
+  "Open init file."
+  (interactive)
+  (display-buffer (find-file-noselect user-init-file)))
+
+;; You could actually do this via abbrev-mode as well.  And actually it might be
+;; better in a sense because.
+(defun! oo-dwim-space ()
+  "Replace two consecutive spaces with a period."
+  (interactive)
+  (set! rx "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
+  (cond ((and (or (derived-mode-p 'text-mode)
+                  (oo-in-string-or-comment-p))
+              (looking-back "\\([[:word:]]\\)[[:space:]]\\{2,\\}" nil))
+         (replace-match "\\1.\s\s"))
+        (t
+         (insert "\s"))))
+
+(defun! oo-sort-elpaca-forms ()
+  "Sort the elpaca forms in."
+  (interactive)
+  (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
+  (sort-regexp-fields nil rx "\\1" (point-min) (point-max)))
 ;;; provide
 (provide 'oo-ext-commands)
 ;;; oo-ext-commands.el ends here

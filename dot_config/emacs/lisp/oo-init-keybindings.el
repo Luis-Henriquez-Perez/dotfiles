@@ -1,4 +1,4 @@
-;;; oo-init-keybindings.el --- Specify initial keybindings -*- lexical-binding: t; -*-
+;;; oo-init-keybindings.el --- initial keybindings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,115 +22,194 @@
 ;;
 ;;; Commentary:
 ;;
-;; Here I specify the initial keybindings for my Emacs configuration.
+;; These are all my initial keybindings for my Emacs configuration.
 ;;
 ;;; Code:
-(require 'oo-base)
-;;;; level 1 evil bindings
-;;;;; w W e E f b - evil motions
-;; The problem with these keys is that they interfere with keyboard macros.  Let
-;; me explain--when you use avy, it is not necessarily the case that the
-;; following keys have the same letter.  For keyboard macros to work you need
-;; keys to exhibit predictable behaviors.  I do not want to get rid of these
-;; keys entirely, but I have to consider more carfully on how I will re-add them
-;; to my configuration.  TODO: Maybe make more direct or add support for
-;; autoloading in the lisp directory.  Right now this loads easymotion which
-;; causes these functons to be define by me with `eval-after-load'.
-(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion")
-(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion")
-(autoload #'oo-evilem-motion-end-of-word "evil-easymotion")
-(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion")
-(autoload #'oo-evilem-motion-char "evil-easymotion")
-(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion")
+(eval-when-compile (require 'oo-base-macros-bind-bang))
+;;;; oo-override-map
+;; Creating a minor mode to hold the leader map allows us to toggle our leader
+;; bindings on or off.
 
-;; TODO: Create an evil operator to narrow to a region.
-;; TODO: Do not use these bindings for keyboard macros where the originals might
-;; be more useful.
-(bind! :nv "w" #'oo-evilem-motion-beginning-of-word)
-(bind! :nv "W" #'oo-evilem-motion-beginning-of-WORD)
-(bind! :nv "e" #'oo-evilem-motion-end-of-word)
-(bind! :nv "E" #'oo-evilem-motion-end-of-WORD)
-(bind! :nvo "f" #'oo-evilem-motion-char)
-(bind! :nvo "H" #'oo-evilem-motion-beginning-of-line)
-;; (bind! :nvo "L" #'oo-evilem-motion-end-of-line)
-;;;;; +/- increasing text-size
-(bind! :nm "+" #'text-scale-increase)
-(bind! :nm "-" #'text-scale-decrease)
-;;;;; l as a textobj for line
-;; TODO: create an abbrev to today's date.
-;; TODO: there needs to be a standard for setting today.
-;; While I was writing a code that would automate adding package headers to
-;; files, I wanted to surround each line with quotes and that is when I thought
-;; I would like a line text-object.
-(autoload #'evil-inner-line "evil-textobj-line")
-(autoload #'evil-a-line "evil-textobj-line")
-(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
-(bind! evil-outer-text-objects-map "l" #'evil-a-line)
-;;;;; form textobject
-;; TODO: Figure out how to do this only in lisp modes.  Although now that I
-;; think about it I think I have used this in non-lisp modes as well.
-(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
-;;;;; v and V to expand/contract region
-(bind! :v "V" #'expreg-contract)
-(bind! :v "v" #'expreg-expand)
-;;;;; use TAB to complete a word
-(bind! :i "TAB" #'completion-at-point)
-;;;;; bind =H= and =L=
-;; I find these bindings more useful on an everyday basis.
-(bind! :n "H" #'evil-first-non-blank)
-(bind! :n "L" #'evil-last-non-blank)
-;;;;; g is kind of like the main prefix key of vim
-;; The =g= prefix contains lots of things including the beginning of buffer.
-;; I will use =ge= as the eval operator because especially in an interactive
-;; editor like emacs being able to eval on demand is very important.
-(autoload #'evil-operator-eval "evil-extra-operator")
-(autoload #'evil-operator-eval-replace "evil-extra-operator")
-;; =g a= is a bit easier to press than =g e= on a QWERTY keyboard.
-;; TODO: Maybe make an operator for eval print.
-;; TODO: Make evil use symbol object instead of word object in lisp code.
+;; Enabling =override-mode= needs to be the first thing we do in
+;; =emacs-startup-hook=, or at least it needs to be before modes that set
+;; keybindings like evil.  Otherwise, your bindings might not take effect
+;; immediately.  This is why I set the advice depth to =-100=.
+(defvar oo-override-mode-map (make-sparse-keymap))
 
-;; I feel like the eval operator is so important that it should have =gg=.  I
-;; use this a lot more than the original =gg= binding for going to the beginning
-;; of buffer.
-;; (bind! :nv "g g" #'evil-operator-eval)
-(bind! :nv "g j" #'evil-operator-eval-replace)
+(define-minor-mode oo-override-mode
+  "Global minor mode for higher precedence evil keybindings."
+  :keymap oo-override-mode-map
+  :group 'oo
+  :global t)
 
-;; The command `lispyville-comment-or-uncomment' lags when commenting or
-;; uncommenting in html buffers.  Its designed for lisp and gets confused with
-;; the pairs in html somehow.  That is why it is better to use
-;; `evilnc-comment-operator' in non-lisp buffers.
-(bind! :nv "g c" #'lispyville-comment-or-uncomment)
-(bind! :nv "g l" #'lispyville-comment-and-clone-dwim)
-;; (bind! :nv "g c" #'evilnc-comment-operator)
-;; (bind! :nv "g l" #'evilnc-)
+(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
+;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
+;; to make it an intercept map for all evil states.  In evil, intercept maps are
+;; maps that take priority (intercept) evil bindings when they have a different
+;; binding for the same key (this is opposed to =overriding-maps=, which completely
+;; override an evil keymap).
+(defhook! evil-mode-hook&make-intercept-map ()
+  "Register `oo-override-map' as an intercept map."
+  (evil-make-intercept-map oo-override-mode-map 'all t))
 
-(bind! :nv "g x" #'evil-exchange)
-(bind! :nv "g X" #'evil-exchange-cancel)
-(bind! :nv "g a" #'evil-exchange)
-(bind! :nv "g A" #'evil-exchange-cancel)
-;; TODO: consider switching =f= and =g=.  I feel that I will use =g= more than
-;; =f=.
-;; (bind! :nv "g b")
+;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
+;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
+(pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
+;;;; base leaders
+;; This file provides leaders keys for evil and non-evil states and it binds
+;; these leader keys.
 
-;; These two actually are bound the other way around, but in my opinion I need to
-;; go from downcase to upcase more than from upcase to downcase.  So I would
-;; rather the lowercase you be for upcasing.
-(bind! :nv "g u" #'evil-upcase)
-(bind! :nv "g U" #'evil-downcase)
+;; These leaders are specifically for evil mode states (not including insert and
+;;                                                          Emacs).  I choose the space (=SPC=) key for evil leaders because it is one of if
+;; not the easiest key to press because of its central placement on the keyboard
+;; and its sheer size--at least on the [[https://en.wikipedia.org/wiki/QWERTY][qwerty]] keyboard that I use.  The choice
+;; of =SPC m= for the major mode specific keys is simply for the pnemonic =m= which
+;; stands for "major mode".  The short major mode prefix key =,= is for cases when I
+;; want to shorten a key binding.  Although obviously not as easy to remember as
+;; =m=, it provides me with one shorter keypress in certain situations.
+(defconst oo-normal-leader-key "SPC"
+  "The evil leader prefix key.")
 
-(bind! :nv "g r" #'evil-goto-first-line)
-(bind! :nv "g R" #'evil-goto-line)
+(defconst oo-normal-localleader-key "SPC m"
+  "The localleader prefix key for major-mode specific commands.")
 
-(bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
+(defconst oo-normal-localleader-short-key ","
+  "A shorter alternative `oo-localleader-key'.")
+;; These leaders are for evil insert and emacs states as well as vanilla
+;; Emacs.  Note that evil Emacs state is different from vanilla Emacs.  One of the
+;; goals with these bindings is to set up keybindings in the case that I disable
+;; evil mode or in the case that I want to use my bindings in insert or Emacs
+;; state--or even vanilla Emacs.  The choice behind the bindings is the same as
+;; [[id:][before]], except I just prepended the =Meta= (a.k.a. the =Alt= key) to everything.
+(defconst oo-insert-leader-key "M-SPC"
+  "The leader prefix key used for Insert state.")
 
-;; Add textobj syntax operator.  This is very interesting.
-(autoload #'evil-i-syntax "evil-textobj-syntax")
-(autoload #'evil-a-syntax "evil-textobj-syntax")
-(bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
-(bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
+(defconst oo-insert-localleader-key "M-SPC m"
+  "The localleader prefix key for major-mode specific commands.")
 
-;; toggle-map
+(defconst oo-insert-localleader-short-key "M-,"
+  "A short non-normal `oo-localleader-key'.")
+
+(defconst oo-emacs-leader-key "C-c"
+  "The leader prefix key used for Emacs states.")
+
+(defconst oo-emacs-localleader-key "C-c m"
+  "The localleader prefix key for major-mode specific commands.")
+;;;; keybindings
+;;;;; leader keymap
+;;;;;; root map
+(defvar oo-leader-map (make-sparse-keymap))
+(define-prefix-command 'oo-leader-prefix-command 'oo-leader-map)
+
+;; This is the keymap that's going to contain my main bindings.  I like to think
+;; about it as the root of a tree.  From this root I can access any of the leaves.  It will be bound
+;; to my leader keys.
+(bind! :g   oo-override-mode-map oo-emacs-leader-key  #'oo-leader-prefix-command)
+(bind! :i   oo-override-mode-map oo-insert-leader-key #'oo-leader-prefix-command)
+(bind! :nmv oo-override-mode-map oo-normal-leader-key #'oo-leader-prefix-command)
+
+;; One of the most common--if not the most common--command you use in Emacs is
+;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and
+;; upon pressing enter, then you execute the command.  The fact that this command is
+;; invoked so frequently suggests it should have one of the shortest, easiest to
+;; press bindings.  I chose to give it =SPC SPC= and =;=.  =SPC SPC= is short and
+;; quick to type as well as consistent with other =SPC= bindings.  While =;= is
+;; super fast to press as well and even faster than =SPC SPC=.
+(bind! :nmv oo-override-mode-map ";" #'execute-extended-command)
+(bind! oo-leader-map oo-normal-leader-key #'execute-extended-command :wk "execute command")
+;;;;;; oo-buffer-map
+(defvar oo-buffer-map (make-sparse-keymap))
+(define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
+(bind! oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
+(bind! oo-buffer-map "j" #'next-buffer)
+(bind! oo-buffer-map "k" #'previous-buffer)
+(bind! oo-buffer-map "x" #'kill-current-buffer)
+(bind! oo-buffer-map "b" #'switch-to-buffer)
+;;;;;; oo-git-map
+(defvar oo-git-map (make-sparse-keymap))
+(define-prefix-command 'oo-git-prefix-command 'oo-git-map)
+(bind! oo-leader-map "g" #'oo-git-prefix-command :wk "git")
+
+(bind! oo-git-map "s" #'magit-status)
+(bind! oo-git-map "p" #'magit-push)
+;;;;;; oo-window-map
+(defvar oo-window-map (make-sparse-keymap))
+(define-prefix-command 'oo-window-prefix-command 'oo-window-map)
+
+(bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
+(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(bind! oo-window-map "w" #'ace-window :wk "select")
+(bind! oo-window-map "j" #'ace-window :wk "select")
+(bind! oo-window-map "o" #'ace-window :wk "select")
+(bind! oo-window-map "s" #'ace-swap-window :wk "swap")
+(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
+(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(bind! oo-window-map "M" #'maximize-window :wk "maximize")
+(bind! oo-window-map "v" #'split-window-horizontally :wk "vsplit")
+(bind! oo-window-map "h" #'split-window-vertically :wk "hsplit")
+(declare-function winner-undo nil)
+(bind! oo-window-map "u" #'winner-undo :wk "undo")
+(bind! oo-window-map "d" #'delete-window :wk "delete")
+(bind! oo-window-map "D" #'delete-other-windows :wk "delete others")
+(bind! oo-window-map "k" #'display-buffer :wk "open")
+;;;;;; oo-app-map
+(defvar oo-app-map (make-sparse-keymap))
+(define-prefix-command 'oo-app-prefix-command 'oo-app-map)
+(bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
+
+(bind! oo-app-map "e" #'eshell)
+(bind! oo-app-map "d" #'dirvish)
+(bind! oo-app-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
+;;;;;; oo-find-map
+(defvar oo-find-map (make-sparse-keymap))
+(define-prefix-command 'oo-find-prefix-command 'oo-find-map)
+(bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
+
+(bind! oo-find-map "d" #'switch-to-buffer)
+(bind! oo-find-map "f" #'display-buffer)
+
+(bind! oo-find-map "i" #'oo-open-emacs-init-file)
+(bind! oo-find-map "e" #'oo-open-emacs-directory)
+
+(bind! oo-find-map "i" #'burly-open-bookmark :wk "bookmark")
+(bind! oo-find-map "j" #'burly-open-bookmark :wk "bookmark")
+
+(bind! oo-find-map "k" #'consult-bookmark :wk "bookmark")
+(bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
+
+(bind! oo-find-map "s" #'consult-line :wk "line")
+(bind! oo-find-map "l" #'consult-line :wk "line")
+
+(bind! oo-find-map "h" #'consult-outline :wk "outline")
+(bind! oo-find-map "g" #'consult-grep :wk "grep")
+;;;;;; oo-help-map
+(defvar oo-help-map (make-sparse-keymap))
+(define-prefix-command 'oo-help-prefix-command 'oo-help-map)
+(bind! oo-leader-map "l" #'oo-help-prefix-command :wk "help")
+(bind! oo-leader-map "h" #'oo-help-prefix-command :wk "help")
+
+;; Emacs has a family of describe functions that are used for help and
+;; introspection.  To name a few, there's [[file:snapshots/_helpful_command__describe-function_.png][describe-function]], [[file:snapshots/_helpful_command__describe-character_.png][describe-character]].
+;; The command =describe-callable=  and =describe-variable= are the ones I use the most
+;; by far and I them it to be accessible quickly.  The various snapshots you see
+;; named are a result of these functions and you can already guess buy how many
+;; such snapshots there are how much I use these commands.
+(bind! oo-help-map "m" #'describe-mode)
+(bind! oo-help-map "l" #'describe-function)
+(bind! oo-help-map "f" #'describe-function)
+(bind! oo-help-map "j" #'describe-variable)
+(bind! oo-help-map "v" #'describe-variable)
+(bind! oo-help-map "h" #'describe-variable)
+(bind! oo-help-map "C" #'describe-char)
+(bind! oo-help-map "k" #'describe-key)
+;;;;;; oo-toggle-map
+(defvar oo-toggle-map (make-sparse-keymap))
+(define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
+(bind! oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
+
+(bind! oo-toggle-map "e" #'eval-expression)
+(bind! oo-toggle-map "f" #'oo-set-font-face)
 (bind! oo-toggle-map "r" #'read-only-mode)
 (bind! oo-toggle-map "t" #'load-theme)
 (bind! oo-toggle-map "d" #'toggle-debug-on-error)
@@ -138,35 +217,11 @@
 ;; (bind! oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
 (bind! oo-toggle-map "P" #'profiler-stop)
 (bind! oo-toggle-map "s" #'smartparens-mode)
-;;;; burly
-;;;;; leader bindings
-(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-find-map "j" #'burly-open-bookmark)
-;;;;; save window configuration with =b= or =S=
-;; The command [[file:snapshots/_helpful_command__burly-bookmark-windows_.png][burly-bookmark-windows]] creates a bookmark with the information
-;; necessary to reproduce the current window configuration.  I can then restore the
-;; window information I've bookmarked with [[file:snapshots/_helpful_command__burly-open-bookmark_.png][burly]].
-(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-;;;; eshell
-(bind! oo-app-map "e" #'eshell)
-(bind! oo-app-map "d" #'dirvish)
-;;;; lispy
-(bind! lispyville-mode-map :i "SPC" #'lispy-space)
-(bind! lispyville-mode-map :i ";" #'lispy-comment)
-;; (bind! :v "E" #'lispy-eval-and-replace)
-
-;; (bind! emacs-lisp-mode-map "er" #'lispy-eval-and-replace :localleader t)
-;;;; create a leader map for dotfile actions
+;;;;;; oo-dotfile-map
 (defvar oo-dotfile-map (make-sparse-keymap))
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
 (bind! oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
 
-;; TODO: bind! should already do this for me.
-(autoload #'chezmoi-find "chezmoi")
-(autoload #'chezmoi-write "chezmoi")
-(autoload #'chezmoi-open-other "chezmoi")
 (bind! oo-dotfile-map "f" #'chezmoi-find)
 ;; I use the command =chezmoi-write= the most so far.  It syncs the current file
 ;; with its corresponding chezmoi file.  If called while in the target file, it
@@ -183,26 +238,99 @@
 ;; the target file.  If you are in the source file, you open the target file and
 ;; vice versa.
 (bind! oo-dotfile-map "o" #'chezmoi-open-other)
-;;;; consult
-(bind! oo-find-map "k" #'consult-bookmark :wk "bookmark")
-(bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
+;;;;;; oo-quit-map
+(defvar oo-quit-map (make-sparse-keymap))
+(define-prefix-command 'oo-quit-prefix-command 'oo-quit-map)
+(bind! oo-leader-map "q" #'oo-quit-prefix-command :wk "quit")
 
-(bind! oo-find-map "s" #'consult-line :wk "line")
-(bind! oo-find-map "l" #'consult-line :wk "line")
+(bind! oo-quit-map "R" #'restart-emacs :wk "restart")
+(bind! oo-quit-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
+(bind! oo-quit-map "q" #'save-buffers-kill-emacs :wk "quit")
+(bind! oo-quit-map "r" #'restart-emacs :wk "restart")
+;;;;;; oo-package-map
+(defvar oo-package-map (make-sparse-keymap))
+(define-prefix-command 'oo/package-prefix-command 'oo-package-map)
+(bind! oo-leader-map "p" #'oo/package-prefix-command :wk "package")
 
-(bind! oo-find-map "h" #'consult-outline :wk "outline")
-(bind! oo-find-map "h" #'consult-org-heading :wk "heading")
-
+(bind! oo-package-map "b" #'elpaca-browse     :wk "browse")
+(bind! oo-package-map "U" #'elpaca-update-all :wk "update all")
+(bind! oo-package-map "u" #'elpaca-update     :wk "update")
+(bind! oo-package-map "v" #'elpaca-visit      :wk "visit")
+(bind! oo-package-map "i" #'elpaca-try        :wk "try")
+(bind! oo-package-map "r" #'elpaca-rebuild    :wk "rebuild")
+(bind! oo-package-map "d" #'elpaca-delete     :wk "delete")
+(bind! oo-package-map "l" #'elpaca-log        :wk "log")
+(bind! oo-package-map "m" #'elpaca-manager    :wk "manager")
+;;;;; level 1 bindings
+;;;;;; lispy
+;; (bind! lispyville-mode-map :i "SPC" #'lispy-space)
+;; (bind! lispyville-mode-map :i ";" #'lispy-comment)
+;;;;;; miscellaneous
+(bind! :i "A-x" #'execute-extended-command)
+(bind! :i "M-x" #'execute-extended-command)
+(bind! :nm "+" #'text-scale-increase)
+(bind! :nm "-" #'text-scale-decrease)
+(bind! :n "H" #'evil-first-non-blank)
+(bind! :n "L" #'evil-last-non-blank)
+(bind! :v "V" #'expreg-contract)
+(bind! :v "v" #'expreg-expand)
+;;;;;; motions
+(bind! :nv "w" #'oo-evilem-motion-beginning-of-word)
+(bind! :nv "W" #'oo-evilem-motion-beginning-of-WORD)
+(bind! :nv "e" #'oo-evilem-motion-end-of-word)
+(bind! :nv "E" #'oo-evilem-motion-end-of-WORD)
+(bind! :nvo "f" #'oo-evilem-motion-char)
+(bind! :nvo "H" #'oo-evilem-motion-beginning-of-line)
+;;;;;; text objects
+;;;;;;; line
+(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
+(bind! evil-outer-text-objects-map "l" #'evil-a-line)
+;;;;;;; form
+(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
+;;;;;; operators
+;;;;;;; eval
+(bind! :nv "g h" #'evil-operator-eval)
+(bind! :nv "g r" #'evil-operator-eval-replace)
+(bind! :nv "g l" #'oo-evil-operator-eval-print)
+(bind! :nv "g p" #'oo-evil-operator-eval-print)
+;;;;;;; comment
+(bind! :nv "g c" #'lispyville-comment-or-uncomment)
+(bind! :nv "g l" #'lispyville-comment-and-clone-dwim)
+;;;;;;; exchange
+(bind! :nv "g x" #'evil-exchange)
+(bind! :nv "g X" #'evil-exchange-cancel)
+(bind! :nv "g a" #'evil-exchange)
+(bind! :nv "g A" #'evil-exchange-cancel)
+;;;;;; g is kind of like the main prefix key of vim
+(bind! :nv "g u" #'evil-upcase)
+(bind! :nv "g U" #'evil-downcase)
+(bind! :nv "g r" #'evil-goto-first-line)
+(bind! :nv "g R" #'evil-goto-line)
+(bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
+;; Add textobj syntax operator.  This is very interesting.
+;; (bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
+;; (bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
+;;;;;; prepend a period to two spaces
+;; https://emacs.stackexchange.com/questions/3941/when-typing-automatically-transform-spc-spc-into-period-spc-spc
+;; (bind! global-map "\s" #'oo-dwim-space)
+;;;;; alternate bindings
+;;;;;; helpful
+(bind! :alt describe-function helpful-callable :feature helpful)
+(bind! :alt describe-command  helpful-command  :feature helpful)
+(bind! :alt describe-variable helpful-variable :feature helpful)
+(bind! :alt describe-key      helpful-key      :feature helpful)
+;;;;;; consult
 (bind! :alt switch-to-buffer consult-buffer   :feature consult)
 (bind! :alt yank-pop         consult-yank-pop :feature consult)
 (bind! :alt apropos          consult-apropos  :feature consult)
 (bind! :alt man              consult-man      :feature consult)
-
-(bind! :alt switch-to-buffer consult-buffer   :feature consult)
-(bind! :alt yank-pop         consult-yank-pop :feature consult)
-(bind! :alt apropos          consult-apropos  :feature consult)
-(bind! :alt man              consult-man      :feature consult)
-
+;;;;; localleaders
+;;;;;; macrostep
+(bind! emacs-lisp-mode-map "me" #'macrostep-expand       :localleader t :wk "expand")
+(bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
+(bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+;;;;; consult
 (bind! oo-miscellany-map "l" #'consult-bookmark)
 
 (opt! consult-preview-key nil)
@@ -216,42 +344,6 @@
   (call-interactively #'consult-buffer))
 
 (bind! :alt display-buffer oo-display-buffer)
-;;;; macrostep
-(bind! emacs-lisp-mode-map "me" #'macrostep-expand       :localleader t :wk "expand")
-(bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
-(bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
-;;;; helpful
-(bind! :alt describe-function helpful-callable :feature helpful)
-(bind! :alt describe-command  helpful-command  :feature helpful)
-(bind! :alt describe-variable helpful-variable :feature helpful)
-(bind! :alt describe-key      helpful-key      :feature helpful)
-;;;; select a window with =w=, =j= or =o=
-;; There are commands such as.  I do not need these commands.  After moving left,
-;; right, up or down some direction once, the effort needed to traverse a window
-;; using directional window movement commands greatly increases.  The command
-;; [[file:snapshots/_helpful_command__ace-window][ace-window]] in contrast scales really well with a greater number of
-;; windows.  And it only loses slightly to directional window commands when moving
-;; one time.
-
-;; The command [[file:snapshots/_helpful_command__ace-window_.png][ace-window]] leverages [[https://github.com/abo-abo/avy][avy]] to select a window.  It assigns each window
-;; a character (I'm using [[][letters]] close to the homerow) which it displays on
-;; the upper right-hand corner of windows. I've found that
-;; ace-window is the quickest way possible to switch focus form one live window to
-;; another.
-
-;; The mnemonic bind is =w= and the quick bindings--which I will likely use most
-;; often--are =o= and =j=.
-(bind! oo-window-map "w" #'ace-window :wk "select")
-(bind! oo-window-map "j" #'ace-window :wk "select")
-(bind! oo-window-map "o" #'ace-window :wk "select")
-;;;; swap two windows with =s=
-;; Often when I want to switch focus from my main window to one of its
-;; subsidiaries; I will want to swap buffers from the two windows.
-;; Actually, =edwina= does provide functions to do this: namely
-;; [[_helpful_command__edwina-swap-next-window_.png][edwina-swap-next-window]] and [[file:snapshots/_helpful_command__edwina-swap-previous-window_.png][edwina-swap-previous-window]].
-;; But I can do something similar, but much faster with.  This is a case where =s= is
-;; mnemonic and easy to press.
-(bind! oo-window-map "s" #'ace-swap-window :wk "swap")
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here

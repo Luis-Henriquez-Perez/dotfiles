@@ -27,28 +27,29 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'oo/ensure-provide "extensions/oo-package-boilerplate" nil t 'function)
-(autoload #'oo/ensure-file-header "extensions/oo-package-boilerplate" nil t 'function)
-
-;; The problem with these keys is that they interfere with keyboard macros.  Let
-;; me explain--when you use avy, it is not necessarily the case that the
-;; following keys have the same letter.  For keyboard macros to work you need
-;; keys to exhibit predictable behaviors.  I do not want to get rid of these
-;; keys entirely, but I have to consider more carfully on how I will re-add them
-;; to my configuration.  TODO: Maybe make more direct or add support for
-;; autoloading in the lisp directory.  Right now this loads easymotion which
-;; causes these functons to be define by me with `eval-after-load'.
-(autoload #'oo-evilem-motion-beginning-of-word "evil-easymotion" nil t 'function)
-(autoload #'oo-evilem-motion-beginning-of-WORD "evil-easymotion" nil t 'function)
-(autoload #'oo-evilem-motion-end-of-word "evil-easymotion" nil t 'function)
-(autoload #'oo-evilem-motion-end-of-WORD "evil-easymotion" nil t 'function)
-(autoload #'oo-evilem-motion-char "evil-easymotion" nil t 'function)
-(autoload #'oo-evilem-motion-beginning-of-line "evil-easymotion" nil t 'function)
-(autoload #'oo-set-font-face "extensions/oo-commands" nil t 'function)
-(autoload #'oo-split-window-below-and-focus "extensions/oo-commands" nil t 'function)
-(autoload #'oo-split-window-right-and-focus "extensions/oo-commands" nil t 'function)
-(autoload #'oo-split-window-right-and-focus "extensions/oo-commands" nil t 'function)
-(autoload #'oo-blog-new-post "extensions/oo-blog-utils" nil t 'function)
+(autoload #'chezmoi-find                       "chezmoi"                           nil t 'function)
+(autoload #'chezmoi-write                      "chezmoi"                           nil t 'function)
+(autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
+(autoload #'evil-operator-eval                 "evil-extra-operator"               nil t 'function)
+(autoload #'evil-operator-eval-replace         "evil-extra-operator"               nil t 'function)
+(autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
+(autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)
+(autoload #'evil-i-syntax                      "evil-textobj-syntax"               nil t 'function)
+(autoload #'evil-a-syntax                      "evil-textobj-syntax"               nil t 'function)
+(autoload #'oo-blog-new-post                   "extensions/oo-blog-utils"          nil t 'function)
+(autoload #'oo/ensure-provide                  "extensions/oo-package-boilerplate" nil t 'function)
+(autoload #'oo/ensure-file-header              "extensions/oo-package-boilerplate" nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-word "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-WORD "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-evilem-motion-end-of-word       "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-evilem-motion-end-of-WORD       "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-evilem-motion-char              "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-line "oo-after-load-evil-easymotion"     nil t 'function)
+(autoload #'oo-set-font-face                   "oo-commands"                       nil t 'function)
+(autoload #'oo-sort-elpaca-forms               "oo-commands"                       nil t 'function)
+(autoload #'oo-split-window-below-and-focus    "oo-commands"                       nil t 'function)
+(autoload #'oo-split-window-right-and-focus    "oo-commands"                       nil t 'function)
+(autoload #'oo-open-init-file                  "oo-commands")
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here

@@ -28,7 +28,6 @@
 (require 'oo-base-vars)
 (require 'oo-base-settings)
 (require 'oo-base-lib)
-(require 'oo-base-leaders)
 ;;; provide
 (provide 'oo-base)
 ;;; oo-base.el ends here
