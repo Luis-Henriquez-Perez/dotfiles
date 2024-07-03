@@ -67,10 +67,15 @@
          (insert "\s"))))
 
 (defun! oo-sort-elpaca-forms ()
-  "Sort the elpaca forms in."
+  "Sort elpaca forms lexicographically by package name."
   (interactive)
   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
   (sort-regexp-fields nil rx "\\1" (point-min) (point-max)))
+
+(defun! oo-sort-autoload-forms ()
+  (interactive)
+  (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
+  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
