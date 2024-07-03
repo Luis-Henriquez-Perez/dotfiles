@@ -167,14 +167,14 @@
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
-(bind! oo-find-map "d" #'switch-to-buffer)
-(bind! oo-find-map "f" #'display-buffer)
+(bind! oo-find-map "o" #'find-file)
+(bind! oo-find-map "f" #'switch-to-buffer)
+(bind! oo-find-map "d" #'display-buffer)
 
 (bind! oo-find-map "i" #'oo-open-emacs-init-file)
 (bind! oo-find-map "e" #'oo-open-emacs-directory)
 
-(bind! oo-find-map "i" #'burly-open-bookmark :wk "bookmark")
-(bind! oo-find-map "j" #'burly-open-bookmark :wk "bookmark")
+(bind! oo-find-map "b" #'burly-open-bookmark :wk "bookmark")
 
 (bind! oo-find-map "k" #'consult-bookmark :wk "bookmark")
 (bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
