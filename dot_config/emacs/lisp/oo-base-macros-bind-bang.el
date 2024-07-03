@@ -120,9 +120,18 @@ letbound to their values around the BODY of the lambda."
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
-    (if (or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
-        (oo--bind-generate-body metadata steps)
-      `((oo-call-after-bound ',!keymap ,(oo--bind-lambda nil metadata steps))))))
+    (cond ((or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
+           (oo--bind-generate-body metadata steps))
+          ;; Dired is the only package that I have encountered where using
+          ;; `oo-call-after-bound' on its keymap does not work.  No idea why it
+          ;; does not.  I assume that it is something about what happens between
+          ;; the time the keymap is bound and the time where dired is provided.
+          ;; In general dired is extremely sensitive as to when the bindings
+          ;; as even this does not work in `oo-after-load-dired'.
+          ((equal !keymap 'dired-mode-map)
+           `((oo-call-after-load 'dired ,(oo--bind-lambda nil metadata steps))))
+          (t
+           `((oo-call-after-bound ',!keymap ,(oo--bind-lambda nil metadata steps)))))))
 
 (defun! oo--bind-step-evil (metadata steps)
   "Register keybinding as evil binding."
