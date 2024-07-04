@@ -168,6 +168,8 @@
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
+(bind! oo-find-map "l" #'consult-yank-pop)
+(bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "o" #'find-file)
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'display-buffer)
@@ -181,7 +183,6 @@
 (bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
 
 (bind! oo-find-map "s" #'consult-line :wk "line")
-(bind! oo-find-map "l" #'consult-line :wk "line")
 (bind! oo-find-map "a" #'find-library :wk "library")
 
 (bind! oo-find-map "h" #'consult-outline :wk "outline")
@@ -211,6 +212,7 @@
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
 (bind! oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
 
+(bind! oo-toggle-map "n" #'oo-dwim-narrow)
 (bind! oo-toggle-map "i" #'iedit-mode)
 (bind! oo-toggle-map "e" #'eval-expression)
 (bind! oo-toggle-map "f" #'oo-set-font-face)
