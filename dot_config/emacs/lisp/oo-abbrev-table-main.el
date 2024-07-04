@@ -28,7 +28,15 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("binds" "bindings")
+  '(("msg" "message")
+    ("mesage" "message")
+    ("sems" "seems")
+    ("rem" "remove")
+    ("bod" "body")
+    ("defing" "defining")
+    ("awkard" "akward")
+    ("recos" "recommends")
+    ("binds" "bindings")
     ("nd" "and")
     ("approp" "appropriate")
     ("aprop" "appropriate")
