@@ -33,6 +33,26 @@
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
 
+(defun oo-dwim-narrow (keep-narrowing-p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: narrow to region, outline heading, org-src-block, org-subtree, or
+defun, whichever applies first.
+
+With prefix KEEP-NARROWING-P, don't widen, just narrow even if buffer
+is already narrowed."
+  (interactive "P")
+  (cond ((and (buffer-narrowed-p) (not keep-narrowing-p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning)
+                           (region-end)))
+        ((equal 'comment (oo-in-string-or-comment-p))
+         (save-excursion (outli-toggle-narrow-to-subtree)))
+        ((derived-mode-p 'org-mode)
+         (or (ignore-errors (org-narrow-to-block) t)
+             (org-narrow-to-subtree)))
+        (t
+         (narrow-to-defun))))
+
 (defun oo-split-window-right-and-focus ()
   "Split window right and select the window created with the split."
   (interactive)
