@@ -145,7 +145,7 @@
 (bind! oo-window-map "o" #'ace-window :wk "select")
 (bind! oo-window-map "s" #'ace-swap-window :wk "swap")
 (bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
+(bind! oo-window-map "b" #'balance-windows :wk "balance")
 (bind! oo-window-map "M" #'maximize-window :wk "maximize")
 (bind! oo-window-map "v" #'split-window-horizontally :wk "vsplit")
 (bind! oo-window-map "h" #'split-window-vertically :wk "hsplit")
@@ -168,6 +168,8 @@
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
+(bind! :alt imenu consult-imenu :feature consult)
+(bind! oo-find-map "i" #'imenu)
 (bind! oo-find-map "l" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)
@@ -175,8 +177,8 @@
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'display-buffer)
 
-(bind! oo-find-map "i" #'oo-open-emacs-init-file)
-(bind! oo-find-map "e" #'oo-open-emacs-directory)
+;; (bind! oo-find-map "i" #'oo-open-emacs-init-file)
+;; (bind! oo-find-map "e" #'oo-open-emacs-directory)
 
 (bind! oo-find-map "b" #'burly-open-bookmark :wk "bookmark")
 
