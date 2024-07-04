@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("nd" "and")
+  '(("binds" "bindings")
+    ("nd" "and")
     ("approp" "appropriate")
     ("aprop" "appropriate")
     ("lexi" "lexicographically")
