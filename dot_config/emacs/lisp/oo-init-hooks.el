@@ -43,8 +43,6 @@
 (oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 
-;; This adds syntax highlighting for my definer macros such as `defhook!',
-;; `defun!' and `defmacro!'.
 (defhook! emacs-lisp-mode-hook&enable-font-lock ()
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
