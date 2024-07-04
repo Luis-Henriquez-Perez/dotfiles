@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("lexi" "lexicographically")
+  '(("nd" "and")
+    ("approp" "appropriate")
+    ("aprop" "appropriate")
+    ("lexi" "lexicographically")
     ("econfig" "Emacs configuration")
     ("consec" "consecutive")
     ("conseq" "consequence")
