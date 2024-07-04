@@ -30,22 +30,6 @@
 (opt! wdired-confirm-overwrite nil)
 (setq dired-clean-confirm-killing-deleted-buffers nil)
 ;;;; dired
-(bind! oo-app-map "d" #'dired)
-;;;;; map =h= to =dired-up-directory=
-;; TODO: investigate whether `bind!' is working properly.
-;; When I was evaluating this immediately upon startup the dired binding did not
-;; take effect.  However, when I put this in an after-load file, the binding
-;; successfully took effect.
-
-;; I do not want to keep pressing =^= for the common action of going up the
-;; directory.
-;; (bind! dired-mode-map :nm "h" #'dired-up-directory)
-
-;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
-;; (bind! dired-mode-map :nm "l" #'dired-find-file)
-;;;; dirvish
-(bind! :alt dired dirvish)
-
 (opt! dirvish-use-mode-line nil)
 
 (opt! dirvish-attributes '(file-size subtree-state))

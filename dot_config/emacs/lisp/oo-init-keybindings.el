@@ -159,8 +159,9 @@
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)
 (bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
 
+(bind! oo-app-map "d" #'dired)
+(bind! :alt dired dirvish :feature dirvish)
 (bind! oo-app-map "e" #'eshell)
-(bind! oo-app-map "d" #'dirvish)
 (bind! oo-app-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
 ;;;;;; oo-find-map
 (defvar oo-find-map (make-sparse-keymap))
