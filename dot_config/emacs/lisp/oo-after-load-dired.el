@@ -39,10 +39,10 @@
 
 ;; I do not want to keep pressing =^= for the common action of going up the
 ;; directory.
-(bind! dired-mode-map :nm "h" #'dired-up-directory)
+;; (bind! dired-mode-map :nm "h" #'dired-up-directory)
 
 ;; Additionally, =l= is faster than =Enter= on a QWERTY keyboard.
-(bind! dired-mode-map :nm "l" #'dired-find-file)
+;; (bind! dired-mode-map :nm "l" #'dired-find-file)
 ;;;; dirvish
 (bind! :alt dired dirvish)
 
