@@ -308,11 +308,20 @@
 ;;;;;;; line
 (bind! evil-inner-text-objects-map "l" #'evil-inner-line)
 (bind! evil-outer-text-objects-map "l" #'evil-a-line)
-;;;;;;; form
+;;;;;;; block
+;; Not sure what the difference is between block and form.
+(bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
+(bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
 (bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
+(bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
 ;;;;;; operators
 ;;;;;;; eval
+;; It is a bit more controversial to bind such a well-known evil key, but I
+;; think the freuqency.
+(bind! :nv "g t" #'evil-goto-first-line)
+(bind! :nv "g b" #'evil-goto-line)
+(bind! :nv "g g" #'evil-operator-eval)
 (bind! :nv "g h" #'evil-operator-eval)
 (bind! :nv "g r" #'evil-operator-eval-replace)
 (bind! :nv "g l" #'oo-evil-operator-eval-print)
@@ -330,7 +339,6 @@
 (bind! :nv "g U" #'evil-downcase)
 (bind! :nv "g r" #'evil-goto-first-line)
 (bind! :nv "g R" #'evil-goto-line)
-(bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
 ;;;;; alternate bindings
 ;;;;;; helpful
 (bind! :alt describe-function helpful-callable :feature helpful)
