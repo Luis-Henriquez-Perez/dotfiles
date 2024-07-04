@@ -132,6 +132,8 @@
 
 (bind! oo-git-map "s" #'magit-status)
 (bind! oo-git-map "p" #'magit-push)
+(bind! oo-git-map "n" #'vc-next-action)
+(bind! oo-git-map "c" #'magit-commit)
 (bind! oo-git-map "b" #'vc-create-branch)
 (bind! oo-git-map "B" #'magit-branch)
 ;;;;;; oo-window-map
