@@ -317,8 +317,6 @@
 (bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
 ;;;;;; operators
 ;;;;;;; eval
-;; It is a bit more controversial to bind such a well-known evil key, but I
-;; think the freuqency.
 (bind! :nv "g t" #'evil-goto-first-line)
 (bind! :nv "g b" #'evil-goto-line)
 (bind! :nv "g g" #'evil-operator-eval)
