@@ -356,8 +356,6 @@
 (bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
 (bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
 ;;;;; consult
-(bind! oo-miscellany-map "l" #'consult-bookmark)
-
 (opt! consult-preview-key nil)
 
 (opt! consult-fontify-preserve nil)
