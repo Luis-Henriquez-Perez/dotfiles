@@ -182,6 +182,7 @@
 
 (bind! oo-find-map "s" #'consult-line :wk "line")
 (bind! oo-find-map "l" #'consult-line :wk "line")
+(bind! oo-find-map "a" #'find-library :wk "library")
 
 (bind! oo-find-map "h" #'consult-outline :wk "outline")
 (bind! oo-find-map "g" #'consult-grep :wk "grep")
