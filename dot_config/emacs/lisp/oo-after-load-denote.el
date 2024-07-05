@@ -27,6 +27,7 @@
 ;;; Code:
 (require 'denote)
 ;;;; denote
+(opt! denote-directory "~/Documents/notes/")
 (opt! denote-file-type 'text)
 ;;; provide
 (provide 'oo-after-load-denote)
