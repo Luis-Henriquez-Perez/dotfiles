@@ -49,6 +49,8 @@
   "Disable old themes before loading new ones."
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
+;;;; ws-butler
+(opt! ws-butler-keep-whitespace-before-point t)
 ;;;; set initial font
 (alet (or (font-spec :name "Martian Mono Nerd Font"
                      :weight 'normal
