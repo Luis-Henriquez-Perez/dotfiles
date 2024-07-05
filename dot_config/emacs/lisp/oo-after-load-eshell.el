@@ -30,9 +30,9 @@
 ;;;; open eshell at bottom
 (oo-popup-at-bottom "\\*eshell")
 ;;;; hooks
-(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
+(hook! eshell-mode-hook&abbrev-mode)
 
-(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
+(hook! eshell-mode-hook&smartparens-mode)
 ;;;; prevent eshell from printing out messages on load
 ;; Eshell prints various messages about loading modules.  These messages
 ;; originate from the function [[][eshell-unload-all-modules]].  I would rather
@@ -53,7 +53,7 @@
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
 ;;;; enable eat
-(oo-add-hook 'eshell-mode-hook #'eat-eshell-mode)
+(hook! eshell-mode-hook&eat-eshell-mode)
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use

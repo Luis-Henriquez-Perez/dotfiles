@@ -42,7 +42,7 @@
   :group 'oo
   :global t)
 
-(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
+(hook! after-init-hook&oo-override-mode :depth -100)
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different

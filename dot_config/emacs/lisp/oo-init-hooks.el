@@ -34,14 +34,14 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-file-hook
-(oo-add-hook 'on-first-file-hook #'super-save-mode)
+(hook! on-first-file-hook&super-save-mode)
 ;;;;; on-first-input-hook
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
-(oo-add-hook 'on-first-input-hook #'vertico-mode)
-(oo-add-hook 'on-first-input-hook #'savehist-mode)
+(hook! on-first-input-hook&minibuffer-depth-indicate-mode)
+(hook! on-first-input-hook&vertico-mode)
+(hook! on-first-input-hook&savehist-mode)
 ;;;;; emacs-lisp-mode-hook
-(oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+(hook! emacs-lisp-mode-hook&aggressive-indent-mode)
+(hook! emacs-lisp-mode-hook&highlight-quoted-mode)
 
 (defhook! emacs-lisp-mode-hook&enable-font-lock ()
   "Add font lock keywords for definer macros."
@@ -51,28 +51,28 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; reb-mode-hook
-(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
+(hook! reb-mode-hook&rainbow-delimiters-mode)
 ;;;;; prog-mode-hook
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+(hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
-;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-(oo-add-hook 'prog-mode-hook #'auto-fill-mode)
-(oo-add-hook 'prog-mode-hook #'abbrev-mode)
-(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-(oo-add-hook 'prog-mode-hook #'outli-mode)
-(oo-add-hook 'prog-mode-hook #'smartparens-mode)
-(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
-(oo-add-hook 'prog-mode-hook #'lispyville-mode)
-(oo-add-hook 'prog-mode-hook #'captain-mode)
+;; (hook! prog-mode-hook&flyspell-prog-mode)
+(hook! auto-fill-mode-hook&filladapt-mode)
+(hook! prog-mode-hook&auto-fill-mode)
+(hook! prog-mode-hook&abbrev-mode)
+(hook! prog-mode-hook&rainbow-delimiters-mode)
+(hook! prog-mode-hook&outli-mode)
+(hook! prog-mode-hook&smartparens-mode)
+(hook! prog-mode-hook&turn-on-show-smartparens-mode)
+(hook! prog-mode-hook&lispyville-mode)
+(hook! prog-mode-hook&captain-mode)
 ;;;;; text-mode-hook
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
-(oo-add-hook 'text-mode-hook #'abbrev-mode)
-(oo-add-hook 'text-mode-hook #'captain-mode)
-(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
-(oo-add-hook 'text-mode-hook #'smartparens-mode)
+(hook! text-mode-hook&visual-line-mode)
+(hook! text-mode-hook&auto-fill-mode)
+(hook! text-mode-hook&abbrev-mode)
+(hook! text-mode-hook&captain-mode)
+(hook! text-mode-hook&turn-on-show-smartparens-mode)
+(hook! text-mode-hook&smartparens-mode)
 ;;;;; after-init-hook
 ;; Don't load everything at once.
 ;; (oo-require-hook 'after-init-hook 'evil)
@@ -84,15 +84,15 @@
 ;; theme first or the order of setting the window-divider, or maybe I can
 ;; specify the default theme to load beforehand.  I need to play around with
 ;; settings and see if this flickering can be avoided.
-(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
+(hook! after-init-hook&window-divider-mode :depth 12)
 ;;;;; emacs-startup-hook
-(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
-(oo-add-hook 'emacs-startup-hook #'evil-mode)
-(oo-add-hook 'emacs-startup-hook #'which-key-mode)
-(oo-add-hook 'emacs-startup-hook #'idle-require-mode :append t)
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+(hook! emacs-startup-hook&gcmh-mode :depth 91)
+(hook! emacs-startup-hook&evil-mode)
+(hook! emacs-startup-hook&which-key-mode)
+(hook! emacs-startup-hook&idle-require-mode :append t)
+(hook! emacs-startup-hook&recentf-mode)
 ;;;;; html-mode
-(oo-add-hook 'html-mode-hook #'emmet-mode)
+(hook! html-mode-hook&emmet-mode)
 ;;;;; enable default theme - modus-operandi
 (defhook! after-init-hook&load-modus-operandi-theme ()
   "Load `modus-operandi' theme."
@@ -120,7 +120,7 @@
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
+  (hook! after-load-functions&oo-call-after-load-functions))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()

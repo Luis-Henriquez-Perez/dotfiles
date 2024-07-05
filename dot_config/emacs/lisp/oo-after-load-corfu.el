@@ -50,7 +50,7 @@
 (opt! corfu-quick1 "ajskdlghty")
 (opt! corfu-quick2 "ajskdlghty")
 
-(oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
+(hook! corfu-mode-hook&corfu-history-mode)
 
 ;; TODO: make it so moving on a candidate if I press espace insert that candidate.
 (opt! corfu-preview-current t)

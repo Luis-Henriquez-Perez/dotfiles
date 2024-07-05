@@ -27,7 +27,7 @@
 ;;; Code:
 ;;;; org
 ;;;;; org-superstar
-(oo-add-hook 'org-mode-hook #'org-superstar-mode)
+(hook! org-mode-hook&org-superstar-mode)
 
 (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
 
@@ -35,7 +35,7 @@
 
 (opt! org-superstar-special-todo-items t)
 ;;;;; org-appear
-(oo-add-hook 'org-mode-hook #'org-appear-mode)
+(hook! org-mode-hook&org-appear-mode)
 
 (opt! org-appear-autolinks t)
 ;;;;; org-refile
@@ -103,7 +103,7 @@
 
 (opt! org-archive-location (concat org-directory "archive.org::"))
 
-(oo-add-hook 'org-insert-heading-hook #'org-id-get-create)
+(hook! org-insert-heading-hook&org-id-get-create)
 ;;;;; miscellaneous
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)

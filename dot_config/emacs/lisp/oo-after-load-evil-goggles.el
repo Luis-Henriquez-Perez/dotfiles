@@ -73,7 +73,7 @@
 ;;;;; evil-goggles
 ;; There is probably a better way to lazy-load this.
 ;; TODO: Figure out a way to lazy-load this.
-;; (oo-add-hook 'evil-mode-hook #'evil-goggles-mode)
+;; (hook! evil-mode-hook&evil-goggles-mode)
 
 ;; Let me write a quick macro to set these commands.
 ;; (progn!
