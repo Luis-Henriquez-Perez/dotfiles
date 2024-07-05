@@ -139,7 +139,6 @@ file is loaded."
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
-  ;; This is a sanity check to ensure.
   (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo-lower-garbage-collection)
