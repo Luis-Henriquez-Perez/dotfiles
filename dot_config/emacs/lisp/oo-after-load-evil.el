@@ -25,6 +25,8 @@
 ;; This is my configuration for evil.
 ;;
 ;;; Code:
+(require 'evil)
+;; (require 'oo-init-evil-keybindings)
 ;;;; settings
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
@@ -64,7 +66,6 @@
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
 
-;; (oo-add-hook 'ah-after-enable-theme-hook #'evil-refresh-cursor)
 (advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;;; escape
 (defvar oo-escape-hook nil
@@ -78,12 +79,7 @@
         ((or defining-kbd-macro executing-kbd-macro) nil)
         (t (keyboard-quit))))
 
-(bind! :ie [escape] #'evil-force-normal-state)
-
 (oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
-
-(bind! :n "J" #'evil-scroll-page-down)
-(bind! :n "K" #'evil-scroll-page-up)
 ;;;; eval operator
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator oo-eval-operator (beg end)
@@ -117,6 +113,7 @@
 (hook! prog-mode-hook&evil-surround-mode)
 
 (hook! text-mode-hook&evil-surround-mode)
+(require 'oo-init-evil-keybindings)
 ;;; provide
 (provide 'oo-after-load-evil)
 ;;; oo-after-load-evil.el ends here

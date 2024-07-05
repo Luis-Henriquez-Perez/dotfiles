@@ -25,36 +25,8 @@
 ;; These are all my initial keybindings for my Emacs configuration.
 ;;
 ;;; Code:
-(eval-when-compile (require 'oo-base-macros-bind-bang))
-;;;; oo-override-map
-;; Creating a minor mode to hold the leader map allows us to toggle our leader
-;; bindings on or off.
-
-;; Enabling =override-mode= needs to be the first thing we do in
-;; =emacs-startup-hook=, or at least it needs to be before modes that set
-;; keybindings like evil.  Otherwise, your bindings might not take effect
-;; immediately.  This is why I set the advice depth to =-100=.
-(defvar oo-override-mode-map (make-sparse-keymap))
-
-(define-minor-mode oo-override-mode
-  "Global minor mode for higher precedence evil keybindings."
-  :keymap oo-override-mode-map
-  :group 'oo
-  :global t)
-
-(hook! after-init-hook&oo-override-mode :depth -100)
-;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
-;; to make it an intercept map for all evil states.  In evil, intercept maps are
-;; maps that take priority (intercept) evil bindings when they have a different
-;; binding for the same key (this is opposed to =overriding-maps=, which completely
-;; override an evil keymap).
-(defhook! evil-mode-hook&make-intercept-map ()
-  "Register `oo-override-map' as an intercept map."
-  (evil-make-intercept-map oo-override-mode-map 'all t))
-
-;; Looking at the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Searching-Keymaps.html][Emacs keymap hierarchy]], emulation mode maps is pretty up
-;; there.  The [[helpvar:emulation-mode-map-alists][emulation-mode-map-alists]]
-(pushing! emulation-mode-map-alists '((oo-override-mode . oo-override-mode-map)))
+(require 'oo-base)
+(require 'oo-override-mode)
 ;;;; base leaders
 ;; This file provides leaders keys for evil and non-evil states and it binds
 ;; these leader keys.
@@ -70,7 +42,7 @@
 (defconst oo-normal-leader-key "SPC"
   "The evil leader prefix key.")
 
-(defconst oo-normal-localleader-key "SPC m"
+(defconst oo-normal-localleader-key "SPC l"
   "The localleader prefix key for major-mode specific commands.")
 
 (defconst oo-normal-localleader-short-key ","
@@ -84,16 +56,18 @@
 (defconst oo-insert-leader-key "M-SPC"
   "The leader prefix key used for Insert state.")
 
-(defconst oo-insert-localleader-key "M-SPC m"
+(defconst oo-insert-localleader-key "M-SPC l"
   "The localleader prefix key for major-mode specific commands.")
 
 (defconst oo-insert-localleader-short-key "M-,"
   "A short non-normal `oo-localleader-key'.")
 
-(defconst oo-emacs-leader-key "C-c"
+(defconst oo-emacs-leader-key "C-c l"
   "The leader prefix key used for Emacs states.")
 
-(defconst oo-emacs-localleader-key "C-c m"
+(defconst oo-emacs-alternate-leader-key "C-c SPC")
+
+(defconst oo-emacs-localleader-key "C-c l l"
   "The localleader prefix key for major-mode specific commands.")
 ;;;; keybindings
 ;;;;; leader keymap
@@ -104,10 +78,11 @@
 ;; This is the keymap that's going to contain my main bindings.  I like to think
 ;; about it as the root of a tree.  From this root I can access any of the leaves.  It will be bound
 ;; to my leader keys.
-(bind! :g   oo-override-mode-map oo-emacs-leader-key  #'oo-leader-prefix-command)
-(bind! :i   oo-override-mode-map oo-insert-leader-key #'oo-leader-prefix-command)
-(bind! :nmv oo-override-mode-map oo-normal-leader-key #'oo-leader-prefix-command)
+(define-key oo-override-mode-map (kbd oo-emacs-leader-key)  #'oo-leader-prefix-command)
+(define-key oo-override-mode-map (kbd "C-c SPC")  #'oo-leader-prefix-command)
 
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "l" "localleader"))
 ;; One of the most common--if not the most common--command you use in Emacs is
 ;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and
 ;; upon pressing enter, then you execute the command.  The fact that this command is
@@ -115,97 +90,102 @@
 ;; press bindings.  I chose to give it =SPC SPC= and =;=.  =SPC SPC= is short and
 ;; quick to type as well as consistent with other =SPC= bindings.  While =;= is
 ;; super fast to press as well and even faster than =SPC SPC=.
-(bind! :nmv oo-override-mode-map ";" #'execute-extended-command)
-(bind! oo-leader-map oo-normal-leader-key #'execute-extended-command :wk "execute command")
+(define-key oo-leader-map (kbd oo-normal-leader-key) #'execute-extended-command)
 ;;;;;; oo-buffer-map
 (defvar oo-buffer-map (make-sparse-keymap))
 (define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
-(bind! oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
-(bind! oo-buffer-map "j" #'next-buffer)
-(bind! oo-buffer-map "k" #'previous-buffer)
-(bind! oo-buffer-map "x" #'kill-current-buffer)
-(bind! oo-buffer-map "b" #'switch-to-buffer)
-;;;;;; oo-vc-map
-(defvar oo-vc-map (make-sparse-keymap))
-(define-prefix-command 'oo-vc-prefix-command 'oo-vc-map)
-(bind! oo-leader-map "v" #'oo-vc-prefix-command :wk "vc")
+(define-key oo-leader-map "b" #'oo-buffer-prefix-command)
 
-(bind! oo-vc-map "s" #'vc-st)
-(bind! oo-vc-map "p" #'vc-push)
-(bind! oo-vc-map "n" #'vc-next-action)
-(bind! oo-vc-map "b" #'vc-create-branch)
-;;;;;; oo-magit-map
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "b" "buffer"))
+
+(define-key oo-buffer-map "j" #'next-buffer)
+(define-key oo-buffer-map "k" #'previous-buffer)
+(define-key oo-buffer-map "x" #'kill-current-buffer)
+(define-key oo-buffer-map "b" #'switch-to-buffer)
+;;;;;; oo-git-map
 (defvar oo-magit-map (make-sparse-keymap))
 (define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
-(bind! oo-leader-map "g" #'oo-magit-prefix-command :wk "git")
+(define-key oo-leader-map "g" #'oo-buffer-prefix-command)
 
-(bind! oo-magit-map "s" #'magit-status)
-(bind! oo-magit-map "p" #'magit-push)
-;; (bind! oo-magit-map "n" #'vc-next-action)
-(bind! oo-magit-map "c" #'magit-commit)
-;; (bind! oo-magit-map "b" #'vc-create-branch)
-(bind! oo-magit-map "b" #'magit-branch)
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "g" "magit"))
+
+(define-key oo-magit-map "g" #'oo-git-prefix-command)
+(define-key oo-magit-map "s" #'magit-status)
+(define-key oo-magit-map "p" #'magit-push)
+(define-key oo-magit-map "n" #'vc-next-action)
+(define-key oo-magit-map "c" #'magit-commit)
+(define-key oo-magit-map "b" #'vc-create-branch)
+(define-key oo-magit-map "B" #'magit-branch)
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)
-(bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
+(define-key oo-leader-map "w" #'oo-window-prefix-command)
 
-(bind! oo-window-map "t" #'transpose-frame :wk "transpose")
-(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "w" #'ace-window :wk "select")
-(bind! oo-window-map "j" #'burly-open-bookmark)
-(bind! oo-window-map "o" #'ace-window :wk "select")
-(bind! oo-window-map "s" #'ace-swap-window :wk "swap")
-(bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
-(bind! oo-window-map "b" #'balance-windows :wk "balance")
-(bind! oo-window-map "M" #'maximize-window :wk "maximize")
-(bind! oo-window-map "v" #'split-window-horizontally :wk "vsplit")
-(bind! oo-window-map "h" #'split-window-vertically :wk "hsplit")
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "w" "window"))
+
+(define-key oo-window-map "t" #'transpose-frame)
+(define-key oo-window-map "S" #'burly-bookmark-windows)
+(define-key oo-window-map "b" #'burly-bookmark-windows)
+(define-key oo-window-map "w" #'ace-window)
+(define-key oo-window-map "j" #'ace-window)
+(define-key oo-window-map "o" #'ace-window)
+(define-key oo-window-map "s" #'ace-swap-window)
+(define-key oo-window-map "S" #'burly-bookmark-windows)
+(define-key oo-window-map "b" #'balance-windows)
+(define-key oo-window-map "M" #'maximize-window)
+(define-key oo-window-map "v" #'split-window-horizontally)
+(define-key oo-window-map "h" #'split-window-vertically)
 (declare-function winner-undo nil)
-(bind! oo-window-map "u" #'winner-undo :wk "undo")
-(bind! oo-window-map "d" #'delete-window :wk "delete")
-(bind! oo-window-map "D" #'delete-other-windows :wk "delete others")
-(bind! oo-window-map "k" #'display-buffer :wk "open")
+(define-key oo-window-map "u" #'winner-undo)
+(define-key oo-window-map "d" #'delete-window)
+(define-key oo-window-map "D" #'delete-other-windows)
+(define-key oo-window-map "k" #'display-buffer)
 ;;;;;; oo-app-map
 (defvar oo-app-map (make-sparse-keymap))
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)
-(bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
+(define-key oo-leader-map "a" #'oo-app-prefix-command)
 
-(bind! oo-app-map "d" #'dired)
-(bind! oo-app-map "n" #'notmuch)
-(bind! oo-app-map "m" #'mu4e)
-(bind! :alt dired dirvish :feature dirvish)
-(bind! oo-app-map "e" #'eshell)
-(bind! oo-app-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "a" "app"))
+
+(define-key oo-app-map "d" #'dired)
+(define-key oo-app-map "e" #'eshell)
+(define-key oo-app-map "E" #'restart-emacs-start-new-emacs)
 ;;;;;; oo-find-map
 (defvar oo-find-map (make-sparse-keymap))
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
-(bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
+(define-key oo-leader-map "f" #'oo-find-prefix-command)
 
-(bind! :alt imenu consult-imenu :feature consult)
-(bind! oo-find-map ";" #'save-buffer)
-(bind! oo-find-map "a" #'imenu)
-(bind! oo-find-map "k" #'consult-yank-pop)
-(bind! oo-find-map "j" #'oo-dwim-narrow)
-(bind! oo-find-map "o" #'find-file)
-(bind! oo-find-map "f" #'switch-to-buffer)
-(bind! oo-find-map "d" #'pop-to-buffer)
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "f" "find"))
 
-;; (bind! oo-find-map "i" #'oo-open-emacs-init-file)
-;; (bind! oo-find-map "e" #'oo-open-emacs-directory)
+(define-key oo-find-map "i" #'imenu)
+(define-key oo-find-map "l" #'consult-yank-pop)
+(define-key oo-find-map "j" #'oo-dwim-narrow)
+(define-key oo-find-map "n" #'oo-dwim-narrow)
+(define-key oo-find-map "o" #'find-file)
+(define-key oo-find-map "f" #'switch-to-buffer)
+(define-key oo-find-map "d" #'display-buffer)
 
-;; (bind! oo-find-map "b" #'burly-open-bookmark :wk "bookmark")
-(bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
-(bind! oo-find-map "l" #'consult-line :wk "line")
-(bind! oo-find-map "s" #'find-library :wk "library")
-(bind! oo-find-map "h" #'consult-outline :wk "outline")
-(bind! oo-find-map "g" #'consult-grep :wk "grep")
+;; (define-key oo-find-map "i" #'oo-open-emacs-init-file)
+;; (define-key oo-find-map "e" #'oo-open-emacs-directory)
+(define-key oo-find-map "b" #'burly-open-bookmark)
+(define-key oo-find-map "k" #'consult-bookmark)
+(define-key oo-find-map "b" #'consult-bookmark)
+(define-key oo-find-map "s" #'consult-line)
+(define-key oo-find-map "a" #'find-library)
+(define-key oo-find-map "h" #'consult-outline)
+(define-key oo-find-map "g" #'consult-grep)
 ;;;;;; oo-help-map
 (defvar oo-help-map (make-sparse-keymap))
 (define-prefix-command 'oo-help-prefix-command 'oo-help-map)
-(bind! oo-leader-map "l" #'oo-help-prefix-command :wk "help")
-(bind! oo-leader-map "h" #'oo-help-prefix-command :wk "help")
+(define-key oo-leader-map "h" #'oo-help-prefix-command)
+
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "h" "help"))
 
 ;; Emacs has a family of describe functions that are used for help and
 ;; introspection.  To name a few, there's [[file:snapshots/_helpful_command__describe-function_.png][describe-function]], [[file:snapshots/_helpful_command__describe-character_.png][describe-character]].
@@ -213,208 +193,146 @@
 ;; by far and I them it to be accessible quickly.  The various snapshots you see
 ;; named are a result of these functions and you can already guess buy how many
 ;; such snapshots there are how much I use these commands.
-(bind! oo-help-map "m" #'describe-mode)
-(bind! oo-help-map "l" #'describe-function)
-(bind! oo-help-map "f" #'describe-function)
-(bind! oo-help-map "j" #'describe-variable)
-(bind! oo-help-map "v" #'describe-variable)
-(bind! oo-help-map "h" #'describe-variable)
-(bind! oo-help-map "C" #'describe-char)
-(bind! oo-help-map "k" #'describe-key)
-;;;;;; emms
+(define-key oo-help-map "m" #'describe-mode)
+(define-key oo-help-map "l" #'describe-function)
+(define-key oo-help-map "f" #'describe-function)
+(define-key oo-help-map "j" #'describe-variable)
+(define-key oo-help-map "v" #'describe-variable)
+(define-key oo-help-map "h" #'describe-variable)
+(define-key oo-help-map "C" #'describe-char)
+(define-key oo-help-map "k" #'describe-key)
+;;;;;; oo-emms-map
 (defvar oo-emms-map (make-sparse-keymap))
 (define-prefix-command 'oo-emms-prefix-command 'oo-emms-map)
-(bind! oo-leader-map "e" #'oo-emms-prefix-command :wk "emms")
+(define-key oo-leader-map "e" #'oo-emms-prefix-command)
 
-(bind! oo-emms-map "f" #'emms-play-file)
-(bind! oo-emms-map "p" #'emms-pause)
-(bind! oo-emms-map "P" #'emms-stop)
-(bind! oo-emms-map "r" #'emms-toggle-repeat-track)
-(bind! oo-emms-map "R" #'emms-toggle-repeat-playlist)
-(bind! oo-emms-map "v" #'emms-volume-lower)
-(bind! oo-emms-map "V" #'emms-volume-raise)
-(bind! oo-emms-map "s" #'emms-seek-to)
-;;;;;; oo-workspace-map
-(defvar oo-workspace-map (make-sparse-keymap))
-(define-prefix-command 'oo-workspace-prefix-command 'oo-workspace-map)
-(bind! oo-leader-map "k" #'oo-workspace-prefix-command :wk "workspace")
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "e" "emms"))
 
-(bind! oo-workspace-map "j" #'tab-next :wk "workspace")
-(bind! oo-workspace-map "k" #'tab-previous :wk "workspace")
-(bind! oo-workspace-map "d" #'tab-close :wk "workspace")
-(bind! oo-workspace-map "o" #'burly-bookmark-windows :wk "workspace")
-;;;;;; oo-quick-map
-(defvar oo-quick-map (make-sparse-keymap))
-(define-prefix-command 'oo-quick-prefix-command 'oo-quick-map)
-(bind! oo-leader-map "j" #'oo-quick-prefix-command :wk "quick")
-
-(bind! oo-quick-map "d" #'eval-expression)
-(bind! oo-quick-map "j" #'oo-dwim-narrow)
-(bind! oo-quick-map "f" #'grugru)
+(define-key oo-emms-map "f" #'emms-play-file)
+(define-key oo-emms-map "p" #'emms-pause)
+(define-key oo-emms-map "P" #'emms-stop)
+(define-key oo-emms-map "r" #'emms-toggle-repeat-track)
+(define-key oo-emms-map "R" #'emms-toggle-repeat-playlist)
+(define-key oo-emms-map "v" #'emms-volume-lower)
+(define-key oo-emms-map "V" #'emms-volume-raise)
+(define-key oo-emms-map "s" #'emms-seek-to)
 ;;;;;; oo-toggle-map
-(defvar oo-toggle-map (make-sparse-keymap))
+(defvar oo-toggle-map (make-sparse-keymap)
+  "Keymap that contains bindings for things that should be toggled.")
+
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "t" "toggle"))
+
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
-(bind! oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
-
-(bind! oo-toggle-map "u" #'toggle-truncate-lines)
-(bind! oo-toggle-map "n" #'oo-dwim-narrow)
-(bind! oo-toggle-map "i" #'iedit-mode)
-(bind! oo-toggle-map "e" #'eval-expression)
-(bind! oo-toggle-map "f" #'oo-set-font-face)
-(bind! oo-toggle-map "r" #'read-only-mode)
-(bind! oo-toggle-map "t" #'load-theme)
-(bind! oo-toggle-map "d" #'toggle-debug-on-error)
-
-;; (bind! oo-toggle-map "p" (lambda () (interactive) (profiler-start 'cpu+mem)))
-(bind! oo-toggle-map "P" #'profiler-stop)
-(bind! oo-toggle-map "s" #'smartparens-mode)
+(define-key oo-leader-map "t" #'oo-toggle-prefix-command)
+(define-key oo-toggle-map "u" #'toggle-truncate-lines)
+(define-key oo-toggle-map "n" #'oo-dwim-narrow)
+(define-key oo-toggle-map "i" #'iedit-mode)
+(define-key oo-toggle-map "e" #'eval-expression)
+(define-key oo-toggle-map "f" #'oo-set-font-face)
+(define-key oo-toggle-map "r" #'read-only-mode)
+(define-key oo-toggle-map "t" #'load-theme)
+(define-key oo-toggle-map "d" #'toggle-debug-on-error)
+(define-key oo-toggle-map "P" #'profiler-stop)
+(define-key oo-toggle-map "s" #'smartparens-mode)
 ;;;;;; oo-dotfile-map
 (defvar oo-dotfile-map (make-sparse-keymap))
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
-(bind! oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfiles")
+(define-key oo-leader-map "d" #'oo-dotfile-prefix-command)
 
-(bind! oo-dotfile-map "f" #'chezmoi-find)
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "d" "dotfile"))
+
+(define-key oo-dotfile-map "f" #'chezmoi-find)
 ;; I use the command =chezmoi-write= the most so far.  It syncs the current file
 ;; with its corresponding chezmoi file.  If called while in the target file, it
 ;; applies the changes in the target file to the source file and vice versa.
 ;; Only caveat is that if there is a more recent change in the "other" file,
 ;; then you have to use a prefix command to make sure you want to override those
 ;; changes.
-(bind! oo-dotfile-map "w" #'chezmoi-write)
+(define-key oo-dotfile-map "w" #'chezmoi-write)
 ;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
 ;; homerow for QWERTY keyboards.
-(bind! oo-dotfile-map "d" #'chezmoi-write)
+(define-key oo-dotfile-map "d" #'chezmoi-write)
 ;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
 ;; it does something different depending on whether your in the source file or
 ;; the target file.  If you are in the source file, you open the target file and
 ;; vice versa.
-(bind! oo-dotfile-map "o" #'chezmoi-open-other)
+(define-key oo-dotfile-map "o" #'chezmoi-open-other)
 ;;;;;; oo-quit-map
 (defvar oo-quit-map (make-sparse-keymap))
 (define-prefix-command 'oo-quit-prefix-command 'oo-quit-map)
-(bind! oo-leader-map "q" #'oo-quit-prefix-command :wk "quit")
+(define-key oo-leader-map "q" #'oo-quit-prefix-command)
 
-(bind! oo-quit-map "R" #'restart-emacs :wk "restart")
-(bind! oo-quit-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
-(bind! oo-quit-map "q" #'save-buffers-kill-emacs :wk "quit")
-(bind! oo-quit-map "r" #'restart-emacs :wk "restart")
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "q" "quit"))
+
+(define-key oo-quit-map "R" #'restart-emacs)
+(define-key oo-quit-map "E" #'restart-emacs-start-new-emacs)
+(define-key oo-quit-map "q" #'save-buffers-kill-emacs)
+(define-key oo-quit-map "r" #'restart-emacs)
 ;;;;;; oo-package-map
 (defvar oo-package-map (make-sparse-keymap))
 (define-prefix-command 'oo/package-prefix-command 'oo-package-map)
+(define-key oo-leader-map "p" #'oo/package-prefix-command)
 
-(bind! oo-package-map "b" #'elpaca-browse     :wk "browse")
-(bind! oo-leader-map "p" #'oo/package-prefix-command :wk "package")
-(bind! oo-package-map "U" #'elpaca-update-all :wk "update all")
-(bind! oo-package-map "u" #'elpaca-update     :wk "update")
-(bind! oo-package-map "v" #'elpaca-visit      :wk "visit")
-(bind! oo-package-map "i" #'elpaca-try        :wk "try")
-(bind! oo-package-map "r" #'elpaca-rebuild    :wk "rebuild")
-(bind! oo-package-map "d" #'elpaca-delete     :wk "delete")
-(bind! oo-package-map "l" #'elpaca-log        :wk "log")
-(bind! oo-package-map "m" #'elpaca-manager    :wk "manager")
-;;;;; level 1 bindings
-;;;;;; abbreviations
-(bind! :nie "C-c u" #'unexpand-abbrev)
-(bind! :nie "C-c j" #'oo-add-new-abbrev)
-;;;;;; lispy
-(bind! lispyville-mode-map :i "SPC" #'lispy-space)
-(bind! lispyville-mode-map :i ";" #'lispy-comment)
-(bind! :i "TAB" #'completion-at-point)
-;;;;;; miscellaneous
-(bind! :i "A-x" #'execute-extended-command)
-(bind! :i "M-x" #'execute-extended-command)
-(bind! :nm "+" #'text-scale-increase)
-(bind! :nm "-" #'text-scale-decrease)
-(bind! :n "H" #'evil-first-non-blank)
-(bind! :n "L" #'evil-last-non-blank)
-(bind! :v "V" #'expreg-contract)
-(bind! :v "v" #'expreg-expand)
-;;;;;; motions
-(bind! :nv "w" #'oo-evilem-motion-beginning-of-word)
-(bind! :nv "W" #'oo-evilem-motion-beginning-of-WORD)
-(bind! :nv "e" #'oo-evilem-motion-end-of-word)
-(bind! :nv "E" #'oo-evilem-motion-end-of-WORD)
-(bind! :nvo "f" #'oo-evilem-motion-char)
-(bind! :nvo "H" #'oo-evilem-motion-beginning-of-line)
-;;;;;; text objects
-;;;;;;; line
-(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
-(bind! evil-outer-text-objects-map "l" #'evil-a-line)
-;;;;;;; block
-;; Not sure what the difference is between block and form.
-(bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
-(bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
-(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
-(bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
-;;;;;;; syntax
-(bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
-(bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
-;;;;;;; entire
-(bind! evil-outer-text-objects-map "e" #'evil-entire-entire-buffer)
-(bind! evil-inner-text-objects-map "e" #'evil-entire-entire-buffer)
-;;;;;;; column
-(bind! evil-inner-text-objects-map "k" 'evil-textobj-column-word)
-(bind! evil-inner-text-objects-map "K" 'evil-textobj-column-WORD)
-;;;;;; operators
-;;;;;;; eval
-(bind! :nv "g t" #'evil-goto-first-line)
-(bind! :nv "g b" #'evil-goto-line)
-(bind! :nv "g g" #'oo-eval-operator)
-(bind! :nv "g h" #'oo-eval-operator)
-(bind! :nv "g r" #'oo-eval-replace-operator)
-(bind! :nv "g l" #'oo-eval-print-operator)
-(bind! :nv "g p" #'oo-eval-print-operator)
-;;;;;;; comment
-(bind! :nv "g c" #'lispyville-comment-or-uncomment)
-(bind! :nv "g l" #'lispyville-comment-and-clone-dwim)
-;;;;;;; exchange
-(bind! :nv "g x" #'evil-exchange)
-(bind! :nv "g X" #'evil-exchange-cancel)
-(bind! :nv "g a" #'evil-exchange)
-(bind! :nv "g A" #'evil-exchange-cancel)
-;;;;;; g is kind of like the main prefix key of vim
-(bind! :nv "g u" #'evil-upcase)
-(bind! :nv "g U" #'evil-downcase)
+(with-eval-after-load 'which-key
+  (which-key-add-keymap-based-replacements oo-leader-map "p" "package"))
+
+(define-key oo-package-map "b" #'elpaca-browse)
+(define-key oo-package-map "U" #'elpaca-update-all)
+(define-key oo-package-map "u" #'elpaca-update)
+(define-key oo-package-map "v" #'elpaca-visit)
+(define-key oo-package-map "i" #'elpaca-try)
+(define-key oo-package-map "r" #'elpaca-rebuild)
+(define-key oo-package-map "d" #'elpaca-delete)
+(define-key oo-package-map "l" #'elpaca-log)
+(define-key oo-package-map "m" #'elpaca-manager)
 ;;;;; alternate bindings
+(alt! imenu consult-imenu consult)
+(alt! dired dirvish dirvish)
 ;;;;;; helpful
-(bind! :alt describe-function helpful-callable :feature helpful)
-(bind! :alt describe-command  helpful-command  :feature helpful)
-(bind! :alt describe-variable helpful-variable :feature helpful)
-(bind! :alt describe-key      helpful-key      :feature helpful)
+(alt! describe-function helpful-callable helpful)
+(alt! describe-command helpful-command helpful)
+(alt! describe-variable helpful-variable helpful)
+(alt! describe-key helpful-key helpful)
+;;;;;; vertico 
+(with-eval-after-load 'vertico
+  (define-key vertico-map "TAB" #'vertico-next)
+  (define-key vertico-map "C-k" #'vertico-previous)
+  (define-key vertico-map "C-j" #'vertico-next)
+  (define-key vertico-map ";" #'vertico-quick-exit)
+  (define-key vertico-map "C-;" #'vertico-quick-exit)
+  (define-key vertico-map [backtab] #'vertico-previous)
+  (define-key vertico-map "C-o" #'embark-act))
 ;;;;;; consult
-(bind! :alt switch-to-buffer consult-buffer   :feature consult)
-(bind! :alt yank-pop         consult-yank-pop :feature consult)
-(bind! :alt apropos          consult-apropos  :feature consult)
-(bind! :alt man              consult-man      :feature consult)
+(alt! switch-to-buffer consult-buffer consult)
+(alt! yank-pop consult-yank-pop consult)
+(alt! apropos consult-apropos consult)
+(alt! man consult-man consult)
 ;;;;; localleaders
-;;;;;; macrostep
-(bind! emacs-lisp-mode-map "me" #'macrostep-expand       :localleader t :wk "expand")
-(bind! emacs-lisp-mode-map "mc" #'macrostep-collapse     :localleader t :wk "collapse")
-(bind! emacs-lisp-mode-map "mC" #'macrostep-collapse-all :localleader t :wk "collapse all")
+(defun! oo-localleader-bind (keymap key def)
+  "Convenience function for defining localleader bindings."
+  (flet! leader (leader)
+    (kbd (concat leader "\s" key)))
+  (define-key keymap (leader oo-emacs-localleader-key) def)
+  (with-eval-after-load 'evil
+    (evil-define-key* 'emacs keymap (leader oo-emacs-localleader-key) def)
+    (evil-define-key* 'normal keymap (leader oo-normal-localleader-key) def)
+    (evil-define-key* 'normal keymap (leader oo-normal-localleader-short-key) def)
+    (evil-define-key* 'insert keymap (leader oo-insert-localleader-key) def)
+    (evil-define-key* 'insert keymap (leader oo-insert-localleader-short-key) def)))
+
+(oo-localleader-bind emacs-lisp-mode-map "me" #'macrostep-collapse)
+(oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
+(oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
 ;;;;; consult
 (opt! consult-preview-key nil)
 
 (opt! consult-fontify-preserve nil)
 
-(defun! oo-pop-to-buffer ()
-  (interactive)
-  (require 'consult)
-  (set! consult--buffer-display #'pop-to-buffer)
-  (call-interactively #'consult-buffer))
-
-(bind! :alt pop-to-buffer oo-pop-to-buffer)
-;;;;; dired
-;; Dired is very picky about when these bindings happen.  It is the only package
-;; I have had that is that picky.  I have noticed that unlike every other
-;; package I have tried dired bindings do not work by trying to set them when
-;; `dired-mode-map' is bound.  You need to use (eval-after-load 'dired ...).
-;; Also, even if you have the `eval-after-load' it work work from the
-;; `oo-after-load-dired' file--do not ask me why.  Again, only package I have
-;; had this happen with.
-(bind! dired-mode-map :nm "h" #'dired-up-directory)
-
-(bind! dired-mode-map :nm "l" #'dired-find-file)
+(alt! display-buffer oo-pop-to-buffer consult)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here

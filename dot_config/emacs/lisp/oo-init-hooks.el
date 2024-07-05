@@ -52,6 +52,16 @@
       (2 font-lock-function-name-face nil t)))))
 ;;;;; reb-mode-hook
 (hook! reb-mode-hook&rainbow-delimiters-mode)
+;;;;; oo-override-map
+(hook! after-init-hook&oo-override-mode :depth -100)
+;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
+;; to make it an intercept map for all evil states.  In evil, intercept maps are
+;; maps that take priority (intercept) evil bindings when they have a different
+;; binding for the same key (this is opposed to =overriding-maps=, which completely
+;; override an evil keymap).
+(defhook! evil-mode-hook&make-intercept-map ()
+  "Register `oo-override-map' as an intercept map."
+  (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; prog-mode-hook
 (hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in

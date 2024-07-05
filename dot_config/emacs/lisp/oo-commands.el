@@ -134,6 +134,12 @@ abbreviation at point. This function assumes the abbreviations file
         (eval-buffer)))
     (expand-abbrev)
     (message "Mapped abbrev %S to expansion %S!" abbrev expansion)))
+
+(defun! oo-pop-to-buffer ()
+  (interactive)
+  (require 'consult)
+  (set! consult--buffer-display #'pop-to-buffer)
+  (call-interactively #'consult-buffer))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here

@@ -29,6 +29,10 @@
 (require 'oo-base-settings)
 (require 'oo-base-lib)
 (eval-when-compile (require 'oo-base-macros-hook-bang))
+(defmacro alt! (old new feature)
+  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
+                (gethash ',old oo-alternate-commands))
+          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))))
 ;;; provide
 (provide 'oo-base)
 ;;; oo-base.el ends here

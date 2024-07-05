@@ -55,15 +55,6 @@
 
 (oo-popup-at-bottom "\\*Vertico")
 
-(bind! vertico-map :ieg "TAB" #'vertico-next)
-(bind! vertico-map :ieg "C-k" #'vertico-previous)
-(bind! vertico-map :ieg "C-j" #'vertico-next)
-(bind! vertico-map :ieg ";" #'vertico-quick-exit)
-(bind! vertico-map :ieg "C-;" #'vertico-quick-exit)
-(bind! vertico-map :ieg [backtab] #'vertico-previous)
-
-(bind! vertico-map :i "C-o" #'embark-act)
-
 ;; When I am completing a word at point I want the matching style to be exact.
 ;; at the very least.
 ;; Orderless should be just at.
