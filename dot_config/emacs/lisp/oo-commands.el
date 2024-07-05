@@ -22,7 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file contains non-package specific commands that I use generally.
+;; This file contains non-package specific commands that I use generally.  Some
+;; of these commands will not be perfect in that they are specific to me instead
+;; of generalized polished commands you might see in packages.  Instead,
+;; these functions are very specific to me and my workflow.
 ;;
 ;;; Code:
 (require 'oo-base)
