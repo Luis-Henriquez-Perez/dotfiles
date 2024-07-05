@@ -125,6 +125,16 @@
 (bind! oo-buffer-map "k" #'previous-buffer)
 (bind! oo-buffer-map "x" #'kill-current-buffer)
 (bind! oo-buffer-map "b" #'switch-to-buffer)
+;;;;;; oo-quick-map
+(defvar oo-quick-map (make-sparse-keymap))
+(define-prefix-command 'oo-quick-prefix-command 'oo-quick-map)
+(bind! oo-leader-map "j" #'oo-quick-prefix-command :wk "quick")
+;; (defvar oo-lorem-ipsum-map (make-sparse-keymap))
+;; (define-prefix-command 'oo-lorem-ipsum-prefix-command 'oo-buffer-map)
+;; (bind! oo-quick-map "l" nil :wk "lorem-ipsum")
+(bind! oo-quick-map "l l" #'lorem-ipsum-insert-list :wk "list")
+(bind! oo-quick-map "l s" #'lorem-ipsum-insert-sentences :wk "sentences")
+(bind! oo-quick-map "l p" #'lorem-ipsum-insert-paragraphs :wk "paragraphs")
 ;;;;;; oo-git-map
 (defvar oo-git-map (make-sparse-keymap))
 (define-prefix-command 'oo-git-prefix-command 'oo-git-map)
