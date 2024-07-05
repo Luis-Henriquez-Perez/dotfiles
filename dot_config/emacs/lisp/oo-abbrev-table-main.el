@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("msg" "message")
+  '(("wich" "which")
+    ("msg" "message")
     ("mesage" "message")
     ("sems" "seems")
     ("rem" "remove")
