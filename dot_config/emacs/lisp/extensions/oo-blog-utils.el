@@ -1,4 +1,4 @@
-;;; oo-blog-utils.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-blog-utils.el --- utilities for blogging -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

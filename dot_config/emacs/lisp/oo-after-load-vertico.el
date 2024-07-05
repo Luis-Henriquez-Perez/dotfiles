@@ -1,4 +1,4 @@
-;;; oo-after-load-vertico.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-vertico.el --- vertico configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

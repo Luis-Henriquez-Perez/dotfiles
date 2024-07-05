@@ -1,4 +1,4 @@
-;;; oo-after-load-em-alias.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-em-alias.el --- em-alias configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

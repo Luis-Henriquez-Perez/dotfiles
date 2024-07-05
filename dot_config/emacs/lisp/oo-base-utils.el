@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This file contains utility functions.
 ;;
 ;;; Code:
 ;;;; requirements

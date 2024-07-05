@@ -1,4 +1,4 @@
-;;; oo-after-load-chezmoi.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-chezmoi.el --- chezmoi configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is my configuration for chezmoi.
 ;;
 ;;; Code:
 (require 'chezmoi)

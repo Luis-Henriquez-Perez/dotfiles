@@ -1,4 +1,4 @@
-;;; oo-base-macros-definers.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-definers.el --- defining macros -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

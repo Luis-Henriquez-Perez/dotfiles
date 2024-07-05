@@ -1,4 +1,4 @@
-;;; oo-after-load-outline.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-outline.el --- outline configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is my configuration for outline.
 ;;
 ;;; Code:
 ;; (defafter! define-evil-outline-state)

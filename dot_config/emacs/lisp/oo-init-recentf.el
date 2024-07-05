@@ -1,4 +1,4 @@
-;;; oo-init-recentf.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-recentf.el --- initialize recentf -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

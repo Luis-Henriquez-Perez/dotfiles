@@ -1,4 +1,4 @@
-;;; oo-after-load-evil-easymotion.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-evil-easymotion.el --- evil-easymotion configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

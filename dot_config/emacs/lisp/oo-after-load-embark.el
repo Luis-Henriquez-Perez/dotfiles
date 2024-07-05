@@ -1,4 +1,4 @@
-;;; oo-after-load-embark.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-embark.el --- embark configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is my configuration for embark.
 ;;
 ;;; Code:
 ;;; provide
