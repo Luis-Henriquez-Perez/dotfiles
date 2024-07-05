@@ -103,12 +103,12 @@ advice names for HOW.")
 ;;;; hooks
 ;;;;; oo-add-hook
 ;; No anonymous hooks allowed.
-(defun! oo-add-hook (hook fsym &optional depth local)
+(cl-defun oo-add-hook (hook fsym &key append depth local)
   "Generate a function from FSYM and add it to HOOK.
 Unlike `add-hook'."
   (aprog1 (intern (format "%s&%s" hook fsym))
     (fset it (oo-report-error-fn fsym))
-    (add-hook hook it depth local)))
+    (add-hook hook it (or append depth) local)))
 ;;;;; oo-remove-hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
