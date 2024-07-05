@@ -340,8 +340,6 @@
 ;;;;;; g is kind of like the main prefix key of vim
 (bind! :nv "g u" #'evil-upcase)
 (bind! :nv "g U" #'evil-downcase)
-(bind! :nv "g r" #'evil-goto-first-line)
-(bind! :nv "g R" #'evil-goto-line)
 ;;;;; alternate bindings
 ;;;;;; helpful
 (bind! :alt describe-function helpful-callable :feature helpful)
