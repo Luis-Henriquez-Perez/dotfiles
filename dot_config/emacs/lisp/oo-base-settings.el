@@ -1,4 +1,4 @@
-;;; oo-base-settings.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-settings.el --- core settings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

@@ -1,4 +1,4 @@
-;;; oo-after-load-aas.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-after-load-aas.el --- aas configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

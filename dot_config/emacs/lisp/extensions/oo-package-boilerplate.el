@@ -1,4 +1,4 @@
-;;; xx-package-boilerplate.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; xx-package-boilerplate.el --- elisp file headers and footers -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

@@ -1,4 +1,4 @@
-;;; oo-abbrev-table-wikipedia-misspellings.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-abbrev-table-wikipedia-misspellings.el --- misspellings table -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

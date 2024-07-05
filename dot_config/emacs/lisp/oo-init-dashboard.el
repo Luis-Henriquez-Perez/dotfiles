@@ -1,4 +1,4 @@
-;;; oo-init-dashboard.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-init-dashboard.el --- dashboard configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; This is my configuration for dashboard.
 ;;
 ;;; Code:
 (require 'dashboard)
