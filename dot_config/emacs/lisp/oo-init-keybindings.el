@@ -291,6 +291,9 @@
 (bind! oo-package-map "l" #'elpaca-log        :wk "log")
 (bind! oo-package-map "m" #'elpaca-manager    :wk "manager")
 ;;;;; level 1 bindings
+;;;;;; abbreviations
+(bind! :nie "C-c u" #'unexpand-abbrev)
+(bind! :nie "C-c j" #'oo-add-new-abbrev)
 ;;;;;; lispy
 (bind! lispyville-mode-map :i "SPC" #'lispy-space)
 (bind! lispyville-mode-map :i ";" #'lispy-comment)
