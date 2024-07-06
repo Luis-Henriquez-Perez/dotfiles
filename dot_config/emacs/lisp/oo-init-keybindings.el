@@ -320,6 +320,9 @@
 (bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
 (bind! evil-inner-text-objects-map "c" #'evil-cp-inner-comment)
+;;;;;;; syntax
+(bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
+(bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
 ;;;;;; operators
 ;;;;;;; eval
 (bind! :nv "g t" #'evil-goto-first-line)
