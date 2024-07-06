@@ -93,6 +93,7 @@ is already narrowed."
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
 (defun! oo-sort-autoload-forms ()
+  "Sort autoload forms lexicographically by package name."
   (interactive)
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
