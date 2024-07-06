@@ -113,8 +113,6 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
-;;;; load evil-org-headline-state
-;; (oo-call-after-load 'org #'require '70-evil-org-headline-state)
 ;;;;; evil-surround
 (oo-add-hook 'prog-mode-hook #'evil-surround-mode)
 
