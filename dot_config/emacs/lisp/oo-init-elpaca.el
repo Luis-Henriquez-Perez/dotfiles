@@ -145,6 +145,7 @@
 (elpaca super-save)
 (elpaca tempel)
 (elpaca tempel-collection)
+(elpaca textsize)
 (elpaca transpose-frame)
 (elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github))
 (elpaca vc-auto-commit)
