@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("commnt" "comment")
+  '(("raied" "raised")
+    ("cmt" "comment")
+    ("rased" "raised")
+    ("boudn" "bound")
+    ("commnt" "comment")
     ("commendt" "comment")
     ("hnl" "honestly")
     ("textobj" "text-object")
