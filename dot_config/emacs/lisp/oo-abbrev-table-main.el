@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("textobj" "text-object")
+  '(("commendt" "comment")
+    ("hnl" "honestly")
+    ("textobj" "text-object")
     ("kbds" "keybindings")
     ("wich" "which")
     ("msg" "message")
