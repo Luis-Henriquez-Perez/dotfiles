@@ -36,11 +36,30 @@
 (require 'oo-base-vars)
 (require 'oo-base-lib)
 
+(defvar oo-hook-rx "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)"
+  "Regular expression for the syntax for hooks.")
+
+(defmacro! defhook! (name args &rest body)
+  "Add function to hook as specified by NAME.
+NAME should be a hook symbol."
+  (declare (indent defun))
+  (alet (symbol-name name)
+    (string-match oo-hook-rx it)
+    (set! hook (intern (match-string 1 it))))
+  (cl-assert hook t "%s is not a hook symbol" hook)
+  (when (vectorp (car body))
+    (alet (append (pop body) nil)
+      (set! params (list (or (map-elt it :depth) (map-elt it :append))
+                         (map-elt it :local)))))
+  `(prog1 ',name
+     (fset ',name (lambda ,args (progn! ,@body)))
+     (add-hook ',hook ',name ,@params)))
+
 (defmacro unhook! (name)
   "Remove NAME from its corresponding hook.
 Counterpart to `hook!'."
   (alet (symbol-name name)
-    (string-match "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)" it)
+    (string-match oo-hook-rx it)
     (set! hook (intern (match-string 1 it))))
   `(progn (info! "Removing hook %s from %s...")
           (remove-hook ',hook #',name)))
@@ -54,7 +73,7 @@ invoked.  The defined function will log its usage and suppress errors whenever
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
   (alet (symbol-name name)
-    (string-match "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)" it)
+    (string-match oo-hook-rx it)
     (set! hook (intern (match-string 1 it)))
     (set! fn (intern (match-string 2 it))))
   `(progn (defun ,name (&rest args)

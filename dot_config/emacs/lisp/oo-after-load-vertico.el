@@ -28,10 +28,8 @@
 (require 'vertico)
 ;;;; vertico
 
-;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 (hook! vertico-mode-hook&vertico-buffer-mode)
 (hook! vertico-mode-hook&marginalia-mode)
-
 
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")

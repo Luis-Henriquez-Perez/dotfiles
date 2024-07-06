@@ -64,7 +64,6 @@
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
 
-;; (oo-add-hook 'ah-after-enable-theme-hook #'evil-refresh-cursor)
 (advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;;; escape
 (defvar oo-escape-hook nil

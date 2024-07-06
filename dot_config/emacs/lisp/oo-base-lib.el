@@ -100,31 +100,6 @@ advice names for HOW.")
   (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
     (fset it fsym)
     (advice-add symbol how it props)))
-;;;; hooks
-;;;;; oo-add-hook
-;; No anonymous hooks allowed.
-(cl-defun oo-add-hook (hook fsym &key append depth local)
-  "Generate a function from FSYM and add it to HOOK.
-Unlike `add-hook'."
-  (aprog1 (intern (format "%s&%s" hook fsym))
-    (fset it (oo-report-error-fn fsym))
-    (add-hook hook it (or append depth) local)))
-;;;;; oo-remove-hook
-(defun oo-remove-hook (fsym &optional hook)
-  "Remove FSYM from HOOK."
-  (if (and fsym hook)
-      (remove-hook hook fsym)
-    (remove-hook (oo-hook fsym) fsym)))
-;;;;; oo-hook
-(defun! oo-hook (fsym)
-  "Return the hook symbol for FSYM."
-  (declare (pure t) (side-effect-free t))
-  (cl-assert (symbolp fsym))
-  (alet (symbol-name fsym)
-    (when (string-match "\\(.+\\)&.+" it)
-      (intern (match-string 1 it)))))
-;;;;; oo-hook-p
-(defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
