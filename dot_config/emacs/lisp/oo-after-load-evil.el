@@ -90,13 +90,7 @@
   "Evil operator for evaluating code."
   :move-point nil
   (interactive "<r>")
-  (let* ((ele (assoc major-mode evil-extra-operator-eval-modes-alist))
-         (f-a (cdr-safe ele))
-         (func (car-safe f-a))
-         (args (cdr-safe f-a)))
-    (if (fboundp func)
-        (apply func beg end args)
-      (eval-region beg end t))))
+  (eval-region beg end t))
 
 ;; This is also shamelessly copied with the difference that the format string is
 ;; "%S" instead of "%s".  Honestly, I think not having it that way was a bug.
@@ -104,14 +98,8 @@
   "Evil operator for replacing contents with result from eval."
   :move-point nil
   (interactive "<r>")
-  (let* ((ele (assoc major-mode evil-extra-operator-eval-replace-modes-alist))
-         (f-a (cdr-safe ele))
-         (func (car-safe f-a))
-         (args (cdr-safe f-a))
-         (text (buffer-substring-no-properties beg end))
-         (result (if (fboundp func)
-                     (apply func beg end args)
-                   (format "%S" (eval (read text))))))
+  (let* ((text (buffer-substring-no-properties beg end))
+         (result (format "%S" (eval (read text)))))
     (delete-region beg end)
     (insert result)))
 
@@ -119,14 +107,8 @@
   "Evil operator for printing the results of contents below."
   :move-point nil
   (interactive "<r>")
-  (let* ((ele (assoc major-mode evil-extra-operator-eval-replace-modes-alist))
-         (f-a (cdr-safe ele))
-         (func (car-safe f-a))
-         (args (cdr-safe f-a))
-         (text (buffer-substring-no-properties beg end))
-         (result (if (fboundp func)
-                     (apply func beg end args)
-                   (format "\n=> %S" (eval (read text))))))
+  (let* ((text (buffer-substring-no-properties beg end))
+         (result (format "\n=> %S" (eval (read text)))))
     (goto-char end)
     (alet (point)
       (insert result)
