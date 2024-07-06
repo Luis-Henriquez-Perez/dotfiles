@@ -36,6 +36,15 @@
 (require 'oo-base-vars)
 (require 'oo-base-lib)
 
+(defmacro unhook! (name)
+  "Remove NAME from its corresponding hook.
+Counterpart to `hook!'."
+  (alet (symbol-name name)
+    (string-match "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)" it)
+    (set! hook (intern (match-string 1 it))))
+  `(progn (info! "Removing hook %s from %s...")
+          (remove-hook ',hook #',name)))
+
 (defmacro! hook! (name &rest plist)
   "Define a function named NAME and add it to hook.
 NAME is a symbol of the form HOOK&FUNCTION.  HOOK is the hook to which the
