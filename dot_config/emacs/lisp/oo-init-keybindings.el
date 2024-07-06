@@ -164,6 +164,8 @@
 (bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
 
 (bind! oo-app-map "d" #'dired)
+(bind! oo-app-map "n" #'notmuch)
+(bind! oo-app-map "m" #'mu4e)
 (bind! :alt dired dirvish :feature dirvish)
 (bind! oo-app-map "e" #'eshell)
 (bind! oo-app-map "E" #'restart-emacs-start-new-emacs :wk "new instance")
