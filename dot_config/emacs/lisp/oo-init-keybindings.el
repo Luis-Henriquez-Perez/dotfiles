@@ -175,6 +175,7 @@
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
 (bind! :alt imenu consult-imenu :feature consult)
+(bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "i" #'imenu)
 (bind! oo-find-map "l" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
