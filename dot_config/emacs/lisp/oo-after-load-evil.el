@@ -84,6 +84,53 @@
 
 (bind! :n "J" #'evil-scroll-page-down)
 (bind! :n "K" #'evil-scroll-page-up)
+;;;; eval operator
+;; This is shamelessly copied from `evil-extra-operator'.
+(evil-define-operator oo-eval-operator (beg end)
+  "Evil operator for evaluating code."
+  :move-point nil
+  (interactive "<r>")
+  (let* ((ele (assoc major-mode evil-extra-operator-eval-modes-alist))
+         (f-a (cdr-safe ele))
+         (func (car-safe f-a))
+         (args (cdr-safe f-a)))
+    (if (fboundp func)
+        (apply func beg end args)
+      (eval-region beg end t))))
+
+;; This is also shamelessly copied with the difference that the format string is
+;; "%S" instead of "%s".  Honestly, I think not having it that way was a bug.
+(evil-define-operator oo-eval-replace-operator (beg end)
+  "Evil operator for replacing contents with result from eval."
+  :move-point nil
+  (interactive "<r>")
+  (let* ((ele (assoc major-mode evil-extra-operator-eval-replace-modes-alist))
+         (f-a (cdr-safe ele))
+         (func (car-safe f-a))
+         (args (cdr-safe f-a))
+         (text (buffer-substring-no-properties beg end))
+         (result (if (fboundp func)
+                     (apply func beg end args)
+                   (format "%S" (eval (read text))))))
+    (delete-region beg end)
+    (insert result)))
+
+(evil-define-operator oo-eval-print-operator (beg end)
+  "Evil operator for printing the results of contents below."
+  :move-point nil
+  (interactive "<r>")
+  (let* ((ele (assoc major-mode evil-extra-operator-eval-replace-modes-alist))
+         (f-a (cdr-safe ele))
+         (func (car-safe f-a))
+         (args (cdr-safe f-a))
+         (text (buffer-substring-no-properties beg end))
+         (result (if (fboundp func)
+                     (apply func beg end args)
+                   (format "\n=> %S" (eval (read text))))))
+    (goto-char end)
+    (alet (point)
+      (insert result)
+      (comment-region it (point)))))
 ;;;; load evil-org-headline-state
 ;; (oo-call-after-load 'org #'require '70-evil-org-headline-state)
 ;;;;; evil-surround

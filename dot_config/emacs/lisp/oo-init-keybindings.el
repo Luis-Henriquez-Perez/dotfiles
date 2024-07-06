@@ -329,11 +329,11 @@
 ;;;;;;; eval
 (bind! :nv "g t" #'evil-goto-first-line)
 (bind! :nv "g b" #'evil-goto-line)
-(bind! :nv "g g" #'evil-operator-eval)
-(bind! :nv "g h" #'evil-operator-eval)
-(bind! :nv "g r" #'evil-operator-eval-replace)
-(bind! :nv "g l" #'oo-evil-operator-eval-print)
-(bind! :nv "g p" #'oo-evil-operator-eval-print)
+(bind! :nv "g g" #'oo-eval-operator)
+(bind! :nv "g h" #'oo-eval-operator)
+(bind! :nv "g r" #'oo-eval-replace-operator)
+(bind! :nv "g l" #'oo-eval-print-operator)
+(bind! :nv "g p" #'oo-eval-print-operator)
 ;;;;;;; comment
 (bind! :nv "g c" #'lispyville-comment-or-uncomment)
 (bind! :nv "g l" #'lispyville-comment-and-clone-dwim)
