@@ -75,6 +75,33 @@
 (opt! window-divider-default-bottom-width 7)
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-places t)
+;;;; less confusing kill buffer
+(defun oo--prompt-in-less-confusing-way (original-function buffer &rest args)
+  "Ask user in the minibuffer whether to save before killing.
+
+Replaces `kill-buffer--possibly-save' as advice, so
+ORIGINAL-FUNCTION is unused and never delegated to. Its first
+parameter is the buffer, which is the `car' or ARGS."
+  (let ((response
+         (car
+          (read-multiple-choice
+           (format "Buffer %s modified."
+                   (buffer-name))
+           '((?s "Save and kill buffer" "save the buffer and then kill it")
+             (?d "Discard and kill buffer without saving" "kill buffer without saving")
+             (?c "Cancel" "Exit without doing anything"))
+           nil nil (and (not use-short-answers)
+                        (not (use-dialog-box-p)))))))
+    (cond ((= response ?s)
+           (with-current-buffer buffer (save-buffer))
+           t)
+          ((= response ?d)
+           t)
+          ((= response ?c)
+           nil)
+          )))
+
+(advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
