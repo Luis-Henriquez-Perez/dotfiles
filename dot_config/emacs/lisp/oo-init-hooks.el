@@ -89,7 +89,6 @@
 (hook! emacs-startup-hook&gcmh-mode :depth 91)
 (hook! emacs-startup-hook&evil-mode)
 (hook! emacs-startup-hook&which-key-mode)
-(hook! emacs-startup-hook&idle-require-mode :append t)
 (hook! emacs-startup-hook&recentf-mode)
 ;;;;; html-mode
 (hook! html-mode-hook&emmet-mode)
