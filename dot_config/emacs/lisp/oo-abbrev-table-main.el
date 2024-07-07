@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("raied" "raised")
+  '(("err" "error")
+    ("evala" "evaluate")
+    ("raied" "raised")
     ("cmt" "comment")
     ("rased" "raised")
     ("boudn" "bound")
