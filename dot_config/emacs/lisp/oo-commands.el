@@ -141,6 +141,12 @@ abbreviation at point. This function assumes the abbreviations file
   "Generate a test file for current file."
   (set! test-dir )
   )
+;; (defun! oo-rename-elisp-file ()
+;;   "Rename emacs-lisp file completely."
+;;   ;; Replace all references to file in project.
+;;   ;; Change name of file.
+;;   ()
+;;   )
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
