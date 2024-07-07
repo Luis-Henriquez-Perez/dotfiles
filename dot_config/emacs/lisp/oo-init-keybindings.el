@@ -125,17 +125,26 @@
 (bind! oo-buffer-map "k" #'previous-buffer)
 (bind! oo-buffer-map "x" #'kill-current-buffer)
 (bind! oo-buffer-map "b" #'switch-to-buffer)
-;;;;;; oo-git-map
-(defvar oo-git-map (make-sparse-keymap))
-(define-prefix-command 'oo-git-prefix-command 'oo-git-map)
-(bind! oo-leader-map "g" #'oo-git-prefix-command :wk "git")
+;;;;;; oo-vc-map
+(defvar oo-vc-map (make-sparse-keymap))
+(define-prefix-command 'oo-vc-prefix-command 'oo-vc-map)
+(bind! oo-leader-map "v" #'oo-vc-prefix-command :wk "vc")
 
-(bind! oo-git-map "s" #'magit-status)
-(bind! oo-git-map "p" #'magit-push)
-(bind! oo-git-map "n" #'vc-next-action)
-(bind! oo-git-map "c" #'magit-commit)
-(bind! oo-git-map "b" #'vc-create-branch)
-(bind! oo-git-map "B" #'magit-branch)
+(bind! oo-vc-map "s" #'vc-st)
+(bind! oo-vc-map "p" #'vc-push)
+(bind! oo-vc-map "n" #'vc-next-action)
+(bind! oo-vc-map "b" #'vc-create-branch)
+;;;;;; oo-magit-map
+(defvar oo-magit-map (make-sparse-keymap))
+(define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
+(bind! oo-leader-map "g" #'oo-magit-prefix-command :wk "git")
+
+(bind! oo-magit-map "s" #'magit-status)
+(bind! oo-magit-map "p" #'magit-push)
+;; (bind! oo-magit-map "n" #'vc-next-action)
+(bind! oo-magit-map "c" #'magit-commit)
+;; (bind! oo-magit-map "b" #'vc-create-branch)
+(bind! oo-magit-map "b" #'magit-branch)
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)
