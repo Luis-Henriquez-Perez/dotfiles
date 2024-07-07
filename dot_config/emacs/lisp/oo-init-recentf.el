@@ -33,11 +33,12 @@
 ;; out what eldev is doing here.
 (hook! kill-emacs-hook&recentf-save-list)
 
-(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
-
-(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+;; (advice! recentf-save-list@BF@recentf-cleanup)
+(oo-add-advice 'recentf-save-list :before #'recentf-cleanup)
+;; (advice! recentf-cleanup@AR@silent)
+(oo-add-advice 'recentf-cleanup :around #'oo-funcall-silently)
+(oo-add-advice 'recentf-save-list :around #'oo-funcall-silently)
+(oo-add-advice 'recentf-mode :around #'oo-funcall-silently)
 
 (setq recentf-filename-handlers '(file-truename))
 
@@ -49,9 +50,9 @@
 
 (setq recentf-max-saved-items nil)
 ;;;; TODO always keep important files in recentf-list
-(recentf-push (recentf-expand-file-name "~/.local/share/chezmoi/init.el"))
-(recentf-push (recentf-expand-file-name "~/.config/init.el"))
-(recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
+;; (recentf-push (recentf-expand-file-name "~/.local/share/chezmoi/init.el"))
+;; (recentf-push (recentf-expand-file-name "~/.config/init.el"))
+;; (recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
 (provide 'oo-init-recentf)
 ;;; oo-init-recentf.el ends here
