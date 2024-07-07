@@ -134,6 +134,11 @@ abbreviation at point. This function assumes the abbreviations file
         (eval-buffer)))
     (expand-abbrev)
     (message "Mapped abbrev %S to expansion %S!" abbrev expansion)))
+
+(defun! oo-generate-test-file ()
+  "Generate a test file for current file."
+  (set! test-dir )
+  )
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
