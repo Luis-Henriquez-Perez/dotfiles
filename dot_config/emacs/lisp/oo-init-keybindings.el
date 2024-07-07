@@ -184,10 +184,9 @@
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
 (bind! :alt imenu consult-imenu :feature consult)
-(bind! oo-find-map "i" #'imenu)
-(bind! oo-find-map "l" #'consult-yank-pop)
+(bind! oo-find-map "a" #'imenu)
+(bind! oo-find-map "k" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
-(bind! oo-find-map "n" #'oo-dwim-narrow)
 (bind! oo-find-map "o" #'find-file)
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'pop-to-buffer)
@@ -195,14 +194,10 @@
 ;; (bind! oo-find-map "i" #'oo-open-emacs-init-file)
 ;; (bind! oo-find-map "e" #'oo-open-emacs-directory)
 
-(bind! oo-find-map "b" #'burly-open-bookmark :wk "bookmark")
-
-(bind! oo-find-map "k" #'consult-bookmark :wk "bookmark")
+;; (bind! oo-find-map "b" #'burly-open-bookmark :wk "bookmark")
 (bind! oo-find-map "b" #'consult-bookmark :wk "bookmark")
-
-(bind! oo-find-map "s" #'consult-line :wk "line")
-(bind! oo-find-map "a" #'find-library :wk "library")
-
+(bind! oo-find-map "l" #'consult-line :wk "line")
+(bind! oo-find-map "s" #'find-library :wk "library")
 (bind! oo-find-map "h" #'consult-outline :wk "outline")
 (bind! oo-find-map "g" #'consult-grep :wk "grep")
 ;;;;;; oo-help-map
