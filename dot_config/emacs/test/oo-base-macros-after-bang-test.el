@@ -1,4 +1,4 @@
-;;; oo-after-load-tempel.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-base-macros-after-bang-test.el --- test `oo-base-macros-after-bang.el' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,18 +22,22 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'tempel)
-;;;; tempel
-(bind! tempel-map :ieg "C-j" #'tempel-next)
-(bind! tempel-map :ieg "C-k" #'tempel-previous)
-(bind! tempel-map :ieg "TAB" #'tempel-next)
-(bind! tempel-map :ieg [backtab] #'tempel-previous)
-;;;; make tempel an overriding map
-(after! evil
-  (evil-make-overriding-map tempel-map))
+(require 'oo-base-macros-after-bang)
+
+(ert-deftest oo-after ()
+  ()
+  )
+
+;; (ert-deftest oo--after-bang-body ()
+;;   (should (equal (oo--after-bang-forms nil '((+ 1 1))) '((+ 1 1))))
+;;   (should (equal (oo--after-bang-forms 'a '((+ 1 1))) '((+ 1 1))))
+;;   (should (equal (oo--after-bang-body nil '(+ 1 1))))
+;;   (should (equal (oo--after-bang-body 'foo '(+ 1 1))))
+;;   (should (equal (oo--after-bang-body '(:or foo bar) '(+ 1 1))))
+;;   (should (equal (oo--after-bang-body '(:and foo bar) '(+ 1 1))))
+;;   )
 ;;; provide
-(provide 'oo-after-load-tempel)
-;;; oo-after-load-tempel.el ends here
+(provide 'oo-base-macros-after-bang-test)
+;;; oo-base-macros-after-bang-test.el ends here

@@ -136,45 +136,6 @@ Unlike `add-hook'."
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;;;; oo-call-after-load
-(defun oo--call-after-load (expr fn)
-  "Call FN after EXPR is met."
-  (pcase expr
-    (`(:or . ,exprs)
-     (--each exprs (oo--call-after-load it fn)))
-    (`(:and . ,exprs)
-     (apply #'oo--call-after-load exprs fn))
-    ((or (pred null) (and (pred symbolp) (pred featurep)))
-     (funcall fn))
-    (`(,expr . ,exprs)
-     (oo--call-after-load expr (apply-partially #'oo--call-after-load exprs fn)))
-    ((and feature (pred symbolp))
-     (if (featurep feature)
-         (funcall fn)
-       (eval-after-load feature fn)))
-    (_
-     (error "invalid expression `%S'" expr))))
-
-;; This macro is designed with the following goals in mind.
-;; 1 - use one generic macro for most binding needs
-;; 2 - log the variables I set and when they are being set
-;; You'll get a warning when trying to bind a symbol that hasn't been defined yet.
-;; So it's best to bind a package symbol only after the package has been loaded.
-;; 3 - stop worrying about variables that haven't been bound
-;; 4 - stop worrying about whether a variable is a custom variable or not
-;; Some variables are custom variables.  Meaning they have some function that.
-(defun! oo-call-after-load (expr fn &rest args)
-  "Call FN with ARGS after EXPR resolves.
-EXPR can be a feature (symbol), a list of CONDITIONS, a list whose CAR is
-either `:or' or `:and' and whose CDR is a list of EXPRS.  If CONDITION is a
-feature, call FN with ARGS if feature has already been provided; otherwise,
-behave similarly to `eval-after-load'.  If EXPR is a list of
-EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
-EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
-If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
-EXPRS in (CDR CONDITION) is met."
-  (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
-    (oo--call-after-load expr it)))
 ;;;; oo-after-load-hash-table
 ;; This alist is meant to call certain functions whenever a file is loaded.  It
 ;; is meant for things could happen at any time.  Right now I use it for evil

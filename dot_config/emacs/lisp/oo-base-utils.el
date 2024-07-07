@@ -122,16 +122,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
   `(if (not ,cond) ,then ,@else))
 
 (defalias 'nif! 'if-not!)
-;;;; oo-once-only-fn
-(defun oo-only-once-fn (fn)
-  "Return a function behaves the same as FN the first time it is called.
-After the first call, it does nothing and returns nil.  Note that this function
-must be evaluated with `lexical-binding' enabled."
-  (let ((first-call-p t))
-    (lambda (&rest args)
-      (when first-call-p
-        (setq first-call-p nil)
-        (apply fn args)))))
 ;;;; oo-funcall-silently
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."

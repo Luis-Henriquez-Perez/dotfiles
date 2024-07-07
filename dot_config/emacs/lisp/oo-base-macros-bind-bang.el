@@ -129,7 +129,7 @@ If METADATA has no keymap return."
           ;; In general dired is extremely sensitive as to when the bindings
           ;; as even this does not work in `oo-after-load-dired'.
           ((equal !keymap 'dired-mode-map)
-           `((oo-call-after-load 'dired ,(oo--bind-lambda nil metadata steps))))
+           `((after! dired ,(oo--bind-lambda nil metadata steps))))
           (t
            `((oo-call-after-bound ',!keymap ,(oo--bind-lambda nil metadata steps)))))))
 
@@ -147,7 +147,7 @@ If METADATA has no keymap return."
       (oo--bind-generate-body metadata steps)
     (pushing! steps #'oo--bind-step-evil-signature)
     (setf (map-elt metadata :evil-state) (oo-ensure-quote state))
-    `((oo-call-after-load 'evil (lambda () ,@(oo--bind-generate-body metadata steps))))))
+    `((after! evil (lambda () ,@(oo--bind-generate-body metadata steps))))))
 
 (defun! oo--bind-step-evil-symbol (metadata steps)
   (set! evil-symbol (map-elt metadata :evil-symbol))
@@ -187,7 +187,7 @@ If METADATA has no keymap return."
     (set! which-key (or !which-key !wk !desc))
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     (set! fn `(lambda (keymap key def)
-                (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,which-key))
+                (after! which-key (,wk-fn keymap key ,which-key))
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
     (nif! which-key

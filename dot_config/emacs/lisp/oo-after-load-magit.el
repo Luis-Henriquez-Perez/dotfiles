@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 ;;;; magit
-(oo-call-after-load 'evil #'evil-magit-init)
+(after! evil (evil-magit-init))
 
 (oo-popup-at-bottom "\\`magit")
 ;;; provide
