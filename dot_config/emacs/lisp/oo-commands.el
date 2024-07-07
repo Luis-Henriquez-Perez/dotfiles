@@ -53,6 +53,8 @@ is already narrowed."
         ((derived-mode-p 'org-mode)
          (or (ignore-errors (org-narrow-to-block) t)
              (org-narrow-to-subtree)))
+        ;; (()
+        ;;  (shell-narrow-to-prompt))
         (t
          (narrow-to-defun))))
 
