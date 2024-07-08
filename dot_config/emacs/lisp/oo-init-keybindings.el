@@ -373,13 +373,13 @@
 
 (opt! consult-fontify-preserve nil)
 
-(defun! oo-display-buffer ()
+(defun! oo-pop-to-buffer ()
   (interactive)
   (require 'consult)
-  (set! consult--buffer-display #'display-buffer)
+  (set! consult--buffer-display #'pop-to-buffer)
   (call-interactively #'consult-buffer))
 
-(bind! :alt display-buffer oo-display-buffer)
+(bind! :alt pop-to-buffer oo-pop-to-buffer)
 ;;;;; dired
 ;; Dired is very picky about when these bindings happen.  It is the only package
 ;; I have had that is that picky.  I have noticed that unlike every other
