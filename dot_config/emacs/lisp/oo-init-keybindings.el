@@ -234,6 +234,13 @@
 (bind! oo-emms-map "v" #'emms-volume-lower)
 (bind! oo-emms-map "V" #'emms-volume-raise)
 (bind! oo-emms-map "s" #'emms-seek-to)
+;;;;;; oo-quick-map
+(defvar oo-quick-map (make-sparse-keymap))
+(define-prefix-command 'oo-quick-prefix-command 'oo-quick-map)
+(bind! oo-leader-map "j" #'oo-quick-prefix-command :wk "quick")
+
+(bind! oo-quick-map "d" #'eval-expression)
+(bind! oo-quick-map "j" #'oo-dwim-narrow)
 ;;;;;; oo-toggle-map
 (defvar oo-toggle-map (make-sparse-keymap))
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
@@ -284,9 +291,9 @@
 ;;;;;; oo-package-map
 (defvar oo-package-map (make-sparse-keymap))
 (define-prefix-command 'oo/package-prefix-command 'oo-package-map)
-(bind! oo-leader-map "p" #'oo/package-prefix-command :wk "package")
 
 (bind! oo-package-map "b" #'elpaca-browse     :wk "browse")
+(bind! oo-leader-map "p" #'oo/package-prefix-command :wk "package")
 (bind! oo-package-map "U" #'elpaca-update-all :wk "update all")
 (bind! oo-package-map "u" #'elpaca-update     :wk "update")
 (bind! oo-package-map "v" #'elpaca-visit      :wk "visit")
