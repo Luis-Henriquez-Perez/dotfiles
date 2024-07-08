@@ -27,10 +27,14 @@
 (require 'oo-base-macros-after-bang)
 
 (ert-deftest oo-after ()
-  (progn! (let! result nil)
+  (progn! (set! result nil)
           (after! foo (push 1 result))
           (provide 'foo)
-          (should (equal '(1) result))))
+          (should (equal '(1) result))
+          (provide 'foo)
+          ;; It should only be evaluated once.
+          (should (equal '(1) result))
+          ))
 
 ;; (ert-deftest oo--after-bang-body ()
 ;;   (should (equal (oo--after-bang-forms nil '((+ 1 1))) '((+ 1 1))))
