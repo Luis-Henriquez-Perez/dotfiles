@@ -333,6 +333,9 @@
 ;;;;;;; syntax
 (bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
 (bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
+;;;;;;; entire
+(bind! evil-outer-text-objects-map "e" #'evil-entire-entire-buffer)
+(bind! evil-inner-text-objects-map "e" #'evil-entire-entire-buffer)
 ;;;;;; operators
 ;;;;;;; eval
 (bind! :nv "g t" #'evil-goto-first-line)

@@ -127,6 +127,7 @@
 (elpaca org-bookmark-heading)
 (elpaca org-ml)
 (elpaca org-superstar)
+(elpaca evil-textobj-entire)
 (elpaca org-tidy)
 (elpaca orglink)
 (elpaca (outli :fetcher github :repo "jdtsmith/outli"))
