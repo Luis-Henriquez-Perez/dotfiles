@@ -34,6 +34,10 @@
           (provide 'foo)
           ;; It should only be evaluated once.
           (should (equal '(1) result))
+          ;; It should suppress errors if `oo-debug-p'.
+          (set! result nil)
+          (should-not result)
+          (after! bar ())
           ))
 
 ;; (ert-deftest oo--after-bang-body ()
