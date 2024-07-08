@@ -29,6 +29,7 @@
 (require 'oo-base-settings)
 (require 'oo-base-lib)
 (eval-when-compile (require 'oo-base-macros-hook-bang))
+(eval-when-compile (require 'oo-base-macros-after-bang))
 ;;; provide
 (provide 'oo-base)
 ;;; oo-base.el ends here
