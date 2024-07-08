@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("prelim" "preliminary")
+  '(("ifo" "in favor of")
+    ("thes" "these")
+    ("prelim" "preliminary")
     ("buff" "buffer")
     ("raied" "raised")
     ("cmt" "comment")
