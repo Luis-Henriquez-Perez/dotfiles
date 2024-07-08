@@ -234,6 +234,15 @@
 (bind! oo-emms-map "v" #'emms-volume-lower)
 (bind! oo-emms-map "V" #'emms-volume-raise)
 (bind! oo-emms-map "s" #'emms-seek-to)
+;;;;;; oo-workspace-map
+(defvar oo-workspace-map (make-sparse-keymap))
+(define-prefix-command 'oo-workspace-prefix-command 'oo-workspace-map)
+(bind! oo-leader-map "k" #'oo-workspace-prefix-command :wk "workspace")
+
+(bind! oo-workspace-map "j" #'tab-next :wk "workspace")
+(bind! oo-workspace-map "k" #'tab-previous :wk "workspace")
+(bind! oo-workspace-map "d" #'tab-close :wk "workspace")
+(bind! oo-workspace-map "o" #'burly-bookmark-windows :wk "workspace")
 ;;;;;; oo-quick-map
 (defvar oo-quick-map (make-sparse-keymap))
 (define-prefix-command 'oo-quick-prefix-command 'oo-quick-map)
