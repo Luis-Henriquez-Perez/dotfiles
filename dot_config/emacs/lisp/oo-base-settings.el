@@ -69,6 +69,9 @@
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
 ;;;; don't create lockfiles
 (setq create-lockfiles nil)
+
+;; Do not create backup files ever.
+(setq version-control 'never)
 ;;;; don't flash unstyled modeline at startup
 ;; When emacs starts up, the default modeline will show up.  Rendering this default
 ;; modeline at startup does slightly slow down emacs (insignificant on it's own but
