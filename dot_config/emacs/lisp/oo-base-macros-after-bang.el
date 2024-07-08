@@ -29,6 +29,8 @@
 ;; This only works with lexical-binding.
 ;;
 ;;; Code:
+(require 'oo-base-lib)
+
 (defun oo--after-bang-error (body)
   "Return form that produces error."
   (let ((eval-after-load-error (gensym "oo--eval-after-load-error-")))
