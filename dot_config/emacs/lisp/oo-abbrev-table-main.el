@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("buff" "buffer")
+  '(("prelim" "preliminary")
+    ("buff" "buffer")
     ("raied" "raised")
     ("cmt" "comment")
     ("rased" "raised")
