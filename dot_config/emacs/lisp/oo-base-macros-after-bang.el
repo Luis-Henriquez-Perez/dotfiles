@@ -1,4 +1,4 @@
-;;; oo-base-macros-after-load-bang.el --- `with-eval-after-load' replacement -*- lexical-binding: t; -*-
+;;; oo-base-macros-after-bang.el --- `with-eval-after-load' replacement -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -80,5 +80,5 @@ error and `oo-debug-p' is nil, log the error and add a function to `oo-errors'."
     `(let ((,once-only-lambda ,(oo--once-only-lambda (oo--after-bang-error body))))
        ,(macroexp-progn (oo--after-bang-forms expr `((funcall ,once-only-lambda)))))))
 ;;; provide
-(provide 'oo-base-macros-after-load-bang)
-;;; oo-base-macros-after-load-bang.el ends here
+(provide 'oo-base-macros-after-bang)
+;;; oo-base-macros-after-bang.el ends here
