@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("ifo" "in favor of")
+  '(("lata" "later")
+    ("ifo" "in favor of")
     ("thes" "these")
     ("prelim" "preliminary")
     ("buff" "buffer")
