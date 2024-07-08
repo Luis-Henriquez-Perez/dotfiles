@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("err" "error")
+  '(("supres" "suppress")
+    ("errs" "errors")
+    ("err" "error")
     ("evala" "evaluate")
     ("raied" "raised")
     ("cmt" "comment")
