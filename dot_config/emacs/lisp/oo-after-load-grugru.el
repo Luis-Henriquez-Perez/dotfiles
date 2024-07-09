@@ -25,36 +25,33 @@
 ;; This is my configuration for grugru.
 ;;
 ;;; Code:
-;; For helpful information see [[][]]
-;; (grugru-define-on-major-mode)
+(require 'grugru)
 
-;;; grugru
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("yes" "no")))
 
-;;;; define opposites
-;; Define grugru globally.  This is applied in all buffers.
-(grugru-define-global 'symbol '("yes" "no"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("up" "down")))
 
-(grugru-define-global 'symbol '("up" "down"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("left" "right")))
 
-(grugru-define-global 'symbol '("left" "right"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("wrong" "right")))
 
-(grugru-define-global 'symbol '("wrong" "right"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("red" "orange" "yellow" "green" "blue" "indigo" "violet")))
 
-(grugru-define-global 'symbol '("red" "orange" "yellow" "green" "blue" "indigo" "violet"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("front" "back")))
 
-(grugru-define-global 'symbol '("front" "back"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("inner" "outer")))
 
-(grugru-define-global 'symbol '("inner" "outer"))
-
-(grugru-define-global 'symbol '("is" "was"))
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("is" "was")))
 ;;;; emacs-lisp
-(grugru-define-on-major-mode '(emacs-lisp) 'word '("let" "let*" "let!" "-let"))
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("let" "let*" "let!" "-let"))
 
-(grugru-define-on-major-mode '(emacs-lisp) 'symbol '(should should-not))
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("define-key" "evil-define-key*"))
 
-(grugru-define-on-major-mode '(emacs-lisp) 'word '(abbrev-table-put abbrev-table-get))
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("abbrev-table-put" "abbrev-table-get"))
 
-(grugru-define-on-major-mode '(emacs-lisp) 'word '(gethash puthash))
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("gethash" "puthash"))
+
+(grugru-define-on-major-mode 'c-mode 'symbol '("unsigned" "signed"))
 ;;; provide
 (provide 'oo-after-load-grugru)
 ;;; oo-after-load-grugru.el ends here
