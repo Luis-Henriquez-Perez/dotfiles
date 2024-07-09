@@ -119,6 +119,7 @@
 (elpaca modus-themes)
 (elpaca monokai-theme)
 (elpaca no-littering)
+(elpaca noccur)
 (elpaca notmuch)
 (elpaca (on :host github :repo "ajgrf/on.el"))
 ;; (elpaca (once :host github :repo "emacs-magus/once"))
