@@ -353,6 +353,9 @@
 ;;;;;;; entire
 (bind! evil-outer-text-objects-map "e" #'evil-entire-entire-buffer)
 (bind! evil-inner-text-objects-map "e" #'evil-entire-entire-buffer)
+;;;;;;; column
+(bind! evil-inner-text-objects-map "k" 'evil-textobj-column-word)
+(bind! evil-inner-text-objects-map "K" 'evil-textobj-column-WORD)
 ;;;;;; operators
 ;;;;;;; eval
 (bind! :nv "g t" #'evil-goto-first-line)
