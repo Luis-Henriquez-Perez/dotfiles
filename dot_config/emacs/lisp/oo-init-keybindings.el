@@ -250,6 +250,7 @@
 
 (bind! oo-quick-map "d" #'eval-expression)
 (bind! oo-quick-map "j" #'oo-dwim-narrow)
+(bind! oo-quick-map "f" #'grugru)
 ;;;;;; oo-toggle-map
 (defvar oo-toggle-map (make-sparse-keymap))
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
