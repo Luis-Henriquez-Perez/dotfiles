@@ -155,7 +155,7 @@
 (bind! oo-window-map "b" #'burly-bookmark-windows :wk "bookmark")
 (bind! oo-window-map "w" #'ace-window :wk "select")
 (bind! oo-window-map "j" #'ace-window :wk "select")
-(bind! oo-window-map "o" #'ace-window :wk "select")
+(bind! oo-window-map "o" #'burly-open-bookmark)
 (bind! oo-window-map "s" #'ace-swap-window :wk "swap")
 (bind! oo-window-map "S" #'burly-bookmark-windows :wk "bookmark")
 (bind! oo-window-map "b" #'balance-windows :wk "balance")
