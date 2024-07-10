@@ -29,6 +29,17 @@
 (require 'evil)
 (require 'oo-override-mode)
 (require 'oo-init-keybindings)
+;;;; corfu
+(with-eval-after-load 'corfu
+  (evil-define-key* 'insert corfu-map "<tab>"   #'corfu-next)
+  (evil-define-key* 'insert corfu-map [backtab] #'corfu-previous)
+  (evil-define-key* 'insert corfu-map "S-TAB"   #'corfu-previous)
+  (evil-define-key* 'insert corfu-map "C-;"     #'corfu-quick-complete)
+  (evil-define-key* 'insert corfu-map "C-j"     #'corfu-next)
+  (evil-define-key* 'insert corfu-map "C-k"     #'corfu-previous)
+  (evil-define-key* 'insert corfu-map "C-p"     #'corfu-previous)
+  (evil-define-key* 'insert corfu-map ";"       #'corfu-quick-complete)
+  (evil-define-key* 'insert corfu-map "SPC"     #'corfu-insert))
 ;;;; vertico
 (with-eval-after-load 'vertico
   (evil-define-key* '(insert emacs) vertico-map "TAB" #'vertico-next)
