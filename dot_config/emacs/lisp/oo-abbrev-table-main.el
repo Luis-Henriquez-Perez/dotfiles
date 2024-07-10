@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("suport" "support")
+  '(("exs" "examples")
+    ("suport" "support")
     ("oftne" "often")
     ("nl" "newline")
     ("packae" "package")
