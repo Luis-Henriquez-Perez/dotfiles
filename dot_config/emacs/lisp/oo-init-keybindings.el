@@ -106,12 +106,12 @@
 ;;;;;; oo-git-map
 (defvar oo-magit-map (make-sparse-keymap))
 (define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
-(define-key oo-leader-map "g" #'oo-buffer-prefix-command)
+(define-key oo-leader-map "g" #'oo-magit-prefix-command)
 
 (with-eval-after-load 'which-key
   (which-key-add-keymap-based-replacements oo-leader-map "g" "magit"))
 
-(define-key oo-magit-map "g" #'oo-git-prefix-command)
+(define-key oo-magit-map "g" #'oo-magit-prefix-command)
 (define-key oo-magit-map "s" #'magit-status)
 (define-key oo-magit-map "p" #'magit-push)
 (define-key oo-magit-map "n" #'vc-next-action)
