@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("cmnts" "comments")
+  '(("suport" "support")
+    ("oftne" "often")
+    ("nl" "newline")
+    ("packae" "package")
+    ("cmnts" "comments")
     ("lata" "later")
     ("ifo" "in favor of")
     ("thes" "these")
