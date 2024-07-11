@@ -60,6 +60,7 @@
 (evil-define-key* '(insert emacs) global-map [escape] #'evil-force-normal-state)
 ;;;; miscellaneous
 (evil-define-key* 'insert global-map (kbd "TAB") #'completion-at-point)
+(declare-function hungry-delete-forward "hungry-delete")
 (evil-define-key* '(normal) global-map "x" #'hungry-delete-forward)
 (evil-define-key* 'insert global-map (kbd "A-x") #'execute-extended-command)
 (evil-define-key* 'insert global-map (kbd "M-x") #'execute-extended-command)
@@ -88,7 +89,9 @@
 (define-key evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
 (define-key evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (define-key evil-outer-text-objects-map "f" #'evil-cp-a-form)
+(declare-function lispyville-outer-comment "lispyville")
 (define-key evil-outer-text-objects-map "c" #'lispyville-outer-comment)
+(declare-function lispyville-inner-comment "lispyville")
 (define-key evil-inner-text-objects-map "c" #'lispyville-inner-comment)
 ;;;; operators
 ;;;;; eval
@@ -100,6 +103,8 @@
 (evil-define-key* '(normal visual) global-map (kbd "g l") #'oo-evil-operator-eval-print)
 (evil-define-key* '(normal visual) global-map (kbd "g p") #'oo-evil-operator-eval-print)
 ;;;;; comment
+(declare-function lispyville-comment-or-uncomment "lispyville")
+(declare-function lispyville-comment-and-clone-dwim "lispyville")
 (evil-define-key* '(normal visual) global-map (kbd "g c") #'lispyville-comment-or-uncomment)
 (evil-define-key* '(normal visual) global-map (kbd "g l") #'lispyville-comment-and-clone-dwim)
 ;;;;; exchange
