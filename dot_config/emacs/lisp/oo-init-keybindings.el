@@ -163,7 +163,7 @@
   (which-key-add-keymap-based-replacements oo-leader-map "f" "find"))
 
 (define-key oo-find-map "i" #'imenu)
-(define-key oo-find-map "l" #'consult-yank-pop)
+(define-key oo-find-map "p" #'consult-yank-pop)
 (define-key oo-find-map "j" #'oo-dwim-narrow)
 (define-key oo-find-map "n" #'oo-dwim-narrow)
 (define-key oo-find-map "o" #'find-file)
@@ -175,7 +175,7 @@
 (define-key oo-find-map "b" #'burly-open-bookmark)
 (define-key oo-find-map "k" #'consult-bookmark)
 (define-key oo-find-map "b" #'consult-bookmark)
-(define-key oo-find-map "s" #'consult-line)
+(define-key oo-find-map "l" #'consult-line)
 (define-key oo-find-map "a" #'find-library)
 (define-key oo-find-map "h" #'consult-outline)
 (define-key oo-find-map "g" #'consult-grep)
