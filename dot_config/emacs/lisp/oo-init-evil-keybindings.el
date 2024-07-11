@@ -29,6 +29,20 @@
 (require 'evil)
 (require 'oo-override-mode)
 (require 'oo-init-keybindings)
+;;;; helm
+(with-eval-after-load 'helm
+  (evil-define-key* 'insert helm-map :ie "TAB" #'helm-next-line)
+  (evil-define-key* 'insert helm-map :ie [backtab] #'helm-previous-line)
+  (evil-define-key* 'insert helm-map :ie "C-j" #'helm-next-line)
+  (evil-define-key* 'insert helm-map :ie "C-k" #'helm-previous-line)
+
+  (evil-define-key* 'insert helm-map :ie "C-a" #'helm-select-action)
+  (evil-define-key* 'insert helm-map :ie "C-m" #'helm-toggle-visible-mark-forward)
+  ;; (evil-define-key* 'insert helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
+  ;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
+  (evil-define-key* 'insert helm-map :ie "S-TAB" #'helm-mark-current-line)
+
+  (evil-define-key* 'insert helm-map :ie "C-;" #'ace-jump-helm-line))
 ;;;; corfu
 (with-eval-after-load 'corfu
   (evil-define-key* 'insert corfu-map "<tab>"   #'corfu-next)
