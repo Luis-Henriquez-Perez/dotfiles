@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 ;;;; org
+(require 'org)
 ;;;;; org-superstar
 (hook! org-mode-hook&org-superstar-mode)
 
@@ -83,21 +84,8 @@
 (opt! org-edit-src-content-indentation 0)
 
 (opt! org-src-window-setup 'plain)
-
-(bind! :alt org-edit-src-code oo-dwim-edit-src-code)
-;; (bind! :h "," #'org-edit-src-code :localleader t)
-;; (bind! org-mode-map "e" #'org-edit-src-code)
-;; (bind! :h "es" #'org-edit-src-code :wk "source block" :localleader t)
-
-;; (bind! org-src-mode-map "," #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-;; (bind! org-src-mode-map "a" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
-;; (bind! org-src-mode-map "c" #'org-edit-src-exit :localleader t :mode 'org-src-mode)
 ;;;;; org-capture
 (oo-popup-at-bottom "CAPTURE[^z-a]+")
-
-(bind! oo-quick-map "j" #'org-capture :wk "capture")
-(bind! oo-app-map "a" #'org-capture :wk "capture")
-(bind! oo-app-map "j" #'org-capture :wk "capture")
 
 (opt! org-archive-save-context-info nil)
 
