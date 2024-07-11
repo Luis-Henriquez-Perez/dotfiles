@@ -27,10 +27,10 @@
 ;;; Code:
 (require 'tempel)
 ;;;; tempel
-(bind! tempel-map :ieg "C-j" #'tempel-next)
-(bind! tempel-map :ieg "C-k" #'tempel-previous)
-(bind! tempel-map :ieg "TAB" #'tempel-next)
-(bind! tempel-map :ieg [backtab] #'tempel-previous)
+;; (bind! tempel-map :ieg "C-j" #'tempel-next)
+;; (bind! tempel-map :ieg "C-k" #'tempel-previous)
+;; (bind! tempel-map :ieg "TAB" #'tempel-next)
+;; (bind! tempel-map :ieg [backtab] #'tempel-previous)
 ;;;; make tempel an overriding map
 (with-eval-after-load 'evil
   (with-no-warnings
