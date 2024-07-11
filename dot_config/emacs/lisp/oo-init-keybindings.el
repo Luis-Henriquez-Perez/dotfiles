@@ -227,6 +227,7 @@
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
 (define-key oo-leader-map "t" #'oo-toggle-prefix-command)
 (define-key oo-toggle-map "u" #'toggle-truncate-lines)
+(declare-function oo-dwim-narrow "oo-commands")
 (define-key oo-toggle-map "n" #'oo-dwim-narrow)
 (define-key oo-toggle-map "i" #'iedit-mode)
 (define-key oo-toggle-map "e" #'eval-expression)
@@ -234,6 +235,7 @@
 (define-key oo-toggle-map "r" #'read-only-mode)
 (define-key oo-toggle-map "t" #'load-theme)
 (define-key oo-toggle-map "d" #'toggle-debug-on-error)
+(declare-function profiler-stop "profiler")
 (define-key oo-toggle-map "P" #'profiler-stop)
 (define-key oo-toggle-map "s" #'smartparens-mode)
 ;;;;;; oo-dotfile-map

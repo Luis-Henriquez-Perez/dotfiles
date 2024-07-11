@@ -42,17 +42,21 @@
   (evil-define-key* 'insert corfu-map "SPC"     #'corfu-insert))
 ;;;; vertico
 (with-eval-after-load 'vertico
-  (evil-define-key* '(insert emacs) vertico-map "TAB" #'vertico-next)
-  (evil-define-key* '(insert emacs) vertico-map "C-k" #'vertico-previous)
-  (evil-define-key* '(insert emacs) vertico-map "C-j" #'vertico-next)
-  (evil-define-key* '(insert emacs) vertico-map ";" #'vertico-quick-exit)
-  (evil-define-key* '(insert emacs) vertico-map "C-;" #'vertico-quick-exit)
-  (evil-define-key* '(insert emacs) vertico-map [backtab] #'vertico-previous)
-  (evil-define-key* '(insert) vertico-map "C-o" #'embark-act))
+  (with-no-warnings
+    (declare-function vertico-next "vertico")
+    (evil-define-key* 'insert vertico-map (kbd "TAB") #'vertico-next)
+    (declare-function vertico-previous "vertico")
+    (evil-define-key* 'insert vertico-map (kbd "C-k") #'vertico-previous)
+    (evil-define-key* 'insert vertico-map (kbd "C-j") #'vertico-next)
+    (evil-define-key* 'insert vertico-map ";" #'vertico-quick-exit)
+    (evil-define-key* 'insert vertico-map (kbd "C-;") #'vertico-quick-exit)
+    (evil-define-key* 'insert vertico-map [backtab] #'vertico-previous)
+    (evil-define-key* 'insert vertico-map (kbd "C-o") #'embark-act)))
 ;;;; lispy
 (with-eval-after-load 'lispyville
-  (evil-define-key* 'insert lispyville-mode-map "SPC" #'lispy-space)
-  (evil-define-key* 'insert lispyville-mode-map ";" #'lispy-comment))
+  (with-no-warnings
+    (evil-define-key* 'insert lispyville-mode-map (kbd "SPC") #'lispy-space)
+    (evil-define-key* 'insert lispyville-mode-map (kbd ";") #'lispy-comment)))
 ;;;; dired
 ;; Dired is very picky about when these bindings happen.  It is the only package
 ;; I have had that is that picky.  I have noticed that unlike every other
