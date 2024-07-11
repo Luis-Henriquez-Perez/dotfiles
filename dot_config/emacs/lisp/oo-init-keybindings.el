@@ -302,13 +302,13 @@
 ;;;;;; vertico
 (with-eval-after-load 'vertico
   (with-no-warnings
-    (define-key vertico-map "TAB" #'vertico-next)
-    (define-key vertico-map "C-k" #'vertico-previous)
-    (define-key vertico-map "C-j" #'vertico-next)
+    (define-key vertico-map (kbd "TAB") #'vertico-next)
+    (define-key vertico-map (kbd "C-k") #'vertico-previous)
+    (define-key vertico-map (kbd "C-j") #'vertico-next)
     (define-key vertico-map ";" #'vertico-quick-exit)
-    (define-key vertico-map "C-;" #'vertico-quick-exit)
+    (define-key vertico-map (kbd "C-;") #'vertico-quick-exit)
     (define-key vertico-map [backtab] #'vertico-previous)
-    (define-key vertico-map "C-o" #'embark-act)))
+    (define-key vertico-map (kbd "C-o") #'embark-act)))
 ;;;;;; consult
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
