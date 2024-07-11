@@ -25,10 +25,9 @@
 ;; This is my modeline configuration.
 ;;
 ;;; Code:
-;; (defvar oo-line-spinner nil)
-;; (setq oo-line-spinner (spinner-create 'rotating-line))
-;; (spinner-start oo-line-spinner)
-;; (spinner-stop oo-line-spinner)
+(require 'battery)
+
+(defvar org-timer-mode-line-string)
 ;;;; macro to generate a modeline segment
 (defmacro! defsegment! (name &rest body)
   "Define a segment for the modeline."
