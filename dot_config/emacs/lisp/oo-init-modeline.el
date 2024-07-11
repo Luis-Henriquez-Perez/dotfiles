@@ -93,8 +93,8 @@
 ;; TODO: Add how much time is left plaing...
 (defsegment! emms ()
   (when (bound-and-true-p emms-player-playing-p)
-    (require 'f)
-    (set! track (f-filename (emms-track-description (emms-playlist-current-selected-track))))
+    (set! path (emms-track-description (emms-playlist-current-selected-track)))
+    (set! track (file-name-nondirectory (directory-file-name path)))
     (cond ((bound-and-true-p emms-player-paused-p)
            (format "PAUSED %s" track))
           ((bound-and-true-p emms-repeat-track)
