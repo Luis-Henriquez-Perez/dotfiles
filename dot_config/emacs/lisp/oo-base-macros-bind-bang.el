@@ -27,31 +27,31 @@
 ;;; Code:
 (require 'oo-base)
 ;;;; build functions
-;; (defun oo--build-define-key (metadata forms)
-;;   (with-map-keywords! metadata
-;;     `((define-key ,!keymap ,!key ,!def)
-;;       ,@forms)))
+(defun oo--build-define-key (metadata forms)
+  (with-map-keywords! metadata
+    `((define-key ,!keymap ,!key ,!def)
+      ,@forms)))
 
-;; (defun oo--build-evil-define-key (metadata forms)
-;;   (with-map-keywords! metadata
-;;     `((evil-define-key* ,!state ,!keymap ,!key ,!def)
-;;       ,@forms)))
+(defun oo--build-evil-define-key (metadata forms)
+  (with-map-keywords! metadata
+    `((evil-define-key* ,!state ,!keymap ,!key ,!def)
+      ,@forms)))
 
-;; (defun oo--build-evil-define-minor-mode-key (metadata forms)
-;;   (with-map-keywords! metadata
-;;     `((evil-define-key* ,!state ,!mode ,!key ,!def)
-;;       ,@forms)))
+(defun oo--build-evil-define-minor-mode-key (metadata forms)
+  (with-map-keywords! metadata
+    `((evil-define-key* ,!state ,!mode ,!key ,!def)
+      ,@forms)))
 
-;; (defun oo--build-kbd (metadata forms)
-;;   "Apply kbd to binding if possible."
-;;   (with-map-keywords! metadata
-;;     `((setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
-;;       ,@forms)))
+(defun oo--build-kbd (metadata forms)
+  "Apply kbd to binding if possible."
+  (with-map-keywords! metadata
+    `((setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
+      ,@forms)))
 
-;; (defun oo--build-which-key (metadata form)
-;;   ;; (with-map-keywords! metadata
-;;   ;;   )
-;;   )
+(defun oo--build-which-key (metadata form)
+  ;; (with-map-keywords! metadata
+  ;;   )
+  )
 ;;;; generate body
 ;; (defun! oo--bind-generate-forms (metadata)
 ;;   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
