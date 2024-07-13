@@ -27,31 +27,50 @@
 ;;; Code:
 (require 'oo-base-macros-bind-bang)
 
-(ert-deftest oo--bind-build-metadata ()
-  ;; Just a key and a definition.
-  ;; (bind! "d" #'ho)
-  (should (equal '(:keymap global-map :key "d" :def #'ho)
-                 (oo--bind-build-metadata '("d" #'ho))))
-  ;; => (:keymap global-map :key "d" :def #'ho)
+(ert-deftest oo--build-steps ()
+  (should (equal '(oo--build-define-key
+                   oo--build-kbd
+                   oo--build-let-binds
+                   oo--build-defer-keymap)
+                 (oo--build-steps '(:state g))))
 
-  ;; A state letter with a key and definition.
-  ;; (bind! i "d" #'ho)
-  (should (equal '(:evil-state-letters (i) :keymap global-map :key "d" :def #'ho)
-                 (oo--bind-build-metadata '(i "d" #'ho))))
-  ;; => (:evil-states (i) :keymap global-map :key "d" :def #'ho)
+  (should (equal '(oo--build-evil-define-key
+                   oo--build-kbd
+                   oo--build-let-binds
+                   oo--build-defer-keymap
+                   oo--build-defer-evil-state-char)
+                 (oo--build-steps '(:state i))))
+  (should (equal '(oo--build-evil-define-key
+                   oo--build-kbd
+                   oo--build-let-binds
+                   oo--build-defer-keymap)
+                 (oo--build-steps '(:state normal)))))
 
-  ;; A list of state letter with a key and definition.
-  ;; (bind! (n v) "d" #'ho)
-  (should '(:evil-state-letters (n v) :key "d" :def #'ho)
-          (oo--bind-build-metadata '((n v) "d" #'ho)))
-  ;; => (:evil-states (n v) :key "d" :def #'ho)
+;; (ert-deftest oo--bind-build-metadata ()
+;;   ;; Just a key and a definition.
+;;   ;; (bind! "d" #'ho)
+;;   (should (equal '(:keymap global-map :key "d" :def #'ho)
+;;                  (oo--bind-build-metadata '("d" #'ho))))
+;;   ;; => (:keymap global-map :key "d" :def #'ho)
 
-  ;; A state symbol with a key and definition.
-  ;; (bind! normal "d" #'ho)
-  (should '(:evil-states (normal) :keymap global-map :key "d" :def #'ho)
-          (oo--bind-build-metadata '(normal "d" #'ho)))
-  ;; => (:evil-states normal :keymap global-map :key "d" :def #'ho)
-  )
+;;   ;; A state letter with a key and definition.
+;;   ;; (bind! i "d" #'ho)
+;;   (should (equal '(:evil-state-letters (i) :keymap global-map :key "d" :def #'ho)
+;;                  (oo--bind-build-metadata '(i "d" #'ho))))
+;;   ;; => (:evil-states (i) :keymap global-map :key "d" :def #'ho)
+
+;;   ;; A list of state letter with a key and definition.
+;;   ;; (bind! (n v) "d" #'ho)
+;;   (should '(:evil-state-letters (n v) :key "d" :def #'ho)
+;;           (oo--bind-build-metadata '((n v) "d" #'ho)))
+;;   ;; => (:evil-states (n v) :key "d" :def #'ho)
+
+;;   ;; A state symbol with a key and definition.
+;;   ;; (bind! normal "d" #'ho)
+;;   (should '(:evil-states (normal) :keymap global-map :key "d" :def #'ho)
+;;           (oo--bind-build-metadata '(normal "d" #'ho)))
+;;   ;; => (:evil-states normal :keymap global-map :key "d" :def #'ho)
+;;   )
 ;;; provide
 (provide 'oo-base-macros-bind-bang-test)
 ;;; oo-base-macros-bind-bang-test.el ends here

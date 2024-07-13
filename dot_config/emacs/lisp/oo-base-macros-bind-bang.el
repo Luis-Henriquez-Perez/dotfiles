@@ -27,57 +27,57 @@
 ;;; Code:
 (require 'oo-base)
 ;;;; build functions
-(defun oo--build-define-key (metadata forms)
-  (with-map-keywords! metadata
-    `((define-key ,!keymap ,!key ,!def)
-      ,@forms)))
+;; (defun oo--build-define-key (metadata forms)
+;;   (with-map-keywords! metadata
+;;     `((define-key ,!keymap ,!key ,!def)
+;;       ,@forms)))
 
-(defun oo--build-evil-define-key (metadata forms)
-  (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!keymap ,!key ,!def)
-      ,@forms)))
+;; (defun oo--build-evil-define-key (metadata forms)
+;;   (with-map-keywords! metadata
+;;     `((evil-define-key* ,!state ,!keymap ,!key ,!def)
+;;       ,@forms)))
 
-(defun oo--build-evil-define-minor-mode-key (metadata forms)
-  (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!mode ,!key ,!def)
-      ,@forms)))
+;; (defun oo--build-evil-define-minor-mode-key (metadata forms)
+;;   (with-map-keywords! metadata
+;;     `((evil-define-key* ,!state ,!mode ,!key ,!def)
+;;       ,@forms)))
 
-(defun oo--build-kbd (metadata forms)
-  "Apply kbd to binding if possible."
-  (with-map-keywords! metadata
-    `((setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
-      ,@forms)))
+;; (defun oo--build-kbd (metadata forms)
+;;   "Apply kbd to binding if possible."
+;;   (with-map-keywords! metadata
+;;     `((setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
+;;       ,@forms)))
 
-(defun oo--build-which-key (metadata form)
-  (with-map-keywords! metadata
-    ))
+;; (defun oo--build-which-key (metadata form)
+;;   ;; (with-map-keywords! metadata
+;;   ;;   )
+;;   )
 ;;;; generate body
-(defun! oo--bind-generate-forms (metadata)
-  (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
+;; (defun! oo--bind-generate-forms (metadata)
+;;   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
 ;;;; process arguments
-(defun! oo--build-metadata (args)
-  "Return standardized metadata from arguments."
-  (flet! letterp (obj)
-    (and (symbolp obj) (= 1 (length (symbol-name obj)))))
-  (flet! symbol-list (obj)
-    (and (listp obj) (-all-p #'symbolp obj)))
-  (flet! letter-list (obj)
-    (and (listp obj) (-all-p fn obj)))
-  (flet! not-keyword-p (-not #'keywordp))
-  (flet!)
-  (pcase args
-    (`(,(and (pred letterp) letter) ,key ,def . ,plist)
-     `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
-    (`(,(and (pred letterp) letter) ,keymap ,key ,def . ,plist)
-     `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
-    (`(,letter-list ,key ,def . ,plist)
-     `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
-    (`(,letter-list ,key ,def . ,plist)
-     `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
-    (`(,key ,def . ,plist)
-     `(:keymap global-map :key ,key :def ,def . ,plist))
-    (_
-     nil)))
+;; (defun! oo--build-metadata (args)
+;;   "Return standardized metadata from arguments."
+;;   (flet! letterp (obj)
+;;     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
+;;   (flet! symbol-list (obj)
+;;     (and (listp obj) (-all-p #'symbolp obj)))
+;;   (flet! letter-list (obj)
+;;     (and (listp obj) (-all-p fn obj)))
+;;   (flet! not-keyword-p (-not #'keywordp))
+;;   (pcase args
+;;     (`(,(and (pred letterp) letter) ,key ,def . ,plist)
+;;      `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
+;;     (`(,(and (pred letterp) letter) ,keymap ,key ,def . ,plist)
+;;      `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
+;;     (`(,letter-list ,key ,def . ,plist)
+;;      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
+;;     (`(,letter-list ,key ,def . ,plist)
+;;      `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
+;;     (`(,key ,def . ,plist)
+;;      `(:keymap global-map :key ,key :def ,def . ,plist))
+;;     (_
+;;      nil)))
 ;;;; bind steps
 ;; This contains the complex logic of which steps should happen when.  Before I
 ;; had this logic in the build functions themselves which each of them longer
@@ -104,8 +104,8 @@
       (pushing! steps 'oo--build-defer-evil-state)))
   (nreverse steps))
 ;;;; bind! 
-(defmacro bind! (&rest args)
-  (oo--build-body (oo--build-steps args)))
+;; (defmacro bind! (&rest args)
+;;   (oo--build-body (oo--build-steps args)))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
