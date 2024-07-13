@@ -169,6 +169,7 @@
 (define-key oo-find-map "o" #'find-file)
 (define-key oo-find-map "f" #'switch-to-buffer)
 (define-key oo-find-map "d" #'display-buffer)
+(define-key oo-find-map ";" #'save-buffer)
 
 ;; (define-key oo-find-map "i" #'oo-open-emacs-init-file)
 ;; (define-key oo-find-map "e" #'oo-open-emacs-directory)
