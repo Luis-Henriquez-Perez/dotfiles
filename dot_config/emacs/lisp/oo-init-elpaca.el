@@ -103,6 +103,7 @@
 (elpaca highlight-quoted)
 (elpaca htmlize)
 (elpaca humanoid-themes)
+(elpaca hungry-delete)
 (elpaca idle-require)
 (elpaca leuven-theme)
 (elpaca lgr)
