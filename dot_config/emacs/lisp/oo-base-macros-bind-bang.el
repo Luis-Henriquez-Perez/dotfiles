@@ -74,10 +74,12 @@
   (flet! notkeyp (-not #'keywordp))
   (pcase args
     ;; (bind! i "d" #'foo)
-    (`(,(and (pred letterp) letter) ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
+    (`(,(and (pred letterp) letter) ,(and (pred notkeyp) key)
+       ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
     ;; (bind! i org-mode-map "d" #'foo)
-    (`(,(and (pred letterp) letter) ,(and (pred keymap-symbol-p) keymap) ,key ,def . ,plist)
+    (`(,(and (pred letterp) letter) ,(and (pred keymap-symbol-p) keymap)
+       ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
     ;; (bind! (n m v) "d" #'foo)
     (`(,(pred keymap-symbol-p keymap) ,(and (pred letterp) letter) ,key ,def . ,plist)
@@ -89,7 +91,7 @@
     (`(,letter-list ,key ,def . ,plist)
      `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
     ;; (bind! "d" #'foo)
-    (`(,key ,def . ,plist)
+    (`(,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:keymap global-map :key ,key :def ,def . ,plist))
     (_
      (error "cannot parse arguments..."))))
