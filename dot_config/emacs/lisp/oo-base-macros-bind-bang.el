@@ -26,7 +26,8 @@
 ;;
 ;;; Code:
 (require 'oo-base)
-;;;; build functions
+;;;; build steps functions
+;; These are functions that produce forms.
 (defun oo--build-define-key (metadata forms)
   (with-map-keywords! metadata
     `((define-key ,!keymap ,!key ,!def)
