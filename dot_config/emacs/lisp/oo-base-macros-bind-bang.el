@@ -65,6 +65,8 @@
   "Return standardized metadata from arguments."
   (flet! letterp (obj)
     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
+  (flet! map-symbol-p (obj)
+    (and (symbolp obj) (string-match-p (rx "map" eos) (symbol-name obj))))
   (flet! symbol-list (obj)
     (and (listp obj) (-all-p #'symbolp obj)))
   (flet! letter-list (obj)
@@ -74,14 +76,16 @@
     ;; (bind! i "d" #'foo)
     (`(,(and (pred letterp) letter) ,(and (pred not-keyword-p) key) ,def . ,plist)
      `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
-    ;; (bind! i "d" #'foo)
+    ;; (bind! i org-mode-map "d" #'foo)
     (`(,(and (pred letterp) letter) ,keymap ,key ,def . ,plist)
      `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
     ;; (bind! (n m v) "d" #'foo)
     (`(,letter-list ,key ,def . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
+    ;;
     (`(,letter-list ,key ,def . ,plist)
      `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
+    ;; (bind! "d" #'foo)
     (`(,key ,def . ,plist)
      `(:keymap global-map :key ,key :def ,def . ,plist))
     (_
