@@ -53,6 +53,16 @@
   ;; (with-map-keywords! metadata
   ;;   )
   )
+
+(defun! oo--bind-step-which-key (metadata forms)
+  (with-map-keywords! metadata
+    (set! which-key (or !which-key !wk !desc))
+    (set! wk-fn #'which-key-add-keymap-based-replacements)
+    (set! fn `(lambda (keymap key def)
+                (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,which-key))
+                (setq key (if (stringp key) (kbd key) key))
+                (funcall this-fn keymap key def)))
+    `((lef! ((define-key ,fn)) ,@forms))))
 ;;;; generate body
 (defun! oo--bind-generate-forms (metadata)
   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
