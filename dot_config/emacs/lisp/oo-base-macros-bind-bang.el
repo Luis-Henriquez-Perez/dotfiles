@@ -53,8 +53,8 @@
   ;;   )
   )
 ;;;; generate body
-;; (defun! oo--bind-generate-forms (metadata)
-;;   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
+(defun! oo--bind-generate-forms (metadata)
+  (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
 ;;;; process arguments
 ;; (defun! oo--build-metadata (args)
 ;;   "Return standardized metadata from arguments."
