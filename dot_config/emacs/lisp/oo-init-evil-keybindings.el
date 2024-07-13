@@ -126,11 +126,11 @@
 ;;;;; eval
 (evil-define-key* '(normal visual) global-map (kbd "g t") #'evil-goto-first-line)
 (evil-define-key* '(normal visual) global-map (kbd "g b") #'evil-goto-line)
-(evil-define-key* '(normal visual) global-map (kbd "g g") #'oo-operator-eval)
-(evil-define-key* '(normal visual) global-map (kbd "g h") #'oo-operator-eval)
-(evil-define-key* '(normal visual) global-map (kbd "g r") #'oo-operator-eval-replace)
-(evil-define-key* '(normal visual) global-map (kbd "g l") #'oo-operator-eval-print)
-(evil-define-key* '(normal visual) global-map (kbd "g p") #'oo-operator-eval-print)
+(evil-define-key* '(normal visual) global-map (kbd "g g") #'oo-eval-operator)
+(evil-define-key* '(normal visual) global-map (kbd "g h") #'oo-eval-operator)
+(evil-define-key* '(normal visual) global-map (kbd "g r") #'oo-eval-replace-operator)
+(evil-define-key* '(normal visual) global-map (kbd "g l") #'oo-eval-print-operator)
+(evil-define-key* '(normal visual) global-map (kbd "g p") #'oo-eval-print-operator)
 ;;;;; comment
 (declare-function lispyville-comment-or-uncomment "lispyville")
 (declare-function lispyville-comment-and-clone-dwim "lispyville")
