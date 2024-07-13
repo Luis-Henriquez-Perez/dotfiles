@@ -89,8 +89,8 @@
 (evil-define-key* '(insert emacs) global-map [escape] #'evil-force-normal-state)
 ;;;; miscellaneous
 (evil-define-key* 'insert global-map (kbd "TAB") #'completion-at-point)
-(declare-function hungry-delete-forward "hungry-delete")
-(evil-define-key* '(normal) global-map "x" #'hungry-delete-forward)
+;; (declare-function hungry-delete-forward "hungry-delete")
+;; (evil-define-key* '(normal) global-map "x" #'hungry-delete-forward)
 (evil-define-key* 'insert global-map (kbd "A-x") #'execute-extended-command)
 (evil-define-key* 'insert global-map (kbd "M-x") #'execute-extended-command)
 (evil-define-key* '(normal motion) global-map "+" #'text-scale-increase)
