@@ -56,28 +56,28 @@
 (defun! oo--bind-generate-forms (metadata)
   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
 ;;;; process arguments
-;; (defun! oo--build-metadata (args)
-;;   "Return standardized metadata from arguments."
-;;   (flet! letterp (obj)
-;;     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
-;;   (flet! symbol-list (obj)
-;;     (and (listp obj) (-all-p #'symbolp obj)))
-;;   (flet! letter-list (obj)
-;;     (and (listp obj) (-all-p fn obj)))
-;;   (flet! not-keyword-p (-not #'keywordp))
-;;   (pcase args
-;;     (`(,(and (pred letterp) letter) ,key ,def . ,plist)
-;;      `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
-;;     (`(,(and (pred letterp) letter) ,keymap ,key ,def . ,plist)
-;;      `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
-;;     (`(,letter-list ,key ,def . ,plist)
-;;      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
-;;     (`(,letter-list ,key ,def . ,plist)
-;;      `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
-;;     (`(,key ,def . ,plist)
-;;      `(:keymap global-map :key ,key :def ,def . ,plist))
-;;     (_
-;;      nil)))
+(defun! oo--build-metadata (args)
+  "Return standardized metadata from arguments."
+  (flet! letterp (obj)
+    (and (symbolp obj) (= 1 (length (symbol-name obj)))))
+  (flet! symbol-list (obj)
+    (and (listp obj) (-all-p #'symbolp obj)))
+  (flet! letter-list (obj)
+    (and (listp obj) (-all-p fn obj)))
+  (flet! not-keyword-p (-not #'keywordp))
+  (pcase args
+    (`(,(and (pred letterp) letter) ,key ,def . ,plist)
+     `(:evil-states (,letter) :keymap global-map :key ,key :def ,def))
+    (`(,(and (pred letterp) letter) ,keymap ,key ,def . ,plist)
+     `(:evil-states (,letter) :keymap ,keymap :key ,key :def ,def))
+    (`(,letter-list ,key ,def . ,plist)
+     `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
+    (`(,letter-list ,key ,def . ,plist)
+     `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
+    (`(,key ,def . ,plist)
+     `(:keymap global-map :key ,key :def ,def . ,plist))
+    (_
+     nil)))
 ;;;; bind steps
 ;; This contains the complex logic of which steps should happen when.  Before I
 ;; had this logic in the build functions themselves which each of them longer
