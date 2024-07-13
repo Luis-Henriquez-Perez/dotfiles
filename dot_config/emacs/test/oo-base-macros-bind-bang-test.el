@@ -33,7 +33,6 @@
                    oo--build-let-binds
                    oo--build-defer-keymap)
                  (oo--build-steps '(:state g))))
-
   (should (equal '(oo--build-evil-define-key
                    oo--build-kbd
                    oo--build-let-binds
@@ -43,8 +42,11 @@
   (should (equal '(oo--build-evil-define-key
                    oo--build-kbd
                    oo--build-let-binds
-                   oo--build-defer-keymap)
-                 (oo--build-steps '(:state normal)))))
+                   oo--build-defer-keymap
+                   oo--build-defer-evil-state)
+                 (oo--build-steps '(:state normal))))
+  ;; (should (equal '(oo)))
+  )
 
 ;; (ert-deftest oo--bind-build-metadata ()
 ;;   ;; Just a key and a definition.
