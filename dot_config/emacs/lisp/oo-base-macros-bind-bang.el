@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'oo-base)
 ;;;; build functions
 (defun oo--build-define-key (metadata forms)
   (with-map-keywords! metadata
