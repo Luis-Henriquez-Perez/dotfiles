@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 (require 'evil)
-;; (require 'oo-init-evil-keybindings)
 ;;;; settings
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
@@ -113,7 +112,6 @@
 (hook! prog-mode-hook&evil-surround-mode)
 
 (hook! text-mode-hook&evil-surround-mode)
-(require 'oo-init-evil-keybindings)
 ;;; provide
 (provide 'oo-after-load-evil)
 ;;; oo-after-load-evil.el ends here
