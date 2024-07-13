@@ -82,14 +82,14 @@
     ;; (bind! (n m v) "d" #'foo)
     (`(,letter-list ,key ,def . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
-    ;;
+    ;; (bind!)
     (`(,letter-list ,key ,def . ,plist)
      `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
     ;; (bind! "d" #'foo)
     (`(,key ,def . ,plist)
      `(:keymap global-map :key ,key :def ,def . ,plist))
     (_
-     nil)))
+     (error "cannot parse arguments..."))))
 ;;;; bind steps
 ;; This contains the complex logic of which steps should happen when.  Before I
 ;; had this logic in the build functions themselves which each of them longer
