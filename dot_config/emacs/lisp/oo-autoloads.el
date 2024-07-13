@@ -30,8 +30,6 @@
 (autoload #'chezmoi-find                       "chezmoi"                           nil t 'function)
 (autoload #'chezmoi-write                      "chezmoi"                           nil t 'function)
 (autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
-(autoload #'evil-operator-eval                 "evil-extra-operator"               nil t 'function)
-(autoload #'evil-operator-eval-replace         "evil-extra-operator"               nil t 'function)
 (autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-i-syntax                      "evil-textobj-syntax"               nil t 'function)
