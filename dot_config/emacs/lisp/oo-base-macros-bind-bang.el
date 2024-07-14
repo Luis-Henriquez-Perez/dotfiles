@@ -97,7 +97,7 @@ If METADATA has no keymap return."
          (oo--bind-generate-forms (oo--let-binds metadata)))))
 ;;;; generate forms
 (defun! oo--bind-generate-forms (metadata)
-  (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
+  (--reduce-from (funcall it acc metadata) nil (oo--build-steps metadata)))
 ;;;; process arguments
 (defun! oo--build-metadata (args)
   "Return standardized metadata from arguments."
