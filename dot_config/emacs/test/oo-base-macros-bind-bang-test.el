@@ -44,9 +44,7 @@
                    oo--build-let-binds
                    oo--build-defer-keymap
                    oo--build-defer-evil-state)
-                 (oo--build-steps '(:state normal))))
-  ;; (should (equal '(oo)))
-  )
+                 (oo--build-steps '(:state normal)))))
 
 (ert-deftest oo--build-metadata ()
   ;; (bind! "d" #'foo)
