@@ -182,9 +182,9 @@ If METADATA has no keymap return."
          (pushing! steps 'oo--build-evil-define-minor-mode-key))
         (t
          (pushing! steps 'oo--build-evil-define-key)))
+  (when (map-elt metadata :wk)
+    (pushing! steps 'oo--build-which-key))
   (pushing! steps 'oo--build-kbd)
-  (if (map-elt metadata :wk)
-      (pushing! steps 'oo--build-which-key))
   ;; (pushing! steps 'oo--build-let-binds)
   ;; (pushing! steps 'oo--build-defer-keymap)
   ;; (unless (member state '(g global))
