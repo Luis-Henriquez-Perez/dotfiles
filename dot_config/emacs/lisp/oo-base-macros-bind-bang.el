@@ -87,10 +87,8 @@ If METADATA has no keymap return."
 ;;;; generate let-bind symbols 
 (defun! oo--let-binds (metadata)
   "Return a list of symbols."
+  (set! binds)
   `((let ,@binds ,@(oo--bind-body metadata steps))))
-;;;; oo--build-let-bind 
-(defun! oo--build-let-bind (metadata forms)
-  `((let ,let-binds ,@forms)))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   ;; Make a copy of the list but make the keywords point to symbols instead.
