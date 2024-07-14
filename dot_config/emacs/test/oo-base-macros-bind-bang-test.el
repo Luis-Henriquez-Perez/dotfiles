@@ -49,14 +49,15 @@
   )
 
 (ert-deftest oo--build-metadata ()
-  ;; Just a key and a definition.
   ;; (bind! "d" #'foo)
   (should (equal (oo--build-metadata '("d" #'foo))
                  '(:keymap global-map :key "d" :def #'foo)))
   ;; (bind! insert "d" #'foo)
   ;; (bind! i "d" #'foo)
-  (should (equal (oo--build-metadata '(insert "d" #'foo))))
-  (should (equal (oo--build-metadata '(i "d" #'foo))))
+  (should (equal (oo--build-metadata '(insert "d" #'foo))
+                 '(:state insert :keymap global-map :key "d" :def #'foo)))
+  (should (equal (oo--build-metadata '(i "d" #'foo))
+                 '(:state i :keymap global-map :key "d" :def #'foo)))
   ;; (bind! insert org-mode-map "d" #'foo)
   ;; (bind! i org-mode-map "d" #'foo)
   (should (equal (oo--build-metadata '(insert org-mode-map "d" #'foo))
