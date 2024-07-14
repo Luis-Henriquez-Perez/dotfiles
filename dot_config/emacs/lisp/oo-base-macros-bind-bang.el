@@ -111,6 +111,7 @@ If METADATA has no keymap return."
   "Return standardized metadata from arguments."
   (flet! keymap-symbol-p (obj)
     (and (symbolp obj) (string-match-p "[^[:space:]]+-map\\'" (symbol-name obj))))
+  (flet! not-keymap-symbol-p (-not #'keymap-symbol-p))
   (flet! symbol-list-p (obj)
     (and (listp obj) (-all-p #'symbolp obj)))
   (flet! non-keyword-symbol-p (obj)
