@@ -62,7 +62,7 @@
 ;;;; generate let-bind symbols 
 (defun oo--let-binds (metadata)
   "Return."
-  )
+  (--mapcat (list it (symbol-name)) (map-keys metadata)))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   ;; Make a copy of the list but make the keywords point to symbols instead.
