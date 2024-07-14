@@ -58,7 +58,7 @@
   ;; A state letter with a key and definition.
   ;; (bind! i "d" #'ho)
   (should (equal (oo--build-metadata '(i "d" #'ho))
-                 '(:states (i) :keymap global-map :key "d" :def #'ho)))
+                 '(:state i :keymap global-map :key "d" :def #'ho)))
   ;; => (:evil-states (i) :keymap global-map :key "d" :def #'ho)
 
   ;; A list of state letter with a key and definition.
