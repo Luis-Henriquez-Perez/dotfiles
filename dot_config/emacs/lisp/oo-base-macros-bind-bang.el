@@ -31,7 +31,7 @@
 (require 'oo-base)
 ;;;; process-forms 
 (defun oo--build-body (metadata steps)
-  (funcall (car steps) metadata (cdr steps)))
+  (and steps (funcall (car steps) metadata (cdr steps))))
 ;;;; build steps
 ;; These are functions that produce forms.
 (defun oo--build-define-key (metadata steps)
@@ -66,7 +66,9 @@
 
 (defun! oo--build-defer-evil-state-char (metadata forms)
   (set! char (char-to-string (symbol-name (map-elt metadata :state-value))))
-  `((oo-call-after-evil-state-char ,char (lambda (_) ,@(oo--bind-body metadata steps)))))
+  (set! state (gensym "state"))
+  (setf (map-elt metadata :state-value) state)
+  `((oo-call-after-evil-state-char ,char (lambda (,state) ,@(oo--bind-body metadata steps)))))
 
 (defun! oo--build-defer-keymap (metadata forms)
   "Defer the evaluation of body until keymap is loaded.
@@ -91,8 +93,6 @@ If METADATA has no keymap return."
   `((let ,@binds ,@(oo--bind-body metadata steps))))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
-  ;; Make a copy of the list but make the keywords point to symbols instead.
-  ;; If there are the.
   (set! let-binds (oo--let-binds metadata))
   (set! states (map-elt metadata :states))
   (cond (states
