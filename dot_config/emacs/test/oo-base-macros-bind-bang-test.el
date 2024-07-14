@@ -73,6 +73,9 @@
   ;;         (oo--build-metadata '(normal "d" #'ho)))
   ;; => (:evil-states normal :keymap global-map :key "d" :def #'ho)
   )
+
+(ert-deftest oo--let-binds ()
+  (should-not (oo--let-binds '(:a 1 :b 2 :c 3))))
 ;;; provide
 (provide 'oo-base-macros-bind-bang-test)
 ;;; oo-base-macros-bind-bang-test.el ends here
