@@ -57,7 +57,13 @@
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@forms))))
+
+(defun! oo--build-defer-keymap ())
 ;;;; generate body
+(defun! oo--bind-generate-body (metadata)
+  ;; If there are thr
+  )
+;;;; generate forms
 (defun! oo--bind-generate-forms (metadata)
   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
 ;;;; process arguments
@@ -73,6 +79,9 @@
     (and (listp obj) (-all-p #'letterp obj)))
   (flet! notkeyp (-not #'keywordp))
   (pcase args
+    ;; (bind! "d" #'foo)
+    (`(,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
+     `(:keymap global-map :key ,key :def ,def . ,plist))
     ;; (bind! i "d" #'foo)
     (`(,(and (pred letterp) letter) ,(and (pred notkeyp) key)
        ,(and (pred notkeyp) def) . ,plist)
@@ -97,12 +106,7 @@
     (`(,(and (pred letter-list-p) letter-list) ,(and (pred keymap-symbol-p) keymap)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
-    ;; (bind!)
-    ;; (`(,letter-list ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
-    ;;  `(:evil-states ,letter-list :key ,key :def ,def . ,plist))
-    ;; (bind! "d" #'foo)
-    (`(,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
-     `(:keymap global-map :key ,key :def ,def . ,plist))
+    ;; DOOM style keywords.
     (_
      (error "cannot parse arguments..."))))
 ;;;; bind steps
@@ -130,7 +134,7 @@
         (pushing! steps 'oo--build-defer-evil-state-char)
       (pushing! steps 'oo--build-defer-evil-state)))
   (nreverse steps))
-;;;; bind! 
+;;;; bind!
 ;; (defmacro bind! (&rest args)
 ;;   (oo--build-body (oo--build-steps args)))
 ;;; provide
