@@ -62,10 +62,10 @@
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   ;; If there are the.
-  (set! states (map-elt metadata :states))
+  (set! states (map-elt metadata :evil-states))
   (cond (states
          (dolist (state states)
-           (setf (map-elt metadata :state) state)
+           (setf (map-elt metadata :evil-state) state)
            (appending! forms (oo--bind-generate-forms metadata)))
          forms)
         (t
@@ -95,30 +95,32 @@
     ;; (bind! i "d" #'foo)
     (`(,(and (pred non-keyword-symbol-p) letter) ,(and (pred notkeyp) key)
        ,(and (pred notkeyp) def) . ,plist)
-     `(:state ,letter :keymap global-map :key ,key :def ,def))
+     `(:evil-state ,letter :keymap global-map :key ,key :def ,def))
     ;; (bind! insert org-mode-map "d" #'foo)
     ;; (bind! i org-mode-map "d" #'foo)
     (`(,(and (pred non-keyword-symbol-p) letter) ,(and (pred keymap-symbol-p) keymap)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
-     `(:state ,letter :keymap ,keymap :key ,key :def ,def))
+     `(:evil-state ,letter :keymap ,keymap :key ,key :def ,def))
     ;; (bind! org-mode-map insert "d" #'foo)
     ;; (bind! org-mode-map i "d" #'foo)
     (`(,(and (pred keymap-symbol-p) keymap) ,(and (pred non-keyword-symbol-p) letter)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
-     `(:state ,letter :keymap ,keymap :key ,key :def ,def))
+     `(:evil-state ,letter :keymap ,keymap :key ,key :def ,def))
+    ;; (bind! (normal insert visual) "d" #'foo)
     ;; (bind! (n m v) "d" #'foo)
     (`(,(and (pred letter-list-p) letter-list) ,(and (pred notkeyp) key)
        ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
+    ;; (bind! org-mode-map (normal motion visual) "d" #'foo)
     ;; (bind! org-mode-map (n m v) "d" #'foo)
     (`(,(and (pred keymap-symbol-p) keymap) ,(and (pred letter-list-p) letter-list)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
+    ;; (bind! (normal motion visual) org-mode-map "d" #'foo)
     ;; (bind! (n m v) org-mode-map "d" #'foo)
     (`(,(and (pred letter-list-p) letter-list) ,(and (pred keymap-symbol-p) keymap)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:evil-states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
-    ;; DOOM style keywords.
     (_
      (error "cannot parse arguments..."))))
 ;;;; bind steps
@@ -129,7 +131,7 @@
   "Return the list of build steps for metadata."
   (flet! letterp (obj)
     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
-  (set! state (map-elt metadata :state))
+  (set! state (map-elt metadata :evil-state))
   (cond ((member state '(g global))
          (pushing! steps 'oo--build-define-key))
         ((map-elt metadata :mode)
