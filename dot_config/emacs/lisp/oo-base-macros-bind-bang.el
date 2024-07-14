@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Binding macro.
 ;;
 ;;; Code:
 (require 'oo-base)
@@ -40,7 +40,7 @@
 
 (defun oo--build-evil-define-minor-mode-key (metadata forms)
   (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!mode ,!key ,!def)
+    `((evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
       ,@forms)))
 
 (defun oo--build-kbd (metadata forms)
@@ -61,6 +61,7 @@
 (defun! oo--build-defer-keymap ())
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
+  ;; Make a copy of the list but make the keywords point to symbols instead.
   ;; If there are the.
   (set! states (map-elt metadata :states))
   (cond (states
