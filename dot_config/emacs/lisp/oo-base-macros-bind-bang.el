@@ -118,7 +118,7 @@
      `(:states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
     ;; (bind! (normal motion visual) org-mode-map "d" #'foo)
     ;; (bind! (n m v) org-mode-map "d" #'foo)
-    (`(,(and (pred letter-list-p) letter-list) ,(and (pred keymap-symbol-p) keymap)
+    (`(,(and (pred symbol-list-p) letter-list) ,(and (pred keymap-symbol-p) keymap)
        ,(and (pred notkeyp) key) ,(and (pred notkeyp) def) . ,plist)
      `(:states ,letter-list :keymap global-map :key ,key :def ,def . ,plist))
     (_
