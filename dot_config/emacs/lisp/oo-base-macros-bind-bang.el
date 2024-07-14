@@ -65,7 +65,7 @@
   (set! states (map-elt metadata :states))
   (cond (states
          (dolist (state states)
-           (setf (map-elt metadata :evil-state) state)
+           (setf (map-elt metadata :state) state)
            (appending! forms (oo--bind-generate-forms metadata)))
          forms)
         (t
@@ -154,8 +154,8 @@
       (pushing! steps 'oo--build-defer-evil-state)))
   (nreverse steps))
 ;;;; bind!
-;; (defmacro bind! (&rest args)
-;;   (oo--build-body (oo--build-steps args)))
+(defmacro bind! (&rest args)
+  (oo--build-body (oo--build-steps args)))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
