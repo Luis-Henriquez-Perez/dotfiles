@@ -90,8 +90,7 @@
     ;; (bind! "d" #'foo)
     (`(,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
        . ,(and (pred plist-p) plist))
-     `(:keymap global-map :key ,key :def ,def . ,(and
-                                                  (pred plist-p) plist)))
+     `(:keymap global-map :key ,key :def ,def . ,(and (pred plist-p) plist)))
     ;; (bind! insert "d" #'foo)
     ;; (bind! i "d" #'foo)
     (`(,(and (pred non-keyword-symbol-p) state) ,(and (pred not-keyword-p) key)
