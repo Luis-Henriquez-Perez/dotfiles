@@ -61,8 +61,13 @@
 (defun! oo--build-defer-keymap ())
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
-  ;; If there are thr
-  )
+  ;; If there are the.
+  (cond (()
+         (dolist (state states)
+           (setf (map-elt metadata :state) state)
+           (appending! forms (oo--bind-generate-forms metadata))))
+        (t
+         (oo--bind-generate-forms metadata))))
 ;;;; generate forms
 (defun! oo--bind-generate-forms (metadata)
   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
