@@ -59,6 +59,10 @@
     `((lef! ((define-key ,fn)) ,@forms))))
 
 (defun! oo--build-defer-keymap ())
+;;;; generate let-bind symbols 
+(defun oo--let-binds (metadata)
+  "Return."
+  )
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   ;; Make a copy of the list but make the keywords point to symbols instead.
