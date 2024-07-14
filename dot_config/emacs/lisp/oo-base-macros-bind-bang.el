@@ -188,7 +188,7 @@ If METADATA has no keymap return."
   (nreverse steps))
 ;;;; bind!
 (defmacro bind! (&rest args)
-  (oo--bind-generate-forms (oo--let-binds (oo--build-metadata args))))
+  (oo--bind-generate-forms (oo--build-metadata args)))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
