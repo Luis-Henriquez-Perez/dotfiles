@@ -23,6 +23,9 @@
 ;;; Commentary:
 ;;
 ;; Binding macro.
+;; The return value has to be something other than a list of forms so that I can
+;; manipulate it better.
+;; (formlist wrappers let-bindings)
 ;;
 ;;; Code:
 (require 'oo-base)
@@ -44,19 +47,24 @@
       ,@forms)))
 
 (defun oo--build-kbd (metadata forms)
-  "Apply kbd to binding if possible."
   (with-map-keywords! metadata
-    `((setq ,!key (if (stringp ,!key) (kbd ,!key) ,!key))
-      ,@forms)))
+    (set! fn `(lambda (keymap key def)
+                (setq key (if (stringp key) (kbd key) key))
+                (funcall this-fn keymap key def)))
+    `((lef! ((define-key ,fn))
+        ,@forms))))
 
 (defun! oo--build-which-key (metadata forms)
   (with-map-keywords! metadata
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     (set! fn `(lambda (keymap key def)
                 (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,!wk))
-                (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@forms))))
+
+(defun! oo--build-defer-evil-state-char (metadata forms)
+  (set! char (char-to-string (symbol-name (map-elt metadata :state-value))))
+  `((oo-call-after-evil-state-char ,char (lambda (_) ,@forms))))
 
 (defun! oo--build-defer-keymap (metadata forms)
   "Defer the evaluation of body until keymap is loaded.
@@ -77,7 +85,8 @@ If METADATA has no keymap return."
 ;;;; generate let-bind symbols 
 (defun! oo--let-binds (metadata)
   "Return a list of symbols.."
-  (flet! fn (key) (cons key (gensym (symbol-name key))))
+  (dolist ())
+  (flet! fn (key) (cons key (make-symbol (seq-rest (symbol-name key)))))
   (mapcar #'fn (map-keys metadata)))
 ;;;; oo--build-let-bind 
 (defun! oo--build-let-bind (metadata forms)
@@ -162,7 +171,7 @@ If METADATA has no keymap return."
   (flet! letterp (obj)
     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
   (set! state (map-elt metadata :state))
-  (cond ((member state '(g global))
+  (cond ((member state '(nil g global))
          (pushing! steps 'oo--build-define-key))
         ((map-elt metadata :mode)
          (pushing! steps 'oo--build-evil-define-minor-mode-key))
@@ -171,7 +180,7 @@ If METADATA has no keymap return."
   (if (map-elt metadata :wk)
       (pushing! steps 'oo--build-which-key)
     (pushing! steps 'oo--build-kbd))
-  ;; (pushing! steps 'oo--build-let-binds)
+  (pushing! steps 'oo--build-let-binds)
   ;; (pushing! steps 'oo--build-defer-keymap)
   ;; (unless (member state '(g global))
   ;;   (if (letterp state)
@@ -180,7 +189,7 @@ If METADATA has no keymap return."
   (nreverse steps))
 ;;;; bind!
 (defmacro bind! (&rest args)
-  (oo--build-body (oo--build-steps args)))
+  (oo--bind-generate-forms (oo--let-binds (oo--build-metadata args))))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
