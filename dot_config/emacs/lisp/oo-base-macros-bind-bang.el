@@ -29,29 +29,32 @@
 ;;
 ;;; Code:
 (require 'oo-base)
+;;;; process-forms 
+(defun oo--build-body (metadata steps)
+  (funcall (car steps) metadata (cdr steps)))
 ;;;; build steps
 ;; These are functions that produce forms.
-(defun oo--build-define-key (metadata forms)
+(defun oo--build-define-key (metadata steps)
   (with-map-keywords! metadata
     `((define-key ,!keymap ,!key ,!def)
-      ,@forms)))
+      ,@(oo--build-body metadata steps))))
 
 (defun oo--build-evil-define-key (metadata forms)
   (with-map-keywords! metadata
     `((evil-define-key* ,!state ,!keymap ,!key ,!def)
-      ,@forms)))
+      ,@(oo--build-body metadata steps))))
 
 (defun oo--build-evil-define-minor-mode-key (metadata forms)
   (with-map-keywords! metadata
     `((evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
-      ,@forms)))
+      ,@(oo--build-body metadata steps))))
 
 (defun oo--build-kbd (metadata forms)
   (with-map-keywords! metadata
     (set! fn `(lambda (keymap key def)
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
-    `((lef! ((define-key ,fn)) ,@forms))))
+    `((lef! ((define-key ,fn)) ,@(oo--bind-body metadata steps)))))
 
 (defun! oo--build-which-key (metadata forms)
   (with-map-keywords! metadata
@@ -59,18 +62,18 @@
     (set! fn `(lambda (keymap key def)
                 (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,!wk))
                 (funcall this-fn keymap key def)))
-    `((lef! ((define-key ,fn)) ,@forms))))
+    `((lef! ((define-key ,fn)) ,@(oo--bind-body metadata steps)))))
 
 (defun! oo--build-defer-evil-state-char (metadata forms)
   (set! char (char-to-string (symbol-name (map-elt metadata :state-value))))
-  `((oo-call-after-evil-state-char ,char (lambda (_) ,@forms))))
+  `((oo-call-after-evil-state-char ,char (lambda (_) ,@(oo--bind-body metadata steps)))))
 
 (defun! oo--build-defer-keymap (metadata forms)
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
     (cond ((or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
-           forms)
+           (oo--bind-body metadata steps))
           ;; Dired is the only package that I have encountered where using
           ;; `oo-call-after-bound' on its keymap does not work.  No idea why it
           ;; does not.  I assume that it is something about what happens between
@@ -78,15 +81,13 @@ If METADATA has no keymap return."
           ;; In general dired is extremely sensitive as to when the bindings
           ;; as even this does not work in `oo-after-load-dired'.
           ((equal !keymap 'dired-mode-map)
-           `((oo-call-after-load 'dired (lambda () ,@forms))))
+           `((oo-call-after-load 'dired (lambda () ,@(oo--bind-body metadata steps)))))
           (t
-           `((oo-call-after-bound ',!keymap (lambda () ,@forms)))))))
+           `((oo-call-after-bound ',!keymap (lambda () ,@(oo--bind-body metadata steps))))))))
 ;;;; generate let-bind symbols 
 (defun! oo--let-binds (metadata)
-  "Return a list of symbols.."
-  (dolist ())
-  (flet! fn (key) (cons key (make-symbol (seq-rest (symbol-name key)))))
-  (mapcar #'fn (map-keys metadata)))
+  "Return a list of symbols."
+  `((let ,@binds ,@(oo--bind-body metadata steps))))
 ;;;; oo--build-let-bind 
 (defun! oo--build-let-bind (metadata forms)
   `((let ,let-binds ,@forms)))
