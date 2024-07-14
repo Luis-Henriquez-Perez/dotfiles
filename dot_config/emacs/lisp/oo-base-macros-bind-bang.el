@@ -76,8 +76,6 @@
 ;;;; process arguments
 (defun! oo--build-metadata (args)
   "Return standardized metadata from arguments."
-  (flet! letterp (obj)
-    (and (symbolp obj) (= 1 (length (symbol-name obj)))))
   (flet! map-symbol-p (obj)
     (and (symbolp obj) (string-match-p "[^[:space:]]+-map\\'" (symbol-name obj))))
   (flet! symbol-list (obj)
