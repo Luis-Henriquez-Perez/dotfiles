@@ -119,13 +119,13 @@
     (`(,(and (pred keymap-symbol-p) keymap) ,(and (pred symbol-list-p) states)
        ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
        . ,(and (pred plist-p) plist))
-     `(:states ,states :keymap global-map :key ,key :def ,def . ,plist))
+     `(:states ,states :keymap ,keymap :key ,key :def ,def . ,plist))
     ;; (bind! (normal motion visual) org-mode-map "d" #'foo)
     ;; (bind! (n m v) org-mode-map "d" #'foo)
     (`(,(and (pred symbol-list-p) states) ,(and (pred keymap-symbol-p) keymap)
        ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
        . ,(and (pred plist-p) plist))
-     `(:states ,states :keymap global-map :key ,key :def ,def . ,plist))
+     `(:states ,states :keymap ,keymap :key ,key :def ,def . ,plist))
     (_
      (error "cannot parse arguments..."))))
 ;;;; bind steps
