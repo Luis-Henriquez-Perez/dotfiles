@@ -58,7 +58,7 @@
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@forms))))
 
-(defun! oo--bind-step-defer-keymap (metadata forms)
+(defun! oo--build-defer-keymap (metadata forms)
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
@@ -171,12 +171,12 @@ If METADATA has no keymap return."
   (if (map-elt metadata :wk)
       (pushing! steps 'oo--build-which-key)
     (pushing! steps 'oo--build-kbd))
-  (pushing! steps 'oo--build-let-binds)
-  (pushing! steps 'oo--build-defer-keymap)
-  (unless (member state '(g global))
-    (if (letterp state)
-        (pushing! steps 'oo--build-defer-evil-state-char)
-      (pushing! steps 'oo--build-defer-evil-state)))
+  ;; (pushing! steps 'oo--build-let-binds)
+  ;; (pushing! steps 'oo--build-defer-keymap)
+  ;; (unless (member state '(g global))
+  ;;   (if (letterp state)
+  ;;       (pushing! steps 'oo--build-defer-evil-state-char)
+  ;;     (pushing! steps 'oo--build-defer-evil-state)))
   (nreverse steps))
 ;;;; bind!
 (defmacro bind! (&rest args)
