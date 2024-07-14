@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'oo-base)
-;;;; build steps functions
+;;;; build steps
 ;; These are functions that produce forms.
 (defun oo--build-define-key (metadata forms)
   (with-map-keywords! metadata
@@ -60,13 +60,18 @@
 
 (defun! oo--build-defer-keymap ())
 ;;;; generate let-bind symbols 
-(defun oo--let-binds (metadata)
-  "Return."
-  (--mapcat (list it (symbol-name)) (map-keys metadata)))
+(defun! oo--let-binds (metadata)
+  "Return a list of symbols.."
+  (flet! fn (key) (cons key (gensym (symbol-name key))))
+  (mapcar #'fn (map-keys metadata)))
+;;;; oo--build-let-bind 
+(defun! oo--build-let-bind (metadata forms)
+  `((let ,let-binds ,@forms)))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   ;; Make a copy of the list but make the keywords point to symbols instead.
   ;; If there are the.
+  (set! let-binds (oo--let-binds metadata))
   (set! states (map-elt metadata :states))
   (cond (states
          (dolist (state states)
@@ -74,7 +79,7 @@
            (appending! forms (oo--bind-generate-forms metadata)))
          forms)
         (t
-         (oo--bind-generate-forms metadata))))
+         (oo--bind-generate-forms (oo--let-binds metadata)))))
 ;;;; generate forms
 (defun! oo--bind-generate-forms (metadata)
   (--reduce (funcall it acc metadata) (oo--bind-build-steps metadata)))
