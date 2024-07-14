@@ -328,7 +328,7 @@
     (evil-define-key* 'insert keymap (leader oo-insert-localleader-key) def)
     (evil-define-key* 'insert keymap (leader oo-insert-localleader-short-key) def)))
 
-(oo-localleader-bind emacs-lisp-mode-map "me" #'macrostep-collapse)
+(oo-localleader-bind emacs-lisp-mode-map "me" #'macrostep-expand)
 (oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
 (oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
 ;;;;; consult
