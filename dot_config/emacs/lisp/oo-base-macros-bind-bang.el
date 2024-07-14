@@ -56,6 +56,11 @@
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@(oo--bind-body metadata steps)))))
 
+(defun! oo--let-binds (metadata)
+  "Return a list of symbols."
+  (set! binds)
+  `((let ,@binds ,@(oo--bind-body metadata steps))))
+
 (defun! oo--build-which-key (metadata forms)
   (with-map-keywords! metadata
     (set! wk-fn #'which-key-add-keymap-based-replacements)
@@ -86,11 +91,6 @@ If METADATA has no keymap return."
            `((oo-call-after-load 'dired (lambda () ,@(oo--bind-body metadata steps)))))
           (t
            `((oo-call-after-bound ',!keymap (lambda () ,@(oo--bind-body metadata steps))))))))
-;;;; generate let-bind symbols 
-(defun! oo--let-binds (metadata)
-  "Return a list of symbols."
-  (set! binds)
-  `((let ,@binds ,@(oo--bind-body metadata steps))))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   (set! let-binds (oo--let-binds metadata))
