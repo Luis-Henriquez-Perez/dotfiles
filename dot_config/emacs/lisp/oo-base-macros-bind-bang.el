@@ -146,7 +146,7 @@
   "Return the list of build steps for metadata."
   (flet! letterp (obj)
     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
-  (set! state (map-elt metadata :evil-state))
+  (set! state (map-elt metadata :state))
   (cond ((member state '(g global))
          (pushing! steps 'oo--build-define-key))
         ((map-elt metadata :mode)
