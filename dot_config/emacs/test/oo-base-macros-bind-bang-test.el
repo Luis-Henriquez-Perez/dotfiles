@@ -58,12 +58,12 @@
   ;; A state letter with a key and definition.
   ;; (bind! i "d" #'ho)
   (should (equal (oo--build-metadata '(i "d" #'ho))
-                 '(:evil-state-letters (i) :keymap global-map :key "d" :def #'ho)))
+                 '(:states (i) :keymap global-map :key "d" :def #'ho)))
   ;; => (:evil-states (i) :keymap global-map :key "d" :def #'ho)
 
   ;; A list of state letter with a key and definition.
   ;; (bind! (n v) "d" #'ho)
-  ;; (should '(:evil-state-letters (n v) :key "d" :def #'ho)
+  ;; (should '(:states (n v) :key "d" :def #'ho)
   ;;         (oo--build-metadata '((n v) "d" #'ho)))
   ;; => (:evil-states (n v) :key "d" :def #'ho)
 
