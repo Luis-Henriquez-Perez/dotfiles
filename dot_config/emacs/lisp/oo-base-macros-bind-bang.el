@@ -58,7 +58,7 @@
 
 (defun! oo--let-binds (metadata)
   "Return a list of symbols."
-  (set! binds)
+  (set! (symbols values) (map-keys metadata))
   `((let ,@binds ,@(oo--bind-body metadata steps))))
 
 (defun! oo--build-which-key (metadata forms)
@@ -98,7 +98,7 @@ If METADATA has no keymap return."
   (cond (states
          (dolist (state states)
            (setf (map-elt metadata :state) state)
-           (appending! forms (oo--bind-generate-forms metadata)))
+           (appending! forms (oo--bind-body metadata)))
          forms)
         (t
          (oo--bind-generate-forms (oo--let-binds metadata)))))
