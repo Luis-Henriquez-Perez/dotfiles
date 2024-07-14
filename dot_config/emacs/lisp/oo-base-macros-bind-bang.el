@@ -51,8 +51,7 @@
     (set! fn `(lambda (keymap key def)
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
-    `((lef! ((define-key ,fn))
-        ,@forms))))
+    `((lef! ((define-key ,fn)) ,@forms))))
 
 (defun! oo--build-which-key (metadata forms)
   (with-map-keywords! metadata
