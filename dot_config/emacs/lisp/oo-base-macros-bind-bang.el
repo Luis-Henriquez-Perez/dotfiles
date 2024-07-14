@@ -58,12 +58,12 @@
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@forms))))
 
-(defun! oo--bind-step-defer-keymap (metadata steps)
+(defun! oo--bind-step-defer-keymap (metadata forms)
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
     (cond ((or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
-           (oo--bind-generate-body metadata steps))
+           forms)
           ;; Dired is the only package that I have encountered where using
           ;; `oo-call-after-bound' on its keymap does not work.  No idea why it
           ;; does not.  I assume that it is something about what happens between
