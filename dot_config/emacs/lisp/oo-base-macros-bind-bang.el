@@ -39,48 +39,51 @@
     `((define-key ,!keymap ,!key ,!def)
       ,@(oo--build-body metadata steps))))
 
-(defun oo--build-evil-define-key (metadata forms)
+(defun oo--build-evil-define-key (metadata steps)
   (with-map-keywords! metadata
     `((evil-define-key* ,!state ,!keymap ,!key ,!def)
       ,@(oo--build-body metadata steps))))
 
-(defun oo--build-evil-define-minor-mode-key (metadata forms)
+(defun oo--build-evil-define-minor-mode-key (metadata steps)
   (with-map-keywords! metadata
     `((evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
       ,@(oo--build-body metadata steps))))
 
-(defun oo--build-kbd (metadata forms)
+(defun oo--build-kbd (metadata steps)
   (with-map-keywords! metadata
     (set! fn `(lambda (keymap key def)
                 (setq key (if (stringp key) (kbd key) key))
                 (funcall this-fn keymap key def)))
-    `((lef! ((define-key ,fn)) ,@(oo--bind-body metadata steps)))))
+    `((lef! ((define-key ,fn)) ,@(oo--build-body metadata steps)))))
 
-(defun! oo--let-binds (metadata)
+(defun! oo--let-binds (metadata steps)
   "Return a list of symbols."
-  (set! (symbols values) (map-keys metadata))
-  `((let ,@binds ,@(oo--bind-body metadata steps))))
+  ;; (set! (symbols values) (map-keys metadata))
+  `((let ((a 1)) ,@(oo--build-body metadata steps))))
 
-(defun! oo--build-which-key (metadata forms)
+(defun! oo--build-which-key (metadata steps)
   (with-map-keywords! metadata
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     (set! fn `(lambda (keymap key def)
                 (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,!wk))
                 (funcall this-fn keymap key def)))
-    `((lef! ((define-key ,fn)) ,@(oo--bind-body metadata steps)))))
+    `((lef! ((define-key ,fn)) ,@(oo--build-body metadata steps)))))
 
-(defun! oo--build-defer-evil-state-char (metadata forms)
+(defun! oo--build-defer-evil-state-char (metadata steps)
   (set! char (char-to-string (symbol-name (map-elt metadata :state-value))))
   (set! state (gensym "state"))
   (setf (map-elt metadata :state-value) state)
-  `((oo-call-after-evil-state-char ,char (lambda (,state) ,@(oo--bind-body metadata steps)))))
+  `((oo-call-after-evil-state-char ,char (lambda (,state) ,@(oo--build-body metadata steps)))))
 
-(defun! oo--build-defer-keymap (metadata forms)
+(defun! oo--build-defer-evil-state (metadata steps)
+  `((oo-call-after-load 'evil (lambda () ,@(oo--build-body metadata steps)))))
+
+(defun! oo--build-defer-keymap (metadata steps)
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
     (cond ((or (not !!keymap) (equal !keymap 'global-map) (not (symbolp !keymap)))
-           (oo--bind-body metadata steps))
+           (oo--build-body metadata steps))
           ;; Dired is the only package that I have encountered where using
           ;; `oo-call-after-bound' on its keymap does not work.  No idea why it
           ;; does not.  I assume that it is something about what happens between
@@ -88,9 +91,9 @@ If METADATA has no keymap return."
           ;; In general dired is extremely sensitive as to when the bindings
           ;; as even this does not work in `oo-after-load-dired'.
           ((equal !keymap 'dired-mode-map)
-           `((oo-call-after-load 'dired (lambda () ,@(oo--bind-body metadata steps)))))
+           `((oo-call-after-load 'dired (lambda () ,@(oo--build-body metadata steps)))))
           (t
-           `((oo-call-after-bound ',!keymap (lambda () ,@(oo--bind-body metadata steps))))))))
+           `((oo-call-after-bound ',!keymap (lambda () ,@(oo--build-body metadata steps))))))))
 ;;;; generate body
 (defun! oo--bind-generate-body (metadata)
   (set! let-binds (oo--let-binds metadata))
@@ -98,13 +101,10 @@ If METADATA has no keymap return."
   (cond (states
          (dolist (state states)
            (setf (map-elt metadata :state) state)
-           (appending! forms (oo--bind-body metadata)))
+           (appending! forms (oo--build-body metadata)))
          forms)
         (t
          (oo--bind-generate-forms (oo--let-binds metadata)))))
-;;;; generate forms
-(defun! oo--bind-generate-forms (metadata)
-  (--reduce-from (funcall it metadata acc) nil (oo--build-steps metadata)))
 ;;;; process arguments
 (defun! oo--build-metadata (args)
   "Return standardized metadata from arguments."
@@ -192,8 +192,9 @@ If METADATA has no keymap return."
       (pushing! steps 'oo--build-defer-evil-state)))
   steps)
 ;;;; bind!
-(defmacro bind! (&rest args)
-  (macroexp-progn (oo--bind-generate-forms (oo--let-binds (oo--build-metadata args)))))
+(defmacro! bind! (&rest args)
+  (set! metadata (oo--build-metadata args))
+  (macroexp-progn (oo--build-body metadata (oo--build-steps metadata))))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
