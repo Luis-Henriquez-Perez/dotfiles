@@ -70,6 +70,9 @@
 (defconst oo-emacs-localleader-key "C-c l l"
   "The localleader prefix key for major-mode specific commands.")
 ;;;; keybindings
+;;;;; generic bindings
+(define-key global-map (kbd "C-c j") #'oo-add-new-abbrev)
+(define-key global-map (kbd "C-c k") #'unexpand-abbrev)
 ;;;;; leader keymap
 ;;;;;; root map
 (defvar oo-leader-map (make-sparse-keymap))
