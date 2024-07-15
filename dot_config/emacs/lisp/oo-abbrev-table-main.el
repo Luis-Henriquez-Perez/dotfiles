@@ -28,7 +28,12 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("exs" "examples")
+  '(("durat" "duration")
+    ("buidls" "builds")
+    ("asb" "as specified by")
+    ("defering" "deferring")
+    ("temr" "term")
+    ("exs" "examples")
     ("suport" "support")
     ("oftne" "often")
     ("nl" "newline")
