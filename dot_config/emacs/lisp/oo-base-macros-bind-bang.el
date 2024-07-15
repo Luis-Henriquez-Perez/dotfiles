@@ -169,6 +169,7 @@ If METADATA has no keymap return."
        ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
        . ,(and (pred plist-p) plist))
      `(:states ,states :keymap ,keymap :key ,key :def ,def . ,plist))
+    ;; (bind! :nmv )
     (_
      (error "cannot parse arguments..."))))
 ;;;; bind steps
