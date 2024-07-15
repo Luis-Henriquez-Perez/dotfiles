@@ -56,7 +56,7 @@
                 (funcall this-fn keymap key def)))
     `((lef! ((define-key ,fn)) ,@(oo--build-body metadata steps)))))
 
-(defun! oo--let-binds (metadata steps)
+(defun! oo--build-let-binds (metadata steps)
   "Return a list of symbols."
   ;; (set! (symbols values) (map-keys metadata))
   `((let ((a 1)) ,@(oo--build-body metadata steps))))
@@ -70,7 +70,7 @@
     `((lef! ((define-key ,fn)) ,@(oo--build-body metadata steps)))))
 
 (defun! oo--build-defer-evil-state-char (metadata steps)
-  (set! char (char-to-string (symbol-name (map-elt metadata :state-value))))
+  (set! char (string-to-char (symbol-name (map-elt metadata :state))))
   (set! state (gensym "state"))
   (setf (map-elt metadata :state-value) state)
   `((oo-call-after-evil-state-char ,char (lambda (,state) ,@(oo--build-body metadata steps)))))
@@ -94,17 +94,22 @@ If METADATA has no keymap return."
            `((oo-call-after-load 'dired (lambda () ,@(oo--build-body metadata steps)))))
           (t
            `((oo-call-after-bound ',!keymap (lambda () ,@(oo--build-body metadata steps))))))))
+;;;; process let-bindings 
+(defun oo--let-binds (metadata)
+  ())
 ;;;; generate body
-(defun! oo--bind-generate-body (metadata)
-  (set! let-binds (oo--let-binds metadata))
+(defun! oo--bind-generate-body (args)
+  (set! metadata (oo--build-metadata args))
   (set! states (map-elt metadata :states))
   (cond (states
          (dolist (state states)
            (setf (map-elt metadata :state) state)
-           (appending! forms (oo--build-body metadata)))
+           (set! steps (oo--build-steps metadata))
+           (appending! forms (oo--build-body metadata steps)))
          forms)
         (t
-         (oo--bind-generate-forms (oo--let-binds metadata)))))
+         (set! steps (oo--build-steps metadata))
+         (oo--build-body metadata steps))))
 ;;;; process arguments
 (defun! oo--build-metadata (args)
   "Return standardized metadata from arguments."
@@ -186,15 +191,14 @@ If METADATA has no keymap return."
   (pushing! steps 'oo--build-kbd)
   (pushing! steps 'oo--build-let-binds)
   (pushing! steps 'oo--build-defer-keymap)
-  (unless (member state '(g global))
+  (unless (member state '(nil g global))
     (if (letterp state)
         (pushing! steps 'oo--build-defer-evil-state-char)
       (pushing! steps 'oo--build-defer-evil-state)))
   steps)
 ;;;; bind!
 (defmacro! bind! (&rest args)
-  (set! metadata (oo--build-metadata args))
-  (macroexp-progn (oo--build-body metadata (oo--build-steps metadata))))
+  (macroexp-progn (oo--bind-generate-body args)))
 ;;; provide
 (provide 'oo-base-macros-bind-bang)
 ;;; oo-base-macros-bind-bang.el ends here
