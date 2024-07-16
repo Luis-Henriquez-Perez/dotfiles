@@ -92,6 +92,9 @@ Replace `kill-buffer--possibly-save' as advice."
     (t nil)))
 
 (advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
+;;;; hungry-delete
+;; Leave one space in between instead of deleting everything.
+(opt! hungry-delete-join-reluctantly t)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
