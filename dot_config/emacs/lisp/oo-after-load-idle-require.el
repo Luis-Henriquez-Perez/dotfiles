@@ -25,6 +25,7 @@
 ;; This is my configuration for idle-require.
 ;;
 ;;; Code:
+(require 'idle-require)
 ;;;;; idle-require
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 ;;; provide
