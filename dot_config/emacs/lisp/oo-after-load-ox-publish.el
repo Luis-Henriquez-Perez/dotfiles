@@ -28,6 +28,8 @@
 ;; but this should not be an "after load" file.
 ;;
 ;;; Code:
+(require 'ox)
+
 (setq org-publish-project-alist
       (progn!
         (set! blog-dir (expand-file-name "blog" "~/Documents/"))
