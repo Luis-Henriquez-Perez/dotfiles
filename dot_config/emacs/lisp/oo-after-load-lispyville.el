@@ -25,6 +25,7 @@
 ;; This is my configuration for lispyville.
 ;;
 ;;; Code:
+(require 'lispyville)
 ;;;; lispyville
 ;; Do not bind any keys by default.
 (opt! lispyville-key-theme nil)
