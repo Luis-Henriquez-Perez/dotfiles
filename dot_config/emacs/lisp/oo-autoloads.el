@@ -50,6 +50,7 @@
 (autoload #'oo-open-emacs-init-file            "oo-commands"                       nil t 'function)
 (autoload #'oo-add-new-abbrev                  "oo-commands"                       nil t 'function)
 (autoload #'oo-pop-to-buffer                   "oo-commands"                       nil t 'function)
+(autoload #'oo-dwim-narrow                     "oo-commands"                       nil t 'function)
 ;;; provide
 (provide 'oo-autoloads)
 ;;; oo-autoloads.el ends here
