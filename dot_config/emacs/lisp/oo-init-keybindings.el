@@ -151,6 +151,7 @@
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
+(bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "i" #'imenu)
 (bind! oo-find-map "p" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
@@ -159,8 +160,6 @@
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'display-buffer)
 
-;; (bind! oo-find-map "i" #'oo-open-emacs-init-file)
-;; (bind! oo-find-map "e" #'oo-open-emacs-directory)
 (bind! oo-find-map "b" #'burly-open-bookmark)
 (bind! oo-find-map "k" #'consult-bookmark)
 (bind! oo-find-map "b" #'consult-bookmark)
@@ -280,6 +279,8 @@
 (oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
 (oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
 ;;;;; miscellaneous
+(bind! "C-c j" #'oo-add-new-abbrev)
+(bind! "C-c k" #'unexpand-abbrev)
 (bind! i "TAB" #'completion-at-point)
 ;; (bind! n "x" #'hungry-delete-forward)
 (bind! i "A-x" #'execute-extended-command)
