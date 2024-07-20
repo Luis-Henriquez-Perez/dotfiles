@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("dupl" "duplicate")
+  '(("bytecomp" "byte-compilation")
+    ("dupl" "duplicate")
     ("err" "error")
     ("repeateadly" "repeatedly")
     ("wtim" "with this in mind")
