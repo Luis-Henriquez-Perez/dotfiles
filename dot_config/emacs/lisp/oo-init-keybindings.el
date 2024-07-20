@@ -123,7 +123,6 @@
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
 
 (bind! oo-window-map "t" #'transpose-frame)
-(bind! oo-window-map "S" #'burly-bookmark-windows)
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-window-map "w" #'ace-window)
 (bind! oo-window-map "j" #'ace-window)
