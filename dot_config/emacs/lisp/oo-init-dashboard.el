@@ -35,9 +35,7 @@
 
 (setq dashboard-banner-logo-title "Welcome!")
 
-(setq dashboard-set-footer nil)
-
-(setq dashboard-items nil)
+(setq dashboard-startupify-list (-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
 
 (setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 
