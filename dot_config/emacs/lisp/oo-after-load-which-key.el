@@ -25,6 +25,8 @@
 ;; This is my configuration for which-key.
 ;;
 ;;; Code:
+(require 'which-key)
+
 (opt! which-key-sort-uppercase-first nil)
 (opt! which-key-max-display-columns nil)
 (opt! which-key-add-column-padding 1)
