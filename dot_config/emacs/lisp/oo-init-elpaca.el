@@ -36,7 +36,6 @@
 ;; TODO: add bindings for lorem ipsum.
 ;; This is temporary--ideally I would want.
 ;; (elpaca aas)
-(elpaca tok-theme)
 (elpaca ace-jump-helm-line)
 (elpaca ace-link)
 (elpaca aggressive-indent)
@@ -153,6 +152,7 @@
 (elpaca tempel)
 (elpaca tempel-collection)
 (elpaca textsize)
+(elpaca tok-theme)
 (elpaca transpose-frame)
 (elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github))
 (elpaca vc-auto-commit)
