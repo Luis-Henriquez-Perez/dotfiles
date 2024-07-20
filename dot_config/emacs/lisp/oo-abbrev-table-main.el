@@ -28,7 +28,17 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("errs" "errors")
+  '(("repeateadly" "repeatedly")
+    ("wtim" "with this in mind")
+    ("dingly" "accordingly")
+    ("ued" "used")
+    ("consice" "concise")
+    ("doenst" "does not")
+    ("descr" "description")
+    ("vai" "via")
+    ("laoded" "loaded")
+    ("mprove" "improve")
+    ("errs" "errors")
     ("vals" "values")
     ("env" "environment")
     ("fomr" "form")
