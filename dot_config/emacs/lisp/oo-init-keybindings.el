@@ -143,6 +143,7 @@
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)
 (bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
 
+(bind! oo-app-map "n" #'notmuch)
 (bind! oo-app-map "d" #'dired)
 (bind! oo-app-map "e" #'eshell)
 (bind! oo-app-map "E" #'restart-emacs-start-new-emacs)
