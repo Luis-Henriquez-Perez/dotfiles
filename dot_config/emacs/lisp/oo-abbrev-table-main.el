@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("repeateadly" "repeatedly")
+  '(("err" "error")
+    ("repeateadly" "repeatedly")
     ("wtim" "with this in mind")
     ("dingly" "accordingly")
     ("ued" "used")
