@@ -301,7 +301,12 @@
 (opt! consult-fontify-preserve nil)
 
 (alt! display-buffer oo-pop-to-buffer consult)
-;;;;;; evil 
+;;;;;; tempel
+(map! tempel-map :ieg "C-j" #'tempel-next)
+(map! tempel-map :ieg "C-k" #'tempel-previous)
+(map! tempel-map :ieg "TAB" #'tempel-next)
+(map! tempel-map :ieg [backtab] #'tempel-previous)
+;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
 (bind! (n v) "g t" #'evil-goto-first-line)
