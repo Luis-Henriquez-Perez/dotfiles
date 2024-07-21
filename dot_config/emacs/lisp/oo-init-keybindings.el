@@ -302,10 +302,10 @@
 
 (alt! display-buffer oo-pop-to-buffer consult)
 ;;;;;; tempel
-(map! tempel-map :ieg "C-j" #'tempel-next)
-(map! tempel-map :ieg "C-k" #'tempel-previous)
-(map! tempel-map :ieg "TAB" #'tempel-next)
-(map! tempel-map :ieg [backtab] #'tempel-previous)
+(bind! tempel-map :ieg "C-j" #'tempel-next)
+(bind! tempel-map :ieg "C-k" #'tempel-previous)
+(bind! tempel-map :ieg "TAB" #'tempel-next)
+(bind! tempel-map :ieg [backtab] #'tempel-previous)
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
