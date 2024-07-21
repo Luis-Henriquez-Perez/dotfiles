@@ -294,7 +294,7 @@
 (bind! v "v" #'expreg-expand)
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
-;;;;; package specific 
+;;;;; package specific
 ;;;;;; consult
 (opt! consult-preview-key nil)
 
