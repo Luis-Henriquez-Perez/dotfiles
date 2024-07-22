@@ -31,7 +31,7 @@
 ;;; Code:
 ;;;; helm
 (set! helm-candidate-number-limit 50)
-;;;; gcmh 
+;;;; gcmh
 (opt! gcmh-idle-delay 'auto)
 (opt! gcmh-high-cons-threshold (* 8 1024 1024))
 (opt! gcmh-low-cons-threshold (* 4 1024 1024))
@@ -104,7 +104,7 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
-;;;; lispyville 
+;;;; lispyville
 (opt! lispyville-key-theme nil)
 ;;;; savehist
 (opt! savehist-save-minibuffer-history t)
