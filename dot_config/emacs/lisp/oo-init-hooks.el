@@ -119,22 +119,21 @@
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection)
   (require 'oo-init-modeline))
-;;;;; html-mode
-(hook! html-mode-hook&emmet-mode)
-;;;;; enable smartparens in the minibuffer
-;; This allows me to have parens completion when I invoke the command `eval-expression'.
-(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
-  "Enable `smartparens-mode' in the minibuffer."
-  (when (memq this-command '(eval-expression evil-ex))
-    (require 'smartparens)
-    (smartparens-strict-mode 1)))
-;;;;; after-load-functions
 (defhook! emacs-startup-hook&init-after-load-functions ()
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
   (hook! after-load-functions&oo-call-after-load-functions))
+;;;;; html-mode
+(hook! html-mode-hook&emmet-mode)
+;;;;; minibuffer-setup-hook
+;; This allows me to have parens completion when I invoke the command `eval-expression'.
+(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()
@@ -162,7 +161,7 @@ file is loaded."
            (setq gc-cons-percentage 0.4))
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
-;;;;; initial buffer
+;;;;; oo-initial-buffer-choice-hook
 (defhook! oo-initial-buffer-choice-hook&make-dashboard ()
   (when (require 'dashboard nil t)
     (aprog1 (get-buffer-create dashboard-buffer-name)
