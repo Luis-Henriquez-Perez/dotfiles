@@ -28,7 +28,14 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("usng" "using")
+  '(("drawbakc" "drawback")
+("wigo" "what is going on")
+("initializatioin" "initialization")
+("whehter" "whether")
+("nubmer" "number")
+("itt" "is that")
+("diffic" "difficult")
+("usng" "using")
     ("advoid" "avoid")
     ("bytecomp" "byte-compilation")
     ("dupl" "duplicate")
