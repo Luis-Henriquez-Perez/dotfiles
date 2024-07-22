@@ -42,7 +42,15 @@
 ;;;;; emacs-lisp-mode-hook
 (hook! emacs-lisp-mode-hook&aggressive-indent-mode)
 (hook! emacs-lisp-mode-hook&highlight-quoted-mode)
-
+;; The macros in my configuration are expanded during compilation thereby saving
+;; time because they do not need to be expanded during startup.  The one caviat
+;; is that since they are already expanded at runtime my emacs configuration
+;; will have no knowledge of them.  The `oo-macros' file will not be loaded at
+;; all.  And again this is great for reducing startup time but I still want the
+;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
+;; load the `oo-macros' file.
+(defhook! emacs-lisp-mode-hook&require-macros ()
+  (require 'oo-base-macros))
 (defhook! emacs-lisp-mode-hook&enable-font-lock ()
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
@@ -52,8 +60,7 @@
       (2 font-lock-function-name-face nil t)))))
 ;;;;; reb-mode-hook
 (hook! reb-mode-hook&rainbow-delimiters-mode)
-;;;;; oo-override-map
-(hook! after-init-hook&oo-override-mode :depth -100)
+;;;;; evil-mode-hook
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
@@ -86,36 +93,34 @@
 ;;;;; after-init-hook
 ;; Don't load everything at once.
 ;; (oo-require-hook 'after-init-hook 'evil)
+(hook! after-init-hook&oo-override-mode :depth -100)
 (defhook! after-init-hook&load-evil ()
   [:depth 10]
   (require 'evil nil t))
+
 ;; TODO: The display flickers when setting the initial theme.  Maybe this is
 ;; inevitable.  But maybe this has to do with me either disabling the previous
 ;; theme first or the order of setting the window-divider, or maybe I can
 ;; specify the default theme to load beforehand.  I need to play around with
 ;; settings and see if this flickering can be avoided.
 (hook! after-init-hook&window-divider-mode :depth 12)
+
+(defhook! after-init-hook&load-modus-operandi-theme ()
+  "Load `modus-operandi' theme."
+  (load-theme 'modus-operandi :no-confirm nil))
 ;;;;; emacs-startup-hook
 (hook! emacs-startup-hook&gcmh-mode :depth 91)
 (hook! emacs-startup-hook&evil-mode)
 (hook! emacs-startup-hook&which-key-mode)
 (hook! emacs-startup-hook&recentf-mode)
+(defhook! emacs-startup-hook&restore-startup-values ()
+  [:depth 91]
+  (oo-restore-value 'file-name-handler-alist)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection)
+  (require 'oo-init-modeline))
 ;;;;; html-mode
 (hook! html-mode-hook&emmet-mode)
-;;;;; enable default theme - modus-operandi
-(defhook! after-init-hook&load-modus-operandi-theme ()
-  "Load `modus-operandi' theme."
-  (load-theme 'modus-operandi :no-confirm nil))
-;;;;; load macros for init file
-;; The macros in my configuration are expanded during compilation thereby saving
-;; time because they do not need to be expanded during startup.  The one caviat
-;; is that since they are already expanded at runtime my emacs configuration
-;; will have no knowledge of them.  The `oo-macros' file will not be loaded at
-;; all.  And again this is great for reducing startup time but I still want the
-;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
-;; load the `oo-macros' file.
-(defhook! emacs-lisp-mode-hook&require-macros ()
-  (require 'oo-base-macros))
 ;;;;; enable smartparens in the minibuffer
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
@@ -157,13 +162,6 @@ file is loaded."
            (setq gc-cons-percentage 0.4))
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
-
-(defhook! emacs-startup-hook&restore-startup-values ()
-  [:depth 91]
-  (oo-restore-value 'file-name-handler-alist)
-  (setq gc-cons-threshold (* 32 1024 1024))
-  (run-with-timer 5 nil #'oo-lower-garbage-collection)
-  (require 'oo-init-modeline))
 ;;;;; initial buffer
 (defhook! oo-initial-buffer-choice-hook&make-dashboard ()
   (when (require 'dashboard nil t)
