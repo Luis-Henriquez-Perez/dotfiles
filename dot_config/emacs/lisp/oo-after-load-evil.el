@@ -27,18 +27,6 @@
 ;;; Code:
 (require 'evil)
 ;;;; settings
-;; By default =evil= displays the current state in the echo area.  I think some
-;; indicator for the current state is necessary but I don't want to do it via
-;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
-;; modeline as well.
-(opt! evil-echo-state nil)
-
-(opt! evil-move-cursor-back nil)
-
-(opt! evil-move-beyond-eol nil)
-
-(opt! evil-search-wrap nil)
-
 (opt! evil-visualstar/persistent t)
 ;;;; minibuffer
 (defvar oo-evil-state-before-minibuffer nil
@@ -57,14 +45,6 @@
     (evil-change-state oo-evil-state-before-minibuffer)
     (setq oo-evil-state-before-minibuffer nil)))
 ;;;; cursors
-(opt! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
-(opt! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
-(opt! evil-normal-state-cursor '(box "DarkGoldenrod2"))
-(opt! evil-visual-state-cursor '((hollow) "dark gray"))
-(opt! evil-operator-state-cursor '((hbar . 10) "hot pink"))
-(opt! evil-replace-state-cursor '(box "chocolate"))
-(opt! evil-motion-state-cursor '(box "plum3"))
-
 (advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;;; escape
 (defvar oo-escape-hook nil

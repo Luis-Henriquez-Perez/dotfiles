@@ -27,20 +27,9 @@
 ;;; Code:
 (require 'vertico)
 ;;;; vertico
-
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 (hook! vertico-mode-hook&vertico-buffer-mode)
 (hook! vertico-mode-hook&marginalia-mode)
-
-
-(opt! vertico-quick1 "asdfgh")
-(opt! vertico-quick2 "jkluionm")
-
-(opt! vertico-count-format '("%-6s " . "%2$s"))
-(opt! vertico-count 15)
-
-(opt! orderless-matching-styles '(orderless-initialism
-                                  orderless-regexp))
 
 (setq vertico-buffer-display-action
       '(display-buffer-in-direction

@@ -296,10 +296,6 @@
 (bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific
 ;;;;;; consult
-(opt! consult-preview-key nil)
-
-(opt! consult-fontify-preserve nil)
-
 (alt! display-buffer oo-pop-to-buffer consult)
 ;;;;;; tempel
 (bind! tempel-map :ieg "C-j" #'tempel-next)

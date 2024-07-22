@@ -25,13 +25,6 @@
 ;; This is my configuration for avy.
 ;;
 ;;; Code:
-(opt! avy-style 'pre)
-
-(opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-
-(opt! avy-background nil)
-
-(opt! avy-timeout-seconds 0.3)
 ;;; provide
 (provide 'oo-after-load-avy)
 ;;; oo-after-load-avy.el ends here
