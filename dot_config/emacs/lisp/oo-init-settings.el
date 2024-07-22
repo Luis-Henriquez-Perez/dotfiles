@@ -50,6 +50,9 @@
 (opt! evil-operator-state-cursor '((hbar . 10) "hot pink"))
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
+;;;; denote
+(opt! denote-directory "~/Documents/notes/")
+(opt! denote-file-type 'text)
 ;;;; emms
 (opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
 (opt! emms-directory (expand-file-name "emms/" oo-var-dir))

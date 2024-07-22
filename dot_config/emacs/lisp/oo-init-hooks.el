@@ -125,7 +125,7 @@ Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
   (hook! after-load-functions&oo-call-after-load-functions))
-;;;;; html-mode
+;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
 ;;;;; minibuffer-setup-hook
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
