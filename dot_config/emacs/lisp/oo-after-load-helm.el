@@ -27,8 +27,6 @@
 ;;; Code:
 (require 'helm)
 
-(set! helm-candidate-number-limit 50)
-
 (oo-popup-at-bottom "\\*Helm")
 ;;; provide
 (provide 'oo-after-load-helm)

@@ -71,10 +71,6 @@
                      :slant 'normal
                      :size 15))
   (set-face-attribute 'default nil :font it))
-;;;; window divider
-(opt! window-divider-default-bottom-width 7)
-(opt! window-divider-default-right-width 7)
-(opt! window-divider-default-places t)
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
 (defadvice! kill-buffer--possibly-save@ARprompt-clearly (_ buffer &rest args)
@@ -92,9 +88,6 @@ Replace `kill-buffer--possibly-save' as advice."
     (t nil)))
 
 (advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
-;;;; hungry-delete
-;; Leave one space in between instead of deleting everything.
-(opt! hungry-delete-join-reluctantly t)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here

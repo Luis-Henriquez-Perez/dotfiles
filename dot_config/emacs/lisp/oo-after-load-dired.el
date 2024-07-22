@@ -36,10 +36,6 @@
 
 (opt! dirvish-default-layout nil)
 
-(hook! dired-mode-hook&dired-omit-mode)
-;; By default hide details.
-(hook! dired-mode-hook&dired-hide-details-mode)
-
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
 ;;; provide

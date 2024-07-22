@@ -83,6 +83,14 @@
 (hook! prog-mode-hook&turn-on-show-smartparens-mode)
 (hook! prog-mode-hook&lispyville-mode)
 (hook! prog-mode-hook&captain-mode)
+;; TODO: figure out the best way to add these things.
+(defhook! prog-mode-hook&set-captain-local-vars ()
+  (setq-local captain-predicate #'oo-in-string-or-comment-p)
+  (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
+;;;;; dired-mode-hook 
+(hook! dired-mode-hook&dired-omit-mode)
+;; By default hide details.
+(hook! dired-mode-hook&dired-hide-details-mode)
 ;;;;; text-mode-hook
 (hook! text-mode-hook&visual-line-mode)
 (hook! text-mode-hook&auto-fill-mode)
@@ -90,6 +98,9 @@
 (hook! text-mode-hook&captain-mode)
 (hook! text-mode-hook&turn-on-show-smartparens-mode)
 (hook! text-mode-hook&smartparens-mode)
+(defhook! text-mode-hook&set-captain-local-vars ()
+  (setq-local captain-predicate #'always)
+  (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;;; after-init-hook
 ;; Don't load everything at once.
 ;; (oo-require-hook 'after-init-hook 'evil)

@@ -59,15 +59,6 @@
      ;; If it's a docstring capitalize the first word of the doc-string.
      (when (looking-back oo-docstring-regexp (line-beginning-position 0))
        (match-end 0)))))
-
-(defhook! text-mode-hook&set-captain-local-vars ()
-  (setq-local captain-predicate #'always)
-  (setq-local captain-sentence-start-function #'captain--default-sentence-start))
-
-;; TODO: figure out the best way to add these things.
-(defhook! prog-mode-hook&set-captain-local-vars ()
-  (setq-local captain-predicate #'oo-in-string-or-comment-p)
-  (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;; provide
 (provide 'oo-after-load-captain)
 ;;; oo-after-load-captain.el ends here

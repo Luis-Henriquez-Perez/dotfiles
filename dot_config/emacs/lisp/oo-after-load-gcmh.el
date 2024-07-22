@@ -27,12 +27,6 @@
 ;;; Code:
 (require 'gcmh)
 
-(opt! gcmh-idle-delay 'auto)
-
-(opt! gcmh-high-cons-threshold (* 8 1024 1024))
-
-(opt! gcmh-low-cons-threshold (* 4 1024 1024))
-
 ;; [[helpvar:minibuffer-setup-hook][minibuffer-setup-hook]] and [[helpvar:minibuffer-exit-hook][minibuffer-exit-hook]] are the hooks run just before
 ;; entering and exiting the minibuffer (respectively).  In the minibuffer I'll be
 ;; primarily doing searches for variables and functions.  There are alot of

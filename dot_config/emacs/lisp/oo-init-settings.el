@@ -29,6 +29,15 @@
 ;; considering.
 ;;
 ;;; Code:
+;;;; helm
+(set! helm-candidate-number-limit 50)
+;;;; gcmh 
+(opt! gcmh-idle-delay 'auto)
+(opt! gcmh-high-cons-threshold (* 8 1024 1024))
+(opt! gcmh-low-cons-threshold (* 4 1024 1024))
+;;;; ace-window
+(opt! aw-swap-invert t)
+(opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
 ;;;; avy
 (opt! avy-style 'pre)
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
@@ -72,6 +81,17 @@
 ;;;; consult
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
+;;;; corfu
+(opt! corfu-quick1 "ajskdlghty")
+(opt! corfu-quick2 "ajskdlghty")
+;; TODO: make it so moving on a candidate if I press espace insert that candidate.
+(opt! corfu-preview-current t)
+(opt! corfu-preselect-first t)
+(opt! corfu-quit-at-boundary nil)
+(opt! corfu-auto t)
+(opt! corfu-auto-delay 0.1)
+(opt! corfu-auto-prefix 1)
+(opt! corfu-bar-width 0)
 ;;;; super-save
 ;; The default auto-saving feature in emacs saves after a certain number of
 ;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
@@ -84,6 +104,8 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
+;;;; lispyville 
+(opt! lispyville-key-theme nil)
 ;;;; savehist
 (opt! savehist-save-minibuffer-history t)
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
@@ -109,6 +131,13 @@
 (opt! which-key-show-operator-state-maps t)
 
 (opt! which-key-show-prefix 'top)
+;;;; window divider
+(opt! window-divider-default-bottom-width 7)
+(opt! window-divider-default-right-width 7)
+(opt! window-divider-default-places t)
+;;;; hungry-delete
+;; Leave one space in between instead of deleting everything.
+(opt! hungry-delete-join-reluctantly t)
 ;;; provide
 (provide 'oo-init-settings)
 ;;; oo-init-settings.el ends here

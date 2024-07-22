@@ -38,25 +38,7 @@
     (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
     (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)))
 
-(opt! corfu-quick1 "ajskdlghty")
-(opt! corfu-quick2 "ajskdlghty")
-
 (hook! corfu-mode-hook&corfu-history-mode)
-
-;; TODO: make it so moving on a candidate if I press espace insert that candidate.
-(opt! corfu-preview-current t)
-
-(opt! corfu-preselect-first t)
-
-(opt! corfu-quit-at-boundary nil)
-
-(opt! corfu-auto t)
-
-(opt! corfu-auto-delay 0.1)
-
-(opt! corfu-auto-prefix 1)
-
-(opt! corfu-bar-width 0)
 ;;; provide
 (provide 'oo-after-load-corfu)
 ;;; oo-after-load-corfu.el ends here
