@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("tother" "together")
+  '(("lke" "like")
+    ("tother" "together")
     ("usng" "using")
     ("advoid" "avoid")
     ("bytecomp" "byte-compilation")
