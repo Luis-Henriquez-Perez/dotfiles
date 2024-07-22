@@ -100,7 +100,12 @@
 (hook! emacs-startup-hook&evil-mode)
 (hook! emacs-startup-hook&which-key-mode)
 (hook! emacs-startup-hook&recentf-mode)
-;;;;; html-mode
+(defhook! emacs-startup-hook&init-after-load-functions ()
+  "Call `oo-call-after-load-functions' once.
+Also add it as a hook to `after-load-functions' so that it is invoked whenever a
+file is loaded."
+  (oo-call-after-load-functions)
+  (hook! after-load-functions&oo-call-after-load-functions));;;;; html-mode
 (hook! html-mode-hook&emmet-mode)
 ;;;;; enable default theme - modus-operandi
 (defhook! after-init-hook&load-modus-operandi-theme ()
@@ -123,13 +128,6 @@
   (when (memq this-command '(eval-expression evil-ex))
     (require 'smartparens)
     (smartparens-strict-mode 1)))
-;;;;; after-load-functions
-(defhook! emacs-startup-hook&init-after-load-functions ()
-  "Call `oo-call-after-load-functions' once.
-Also add it as a hook to `after-load-functions' so that it is invoked whenever a
-file is loaded."
-  (oo-call-after-load-functions)
-  (hook! after-load-functions&oo-call-after-load-functions))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()
