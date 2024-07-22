@@ -1,4 +1,4 @@
-;;; oo-after-load-which-key.el --- which-key configuration -*- lexical-binding: t; -*-
+;;; oo-init-features.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,25 +22,13 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for which-key.
+;; This file loads features that have to be initialized on startup.
 ;;
 ;;; Code:
-(require 'which-key)
-
-(opt! which-key-sort-uppercase-first nil)
-(opt! which-key-max-display-columns nil)
-(opt! which-key-add-column-padding 1)
-(opt! which-key-min-display-lines 1)
-(opt! which-key-side-window-slot -10)
-(opt! which-key-sort-order #'which-key-prefix-then-key-order)
-(opt! which-key-popup-type 'side-window)
-(opt! which-key-idle-delay 0.8)
-;; (opt! line-spacing 3 :hook which-key-init-buffer-hook :local t)
-
-(opt! which-key-show-transient-maps t)
-(opt! which-key-show-operator-state-maps t)
-
-(opt! which-key-show-prefix 'top)
+(require 'oo-init-no-littering)
+(require 'oo-init-abbrev)
+(require 'oo-init-dashboard)
+(require 'oo-init-recentf)
 ;;; provide
-(provide 'oo-after-load-which-key)
-;;; oo-after-load-which-key.el ends here
+(provide 'oo-init-features)
+;;; oo-init-features.el ends here
