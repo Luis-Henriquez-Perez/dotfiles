@@ -31,7 +31,6 @@
 
 ;; TODO: set the style for all configs.
 (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
-
 ;;; provide
 (provide 'oo-after-load-outli)
 ;;; oo-after-load-outli.el ends here
