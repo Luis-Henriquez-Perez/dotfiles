@@ -16,7 +16,7 @@
 ;; it's wrong for packages to install other packages when they're loaded.  In
 ;; theory -X option could be used for.
 (setq user-emacs-directory eldev-real-user-emacs-directory)
-;;;; tell =eldev= where to load
+;;;; tell eldev where to load
 (setq eldev-project-main-file "init.el")
 ;; Eldev seems to be looking recursively in directories for any file named
 ;; =init.el= or =early-init.el= unless you specifically put the "./" before the
@@ -25,12 +25,11 @@
 ;; "./".
 (setq eldev-main-fileset '("./init.el"
                            "./early-init.el"
-                           "lisp/oo-after-load*.el"
-                           "lisp/oo-init-*.el"
-                           "lisp/oo-base*.el"
-                           "lisp/oo-abbrev-table*.el"
-                           ))
-(setq eldev-test-fileset '("test/oo-base*.el"))
+                           "lisp/init-*.el"
+                           "lisp/base*.el"
+                           "lisp/config*.el"
+                           "lisp/+abbrev*.el"))
+(setq eldev-test-fileset '("test/base*.el"))
 ;; Emacs doesn't allow to add directory containing init.el to load
 ;; path, so we have to put other Emacs Lisp files in directory. Help
 ;; Eldev commands to locate them.

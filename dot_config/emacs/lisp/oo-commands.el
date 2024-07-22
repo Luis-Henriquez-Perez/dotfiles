@@ -28,14 +28,62 @@
 ;; these functions are very specific to me and my workflow.
 ;;
 ;;; Code:
-(require 'oo-base)
-;;;; custom functions
+(require 'base)
+;;;; opening specific files
+;; A complicating factor is the fact that I use the chezmoi directory as the
+;; main way to edit these files.
+(defun! oo--chezmoi-source-path (target-dir)
+  "Get the source path for a given TARGET-DIR using chezmoi."
+  (cl-assert (executable-find "chezmoi"))
+  (set! command (format "chezmoi source-path %s" (shell-quote-argument target-dir)))
+  (set! source-path (string-trim (shell-command-to-string command)))
+  ;; Remove any trailing newlines from the output
+  (and (not (string-empty-p source-path))
+	   source-path))
+
+(defun oo-open-emacs-config ()
+  "Open Emacs configuration."
+  (interactive)
+  (switch-to-buffer (dired (oo--chezmoi-source-path user-emacs-directory))))
+
+(defun oo-open-emacs-init-file ()
+  "Open init file."
+  (interactive)
+  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path user-init-file))))
+
+(defun oo-open-emacs-lisp-dir ()
+  "Open init file."
+  (interactive)
+  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
+;;;; window splitting
+(defun oo-split-window-right-and-focus ()
+  "Split window right and select the window created with the split."
+  (interactive)
+  (select-window (split-window-right)))
+
+(defun oo-split-window-below-and-focus ()
+  "Split window below and select the window created with the split."
+  (interactive)
+  (select-window (split-window-below)))
+;;;; font
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."
   (interactive)
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
+;;;; sorting
+(defun! oo-sort-elpaca-forms ()
+  "Sort elpaca forms lexicographically by package name."
+  (interactive)
+  (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
+  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
+(defun! oo-sort-autoload-forms ()
+  "Sort autoload forms lexicographically by package name."
+  (interactive)
+  (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
+  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
+;;;; custom functions
 (defun oo-dwim-narrow (keep-narrowing-p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
 Dwim means: narrow to region, outline heading, org-src-block, org-subtree, or
@@ -55,27 +103,6 @@ is already narrowed."
              (org-narrow-to-subtree)))
         (t
          (narrow-to-defun))))
-
-(defun oo-split-window-right-and-focus ()
-  "Split window right and select the window created with the split."
-  (interactive)
-  (select-window (split-window-right)))
-
-(defun oo-split-window-below-and-focus ()
-  "Split window below and select the window created with the split."
-  (interactive)
-  (select-window (split-window-below)))
-
-(defun oo-open-emacs-config ()
-  "Open Emacs configuration."
-  (interactive)
-  (display-buffer (dired user-emacs-directory)))
-
-(defun oo-open-emacs-init-file ()
-  "Open init file."
-  (interactive)
-  (display-buffer (find-file-noselect user-init-file)))
-
 ;; You could actually do this via abbrev-mode as well.  And actually it might be
 ;; better in a sense because.
 (defun! oo-dwim-space ()
@@ -89,57 +116,64 @@ is already narrowed."
         (t
          (insert "\s"))))
 
-(defun! oo-sort-elpaca-forms ()
-  "Sort elpaca forms lexicographically by package name."
-  (interactive)
-  (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
-  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
-
-(defun! oo-sort-autoload-forms ()
-  "Sort autoload forms lexicographically by package name."
-  (interactive)
-  (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
-  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
-
-;; I am aware that there is already a command to add abbreviations to their abbrev-file but I do
-;; not use the abbreviation file partly because I do not think it lends itself
-;; well for version control--which I want for my abbrevs--and because I do not
-;; like the indentation and code format with which it saves the abbrev table.
-(defun! oo-add-new-abbrev ()
-  "Add abbreviation at point to `oo-abbrev-table-main'.
-Prompt for the expansion and insert the abbreviation directly into
-`oo-abbrev-table-main.el`.  Also evaluate the the file and expand the
-abbreviation at point. This function assumes the abbreviations file
-`oo-abbrev-table-main.el` is located at
-'~/.local/share/chezmoi/dot_config/emacs/lisp/'."
-  (interactive)
-  (set! abbrev (downcase (substring-no-properties (thing-at-point 'word))))
-  ;; Replace abbreviation?
-  (set! existing-expansion (abbrev-expansion abbrev oo-abbrev-table-main))
-  (set! prompt (format "Abbrev for %s already expands to %s, replace it?" abbrev existing-expansion))
-  (nif! (or (not existing-expansion) (and existing-expansion (y-or-n-p prompt)))
-      (message "O.K., cancelled replacing abbrev for %s." abbrev)
-    (set! expansion (read-string (format "Expansion for '%s': " abbrev)))
-    (message "Expansion for '%s': %s" abbrev expansion)
-    (set! regexp "^(define-abbrev-table 'oo-abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
-    (set! file "~/.local/share/chezmoi/dot_config/emacs/lisp/oo-abbrev-table-main.el")
-    (set! buffer (find-file-noselect file))
-    (with-current-buffer buffer
-      (save-excursion
-        (goto-char (point-min))
-        (re-search-forward regexp nil t nil)
-        (insert (format "(%S %S)\n" abbrev expansion))
-        (goto-char (match-beginning 0))
-        (lisp-indent-line)
-        (eval-buffer)))
-    (expand-abbrev)
-    (message "Mapped abbrev %S to expansion %S!" abbrev expansion)))
-
 (defun! oo-pop-to-buffer ()
   (interactive)
   (require 'consult)
   (set! consult--buffer-display #'pop-to-buffer)
   (call-interactively #'consult-buffer))
+
+;; Helper for maintaining my Emacs configuration.
+;; (defun! oo--dwim-rename-file (orig-fn old new &optional ok-p)
+;;   (prog1 (apply orig-fn old new ok-p)
+;;     (set! emacs-dir (f-full "~/.local/share/chezmoi/dot_config/emacs/"))
+;;     (when (and (f-ancestor-of-p emacs-dir old) (equal "el" (f-ext old)))
+;;       (oo-ensure-feature-matches-filename new))))
+
+;; (advice-add 'rename-file :around #'oo--dwim-rename-file)
+;; (advice-remove 'rename-file #'oo--dwim-rename-file)
+
+;; (defun! oo-ensure-feature-matches-filename (file)
+;;   "Change usages of feature in file to match filename."
+;;   (with-temp-file file
+;;     (insert-file-contents file)
+;;     (set! feature (file-name-sans-extension (file-name-nondirectory (directory-file-name file))))
+;;     (goto-char (point-min))
+;;     (set! header "\\`;;;[[:blank:]]\\(?1:.+\\)\\.el")
+;;     (if (re-search-forward header nil t nil)
+;;         (replace-match feature nil nil nil 1)
+;;       (message "NO MATCH FOR HEADER"))
+;;     (set! footer "\\(?:^(provide[[:blank:]]'\\(?1:.+\\))\n;;;[[:blank:]]\\(?2:.+\\)\\.el ends here$\\)\n\\'")
+;;     (nif! (re-search-forward footer nil t nil)
+;;         (message "NO MATCH FOR FOOTER")
+;;       (replace-match feature nil nil nil 1)
+;;       (replace-match feature nil nil nil 2))))
+
+;; (defun oo-bubble-up (item list)
+;;   (cons item (-remove-item item list)))
+
+;; (defun! oo-generate-requires ()
+;;   (set! dir "~/.local/share/chezmoi/dot_config/emacs/lisp/")
+;;   (set! files (directory-files dir t "\\`init-.+\\.el\\'"))
+;;   (setq files (oo-bubble-up "init-no-littering.el" files))
+;;   (dolist (file files)
+;;     (set! feature (intern (f-no-ext (f-base file))))
+;;     (collecting! forms `(require ',feature)))
+;;   forms)
+
+;; TODO: I want to do more complex things like loading a random theme with no
+;; repetitions in the current session and marking certain themes as favorite
+;; themes that have a greater likelihood of being displayed.
+(defun! oo-load-random-theme ()
+  "Load a random theme."
+  (interactive)
+  (set! theme (seq-random-elt (custom-available-themes)))
+  (message "Loading theme %s..." theme)
+  (load-theme theme))
+;;;; miscellaneous
+(defun oo-kill-emacs-no-confirm ()
+  "Kill Emacs without confirmation."
+  (let (confirm-kill-emacs)
+	(call-interactively #'kill-emacs)))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here

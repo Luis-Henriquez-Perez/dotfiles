@@ -1,4 +1,4 @@
-;;; oo-override-mode.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-override-mode.el --- Initialize oo-override-mode -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Provide mode for overriding keybindings.
 ;;
 ;;; Code:
 ;; Creating a minor mode to hold the leader map allows us to toggle our leader

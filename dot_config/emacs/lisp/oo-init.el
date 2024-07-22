@@ -26,29 +26,9 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base)
-(require 'oo-init-no-littering)
-(require 'oo-init-abbrev)
-(require 'oo-init-dashboard)
-(require 'oo-init-recentf)
+(require 'base)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
-;;;; disable old themes before enabling new ones
-;; We end up with remants of the faces of old themes when we load a new
-;; one.  For this reason, I make sure to disable any enabled themes before applying
-;; a new theme.
-
-;; When you load a theme you'll end up with quite a surprise.  And it
-;; stacks as well when working on a big configuration change I didn't
-;; have this code and I could literally backtrack the themes.
-
-;; Don't know why deleting the previous theme before enabling a new
-;; one isn't the default behavior.  When would anyone want to layer
-;; the colors of one theme on top of an older one.
-(defadvice! load-theme@ARdisable-old-themes (orig-fn &rest args)
-  "Disable old themes before loading new ones."
-  (mapc #'disable-theme custom-enabled-themes)
-  (apply orig-fn args))
 ;;;; set initial font
 (alet (or (font-spec :name "Martian Mono Nerd Font"
                      :weight 'normal
@@ -71,30 +51,6 @@
                      :slant 'normal
                      :size 15))
   (set-face-attribute 'default nil :font it))
-;;;; window divider
-(opt! window-divider-default-bottom-width 7)
-(opt! window-divider-default-right-width 7)
-(opt! window-divider-default-places t)
-;;;; less confusing kill buffer
-;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
-(defun! oo--prompt-in-less-confusing-way (_ buffer &rest args)
-  "Ask user in the minibuffer whether to save before killing.
-Replace `kill-buffer--possibly-save' as advice."
-  (set! prompt (format "Buffer %s modified." (buffer-name)))
-  (set! choices '((?s "Save and kill buffer" "save the buffer and then kill it")
-                  (?d "Discard and kill buffer without saving" "kill buffer without saving")
-                  (?c "Cancel" "Exit without doing anything")))
-  (set! long-form (and (not use-short-answers) (not (use-dialog-box-p))))
-  (set! response (car (read-multiple-choice prompt choices nil nil long-form)))
-  (cl-case response
-    (?s (with-current-buffer buffer (save-buffer)) t)
-    (?d t)
-    (t nil)))
-
-(advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
-;;;; hungry-delete
-;; Leave one space in between instead of deleting everything.
-(opt! hungry-delete-join-reluctantly t)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here

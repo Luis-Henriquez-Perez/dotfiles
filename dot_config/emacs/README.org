@@ -52,7 +52,7 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
 - Extensive abbrev configuration
 - Spacemacs-like keybinding scheme
 - Uses [[https://github.com/progfolio/elpaca][elpaca]] an advanced package manager
-- Advanced macros such as [[./lisp/oo-progn-macro.el][progn!]], [[./lisp/oo-let-macro.el][lef!]], and [[./lisp/oo-let-macro.el][let!]]
+- Advanced macros such as [[./lisp/oo-progn-macro.el][block!]], [[./lisp/oo-let-macro.el][lef!]], and [[./lisp/oo-let-macro.el][let!]]
 - Avoids the use of macros such as [[https://github.com/jwiegley/use-package][use-package]], [[https://github.com/conao3/leaf.el][leaf]] and
   [[https://www.emacswiki.org/emacs/SetupEl][setup.el]]
 - Generated functions specifically designed to be hooks and advices
@@ -63,16 +63,20 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
 :END:
 The way I choose to manage my files reflects.
 - [[file:./init.el][init.el]] - Loads everything else.
-- core files - Define tools that will help me configure emacs and that will be
+- base files - Define tools that will help me configure emacs and that will be
   used pervasively throughout init and after-load files.
 - init files - These are files that can be loaded immediately.  Their objective
-  is to initialize or setup a package to be used in my configuration.  Usually
+  is to initialize a package to be used in my configuration.  Usually
   that means adding hooks, setting bindings and autoloading functions.
-- after-load-files - These are files that are loaded after some feature is loaded.
-  These files should not be loaded immediately because (1) they may load
-  packages not needed during startup thereby slowing down startup and (2) they
-  themselves may contain some computation that should only be done when a
-  particular feature is loaded.
+- config files - These are files that by init files after some feature is loaded.
+  These files should not be loaded immediately because they contain funtionality
+  or perform computations that are only needed when a particular package is
+  loaded.
+The init and config files are named strictly after packages.  Typically in Emacs
+configurations these files are named after some functionality the files are
+adding--a name might be for example "init-editing" or "init-completion".  I
+specifically choose not to do this because I find that the category is
+opinionated an has a tendency to become nebulous and obscure.
 * why the name =OO=?
 :PROPERTIES:
 :ID:       20240408T215953.404277
