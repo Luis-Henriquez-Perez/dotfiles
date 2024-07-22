@@ -294,14 +294,14 @@
 (bind! v "v" #'expreg-expand)
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
-;;;;; package specific 
+;;;;; package specific
 ;;;;;; consult
 (opt! consult-preview-key nil)
 
 (opt! consult-fontify-preserve nil)
 
 (alt! display-buffer oo-pop-to-buffer consult)
-;;;;;; evil 
+;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
 (bind! (n v) "g t" #'evil-goto-first-line)
