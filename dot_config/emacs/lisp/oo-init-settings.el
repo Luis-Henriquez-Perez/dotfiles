@@ -25,11 +25,15 @@
 ;; This file contains settings for third-party packages.  Many emacsers and I in
 ;; the past divided package configuration into separate files, but the truth is
 ;; for most packages I just have to set some variables and I was beginning to
-;; feel like it was not worth it.  Also it made less sense for me to do so
-;; considering.
+;; feel like it was not worth it.  I am learning the hard way that is do not
+;; over-abstract; only make an abstraction when the situation calls for it.
+;; Otherwise, you risk making maintaining code much more difficult than it has
+;; to be.  Also it made less sense for me to do so considering many package
+;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
 ;;;; helm
+(oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
 ;;;; gcmh
 (opt! gcmh-idle-delay 'auto)
@@ -93,6 +97,14 @@
 (opt! corfu-auto-delay 0.1)
 (opt! corfu-auto-prefix 1)
 (opt! corfu-bar-width 0)
+;;;; dired 
+(opt! dired-clean-confirm-killing-deleted-buffers nil)
+(opt! dired-recursive-copies 'always)
+(opt! dired-recursive-deletes 'always)
+;;;; dirvish 
+(opt! dirvish-use-mode-line nil)
+(opt! dirvish-attributes '(file-size subtree-state))
+(opt! dirvish-default-layout nil)
 ;;;; super-save
 ;; The default auto-saving feature in emacs saves after a certain number of
 ;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
@@ -106,6 +118,8 @@
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
 ;;;; lispyville
+;; Do not bind any keys by default.
+(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
 ;;;; savehist
 (opt! savehist-save-minibuffer-history t)
@@ -194,6 +208,16 @@
 ;;;;; miscellaneous
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
+;;;; outli
+;; TODO: figure out how to make this a named advice.
+(advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
+;;;; grugru
+;; (oo-call-after-load #'require 'oo-grugru-definitions)
+;;;; magit
+(oo-call-after-load 'evil #'evil-magit-init)
+(oo-popup-at-bottom "\\`magit")
+;;;; idle-require 
+(oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 ;;; provide
 (provide 'oo-init-settings)
 ;;; oo-init-settings.el ends here

@@ -169,6 +169,12 @@ file is loaded."
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
+;;;;; kill-emacs-hook 
+(hook! kill-emacs-hook&recentf-save-list)
+;;;;; eshell-mode-hook 
+(hook! eshell-mode-hook&abbrev-mode)
+(hook! eshell-mode-hook&smartparens-mode)
+(hook! eshell-mode-hook&eat-eshell-mode)
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."

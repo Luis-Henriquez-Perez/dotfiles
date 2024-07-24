@@ -28,16 +28,7 @@
 (require 'dired)
 
 (opt! wdired-confirm-overwrite nil)
-(setq dired-clean-confirm-killing-deleted-buffers nil)
 ;;;; dired
-(opt! dirvish-use-mode-line nil)
-
-(opt! dirvish-attributes '(file-size subtree-state))
-
-(opt! dirvish-default-layout nil)
-
-(opt! dired-recursive-copies 'always)
-(opt! dired-recursive-deletes 'always)
 ;;; provide
 (provide 'oo-after-load-dired)
 ;;; oo-after-load-dired.el ends here

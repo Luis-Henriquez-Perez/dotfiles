@@ -27,12 +27,18 @@
 ;;; Code:
 (require 'eshell-z)
 (require 'eshell-up)
-;;;; open eshell at bottom
+;;;; popup rules
 (oo-popup-at-bottom "\\*eshell")
 ;;;; hooks
 (hook! eshell-mode-hook&abbrev-mode)
-
 (hook! eshell-mode-hook&smartparens-mode)
+(hook! eshell-mode-hook&eat-eshell-mode)
+;;;; settings 
+;;;; TODO: configure eshell prompt
+(autoload 'epe-theme-lambda "eshell-prompt-extras")
+(opt! eshell-banner-message "")
+(opt! eshell-highlight-prompt nil)
+(opt! eshell-prompt-function 'epe-theme-lambda)
 ;;;; prevent eshell from printing out messages on load
 ;; Eshell prints various messages about loading modules.  These messages
 ;; originate from the function [[][eshell-unload-all-modules]].  I would rather
@@ -42,18 +48,11 @@
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
-;;;; TODO: configure eshell prompt
-(autoload 'epe-theme-lambda "eshell-prompt-extras")
-(opt! eshell-banner-message "")
-(opt! eshell-highlight-prompt nil)
-(opt! eshell-prompt-function 'epe-theme-lambda)
 ;;;; eshell history
 (opt! eshell-hist-ignoredups t)
 ;; boost eshell history-size
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
-;;;; enable eat
-(hook! eshell-mode-hook&eat-eshell-mode)
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use
