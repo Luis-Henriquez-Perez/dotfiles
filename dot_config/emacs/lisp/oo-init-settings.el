@@ -71,6 +71,7 @@
 ;; empty" error and if I have mpv installed, add it and play the file.  I can do
 ;; this for `emms-play-file' but I need to check if to.
 (opt! emms-player-list '(emms-player-mpv))
+(oo-call-after-load 'emms #'require emms-player-mpv nil t)
 ;;;; vertico
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")
@@ -111,11 +112,15 @@
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
+
+(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
+  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;;; smartparens
 (opt! sp-highlight-wrap-tag-overlay nil)
 (opt! sp-highlight-pair-overlay nil)
 (opt! sp-highlight-wrap-overlay nil)
 (opt! sp-show-pair-delay 0.2)
+(oo-call-after-load 'smartparens #'require 'smartparens-config)
 ;;;; which-key
 (opt! which-key-sort-uppercase-first nil)
 (opt! which-key-max-display-columns nil)
@@ -138,6 +143,57 @@
 ;;;; hungry-delete
 ;; Leave one space in between instead of deleting everything.
 (opt! hungry-delete-join-reluctantly t)
+;;;; notmuch
+(opt! notmuch-sort-oldest-first nil)
+;;;; rx
+;; (oo-call-after-load #'require 'oo-rx-definitions)
+;;;; org
+;;;;; org-superstar
+(opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
+(opt! org-superstar-leading-bullet ?\s)
+(opt! org-superstar-special-todo-items t)
+;;;;; org-appear
+(opt! org-appear-autolinks t)
+;;;;; org-refile
+(opt! org-refile-allow-creating-parent-nodes t)
+;; The variable =org-refile-targets= specifies the places from which information is
+;; taken to create the list of possible refile targets.  So, for example,
+(opt! org-refile-targets '((oo-directory-files :maxlevel . 10)))
+(opt! org-outline-path-complete-in-steps nil)
+(opt! org-refile-use-cache nil)
+;; Without this setting, you can't actually refile to a generic file with refiling;
+;; you can only refile to existing headings within that file.  The way I use
+;; refiling, I'm refiling to files most of the time.
+(opt! org-refile-use-outline-path 'file)
+;; Although it is possible to have a parent headline that also has a source
+;; block, I prefer not to.  I guess it is a stylistic thing.
+;; TODO: Fix `oo-has-source-block-p' is not defined.
+;; (opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
+;;;;; org-id
+(opt! org-id-track-globally t)
+(opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
+;; The way I see it, if I can have a universally unique identifier that also tells
+;; me the date my headline was created; we hit two birds with one stone.  That way I
+;; never need a =date-created= property.
+(opt! org-id-method 'ts)
+(opt! org-id-link-to-org-use-id t)
+;;;;; org-src
+(oo-popup-at-bottom "\\*Org Src")
+(opt! org-edit-src-persistent-message nil)
+;; (adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
+;; (adjoin! org-src-lang-modes '("lua" . lua))
+(opt! org-src-ask-before-returning-to-edit-buffer nil)
+(opt! org-src-preserve-indentation t)
+(opt! org-edit-src-content-indentation 0)
+(opt! org-src-window-setup 'plain)
+;;;;; org-capture
+(oo-popup-at-bottom "CAPTURE[^z-a]+")
+(opt! org-archive-save-context-info nil)
+(opt! org-archive-location (concat org-directory "archive.org::"))
+(hook! org-insert-heading-hook&org-id-get-create)
+;;;;; miscellaneous
+(opt! org-src-fontify-natively t)
+(opt! org-hide-emphasis-markers t)
 ;;; provide
 (provide 'oo-init-settings)
 ;;; oo-init-settings.el ends here

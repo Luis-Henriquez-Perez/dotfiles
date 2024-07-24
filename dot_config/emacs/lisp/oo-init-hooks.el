@@ -69,6 +69,9 @@
 (defhook! evil-mode-hook&make-intercept-map ()
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
+;;;;; org-mode-hook
+(hook! org-mode-hook&org-appear-mode)
+(hook! org-mode-hook&org-superstar-mode)
 ;;;;; prog-mode-hook
 (hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
@@ -87,7 +90,7 @@
 (defhook! prog-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
-;;;;; dired-mode-hook 
+;;;;; dired-mode-hook
 (hook! dired-mode-hook&dired-omit-mode)
 ;; By default hide details.
 (hook! dired-mode-hook&dired-hide-details-mode)
