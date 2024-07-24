@@ -33,12 +33,75 @@
 ;; when as opposed to the configuration for over 50 individual packages.  The
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
+;;;;; after-init-hook
+;; Don't load everything at once.
+;; (oo-require-hook 'after-init-hook 'evil)
+(hook! after-init-hook&oo-override-mode :depth -100)
+(defhook! after-init-hook&load-evil ()
+  [:depth 10]
+  (require 'evil nil t))
+
+;; TODO: The display flickers when setting the initial theme.  Maybe this is
+;; inevitable.  But maybe this has to do with me either disabling the previous
+;; theme first or the order of setting the window-divider, or maybe I can
+;; specify the default theme to load beforehand.  I need to play around with
+;; settings and see if this flickering can be avoided.
+(hook! after-init-hook&window-divider-mode :depth 12)
+
+(defhook! after-init-hook&load-modus-operandi-theme ()
+  "Load `modus-operandi' theme."
+  (load-theme 'modus-operandi :no-confirm nil))
+;;;;; emacs-startup-hook
+(hook! emacs-startup-hook&gcmh-mode :depth 91)
+(hook! emacs-startup-hook&evil-mode)
+(hook! emacs-startup-hook&which-key-mode)
+(hook! emacs-startup-hook&recentf-mode)
+(defhook! emacs-startup-hook&restore-startup-values ()
+  [:depth 91]
+  (oo-restore-value 'file-name-handler-alist)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection)
+  (require 'oo-init-modeline))
+(defhook! emacs-startup-hook&init-after-load-functions ()
+  "Call `oo-call-after-load-functions' once.
+Also add it as a hook to `after-load-functions' so that it is invoked whenever a
+file is loaded."
+  (oo-call-after-load-functions)
+  (hook! after-load-functions&oo-call-after-load-functions))
+;;;;; minibuffer-setup-hook
+;; This allows me to have parens completion when I invoke the command `eval-expression'.
+(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
+;;;;; minibuffer
+;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
+(defhook! minibuffer-setup-hook&increase-garbage-collection ()
+  "Boost garbage collection settings to `gcmh-high-cons-threshold'."
+  [:depth 10]
+  (oo-record-value 'gc-cons-threshold)
+  (oo-record-value 'gc-cons-percentage)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (setq gc-cons-percentage 0.8))
+
+(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
+  [:depth 90]
+  (oo-restore-value 'gc-cons-threshold)
+  (oo-restore-value 'gc-cons-percentage))
 ;;;;; on-first-file-hook
 (hook! on-first-file-hook&super-save-mode)
 ;;;;; on-first-input-hook
 (hook! on-first-input-hook&minibuffer-depth-indicate-mode)
 (hook! on-first-input-hook&vertico-mode)
 (hook! on-first-input-hook&savehist-mode)
+;;;;; oo-initial-buffer-choice-hook
+(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
+  (when (require 'dashboard nil t)
+    (aprog1 (get-buffer-create dashboard-buffer-name)
+      (with-current-buffer it
+        (dashboard-insert-startupify-lists)))))
 ;;;;; emacs-lisp-mode-hook
 (hook! emacs-lisp-mode-hook&aggressive-indent-mode)
 (hook! emacs-lisp-mode-hook&highlight-quoted-mode)
@@ -104,65 +167,8 @@
 (defhook! text-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
-;;;;; after-init-hook
-;; Don't load everything at once.
-;; (oo-require-hook 'after-init-hook 'evil)
-(hook! after-init-hook&oo-override-mode :depth -100)
-(defhook! after-init-hook&load-evil ()
-  [:depth 10]
-  (require 'evil nil t))
-
-;; TODO: The display flickers when setting the initial theme.  Maybe this is
-;; inevitable.  But maybe this has to do with me either disabling the previous
-;; theme first or the order of setting the window-divider, or maybe I can
-;; specify the default theme to load beforehand.  I need to play around with
-;; settings and see if this flickering can be avoided.
-(hook! after-init-hook&window-divider-mode :depth 12)
-
-(defhook! after-init-hook&load-modus-operandi-theme ()
-  "Load `modus-operandi' theme."
-  (load-theme 'modus-operandi :no-confirm nil))
-;;;;; emacs-startup-hook
-(hook! emacs-startup-hook&gcmh-mode :depth 91)
-(hook! emacs-startup-hook&evil-mode)
-(hook! emacs-startup-hook&which-key-mode)
-(hook! emacs-startup-hook&recentf-mode)
-(defhook! emacs-startup-hook&restore-startup-values ()
-  [:depth 91]
-  (oo-restore-value 'file-name-handler-alist)
-  (setq gc-cons-threshold (* 32 1024 1024))
-  (run-with-timer 5 nil #'oo-lower-garbage-collection)
-  (require 'oo-init-modeline))
-(defhook! emacs-startup-hook&init-after-load-functions ()
-  "Call `oo-call-after-load-functions' once.
-Also add it as a hook to `after-load-functions' so that it is invoked whenever a
-file is loaded."
-  (oo-call-after-load-functions)
-  (hook! after-load-functions&oo-call-after-load-functions))
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
-;;;;; minibuffer-setup-hook
-;; This allows me to have parens completion when I invoke the command `eval-expression'.
-(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
-  "Enable `smartparens-mode' in the minibuffer."
-  (when (memq this-command '(eval-expression evil-ex))
-    (require 'smartparens)
-    (smartparens-strict-mode 1)))
-;;;;; minibuffer
-;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! minibuffer-setup-hook&increase-garbage-collection ()
-  "Boost garbage collection settings to `gcmh-high-cons-threshold'."
-  [:depth 10]
-  (oo-record-value 'gc-cons-threshold)
-  (oo-record-value 'gc-cons-percentage)
-  (setq gc-cons-threshold (* 32 1024 1024))
-  (setq gc-cons-percentage 0.8))
-
-(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
-  "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-  [:depth 90]
-  (oo-restore-value 'gc-cons-threshold)
-  (oo-restore-value 'gc-cons-percentage))
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
@@ -175,12 +181,6 @@ file is loaded."
            (setq gc-cons-percentage 0.4))
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
-;;;;; oo-initial-buffer-choice-hook
-(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-        (dashboard-insert-startupify-lists)))))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here
