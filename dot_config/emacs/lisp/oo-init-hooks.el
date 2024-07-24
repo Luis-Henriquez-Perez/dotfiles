@@ -169,9 +169,9 @@ file is loaded."
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
-;;;;; kill-emacs-hook 
+;;;;; kill-emacs-hook
 (hook! kill-emacs-hook&recentf-save-list)
-;;;;; eshell-mode-hook 
+;;;;; eshell-mode-hook
 (hook! eshell-mode-hook&abbrev-mode)
 (hook! eshell-mode-hook&smartparens-mode)
 (hook! eshell-mode-hook&eat-eshell-mode)
