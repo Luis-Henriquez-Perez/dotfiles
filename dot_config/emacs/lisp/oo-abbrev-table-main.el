@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("lding" "loading")
+  '(("hoosk" "hooks")
+    ("fiew" "few")
+    ("lding" "loading")
     ("laod" "load")
     ("laoding" "loading")
     ("aee" "all else equal")
