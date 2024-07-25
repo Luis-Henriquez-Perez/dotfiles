@@ -95,6 +95,15 @@
 (opt! corfu-quick1 "ajskdlghty")
 (opt! corfu-quick2 "ajskdlghty")
 ;; https://github.com/minad/corfu/issues/12
+;;;; chezmoi
+;; I need the command to write the source from the target.  The command
+;; =chezmoi-apply= does this but I would like it to do it automatically if I am
+;; already editing a target-file.
+(defhook! after-save-hook&chezmoi-write-maybe (&rest _)
+  (when (aand (require 'chezmoi nil t)
+              (buffer-file-name)
+              (chezmoi-target-file it))
+    (with-demoted-errors "error:%S" (chezmoi-write))))
 ;;;; dashboard
 (require 'dashboard)
 
