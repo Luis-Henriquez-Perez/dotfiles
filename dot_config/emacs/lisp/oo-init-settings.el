@@ -88,6 +88,7 @@
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 (opt! avy-background nil)
 (opt! avy-timeout-seconds 0.3)
+;;;; emmet 
 ;;;; evil
 (defhook! after-init-hook&load-evil ()
   [:depth 10]
