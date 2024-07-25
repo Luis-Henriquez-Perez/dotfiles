@@ -292,8 +292,6 @@
 (bind! n "L" #'evil-last-non-blank)
 (bind! v "V" #'expreg-contract)
 (bind! v "v" #'expreg-expand)
-(bind! n "J" #'evil-scroll-page-down)
-(bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific
 ;;;;;; evil
 ;;;;;;; operators
@@ -305,9 +303,6 @@
 (bind! (n v) "g r" #'oo-eval-replace-operator)
 (bind! (n v) "g l" #'oo-eval-print-operator)
 (bind! (n v) "g p" #'oo-eval-print-operator)
-;;;;;;;; comment
-(bind! (n v) "g c" #'lispyville-comment-or-uncomment)
-(bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
 ;;;;;;;; exchange
 ;;;;;;;; g is kind of like the main prefix key of vim
 (bind! (n v) "g u" #'evil-upcase)
@@ -316,7 +311,6 @@
 ;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
 ;; Though I will say I am not 100% sure it is the equivalent.
 (bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
-;;;;;;; motions
 ;;;;;;; text objects
 ;;;;;;;; line
 (bind! evil-inner-text-objects-map "l" #'evil-inner-line)

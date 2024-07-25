@@ -154,6 +154,9 @@
 (advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 
 (oo-call-after-load 'evil #'require 'oo-evil-operators)
+
+(bind! n "J" #'evil-scroll-page-down)
+(bind! n "K" #'evil-scroll-page-up)
 ;;;; evil-surround
 (hook! prog-mode-hook&evil-surround-mode)
 (hook! text-mode-hook&evil-surround-mode)
@@ -318,6 +321,9 @@
 
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
+
+(bind! (n v) "g c" #'lispyville-comment-or-uncomment)
+(bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
 ;;;; savehist
 (hook! on-first-input-hook&savehist-mode)
 (opt! savehist-save-minibuffer-history t)
