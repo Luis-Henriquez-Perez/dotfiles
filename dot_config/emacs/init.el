@@ -58,8 +58,7 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load requirements
-(require 'oo-init)
-(require 'oo-after-load)
+(require 'oo-init-features)
 (require 'oo-autoloads)
 ;;; provide init
 (provide 'init)
