@@ -32,11 +32,16 @@
 ;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
+;;;; no-littering
+(setq no-littering-etc-directory oo-etc-dir)
+(setq no-littering-var-directory oo-var-dir)
+(require 'no-littering)
 ;;;; grugru
 (oo-call-after-load 'grugru #'require 'oo-grugru-definitions)
 ;;;; abbrev-mode
 (hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)
+;; (oo-call-after-load)
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
