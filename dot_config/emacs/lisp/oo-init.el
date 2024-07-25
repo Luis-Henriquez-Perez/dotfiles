@@ -27,11 +27,6 @@
 ;;; Code:
 ;;;; requirements
 (require 'oo-base)
-(require 'oo-init-no-littering)
-(require 'oo-init-abbrev)
-(require 'oo-init-dashboard)
-(require 'oo-init-recentf)
-(require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; disable old themes before enabling new ones
 ;; We end up with remants of the faces of old themes when we load a new

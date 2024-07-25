@@ -204,13 +204,13 @@
 ;;;; evil-easymotion
 (opt! evilem-style 'at)
 (opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
-;; (oo-call-after-load 'evil-easymotion #'require 'oo-evilem-motions)
-(autoload #'oo-evilem-motion-beginning-of-word "oo-evilem-motions"     nil t 'function)
-(autoload #'oo-evilem-motion-beginning-of-WORD "oo-evilem-motions"     nil t 'function)
-(autoload #'oo-evilem-motion-end-of-word       "oo-evilem-motions"     nil t 'function)
-(autoload #'oo-evilem-motion-end-of-WORD       "oo-evilem-motions"     nil t 'function)
-(autoload #'oo-evilem-motion-char              "oo-evilem-motions"     nil t 'function)
-(autoload #'oo-evilem-motion-beginning-of-line "oo-evilem-motions"     nil t 'function)
+
+(autoload #'oo-evilem-motion-beginning-of-word "oo-evilem-motions" nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-WORD "oo-evilem-motions" nil t 'function)
+(autoload #'oo-evilem-motion-end-of-word       "oo-evilem-motions" nil t 'function)
+(autoload #'oo-evilem-motion-end-of-WORD       "oo-evilem-motions" nil t 'function)
+(autoload #'oo-evilem-motion-char              "oo-evilem-motions" nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-line "oo-evilem-motions" nil t 'function)
 
 (bind! (n v) "w" #'oo-evilem-motion-beginning-of-word)
 (bind! (n v) "W" #'oo-evilem-motion-beginning-of-WORD)
