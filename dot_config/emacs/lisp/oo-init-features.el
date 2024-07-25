@@ -369,6 +369,7 @@
 ;;;; outli
 (hook! prog-mode-hook&outli-mode)
 ;; TODO: figure out how to make this a named advice.
+(setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 (advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
 ;;;; rainbow-delimiters
 (hook! prog-mode-hook&rainbow-delimiters-mode)
