@@ -97,21 +97,11 @@ file is loaded."
    '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
-;;;;; evil-mode-hook
-;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
-;; to make it an intercept map for all evil states.  In evil, intercept maps are
-;; maps that take priority (intercept) evil bindings when they have a different
-;; binding for the same key (this is opposed to =overriding-maps=, which completely
-;; override an evil keymap).
-(defhook! evil-mode-hook&make-intercept-map ()
-  "Register `oo-override-map' as an intercept map."
-  (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; prog-mode-hook
 (hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
 ;; (hook! prog-mode-hook&flyspell-prog-mode)
-(hook! auto-fill-mode-hook&filladapt-mode)
 (hook! prog-mode-hook&auto-fill-mode)
 ;; TODO: figure out the best way to add these things.
 (defhook! prog-mode-hook&set-captain-local-vars ()
@@ -120,9 +110,6 @@ file is loaded."
 ;;;;; text-mode-hook
 (hook! text-mode-hook&visual-line-mode)
 (hook! text-mode-hook&auto-fill-mode)
-(defhook! text-mode-hook&set-captain-local-vars ()
-  (setq-local captain-predicate #'always)
-  (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
 ;;;;; garbage collection

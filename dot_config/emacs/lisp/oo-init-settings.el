@@ -41,13 +41,17 @@
 ;;;; abbrev-mode
 (hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)
-;; (oo-call-after-load)
+;;;; fill-adapt
+(hook! auto-fill-mode-hook&filladapt-mode)
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
 ;;;; captain-mode
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)
+(defhook! text-mode-hook&set-captain-local-vars ()
+  (setq-local captain-predicate #'always)
+  (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;; recentf
 (hook! emacs-startup-hook&recentf-mode)
 (hook! kill-emacs-hook&recentf-save-list)
@@ -100,6 +104,14 @@
   [:depth 10]
   (require 'evil nil t))
 (hook! emacs-startup-hook&evil-mode)
+;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
+;; to make it an intercept map for all evil states.  In evil, intercept maps are
+;; maps that take priority (intercept) evil bindings when they have a different
+;; binding for the same key (this is opposed to =overriding-maps=, which completely
+;; override an evil keymap).
+(defhook! evil-mode-hook&make-intercept-map ()
+  "Register `oo-override-map' as an intercept map."
+  (evil-make-intercept-map oo-override-mode-map 'all t))
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
 ;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
