@@ -32,10 +32,47 @@
 ;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
+;;;; abbrev-mode
+(hook! text-mode-hook&abbrev-mode)
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
+;;;; captain-mode
+(hook! prog-mode-hook&captain-mode)
+(hook! text-mode-hook&captain-mode)
+;;;; recentf
+(hook! emacs-startup-hook&recentf-mode)
+(hook! kill-emacs-hook&recentf-save-list)
+(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
+(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
+(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
+(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+(setq recentf-filename-handlers '(file-truename))
+;;;; eshell
+(hook! eshell-mode-hook&abbrev-mode)
+(hook! eshell-mode-hook&smartparens-mode)
+(hook! eshell-mode-hook&eat-eshell-mode)
+(oo-popup-at-bottom "\\*eshell")
+(autoload 'epe-theme-lambda "eshell-prompt-extras")
+(opt! eshell-banner-message "")
+(opt! eshell-highlight-prompt nil)
+(opt! eshell-prompt-function 'epe-theme-lambda)
+(opt! eshell-hist-ignoredups t)
+;; boost eshell history-size
+;; Increase the history size from 128 to 1000.
+(opt! eshell-history-size 1000)
+;; Eshell prints various messages about loading modules.  These messages
+;; originate from the function [[][eshell-unload-all-modules]].  I would rather
+;; not see these messages.
+(oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
+;; At first I thought the culprit was this function, but I was wrong.  The
+;; printing comes from =eshell-mode=.  In any case, however, I silence it as
+;; well.
+(oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
+;; (require 'eshell-z)
+;; (require 'eshell-up)
 ;;;; gcmh
+(hook! emacs-startup-hook&gcmh-mode :depth 91)
 (opt! gcmh-idle-delay 'auto)
 (opt! gcmh-high-cons-threshold (* 8 1024 1024))
 (opt! gcmh-low-cons-threshold (* 4 1024 1024))
@@ -78,6 +115,7 @@
 (opt! emms-player-list '(emms-player-mpv))
 (oo-call-after-load 'emms #'require emms-player-mpv nil t)
 ;;;; vertico
+(hook! on-first-input-hook&vertico-mode)
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")
 (opt! vertico-count-format '("%-6s " . "%2$s"))
@@ -99,6 +137,9 @@
 (opt! corfu-auto-prefix 1)
 (opt! corfu-bar-width 0)
 ;;;; dired
+(hook! dired-mode-hook&dired-omit-mode)
+;; By default hide details.
+(hook! dired-mode-hook&dired-hide-details-mode)
 (opt! dired-clean-confirm-killing-deleted-buffers nil)
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
@@ -121,17 +162,22 @@
 (opt! super-save-idle-duration 5)
 ;;;; lispyville
 ;; Do not bind any keys by default.
+(hook! prog-mode-hook&lispyville-mode)
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
 ;;;; savehist
+(hook! on-first-input-hook&savehist-mode)
 (opt! savehist-save-minibuffer-history t)
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-
 (defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;;; smartparens
+(hook! text-mode-hook&turn-on-show-smartparens-mode)
+(hook! text-mode-hook&smartparens-mode)
+(hook! prog-mode-hook&smartparens-mode)
+(hook! prog-mode-hook&turn-on-show-smartparens-mode)
 (opt! sp-highlight-wrap-tag-overlay nil)
 (opt! sp-highlight-pair-overlay nil)
 (opt! sp-highlight-wrap-overlay nil)
@@ -221,6 +267,7 @@
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;;; outli
+(hook! prog-mode-hook&outli-mode)
 ;; TODO: figure out how to make this a named advice.
 (advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
 ;;;; grugru

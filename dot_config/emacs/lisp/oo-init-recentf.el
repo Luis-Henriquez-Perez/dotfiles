@@ -32,12 +32,6 @@
 ;; For some reason this gives an error when I use eldev eval. I have to figure
 ;; out what eldev is doing here.
 
-(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
-
-(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
-
 (setq recentf-filename-handlers '(file-truename))
 
 (adjoining! recentf-filename-handlers #'abbreviate-file-name)

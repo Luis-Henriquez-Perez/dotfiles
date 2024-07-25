@@ -52,9 +52,6 @@
   "Load `modus-operandi' theme."
   (load-theme 'modus-operandi :no-confirm nil))
 ;;;;; emacs-startup-hook
-(hook! emacs-startup-hook&gcmh-mode :depth 91)
-(hook! emacs-startup-hook&evil-mode)
-(hook! emacs-startup-hook&recentf-mode)
 (defhook! emacs-startup-hook&restore-startup-values ()
   [:depth 91]
   (oo-restore-value 'file-name-handler-alist)
@@ -90,11 +87,8 @@ file is loaded."
   (oo-restore-value 'gc-cons-threshold)
   (oo-restore-value 'gc-cons-percentage))
 ;;;;; on-first-file-hook
-(hook! on-first-file-hook&super-save-mode)
 ;;;;; on-first-input-hook
 (hook! on-first-input-hook&minibuffer-depth-indicate-mode)
-(hook! on-first-input-hook&vertico-mode)
-(hook! on-first-input-hook&savehist-mode)
 ;;;;; oo-initial-buffer-choice-hook
 (defhook! oo-initial-buffer-choice-hook&make-dashboard ()
   (when (require 'dashboard nil t)
@@ -118,8 +112,6 @@ file is loaded."
    '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
-;;;;; reb-mode-hook
-(hook! reb-mode-hook&rainbow-delimiters-mode)
 ;;;;; evil-mode-hook
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
@@ -129,7 +121,6 @@ file is loaded."
 (defhook! evil-mode-hook&make-intercept-map ()
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
-;;;;; org-mode-hook
 ;;;;; prog-mode-hook
 (hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
@@ -138,37 +129,18 @@ file is loaded."
 (hook! auto-fill-mode-hook&filladapt-mode)
 (hook! prog-mode-hook&auto-fill-mode)
 (hook! prog-mode-hook&abbrev-mode)
-(hook! prog-mode-hook&outli-mode)
-(hook! prog-mode-hook&smartparens-mode)
-(hook! prog-mode-hook&turn-on-show-smartparens-mode)
-(hook! prog-mode-hook&lispyville-mode)
-(hook! prog-mode-hook&captain-mode)
 ;; TODO: figure out the best way to add these things.
 (defhook! prog-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
-;;;;; dired-mode-hook
-(hook! dired-mode-hook&dired-omit-mode)
-;; By default hide details.
-(hook! dired-mode-hook&dired-hide-details-mode)
 ;;;;; text-mode-hook
 (hook! text-mode-hook&visual-line-mode)
 (hook! text-mode-hook&auto-fill-mode)
-(hook! text-mode-hook&abbrev-mode)
-(hook! text-mode-hook&captain-mode)
-(hook! text-mode-hook&turn-on-show-smartparens-mode)
-(hook! text-mode-hook&smartparens-mode)
 (defhook! text-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)
-;;;;; kill-emacs-hook
-(hook! kill-emacs-hook&recentf-save-list)
-;;;;; eshell-mode-hook
-(hook! eshell-mode-hook&abbrev-mode)
-(hook! eshell-mode-hook&smartparens-mode)
-(hook! eshell-mode-hook&eat-eshell-mode)
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
