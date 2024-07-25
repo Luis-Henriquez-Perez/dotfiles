@@ -97,11 +97,11 @@
 (opt! corfu-auto-delay 0.1)
 (opt! corfu-auto-prefix 1)
 (opt! corfu-bar-width 0)
-;;;; dired 
+;;;; dired
 (opt! dired-clean-confirm-killing-deleted-buffers nil)
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
-;;;; dirvish 
+;;;; dirvish
 (opt! dirvish-use-mode-line nil)
 (opt! dirvish-attributes '(file-size subtree-state))
 (opt! dirvish-default-layout nil)
@@ -216,7 +216,7 @@
 ;;;; magit
 (oo-call-after-load 'evil #'evil-magit-init)
 (oo-popup-at-bottom "\\`magit")
-;;;; idle-require 
+;;;; idle-require
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 ;;; provide
 (provide 'oo-init-settings)
