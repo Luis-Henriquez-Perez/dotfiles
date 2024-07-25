@@ -37,20 +37,6 @@
 ;; Don't load everything at once.
 ;; (oo-require-hook 'after-init-hook 'evil)
 (hook! after-init-hook&oo-override-mode :depth -100)
-(defhook! after-init-hook&load-evil ()
-  [:depth 10]
-  (require 'evil nil t))
-
-;; TODO: The display flickers when setting the initial theme.  Maybe this is
-;; inevitable.  But maybe this has to do with me either disabling the previous
-;; theme first or the order of setting the window-divider, or maybe I can
-;; specify the default theme to load beforehand.  I need to play around with
-;; settings and see if this flickering can be avoided.
-(hook! after-init-hook&window-divider-mode :depth 12)
-
-(defhook! after-init-hook&load-modus-operandi-theme ()
-  "Load `modus-operandi' theme."
-  (load-theme 'modus-operandi :no-confirm nil))
 ;;;;; emacs-startup-hook
 (defhook! emacs-startup-hook&restore-startup-values ()
   [:depth 91]
@@ -86,7 +72,6 @@ file is loaded."
   [:depth 90]
   (oo-restore-value 'gc-cons-threshold)
   (oo-restore-value 'gc-cons-percentage))
-;;;;; on-first-file-hook
 ;;;;; on-first-input-hook
 (hook! on-first-input-hook&minibuffer-depth-indicate-mode)
 ;;;;; oo-initial-buffer-choice-hook
@@ -128,7 +113,6 @@ file is loaded."
 ;; (hook! prog-mode-hook&flyspell-prog-mode)
 (hook! auto-fill-mode-hook&filladapt-mode)
 (hook! prog-mode-hook&auto-fill-mode)
-(hook! prog-mode-hook&abbrev-mode)
 ;; TODO: figure out the best way to add these things.
 (defhook! prog-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'oo-in-string-or-comment-p)

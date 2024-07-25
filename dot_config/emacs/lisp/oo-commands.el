@@ -101,6 +101,14 @@ is already narrowed."
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
+(defun! oo-sort-outli-headings ()
+  "Sort outli headings lexicographically by title."
+  '(seq (seq ";;;" (one-or-more ";") blank (group (1+ (not white))) "\n")
+        (1+ (or (seq bol ";;" (not ";") (1+ nonl))
+                (seq bol (not ";") (1+ nonl))) "\n"))
+  (set! rx ())
+  )
+
 ;; I am aware that there is already a command to add abbreviations to their abbrev-file but I do
 ;; not use the abbreviation file partly because I do not think it lends itself
 ;; well for version control--which I want for my abbrevs--and because I do not

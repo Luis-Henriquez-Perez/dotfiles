@@ -44,8 +44,6 @@
   (when (bound-and-true-p evil-mode)
     (evil-change-state oo-evil-state-before-minibuffer)
     (setq oo-evil-state-before-minibuffer nil)))
-;;;; cursors
-(advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;;; escape
 (defvar oo-escape-hook nil
   "Hook run after escaping.")
@@ -88,10 +86,6 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
-;;;;; evil-surround
-(hook! prog-mode-hook&evil-surround-mode)
-
-(hook! text-mode-hook&evil-surround-mode)
 ;;; provide
 (provide 'oo-after-load-evil)
 ;;; oo-after-load-evil.el ends here

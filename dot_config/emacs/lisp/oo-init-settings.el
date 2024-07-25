@@ -32,7 +32,10 @@
 ;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
+;;;; grugru
+(oo-call-after-load 'grugru #'require 'oo-grugru-definitions)
 ;;;; abbrev-mode
+(hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
@@ -69,8 +72,9 @@
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
-;; (require 'eshell-z)
-;; (require 'eshell-up)
+(oo-call-after-load 'eshell #'require 'eshell-z)
+(oo-call-after-load 'eshell #'require 'eshell-up)
+(oo-call-after-load 'em-alias #'require 'oo-eshell-aliases)
 ;;;; gcmh
 (hook! emacs-startup-hook&gcmh-mode :depth 91)
 (opt! gcmh-idle-delay 'auto)
@@ -85,6 +89,9 @@
 (opt! avy-background nil)
 (opt! avy-timeout-seconds 0.3)
 ;;;; evil
+(defhook! after-init-hook&load-evil ()
+  [:depth 10]
+  (require 'evil nil t))
 (hook! emacs-startup-hook&evil-mode)
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
@@ -101,6 +108,13 @@
 (opt! evil-operator-state-cursor '((hbar . 10) "hot pink"))
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
+
+(advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
+
+(oo-call-after-load 'evil #'require 'oo-evil-operators)
+;;;; evil-surround
+(hook! prog-mode-hook&evil-surround-mode)
+(hook! text-mode-hook&evil-surround-mode)
 ;;;; denote
 (opt! denote-directory "~/Documents/notes/")
 (opt! denote-file-type 'text)
@@ -114,12 +128,31 @@
 ;; this for `emms-play-file' but I need to check if to.
 (opt! emms-player-list '(emms-player-mpv))
 (oo-call-after-load 'emms #'require emms-player-mpv nil t)
+;;;; evil-easymotion
+(opt! evilem-style 'at)
+(opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
+;; (oo-call-after-load 'evil-easymotion #'require 'oo-evilem-motions)
+(autoload #'oo-evilem-motion-beginning-of-word "oo-evilem-motions"     nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-WORD "oo-evilem-motions"     nil t 'function)
+(autoload #'oo-evilem-motion-end-of-word       "oo-evilem-motions"     nil t 'function)
+(autoload #'oo-evilem-motion-end-of-WORD       "oo-evilem-motions"     nil t 'function)
+(autoload #'oo-evilem-motion-char              "oo-evilem-motions"     nil t 'function)
+(autoload #'oo-evilem-motion-beginning-of-line "oo-evilem-motions"     nil t 'function)
 ;;;; vertico
 (hook! on-first-input-hook&vertico-mode)
+(hook! vertico-mode-hook&vertico-buffer-mode)
+(hook! vertico-mode-hook&marginalia-mode)
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
+
+(oo-popup-at-bottom "\\*Vertico")
+
+(opt! vertico-buffer-display-action
+      '(display-buffer-in-direction
+        (direction . below)
+        (window-height . ,(+ 3 vertico-count))))
 ;;;; orderless
 (opt! orderless-matching-styles '(orderless-initialism orderless-regexp))
 ;;;; consult
@@ -199,7 +232,13 @@
 (opt! which-key-show-operator-state-maps t)
 
 (opt! which-key-show-prefix 'top)
-;;;; window divider
+;;;; window-divider
+;; TODO: The display flickers when setting the initial theme.  Maybe this is
+;; inevitable.  But maybe this has to do with me either disabling the previous
+;; theme first or the order of setting the window-divider, or maybe I can
+;; specify the default theme to load beforehand.  I need to play around with
+;; settings and see if this flickering can be avoided.
+(hook! after-init-hook&window-divider-mode :depth 12)
 (opt! window-divider-default-bottom-width 7)
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-places t)
@@ -212,7 +251,11 @@
 ;; (oo-call-after-load #'require 'oo-rx-definitions)
 ;;;; highlight-quoted
 (hook! emacs-lisp-mode-hook&highlight-quoted-mode)
-;;;; rainbow delimiters
+;;;; modus-operandi
+(defhook! after-init-hook&load-modus-operandi-theme ()
+  "Load `modus-operandi' theme."
+  (load-theme 'modus-operandi :no-confirm nil))
+;;;; rainbow-delimiters
 (hook! prog-mode-hook&rainbow-delimiters-mode)
 (hook! reb-mode-hook&rainbow-delimiters-mode)
 ;;;; aggressive-indent
