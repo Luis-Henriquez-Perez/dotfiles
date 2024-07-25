@@ -50,9 +50,6 @@ Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
   (hook! after-load-functions&oo-call-after-load-functions))
-;;;;; minibuffer-setup-hook
-;; This allows me to have parens completion when I invoke the command `eval-expression'.
-
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()

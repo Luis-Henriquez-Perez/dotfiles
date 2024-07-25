@@ -354,6 +354,7 @@
 (hook! prog-mode-hook&smartparens-mode)
 (hook! prog-mode-hook&turn-on-show-smartparens-mode)
 
+;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
   "Enable `smartparens-mode' in the minibuffer."
   (when (memq this-command '(eval-expression evil-ex))
