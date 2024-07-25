@@ -80,10 +80,12 @@
 ;;;; recentf
 (hook! emacs-startup-hook&recentf-mode)
 (hook! kill-emacs-hook&recentf-save-list)
+
 (oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
 (oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+
 (setq recentf-filename-handlers '(file-truename))
 ;;;; eshell
 (hook! eshell-mode-hook&abbrev-mode)
