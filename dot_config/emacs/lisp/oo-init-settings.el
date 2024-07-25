@@ -32,6 +32,8 @@
 ;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
+;;;; wdired
+(opt! wdired-confirm-overwrite nil)
 ;;;; dashboard
 (require 'dashboard)
 
