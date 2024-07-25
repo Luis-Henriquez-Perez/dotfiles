@@ -223,6 +223,12 @@
 
 (bind! (n v) "g t" #'evil-goto-first-line)
 (bind! (n v) "g b" #'evil-goto-line)
+
+(bind! (n v) "g g" #'oo-eval-operator)
+(bind! (n v) "g h" #'oo-eval-operator)
+(bind! (n v) "g r" #'oo-eval-replace-operator)
+(bind! (n v) "g l" #'oo-eval-print-operator)
+(bind! (n v) "g p" #'oo-eval-print-operator)
 ;;;; evil-cleverparens
 (bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)

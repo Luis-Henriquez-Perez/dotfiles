@@ -285,19 +285,6 @@
 (bind! i "M-x" #'execute-extended-command)
 (bind! (n m) "+" #'text-scale-increase)
 (bind! (n m) "-" #'text-scale-decrease)
-;;;;; package specific
-;;;;;; evil
-;;;;;;; operators
-;;;;;;;; eval
-(bind! (n v) "g g" #'oo-eval-operator)
-(bind! (n v) "g h" #'oo-eval-operator)
-(bind! (n v) "g r" #'oo-eval-replace-operator)
-(bind! (n v) "g l" #'oo-eval-print-operator)
-(bind! (n v) "g p" #'oo-eval-print-operator)
-;;;;;;;; make `evil-for'
-;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
-;; Though I will say I am not 100% sure it is the equivalent.
-(bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
