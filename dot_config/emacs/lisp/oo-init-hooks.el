@@ -52,11 +52,7 @@ file is loaded."
   (hook! after-load-functions&oo-call-after-load-functions))
 ;;;;; minibuffer-setup-hook
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
-(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
-  "Enable `smartparens-mode' in the minibuffer."
-  (when (memq this-command '(eval-expression evil-ex))
-    (require 'smartparens)
-    (smartparens-strict-mode 1)))
+
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! minibuffer-setup-hook&increase-garbage-collection ()

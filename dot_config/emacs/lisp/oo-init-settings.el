@@ -353,10 +353,18 @@
 (hook! text-mode-hook&smartparens-mode)
 (hook! prog-mode-hook&smartparens-mode)
 (hook! prog-mode-hook&turn-on-show-smartparens-mode)
+
+(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
+  "Enable `smartparens-mode' in the minibuffer."
+  (when (memq this-command '(eval-expression evil-ex))
+    (require 'smartparens)
+    (smartparens-strict-mode 1)))
+
 (opt! sp-highlight-wrap-tag-overlay nil)
 (opt! sp-highlight-pair-overlay nil)
 (opt! sp-highlight-wrap-overlay nil)
 (opt! sp-show-pair-delay 0.2)
+
 (oo-call-after-load 'smartparens #'require 'smartparens-config)
 ;;;; which-key
 (hook! emacs-startup-hook&which-key-mode)
