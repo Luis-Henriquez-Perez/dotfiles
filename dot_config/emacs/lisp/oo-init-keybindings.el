@@ -289,16 +289,11 @@
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
-(bind! (n v) "g t" #'evil-goto-first-line)
-(bind! (n v) "g b" #'evil-goto-line)
 (bind! (n v) "g g" #'oo-eval-operator)
 (bind! (n v) "g h" #'oo-eval-operator)
 (bind! (n v) "g r" #'oo-eval-replace-operator)
 (bind! (n v) "g l" #'oo-eval-print-operator)
 (bind! (n v) "g p" #'oo-eval-print-operator)
-;;;;;;;; g is kind of like the main prefix key of vim
-(bind! (n v) "g u" #'evil-upcase)
-(bind! (n v) "g U" #'evil-downcase)
 ;;;;;;;; make `evil-for'
 ;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
 ;; Though I will say I am not 100% sure it is the equivalent.

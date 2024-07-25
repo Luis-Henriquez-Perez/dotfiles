@@ -86,7 +86,7 @@
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
-(setq recentf-filename-handlers '(file-truename))
+(opt! recentf-filename-handlers '(file-truename))
 ;;;; eshell
 (hook! eshell-mode-hook&abbrev-mode)
 (hook! eshell-mode-hook&smartparens-mode)
@@ -163,6 +163,16 @@
 (bind! n "L" #'evil-last-non-blank)
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
+
+(bind! (n v) "g u" #'evil-upcase)
+(bind! (n v) "g U" #'evil-downcase)
+
+;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
+;; Though I will say I am not 100% sure it is the equivalent.
+(bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
+
+(bind! (n v) "g t" #'evil-goto-first-line)
+(bind! (n v) "g b" #'evil-goto-line)
 ;;;; evil-textobj-anyblock
 (bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
 (bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
@@ -416,15 +426,17 @@
 ;;;; aggressive-indent
 (hook! emacs-lisp-mode-hook&aggressive-indent-mode)
 ;;;; org
-;;;;; org-superstar
+(opt! org-src-fontify-natively t)
+(opt! org-hide-emphasis-markers t)
+;;;; org-superstar
 (hook! org-mode-hook&org-superstar-mode)
 (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items t)
-;;;;; org-appear
+;;;; org-appear
 (hook! org-mode-hook&org-appear-mode)
 (opt! org-appear-autolinks t)
-;;;;; org-refile
+;;;; org-refile
 (opt! org-refile-allow-creating-parent-nodes t)
 ;; The variable =org-refile-targets= specifies the places from which information is
 ;; taken to create the list of possible refile targets.  So, for example,
@@ -439,7 +451,7 @@
 ;; block, I prefer not to.  I guess it is a stylistic thing.
 ;; TODO: Fix `oo-has-source-block-p' is not defined.
 ;; (opt! org-refile-target-verify-function (lambda () (not (oo-has-src-block-p))))
-;;;;; org-id
+;;;; org-id
 (opt! org-id-track-globally t)
 (opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
 ;; The way I see it, if I can have a universally unique identifier that also tells
@@ -447,7 +459,7 @@
 ;; never need a =date-created= property.
 (opt! org-id-method 'ts)
 (opt! org-id-link-to-org-use-id t)
-;;;;; org-src
+;;;; org-src
 (oo-popup-at-bottom "\\*Org Src")
 (opt! org-edit-src-persistent-message nil)
 ;; (adjoin! org-src-lang-modes '("emacs-lisp" . emacs-lisp))
@@ -456,14 +468,11 @@
 (opt! org-src-preserve-indentation t)
 (opt! org-edit-src-content-indentation 0)
 (opt! org-src-window-setup 'plain)
-;;;;; org-capture
+;;;; org-capture
 (oo-popup-at-bottom "CAPTURE[^z-a]+")
 (opt! org-archive-save-context-info nil)
 (opt! org-archive-location (concat org-directory "archive.org::"))
 (hook! org-insert-heading-hook&org-id-get-create)
-;;;;; miscellaneous
-(opt! org-src-fontify-natively t)
-(opt! org-hide-emphasis-markers t)
 ;;;; outli
 (hook! prog-mode-hook&outli-mode)
 ;; TODO: figure out how to make this a named advice.
