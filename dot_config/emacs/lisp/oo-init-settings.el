@@ -180,6 +180,13 @@
 (autoload #'oo-evilem-motion-end-of-WORD       "oo-evilem-motions"     nil t 'function)
 (autoload #'oo-evilem-motion-char              "oo-evilem-motions"     nil t 'function)
 (autoload #'oo-evilem-motion-beginning-of-line "oo-evilem-motions"     nil t 'function)
+
+(bind! (n v) "w" #'oo-evilem-motion-beginning-of-word)
+(bind! (n v) "W" #'oo-evilem-motion-beginning-of-WORD)
+(bind! (n v) "e" #'oo-evilem-motion-end-of-word)
+(bind! (n v) "E" #'oo-evilem-motion-end-of-WORD)
+(bind! (n v o) "f" #'oo-evilem-motion-char)
+(bind! (n v o) "H" #'oo-evilem-motion-beginning-of-line)
 ;;;; marginalia
 (hook! vertico-mode-hook&marginalia-mode)
 ;;;; vertico
@@ -295,6 +302,11 @@
 (bind! i tempel-map "C-k" #'tempel-previous)
 (bind! i tempel-map "TAB" #'tempel-next)
 (bind! i tempel-map [backtab] #'tempel-previous)
+;;;; evil-exchange
+(bind! (n v) "g x" #'evil-exchange)
+(bind! (n v) "g X" #'evil-exchange-cancel)
+(bind! (n v) "g a" #'evil-exchange)
+(bind! (n v) "g A" #'evil-exchange-cancel)
 ;;;; lispyville
 ;; Do not bind any keys by default.
 (hook! prog-mode-hook&lispyville-mode)
@@ -303,6 +315,9 @@
 
 (bind! i lispyville-mode-map "SPC" #'lispy-space)
 (bind! i lispyville-mode-map ";" #'lispy-comment)
+
+(bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
+(bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
 ;;;; savehist
 (hook! on-first-input-hook&savehist-mode)
 (opt! savehist-save-minibuffer-history t)

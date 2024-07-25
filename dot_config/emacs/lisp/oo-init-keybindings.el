@@ -309,10 +309,6 @@
 (bind! (n v) "g c" #'lispyville-comment-or-uncomment)
 (bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
 ;;;;;;;; exchange
-(bind! (n v) "g x" #'evil-exchange)
-(bind! (n v) "g X" #'evil-exchange-cancel)
-(bind! (n v) "g a" #'evil-exchange)
-(bind! (n v) "g A" #'evil-exchange-cancel)
 ;;;;;;;; g is kind of like the main prefix key of vim
 (bind! (n v) "g u" #'evil-upcase)
 (bind! (n v) "g U" #'evil-downcase)
@@ -321,12 +317,6 @@
 ;; Though I will say I am not 100% sure it is the equivalent.
 (bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
 ;;;;;;; motions
-(bind! (n v) "w" #'oo-evilem-motion-beginning-of-word)
-(bind! (n v) "W" #'oo-evilem-motion-beginning-of-WORD)
-(bind! (n v) "e" #'oo-evilem-motion-end-of-word)
-(bind! (n v) "E" #'oo-evilem-motion-end-of-WORD)
-(bind! (n v o) "f" #'oo-evilem-motion-char)
-(bind! (n v o) "H" #'oo-evilem-motion-beginning-of-line)
 ;;;;;;; text objects
 ;;;;;;;; line
 (bind! evil-inner-text-objects-map "l" #'evil-inner-line)
@@ -337,8 +327,6 @@
 (bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
 (bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
-(bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
-(bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
