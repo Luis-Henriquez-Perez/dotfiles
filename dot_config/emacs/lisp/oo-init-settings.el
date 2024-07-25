@@ -88,7 +88,8 @@
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 (opt! avy-background nil)
 (opt! avy-timeout-seconds 0.3)
-;;;; emmet 
+;;;; emmet
+(hook! html-mode-hook&emmet-mode)
 ;;;; evil
 (defhook! after-init-hook&load-evil ()
   [:depth 10]
@@ -160,8 +161,6 @@
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
 ;;;; corfu
-(opt! corfu-quick1 "ajskdlghty")
-(opt! corfu-quick2 "ajskdlghty")
 ;; TODO: make it so moving on a candidate if I press espace insert that candidate.
 (opt! corfu-preview-current t)
 (opt! corfu-preselect-first t)
@@ -170,6 +169,21 @@
 (opt! corfu-auto-delay 0.1)
 (opt! corfu-auto-prefix 1)
 (opt! corfu-bar-width 0)
+
+;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
+;; because the maps are overridden by evil.  In order for them to work, we need
+;; to boost give the maps greater precedence.
+(with-eval-after-load 'evil
+  (with-no-warnings
+    (evil-make-overriding-map corfu-map)
+    (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+    (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)))
+;;;; corfu-quick
+(opt! corfu-quick1 "ajskdlghty")
+(opt! corfu-quick2 "ajskdlghty")
+;; https://github.com/minad/corfu/issues/12
+;;;; corfu-history
+(hook! corfu-mode-hook&corfu-history-mode)
 ;;;; dired
 (hook! dired-mode-hook&dired-omit-mode)
 ;; By default hide details.
