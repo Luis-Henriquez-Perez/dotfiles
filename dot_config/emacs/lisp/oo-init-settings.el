@@ -48,6 +48,7 @@
 (opt! avy-background nil)
 (opt! avy-timeout-seconds 0.3)
 ;;;; evil
+(hook! emacs-startup-hook&evil-mode)
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
 ;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
@@ -106,6 +107,7 @@
 (opt! dirvish-attributes '(file-size subtree-state))
 (opt! dirvish-default-layout nil)
 ;;;; super-save
+(hook! on-first-file-hook&super-save-mode)
 ;; The default auto-saving feature in emacs saves after a certain number of
 ;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
 ;; the middle of typing and you've just hit the number of characters that trigger a
@@ -136,6 +138,7 @@
 (opt! sp-show-pair-delay 0.2)
 (oo-call-after-load 'smartparens #'require 'smartparens-config)
 ;;;; which-key
+(hook! emacs-startup-hook&which-key-mode)
 (opt! which-key-sort-uppercase-first nil)
 (opt! which-key-max-display-columns nil)
 (opt! which-key-add-column-padding 1)
@@ -161,12 +164,21 @@
 (opt! notmuch-sort-oldest-first nil)
 ;;;; rx
 ;; (oo-call-after-load #'require 'oo-rx-definitions)
+;;;; highlight-quoted
+(hook! emacs-lisp-mode-hook&highlight-quoted-mode)
+;;;; rainbow delimiters
+(hook! prog-mode-hook&rainbow-delimiters-mode)
+(hook! reb-mode-hook&rainbow-delimiters-mode)
+;;;; aggressive-indent
+(hook! emacs-lisp-mode-hook&aggressive-indent-mode)
 ;;;; org
 ;;;;; org-superstar
+(hook! org-mode-hook&org-superstar-mode)
 (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items t)
 ;;;;; org-appear
+(hook! org-mode-hook&org-appear-mode)
 (opt! org-appear-autolinks t)
 ;;;;; org-refile
 (opt! org-refile-allow-creating-parent-nodes t)

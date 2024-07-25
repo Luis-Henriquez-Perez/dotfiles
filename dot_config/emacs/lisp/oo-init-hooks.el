@@ -54,7 +54,6 @@
 ;;;;; emacs-startup-hook
 (hook! emacs-startup-hook&gcmh-mode :depth 91)
 (hook! emacs-startup-hook&evil-mode)
-(hook! emacs-startup-hook&which-key-mode)
 (hook! emacs-startup-hook&recentf-mode)
 (defhook! emacs-startup-hook&restore-startup-values ()
   [:depth 91]
@@ -103,8 +102,6 @@ file is loaded."
       (with-current-buffer it
         (dashboard-insert-startupify-lists)))))
 ;;;;; emacs-lisp-mode-hook
-(hook! emacs-lisp-mode-hook&aggressive-indent-mode)
-(hook! emacs-lisp-mode-hook&highlight-quoted-mode)
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
 ;; is that since they are already expanded at runtime my emacs configuration
@@ -133,8 +130,6 @@ file is loaded."
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; org-mode-hook
-(hook! org-mode-hook&org-appear-mode)
-(hook! org-mode-hook&org-superstar-mode)
 ;;;;; prog-mode-hook
 (hook! prog-mode-hook&hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
@@ -143,7 +138,6 @@ file is loaded."
 (hook! auto-fill-mode-hook&filladapt-mode)
 (hook! prog-mode-hook&auto-fill-mode)
 (hook! prog-mode-hook&abbrev-mode)
-(hook! prog-mode-hook&rainbow-delimiters-mode)
 (hook! prog-mode-hook&outli-mode)
 (hook! prog-mode-hook&smartparens-mode)
 (hook! prog-mode-hook&turn-on-show-smartparens-mode)
