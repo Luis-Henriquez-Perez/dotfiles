@@ -295,8 +295,6 @@
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific
-;;;;;; consult
-(alt! display-buffer oo-pop-to-buffer consult)
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
@@ -341,36 +339,6 @@
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
-;;;;;; helpful
-(alt! describe-function helpful-callable helpful)
-(alt! describe-command helpful-command helpful)
-(alt! describe-variable helpful-variable helpful)
-(alt! describe-key helpful-key helpful)
-;;;;;; consult
-(alt! switch-to-buffer consult-buffer consult)
-(alt! yank-pop consult-yank-pop consult)
-(alt! apropos consult-apropos consult)
-(alt! man consult-man consult)
-;;;;;; corfu
-;;;;;; vertico
-(bind! i vertico-map "TAB"     #'vertico-next)
-(bind! i vertico-map "C-k"     #'vertico-previous)
-(bind! i vertico-map "C-j"     #'vertico-next)
-(bind! i vertico-map ";"       #'vertico-quick-exit)
-(bind! i vertico-map "C-;"     #'vertico-quick-exit)
-(bind! i vertico-map [backtab] #'vertico-previous)
-(bind! i vertico-map "C-o"     #'embark-act)
-;;;;;; lispy
-;;;;;; dired
-;; Dired is very picky about when these bindings happen.  It is the only package
-;; I have had that is that picky.  I have noticed that unlike every other
-;; package I have tried dired bindings do not work by trying to set them when
-;; `dired-mode-map' is bound.  You need to use (eval-after-load 'dired ...).
-;; Also, even if you have the `eval-after-load' it work work from the
-;; `oo-after-load-dired' file--do not ask me why.  Again, only package I have
-;; had this happen with.
-(bind! (n m) dired-mode-map "h" #'dired-up-directory)
-(bind! (n m) dired-mode-map "l" #'dired-find-file)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here

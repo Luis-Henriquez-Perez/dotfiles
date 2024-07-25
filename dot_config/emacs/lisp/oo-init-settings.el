@@ -38,15 +38,10 @@
 ;; If I put dashboard configuration in its own.
 (defun oo-dashboard-init-info (&rest _)
   (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
-
 (setq dashboard-init-info #'oo-dashboard-init-info)
-
 (setq dashboard-banner-logo-title "Welcome!")
-
 (setq dashboard-startupify-list (-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
-
 (setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
-
 (setq dashboard-center-content t)
 ;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
@@ -192,13 +187,13 @@
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
 
-(bind! vertico-map "TAB" #'vertico-next)
-(bind! vertico-map "C-k" #'vertico-previous)
-(bind! vertico-map "C-j" #'vertico-next)
-(bind! vertico-map ";" #'vertico-quick-exit)
-(bind! vertico-map "C-;" #'vertico-quick-exit)
-(bind! vertico-map [backtab] #'vertico-previous)
-(bind! vertico-map "C-o" #'embark-act)
+(bind! i vertico-map "TAB" #'vertico-next)
+(bind! i vertico-map "C-k" #'vertico-previous)
+(bind! i vertico-map "C-j" #'vertico-next)
+(bind! i vertico-map ";" #'vertico-quick-exit)
+(bind! i vertico-map "C-;" #'vertico-quick-exit)
+(bind! i vertico-map [backtab] #'vertico-previous)
+(bind! i vertico-map "C-o" #'embark-act)
 ;;;; vertico-quick
 (opt! vertico-quick1 "asdfgh")
 (opt! vertico-quick2 "jkluionm")
@@ -216,6 +211,12 @@
 ;;;; consult
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
+
+(alt! display-buffer oo-pop-to-buffer consult)
+(alt! switch-to-buffer consult-buffer consult)
+(alt! yank-pop consult-yank-pop consult)
+(alt! apropos consult-apropos consult)
+(alt! man consult-man consult)
 ;;;; corfu
 ;; TODO: make it so moving on a candidate if I press espace insert that candidate.
 (opt! corfu-preview-current t)
@@ -257,6 +258,16 @@
 (opt! dired-clean-confirm-killing-deleted-buffers nil)
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
+
+;; Dired is very picky about when these bindings happen.  It is the only package
+;; I have had that is that picky.  I have noticed that unlike every other
+;; package I have tried dired bindings do not work by trying to set them when
+;; `dired-mode-map' is bound.  You need to use (eval-after-load 'dired ...).
+;; Also, even if you have the `eval-after-load' it work work from the
+;; `oo-after-load-dired' file--do not ask me why.  Again, only package I have
+;; had this happen with.
+(bind! (n m) dired-mode-map "h" #'dired-up-directory)
+(bind! (n m) dired-mode-map "l" #'dired-find-file)
 ;;;; dirvish
 (opt! dirvish-use-mode-line nil)
 (opt! dirvish-attributes '(file-size subtree-state))
@@ -275,6 +286,10 @@
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
 ;;;; helpful
+(alt! describe-function helpful-callable helpful)
+(alt! describe-command helpful-command helpful)
+(alt! describe-variable helpful-variable helpful)
+(alt! describe-key helpful-key helpful)
 ;;;; tempel
 (bind! i tempel-map "C-j" #'tempel-next)
 (bind! i tempel-map "C-k" #'tempel-previous)
