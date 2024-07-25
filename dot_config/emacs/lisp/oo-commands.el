@@ -103,6 +103,7 @@ is already narrowed."
 
 (defun! oo-sort-outli-headings ()
   "Sort outli headings lexicographically by title."
+  (interactive)
   (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
