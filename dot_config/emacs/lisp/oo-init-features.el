@@ -318,6 +318,12 @@
 (opt! notmuch-sort-oldest-first nil)
 ;;;; orderless
 (opt! orderless-matching-styles '(orderless-initialism orderless-regexp))
+
+(defhook! vertico-mode-hook&enable-orderless ()
+  (when (require 'orderless nil t)
+    (setq completion-styles '(orderless))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides '((file (styles partial-completion))))))
 ;;;; org
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)

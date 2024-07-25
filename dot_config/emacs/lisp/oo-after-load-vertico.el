@@ -29,12 +29,6 @@
 ;;;; vertico
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
 
-(defhook! vertico-mode-hook&enable-orderless ()
-  (when (require 'orderless nil t)
-    (setq completion-styles '(orderless))
-    (setq completion-category-defaults nil)
-    (setq completion-category-overrides '((file (styles partial-completion))))))
-
 ;; When I am completing a word at point I want the matching style to be exact.
 ;; at the very least.
 ;; Orderless should be just at.
