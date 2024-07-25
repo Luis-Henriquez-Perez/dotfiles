@@ -260,8 +260,6 @@
 (opt! gcmh-low-cons-threshold (* 4 1024 1024))
 ;;;; grugru
 (oo-call-after-load 'grugru #'require 'oo-grugru-definitions)
-;;;; grugru
-;; (oo-call-after-load #'require 'oo-grugru-definitions)
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
