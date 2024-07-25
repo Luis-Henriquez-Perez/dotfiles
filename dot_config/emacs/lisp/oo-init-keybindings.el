@@ -297,11 +297,6 @@
 ;;;;; package specific
 ;;;;;; consult
 (alt! display-buffer oo-pop-to-buffer consult)
-;;;;;; tempel
-(bind! tempel-map :ieg "C-j" #'tempel-next)
-(bind! tempel-map :ieg "C-k" #'tempel-previous)
-(bind! tempel-map :ieg "TAB" #'tempel-next)
-(bind! tempel-map :ieg [backtab] #'tempel-previous)
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
@@ -351,42 +346,12 @@
 (alt! describe-command helpful-command helpful)
 (alt! describe-variable helpful-variable helpful)
 (alt! describe-key helpful-key helpful)
-;;;;;; vertico
-(bind! vertico-map "TAB" #'vertico-next)
-(bind! vertico-map "C-k" #'vertico-previous)
-(bind! vertico-map "C-j" #'vertico-next)
-(bind! vertico-map ";" #'vertico-quick-exit)
-(bind! vertico-map "C-;" #'vertico-quick-exit)
-(bind! vertico-map [backtab] #'vertico-previous)
-(bind! vertico-map "C-o" #'embark-act)
 ;;;;;; consult
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
 (alt! apropos consult-apropos consult)
 (alt! man consult-man consult)
-;;;;;; helm
-(bind! i helm-map "TAB" #'helm-next-line)
-(bind! i helm-map [backtab] #'helm-previous-line)
-(bind! i helm-map "C-j" #'helm-next-line)
-(bind! i helm-map "C-k" #'helm-previous-line)
-
-(bind! i helm-map "C-a" #'helm-select-action)
-(bind! i helm-map "C-m" #'helm-toggle-visible-mark-forward)
-;; (bind! i helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
-;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
-(bind! i helm-map "S-TAB" #'helm-mark-current-line)
-
-(bind! i helm-map "C-;" #'ace-jump-helm-line)
 ;;;;;; corfu
-(bind! i corfu-map "<tab>"   #'corfu-next)
-(bind! i corfu-map [backtab] #'corfu-previous)
-(bind! i corfu-map "S-TAB"   #'corfu-previous)
-(bind! i corfu-map "C-;"     #'corfu-quick-complete)
-(bind! i corfu-map "C-j"     #'corfu-next)
-(bind! i corfu-map "C-k"     #'corfu-previous)
-(bind! i corfu-map "C-p"     #'corfu-previous)
-(bind! i corfu-map ";"       #'corfu-quick-complete)
-(bind! i corfu-map "SPC"     #'corfu-insert)
 ;;;;;; vertico
 (bind! i vertico-map "TAB"     #'vertico-next)
 (bind! i vertico-map "C-k"     #'vertico-previous)
@@ -396,8 +361,6 @@
 (bind! i vertico-map [backtab] #'vertico-previous)
 (bind! i vertico-map "C-o"     #'embark-act)
 ;;;;;; lispy
-(bind! i lispyville-mode-map "SPC" #'lispy-space)
-(bind! i lispyville-mode-map ";" #'lispy-comment)
 ;;;;;; dired
 ;; Dired is very picky about when these bindings happen.  It is the only package
 ;; I have had that is that picky.  I have noticed that unlike every other

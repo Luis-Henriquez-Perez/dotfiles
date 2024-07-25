@@ -32,6 +32,22 @@
 ;; configurations involve only the setting of a few variables.
 ;;
 ;;; Code:
+;;;; dashboard
+(require 'dashboard)
+
+;; If I put dashboard configuration in its own.
+(defun oo-dashboard-init-info (&rest _)
+  (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
+
+(setq dashboard-init-info #'oo-dashboard-init-info)
+
+(setq dashboard-banner-logo-title "Welcome!")
+
+(setq dashboard-startupify-list (-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
+
+(setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
+
+(setq dashboard-center-content t)
 ;;;; no-littering
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
@@ -46,6 +62,18 @@
 ;;;; helm
 (oo-popup-at-bottom "\\*Helm")
 (set! helm-candidate-number-limit 50)
+
+(bind! i helm-map "TAB" #'helm-next-line)
+(bind! i helm-map [backtab] #'helm-previous-line)
+(bind! i helm-map "C-j" #'helm-next-line)
+(bind! i helm-map "C-k" #'helm-previous-line)
+
+(bind! i helm-map "C-a" #'helm-select-action)
+(bind! i helm-map "C-m" #'helm-toggle-visible-mark-forward)
+;; (bind! i helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
+;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
+(bind! i helm-map "S-TAB" #'helm-mark-current-line)
+(bind! i helm-map "C-;" #'ace-jump-helm-line)
 ;;;; captain-mode
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)
@@ -157,21 +185,32 @@
 (autoload #'oo-evilem-motion-end-of-WORD       "oo-evilem-motions"     nil t 'function)
 (autoload #'oo-evilem-motion-char              "oo-evilem-motions"     nil t 'function)
 (autoload #'oo-evilem-motion-beginning-of-line "oo-evilem-motions"     nil t 'function)
+;;;; marginalia
+(hook! vertico-mode-hook&marginalia-mode)
 ;;;; vertico
 (hook! on-first-input-hook&vertico-mode)
-(hook! vertico-mode-hook&vertico-buffer-mode)
-(hook! vertico-mode-hook&marginalia-mode)
-(opt! vertico-quick1 "asdfgh")
-(opt! vertico-quick2 "jkluionm")
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)
 
-(oo-popup-at-bottom "\\*Vertico")
+(bind! vertico-map "TAB" #'vertico-next)
+(bind! vertico-map "C-k" #'vertico-previous)
+(bind! vertico-map "C-j" #'vertico-next)
+(bind! vertico-map ";" #'vertico-quick-exit)
+(bind! vertico-map "C-;" #'vertico-quick-exit)
+(bind! vertico-map [backtab] #'vertico-previous)
+(bind! vertico-map "C-o" #'embark-act)
+;;;; vertico-quick
+(opt! vertico-quick1 "asdfgh")
+(opt! vertico-quick2 "jkluionm")
+;;;; vertico-buffer
+(hook! vertico-mode-hook&vertico-buffer-mode)
 
 (opt! vertico-buffer-display-action
       '(display-buffer-in-direction
         (direction . below)
         (window-height . ,(+ 3 vertico-count))))
+
+(oo-popup-at-bottom "\\*Vertico")
 ;;;; orderless
 (opt! orderless-matching-styles '(orderless-initialism orderless-regexp))
 ;;;; consult
@@ -195,6 +234,16 @@
     (evil-make-overriding-map corfu-map)
     (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
     (advice-add 'corfu--teardown :after 'evil-normalize-keymaps)))
+
+(bind! i corfu-map "<tab>"   #'corfu-next)
+(bind! i corfu-map [backtab] #'corfu-previous)
+(bind! i corfu-map "S-TAB"   #'corfu-previous)
+(bind! i corfu-map "C-;"     #'corfu-quick-complete)
+(bind! i corfu-map "C-j"     #'corfu-next)
+(bind! i corfu-map "C-k"     #'corfu-previous)
+(bind! i corfu-map "C-p"     #'corfu-previous)
+(bind! i corfu-map ";"       #'corfu-quick-complete)
+(bind! i corfu-map "SPC"     #'corfu-insert)
 ;;;; corfu-quick
 (opt! corfu-quick1 "ajskdlghty")
 (opt! corfu-quick2 "ajskdlghty")
@@ -225,11 +274,20 @@
 (opt! super-save-auto-save-when-idle t)
 ;; Save after 5 seconds of idle time.
 (opt! super-save-idle-duration 5)
+;;;; helpful
+;;;; tempel
+(bind! i tempel-map "C-j" #'tempel-next)
+(bind! i tempel-map "C-k" #'tempel-previous)
+(bind! i tempel-map "TAB" #'tempel-next)
+(bind! i tempel-map [backtab] #'tempel-previous)
 ;;;; lispyville
 ;; Do not bind any keys by default.
 (hook! prog-mode-hook&lispyville-mode)
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
+
+(bind! i lispyville-mode-map "SPC" #'lispy-space)
+(bind! i lispyville-mode-map ";" #'lispy-comment)
 ;;;; savehist
 (hook! on-first-input-hook&savehist-mode)
 (opt! savehist-save-minibuffer-history t)
