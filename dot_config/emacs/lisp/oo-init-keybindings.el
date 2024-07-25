@@ -260,9 +260,6 @@
 (bind! oo-package-map "d" #'elpaca-delete)
 (bind! oo-package-map "l" #'elpaca-log)
 (bind! oo-package-map "m" #'elpaca-manager)
-;;;;; alternate bindings
-(alt! imenu consult-imenu consult)
-(alt! dired dirvish dirvish)
 ;;;;; localleaders
 (defun! oo-localleader-bind (keymap key def)
   "Convenience function for defining localleader bindings."
@@ -288,10 +285,6 @@
 (bind! i "M-x" #'execute-extended-command)
 (bind! (n m) "+" #'text-scale-increase)
 (bind! (n m) "-" #'text-scale-decrease)
-(bind! n "H" #'evil-first-non-blank)
-(bind! n "L" #'evil-last-non-blank)
-(bind! v "V" #'expreg-contract)
-(bind! v "v" #'expreg-expand)
 ;;;;; package specific
 ;;;;;; evil
 ;;;;;;; operators
@@ -303,7 +296,6 @@
 (bind! (n v) "g r" #'oo-eval-replace-operator)
 (bind! (n v) "g l" #'oo-eval-print-operator)
 (bind! (n v) "g p" #'oo-eval-print-operator)
-;;;;;;;; exchange
 ;;;;;;;; g is kind of like the main prefix key of vim
 (bind! (n v) "g u" #'evil-upcase)
 (bind! (n v) "g U" #'evil-downcase)
@@ -311,16 +303,6 @@
 ;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
 ;; Though I will say I am not 100% sure it is the equivalent.
 (bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
-;;;;;;; text objects
-;;;;;;;; line
-(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
-(bind! evil-outer-text-objects-map "l" #'evil-a-line)
-;;;;;;;; block
-;; Not sure what the difference is between block and form.
-(bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
-(bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
-(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here

@@ -155,8 +155,19 @@
 
 (oo-call-after-load 'evil #'require 'oo-evil-operators)
 
+(bind! n "H" #'evil-first-non-blank)
+(bind! n "L" #'evil-last-non-blank)
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
+;;;; evil-textobj-anyblock
+(bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
+(bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
+;;;; evil-cleverparens
+(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
+(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
+;;;; evil-textobj-line
+(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
+(bind! evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;; evil-surround
 (hook! prog-mode-hook&evil-surround-mode)
 (hook! text-mode-hook&evil-surround-mode)
@@ -173,6 +184,9 @@
 ;; this for `emms-play-file' but I need to check if to.
 (opt! emms-player-list '(emms-player-mpv))
 (oo-call-after-load 'emms #'require emms-player-mpv nil t)
+;;;; expreg
+(bind! v "V" #'expreg-contract)
+(bind! v "v" #'expreg-expand)
 ;;;; evil-easymotion
 (opt! evilem-style 'at)
 (opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
@@ -222,6 +236,7 @@
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
 
+(alt! imenu consult-imenu consult)
 (alt! display-buffer oo-pop-to-buffer consult)
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
@@ -282,6 +297,7 @@
 (opt! dirvish-use-mode-line nil)
 (opt! dirvish-attributes '(file-size subtree-state))
 (opt! dirvish-default-layout nil)
+(alt! dired dirvish dirvish)
 ;;;; super-save
 (hook! on-first-file-hook&super-save-mode)
 ;; The default auto-saving feature in emacs saves after a certain number of
