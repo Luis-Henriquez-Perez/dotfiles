@@ -25,6 +25,7 @@
 ;; Initialize recentf.
 ;;
 ;;; Code:
+(eval-when-compile (require 'oo-base-macros-ing))
 (require 'oo-base)
 (require 'recentf)
 
@@ -36,7 +37,8 @@
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
-(opt! recentf-filename-handlers '(file-truename))
+(setq recentf-filename-handlers '(file-truename))
+(setq recentf-max-saved-items nil)
 
 (adjoining! recentf-filename-handlers #'abbreviate-file-name)
 (adjoining! recentf-filename-handlers #'substring-no-properties)
