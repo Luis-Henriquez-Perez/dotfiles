@@ -37,9 +37,9 @@
 (oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
-(setq recentf-filename-handlers '(file-truename))
 (setq recentf-max-saved-items nil)
 
+(adjoining! recentf-filename-handlers #'file-truename)
 (adjoining! recentf-filename-handlers #'abbreviate-file-name)
 (adjoining! recentf-filename-handlers #'substring-no-properties)
 
