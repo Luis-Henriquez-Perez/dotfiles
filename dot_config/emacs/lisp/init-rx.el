@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'oo-base)
 
-;; (oo-call-after-load #'require 'oo-rx-definitions)
+(oo-call-after-load #'require 'oo-rx-definitions)
 ;;; provide
 (provide 'init-rx)
 ;;; init-rx.el ends here
