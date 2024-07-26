@@ -31,8 +31,8 @@
 (hook! text-mode-hook&abbrev-mode)
 ;; Emacs loads abbreviation-mode automatically so instead of evaluating the
 ;; configuration.
-;; (defhook! abbrev-mode-hook&apply-config ()
-;;   (require 'oo-after-load-abbrev))
+(defhook! abbrev-mode-hook&apply-config ()
+  (require 'oo-after-load-abbrev))
 ;;; provide
 (provide 'init-abbrev)
 ;;; init-abbrev.el ends here

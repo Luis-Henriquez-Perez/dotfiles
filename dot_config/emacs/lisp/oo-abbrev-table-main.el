@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("hoosk" "hooks")
+  '(("gettig" "getting")
+    ("wa" "way")
+    ("oom" "one or more")
+    ("hoosk" "hooks")
     ("fiew" "few")
     ("lding" "loading")
     ("laod" "load")

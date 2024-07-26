@@ -46,7 +46,7 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
   not have to think about it as there should be a standard procedure.
 - *consistent and simple*
   The way that my configuration is loaded is designed to be as simple and
-  consistent as possible.  No modules.  No abstractions.
+  consistent as possible.  No modules.
 * Features
 :PROPERTIES:
 :ID:       20240408T163225.997099

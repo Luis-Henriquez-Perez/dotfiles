@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 (require 'oo-base)
+(require 'recentf)
 
 (hook! emacs-startup-hook&recentf-mode)
 (hook! kill-emacs-hook&recentf-save-list)
@@ -36,6 +37,16 @@
 (oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
 
 (opt! recentf-filename-handlers '(file-truename))
+
+(adjoining! recentf-filename-handlers #'abbreviate-file-name)
+(adjoining! recentf-filename-handlers #'substring-no-properties)
+
+(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
+(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
+
+(recentf-push (recentf-expand-file-name "~/.local/share/chezmoi/init.el"))
+(recentf-push (recentf-expand-file-name "~/.config/init.el"))
+(recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
 (provide 'init-recentf)
 ;;; init-recentf.el ends here
