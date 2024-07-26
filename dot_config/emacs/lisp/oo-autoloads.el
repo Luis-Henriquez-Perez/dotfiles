@@ -28,8 +28,6 @@
 ;;
 ;;; Code:
 (autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
-(autoload #'evil-i-syntax                      "evil-textobj-syntax"               nil t 'function)
-(autoload #'evil-a-syntax                      "evil-textobj-syntax"               nil t 'function)
 (autoload #'oo-blog-new-post                   "extensions/oo-blog-utils"          nil t 'function)
 (autoload #'oo/ensure-provide                  "extensions/oo-package-boilerplate" nil t 'function)
 (autoload #'oo/ensure-file-header              "extensions/oo-package-boilerplate" nil t 'function)
