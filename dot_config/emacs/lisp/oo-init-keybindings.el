@@ -123,12 +123,10 @@
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
 
 (bind! oo-window-map "t" #'transpose-frame)
-(bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-window-map "w" #'ace-window)
 (bind! oo-window-map "j" #'ace-window)
 (bind! oo-window-map "o" #'ace-window)
 (bind! oo-window-map "s" #'ace-swap-window)
-(bind! oo-window-map "S" #'burly-bookmark-windows)
 (bind! oo-window-map "b" #'balance-windows)
 (bind! oo-window-map "M" #'maximize-window)
 (bind! oo-window-map "v" #'split-window-horizontally)
@@ -142,9 +140,6 @@
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)
 (bind! oo-leader-map "a" #'oo-app-prefix-command :wk "app")
 
-(bind! oo-app-map "n" #'notmuch)
-(bind! oo-app-map "d" #'dired)
-(bind! oo-app-map "e" #'eshell)
 (bind! oo-app-map "E" #'restart-emacs-start-new-emacs)
 ;;;;;; oo-find-map
 (defvar oo-find-map (make-sparse-keymap))
@@ -153,7 +148,6 @@
 
 (bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "i" #'imenu)
-(bind! oo-find-map "p" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)
 (bind! oo-find-map "o" #'find-file)
@@ -161,12 +155,7 @@
 (bind! oo-find-map "d" #'display-buffer)
 
 (bind! oo-find-map "b" #'burly-open-bookmark)
-(bind! oo-find-map "k" #'consult-bookmark)
-(bind! oo-find-map "b" #'consult-bookmark)
-(bind! oo-find-map "l" #'consult-line)
 (bind! oo-find-map "a" #'find-library)
-(bind! oo-find-map "h" #'consult-outline)
-(bind! oo-find-map "g" #'consult-grep)
 ;;;;;; oo-help-map
 (defvar oo-help-map (make-sparse-keymap))
 (define-prefix-command 'oo-help-prefix-command 'oo-help-map)

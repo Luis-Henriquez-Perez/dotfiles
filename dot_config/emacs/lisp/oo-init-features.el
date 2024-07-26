@@ -45,6 +45,9 @@
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))
 (opt! avy-background nil)
 (opt! avy-timeout-seconds 0.3)
+;;;; burly
+(bind! oo-window-map "b" #'burly-bookmark-windows)
+(bind! oo-window-map "S" #'burly-bookmark-windows)
 ;;;; captain-mode
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)
@@ -63,6 +66,13 @@
 ;;;; consult
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
+
+(bind! oo-find-map "p" #'consult-yank-pop)
+(bind! oo-find-map "k" #'consult-bookmark)
+(bind! oo-find-map "b" #'consult-bookmark)
+(bind! oo-find-map "l" #'consult-line)
+(bind! oo-find-map "h" #'consult-outline)
+(bind! oo-find-map "g" #'consult-grep)
 
 (alt! imenu consult-imenu consult)
 (alt! display-buffer oo-pop-to-buffer consult)
@@ -126,6 +136,7 @@
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
 
+(bind! oo-app-map "d" #'dired)
 ;; Dired is very picky about when these bindings happen.  It is the only package
 ;; I have had that is that picky.  I have noticed that unlike every other
 ;; package I have tried dired bindings do not work by trying to set them when
@@ -176,6 +187,8 @@
 (oo-call-after-load 'eshell #'require 'eshell-z)
 (oo-call-after-load 'eshell #'require 'eshell-up)
 (oo-call-after-load 'em-alias #'require 'oo-eshell-aliases)
+
+(bind! oo-app-map "e" #'eshell)
 ;;;; evil
 (defhook! after-init-hook&load-evil ()
   [:depth 10]
@@ -331,6 +344,8 @@
 (require 'no-littering)
 ;;;; notmuch
 (opt! notmuch-sort-oldest-first nil)
+
+(bind! oo-app-map "n" #'notmuch)
 ;;;; orderless
 (opt! orderless-matching-styles '(orderless-initialism orderless-regexp))
 
