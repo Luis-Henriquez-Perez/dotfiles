@@ -107,29 +107,33 @@ is already narrowed."
   (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
-(defun! oo-generate-init-file ()
+(defun! oo-make-init-file ()
+  (interactive)
+  (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+\\)")
+  (goto-char (line-beginning-position))
+  (nif! (looking-at rx)
+      (message "Not at outline headline.")
+    (set! package (match-string 1))
+    (set! content (match-string 2))
+    (oo--make-init-file package content)))
+
+(defun! oo--make-init-file (package content)
   "Generate init files from outline package heading."
   ;; Point should be on the headline.
   ;; Insert the boilerplate.
-  (set! dir (locate-user-emacs-file "lisp"))
-  (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+\\)")
-  (while (re-search-forward rx nil t nil)
-    (set! package (match-string 1))
-    (set! content (match-string 2))
-    (set! feature (format "oo-init-%s" package))
-    (set! filename (format "oo-init-%s.el" package))
-    (set! path (expand-file-name filename dir))
-    (if (file-exists-p path)
-        (message "Skipping %s because %s already exists" package filename)
-      (concat (format ";;; %s --- initialize %s -*- lexical-binding: t; -*-\n" filename package)
-              (oo-copyright-license)
-              (format ";;; Commentary:\n;;\n;; Initialize %s.\n;;\n" package)
-              (format ";;; Code:\n(require 'oo-base)\n")
-              content
-              "\n"
-              (format ";;; provide\n(provide '%s)\n" feature)
-              (format ";;; %s ends here\n" filename))
-      (write-region contents nil path))))
+  (set! dir "~/.local/share/chezmoi/dot_config/emacs/lisp/")
+  (set! feature (format "init-%s" package))
+  (set! filename (concat feature ".el"))
+  (set! path (expand-file-name filename dir))
+  (set! content
+        (concat (format ";;; %s --- initialize %s -*- lexical-binding: t; -*-\n" filename package)
+                (oo-copyright-license)
+                (format ";;; Commentary:\n;;\n;; Initialize %s.\n;;\n" package)
+                (format ";;; Code:\n(require 'oo-base)\n")
+                content
+                (format ";;; provide\n(provide '%s)\n" feature)
+                (format ";;; %s ends here\n" filename)))
+  (write-region content nil path))
 
 ;; I am aware that there is already a command to add abbreviations to their abbrev-file but I do
 ;; not use the abbreviation file partly because I do not think it lends itself
