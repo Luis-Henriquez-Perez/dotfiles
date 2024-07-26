@@ -107,6 +107,16 @@ is already narrowed."
   (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
+(defun! oo-make-init-files ()
+  (interactive)
+  (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+\\)")
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward rx nil t nil)
+      (set! package (match-string 1))
+      (set! content (match-string 2))
+      (oo--make-init-file package content))))
+
 (defun! oo-make-init-file ()
   (interactive)
   (set! rx ";;;;[[:blank:]]\\(.+\\)\n\\(\\(?:\\(?:^;;[^;].+\\|^[^;].+\\)\n\\)+\\)")
