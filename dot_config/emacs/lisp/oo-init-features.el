@@ -35,6 +35,10 @@
 ;;;; abbrev-mode
 (hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)
+;; Emacs loads abbreviation-mode automatically so instead of evaluating the
+;; configuration.
+;; (defhook! abbrev-mode-hook&apply-config ()
+;;   (require 'oo-after-load-abbrev))
 ;;;; ace-window
 (opt! aw-swap-invert t)
 (opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
@@ -48,6 +52,7 @@
 ;;;; burly
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-window-map "S" #'burly-bookmark-windows)
+(bind! oo-find-map "b" #'burly-open-bookmark)
 ;;;; captain-mode
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)
@@ -163,6 +168,15 @@
 ;; this for `emms-play-file' but I need to check if to.
 (opt! emms-player-list '(emms-player-mpv))
 (oo-call-after-load 'emms #'require emms-player-mpv nil t)
+
+(bind! oo-emms-map "f" #'emms-play-file)
+(bind! oo-emms-map "p" #'emms-pause)
+(bind! oo-emms-map "P" #'emms-stop)
+(bind! oo-emms-map "r" #'emms-toggle-repeat-track)
+(bind! oo-emms-map "R" #'emms-toggle-repeat-playlist)
+(bind! oo-emms-map "v" #'emms-volume-lower)
+(bind! oo-emms-map "V" #'emms-volume-raise)
+(bind! oo-emms-map "s" #'emms-seek-to)
 ;;;; eshell
 (hook! eshell-mode-hook&abbrev-mode)
 (hook! eshell-mode-hook&smartparens-mode)
@@ -407,6 +421,7 @@
 ;; TODO: figure out how to make this a named advice.
 (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 (advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
+;;;; package
 ;;;; rainbow-delimiters
 (hook! prog-mode-hook&rainbow-delimiters-mode)
 (hook! reb-mode-hook&rainbow-delimiters-mode)
@@ -449,6 +464,8 @@
 (opt! sp-show-pair-delay 0.2)
 
 (oo-call-after-load 'smartparens #'require 'smartparens-config)
+
+(bind! oo-toggle-map "s" #'smartparens-mode)
 ;;;; super-save
 (hook! on-first-file-hook&super-save-mode)
 ;; The default auto-saving feature in emacs saves after a certain number of
