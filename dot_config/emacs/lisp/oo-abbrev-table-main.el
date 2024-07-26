@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("gettig" "getting")
+  '(("abst" "abstraction")
+    ("nesy" "unnecessarily")
+    ("nevert" "nevertheless")
+    ("gettig" "getting")
     ("wa" "way")
     ("oom" "one or more")
     ("hoosk" "hooks")
