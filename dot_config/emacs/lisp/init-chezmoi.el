@@ -27,6 +27,9 @@
 ;;; Code:
 (require 'oo-base)
 
+(autoload #'chezmoi-find "chezmoi" nil t 'function)
+(autoload #'chezmoi-write "chezmoi" nil t 'function)
+
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
