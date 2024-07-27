@@ -66,23 +66,6 @@
                      :slant 'normal
                      :size 15))
   (set-face-attribute 'default nil :font it))
-;;;; less confusing kill buffer
-;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
-(defadvice! kill-buffer--possibly-save@ARprompt-clearly (_ buffer &rest args)
-  "Ask user in the minibuffer whether to save before killing.
-Replace `kill-buffer--possibly-save' as advice."
-  (set! prompt (format "Buffer %s modified." (buffer-name)))
-  (set! choices '((?s "Save and kill buffer" "save the buffer and then kill it")
-                  (?d "Discard and kill buffer without saving" "kill buffer without saving")
-                  (?c "Cancel" "Exit without doing anything")))
-  (set! long-form (and (not use-short-answers) (not (use-dialog-box-p))))
-  (set! response (car (read-multiple-choice prompt choices nil nil long-form)))
-  (cl-case response
-    (?s (with-current-buffer buffer (save-buffer)) t)
-    (?d t)
-    (t nil)))
-
-(advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
