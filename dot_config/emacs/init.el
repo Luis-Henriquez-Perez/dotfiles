@@ -58,10 +58,10 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; features
-(require 'init-emacs-lock)
 (require 'init-files)
 (require 'init-simple)
 (require 'init-startup)
+(require 'init-emacs-lock)
 (require 'init-evil-textobj-syntax)
 (require 'init-abbrev)
 (require 'init-ace-window)

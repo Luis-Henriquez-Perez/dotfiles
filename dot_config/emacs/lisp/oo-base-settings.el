@@ -32,11 +32,6 @@
 ;;; settings
 ;;;; load newer files
 (setq-default load-prefer-newer t)
-;;;; do not auto-enable =show-paren-mode= in editing modes
-;; By default =show-paren-mode= is enabled in all editing mode (non-special
-;; modes).  I want to control when to enable this mode normally--as in, add it to
-;; hooks myself if I want it enabled.  Therefore, I disable it here.
-(setq show-paren-predicate nil)
 ;;;; by default do not wrap lines
 ;; When a line is too long to be displayed in the screen do not wrap it around;
 ;; just let the rest of the line go out of view (with an indicator that there is
@@ -44,19 +39,11 @@
 ;; wraps around, I find it makes the text confusing and harder to read.  If I
 ;; want this, then I will toggle it myself with [[][toggle-truncate-lines]].
 (setq-default truncate-lines t)
-;;;; automatically kill any processes when exiting emacs
-;; If I start a process, like the =eat= shell for example, stop me from exiting
-;; to ask me whether I want to kill it, just do it.
-;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
-(setq confirm-kill-processes nil)
 ;;;; show newlines as =\n= instead of an actual newline
 ;; They are easier to deal with and do not occupy unnecessary lines.
 (setq print-escape-newlines t)
 ;;;; set the fill-column 80 by default
 (setq-default fill-column 80)
-;;;; stop creating =auto-save-list= directory
-;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
-(setq auto-save-list-file-prefix nil)
 ;;;; use =yes-or-no-p= instead of =y-or-n-p=
 ;; Essentially, I am telling all Emacs functions that prompt the user for a =yes=
 ;; or =no= to instead allow me to type =y= or =p=.  [[helpfn:yes-or-no-p][yes-or-no-p]] is defined in c
@@ -155,6 +142,8 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq fast-but-imprecise-scrolling t)
 (setq redisplay-skip-fontification-on-input t)
 (setq inhibit-compacting-font-caches t)
+
+(setq idle-update-delay 1.0)
 ;;;;; feature-specific customization
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
