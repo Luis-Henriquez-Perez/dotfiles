@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("abst" "abstraction")
+  '(("concretley" "concretely")
+    ("consist" "consistent")
+    ("consis" "consistent")
+    ("abst" "abstraction")
     ("nesy" "unnecessarily")
     ("nevert" "nevertheless")
     ("gettig" "getting")
