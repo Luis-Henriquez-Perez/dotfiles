@@ -63,12 +63,6 @@
 ;; I got this from [[https://www.masteringemacs.org/article/disabling-prompts-emacs][this-post]].  Every time you try to kill a buffer with a live
 ;; process, Emacs will ask you if you're sure you want to kill it.
 (setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
-;;;; don't disable any commands
-;; If non-nil certain commands such as narrowing are disabled.  The idea is that
-;; a new user would think that emacs deleted the contents of their file if they
-;; accidentally narrowed the buffer.  I am experienced enough so that I don't
-;; Need this.
-(setq disabled-command-function nil)
 ;;;; move files to trash instead of deleting them
 ;; By default Emacs actually deletes files.  By setting this to t, you tell Emacs
 ;; to move a file to trash instead of actually deleting it.  This is better because
