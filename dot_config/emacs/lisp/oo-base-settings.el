@@ -119,12 +119,6 @@ end-of-buffer signals; pass the rest to the default handler."
     (command-error-default-function data context caller)))
 
 (setq command-error-function #'oo-command-error-function)
-;;;; don't ask me whether to follow symlinks, just do it
-;; By default Emacs will prompt you when you want to open a file a symlink
-;; references.  It will ask you whether you want to follow the symlink.  For me
-;; the answer is predominately yes.
-(setq vc-follow-symlinks t)
-(setq vc-follow-link t)
 ;;;; stop emacs from asking to save buffers on quit
 ;; https://stackoverflow.com/questions/35658509/gnu-emacs-how-to-disable-prompt-to-save-modified-buffer-on-exit
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
