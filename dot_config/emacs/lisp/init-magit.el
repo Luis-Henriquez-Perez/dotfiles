@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'oo-base)
 
-(oo-call-after-load 'evil #'evil-magit-init)
+(oo-call-after-load '(magit evil) #'evil-magit-init)
 (oo-popup-at-bottom "\\`magit")
 ;;; provide
 (provide 'init-magit)
