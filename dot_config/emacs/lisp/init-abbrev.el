@@ -26,13 +26,17 @@
 ;;
 ;;; Code:
 (require 'oo-base)
-
+;;;; hooks
 (hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)
 ;; Emacs loads abbreviation-mode automatically so instead of evaluating the
 ;; configuration.
 (defhook! abbrev-mode-hook&apply-config ()
-  (require 'oo-after-load-abbrev))
+  (require 'oo-after-load-abbreviation))
+;;;; autoloads
+(bind! "C-c j" #'oo-add-new-abbrev)
+(bind! "C-c k" #'unexpand-abbrev)
+(autoload #'oo-add-new-abbrev "oo-commands" nil t 'function)
 ;;;; do not save abbrevs to a file
 ;; Do not manage abbrevs for me.
 ;; Do not prompt me for saving abbrevs.
