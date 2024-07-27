@@ -62,8 +62,9 @@
 (require 'init-simple)
 (require 'init-startup)
 (require 'init-emacs-lock)
-(require 'init-evil-textobj-syntax)
 (require 'init-abbrev)
+(require 'init-frame)
+(require 'init-evil-textobj-syntax)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
@@ -124,7 +125,6 @@
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
-(require 'init-frame)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
