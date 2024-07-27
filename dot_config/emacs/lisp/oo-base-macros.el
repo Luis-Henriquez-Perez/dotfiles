@@ -93,6 +93,10 @@ This is like `setq' but it is meant for configuring variables."
 
 (defalias '-partial-> 'thread-partial!)
 (defalias '-p-> 'thread-partial!)
+;;;; after!
+(defmacro! after! (expr &rest body)
+  (declare (indent 1))
+  `(oo-call-after-load ',expr (lambda () (with-no-warnings ,@body))))
 ;;; provide
 (provide 'oo-base-macros)
 ;;; oo-base-macros.el ends here
