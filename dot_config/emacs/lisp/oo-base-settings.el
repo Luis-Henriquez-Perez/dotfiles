@@ -132,14 +132,11 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq inhibit-compacting-font-caches t)
 
 (setq idle-update-delay 1.0)
-;;;;; re-builder
-;; By default, use `rx' syntax.  It is my preferred syntax.
-(setq reb-re-syntax 'rx)
 ;;;;; unknown
 ;; I like an indentation of 4 spaces; maybe I have gotten used to it with Python.
 (setq sgml-basic-offset 4)
 ;;;;; dabbrev
-(setq dabbrev-check-all-buffers nil)
+;; (setq dabbrev-check-all-buffers nil)
 ;;; provide
 (provide 'oo-base-settings)
 ;;; oo-base-settings.el ends here
