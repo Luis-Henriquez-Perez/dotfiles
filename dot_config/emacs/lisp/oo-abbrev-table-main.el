@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("wndow" "window")
+  '(("upate" "update")
+    ("autolaods" "autoloads")
+    ("wndow" "window")
     ("concretley" "concretely")
     ("consist" "consistent")
     ("consis" "consistent")
