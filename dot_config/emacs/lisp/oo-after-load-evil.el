@@ -84,6 +84,8 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
+
+(advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;; provide
 (provide 'oo-after-load-evil)
 ;;; oo-after-load-evil.el ends here
