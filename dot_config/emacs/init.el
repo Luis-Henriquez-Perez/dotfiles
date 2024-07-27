@@ -97,7 +97,7 @@
 (require 'init-helpful)
 (require 'init-highlight-quoted)
 (require 'init-hungry-delete)
-(require 'init-idle-require)
+;; (require 'init-idle-require)
 (require 'init-lispyville)
 (require 'init-magit)
 (require 'init-marginalia)
@@ -127,6 +127,8 @@
 (require 'init-which-key)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
+(require 'oo-init-modeline)
+;; (require 'oo-init)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
