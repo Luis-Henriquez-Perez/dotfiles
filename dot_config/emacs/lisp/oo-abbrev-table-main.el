@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("concretley" "concretely")
+  '(("wndow" "window")
+    ("concretley" "concretely")
     ("consist" "consistent")
     ("consis" "consistent")
     ("abst" "abstraction")
