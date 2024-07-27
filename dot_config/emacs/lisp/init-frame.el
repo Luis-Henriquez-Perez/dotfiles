@@ -25,6 +25,7 @@
 ;; Initialize frame.
 ;;
 ;;; Code:
+(require 'oo-base)
 ;;;; window-divider
 ;; TODO: The display flickers when setting the initial theme.  Maybe this is
 ;; inevitable.  But maybe this has to do with me either disabling the previous
