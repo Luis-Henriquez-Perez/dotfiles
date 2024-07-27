@@ -71,10 +71,10 @@ The way I choose to manage my files reflects.
 - init files - These are files that can be loaded immediately.  Their objective
   is to initialize or setup a package to be used in my configuration.  Usually
   that means adding hooks, setting bindings and autoloading functions.
-- after-load-files - These are files that are loaded after some feature is loaded.
+- config files - These are files that are loaded after some feature is loaded.
   These files should not be loaded immediately because (1) they may load
   packages not needed during startup thereby slowing down startup and (2) they
-  themselves may contain some computation that should only be done when a
+  themselves may contain some computation that should only needs be done when a
   particular feature is loaded.
 * why the name =OO=?
 :PROPERTIES:
