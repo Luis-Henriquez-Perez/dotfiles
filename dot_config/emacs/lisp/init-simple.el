@@ -26,6 +26,8 @@
 ;;
 ;;; Code:
 (hook! text-mode-hook&visual-line-mode)
+;;;; don't add indent
+(setq-default indent-tabs-mode nil)
 ;;;; disable the blinking of matching parentheses
 ;; This made scrolling the cursor really slow.  Maybe because it was enabled
 ;; with =show-parens-mode= at the same time.  This isn't needed if I have

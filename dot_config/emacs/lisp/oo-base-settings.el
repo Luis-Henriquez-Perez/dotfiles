@@ -108,37 +108,11 @@
 (setq inhibit-splash-screen t)
 ;;;; skip fontification functions when there's input pending
 (setq redisplay-skip-fontification-on-input t)
-;;;; don't update things on the screen as frequently
-;; This variable is.
-;; https://github.com/hlissner/doom-emacs/blob/ooaadd89oobe45f912124d9d815d8790f540d38c/core/core.el#L177
-(setq idle-update-delay 1)
-;;;; don't make backups
-(setq make-backup-files nil)
-;;;; backup files to trash
-(setq backup-directory-alist '((".*" . "~/.Trash")))
-;;;; diable auto-save-mode
-(setq auto-save-default nil)
-(auto-save-mode -1)
 ;;;; don't echo keystrokes
 ;; By default emacs shows.
 (setq echo-keystrokes 0)
-;;;; ensure there's always a newline at the end of files
-;; Several linux programs require a newline at the end of a file, such as
-;; chrontab--this is more or less what noctuid said and I'll take his word for
-;; it.
-(setq require-final-newline t)
 ;;;; set the tab-width to =4=; it's =8= by default
 (setq-default tab-width 4)
-;;;; set the initial major mode to =fundamental-mode=
-;; This improve startup time because packages enabled for emacs-lisp-mode are not
-;; loaded immediately.
-(setq initial-major-mode 'fundamental-mode)
-;;;; disable initial scratch message
-;; Don't display any documentation--or any message at all--in the =*scratch*=
-;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
-(setq initial-scratch-message nil)
-;;;; don't add indent
-(setq-default indent-tabs-mode nil)
 ;;;; don't beep
 ;; This variable controls whether emacs makes a sound when certain events happen
 ;; such as invoking a binding that doesn't have anything bound to it or trying
@@ -158,36 +132,12 @@ end-of-buffer signals; pass the rest to the default handler."
     (command-error-default-function data context caller)))
 
 (setq command-error-function #'oo-command-error-function)
-;;;; designate location of trash
-;; designate the location of the trash directory
-;; I accidentally sent files to the trash and I could not find them in my trash
-;; directory.  I was confused because I knew that the variable
-;; [[file:_helpful_variable__delete-by-moving-to-trash_.png][delete-by-moving-to-trash]] was non-nil and I even verified this to be the case
-;; with [[file:_helpful_function__helpful-variable_.png][helpful-variable]].  After reading the documentation of [[][]] I realized
-;; that emacs uses the [[][]].  To be honest I had no idea what this actually was
-;; but I extracted what looked like the location, [[][]].
-(setq trash-directory (expand-file-name "~/Trash"))
 ;;;; don't ask me whether to follow symlinks, just do it
 ;; By default Emacs will prompt you when you want to open a file a symlink
 ;; references.  It will ask you whether you want to follow the symlink.  For me
 ;; the answer is predominately yes.
 (setq vc-follow-symlinks t)
 (setq vc-follow-link t)
-;;;; prevent =*Messages*= and =*scratch*= buffers from being killed
-;; "Locking" a file can mean two different things (or both of these things at
-;; once).  It can mean that Emacs cannot be exited while there are "locked"
-;; buffers; it can also mean that the locked buffers cannot be killed (e.g. via
-;; [[file:snapshots/_helpful_command__kill-buffer_.png][kill-buffer]]).  I don't think I ever want the former behavior.  Setting
-;; [[][emacs-default-locking-mode]] to kill tells Emacs just to prevent buffers
-;; with =emacs-lock-mode= enabled from being killed.  If you were to try to kill
-;; one with something like =kill-buffer=, it would fail and you'd get a message
-;; saying the buffer cannot be killed.
-
-;; The =*Messages*= buffer could contain important information and should never
-;; really be killed. See [[https://www.emacswiki.org/emacs/ProtectingBuffers][ProtectingBuffers]].
-(setq emacs-lock-default-locking-mode 'kill)
-(with-current-buffer "*Messages*" (emacs-lock-mode 1))
-(with-current-buffer "*scratch*" (emacs-lock-mode 1))
 ;;;; stop emacs from asking to save buffers on quit
 ;; https://stackoverflow.com/questions/35658509/gnu-emacs-how-to-disable-prompt-to-save-modified-buffer-on-exit
 ;; https://emacs.stackexchange.com/questions/22275/save-a-particular-buffer-without-prompting-on-emacs-exit
@@ -205,8 +155,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq fast-but-imprecise-scrolling t)
 (setq redisplay-skip-fontification-on-input t)
 (setq inhibit-compacting-font-caches t)
-
-(setq idle-update-delay 1.0)
 ;;;;; feature-specific customization
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.

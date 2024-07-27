@@ -25,6 +25,10 @@
 ;; Initialize files.
 ;;
 ;;; Code:
+;;;; backup files to trash
+(setq backup-directory-alist '((".*" . "~/.Trash")))
+;;;; don't make backups
+(setq make-backup-files nil)
 ;;;; don't pass case-insensitive to =auto-mode-alist=
 ;; This is taken from =centaur-emacs=.  By default [[file:snapshots/*helpful variable: auto-mode-case-fold*.png][auto-mode-case-fold]] is
 ;; non-nil; when enabled the auto-mode-alist is traversed twice.  This double
@@ -39,6 +43,25 @@
 ;; [[][]] in =common-lisp-mode= and I realized Emacs wasn't doing it because I
 ;; told it not to with this variable.
 (setq enable-local-variables :safe)
+;;;; ensure there's always a newline at the end of files
+;; Several linux programs require a newline at the end of a file, such as
+;; chrontab--this is more or less what noctuid said and I'll take his word for
+;; it.
+(setq require-final-newline t)
+;;;; designate location of trash
+;; designate the location of the trash directory
+;; I accidentally sent files to the trash and I could not find them in my trash
+;; directory.  I was confused because I knew that the variable
+;; [[file:_helpful_variable__delete-by-moving-to-trash_.png][delete-by-moving-to-trash]] was non-nil and I even verified this to be the case
+;; with [[file:_helpful_function__helpful-variable_.png][helpful-variable]].  After reading the documentation of [[][]] I realized
+;; that emacs uses the [[][]].  To be honest I had no idea what this actually was
+;; but I extracted what looked like the location, [[][]].
+(setq trash-directory (expand-file-name "~/Trash"))
+;;;; diable auto-save-mode
+(setq auto-save-default nil)
+(auto-save-mode -1)
+
+(setq idle-update-delay 1.0)
 ;;; provide
 (provide 'init-files)
 ;;; init-files.el ends here

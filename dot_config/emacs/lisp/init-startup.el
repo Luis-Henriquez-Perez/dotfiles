@@ -25,6 +25,14 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+;;;; set the initial major mode to =fundamental-mode=
+;; This improve startup time because packages enabled for emacs-lisp-mode are not
+;; loaded immediately.
+(setq initial-major-mode 'fundamental-mode)
+;;;; disable initial scratch message
+;; Don't display any documentation--or any message at all--in the =*scratch*=
+;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
+(setq initial-scratch-message nil)
 ;;;; don't display message advertising gnu system
 ;; They made the process of disabling this more difficult.
 (advice-add #'display-startup-echo-area-message :around #'ignore)
