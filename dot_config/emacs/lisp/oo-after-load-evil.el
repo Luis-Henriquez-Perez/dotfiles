@@ -26,8 +26,6 @@
 ;;
 ;;; Code:
 (require 'evil)
-;;;; settings
-(opt! evil-visualstar/persistent t)
 ;;;; minibuffer
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
