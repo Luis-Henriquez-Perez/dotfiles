@@ -38,15 +38,9 @@
 (bind! "C-c k" #'unexpand-abbrev)
 (autoload #'oo-add-new-abbrev "oo-commands" nil t 'function)
 ;;;; do not save abbrevs to a file
-;; Do not manage abbrevs for me.
-;; Do not prompt me for saving abbrevs.
-;; (setq save-abbrevs 'silently)
 (advice-add #'read-abbrev-file :around #'ignore)
 (advice-add #'write-abbrev-file :around #'ignore)
 (advice-add #'abbrev--possibly-save :around #'ignore)
-;; (setq abbrev-file-name null-device)
-;; By default Emacs calls this function on startup.  Thus if there is an
-;; existing abbrev file it will.
 (advice-add #'quietly-read-abbrev-file :around #'ignore)
 ;;; provide
 (provide 'init-abbrev)
