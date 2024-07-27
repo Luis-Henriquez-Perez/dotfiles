@@ -87,12 +87,6 @@
 ;; the window bottom, but a higher value is nice to automatically recenter after
 ;; any bigger jump."
 (setq scroll-conservatively 20)
-;;;; don't show the startup screen
-;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
-;; think these variables are all aliases for eachother.
-(setq inhibit-startup-message t)
-(setq inhibit-startup-screen t)
-(setq inhibit-splash-screen t)
 ;;;; skip fontification functions when there's input pending
 (setq redisplay-skip-fontification-on-input t)
 ;;;; don't echo keystrokes
@@ -138,7 +132,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq inhibit-compacting-font-caches t)
 
 (setq idle-update-delay 1.0)
-;;;;; feature-specific customization
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
 (setq reb-re-syntax 'rx)

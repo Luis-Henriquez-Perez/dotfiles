@@ -25,6 +25,12 @@
 ;; Initialize startup.
 ;;
 ;;; Code:
+;;;; don't show the startup screen
+;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
+;; think these variables are all aliases for eachother.
+(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
 ;;;; stop creating =auto-save-list= directory
 ;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
 (setq auto-save-list-file-prefix nil)
