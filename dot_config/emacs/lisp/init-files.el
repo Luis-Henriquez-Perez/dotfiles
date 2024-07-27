@@ -62,6 +62,11 @@
 (auto-save-mode -1)
 
 (setq idle-update-delay 1.0)
+;;;; automatically kill any processes when exiting emacs
+;; If I start a process, like the =eat= shell for example, stop me from exiting
+;; to ask me whether I want to kill it, just do it.
+;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
+(setq confirm-kill-processes nil)
 ;;; provide
 (provide 'init-files)
 ;;; init-files.el ends here

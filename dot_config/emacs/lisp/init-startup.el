@@ -1,4 +1,4 @@
-;;; init-startup.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-startup.el --- initialize startup -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,9 +22,12 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize startup.
 ;;
 ;;; Code:
+;;;; stop creating =auto-save-list= directory
+;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
+(setq auto-save-list-file-prefix nil)
 ;;;; set the initial major mode to =fundamental-mode=
 ;; This improve startup time because packages enabled for emacs-lisp-mode are not
 ;; loaded immediately.
