@@ -125,6 +125,8 @@
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
+(require 'oo-init-hooks)
+(require 'oo-init-keybindings)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
