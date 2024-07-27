@@ -25,6 +25,8 @@
 ;; Initialize simple.
 ;;
 ;;; Code:
+(require 'oo-base)
+
 (hook! text-mode-hook&visual-line-mode)
 ;;;; don't add indent
 (setq-default indent-tabs-mode nil)
