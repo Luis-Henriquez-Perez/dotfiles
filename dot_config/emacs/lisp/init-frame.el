@@ -1,4 +1,4 @@
-;;; init-frame.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-frame.el --- initialize frame -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,9 +22,19 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize frame.
 ;;
 ;;; Code:
+;;;; window-divider
+;; TODO: The display flickers when setting the initial theme.  Maybe this is
+;; inevitable.  But maybe this has to do with me either disabling the previous
+;; theme first or the order of setting the window-divider, or maybe I can
+;; specify the default theme to load beforehand.  I need to play around with
+;; settings and see if this flickering can be avoided.
+(hook! after-init-hook&window-divider-mode :depth 12)
+(opt! window-divider-default-bottom-width 7)
+(opt! window-divider-default-right-width 7)
+(opt! window-divider-default-places t)
 ;;;; disable cursor blinking
 ;; By default the cursor blinks.  The point is so that it is easier to find on the
 ;; screen.  Usually, however, I have no trouble finding it so I disable it.

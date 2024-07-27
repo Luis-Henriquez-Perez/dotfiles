@@ -124,7 +124,7 @@
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
-(require 'init-window-divider)
+(require 'init-frame)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
