@@ -29,8 +29,9 @@
 
 (hook! prog-mode-hook&outli-mode)
 ;; TODO: figure out how to make this a named advice.
-(setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
-(advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces)))
+(with-eval-after-load 'outli
+  (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
+  (advice-add 'load-theme :after (lambda (&rest _) (outli-reset-all-faces))))
 ;;; provide
 (provide 'init-outli)
 ;;; init-outli.el ends here
