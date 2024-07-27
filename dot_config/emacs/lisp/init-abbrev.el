@@ -32,8 +32,8 @@
 ;; Emacs loads abbreviation-mode automatically so instead of evaluating the
 ;; configuration.
 (defhook! abbrev-mode-hook&apply-config ()
-  (require 'oo-after-load-abbreviation))
-;;;; autoloads
+  (require 'oo-init-abbrev))
+;;;; bindings
 (bind! "C-c j" #'oo-add-new-abbrev)
 (bind! "C-c k" #'unexpand-abbrev)
 (autoload #'oo-add-new-abbrev "oo-commands" nil t 'function)
