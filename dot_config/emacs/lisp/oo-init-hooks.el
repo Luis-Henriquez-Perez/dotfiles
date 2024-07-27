@@ -101,7 +101,6 @@ file is loaded."
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;;;; text-mode-hook
-(hook! text-mode-hook&visual-line-mode)
 (hook! text-mode-hook&auto-fill-mode)
 ;;;;; html-mode-hook
 (hook! html-mode-hook&emmet-mode)

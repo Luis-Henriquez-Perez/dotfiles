@@ -37,11 +37,6 @@
 ;; modes).  I want to control when to enable this mode normally--as in, add it to
 ;; hooks myself if I want it enabled.  Therefore, I disable it here.
 (setq show-paren-predicate nil)
-;;;; disable the blinking of matching parentheses
-;; This made scrolling the cursor really slow.  Maybe because it was enabled
-;; with =show-parens-mode= at the same time.  This isn't needed if I have
-;; =show-parens-mode= already enabled.
-(setq blink-matching-paren nil)
 ;;;; by default do not wrap lines
 ;; When a line is too long to be displayed in the screen do not wrap it around;
 ;; just let the rest of the line go out of view (with an indicator that there is
@@ -81,46 +76,12 @@
 ;; I got this from [[https://www.masteringemacs.org/article/disabling-prompts-emacs][this-post]].  Every time you try to kill a buffer with a live
 ;; process, Emacs will ask you if you're sure you want to kill it.
 (setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function kill-buffer-query-functions))
-;;;; don't pass case-insensitive to =auto-mode-alist=
-;; This is taken from =centaur-emacs=.  By default [[file:snapshots/*helpful variable: auto-mode-case-fold*.png][auto-mode-case-fold]] is
-;; non-nil; when enabled the auto-mode-alist is traversed twice.  This double
-;; traversal can be expensive and it seems unnecessary.
-(setq auto-mode-case-fold nil)
-;;;; don't suggest keybindings or the like for me
-;; See [[https://stackoverflow.com/questions/19781529/how-to-disable-emacs-messages-like-you-can-run-the-command-x-with-y][this stackoverflow post]].  After invoking [[file:snapshots/*helpful command: execute-extended-command*.png][execute-extended-command]] on a
-;; command that has an existing keybinding, or something that could be abbreviated,
-;; emacs will suggest a shorter way.
-(setq suggest-key-bindings nil)
-;;;; stop asking me whether I want to enable file local variables
-;; When installing packages with =quelpa=, I was prompted whether I wanted to apply
-;; file local variables.  I'm guessing =straight.el= and =elpaca= disable this.
-;; The value safe tells Emacs to only apply the "safe" local variables.  I'm
-;; assuming this means ones like "mode" which tell Emacs to open the buffer at a
-;; certain major mode.  At first I had this set to nil, but I wanted to open
-;; [[][]] in =common-lisp-mode= and I realized Emacs wasn't doing it because I
-;; told it not to with this variable.
-(setq enable-local-variables :safe)
-;;;; don't ask me for permission to enable a theme
-;; By default Emacs will ask you whether you are sure you want to enable a theme
-;; as a precaution because a theme could contain malicious code.  Downloading
-;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
-;; from wierd places online and evaluating them.  So I don't need.
-(setq custom-safe-themes t)
-;;;; don't create a custom file
-;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
-;; interface is intended for people that don't know elisp.  For me it's completely
-;; unnecessary.  Every variable I customize is in my emacs configuration.
-(setq custom-file null-device)
 ;;;; don't disable any commands
 ;; If non-nil certain commands such as narrowing are disabled.  The idea is that
 ;; a new user would think that emacs deleted the contents of their file if they
 ;; accidentally narrowed the buffer.  I am experienced enough so that I don't
 ;; Need this.
 (setq disabled-command-function nil)
-;;;; disable cursor blinking
-;; By default the cursor blinks.  The point is so that it is easier to find on the
-;; screen.  Usually, however, I have no trouble finding it so I disable it.
-(blink-cursor-mode -1)
 ;;;; move files to trash instead of deleting them
 ;; By default Emacs actually deletes files.  By setting this to t, you tell Emacs
 ;; to move a file to trash instead of actually deleting it.  This is better because
@@ -172,9 +133,6 @@
 ;; This improve startup time because packages enabled for emacs-lisp-mode are not
 ;; loaded immediately.
 (setq initial-major-mode 'fundamental-mode)
-;;;; don't display message advertising gnu system
-;; They made the process of disabling this more difficult.
-(advice-add #'display-startup-echo-area-message :around #'ignore)
 ;;;; disable initial scratch message
 ;; Don't display any documentation--or any message at all--in the =*scratch*=
 ;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
@@ -249,17 +207,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq inhibit-compacting-font-caches t)
 
 (setq idle-update-delay 1.0)
-;;;;; do not save abbrevs to a file
-;; Do not manage abbrevs for me.
-;; Do not prompt me for saving abbrevs.
-;; (setq save-abbrevs 'silently)
-(advice-add #'read-abbrev-file :around #'ignore)
-(advice-add #'write-abbrev-file :around #'ignore)
-(advice-add #'abbrev--possibly-save :around #'ignore)
-;; (setq abbrev-file-name null-device)
-;; By default Emacs calls this function on startup.  Thus if there is an
-;; existing abbrev file it will.
-(advice-add #'quietly-read-abbrev-file :around #'ignore)
 ;;;;; feature-specific customization
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
