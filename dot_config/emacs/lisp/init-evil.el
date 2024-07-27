@@ -55,9 +55,7 @@
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
 
-(advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
-
-(oo-call-after-load 'evil #'require 'oo-evil-operators)
+(oo-call-after-load 'evil #'require 'oo-after-load-evil)
 
 (bind! n "H" #'evil-first-non-blank)
 (bind! n "L" #'evil-last-non-blank)
