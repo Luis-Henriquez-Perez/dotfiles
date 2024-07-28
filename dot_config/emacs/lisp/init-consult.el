@@ -30,6 +30,8 @@
 (opt! consult-preview-key nil)
 (opt! consult-fontify-preserve nil)
 
+(autoload #'oo-pop-to-buffer "oo-commands" nil t 'function)
+
 (bind! oo-find-map "p" #'consult-yank-pop)
 (bind! oo-find-map "k" #'consult-bookmark)
 (bind! oo-find-map "b" #'consult-bookmark)
@@ -38,7 +40,7 @@
 (bind! oo-find-map "g" #'consult-grep)
 
 (alt! imenu consult-imenu consult)
-(alt! display-buffer oo-pop-to-buffer consult)
+(alt! pop-to-buffer oo-pop-to-buffer consult)
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
 (alt! apropos consult-apropos consult)
