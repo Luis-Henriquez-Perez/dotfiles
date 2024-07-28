@@ -140,8 +140,6 @@
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)
 (bind! oo-find-map "o" #'find-file)
-(bind! oo-find-map "f" #'switch-to-buffer)
-(bind! oo-find-map "d" #'pop-to-buffer)
 
 (bind! oo-find-map "a" #'find-library)
 ;;;;;; oo-help-map

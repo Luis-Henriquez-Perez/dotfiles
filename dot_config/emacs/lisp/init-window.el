@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(bind! oo-find-map "f" #'switch-to-buffer)
+(bind! oo-find-map "d" #'pop-to-buffer)
 (bind! oo-window-map "v" #'split-window-horizontally)
 (bind! oo-window-map "h" #'split-window-vertically)
 (bind! oo-window-map "b" #'balance-windows)
