@@ -102,21 +102,14 @@
 (define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
 (bind! oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
 
-(bind! oo-buffer-map "j" #'next-buffer)
-(bind! oo-buffer-map "k" #'previous-buffer)
-(bind! oo-buffer-map "x" #'kill-current-buffer)
 (bind! oo-buffer-map "b" #'switch-to-buffer)
 ;;;;;; oo-git-map
 (defvar oo-magit-map (make-sparse-keymap))
 (define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
 (bind! oo-leader-map "g" #'oo-magit-prefix-command :wk "magit")
 
-(bind! oo-magit-map "s" #'magit-status)
-(bind! oo-magit-map "p" #'magit-push)
 (bind! oo-magit-map "n" #'vc-next-action)
-(bind! oo-magit-map "c" #'magit-commit)
 (bind! oo-magit-map "b" #'vc-create-branch)
-(bind! oo-magit-map "B" #'magit-branch)
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)

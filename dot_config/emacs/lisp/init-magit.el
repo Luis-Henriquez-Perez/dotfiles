@@ -29,6 +29,11 @@
 
 (oo-call-after-load '(magit evil) #'evil-magit-init)
 (oo-popup-at-bottom "\\`magit")
+
+(bind! oo-magit-map "s" #'magit-status)
+(bind! oo-magit-map "p" #'magit-push)
+(bind! oo-magit-map "c" #'magit-commit)
+(bind! oo-magit-map "B" #'magit-branch)
 ;;; provide
 (provide 'init-magit)
 ;;; init-magit.el ends here
