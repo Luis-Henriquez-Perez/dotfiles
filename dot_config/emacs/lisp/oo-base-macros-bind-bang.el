@@ -140,21 +140,12 @@ Evaluating resulting forms will."
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
-    (cond ((or (not !!keymap) (equal !keymap-value 'global-map) (not (symbolp !keymap)))
-           forms)
-          ;; Dired is the only package that I have encountered where using
-          ;; `oo-call-after-bound' on its keymap does not work.  No idea why it
-          ;; does not.  I assume that it is something about what happens between
-          ;; the time the keymap is bound and the time where dired is provided.
-          ;; In general dired is extremely sensitive as to when the bindings
-          ;; as even this does not work in `oo-after-load-dired'.
-          ((equal !keymap-value 'dired-mode-map)
-           `((oo-call-after-load 'dired (lambda () ,@forms))))
-          (t
-           `((if (boundp ',!keymap-value)
-                 (progn ,@forms)
-               (defvar ,!keymap-value)
-               (oo-call-after-bound ',!keymap-value (lambda () ,@forms))))))))
+    (if (or (not !!keymap) (equal !keymap-value 'global-map) (not (symbolp !keymap)))
+        forms
+      `((if (boundp ',!keymap-value)
+            (progn ,@forms)
+          (defvar ,!keymap-value)
+          (oo-call-after-bound ',!keymap-value (lambda () ,@forms)))))))
 ;;;; standardize metadata
 (defun! oo--bind-metadata (args)
   "Standardize ARGS into proper metadata."
