@@ -34,16 +34,14 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; after-init-hook
-;; Don't load everything at once.
-;; (oo-require-hook 'after-init-hook 'evil)
 (hook! after-init-hook&oo-override-mode :depth -100)
 ;;;;; emacs-startup-hook
 (defhook! emacs-startup-hook&restore-startup-values ()
   [:depth 91]
+  (require 'oo-init-modeline)
   (oo-restore-value 'file-name-handler-alist)
   (setq gc-cons-threshold (* 32 1024 1024))
-  (run-with-timer 5 nil #'oo-lower-garbage-collection)
-  (require 'oo-init-modeline))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection))
 (defhook! emacs-startup-hook&init-after-load-functions ()
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a

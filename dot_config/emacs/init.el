@@ -58,6 +58,7 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; features
+(require 'init-no-littering)
 (require 'init-custom)
 (require 'init-files)
 (require 'init-simple)
@@ -103,7 +104,6 @@
 (require 'init-magit)
 (require 'init-marginalia)
 (require 'init-modus-operandi)
-(require 'init-no-littering)
 (require 'init-notmuch)
 (require 'init-orderless)
 (require 'init-org-appear)
@@ -128,7 +128,6 @@
 (require 'init-which-key)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
-(require 'oo-init-modeline)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here
