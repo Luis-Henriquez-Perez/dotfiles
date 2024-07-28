@@ -65,12 +65,6 @@ file is loaded."
   (oo-restore-value 'gc-cons-percentage))
 ;;;;; on-first-input-hook
 (hook! on-first-input-hook&minibuffer-depth-indicate-mode)
-;;;;; oo-initial-buffer-choice-hook
-(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-        (dashboard-insert-startupify-lists)))))
 ;;;;; emacs-lisp-mode-hook
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
