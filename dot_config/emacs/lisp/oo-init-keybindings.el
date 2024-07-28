@@ -101,8 +101,6 @@
 (defvar oo-buffer-map (make-sparse-keymap))
 (define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
 (bind! oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
-
-(bind! oo-buffer-map "b" #'switch-to-buffer)
 ;;;;;; oo-git-map
 (defvar oo-magit-map (make-sparse-keymap))
 (define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)

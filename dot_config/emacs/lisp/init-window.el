@@ -27,6 +27,7 @@
 ;;; Code:
 (bind! oo-buffer-map "j" #'next-buffer)
 (bind! oo-buffer-map "k" #'previous-buffer)
+(bind! oo-buffer-map "b" #'switch-to-buffer)
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'pop-to-buffer)
 (bind! oo-window-map "v" #'split-window-horizontally)
