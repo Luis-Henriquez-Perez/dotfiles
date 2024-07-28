@@ -123,18 +123,7 @@
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
 
 (bind! oo-window-map "t" #'transpose-frame)
-(bind! oo-window-map "w" #'ace-window)
-(bind! oo-window-map "j" #'ace-window)
-(bind! oo-window-map "o" #'ace-window)
-(bind! oo-window-map "s" #'ace-swap-window)
-(bind! oo-window-map "b" #'balance-windows)
-(bind! oo-window-map "M" #'maximize-window)
-(bind! oo-window-map "v" #'split-window-horizontally)
-(bind! oo-window-map "h" #'split-window-vertically)
 (bind! oo-window-map "u" #'winner-undo)
-(bind! oo-window-map "d" #'delete-window)
-(bind! oo-window-map "D" #'delete-other-windows)
-(bind! oo-window-map "k" #'display-buffer)
 ;;;;;; oo-app-map
 (defvar oo-app-map (make-sparse-keymap))
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)

@@ -25,6 +25,13 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(bind! oo-window-map "v" #'split-window-horizontally)
+(bind! oo-window-map "h" #'split-window-vertically)
+(bind! oo-window-map "b" #'balance-windows)
+(bind! oo-window-map "M" #'maximize-window)
+(bind! oo-window-map "d" #'delete-window)
+(bind! oo-window-map "D" #'delete-other-windows)
+(bind! oo-window-map "k" #'display-buffer)
 ;;; provide
 (provide 'init-window)
 ;;; init-window.el ends here

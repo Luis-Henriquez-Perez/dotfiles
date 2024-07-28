@@ -29,6 +29,11 @@
 
 (opt! aw-swap-invert t)
 (opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
+
+(bind! oo-window-map "w" #'ace-window)
+(bind! oo-window-map "j" #'ace-window)
+(bind! oo-window-map "o" #'ace-window)
+(bind! oo-window-map "s" #'ace-swap-window)
 ;;; provide
 (provide 'init-ace-window)
 ;;; init-ace-window.el ends here
