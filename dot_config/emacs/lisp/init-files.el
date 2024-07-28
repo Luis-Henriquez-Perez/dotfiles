@@ -25,6 +25,7 @@
 ;; Initialize files.
 ;;
 ;;; Code:
+(require 'oo-base)
 ;;;; backup files to trash
 (setq backup-directory-alist '((".*" . "~/.Trash")))
 ;;;; don't make backups
@@ -67,6 +68,9 @@
 ;; to ask me whether I want to kill it, just do it.
 ;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
 (setq confirm-kill-processes nil)
+;;;; keybindings
+(bind! oo-find-map ";" #'save-buffer)
+(bind! oo-find-map "o" #'find-file)
 ;;; provide
 (provide 'init-files)
 ;;; init-files.el ends here

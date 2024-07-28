@@ -135,11 +135,9 @@
 (define-prefix-command 'oo-find-prefix-command 'oo-find-map)
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
-(bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "i" #'imenu)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)
-(bind! oo-find-map "o" #'find-file)
 
 (bind! oo-find-map "a" #'find-library)
 ;;;;;; oo-help-map
