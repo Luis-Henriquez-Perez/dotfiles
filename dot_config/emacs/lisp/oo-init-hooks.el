@@ -94,8 +94,6 @@ file is loaded."
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;;;; text-mode-hook
 (hook! text-mode-hook&auto-fill-mode)
-;;;;; html-mode-hook
-(hook! html-mode-hook&emmet-mode)
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
