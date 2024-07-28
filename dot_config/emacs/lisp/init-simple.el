@@ -50,7 +50,7 @@ Replace `kill-buffer--possibly-save' as advice."
                   (?d "Discard and kill buffer without saving" "kill buffer without saving")
                   (?c "Cancel" "Exit without doing anything")))
   (set! long-form (and (not use-short-answers) (not (use-dialog-box-p))))
-  (set! response (car (read-multiple-choice prompt choices nil nil long-form)))
+  (set! response (car (read-multiple-choice prompt (reverse choices) nil nil long-form)))
   (cl-case response
     (?s (with-current-buffer buffer (save-buffer)) t)
     (?d t)
