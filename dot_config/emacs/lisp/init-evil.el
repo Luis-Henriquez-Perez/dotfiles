@@ -36,9 +36,6 @@
 ;; maps that take priority (intercept) evil bindings when they have a different
 ;; binding for the same key (this is opposed to =overriding-maps=, which completely
 ;; override an evil keymap).
-(defhook! evil-mode-hook&make-intercept-map ()
-  "Register `oo-override-map' as an intercept map."
-  (evil-make-intercept-map oo-override-mode-map 'all t))
 ;; By default =evil= displays the current state in the echo area.  I think some
 ;; indicator for the current state is necessary but I don't want to do it via
 ;; echoing.  Instead I plan to do it primarily via cursor colors; and possibly the
