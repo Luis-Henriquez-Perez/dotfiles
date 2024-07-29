@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("abstractioins" "abstractions")
+  '(("orners" "corners")
+    ("sometiems" "sometimes")
+    ("abstractioins" "abstractions")
     ("capt" "captain")
     ("loadingn" "loading")
     ("evalled" "evaluated")
