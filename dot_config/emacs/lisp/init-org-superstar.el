@@ -28,6 +28,7 @@
 (require 'oo-base)
 
 (hook! org-mode-hook&org-superstar-mode)
+
 (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items t)
