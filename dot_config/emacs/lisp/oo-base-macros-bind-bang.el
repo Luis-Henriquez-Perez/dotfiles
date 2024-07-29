@@ -140,12 +140,15 @@ Evaluating resulting forms will."
   "Defer the evaluation of body until keymap is loaded.
 If METADATA has no keymap return."
   (with-map-keywords! metadata
-    (if (or (not !!keymap) (equal !keymap-value 'global-map) (not (symbolp !keymap)))
-        forms
-      `((if (boundp ',!keymap-value)
-            (progn ,@forms)
-          (defvar ,!keymap-value)
-          (oo-call-after-bound ',!keymap-value (lambda () ,@forms)))))))
+    (cond ((or (not !!keymap) (equal !keymap-value 'global-map) (not (symbolp !keymap)))
+           forms)
+          ((equal !keymap-value 'dired-mode-map)
+           `((oo-call-after-load 'dired (lambda () ,@forms))))
+          (t
+           `((if (boundp ',!keymap-value)
+                 ,@forms
+               (defvar ,!keymap-value)
+               (oo-call-after-bound ',!keymap-value (lambda () ,@forms))))))))
 ;;;; standardize metadata
 (defun! oo--bind-metadata (args)
   "Standardize ARGS into proper metadata."
@@ -273,11 +276,11 @@ returns a list of forms."
     (when !wk
       (pushing! steps 'oo--bind-which-key))
     (pushing! steps 'oo--bind-let-binds)
+    (pushing! steps 'oo--bind-defer-keymap)
     (unless (member !state '(nil global))
       (if (not (member !char-value '(nil ?g)))
           (pushing! steps 'oo--bind-defer-evil-state-char)
         (pushing! steps 'oo--bind-defer-evil-state)))
-    (pushing! steps 'oo--bind-defer-keymap)
     (nreverse steps)))
 ;;;; oo--bind-body
 (defun! oo--bind-body (args)
