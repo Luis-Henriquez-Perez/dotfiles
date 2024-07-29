@@ -30,8 +30,14 @@
 (hook! eshell-mode-hook&abbrev-mode)
 (hook! eshell-mode-hook&smartparens-mode)
 (hook! eshell-mode-hook&eat-eshell-mode)
+
+(autoload #'eshell-z "eshell-z" nil t 'function)
+(autoload #'eshell-up "eshell-up" nil t 'function)
+
 (oo-popup-at-bottom "\\*eshell")
+
 (autoload 'epe-theme-lambda "eshell-prompt-extras")
+
 (opt! eshell-banner-message "")
 (opt! eshell-highlight-prompt nil)
 (opt! eshell-prompt-function 'epe-theme-lambda)
@@ -47,8 +53,6 @@
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
-(oo-call-after-load 'eshell #'require 'eshell-z)
-(oo-call-after-load 'eshell #'require 'eshell-up)
 (oo-call-after-load 'em-alias #'require 'oo-eshell-aliases)
 
 (bind! oo-app-map "e" #'eshell)
