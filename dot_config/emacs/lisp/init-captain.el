@@ -29,9 +29,12 @@
 
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)
+
 (defhook! text-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
+
+(oo-call-after-load 'captain #'require 'config-captain)
 ;;; provide
 (provide 'init-captain-mode)
 ;;; init-captain-mode.el ends here
