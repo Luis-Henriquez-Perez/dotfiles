@@ -27,6 +27,9 @@
 ;;; Code:
 ;;;; requirements
 (require 'oo-base)
+;;;; autoloads
+(autoload #'tempel-insert "tempel" nil t 'function)
+(autoload #'tempel-expand "tempel" nil t 'function)
 ;;;; capf
 (defun oo-setup-tempel-capf ()
   "Add the Tempel Capf to `completion-at-point-functions'."
@@ -45,6 +48,8 @@
 (bind! i tempel-map "C-k" #'tempel-previous)
 (bind! i tempel-map "TAB" #'tempel-next)
 (bind! i tempel-map [backtab] #'tempel-previous)
+;;;; load config
+(oo-call-after-load 'tempel #'require 'config-tempel)
 ;;; provide
 (provide 'init-tempel)
 ;;; init-tempel.el ends here
