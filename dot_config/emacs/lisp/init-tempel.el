@@ -25,8 +25,9 @@
 ;; Initialize tempel.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'oo-base)
-
+;;;; capf
 (defun oo-setup-tempel-capf ()
   "Add the Tempel Capf to `completion-at-point-functions'."
   ;; `tempel-expand' only triggers on exact matches. Alternatively use
@@ -39,7 +40,7 @@
 
 (oo-add-hook 'prog-mode-hook #'oo-setup-tempel-capf)
 (oo-add-hook 'text-mode-hook #'oo-setup-tempel-capf)
-
+;;;; keybindings
 (bind! i tempel-map "C-j" #'tempel-next)
 (bind! i tempel-map "C-k" #'tempel-previous)
 (bind! i tempel-map "TAB" #'tempel-next)
