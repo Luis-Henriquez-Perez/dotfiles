@@ -1,4 +1,4 @@
-;;; oo-after-load-smartparens.el --- smartparens configuration -*- lexical-binding: t; -*-
+;;; config-smartparens.el --- smartparens configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,5 +33,5 @@
 (sp-local-pair 'minibuffer-mode "'" nil :actions nil)
 (sp-local-pair 'minibuffer-mode "`" nil :actions nil)
 ;;; provide
-(provide 'oo-after-load-smartparens)
-;;; oo-after-load-smartparens.el ends here
+(provide 'config-smartparens)
+;;; config-smartparens.el ends here

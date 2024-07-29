@@ -1,4 +1,4 @@
-;;; oo-after-load-evil.el --- evil configuration -*- lexical-binding: t; -*-
+;;; config-evil.el --- evil configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -87,5 +87,5 @@
 
 (advice-add #'load-theme :around (lambda (fn &rest args) (apply fn args) (evil-refresh-cursor)))
 ;;; provide
-(provide 'oo-after-load-evil)
-;;; oo-after-load-evil.el ends here
+(provide 'config-evil)
+;;; config-evil.el ends here
