@@ -1,4 +1,4 @@
-;;; oo-after-load-vertico.el --- vertico configuration -*- lexical-binding: t; -*-
+;;; init-minibuffer.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,18 +22,16 @@
 ;;
 ;;; Commentary:
 ;;
-;; Configuration for vertico.
+;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'vertico)
-;;;; vertico
-;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
+(defun oo-completion-in-region-function (&rest args)
+  (apply (if (and (bound-and-true-p vertico-mode) (featurep 'consult))
+             #'consult-completion-in-region
+           #'completion--in-region)
+         args))
 
-;; When I am completing a word at point I want the matching style to be exact.
-;; at the very least.
-;; Orderless should be just at.
-;; (defun +orderless-exact (component)
-;;   `(: bos (literal ,component)))
+(setq completion-in-region-function #'oo-completion-in-region-function)
 ;;; provide
-(provide 'oo-after-load-vertico)
-;;; oo-after-load-vertico.el ends here
+(provide 'init-minibuffer)
+;;; init-minibuffer.el ends here

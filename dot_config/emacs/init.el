@@ -67,6 +67,7 @@
 (require 'init-abbrev)
 (require 'init-frame)
 (require 'init-window)
+(require 'init-minibuffer)
 (require 'init-evil-textobj-syntax)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
