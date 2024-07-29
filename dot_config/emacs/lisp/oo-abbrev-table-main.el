@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("upate" "update")
+  '(("shoud" "should")
+    ("upate" "update")
     ("autolaods" "autoloads")
     ("wndow" "window")
     ("concretley" "concretely")
