@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("capt" "captain")
+  '(("abstractioins" "abstractions")
+    ("capt" "captain")
     ("loadingn" "loading")
     ("evalled" "evaluated")
     ("reqs" "requirements")
