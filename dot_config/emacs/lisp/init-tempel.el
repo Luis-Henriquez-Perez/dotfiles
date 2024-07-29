@@ -49,6 +49,9 @@
 (bind! i tempel-map "C-k" #'tempel-previous)
 (bind! i tempel-map "TAB" #'tempel-next)
 (bind! i tempel-map [backtab] #'tempel-previous)
+
+(bind! oo-quick-map "i" #'tempel-insert)
+(bind! oo-quick-map "l" #'tempel-insert)
 ;;;; load config
 (oo-call-after-load 'tempel #'require 'config-tempel)
 ;;; provide
