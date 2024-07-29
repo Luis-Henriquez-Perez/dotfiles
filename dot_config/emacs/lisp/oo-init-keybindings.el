@@ -115,6 +115,10 @@
 
 (bind! oo-window-map "t" #'transpose-frame)
 (bind! oo-window-map "u" #'winner-undo)
+;;;;;; oo-quick-map
+(defvar oo-quick-map (make-sparse-keymap))
+(define-prefix-command 'oo-quick-prefix-command 'oo-quick-map)
+(bind! oo-leader-map "j" #'oo-quick-prefix-command :wk "quick")
 ;;;;;; oo-app-map
 (defvar oo-app-map (make-sparse-keymap))
 (define-prefix-command 'oo-app-prefix-command 'oo-app-map)
