@@ -64,18 +64,22 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
 :PROPERTIES:
 :ID:       20240408T164104.628646
 :END:
-The way I choose to manage my files reflects.
+The way I choose to manage my files reflects my point on "consistent and
+simple".  A simple.
 - [[file:./init.el][init.el]] - Loads everything else.
 - core files - Define tools that will help me configure emacs and that will be
   used pervasively throughout init and after-load files.
 - init files - These are files that can be loaded immediately.  Their objective
   is to initialize or setup a package to be used in my configuration.  Usually
-  that means adding hooks, setting bindings and autoloading functions.
+  that means adding hooks, setting bindings and autoloading functions.  These
+  files should be fast to load because they (typically) do not load packages,
+  instead they simple set up a package to be loaded.
 - config files - These are files that are loaded after some feature is loaded.
   These files should not be loaded immediately because (1) they may load
   packages not needed during startup thereby slowing down startup and (2) they
   themselves may contain some computation that should only needs be done when a
   particular feature is loaded.
+Organizing files in this way makes it dead simple to add a new feature.
 * why the name =OO=?
 :PROPERTIES:
 :ID:       20240408T215953.404277
