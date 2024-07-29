@@ -28,6 +28,7 @@
 ;;;; requirements
 (require 'oo-base)
 ;;;; autoloads
+(autoload #'tempel-complete "tempel" nil t 'function)
 (autoload #'tempel-insert "tempel" nil t 'function)
 (autoload #'tempel-expand "tempel" nil t 'function)
 ;;;; capf
