@@ -252,20 +252,6 @@ SYMBOL and FN in `oo-after-load-hash-table'."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (gethash char oo-after-load-hash-table))))
-;;;; initial buffer choice
-(defvar oo-initial-buffer-choice-hook nil
-  "Hook run to choose initial buffer.
-Each hook should return either a buffer to be displayed or a boolean.
-For what buffer is displayed in the case of a boolean see
-`initial-buffer-choice'.")
-
-(defun oo-run-initial-buffer-choice-hook ()
-  "Run `oo-initial-buffer-choice-hook'."
-  (aprog1 (or (run-hook-with-args-until-success 'oo-initial-buffer-choice-hook)
-              (get-buffer-create "*scratch*"))
-    (lgr-info oo-lgr "set initial buffer to %s" (buffer-name))))
-
-(setq initial-buffer-choice #'oo-run-initial-buffer-choice-hook)
 ;;;; alternate bindings
 ;; Inspired by [[https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
 ;; bindings for commands giving me a flexible and robust experience with key
