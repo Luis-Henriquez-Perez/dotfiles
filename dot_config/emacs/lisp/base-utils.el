@@ -1,4 +1,4 @@
-;;; oo-base-utils.el -*- lexical-binding: t; -*-
+;;; base-utils.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,19 +33,16 @@
   "Return ARGS as a string."
   (declare (pure t) (side-effect-free t))
   (with-output-to-string (mapc #'princ args)))
-(defalias 'oo-to-string 'oo-into-string)
 
 (defun oo-into-symbol (&rest args)
   "Return an interned symbol from ARGS."
   (declare (pure t) (side-effect-free t))
   (intern (apply #'oo-into-string args)))
-(defalias 'oo-to-symbol 'oo-into-symbol)
 
 (defun oo-into-keyword (&rest args)
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
-(defalias 'oo-to-keyword 'oo-into-keyword)
 ;;;; quoting
 (defun oo-quoted-p (form)
   "Return non-nil if FORM is quoted."
@@ -98,7 +95,6 @@ arguments FN will be called with."
        (condition-case ,err
            (apply #',fn args)
          (,handlers (funcall #',action ,err #',fn args))))))
-(defalias 'oo-cond-case-fn 'oo-condition-case-fn)
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
@@ -132,27 +128,6 @@ must be evaluated with `lexical-binding' enabled."
       (when first-call-p
         (setq first-call-p nil)
         (apply fn args)))))
-;;;; oo-funcall-silently
-(defun oo-funcall-silently (fn &rest args)
-  "Call FN with ARGS without producing any output."
-  (shut-up (apply fn args)))
-;; With lexical binding you can actually store the values of let-bound variables
-;; in a function by creating a closure.  But it might be useful to.
-;;;; oo-first-success
-;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
-;; These functions take a predicate and a list and they return the first element of
-;; the list for which ~(pred element)~ returns non-nil.  The function =oo-first-success= also takes a
-;; predicate and the list, but instead it returns the first non-nil return value of
-;; ~(pred element)~.  For example, ~(oo-first-sucess 'numberp '(a t 0))~ would return
-;; =t= instead of =0= as it would for =-first= or =cl-find-if= because ~(numberp 0)~ evaluates
-;; to =t=. The name of this function is inspired by a similar function designed for
-;; hooks [[file:snapshots/_helpful_function__run-hooks-with-args-until-success_.png][run-hook-with-args-until-success]].
-(defun oo-first-success (fn list)
-  "Return the first non-nil result of applying FN to an element in LIST."
-  (declare (pure t) (side-effect-free t))
-  (let (success)
-    (--each-while list (not (setq success (funcall fn it))))
-    success))
 ;;; provide
-(provide 'oo-base-utils)
-;;; oo-base-utils.el ends here
+(provide 'base-utils)
+;;; base-utils.el ends here
