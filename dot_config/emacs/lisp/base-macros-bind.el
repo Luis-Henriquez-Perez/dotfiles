@@ -1,4 +1,4 @@
-;;; oo-base-macros-bind-bang.el --- binding macro -*- lexical-binding: t; -*-
+;;; base-macros-bind.el --- binding macro -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -326,5 +326,5 @@ combination with STATE.
 \(fn [STATE] [KEYMAP] KEY DEF . [PLIST])"
   (macroexp-progn (oo--bind-body args)))
 ;;; provide
-(provide 'oo-base-macros-bind-bang)
-;;; oo-base-macros-bind-bang.el ends here
+(provide 'base-macros-bind)
+;;; base-macros-bind.el ends here
