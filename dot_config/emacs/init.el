@@ -59,16 +59,9 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; features
 (require 'init-no-littering)
-(require 'init-custom)
-(require 'init-files)
-(require 'init-simple)
-(require 'init-startup)
-(require 'init-emacs-lock)
+(require 'init-dashboard)
 (require 'init-abbrev)
-(require 'init-frame)
-(require 'init-window)
 (require 'init-minibuffer)
-(require 'init-evil-textobj-syntax)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
@@ -127,8 +120,8 @@
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
-(require 'oo-init-hooks)
-(require 'oo-init-keybindings)
+(require 'oo-hooks)
+(require 'oo-keybindings)
 ;;; provide init
 (provide 'init)
 ;;; init.el ends here

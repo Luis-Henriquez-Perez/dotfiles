@@ -53,7 +53,7 @@
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
-(oo-call-after-load 'em-alias #'require 'oo-eshell-aliases)
+(oo-call-after-load 'em-alias #'require 'config-em-alias)
 
 (bind! oo-app-map "e" #'eshell)
 ;;; provide
