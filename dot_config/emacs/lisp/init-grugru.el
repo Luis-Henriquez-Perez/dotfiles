@@ -28,7 +28,7 @@
 (require 'oo-base)
 
 (bind! i "C-c h" #'grugru)
-(oo-call-after-load 'grugru #'require 'oo-grugru-definitions)
+(oo-call-after-load 'grugru #'require 'config-grugru)
 ;;; provide
 (provide 'init-grugru)
 ;;; init-grugru.el ends here
