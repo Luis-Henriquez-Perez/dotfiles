@@ -1,4 +1,4 @@
-;;; oo-init-abbrevs.el --- abbrev configuration -*- lexical-binding: t; -*-
+;;; config-abbrev.el --- abbrev configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -100,5 +100,5 @@ abbreviation at point. This function assumes the abbreviations file
 
 
 ;;; provide
-(provide 'oo-init-abbrev)
-;;; oo-init-abbrev.el ends here
+(provide 'config-abbrev)
+;;; config-abbrev.el ends here
