@@ -33,16 +33,18 @@
   (format "Emacs started in %.2f seconds" (string-to-number (emacs-init-time))))
 
 (setq dashboard-init-info #'oo-dashboard-init-info)
+
+(defun oo-dashboard-buffer ()
+  (aprog1 (get-buffer-create dashboard-buffer-name)
+    (with-current-buffer it
+      (dashboard-insert-startupify-lists))))
+
+(setq initial-buffer-choice #'oo-dashboard-buffer)
+
 (setq dashboard-banner-logo-title "Welcome!")
 (setq dashboard-startupify-list (-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
 (setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 (setq dashboard-center-content t)
-
-(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
-  (when (require 'dashboard nil t)
-    (aprog1 (get-buffer-create dashboard-buffer-name)
-      (with-current-buffer it
-        (dashboard-insert-startupify-lists)))))
 ;;; provide
 (provide 'init-dashboard)
 ;;; init-dashboard.el ends here
