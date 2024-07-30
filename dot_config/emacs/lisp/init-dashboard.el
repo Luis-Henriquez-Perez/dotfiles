@@ -25,7 +25,7 @@
 ;; Initialize dashboard.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 (require 'dashboard)
 
 ;; If I put dashboard configuration in its own.

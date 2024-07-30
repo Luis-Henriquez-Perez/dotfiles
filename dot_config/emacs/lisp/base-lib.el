@@ -32,8 +32,11 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base-utils)
-(require 'oo-base-requirements)
+(require 'base-utils)
+(require 'init-elpaca)
+(require 'dash)
+(require 'shut-up)
+(eval-when-compile (require 'anaphora))
 (eval-when-compile (require 'oo-base-macros))
 
 (defvar evil-state-properties)
