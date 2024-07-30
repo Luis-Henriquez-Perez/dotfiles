@@ -73,13 +73,15 @@
 (defun oo--bind-define-key (metadata forms)
   "Prepend `define-key' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((define-key ,!keymap ,!key ,!def)
+    `(;; (message "(define-key* %s %S %s)" ',!keymap-value ,!key ,!def)
+      (define-key ,!keymap ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-evil-define-key (metadata forms)
   "Prepend `evil-define-key*' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!keymap ,!key ,!def)
+    `(;; (message "(evil-define-key* %s %s %S %s)" ,!state ',!keymap-value ,!key ,!def)
+      (evil-define-key* ,!state ,!keymap ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-evil-define-minor-mode-key (metadata forms)
