@@ -46,7 +46,7 @@
     (set! name (symbol-name symbol))
     (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
 ;;;; oo--defhook-forms
-(defun oo--defhook-forms (hook name args body append local)
+(defun oo--defhook-forms (name hook args body append local)
   "Return list of forms for defining a hook."
   (set! name (intern (format "%s&%s" hook name)))
   `((defun ,name (&rest args)
