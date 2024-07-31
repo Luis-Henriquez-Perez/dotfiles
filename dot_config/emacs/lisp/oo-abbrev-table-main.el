@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("orners" "corners")
+  '(("cnfig" "configuration")
+    ("orners" "corners")
     ("sometiems" "sometimes")
     ("abstractioins" "abstractions")
     ("capt" "captain")
