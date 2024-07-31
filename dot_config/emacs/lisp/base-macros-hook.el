@@ -33,14 +33,12 @@
 ;; abruptly try to run as many hook functions as you can.
 ;;
 ;;; Code:
-(require 'oo-base-vars)
-(require 'oo-base-lib)
-
-(defmacro! hook! (name &rest plist)
+;;;; requirements
 (require 'base-vars)
 (require 'base-lib)
+(require 'base-macros-definers)
 ;;;; hook!
-(defmacro! hook! (hook function &rest plist)
+(defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
 NAME is a symbol of the form HOOK&FUNCTION.  HOOK is the hook to which the
 symbol NAME will be added.  FUNCTION is the function NAME should call when
@@ -48,7 +46,7 @@ invoked.  The defined function will log its usage and suppress errors whenever
 `oo-debug-p' is nil, logging them instead."
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
-  (set! name (intern (format "%s&%s" hook function)))
+  (set! name (intern (format "%s&%s" hook fn)))
   `(progn (defun ,name (&rest args)
             (info! "Running hook %s -> %s..." ',hook ',fn)
             (condition-case err
@@ -75,6 +73,8 @@ NAME should be a hook symbol."
   `(prog1 ',name
      (fset ',name (lambda ,args (progn! ,@body)))
      (add-hook ',hook ',name ,@params)))
+;;;; hookalias!
+(defmacro hookalias! ())
 ;;; provide
 (provide 'oo-base-macros-hook-bang)
 ;;; oo-base-macros-hook-bang.el ends here

@@ -25,21 +25,9 @@
 ;; Initialize simple.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
-(hook! text-mode-hook&visual-line-mode)
-;;;; don't add indent
-(setq-default indent-tabs-mode nil)
-;;;; disable the blinking of matching parentheses
-;; This made scrolling the cursor really slow.  Maybe because it was enabled
-;; with =show-parens-mode= at the same time.  This isn't needed if I have
-;; =show-parens-mode= already enabled.
-(setq blink-matching-paren nil)
-;;;; don't suggest keybindings or the like for me
-;; See [[https://stackoverflow.com/questions/19781529/how-to-disable-emacs-messages-like-you-can-run-the-command-x-with-y][this stackoverflow post]].  After invoking [[file:snapshots/*helpful command: execute-extended-command*.png][execute-extended-command]] on a
-;; command that has an existing keybinding, or something that could be abbreviated,
-;; emacs will suggest a shorter way.
-(setq suggest-key-bindings nil)
+(hook! text-mode-hook visual-line-mode)
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
 (defadvice! kill-buffer--possibly-save@ARprompt-clearly (_ buffer &rest args)

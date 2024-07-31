@@ -25,9 +25,9 @@
 ;; Initialize savehist.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
-(hook! on-first-input-hook&savehist-mode)
+(hook! on-first-input-hook savehist-mode)
 (opt! savehist-save-minibuffer-history t)
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
