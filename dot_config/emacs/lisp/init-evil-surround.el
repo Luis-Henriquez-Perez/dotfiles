@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'oo-base)
 
-(hook! prog-mode-hook&evil-surround-mode)
-(hook! text-mode-hook&evil-surround-mode)
+(hook! prog-mode-hook evil-surround-mode)
+(hook! text-mode-hook evil-surround-mode)
 ;;; provide
 (provide 'init-evil-surround)
 ;;; init-evil-surround.el ends here
