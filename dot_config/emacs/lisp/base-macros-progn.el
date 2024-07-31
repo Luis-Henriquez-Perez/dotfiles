@@ -27,15 +27,15 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'pcase)
-(require 'oo-base-requirements)
-(require 'oo-base-utils)
-(require 'oo-base-macros-lef-bang)
-(require 'oo-base-macros-let-bang)
-(require 'oo-base-macros-for-bang)
-(require 'oo-base-macros-ing)
+(require 'base-requirements)
+(require 'base-utils)
+(require 'base-macros-lef-bang)
+(require 'base-macros-let-bang)
+(require 'base-macros-for-bang)
+(require 'base-macros-ing)
 ;;;; progn!
 ;;;;; helpers
-(defun oo--parse-progn-bang (data forms)
+(defun oo--parse-progn (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
 `progn!'."
@@ -114,13 +114,13 @@ Must be used in `progn!'."
 (defalias 'noflet! 'stub!)
 (defalias 'nflet! 'stub!)
 ;;;;; generate the body of progn!
-(defun oo--generate-progn-bang-body (forms &optional lets nolets wrappers)
+(defun oo--generate-progn-body (forms &optional lets nolets wrappers)
   "Return the body for `progn!'.
 FORMS is the set of froms from which the resulting body will be generated.  LETS
 is a list of symbols to be bound.  NOLETS is a list of symbols that should not
 be bound and which takes precedence over LETS.  WRAPPERS a list of forms to wrap
 around the resulting body."
-  (let! (((data body) (oo--parse-progn-bang nil forms))
+  (let! (((data body) (oo--parse-progn nil forms))
          (lets (append (mapcar #'list lets) (map-elt data :let)))
          (nolets (append nolets (map-elt data :nolet)))
          (wrappers (append wrappers (map-elt data :wrappers)))
@@ -176,7 +176,7 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
-  (oo--generate-progn-bang-body body))
+  (oo--generate-progn-body body))
 
-(provide 'oo-base-macros-progn-bang)
-;;; oo-progn-macro.el ends here
+(provide 'base-macros-progn)
+;;; base-macros-progn.el ends here
