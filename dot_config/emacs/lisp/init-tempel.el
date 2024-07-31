@@ -32,7 +32,7 @@
 (autoload #'tempel-insert "tempel" nil t 'function)
 (autoload #'tempel-expand "tempel" nil t 'function)
 ;;;; capf
-(defun oo-setup-tempel-capf ()
+(defhook! setup-tempel-capf (prog-mode-hook text-mode-hook)
   "Add the Tempel Capf to `completion-at-point-functions'."
   ;; `tempel-expand' only triggers on exact matches. Alternatively use
   ;; `tempel-complete' if you want to see all matches, but then you
@@ -41,9 +41,6 @@
   ;; `tempel-expand' *before* the main programming mode Capf, such
   ;; that it will be tried first.
   (setq-local completion-at-point-functions (cons #'tempel-expand completion-at-point-functions)))
-
-(oo-add-hook 'prog-mode-hook #'oo-setup-tempel-capf)
-(oo-add-hook 'text-mode-hook #'oo-setup-tempel-capf)
 ;;;; keybindings
 (bind! i tempel-map "C-j" #'tempel-next)
 (bind! i tempel-map "C-k" #'tempel-previous)
