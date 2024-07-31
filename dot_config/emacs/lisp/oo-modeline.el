@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 (require 'battery)
+(require 'base)
 
 (defvar org-timer-mode-line-string)
 ;;;; macro to generate a modeline segment

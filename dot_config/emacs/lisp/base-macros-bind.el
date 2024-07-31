@@ -325,6 +325,11 @@ combination with STATE.
 
 \(fn [STATE] [KEYMAP] KEY DEF . [PLIST])"
   (macroexp-progn (oo--bind-body args)))
+;;;; alt!
+(defmacro alt! (old new feature)
+  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
+                (gethash ',old oo-alternate-commands))
+          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))));;; provide
 ;;; provide
 (provide 'base-macros-bind)
 ;;; base-macros-bind.el ends here
