@@ -37,6 +37,33 @@
 (require 'base-vars)
 (require 'base-lib)
 (require 'base-macros-definers)
+;;;; oo-hook-symbol-p
+(defun! oo-hook-symbol-p (symbol)
+  "Return non-nil if SYMBOL is a hook symbol."
+  (declare (pure t) (side-effect-free t))
+  (when (symbolp symbol)
+    (set! name (symbol-name symbol))
+    (when (string-match "\\(.+\\)&.+" it)
+      (intern (match-string 1 it)))))
+;;;; oo--hook-forms
+(defun oo--hook-forms (hook fn append local)
+  "Return list of forms for defining a hook."
+  (set! name (intern (format "%s&%s" hook fn)))
+  `((defun ,name (&rest args)
+      (info! "Running hook %s -> %s..." ',hook ',fn)
+      (condition-case err
+          (apply #',fn args)
+        (error (if oo-debug-p
+                   (signal (car err) (cdr err))
+                 (error! "Error %s calling %s in %s because of %s"
+                         ',hook
+                         ',fn
+                         (car err)
+                         (cdr err))))))
+    (add-hook ',hook #',name ,append ,local)))
+;;;; parse defhook arguments
+(defun oo--defhook-args ()
+  ())
 ;;;; hook!
 (defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
@@ -46,35 +73,17 @@ invoked.  The defined function will log its usage and suppress errors whenever
 `oo-debug-p' is nil, logging them instead."
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
-  (set! name (intern (format "%s&%s" hook fn)))
-  `(progn (defun ,name (&rest args)
-            (info! "Running hook %s -> %s..." ',hook ',fn)
-            (condition-case err
-                (apply #',fn args)
-              (error (if oo-debug-p
-                         (signal (car err) (cdr err))
-                       (error! "Error %s calling %s in %s because of %s"
-                               ',hook
-                               ',fn
-                               (car err)
-                               (cdr err))))))
-          (add-hook ',hook #',name ,append ,local)))
+  (oo--hook-forms hook fn append local))
 ;;;; defhook!
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (set! hook (oo-hook name))
-  (cl-assert hook t "%s is not a hook symbol" hook)
   (when (vectorp (car body))
     (alet (append (pop body) nil)
       (set! params (list (or (map-elt it :depth) (map-elt it :append))
                          (map-elt it :local)))))
-  `(prog1 ',name
-     (fset ',name (lambda ,args (progn! ,@body)))
-     (add-hook ',hook ',name ,@params)))
-;;;; hookalias!
-(defmacro hookalias! ())
+  (oo--hook-forms hook `(lambda ,args (progn! ,@body))))
 ;;; provide
 (provide 'oo-base-macros-hook-bang)
 ;;; oo-base-macros-hook-bang.el ends here
