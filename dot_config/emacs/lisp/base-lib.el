@@ -133,16 +133,6 @@ Unlike `add-hook'."
   (if (and fsym hook)
       (remove-hook hook fsym)
     (remove-hook (oo-hook fsym) fsym)))
-;;;;; oo-hook
-(defun! oo-hook (fsym)
-  "Return the hook symbol for FSYM."
-  (declare (pure t) (side-effect-free t))
-  (cl-assert (symbolp fsym))
-  (alet (symbol-name fsym)
-    (when (string-match "\\(.+\\)&.+" it)
-      (intern (match-string 1 it)))))
-;;;;; oo-hook-p
-(defalias 'oo-hook-p 'oo-hook "Return non-nil if FSYM is a hook symbol.")
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
