@@ -1,4 +1,4 @@
-;;; oo-base-macros-definers.el --- defining macros -*- lexical-binding: t; -*-
+;;; base-macros-definers.el --- defining macros -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,8 +25,8 @@
 ;; Define definer macros.
 ;;
 ;;; Code:
-(require 'oo-base-macros-with-map-bang)
-(require 'oo-base-macros-progn-bang)
+(require 'base-macros-with-map-bang)
+(require 'base-macros-progn-bang)
 
 (defun oo--arglist (arglist)
   "Return the list of argument symbols in ARGLIST."
@@ -109,5 +109,5 @@ NAME, ARGS and BODY are the same as in `defun'.
                          (oo--prognify-components)
                          (oo--finalize-components))))
 ;;; provide
-(provide 'oo-base-macros-definers)
-;;; oo-base-macros-definers.el ends here
+(provide 'base-macros-definers)
+;;; base-macros-definers.el ends here
