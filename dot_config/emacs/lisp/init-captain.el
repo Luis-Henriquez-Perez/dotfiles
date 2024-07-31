@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'base)
 
-(hook! prog-mode-hook&captain-mode)
-(hook! text-mode-hook&captain-mode)
+(hook! prog-mode-hook captain-mode)
+(hook! text-mode-hook captain-mode)
 
 (defhook! text-mode-hook&set-captain-local-vars ()
   (setq-local captain-predicate #'always)

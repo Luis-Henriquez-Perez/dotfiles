@@ -27,9 +27,9 @@
 ;;; Code:
 (require 'base)
 
-(hook! eshell-mode-hook&abbrev-mode)
-(hook! eshell-mode-hook&smartparens-mode)
-(hook! eshell-mode-hook&eat-eshell-mode)
+(hook! eshell-mode-hook abbrev-mode)
+(hook! eshell-mode-hook smartparens-mode)
+(hook! eshell-mode-hook eat-eshell-mode)
 
 (autoload #'eshell-z "eshell-z" nil t 'function)
 (autoload #'eshell-up "eshell-up" nil t 'function)

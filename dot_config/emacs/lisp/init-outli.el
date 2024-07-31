@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! prog-mode-hook&outli-mode)
+(hook! prog-mode-hook outli-mode)
 ;; TODO: figure out how to make this a named advice.
 (with-eval-after-load 'outli
   (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)

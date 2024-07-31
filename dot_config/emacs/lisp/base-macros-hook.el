@@ -37,6 +37,10 @@
 (require 'oo-base-lib)
 
 (defmacro! hook! (name &rest plist)
+(require 'base-vars)
+(require 'base-lib)
+;;;; hook!
+(defmacro! hook! (hook function &rest plist)
   "Define a function named NAME and add it to hook.
 NAME is a symbol of the form HOOK&FUNCTION.  HOOK is the hook to which the
 symbol NAME will be added.  FUNCTION is the function NAME should call when
@@ -44,10 +48,7 @@ invoked.  The defined function will log its usage and suppress errors whenever
 `oo-debug-p' is nil, logging them instead."
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
-  (alet (symbol-name name)
-    (string-match "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)" it)
-    (set! hook (intern (match-string 1 it)))
-    (set! fn (intern (match-string 2 it))))
+  (set! name (intern (format "%s&%s" hook function)))
   `(progn (defun ,name (&rest args)
             (info! "Running hook %s -> %s..." ',hook ',fn)
             (condition-case err
