@@ -25,7 +25,7 @@
 ;; Initialize evil-cleverparens.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
 (bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)

@@ -1,4 +1,4 @@
-;;; oo-base-macros-with-map-bang.el -*- lexical-binding: t; -*-
+;;; base-macros-with-map.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -26,9 +26,9 @@
 ;; expression.
 ;;
 ;;; Code:
-(require 'oo-base-requirements)
-(require 'oo-base-utils)
-(require 'oo-base-macros-ing)
+(require 'base-requirements)
+(require 'base-utils)
+(require 'base-macros-ing)
 ;;;; map!
 (defun oo--generate-with-map-body (map body &optional use-keywords-p)
   "Return a list of let-bindings for `with-map!'.
@@ -68,5 +68,5 @@ SYMBOL).  Occurrences of !!SYMBOL is let-bound to the result of evaluating
   `(let* ,(oo--generate-with-map-body map body)
      ,@body))
 ;;; provide
-(provide 'oo-base-macros-with-map-bang)
-;;; oo-base-macros-with-map-bang.el ends here
+(provide 'base-macros-with-map)
+;;; base-macros-with-map.el ends here

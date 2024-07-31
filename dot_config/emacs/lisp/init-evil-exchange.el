@@ -25,7 +25,7 @@
 ;; Initialize evil-exchange.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (bind! (n v) "g x" #'evil-exchange)
 (bind! (n v) "g X" #'evil-exchange-cancel)

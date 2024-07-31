@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 (require 'oo-override-mode)
-(eval-when-compile (require 'oo-base-macros-bind-bang))
+(eval-when-compile (require 'base-macros-bind))
 ;;;; base leaders
 ;; This file provides leaders keys for evil and non-evil states and it binds
 ;; these leader keys.

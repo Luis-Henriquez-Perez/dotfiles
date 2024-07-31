@@ -25,7 +25,7 @@
 ;; Initialize files.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; backup files to trash
 (setq backup-directory-alist '((".*" . "~/.Trash")))
 ;;;; don't make backups

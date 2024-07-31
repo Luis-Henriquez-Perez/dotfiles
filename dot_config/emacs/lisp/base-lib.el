@@ -1,4 +1,4 @@
-;;; oo-base-lib.el --- external package library -*- lexical-binding: t; -*-
+;;; base-lib.el --- external package library -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,8 +22,8 @@
 ;;
 ;;; Commentary:
 ;;
-;; Compared to `oo-base-utils' this library has functions that on external
-;; packages loaded in `oo-base-requirements'.
+;; Compared to `base-utils' this library has functions that on external
+;; packages loaded in `base-requirements'.
 
 ;; This file contains functions and macros directly used for customizing Emacs
 ;; by which I mean for doing things like adding hooks, adding advices, and
@@ -246,5 +246,5 @@ SYMBOL and FN in `oo-after-load-hash-table'."
       (funcall fn it)
     (push fn (gethash char oo-after-load-hash-table))))
 ;;; provide
-(provide 'oo-base-lib)
-;;; oo-base-lib.el ends here
+(provide 'base-lib)
+;;; base-lib.el ends here

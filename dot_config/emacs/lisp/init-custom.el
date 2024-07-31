@@ -25,7 +25,7 @@
 ;; Initialize custom.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; don't ask me for permission to enable a theme
 ;; By default Emacs will ask you whether you are sure you want to enable a theme
 ;; as a precaution because a theme could contain malicious code.  Downloading

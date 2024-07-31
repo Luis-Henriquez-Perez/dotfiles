@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! on-first-input-hook gumshoe-mode)
 ;;; provide

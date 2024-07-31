@@ -25,7 +25,7 @@
 ;; Initialize evil-textobj-line.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)

@@ -25,7 +25,7 @@
 ;; Initialize org-superstar.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! org-mode-hook org-superstar-mode)
 

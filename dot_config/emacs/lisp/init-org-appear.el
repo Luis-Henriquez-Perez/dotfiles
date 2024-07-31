@@ -25,7 +25,7 @@
 ;; Initialize org-appear.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! org-mode-hook org-appear-mode)
 (opt! org-appear-autolinks t)

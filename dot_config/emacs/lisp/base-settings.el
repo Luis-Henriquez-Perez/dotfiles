@@ -1,4 +1,4 @@
-;;; oo-base-settings.el --- core settings -*- lexical-binding: t; -*-
+;;; base-settings.el --- core settings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -266,5 +266,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; hooks myself if I want it enabled.  Therefore, I disable it here.
 (setq show-paren-predicate nil)
 ;;; provide
-(provide 'oo-base-settings)
-;;; oo-base-settings.el ends here
+(provide 'base-settings)
+;;; base-settings.el ends here

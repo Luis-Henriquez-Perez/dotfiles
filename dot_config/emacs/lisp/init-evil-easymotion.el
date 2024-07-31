@@ -25,7 +25,7 @@
 ;; Initialize evil-easymotion.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! evilem-style 'at)
 (opt! evilem-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))

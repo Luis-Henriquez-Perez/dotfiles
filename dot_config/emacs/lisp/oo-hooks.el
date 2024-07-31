@@ -74,7 +74,7 @@ file is loaded."
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
 (defhook! require-macros (emacs-lisp-mode-hook)
-  (require 'oo-base-macros))
+  (require 'base-macros))
 (defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords

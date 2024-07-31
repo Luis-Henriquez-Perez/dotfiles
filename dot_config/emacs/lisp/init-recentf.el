@@ -25,7 +25,7 @@
 ;; Initialize recentf.
 ;;
 ;;; Code:
-(eval-when-compile (require 'oo-base-macros-ing))
+(eval-when-compile (require 'base-macros-ing))
 (require 'base)
 (require 'recentf)
 

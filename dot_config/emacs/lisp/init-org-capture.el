@@ -25,7 +25,7 @@
 ;; Initialize org-capture.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (oo-popup-at-bottom "CAPTURE[^z-a]+")
 (opt! org-archive-save-context-info nil)
