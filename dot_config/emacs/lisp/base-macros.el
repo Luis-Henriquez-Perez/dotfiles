@@ -35,20 +35,6 @@
 (require 'base-macros-progn)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
-;;;;; defhook!
-(defmacro! defhook! (name args &rest body)
-  "Add function to hook as specified by NAME.
-NAME should be a hook symbol."
-  (declare (indent defun))
-  (set! hook (oo-hook name))
-  (cl-assert hook t "%s is not a hook symbol" hook)
-  (when (vectorp (car body))
-    (alet (append (pop body) nil)
-      (set! params (list (or (map-elt it :depth) (map-elt it :append))
-                         (map-elt it :local)))))
-  `(prog1 ',name
-     (fset ',name (lambda ,args (progn! ,@body)))
-     (add-hook ',hook ',name ,@params)))
 ;;;;; defadvice!
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
