@@ -58,7 +58,6 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; features
-(require 'base)
 (require 'init-no-littering)
 (require 'init-dashboard)
 (require 'init-abbrev)
