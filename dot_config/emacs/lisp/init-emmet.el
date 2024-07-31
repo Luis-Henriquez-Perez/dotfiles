@@ -25,7 +25,7 @@
 ;; Initialize emmet.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! html-mode-hook&emmet-mode)
 ;;; provide

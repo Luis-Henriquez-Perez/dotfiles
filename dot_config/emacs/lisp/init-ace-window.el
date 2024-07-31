@@ -25,7 +25,7 @@
 ;; Initialize ace-window.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! aw-swap-invert t)
 (opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))

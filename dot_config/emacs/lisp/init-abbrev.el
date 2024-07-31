@@ -25,7 +25,7 @@
 ;; Initialize abbrev-mode.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; hooks
 (hook! prog-mode-hook&abbrev-mode)
 (hook! text-mode-hook&abbrev-mode)

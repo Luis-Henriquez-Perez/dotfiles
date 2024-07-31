@@ -25,7 +25,7 @@
 ;; Initialize helpful.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (alt! describe-function helpful-callable helpful)
 (alt! describe-command helpful-command helpful)

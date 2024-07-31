@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base)
+(require 'base)
 ;;;; autoloads
 (autoload #'tempel-complete "tempel" nil t 'function)
 (autoload #'tempel-insert "tempel" nil t 'function)

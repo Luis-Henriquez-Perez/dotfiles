@@ -25,7 +25,7 @@
 ;; Initialize gcmh.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! emacs-startup-hook&gcmh-mode :depth 91)
 (opt! gcmh-idle-delay 'auto)

@@ -25,7 +25,7 @@
 ;; Initialize captain-mode.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! prog-mode-hook&captain-mode)
 (hook! text-mode-hook&captain-mode)

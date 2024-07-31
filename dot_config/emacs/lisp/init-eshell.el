@@ -25,7 +25,7 @@
 ;; Initialize eshell.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! eshell-mode-hook&abbrev-mode)
 (hook! eshell-mode-hook&smartparens-mode)

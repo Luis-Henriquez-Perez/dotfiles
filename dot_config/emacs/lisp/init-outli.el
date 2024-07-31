@@ -25,7 +25,7 @@
 ;; Initialize outli.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! prog-mode-hook&outli-mode)
 ;; TODO: figure out how to make this a named advice.

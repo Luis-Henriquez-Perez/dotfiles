@@ -25,7 +25,7 @@
 ;; Initialize evil.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (defhook! after-init-hook&load-evil ()
   [:depth 10]

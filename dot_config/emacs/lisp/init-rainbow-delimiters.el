@@ -25,7 +25,7 @@
 ;; Initialize rainbow-delimiters.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! prog-mode-hook&rainbow-delimiters-mode)
 (hook! reb-mode-hook&rainbow-delimiters-mode)

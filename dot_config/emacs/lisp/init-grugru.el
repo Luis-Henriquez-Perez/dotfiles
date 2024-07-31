@@ -25,7 +25,7 @@
 ;; Initialize grugru.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (bind! i "C-c h" #'grugru)
 (oo-call-after-load 'grugru #'require 'config-grugru)

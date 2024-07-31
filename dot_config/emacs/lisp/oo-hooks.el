@@ -26,7 +26,7 @@
 ;; other words, the hooks that cannot go into "after-load" files.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; hooks
 ;; I had been organizing the init file by packages and that is not entirely
 ;; useless but I think maybe an abstraction in which I look at what is happening

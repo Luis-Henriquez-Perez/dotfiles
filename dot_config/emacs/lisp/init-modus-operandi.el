@@ -25,7 +25,7 @@
 ;; Initialize modus-operandi.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (defhook! after-init-hook&load-modus-operandi-theme ()
   "Load `modus-operandi' theme."

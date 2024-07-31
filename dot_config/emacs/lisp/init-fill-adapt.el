@@ -25,7 +25,7 @@
 ;; Initialize fill-adapt.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! auto-fill-mode-hook&filladapt-mode)
 ;;; provide

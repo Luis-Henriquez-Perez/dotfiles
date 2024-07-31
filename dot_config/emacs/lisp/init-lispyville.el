@@ -25,7 +25,7 @@
 ;; Initialize lispyville.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 ;; Do not bind any keys by default.
 (hook! prog-mode-hook&lispyville-mode)

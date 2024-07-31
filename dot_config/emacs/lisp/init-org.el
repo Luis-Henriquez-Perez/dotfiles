@@ -25,7 +25,7 @@
 ;; Initialize org.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)

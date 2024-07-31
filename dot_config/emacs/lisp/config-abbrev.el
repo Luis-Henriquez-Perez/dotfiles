@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'abbrev)
-(require 'oo-base)
+(require 'base)
 (require 'oo-abbrev-table-main)
 (require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs

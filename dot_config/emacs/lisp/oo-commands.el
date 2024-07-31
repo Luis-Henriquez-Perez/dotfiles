@@ -28,7 +28,7 @@
 ;; these functions are very specific to me and my workflow.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; custom functions
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."

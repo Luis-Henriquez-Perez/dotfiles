@@ -25,7 +25,7 @@
 ;; Initialize expreg.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (bind! v "V" #'expreg-contract)
 (bind! v "v" #'expreg-expand)

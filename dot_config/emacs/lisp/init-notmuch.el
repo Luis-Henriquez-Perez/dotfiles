@@ -25,7 +25,7 @@
 ;; Initialize notmuch.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! notmuch-sort-oldest-first nil)
 

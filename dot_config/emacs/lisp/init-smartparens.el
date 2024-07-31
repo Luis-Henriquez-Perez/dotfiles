@@ -25,7 +25,7 @@
 ;; Initialize smartparens.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! text-mode-hook&turn-on-show-smartparens-mode)
 (hook! text-mode-hook&smartparens-mode)

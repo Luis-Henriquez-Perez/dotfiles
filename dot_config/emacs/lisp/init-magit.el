@@ -25,7 +25,7 @@
 ;; Initialize magit.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (oo-call-after-load '(magit evil) #'evil-magit-init)
 (oo-popup-at-bottom "\\`magit")

@@ -25,7 +25,7 @@
 ;; Initialize aggressive-indent.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! emacs-lisp-mode-hook&aggressive-indent-mode)
 ;;; provide

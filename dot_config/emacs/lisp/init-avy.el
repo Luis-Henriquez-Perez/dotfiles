@@ -25,7 +25,7 @@
 ;; Initialize avy.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! avy-style 'pre)
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))

@@ -25,7 +25,7 @@
 ;; Initialize corfu-quick.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! corfu-quick1 "ajskdlghty")
 (opt! corfu-quick2 "ajskdlghty")

@@ -25,7 +25,7 @@
 ;; Initialize idle-require.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (oo-add-advice #'idle-require-load-next :around #'oo-funcall-silently)
 ;;; provide

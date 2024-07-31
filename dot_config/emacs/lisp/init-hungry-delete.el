@@ -25,7 +25,7 @@
 ;; Initialize hungry-delete.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 ;; Leave one space in between instead of deleting everything.
 (opt! hungry-delete-join-reluctantly t)

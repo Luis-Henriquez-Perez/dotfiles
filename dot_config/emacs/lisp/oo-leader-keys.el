@@ -25,7 +25,7 @@
 ;; These are all my initial keybindings for my Emacs configuration.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 (require 'oo-override-mode)
 (eval-when-compile (require 'oo-base-macros-bind-bang))
 ;;;; base leaders

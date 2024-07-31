@@ -25,7 +25,7 @@
 ;; Initialize dired.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! dired-mode-hook&dired-omit-mode)
 ;; By default hide details.

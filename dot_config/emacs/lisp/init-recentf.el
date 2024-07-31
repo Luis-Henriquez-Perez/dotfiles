@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (eval-when-compile (require 'oo-base-macros-ing))
-(require 'oo-base)
+(require 'base)
 (require 'recentf)
 
 (hook! emacs-startup-hook&recentf-mode)

@@ -25,7 +25,7 @@
 ;; Initialize dirvish.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! dirvish-use-mode-line nil)
 (opt! dirvish-attributes '(file-size subtree-state))

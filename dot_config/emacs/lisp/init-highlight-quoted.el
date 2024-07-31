@@ -25,7 +25,7 @@
 ;; Initialize highlight-quoted.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (hook! emacs-lisp-mode-hook&highlight-quoted-mode)
 ;;; provide

@@ -25,7 +25,7 @@
 ;; Initialize burly.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-window-map "S" #'burly-bookmark-windows)
