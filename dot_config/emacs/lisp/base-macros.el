@@ -38,6 +38,7 @@
 (require 'base-macros-progn)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
+(require 'base-macros-opt)
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
