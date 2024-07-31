@@ -37,7 +37,7 @@
 (require 'dash)
 (require 'shut-up)
 (eval-when-compile (require 'anaphora))
-(eval-when-compile (require 'oo-base-macros))
+(eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
 ;;;; oo-first-success
