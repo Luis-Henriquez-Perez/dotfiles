@@ -25,7 +25,7 @@
 ;; Initialize org-id.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! org-id-track-globally t)
 (opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))

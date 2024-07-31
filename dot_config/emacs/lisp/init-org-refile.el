@@ -25,7 +25,7 @@
 ;; Initialize org-refile.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (opt! org-refile-allow-creating-parent-nodes t)
 ;; The variable =org-refile-targets= specifies the places from which information is
