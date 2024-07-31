@@ -85,15 +85,12 @@ invoked.  The defined function will log its usage and suppress errors whenever
                                (cdr err))))))
           (add-hook ',hook #',name ,append ,local)))
 ;;;; defhook!
-(defmacro! defhook! (name args &rest body)
+(defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (when (vectorp (car body))
-    (alet (append (pop body) nil)
-      (set! params (list (or (map-elt it :depth) (map-elt it :append))
-                         (map-elt it :local)))))
-  (oo--defhook-forms 'org-mode-hook name args body t nil))
+  (set! (name hooks args depth local) (oo--defhook-arguments args))
+  (macroexp-progn (--mapcat (oo--defhook-forms name it args body depth local) hooks)))
 ;;; provide
 (provide 'oo-base-macros-hook-bang)
 ;;; oo-base-macros-hook-bang.el ends here
