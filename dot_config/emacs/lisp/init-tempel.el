@@ -40,7 +40,7 @@
   ;; does not trigger too often when you don't expect it. NOTE: We add
   ;; `tempel-expand' *before* the main programming mode Capf, such
   ;; that it will be tried first.
-  (setq-local completion-at-point-functions (cons #'tempel-expand completion-at-point-functions)))
+  (pushing! completion-at-point-functions #'tempel-expand :setter setq-local))
 ;;;; keybindings
 (bind! i tempel-map "C-j" #'tempel-next)
 (bind! i tempel-map "C-k" #'tempel-previous)
