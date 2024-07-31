@@ -36,13 +36,13 @@
 ;;;;; after-init-hook
 (hook! after-init-hook oo-override-mode :depth -100)
 ;;;;; emacs-startup-hook
-(defhook! emacs-startup-hook&restore-startup-values ()
+(defhook! restore-startup-values (emacs-startup-hook)
   [:depth 91]
   (require 'oo-init-modeline)
   (oo-restore-value 'file-name-handler-alist)
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection))
-(defhook! emacs-startup-hook&init-after-load-functions ()
+(defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
@@ -50,7 +50,7 @@ file is loaded."
   (hook! after-load-functions oo-call-after-load-functions))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! minibuffer-setup-hook&increase-garbage-collection ()
+(defhook! increase-garbage-collection (minibuffer-setup-hook)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
   [:depth 10]
   (oo-record-value 'gc-cons-threshold)
@@ -58,7 +58,7 @@ file is loaded."
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
-(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+(defhook! decrease-garbage-collection (minibuffer-exit-hook)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   [:depth 90]
   (oo-restore-value 'gc-cons-threshold)
@@ -73,9 +73,9 @@ file is loaded."
 ;; all.  And again this is great for reducing startup time but I still want the
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
-(defhook! emacs-lisp-mode-hook&require-macros ()
+(defhook! require-macros (emacs-lisp-mode-hook)
   (require 'oo-base-macros))
-(defhook! emacs-lisp-mode-hook&enable-font-lock ()
+(defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
    'emacs-lisp-mode
@@ -89,7 +89,7 @@ file is loaded."
 ;; (hook! prog-mode-hook flyspell-prog-mode)
 (hook! prog-mode-hook auto-fill-mode)
 ;; TODO: figure out the best way to add these things.
-(defhook! prog-mode-hook&set-captain-local-vars ()
+(defhook! set-captain-local-vars (prog-mode-hook)
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;;;; text-mode-hook

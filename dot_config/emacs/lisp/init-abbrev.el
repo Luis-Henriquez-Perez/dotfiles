@@ -31,7 +31,7 @@
 (hook! text-mode-hook abbrev-mode)
 ;; Emacs loads abbreviation-mode automatically so instead of using something
 ;; like `with-eval-after-load' I am loading it in `abbrev-mode-hook'.
-(defhook! abbrev-mode-hook&apply-config ()
+(defhook! apply-config (abbrev-mode-hook)
   (require 'oo-init-abbrev))
 ;;;; bindings
 (bind! "C-c j" #'oo-add-new-abbrev)

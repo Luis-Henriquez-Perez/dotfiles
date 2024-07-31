@@ -30,7 +30,7 @@
 (hook! prog-mode-hook captain-mode)
 (hook! text-mode-hook captain-mode)
 
-(defhook! text-mode-hook&set-captain-local-vars ()
+(defhook! set-captain-local-vars (text-mode-hook)
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 

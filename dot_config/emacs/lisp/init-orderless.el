@@ -29,7 +29,7 @@
 
 (opt! orderless-matching-styles '(orderless-initialism orderless-regexp))
 
-(defhook! vertico-mode-hook&enable-orderless ()
+(defhook! enable-orderless (vertico-mode-hook)
   (when (require 'orderless nil t)
     (setq completion-styles '(orderless))
     (setq completion-category-defaults nil)

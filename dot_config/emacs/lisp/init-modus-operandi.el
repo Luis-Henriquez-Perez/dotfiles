@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(defhook! after-init-hook&load-modus-operandi-theme ()
+(defhook! load-modus-operandi-theme (after-init-hook)
   "Load `modus-operandi' theme."
   (load-theme 'modus-operandi :no-confirm nil))
 ;;; provide
