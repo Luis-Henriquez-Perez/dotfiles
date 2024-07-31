@@ -25,7 +25,7 @@
 ;; Initialize rx.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (oo-call-after-load #'require 'oo-rx-definitions)
 ;;; provide
