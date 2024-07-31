@@ -47,7 +47,7 @@
     (when (string-match "\\(.+\\)&.+" it)
       (intern (match-string 1 it)))))
 ;;;; oo--hook-forms
-(defun oo--hook-forms (hook name body append local)
+(defun oo--defhook-forms (hook a args body append local)
   "Return list of forms for defining a hook."
   (set! name (intern (format "%s&%s" hook name)))
   `((defun ,name (&rest args)
@@ -58,13 +58,10 @@
                    (signal (car err) (cdr err))
                  (error! "Error %s calling %s in %s because of %s"
                          ',hook
-                         ',fn
+                         ',name
                          (car err)
                          (cdr err))))))
     (add-hook ',hook #',name ,append ,local)))
-;;;; parse defhook arguments
-(defun oo--defhook-args ()
-  ())
 ;;;; hook!
 (defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
@@ -96,7 +93,7 @@ NAME should be a hook symbol."
     (alet (append (pop body) nil)
       (set! params (list (or (map-elt it :depth) (map-elt it :append))
                          (map-elt it :local)))))
-  (macroexp-progn (--mapcat (oo--defhook-forms it name body) hooks)))
+  (oo--defhook-forms 'org-mode-hook name args body t nil))
 ;;; provide
 (provide 'oo-base-macros-hook-bang)
 ;;; oo-base-macros-hook-bang.el ends here
