@@ -28,14 +28,7 @@
 (require 'base-vars)
 (require 'base-settings)
 (require 'base-lib)
-(eval-when-compile (require 'base-macros-hook-bang))
-(eval-when-compile (require 'base-macros-lef-bang))
-(eval-when-compile (require 'base-macros-progn-bang))
-(eval-when-compile (require 'base-macros-bind-bang))
-(defmacro alt! (old new feature)
-  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
-                (gethash ',old oo-alternate-commands))
-          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))))
+(eval-when-compile (require 'base-macros))
 ;;; provide
 (provide 'base)
 ;;; base.el ends here
