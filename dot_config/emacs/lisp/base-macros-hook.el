@@ -1,4 +1,4 @@
-;;; oo-base-macros-hook-bang.el --- macro for adding hooks -*- lexical-binding: t; -*-
+;;; base-macros-hook-bang.el --- macro for adding hooks -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -46,8 +46,8 @@
     (set! name (symbol-name symbol))
     (when (string-match "\\(.+\\)&.+" it)
       (intern (match-string 1 it)))))
-;;;; oo--hook-forms
-(defun oo--defhook-forms (hook a args body append local)
+;;;; oo--defhook-forms
+(defun oo--defhook-forms (hook name args body append local)
   "Return list of forms for defining a hook."
   (set! name (intern (format "%s&%s" hook name)))
   `((defun ,name (&rest args)
@@ -62,6 +62,12 @@
                          (car err)
                          (cdr err))))))
     (add-hook ',hook #',name ,append ,local)))
+;;;; oo--defhook-arguments
+(defun oo--defhook-arguments (args)
+  (when (vectorp (car body))
+    (alet (append (pop body) nil)
+      (set! params (list (or (map-elt it :depth) (map-elt it :append))
+                         (map-elt it :local))))))
 ;;;; hook!
 (defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
@@ -92,5 +98,5 @@ NAME should be a hook symbol."
   (set! (name hooks args depth local) (oo--defhook-arguments args))
   (macroexp-progn (--mapcat (oo--defhook-forms name it args body depth local) hooks)))
 ;;; provide
-(provide 'oo-base-macros-hook-bang)
-;;; oo-base-macros-hook-bang.el ends here
+(provide 'base-macros-hook-bang)
+;;; base-macros-hook-bang.el ends here
