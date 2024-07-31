@@ -46,10 +46,10 @@
     (set! name (symbol-name symbol))
     (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
 ;;;; oo--defhook-forms
-(defun oo--defhook-forms (name hook args body append local)
+(defun! oo--defhook-forms (name hook args body append local)
   "Return list of forms for defining a hook."
   (set! name (intern (format "%s&%s" hook name)))
-  `((defun ,name (&rest args)
+  `((defun ,name ,args
       (info! "Running hook %s..." ',name)
       (condition-case err
           ,(macroexp-progn body)
@@ -74,7 +74,7 @@
       (set! depth (or (map-elt it :depth) (map-elt it :append)))
       (set! local (map-elt it :local))))
   (set! body args)
-  (list name arglist hooks depth local))
+  (list name arglist hooks body depth local))
 ;;;; hook!
 (defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
@@ -102,7 +102,7 @@ invoked.  The defined function will log its usage and suppress errors whenever
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (set! (name arglist hooks depth local) (oo--defhook-arguments args))
+  (set! (name arglist hooks body depth local) (oo--defhook-arguments args))
   (macroexp-progn (--mapcat (oo--defhook-forms name it arglist body depth local) hooks)))
 ;;; provide
 (provide 'base-macros-hook-bang)

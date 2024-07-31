@@ -33,11 +33,27 @@
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
-(defhook! after-save-hook&chezmoi-write-maybe (&rest _)
-  (when (aand (require 'chezmoi nil t)
-              (buffer-file-name)
-              (chezmoi-target-file it))
-    (with-demoted-errors "error:%S" (chezmoi-write))))
+(progn
+  (defun after-save-hook&chezmoi-write-maybe
+      (&rest args)
+    (info! "Running hook %s..." 'after-save-hook&chezmoi-write-maybe)
+    (condition-case err
+        (progn "Add the Tempel Capf to `completion-at-point-functions'."
+               (setq-local completion-at-point-functions
+                           (cons
+                            (function tempel-expand)
+                            completion-at-point-functions)))
+      (error
+       (if oo-debug-p
+           (signal
+            (car err)
+            (cdr err))
+         (error! "Error %s calling %s in %s because of %s" 'after-save-hook 'after-save-hook&chezmoi-write-maybe
+                 (car err)
+                 (cdr err))))))
+  (add-hook 'after-save-hook
+            (function after-save-hook&chezmoi-write-maybe)
+            nil nil))
 ;;; provide
 (provide 'init-chezmoi)
 ;;; init-chezmoi.el ends here
