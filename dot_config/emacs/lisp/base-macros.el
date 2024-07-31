@@ -29,21 +29,15 @@
 ;;
 ;;; Code:
 (require 'base-macros-ing)
-(require 'base-macros-for)
+(require 'base-macros-advice)
+(require 'base-macros-hook)
+(require 'base-macros-bind)
+(require 'base-macros-loop)
 (require 'base-macros-let)
 (require 'base-macros-lef)
 (require 'base-macros-progn)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
-;;;;; defadvice!
-(defmacro! defadvice! (name args &rest body)
-  "Define an advice."
-  (declare (indent defun))
-  (set! (symbol how-name _) (oo-advice-components name))
-  (set! how (cdr (assoc how-name oo-advice-how-alist)))
-  `(progn
-     (fset ',name (lambda ,args (progn! ,@body)))
-     (advice-add ',symbol ,how ',name)))
 ;;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
@@ -59,19 +53,11 @@ This is like `setq' but it is meant for configuring variables."
          (aif (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
-;;;; after!
-(defmacro! after! (expr &rest body)
-  (declare (indent 1))
-  `(oo-call-after-load ',expr (lambda () (with-no-warnings ,@body))))
+;;;;; alt!
+(defmacro alt! (old new feature)
+  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
+                (gethash ',old oo-alternate-commands))
+          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))));;; provide
 
-;; I want to enforce named after blocks as opposed to forms.  If you use a
-;; named function, you can always advice the function or override it before it
-;; is evaluated.
-(defmacro! defafter! (name expr &rest body)
-  (declare (indent defun))
-  `(progn
-     (defun ,name () ,@body)
-     (oo-call-after-load ',expr #',name)))
-;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
