@@ -38,26 +38,6 @@
 (require 'base-macros-progn)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
-;;;;; opt!
-;; The reason this needs to be a macro is because `value' might not be evaluated
-;; immediately.
-;; TODO: need better error handling for when value producess an error.
-(defmacro! opt! (symbol value)
-  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
-This is like `setq' but it is meant for configuring variables."
-  (let ((value-var (gensym "value")))
-    `(if (not (boundp ',symbol))
-         (push '(lambda () (opt! ,symbol ,value))
-               (gethash ',symbol oo-after-load-hash-table))
-       (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
-         (aif (get ',symbol 'custom-set)
-             (funcall it ',symbol ,value-var)
-           (with-no-warnings (setq ,symbol ,value-var)))))))
-;;;;; alt!
-(defmacro alt! (old new feature)
-  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
-                (gethash ',old oo-alternate-commands))
-          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))));;; provide
-
+;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
