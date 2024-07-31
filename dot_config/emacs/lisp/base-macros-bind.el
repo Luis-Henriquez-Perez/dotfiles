@@ -46,10 +46,10 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base-lib)
-(require 'oo-base-macros-lef-bang)
-(require 'oo-base-macros-definers)
-(require 'oo-base-macros-with-map-bang)
+(require 'base-lib)
+(require 'base-macros-lef-bang)
+(require 'base-macros-definers)
+(require 'base-macros-with-map-bang)
 ;;;; oo--let-bindings
 ;; I wanted a way to prevent select keys from being let-bound, the concrete case
 ;; was the character that I want to pass into
