@@ -44,14 +44,13 @@
   (declare (pure t) (side-effect-free t))
   (when (symbolp symbol)
     (set! name (symbol-name symbol))
-    (when (string-match "\\(.+\\)&.+" it)
-      (intern (match-string 1 it)))))
+    (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
 ;;;; oo--defhook-forms
 (defun oo--defhook-forms (hook name args body append local)
   "Return list of forms for defining a hook."
   (set! name (intern (format "%s&%s" hook name)))
   `((defun ,name (&rest args)
-      (info! "Running hook %s -> %s..." ',hook ',fn)
+      (info! "Running hook %s..." ',name)
       (condition-case err
           ,(macroexp-progn body)
         (error (if oo-debug-p
@@ -63,11 +62,19 @@
                          (cdr err))))))
     (add-hook ',hook #',name ,append ,local)))
 ;;;; oo--defhook-arguments
-(defun oo--defhook-arguments (args)
-  (when (vectorp (car body))
-    (alet (append (pop body) nil)
-      (set! params (list (or (map-elt it :depth) (map-elt it :append))
-                         (map-elt it :local))))))
+(defun! oo--defhook-arguments (args)
+  (set! name (pop args))
+  (set! arglist (pop args))
+  (while (oo-hook-symbol-p (car arglist))
+    (collecting! hooks (pop arglist)))
+  (when (stringp args)
+    (set! docstring (pop args)))
+  (when (vectorp (car args))
+    (alet (append (pop args) nil)
+      (set! depth (or (map-elt it :depth) (map-elt it :append)))
+      (set! local (map-elt it :local))))
+  (set! body args)
+  (list name arglist hooks depth local))
 ;;;; hook!
 (defmacro! hook! (hook fn &rest plist)
   "Define a function named NAME and add it to hook.
@@ -95,8 +102,8 @@ invoked.  The defined function will log its usage and suppress errors whenever
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (set! (name hooks args depth local) (oo--defhook-arguments args))
-  (macroexp-progn (--mapcat (oo--defhook-forms name it args body depth local) hooks)))
+  (set! (name arglist hooks depth local) (oo--defhook-arguments args))
+  (macroexp-progn (--mapcat (oo--defhook-forms name it arglist body depth local) hooks)))
 ;;; provide
 (provide 'base-macros-hook-bang)
 ;;; base-macros-hook-bang.el ends here
