@@ -139,7 +139,7 @@ is already narrowed."
         (concat (format ";;; %s --- initialize %s -*- lexical-binding: t; -*-\n" filename package)
                 (oo-copyright-license)
                 (format ";;; Commentary:\n;;\n;; Initialize %s.\n;;\n" package)
-                (format ";;; Code:\n(require 'oo-base)\n")
+                (format ";;; Code:\n(require 'base)\n")
                 content
                 (format ";;; provide\n(provide '%s)\n" feature)
                 (format ";;; %s ends here\n" filename)))
