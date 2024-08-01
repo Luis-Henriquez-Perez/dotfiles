@@ -27,11 +27,11 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'pcase)
-(require 'base-requirements)
+(require 'treepy)
 (require 'base-utils)
-(require 'base-macros-lef-bang)
-(require 'base-macros-let-bang)
-(require 'base-macros-for-bang)
+(require 'base-macros-lef)
+(require 'base-macros-let)
+(require 'base-macros-loop)
 (require 'base-macros-ing)
 ;;;; progn!
 ;;;;; helpers
