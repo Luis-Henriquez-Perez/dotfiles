@@ -150,6 +150,13 @@ is already narrowed."
   (require 'consult)
   (set! consult--buffer-display #'pop-to-buffer)
   (call-interactively #'consult-buffer))
+
+(defun! oo-load-random-theme ()
+  "Load a random theme."
+  (interactive)
+  (set! theme (seq-random-elt (custom-available-themes)))
+  (message "Loading theme %s..." theme)
+  (load-theme theme))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
