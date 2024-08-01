@@ -1,4 +1,4 @@
-;;; base-macros-for-bang.el -*- lexical-binding: t; -*-
+;;; base-macros-loop.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,7 +25,7 @@
 ;; Looping macros.
 ;;
 ;;; Code:
-(require 'base-macros-let-bang)
+(require 'base-macros-let)
 (require 'cl-lib)
 (require 'seq)
 ;;;; for!
@@ -67,5 +67,5 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
               (t
                (error "Unknown list predicate: %S" ',loop-struct)))))))
 ;;; provide
-(provide 'base-macros-for-bang)
-;;; base-macros-for-bang.el ends here
+(provide 'base-macros-loop)
+;;; base-macros-loop.el ends here
