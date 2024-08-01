@@ -52,7 +52,7 @@
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
 
-(oo-call-after-load 'evil #'require 'oo-after-load-evil)
+(require! config-evil)
 
 (bind! n "H" #'evil-first-non-blank)
 (bind! n "L" #'evil-last-non-blank)

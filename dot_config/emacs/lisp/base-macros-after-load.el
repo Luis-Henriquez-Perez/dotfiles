@@ -42,6 +42,29 @@
   `(progn
      (defun ,name () ,@body)
      (oo-call-after-load ',expr #',name)))
+
+(defmacro! require! (&rest args)
+  "Require FEATURE after EXPR is met.
+If no EXPR is provided and FEATURE is a configuration file derive expression
+from feature name."
+  (pcase args
+    (`(,config-file)
+     (set! expr )
+     (set! feature config-file))
+    (`(,expr ,file))
+    (t (error)))
+  (set! name (intern (format "oo--after-load-require-%S" feature)))
+  `(progn (unless (fboundp ',name)
+            (defun ,name ()
+              (require ',feature nil t nil)))
+          (oo-call-after-load 'em-alias #',name)))
+
+(defmacro! setq-hook! (hooks symbol value)
+  "Set the local value of hook."
+  (set! name (intern (format "set-%s" symbol)))
+  `(defhook! ,name ,(ensure-list hooks)
+     ,(format "Set local variable %S locally." symbol value)
+     (setq-local ,symbol ,value)))
 ;;; provide
 (provide 'base-macros-after-load)
 ;;; base-macros-after-load.el ends here

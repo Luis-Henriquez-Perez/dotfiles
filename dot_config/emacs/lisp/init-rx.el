@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-call-after-load 'rx #'require 'config-rx)
+(require! config-rx)
 ;;; provide
 (provide 'init-rx)
 ;;; init-rx.el ends here

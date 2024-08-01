@@ -34,7 +34,7 @@
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 
-(oo-call-after-load 'captain #'require 'config-captain)
+(require! config-captain)
 ;;; provide
 (provide 'init-captain)
 ;;; init-captain.el ends here
