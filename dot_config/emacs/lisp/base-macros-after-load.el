@@ -47,21 +47,24 @@
   "Require FEATURE after EXPR is met.
 If no EXPR is provided and FEATURE is a configuration file derive expression
 from feature name."
-  (flet! config-feature-p (symbol)
-    (string-match (rx bos "config" (group (1+ (not white))) eos) (symbol-name symbol)))
-  (pcase args
-    (`(,(and (pred config-feature-p) config-file))
-     (set! expr (match-string 1))
-     (set! feature config-file))
-    (`(,expr ,feature)
-     )
-    (t
-     (error)))
-  (set! name (intern (format "oo--after-load-require-%S" feature)))
+  (flet! config-feature (symbol)
+    (alet (symbol-name symbol)
+      (string-match "\\`config-\\([^[:space:]]+\\)\\'" it)
+      (intern (match-string 1 it))))
+  (cond ((null (nthcdr 1 args))
+         (set! config-file (car args))
+         (set! expr (config-feature config-file))
+         (set! feature config-file))
+        ((null (nthcdr 1 args))
+         (set! (expr feature) args))
+        (t
+         ;; (error "")
+         ))
+  (set! name (intern (format "oo--require-%S" feature)))
   `(progn (unless (fboundp ',name)
             (defun ,name ()
               (require ',feature nil t nil)))
-          (oo-call-after-load 'em-alias #',name)))
+          (oo-call-after-load ',expr #',name)))
 
 (defmacro! setq-hook! (hooks symbol value)
   "Set the local value of hook."
