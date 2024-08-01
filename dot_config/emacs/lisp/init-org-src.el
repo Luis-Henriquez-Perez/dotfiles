@@ -25,7 +25,7 @@
 ;; Initialize org-src.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 
 (oo-popup-at-bottom "\\*Org Src")
 (opt! org-edit-src-persistent-message nil)
