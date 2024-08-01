@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("req" "requirement")
+  '(("deps" "dependencies")
+    ("req" "requirement")
     ("udate" "update")
     ("cnfig" "configuration")
     ("orners" "corners")
