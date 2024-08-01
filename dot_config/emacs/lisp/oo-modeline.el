@@ -107,7 +107,7 @@
     (require 'vc)
     (aand (vc-backend buffer-file-name)
           (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
-          (string-trim it))))
+          (and (stringp it) (string-trim it)))))
 ;;;; default directory
 (defsegment! directory ()
   (abbreviate-file-name default-directory))
