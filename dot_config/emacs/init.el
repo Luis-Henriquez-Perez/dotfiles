@@ -66,7 +66,7 @@
 (require 'init-aggressive-indent)
 (require 'init-avy)
 (require 'init-burly)
-(require 'init-captain-mode)
+(require 'init-captain)
 (require 'init-chezmoi)
 (require 'init-consult)
 (require 'init-corfu-history)

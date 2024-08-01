@@ -1,4 +1,4 @@
-;;; init-captain-mode.el --- initialize captain-mode -*- lexical-binding: t; -*-
+;;; init-captain.el --- initialize captain-mode -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -36,5 +36,5 @@
 
 (oo-call-after-load 'captain #'require 'config-captain)
 ;;; provide
-(provide 'init-captain-mode)
-;;; init-captain-mode.el ends here
+(provide 'init-captain)
+;;; init-captain.el ends here
