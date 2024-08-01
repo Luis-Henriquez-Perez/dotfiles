@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("deps" "dependencies")
+  '(("rnadom" "random")
+    ("deps" "dependencies")
     ("req" "requirement")
     ("udate" "update")
     ("cnfig" "configuration")
