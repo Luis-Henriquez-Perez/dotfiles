@@ -29,14 +29,12 @@
 ;;
 ;;; Code:
 (require 'base-macros-ing)
-;; (require 'base-macros-advice)
 (require 'base-macros-hook)
 (require 'base-macros-bind)
 (require 'base-macros-loop)
 (require 'base-macros-let)
 (require 'base-macros-lef)
 (require 'base-macros-progn)
-(require 'base-macros-with-map)
 (require 'base-macros-opt)
 ;;; provide
 (provide 'base-macros)
