@@ -54,7 +54,13 @@
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
 
-(require! config-em-alias)
+(progn
+  (unless
+      (fboundp 'oo--require-config-em-alias)
+    (defun oo--require-config-em-alias nil
+      (require 'config-em-alias nil t nil)))
+  (oo-call-after-load 'em-alias
+                      (function oo--require-config-em-alias)))
 
 (bind! oo-app-map "e" #'eshell)
 ;;; provide
