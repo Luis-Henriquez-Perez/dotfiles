@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'base-lib)
+(require 'base-macros-definers)
 ;;;; after!
 (defmacro! after! (expr &rest body)
   "Similar to `with-eval-after-load'."
