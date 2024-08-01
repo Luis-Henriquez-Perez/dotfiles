@@ -55,11 +55,10 @@ from feature name."
          (set! config-file (car args))
          (set! expr (config-feature config-file))
          (set! feature config-file))
-        ((null (nthcdr 1 args))
+        ((null (nthcdr 2 args))
          (set! (expr feature) args))
         (t
-         ;; (error "")
-         ))
+         (error "Invalid arguments")))
   (set! name (intern (format "oo--require-%S" feature)))
   `(progn (unless (fboundp ',name)
             (defun ,name ()
