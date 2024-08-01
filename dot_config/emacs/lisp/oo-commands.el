@@ -151,6 +151,9 @@ is already narrowed."
   (set! consult--buffer-display #'pop-to-buffer)
   (call-interactively #'consult-buffer))
 
+;; TODO: I want to do more complex things like loading a random theme with no
+;; repetitions in the current session and marking certain themes as favorite
+;; themes that have a greater likelihood of being displayed.
 (defun! oo-load-random-theme ()
   "Load a random theme."
   (interactive)
