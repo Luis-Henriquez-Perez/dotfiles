@@ -1,4 +1,4 @@
-;;; base-macros-hook-bang.el --- macro for adding hooks -*- lexical-binding: t; -*-
+;;; base-macros-hook.el --- macro for adding hooks -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -35,7 +35,6 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-vars)
-(require 'base-lib)
 (require 'dash)
 (require 'base-macros-definers)
 ;;;; oo-hook-symbol-p
@@ -84,6 +83,7 @@ invoked.  The defined function will log its usage and suppress errors whenever
 `oo-debug-p' is nil, logging them instead."
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
+  (set! name (intern (format "%s&%s" hook fn)))
   `(progn (defun ,name (&rest args)
             ""
             (info! "Running hook %s -> %s..." ',hook ',fn)
@@ -105,5 +105,5 @@ NAME should be a hook symbol."
   (set! (name arglist hooks body depth local) (oo--defhook-arguments args))
   (macroexp-progn (--mapcat (oo--defhook-forms name it arglist body depth local) hooks)))
 ;;; provide
-(provide 'base-macros-hook-bang)
-;;; base-macros-hook-bang.el ends here
+(provide 'base-macros-hook)
+;;; base-macros-hook.el ends here

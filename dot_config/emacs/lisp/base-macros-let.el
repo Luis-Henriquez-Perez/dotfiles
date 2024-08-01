@@ -1,4 +1,4 @@
-;;; base-macros-let-bang.el --- let-binding macro -*- lexical-binding: t; -*-
+;;; base-macros-let.el --- let-binding macro -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -195,5 +195,5 @@ List markers are symbols that begin with `&' such as are `&rest' and
       `(let ,gensyms
          ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
-(provide 'base-macros-let-bang)
-;;; base-macros-let-bang.el ends here
+(provide 'base-macros-let)
+;;; base-macros-let.el ends here

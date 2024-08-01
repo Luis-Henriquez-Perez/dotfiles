@@ -46,10 +46,9 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'base-lib)
-(require 'base-macros-lef-bang)
+(require 'base-macros-lef)
 (require 'base-macros-definers)
-(require 'base-macros-with-map-bang)
+(require 'base-macros-with-map)
 ;;;; oo--let-bindings
 ;; I wanted a way to prevent select keys from being let-bound, the concrete case
 ;; was the character that I want to pass into

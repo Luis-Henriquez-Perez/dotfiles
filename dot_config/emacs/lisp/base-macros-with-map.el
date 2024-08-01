@@ -26,9 +26,9 @@
 ;; expression.
 ;;
 ;;; Code:
-(require 'base-requirements)
 (require 'base-utils)
 (require 'base-macros-ing)
+(require 'map)
 ;;;; map!
 (defun oo--generate-with-map-body (map body &optional use-keywords-p)
   "Return a list of let-bindings for `with-map!'.
