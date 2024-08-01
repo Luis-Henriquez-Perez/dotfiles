@@ -49,10 +49,13 @@ If no EXPR is provided and FEATURE is a configuration file derive expression
 from feature name."
   (pcase args
     (`(,config-file)
-     (set! expr )
+     (set! expr)
      (set! feature config-file))
-    (`(,expr ,file))
-    (t (error)))
+    (`(,expr ,file)
+     ;; (set! )
+     )
+    (t
+     (error)))
   (set! name (intern (format "oo--after-load-require-%S" feature)))
   `(progn (unless (fboundp ',name)
             (defun ,name ()
