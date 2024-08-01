@@ -47,12 +47,13 @@
   "Require FEATURE after EXPR is met.
 If no EXPR is provided and FEATURE is a configuration file derive expression
 from feature name."
+  (flet! config-feature-p (symbol)
+    (string-match (rx bos "config" (group (1+ (not white))) eos) (symbol-name symbol)))
   (pcase args
-    (`(,config-file)
-     (set! expr)
+    (`(,(and (pred config-feature-p) config-file))
+     (set! expr (match-string 1))
      (set! feature config-file))
-    (`(,expr ,file)
-     ;; (set! )
+    (`(,expr ,feature)
      )
     (t
      (error)))
