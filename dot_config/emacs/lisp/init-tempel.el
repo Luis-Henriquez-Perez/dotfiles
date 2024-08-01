@@ -32,7 +32,7 @@
 (autoload #'tempel-insert "tempel" nil t 'function)
 (autoload #'tempel-expand "tempel" nil t 'function)
 ;;;; capf
-(defhook! setup-tempel-capf (prog-mode-hook text-mode-hook)
+(defhook! register-tempel-for-completion (prog-mode-hook text-mode-hook)
   "Add the Tempel Capf to `completion-at-point-functions'."
   ;; `tempel-expand' only triggers on exact matches. Alternatively use
   ;; `tempel-complete' if you want to see all matches, but then you
