@@ -51,7 +51,7 @@ string or comment."
 ;; it is converted into period space space.  Additionally, if I end a sentence
 ;; line with two spaces and I press ESC, the trailing two spaces are replaced
 ;; with a period.
-(defadvice! abbrev--default-expand@ARauto-add-periods (expand-fn)
+(defadvice! add-period-maybe (ar abbrev--default-expand expand-fn)
   "Add a period when necessary."
   (prog1 (funcall expand-fn)
     (when (or (derived-mode-p 'text-mode) (oo-in-string-or-comment-p))

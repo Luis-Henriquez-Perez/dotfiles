@@ -49,7 +49,7 @@
 ;; Don't know why deleting the previous theme before enabling a new
 ;; one isn't the default behavior.  When would anyone want to layer
 ;; the colors of one theme on top of an older one.
-(defadvice! load-theme@ARdisable-old-themes (orig-fn &rest args)
+(defadvice! disable-old-themes (ar load-theme orig-fn &rest args)
   "Disable old themes before loading new ones."
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))

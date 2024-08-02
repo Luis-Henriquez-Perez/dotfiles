@@ -30,7 +30,7 @@
 (hook! text-mode-hook visual-line-mode)
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
-(defadvice! kill-buffer--possibly-save@ARprompt-clearly (_ buffer &rest args)
+(defadvice! prompt-clearly (ar kill-buffer--possibly-save _ buffer &rest args)
   "Ask user in the minibuffer whether to save before killing.
 Replace `kill-buffer--possibly-save' as advice."
   (set! prompt (format "Buffer %s modified." (buffer-name)))

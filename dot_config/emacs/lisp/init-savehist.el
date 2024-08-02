@@ -32,7 +32,7 @@
 (opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 (opt! savehist-autosave-interval (* 60 5))
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
-(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
+(defadvice! remove-kill-ring-properties (bf savehist-save &rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;; provide
 (provide 'init-savehist)
