@@ -53,7 +53,7 @@
   ;;     (pushing! evil-goggles--commands (cons new (cdr it)))))
   )
 
-;; (progn!
+;; (block!
 ;;   (set! commands '((evil-yank                 . lispyville-yank)
 ;;                    (evil-delete               . lispyville-delete)
 ;;                    (evil-change               . lispyville-change)
@@ -76,7 +76,7 @@
 ;; (hook! evil-mode-hook evil-goggles-mode)
 
 ;; Let me write a quick macro to set these commands.
-;; (progn!
+;; (block!
 ;;   (setup! :goggle evil-operator-eval-replace evil-delete)
 ;;   (setup! :goggle evil-operator-eval evil-delete)
 ;;   (setup! :goggle lispyville-yank evil-change)

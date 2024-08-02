@@ -90,7 +90,7 @@ Meant to be used in `defmacro!' and `defun!'."
       `(,!name ,!arglist ,@metadata ,@!body))))
 
 (defmacro defmacro! (&rest args)
-  "Same as `defmacro!' but wrap body with `progn!'.
+  "Same as `defmacro!' but wrap body with `block!'.
 NAME, ARGLIST and BODY are the same as `defmacro!'.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
@@ -100,7 +100,7 @@ NAME, ARGLIST and BODY are the same as `defmacro!'.
                             (oo--finalize-components))))
 
 (defmacro defun! (&rest args)
-  "Same as `defun' but wrap body with `progn!'.
+  "Same as `defun' but wrap body with `block!'.
 NAME, ARGS and BODY are the same as in `defun'.
 
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"

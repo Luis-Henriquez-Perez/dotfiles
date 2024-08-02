@@ -46,7 +46,7 @@
 ;; I do not really utilize the logging enough yet because I need to understand
 ;; `lgr' more.  I considered removing the package, but I still got it to work.
 ;; And logging a little is better than nothing.
-(defvar oo-lgr (progn! (set! logger (lgr-get-logger "oo"))
+(defvar oo-lgr (block! (set! logger (lgr-get-logger "oo"))
                        (set! log-buffer (get-buffer-create "*lgr*"))
                        (lgr-add-appender logger (lgr-appender-buffer :buffer log-buffer)))
   "Object used for logging.")
