@@ -32,7 +32,7 @@
 (require 'base-macros-lef)
 (require 'base-macros-let)
 (require 'base-macros-loop)
-(require 'base-macros-ing)
+(require 'base-macros-setters)
 ;;;; progn!
 ;;;;; helpers
 (defun oo--parse-progn (data forms)

@@ -28,7 +28,7 @@
 ;; easy to compile them away as opposed to intermingling them with functions.
 ;;
 ;;; Code:
-(require 'base-macros-ing)
+(require 'base-macros-setters)
 (require 'base-macros-hook)
 (require 'base-macros-bind)
 (require 'base-macros-loop)
