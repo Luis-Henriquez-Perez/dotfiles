@@ -27,7 +27,7 @@
 ;;
 ;;; Code:
 (require 'base-utils)
-(require 'base-macros-ing)
+(require 'base-macros-setters)
 (require 'map)
 ;;;; map!
 (defun oo--generate-with-map-body (map body &optional use-keywords-p)
