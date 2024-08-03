@@ -34,7 +34,7 @@
 (require 'base-macros-loop)
 (require 'base-macros-let)
 (require 'base-macros-lef)
-(require 'base-macros-progn)
+(require 'base-macros-block)
 (require 'base-macros-opt)
 ;;; provide
 (provide 'base-macros)

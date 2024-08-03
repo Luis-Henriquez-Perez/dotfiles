@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'base-macros-with-map)
-(require 'base-macros-progn)
+(require 'base-macros-block)
 
 (defun oo--arglist (arglist)
   "Return the list of argument symbols in ARGLIST."
@@ -80,7 +80,7 @@ Meant to be used in `defmacro!' and `defun!'."
   (let! ((body (map-elt components :body))
          (arglist (map-elt components :arglist)))
     (setf (map-elt components :body)
-          (list (oo--generate-progn-body body nil (oo--arglist arglist))))
+          (list (oo--generate-block-body body nil (oo--arglist arglist))))
     components))
 
 (defun oo--finalize-components (components)
