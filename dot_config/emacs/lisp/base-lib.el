@@ -36,32 +36,8 @@
 (require 'init-elpaca)
 (require 'dash)
 (require 'shut-up)
-(require 'lgr)
 (eval-when-compile (require 'anaphora))
 (eval-when-compile (require 'base-macros))
-
-(defvar evil-state-properties)
-;;;; logging
-;; TODO: figure out how to change the log format
-;; I do not really utilize the logging enough yet because I need to understand
-;; `lgr' more.  I considered removing the package, but I still got it to work.
-;; And logging a little is better than nothing.
-(defvar oo-lgr (block! (set! logger (lgr-get-logger "oo"))
-                       (set! log-buffer (get-buffer-create "*lgr*"))
-                       (lgr-add-appender logger (lgr-appender-buffer :buffer log-buffer)))
-  "Object used for logging.")
-
-(defmacro info! (msg &rest meta)
-  `(lgr-info oo-lgr ,msg ,@meta))
-
-(defmacro error! (msg &rest meta)
-  `(lgr-error oo-lgr ,msg ,@meta))
-
-(defmacro warn! (msg &rest meta)
-  `(lgr-warn oo-lgr ,msg ,@meta))
-
-(defmacro fatal! (msg &rest meta)
-  `(lgr-fatal oo-lgr ,msg ,@meta))
 ;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
