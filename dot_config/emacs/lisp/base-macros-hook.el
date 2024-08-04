@@ -45,22 +45,22 @@
   (when (symbolp symbol)
     (set! name (symbol-name symbol))
     (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
-;;;; oo--defhook-forms
-(defun! oo--defhook-forms (name hook args body append local)
-  "Return list of forms for defining a hook."
-  (set! name (intern (format "%s&%s" hook name)))
-  `((defun ,name ,args
-      (info! "Running hook %s..." ',name)
-      (condition-case err
-          ,(macroexp-progn body)
-        (error (if oo-debug-p
-                   (signal (car err) (cdr err))
-                 (error! "Error %s calling %s in %s because of %s"
-                         ',hook
-                         ',name
-                         (car err)
-                         (cdr err))))))
-    (add-hook ',hook #',name ,append ,local)))
+;;;; oo--hook-fn
+(defun oo-hook-fn (hook suffix body-fn)
+  "Generate a hook function from HOOK, SUFFIX and BODY-FN. "
+  (set! name (intern (format "+%s&%s" hook suffix)))
+  (defvaralias name
+    `(lambda (&rest args)
+       (info! "Running hook %s..." ',name)
+       (condition-case err
+           (funcall #',body-fn args)
+         (error (if oo-debug-p
+                    (signal (car err) (cdr err))
+                  (message "Error calling %s in %s because of %s"
+                           ',name
+                           (car err)
+                           (cdr err)))))))
+  name)
 ;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
   (set! name (pop args))
@@ -85,26 +85,16 @@ invoked.  The defined function will log its usage and suppress errors whenever
   (set! append (or (plist-get plist :depth) (plist-get plist :append)))
   (set! local (plist-get plist :local))
   (set! name (intern (format "%s&%s" hook fn)))
-  `(progn (defun ,name (&rest args)
-            ""
-            (info! "Running hook %s -> %s..." ',hook ',fn)
-            (condition-case err
-                (apply #',fn args)
-              (error (if oo-debug-p
-                         (signal (car err) (cdr err))
-                       (error! "Error %s calling %s in %s because of %s"
-                               ',hook
-                               ',fn
-                               (car err)
-                               (cdr err))))))
-          (add-hook ',hook #',name ,append ,local)))
+  `(progn (oo-hook) (add-hook ',hook #',name ,append ,local)))
 ;;;; defhook!
 (defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (set! (name arglist hooks body depth local) (oo--defhook-arguments args))
-  (macroexp-progn (--mapcat (oo--defhook-forms name it arglist body depth local) hooks)))
+  (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
+  (--mapcat `((oo-hook-fn it ,suffix (lambda ,arglist ,@body))
+              (add-hook ,it name depth local))
+            hooks))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
