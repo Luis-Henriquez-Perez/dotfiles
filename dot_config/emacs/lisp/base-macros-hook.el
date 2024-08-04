@@ -35,8 +35,9 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-vars)
-(require 'dash)
 (require 'base-macros-definers)
+(require 'init-lgr)
+(require 'dash)
 ;;;; oo-hook-symbol-p
 (defun! oo-hook-symbol-p (symbol)
   "Return non-nil if SYMBOL is a hook symbol."
