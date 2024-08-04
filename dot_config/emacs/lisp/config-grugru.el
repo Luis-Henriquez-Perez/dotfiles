@@ -45,6 +45,8 @@
 ;;;; emacs-lisp
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("let" "let*" "let!" "-let"))
 
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("defun" "defmacro" "defun!" "defmacro!"))
+
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("define-key" "evil-define-key*"))
 
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("abbrev-table-put" "abbrev-table-get"))
