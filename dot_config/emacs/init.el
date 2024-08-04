@@ -62,6 +62,7 @@
 (require 'init-dashboard)
 (require 'init-abbrev)
 (require 'init-minibuffer)
+(require 'init-files)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
