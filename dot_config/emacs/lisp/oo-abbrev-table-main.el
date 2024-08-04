@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("updadte" "update")
+  '(("sillence" "silence")
+    ("updadte" "update")
     ("rnadom" "random")
     ("deps" "dependencies")
     ("req" "requirement")
