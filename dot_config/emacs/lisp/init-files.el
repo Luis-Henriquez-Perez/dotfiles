@@ -68,6 +68,8 @@
 ;; to ask me whether I want to kill it, just do it.
 ;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
 (setq confirm-kill-processes nil)
+;;;; silence save-buffer
+(oo-add-advice 'save-buffer :around #'oo-funcall-silently)
 ;;;; keybindings
 (bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "o" #'find-file)
