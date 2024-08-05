@@ -52,16 +52,17 @@
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
 ;;;; advices
+;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
 ;;;;; oo-generate-advice
 (defun oo-generate-advice (how symbol suffix body-fn &optional props)
   "Generate and add an advice to SYMBOL."
-  (set! advice (intern (format "%s@%s" symbol suffix)))
-  (defalias advice
+  (set! name (intern (format "%s@%s" symbol suffix)))
+  (defalias name
     `(lambda (&rest args)
-       (info! "Running advice %s..." ',advice)
+       (info! "Running advice %s..." ',name)
        (funcall #',body-fn args)))
-  (advice-add symbol how advice props)
-  advice)
+  (advice-add symbol how name props)
+  name)
 ;;;;; oo-add-advice
 (defun! oo-add-advice (symbol how function &optional props)
   "Generate a new advice and add it to SYMBOL. "
