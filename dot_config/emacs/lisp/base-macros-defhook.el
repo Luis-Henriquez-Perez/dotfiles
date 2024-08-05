@@ -60,5 +60,5 @@ NAME should be a hook symbol."
   (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
   (macroexp-progn (--map `(oo-generate-hook ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
 ;;; provide
-(provide 'base-macros-hook)
+(provide 'base-macros-defhook)
 ;;; base-macros-hook.el ends here

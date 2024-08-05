@@ -29,7 +29,7 @@
 ;;
 ;;; Code:
 (require 'base-macros-setters)
-(require 'base-macros-hook)
+(require 'base-macros-defhook)
 (require 'base-macros-bind)
 (require 'base-macros-loop)
 (require 'base-macros-let)
