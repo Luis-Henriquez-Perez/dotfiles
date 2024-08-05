@@ -22,23 +22,29 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Just like hooks, I want my advices to be named functions specifically
+;; designed to be advices.  The point of these advice
+;; macros is to help me seemlessly write named advices.
 ;;
 ;;; Code:
 ;;;; defadvice!
-(defmacro advice! (symbol where fn)
-  `(progn (defun name ()
-            ())
-          (advice-add)))
+(defun oo-generate-advice (how symbol suffix body-fn &rest props)
+  "Generate and add an advice to SYMBOL."
+  (set! name (intern (format "+%s&%s" hook suffix)))
+  (defvaralias name
+    `(lambda (&rest args)
+       (info! "Running advice %s..." ',name)
+       (funcall #',body-fn args)))
+  (advice-add symbol how name props)
+  name)
 
-(defmacro! defadvice! (name args &rest body)
+(defmacro! defadvice! (&rest args)
   "Define an advice."
   (declare (indent defun))
   (set! (symbol how-name _) (oo-advice-components name))
   (set! how (cdr (assoc how-name oo-advice-how-alist)))
-  `(progn
-     (fset ',name (lambda ,args (block! ,@body)))
-     (advice-add ',symbol ,how ',name)))
+  (set! name ())
+  `())
 ;;; provide
 (provide 'base-macros-advice)
 ;;; base-macros-advice.el ends here

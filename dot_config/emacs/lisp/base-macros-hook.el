@@ -45,13 +45,13 @@
   (when (symbolp symbol)
     (set! name (symbol-name symbol))
     (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
-;;;; oo--hook-fn
-;; I am hesitant about having the `oo-hook-function' both generate the fn
+;;;; oo-generate-hook
+;; I am hesitant about having the `oo-generate-hook' both generate the fn
 ;; that produces the hook and add it to the hook, but as of yet I do not see a
 ;; reason not to have it do this.  In other words, I cannot imagine a case where
 ;; I would be using this function and not adding a hook.  If that changes I can
 ;; just change this function.
-(defun oo-hook-function (hook suffix body-fn depth local)
+(defun oo-generate-hook (hook suffix body-fn depth local)
   "Generate a hook function from HOOK, SUFFIX and BODY-FN."
   (set! name (intern (format "+%s&%s" hook suffix)))
   (defvaralias name
@@ -67,6 +67,8 @@
                            (cdr err)))))))
   (add-hook hook name depth local)
   name)
+;;;; oo-make-transient
+(defun oo-)
 ;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
   (set! name (pop args))
@@ -87,7 +89,7 @@
 NAME should be a hook symbol."
   (declare (indent defun))
   (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
-  (macroexp-progn (--map `(oo-hook-function ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
+  (macroexp-progn (--map `(oo-generate-hook ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
