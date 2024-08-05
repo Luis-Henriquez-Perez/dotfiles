@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("gening" "generating")
+  '(("anon" "anonymous")
+    ("gening" "generating")
     ("aoy" "as of yet")
     ("sillence" "silence")
     ("updadte" "update")
