@@ -45,6 +45,20 @@
 ;;;; don't display message advertising gnu system
 ;; They made the process of disabling this more difficult.
 (advice-add #'display-startup-echo-area-message :around #'ignore)
+;;;; emacs-startup-hook
+(defhook! restore-startup-values (emacs-startup-hook)
+  [:depth 91]
+  (require 'oo-init-modeline)
+  (oo-restore-value 'file-name-handler-alist)
+  (setq gc-cons-threshold (* 32 1024 1024))
+  (run-with-timer 5 nil #'oo-lower-garbage-collection))
+
+(defhook! init-after-load-functions (emacs-startup-hook)
+  "Call `oo-call-after-load-functions' once.
+Also add it as a hook to `after-load-functions' so that it is invoked whenever a
+file is loaded."
+  (oo-call-after-load-functions)
+  (hook! after-load-functions oo-call-after-load-functions))
 ;;; provide
 (provide 'init-startup)
 ;;; init-startup.el ends here
