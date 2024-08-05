@@ -200,10 +200,7 @@
 (define-prefix-command 'oo-quit-prefix-command 'oo-quit-map)
 (bind! oo-leader-map "q" #'oo-quit-prefix-command :wk "quit")
 
-(bind! oo-quit-map "R" #'restart-emacs)
-(bind! oo-quit-map "E" #'restart-emacs-start-new-emacs)
 (bind! oo-quit-map "q" #'save-buffers-kill-emacs)
-(bind! oo-quit-map "r" #'restart-emacs)
 ;;;;;; oo-package-map
 (defvar oo-package-map (make-sparse-keymap))
 (define-prefix-command 'oo/package-prefix-command 'oo-package-map)
