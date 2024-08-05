@@ -73,22 +73,56 @@ advice names for HOW.")
   (flet! group (-compose #'intern (-rpartial #'match-string name)))
   (awhen (string-match rx name)
     (mapcar #'group (number-sequence 1 3))))
+;;;;; oo-advice-function
+(defun oo-generate-advice (how symbol suffix body-fn &rest props)
+  "Generate and add an advice to SYMBOL."
+  (set! name (intern (format "+%s@%s" hook suffix)))
+  (defvaralias name
+    `(lambda (&rest args)
+       (info! "Running advice %s..." ',name)
+       (funcall #',body-fn args)))
+  (advice-add symbol how name props)
+  name)
 ;;;;; add-advice
-(defun! oo-add-advice (symbol how fsym &optional props)
-  "Generate a new advice."
-  (set! how-name (car (rassoc how oo-advice-how-alist)))
-  (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
-    (fset it fsym)
-    (advice-add symbol how it props)))
+(defun oo-add-advice (symbol how fsym &optional props)
+  "Generate a new advice and add it to SYMBOL. "
+  (oo-generate-advice how symbol function))
 ;;;; hooks
+;;;;; oo-hook-symbol-p
+(defun! oo-hook-symbol-p (symbol)
+  "Return non-nil if SYMBOL is a hook symbol."
+  (declare (pure t) (side-effect-free t))
+  (when (symbolp symbol)
+    (set! name (symbol-name symbol))
+    (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
+;;;;; oo-generate-hook
+;; I am hesitant about having the `oo-generate-hook' both generate the fn
+;; that produces the hook and add it to the hook, but as of yet I do not see a
+;; reason not to have it do this.  In other words, I cannot imagine a case where
+;; I would be using this function and not adding a hook.  If that changes I can
+;; just change this function.
+(defun! oo-generate-hook (hook suffix body-fn depth local)
+  "Generate a hook function from HOOK, SUFFIX and BODY-FN."
+  (set! name (intern (format "+%s&%s" hook suffix)))
+  (defvaralias name
+    `(lambda (&rest args)
+       (info! "Running hook %s..." ',name)
+       (condition-case err
+           (funcall #',body-fn args)
+         (error (if oo-debug-p
+                    (signal (car err) (cdr err))
+                  (message "Error calling %s in %s because of %s"
+                           ',name
+                           (car err)
+                           (cdr err)))))))
+  (add-hook hook name depth local)
+  name)
 ;;;;; oo-add-hook
 ;; No anonymous hooks allowed.
-(cl-defun oo-add-hook (hook fsym &key append depth local)
-  "Generate a function from FSYM and add it to HOOK.
+(cl-defun oo-add-hook (hook fn &key append depth local)
+  "Generate a function from fn and add it to HOOK.
 Unlike `add-hook'."
-  (aprog1 (intern (format "%s&%s" hook fsym))
-    (fset it (oo-report-error-fn fsym))
-    (add-hook hook it (or append depth) local)))
+  (oo-generate-hook hook fn fn (or append depth) local))
 ;;;;; oo-remove-hook
 (defun oo-remove-hook (fsym &optional hook)
   "Remove FSYM from HOOK."
