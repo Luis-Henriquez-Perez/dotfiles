@@ -34,7 +34,7 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; after-init-hook
-(hook! after-init-hook oo-override-mode :depth -100)
+(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! increase-garbage-collection (minibuffer-setup-hook)
@@ -51,7 +51,7 @@
   (oo-restore-value 'gc-cons-threshold)
   (oo-restore-value 'gc-cons-percentage))
 ;;;;; on-first-input-hook
-(hook! on-first-input-hook minibuffer-depth-indicate-mode)
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
@@ -70,17 +70,17 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; prog-mode-hook
-(hook! prog-mode-hook hs-minor-mode)
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
-;; (hook! prog-mode-hook flyspell-prog-mode)
-(hook! prog-mode-hook auto-fill-mode)
+;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+(oo-add-hook 'prog-mode-hook #'auto-fill-mode)
 ;; TODO: figure out the best way to add these things.
 (defhook! set-captain-local-vars (prog-mode-hook)
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;;;; text-mode-hook
-(hook! text-mode-hook auto-fill-mode)
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."

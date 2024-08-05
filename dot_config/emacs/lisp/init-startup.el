@@ -58,7 +58,7 @@
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (hook! after-load-functions oo-call-after-load-functions))
+  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
 ;;; provide
 (provide 'init-startup)
 ;;; init-startup.el ends here

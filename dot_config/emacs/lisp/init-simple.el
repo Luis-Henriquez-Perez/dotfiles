@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! text-mode-hook visual-line-mode)
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
 (defadvice! prompt-clearly (ar kill-buffer--possibly-save _ buffer &rest args)

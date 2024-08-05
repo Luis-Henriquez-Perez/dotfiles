@@ -28,8 +28,8 @@
 (require 'base)
 (require 'recentf)
 
-(hook! emacs-startup-hook recentf-mode)
-(hook! kill-emacs-hook recentf-save-list)
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+(oo-add-hook 'kill-emacs-hook #'recentf-save-list)
 
 (oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
 (oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)

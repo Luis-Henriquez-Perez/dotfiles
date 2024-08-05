@@ -28,7 +28,7 @@
 (require 'base)
 
 ;; Do not bind any keys by default.
-(hook! prog-mode-hook lispyville-mode)
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
 (oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
 

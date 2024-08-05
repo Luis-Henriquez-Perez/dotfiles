@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'base)
 
-(hook! prog-mode-hook rainbow-delimiters-mode)
-(hook! reb-mode-hook rainbow-delimiters-mode)
+(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
 ;;; provide
 (provide 'init-rainbow-delimiters)
 ;;; init-rainbow-delimiters.el ends here
