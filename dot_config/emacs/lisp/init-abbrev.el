@@ -38,10 +38,10 @@
 (bind! "C-c k" #'unexpand-abbrev)
 (autoload #'oo-add-new-abbrev "oo-commands" nil t 'function)
 ;;;; do not save abbrevs to a file
-(advice-add #'read-abbrev-file :around #'ignore)
-(advice-add #'write-abbrev-file :around #'ignore)
-(advice-add #'abbrev--possibly-save :around #'ignore)
-(advice-add #'quietly-read-abbrev-file :around #'ignore)
+(oo-add-advice #'read-abbrev-file :around #'ignore)
+(oo-add-advice #'write-abbrev-file :around #'ignore)
+(oo-add-advice #'abbrev--possibly-save :around #'ignore)
+(oo-add-advice #'quietly-read-abbrev-file :around #'ignore)
 ;;; provide
 (provide 'init-abbrev)
 ;;; init-abbrev.el ends here
