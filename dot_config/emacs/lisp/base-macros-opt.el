@@ -35,7 +35,7 @@ This is like `setq' but it is meant for configuring variables."
   (let ((value-var (gensym "value")))
     `(if (not (boundp ',symbol))
          (push '(lambda () (opt! ,symbol ,value))
-               (gethash ',symbol oo-after-load-hash-table))
+               (gethash ',symbol oo-call-after-hash-table))
        (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
          (aif (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
