@@ -1,4 +1,4 @@
-;;; base-macros-advice.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; base-macros-defadvice.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -39,5 +39,5 @@
   (set! body-fn `(lambda ,arglist (block! ,@body)))
   `(oo-generate-advice ,how ',symbol ',suffix ,body-fn))
 ;;; provide
-(provide 'base-macros-advice)
-;;; base-macros-advice.el ends here
+(provide 'base-macros-defadvice)
+;;; base-macros-defadvice.el ends here
