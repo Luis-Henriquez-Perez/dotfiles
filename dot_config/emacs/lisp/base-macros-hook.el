@@ -46,8 +46,13 @@
     (set! name (symbol-name symbol))
     (string-match-p (rx (1+ (not white)) "-hook" eos) name)))
 ;;;; oo--hook-fn
-(defun oo-hook-fn (hook suffix body-fn)
-  "Generate a hook function from HOOK, SUFFIX and BODY-FN. "
+;; I am hesitant about having the `oo-hook-function' both generate the fn
+;; that produces the hook and add it to the hook, but as of yet I do not see a
+;; reason not to have it do this.  In other words, I cannot imagine a case where
+;; I would be using this function and not adding a hook.  If that changes I can
+;; just change this function.
+(defun oo-hook-function (hook suffix body-fn depth local)
+  "Generate a hook function from HOOK, SUFFIX and BODY-FN."
   (set! name (intern (format "+%s&%s" hook suffix)))
   (defvaralias name
     `(lambda (&rest args)
@@ -60,6 +65,7 @@
                            ',name
                            (car err)
                            (cdr err)))))))
+  (add-hook hook name depth local)
   name)
 ;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
@@ -75,26 +81,13 @@
       (set! local (map-elt it :local))))
   (set! body args)
   (list name arglist hooks body depth local))
-;;;; hook!
-(defmacro! hook! (hook fn &rest plist)
-  "Define a function named NAME and add it to hook.
-NAME is a symbol of the form HOOK&FUNCTION.  HOOK is the hook to which the
-symbol NAME will be added.  FUNCTION is the function NAME should call when
-invoked.  The defined function will log its usage and suppress errors whenever
-`oo-debug-p' is nil, logging them instead."
-  (set! append (or (plist-get plist :depth) (plist-get plist :append)))
-  (set! local (plist-get plist :local))
-  (set! name (intern (format "%s&%s" hook fn)))
-  `(progn (oo-hook) (add-hook ',hook #',name ,append ,local)))
 ;;;; defhook!
 (defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
   (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
-  (--mapcat `((oo-hook-fn it ,suffix (lambda ,arglist ,@body))
-              (add-hook ,it name depth local))
-            hooks))
+  (macroexp-progn (--map `(oo-hook-function ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
