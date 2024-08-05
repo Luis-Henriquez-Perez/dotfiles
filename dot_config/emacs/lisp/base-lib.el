@@ -104,12 +104,6 @@
   "Generate a function from fn and add it to HOOK.
 Unlike `add-hook'."
   (oo-generate-hook hook fn fn (or append depth) local))
-;;;;; oo-remove-hook
-(defun oo-remove-hook (fsym &optional hook)
-  "Remove FSYM from HOOK."
-  (if (and fsym hook)
-      (remove-hook hook fsym)
-    (remove-hook (oo-hook fsym) fsym)))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
