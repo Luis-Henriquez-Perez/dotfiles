@@ -52,7 +52,6 @@
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
 ;;;; advices
-;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
 ;;;;; oo-generate-advice
 (defun oo-generate-advice (how symbol suffix body-fn &optional props)
   "Generate and add an advice to SYMBOL."
