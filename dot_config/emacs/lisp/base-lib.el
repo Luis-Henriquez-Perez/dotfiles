@@ -53,26 +53,6 @@
   (shut-up (apply fn args)))
 ;;;; advices
 ;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
-;;;;; oo-advice-how
-(defvar oo-advice-how-alist '((BF . :before)
-                              (AF . :after)
-                              (AR . :around)
-                              (OV . :override)
-                              (AU . :after-until)
-                              (BU . :before-until)
-                              (FA . :filter-args)
-                              (FR . :filter-return))
-  "An alist of (HOW-ABBREV . HOW).
-HOW is the same as in `advice-add'.  HOW-ABBREV is the abbreviation used in
-advice names for HOW.")
-;;;;; oo-advice-components
-(defun! oo-advice-components (fsym)
-  "Return a list of."
-  (set! rx "\\(?:\\([^[:space:]]+\\)@\\(\\(?:A[FRU]\\|B[FU]\\|F[AR]\\|OV\\)\\)\\([^[:space:]]+\\)\\)")
-  (set! name (symbol-name fsym))
-  (flet! group (-compose #'intern (-rpartial #'match-string name)))
-  (awhen (string-match rx name)
-    (mapcar #'group (number-sequence 1 3))))
 ;;;;; oo-advice-function
 (defun oo-generate-advice (how symbol suffix body-fn &rest props)
   "Generate and add an advice to SYMBOL."
@@ -84,9 +64,9 @@ advice names for HOW.")
   (advice-add symbol how name props)
   name)
 ;;;;; add-advice
-(defun oo-add-advice (symbol how fsym &optional props)
+(defun oo-add-advice (symbol how function &rest props)
   "Generate a new advice and add it to SYMBOL. "
-  (oo-generate-advice how symbol function))
+  (oo-generate-advice how symbol function function))
 ;;;; hooks
 ;;;;; oo-hook-symbol-p
 (defun! oo-hook-symbol-p (symbol)
