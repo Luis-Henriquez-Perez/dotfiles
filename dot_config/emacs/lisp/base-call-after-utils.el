@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(defvar evil-state-properties)
+
 (defun oo--call-call-after (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
