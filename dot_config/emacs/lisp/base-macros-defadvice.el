@@ -31,10 +31,13 @@
 (defmacro! defadvice! (&rest args)
   "Define an advice."
   (declare (indent defun))
-  (set! (symbol how-name _) (oo-advice-components name))
-  (set! how (cdr (assoc how-name oo-advice-how-alist)))
-  (set! name ())
-  `())
+  (set! suffix (pop args))
+  (set! arglist (pop args))
+  (set! how (oo-into-keyword (pop arglist)))
+  (set! symbol (pop arglist))
+  (set! body args)
+  (set! body-fn `(lambda ,arglist ,@body))
+  `(oo-generate-advice ,how ',symbol ',suffix ,body-fn))
 ;;; provide
 (provide 'base-macros-advice)
 ;;; base-macros-advice.el ends here
