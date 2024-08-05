@@ -36,6 +36,7 @@
 (require 'base-macros-lef)
 (require 'base-macros-block)
 (require 'base-macros-opt)
+(require 'base-macros-defadvice)
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
