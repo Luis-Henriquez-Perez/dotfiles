@@ -66,7 +66,7 @@
 ;;;;; oo-add-advice
 (defun! oo-add-advice (symbol how function &rest props)
   "Generate a new advice and add it to SYMBOL. "
-  (set! suffix (if (symbop function) function "-anonymous"))
+  (set! suffix (if (symbop function) function 'anonymous-advice))
   (oo-generate-advice how symbol suffix function props))
 ;;;; hooks
 ;;;;; oo-hook-symbol-p
