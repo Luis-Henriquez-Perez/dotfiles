@@ -30,13 +30,14 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+;; Open new instance of Emacs in debug-mode
+;; (bind! oo-quit-map "d" #'restart-emacs)
 (bind! oo-quit-map "R" #'restart-emacs)
 (bind! oo-quit-map "E" #'restart-emacs-start-new-emacs)
 (bind! oo-quit-map "r" #'restart-emacs)
 ;;;; fix interactive call
 (defadvice! call-interactively (override restart-emacs-start-new-emacs &optional args)
   "Call `restart-emacs' interactively."
-  (message "ARGUMENTS: %S" args)
   (let ((restart-emacs--inhibit-kill-p t))
     (funcall-interactively #'restart-emacs args)))
 ;;; provide
