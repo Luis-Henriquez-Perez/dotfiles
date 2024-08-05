@@ -28,16 +28,6 @@
 ;;
 ;;; Code:
 ;;;; defadvice!
-(defun oo-generate-advice (how symbol suffix body-fn &rest props)
-  "Generate and add an advice to SYMBOL."
-  (set! name (intern (format "+%s&%s" hook suffix)))
-  (defvaralias name
-    `(lambda (&rest args)
-       (info! "Running advice %s..." ',name)
-       (funcall #',body-fn args)))
-  (advice-add symbol how name props)
-  name)
-
 (defmacro! defadvice! (&rest args)
   "Define an advice."
   (declare (indent defun))
