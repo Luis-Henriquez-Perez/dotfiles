@@ -53,7 +53,7 @@
   (shut-up (apply fn args)))
 ;;;; advices
 ;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
-;;;;; oo-advice-function
+;;;;; oo-generate-advice
 (defun oo-generate-advice (how symbol suffix body-fn &rest props)
   "Generate and add an advice to SYMBOL."
   (set! name (intern (format "+%s@%s" hook suffix)))
@@ -63,10 +63,11 @@
        (funcall #',body-fn args)))
   (advice-add symbol how name props)
   name)
-;;;;; add-advice
-(defun oo-add-advice (symbol how function &rest props)
+;;;;; oo-add-advice
+(defun! oo-add-advice (symbol how function &rest props)
   "Generate a new advice and add it to SYMBOL. "
-  (oo-generate-advice how symbol function function))
+  (set! suffix (if (symbop function) function "-anonymous"))
+  (oo-generate-advice how symbol suffix function))
 ;;;; hooks
 ;;;;; oo-hook-symbol-p
 (defun! oo-hook-symbol-p (symbol)
