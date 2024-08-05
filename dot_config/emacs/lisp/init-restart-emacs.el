@@ -36,6 +36,11 @@
 (bind! oo-quit-map "E" #'restart-emacs-start-new-emacs)
 (bind! oo-quit-map "r" #'restart-emacs)
 ;;;; fix interactive call
+;; When using the function `restart-emacs-start-new-emacs' I find that restart
+;; Emacs does not properly work with prefix arguments because in its body it
+;; converts the prefix argument to shell arguments only if its called
+;; interactively but its not.  I was considering using `lef!' to map
+;; `restart-emacs' to.
 (defadvice! call-interactively (override restart-emacs-start-new-emacs &optional args)
   "Call `restart-emacs' interactively."
   (let ((restart-emacs--inhibit-kill-p t))
