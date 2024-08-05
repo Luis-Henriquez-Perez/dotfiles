@@ -97,8 +97,6 @@ abbreviation at point. This function assumes the abbreviations file
         (eval-buffer)))
     (expand-abbrev)
     (message "Mapped abbrev %S to expansion %S!" abbrev expansion)))
-
-
 ;;; provide
 (provide 'config-abbrev)
 ;;; config-abbrev.el ends here
