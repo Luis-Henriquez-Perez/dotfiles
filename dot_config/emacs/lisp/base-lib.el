@@ -56,8 +56,8 @@
 ;;;;; oo-generate-advice
 (defun oo-generate-advice (how symbol suffix body-fn &rest props)
   "Generate and add an advice to SYMBOL."
-  (set! name (intern (format "+%s@%s" hook suffix)))
-  (defvaralias name
+  (set! name (intern (format "%s@%s" hook suffix)))
+  (defalias name
     `(lambda (&rest args)
        (info! "Running advice %s..." ',name)
        (funcall #',body-fn args)))
@@ -66,7 +66,7 @@
 ;;;;; oo-add-advice
 (defun! oo-add-advice (symbol how function &rest props)
   "Generate a new advice and add it to SYMBOL. "
-  (set! suffix (if (symbop function) function 'anonymous-advice))
+  (set! suffix (if (symbolp function) function 'anonymous-advice))
   (oo-generate-advice how symbol suffix function props))
 ;;;; hooks
 ;;;;; oo-hook-symbol-p
@@ -84,8 +84,8 @@
 ;; just change this function.
 (defun! oo-generate-hook (hook suffix body-fn depth local)
   "Generate a hook function from HOOK, SUFFIX and BODY-FN."
-  (set! name (intern (format "+%s&%s" hook suffix)))
-  (defvaralias name
+  (set! name (intern (format "%s&%s" hook suffix)))
+  (defalias name
     `(lambda (&rest args)
        (info! "Running hook %s..." ',name)
        (condition-case err
