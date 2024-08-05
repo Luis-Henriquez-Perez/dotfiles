@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("aoy" "as of yet")
+  '(("gening" "generating")
+    ("aoy" "as of yet")
     ("sillence" "silence")
     ("updadte" "update")
     ("rnadom" "random")
