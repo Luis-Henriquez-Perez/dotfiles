@@ -63,6 +63,7 @@
 (require 'init-abbrev)
 (require 'init-minibuffer)
 (require 'init-files)
+(require 'init-restart-emacs)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
