@@ -36,7 +36,7 @@
   (set! how (oo-into-keyword (pop arglist)))
   (set! symbol (pop arglist))
   (set! body args)
-  (set! body-fn `(lambda ,arglist ,@body))
+  (set! body-fn `(lambda ,arglist (block! ,@body)))
   `(oo-generate-advice ,how ',symbol ',suffix ,body-fn))
 ;;; provide
 (provide 'base-macros-advice)
