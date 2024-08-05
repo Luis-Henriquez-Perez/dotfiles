@@ -30,6 +30,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'base)
 ;; Open new instance of Emacs in debug-mode
 ;; (bind! oo-quit-map "d" #'restart-emacs)
 (bind! oo-quit-map "R" #'restart-emacs)
