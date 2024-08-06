@@ -25,27 +25,31 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(eval-when-compile (require 'base-macros-definers))
+(eval-when-compile (require 'anaphora))
+(require 'dash)
+
 (defvar evil-state-properties)
 
-(defun oo--call-call-after (expr fn)
+(defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
     (`(:or . ,exprs)
-     (--each exprs (oo--call-call-after it fn)))
+     (--each exprs (oo--call-after-load it fn)))
     (`(:and . ,exprs)
-     (apply #'oo--call-call-after exprs fn))
+     (apply #'oo--call-after-load exprs fn))
     ((or (pred null) (and (pred symbolp) (pred featurep)))
      (funcall fn))
     (`(,expr . ,exprs)
-     (oo--call-call-after expr (apply-partially #'oo--call-after-load exprs fn)))
+     (oo--call-after-load expr (apply-partially #'oo--call-after-load exprs fn)))
     ((and feature (pred symbolp))
      (if (featurep feature)
          (funcall fn)
-       (eval-call-after feature fn)))
+       (eval-after-load feature fn)))
     (_
      (error "invalid expression `%S'" expr))))
 
-(defun! oo-call-call-after (expr fn &rest args)
+(defun! oo-call-after-load (expr fn &rest args)
   "Call FN with ARGS after EXPR resolves.
 EXPR can be a feature (symbol), a list of CONDITIONS, a list whose CAR is
 either `:or' or `:and' and whose CDR is a list of EXPRS.  If CONDITION is a
@@ -56,7 +60,7 @@ EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
   (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
-    (oo--call-call-after expr it)))
+    (oo--call-after-load expr it)))
 
 ;; This alist is meant to call certain functions whenever a file is loaded.  It
 ;; is meant for things could happen at any time.  Right now I use it for evil
@@ -79,7 +83,7 @@ functions.")
 ;; elements of the alist would disappear.  A long while later I realized why: a
 ;; side-effect of this looping is modifying the list.  By setting.  Instead, I
 ;; need to keep track of the elements I will remove.
-(defun! oo-call-call-after-functions (&rest _)
+(defun! oo-call-after-load-functions (&rest _)
   "Call functions in `oo-call-after-hash-table' that need to be called.
 Also, update `oo-call-after-hash-table' to reflect functions called."
   (--each-r (hash-table-keys oo-call-after-hash-table)
