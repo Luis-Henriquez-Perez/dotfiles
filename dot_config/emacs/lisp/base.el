@@ -28,7 +28,6 @@
 (require 'base-vars)
 (require 'base-settings)
 (require 'base-lib)
-(eval-when-compile (require 'base-macros))
 ;;; provide
 (provide 'base)
 ;;; base.el ends here

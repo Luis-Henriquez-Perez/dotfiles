@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 ;;;; requirements
+(require 'base-call-after-utils)
 (require 'base-macros-definers)
 ;;;; after!
 (defmacro! after! (expr &rest body)

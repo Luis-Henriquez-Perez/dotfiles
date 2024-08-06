@@ -36,6 +36,7 @@
 (require 'init-elpaca)
 (require 'dash)
 (require 'shut-up)
+(require 'base-call-after-utils)
 (eval-when-compile (require 'anaphora))
 (eval-when-compile (require 'base-macros))
 ;;;; reporting errors
