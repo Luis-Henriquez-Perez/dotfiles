@@ -140,6 +140,31 @@ abbreviation at point. This function assumes the abbreviations file
   (require 'consult)
   (set! consult--buffer-display #'pop-to-buffer)
   (call-interactively #'consult-buffer))
+
+;; Helper for maintaining my Emacs configuration.
+(defun! oo--dwim-rename-file (orig-fn old new &optional ok-p)
+  (prog1 (apply orig-fn old new ok-p)
+    (set! emacs-dir (f-full "~/.local/share/chezmoi/dot_config/emacs/"))
+    (when (and (f-ancestor-of-p emacs-dir old) (equal "el" (f-ext old)))
+      (oo-ensure-feature-matches-filename new))))
+
+(advice-add 'rename-file :around #'oo--dwim-rename-file)
+
+(defun! oo-ensure-feature-matches-filename (file)
+  "Change usages of feature in file to match filename."
+  (with-temp-file file
+    (insert-file-contents file)
+    (set! feature (file-name-sans-extension (file-name-nondirectory (directory-file-name file))))
+    (goto-char (point-min))
+    (set! header "\\`;;;[[:blank:]]\\(?1:.+\\)\\.el")
+    (if (re-search-forward header nil t nil)
+        (replace-match feature nil nil nil 1)
+      (message "NO MATCH FOR HEADER"))
+    (set! footer "\\(?:^(provide[[:blank:]]'\\(?1:.+\\))\n;;;[[:blank:]]\\(?2:.+\\)\\.el ends here$\\)\n\\'")
+    (nif! (re-search-forward footer nil t nil)
+        (message "NO MATCH FOR FOOTER")
+      (replace-match feature nil nil nil 1)
+      (replace-match feature nil nil nil 2))))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
