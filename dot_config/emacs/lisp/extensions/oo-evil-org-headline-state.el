@@ -91,7 +91,7 @@
       (oo-org-goto-headline-beginning)
     (goto-char start)))
 
-(defhook! org-insert-heading-hook&enter-insert-state ()
+(defhook! enter-insert-state (org-insert-heading-hook)
   "Enter insert state after inserting a headline."
   (and (bound-and-true-p evil-mode)
        (evil-insert-state t)))

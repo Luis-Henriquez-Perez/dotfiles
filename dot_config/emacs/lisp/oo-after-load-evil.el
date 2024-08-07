@@ -44,13 +44,13 @@
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
 
-(defhook! minibuffer-setup-hook&preserve-prior-evil-state ()
+(defhook! preserve-prior-evil-state (minibuffer-setup-hook)
   "Save state before entering the minibuffer and enter insert state."
   (when (bound-and-true-p evil-mode)
     (setq oo-evil-state-before-minibuffer evil-state)
     (evil-insert-state)))
 
-(defhook! minibuffer-exit-hook&restore-prior-evil-state ()
+(defhook! minibuffer-exit-hook (restore-prior-evil-state)
   "Restore state after minibuffer."
   ;; :on evil-mode
   (when (bound-and-true-p evil-mode)
@@ -109,9 +109,9 @@
       (insert result)
       (comment-region it (point)))))
 ;;;;; evil-surround
-(hook! prog-mode-hook&evil-surround-mode)
+(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
 
-(hook! text-mode-hook&evil-surround-mode)
+(oo-add-hook 'text-mode-hook #'evil-surround-mode)
 ;;; provide
 (provide 'oo-after-load-evil)
 ;;; oo-after-load-evil.el ends here

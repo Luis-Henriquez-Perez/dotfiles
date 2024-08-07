@@ -34,16 +34,16 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-file-hook
-(hook! on-first-file-hook&super-save-mode)
+(oo-add-hook 'on-first-file-hook #'super-save-mode)
 ;;;;; on-first-input-hook
-(hook! on-first-input-hook&minibuffer-depth-indicate-mode)
-(hook! on-first-input-hook&vertico-mode)
-(hook! on-first-input-hook&savehist-mode)
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
+(oo-add-hook 'on-first-input-hook #'savehist-mode)
 ;;;;; emacs-lisp-mode-hook
-(hook! emacs-lisp-mode-hook&aggressive-indent-mode)
-(hook! emacs-lisp-mode-hook&highlight-quoted-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 
-(defhook! emacs-lisp-mode-hook&enable-font-lock ()
+(defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
    'emacs-lisp-mode
@@ -51,42 +51,42 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; reb-mode-hook
-(hook! reb-mode-hook&rainbow-delimiters-mode)
+(oo-add-hook 'reb-mode-hook #'rainbow-delimiters-mode)
 ;;;;; oo-override-map
-(hook! after-init-hook&oo-override-mode :depth -100)
+(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
 ;; binding for the same key (this is opposed to =overriding-maps=, which completely
 ;; override an evil keymap).
-(defhook! evil-mode-hook&make-intercept-map ()
+(defhook! make-intercept-map (evil-mode-hook)
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; prog-mode-hook
-(hook! prog-mode-hook&hs-minor-mode)
+(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
-;; (hook! prog-mode-hook&flyspell-prog-mode)
-(hook! auto-fill-mode-hook&filladapt-mode)
-(hook! prog-mode-hook&auto-fill-mode)
-(hook! prog-mode-hook&abbrev-mode)
-(hook! prog-mode-hook&rainbow-delimiters-mode)
-(hook! prog-mode-hook&outli-mode)
-(hook! prog-mode-hook&smartparens-mode)
-(hook! prog-mode-hook&turn-on-show-smartparens-mode)
-(hook! prog-mode-hook&lispyville-mode)
-(hook! prog-mode-hook&captain-mode)
+;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
+(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
+(oo-add-hook 'prog-mode-hook #'auto-fill-mode)
+(oo-add-hook 'prog-mode-hook #'abbrev-mode)
+(oo-add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(oo-add-hook 'prog-mode-hook #'outli-mode)
+(oo-add-hook 'prog-mode-hook #'smartparens-mode)
+(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
+(oo-add-hook 'prog-mode-hook #'captain-mode)
 ;;;;; text-mode-hook
-(hook! text-mode-hook&visual-line-mode)
-(hook! text-mode-hook&auto-fill-mode)
-(hook! text-mode-hook&abbrev-mode)
-(hook! text-mode-hook&captain-mode)
-(hook! text-mode-hook&turn-on-show-smartparens-mode)
-(hook! text-mode-hook&smartparens-mode)
+(oo-add-hook 'text-mode-hook #'visual-line-mode)
+(oo-add-hook 'text-mode-hook #'auto-fill-mode)
+(oo-add-hook 'text-mode-hook #'abbrev-mode)
+(oo-add-hook 'text-mode-hook #'captain-mode)
+(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
+(oo-add-hook 'text-mode-hook #'smartparens-mode)
 ;;;;; after-init-hook
 ;; Don't load everything at once.
 ;; (oo-require-hook 'after-init-hook 'evil)
-(defhook! after-init-hook&load-evil ()
+(defhook! load-evil (after-init-hook)
   [:depth 10]
   (require 'evil nil t))
 ;; TODO: The display flickers when setting the initial theme.  Maybe this is
@@ -94,21 +94,21 @@
 ;; theme first or the order of setting the window-divider, or maybe I can
 ;; specify the default theme to load beforehand.  I need to play around with
 ;; settings and see if this flickering can be avoided.
-(hook! after-init-hook&window-divider-mode :depth 12)
+(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 ;;;;; emacs-startup-hook
-(hook! emacs-startup-hook&gcmh-mode :depth 91)
-(hook! emacs-startup-hook&evil-mode)
-(hook! emacs-startup-hook&which-key-mode)
-(hook! emacs-startup-hook&recentf-mode)
-(defhook! emacs-startup-hook&init-after-load-functions ()
+(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+(oo-add-hook 'emacs-startup-hook #'evil-mode)
+(oo-add-hook 'emacs-startup-hook #'which-key-mode)
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+(defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (hook! after-load-functions&oo-call-after-load-functions));;;;; html-mode
-(hook! html-mode-hook&emmet-mode)
+  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions));;;;; html-mode
+(oo-add-hook 'html-mode-hook #'emmet-mode)
 ;;;;; enable default theme - modus-operandi
-(defhook! after-init-hook&load-modus-operandi-theme ()
+(defhook! load-modus-operandi-theme (after-init-hook)
   "Load `modus-operandi' theme."
   (load-theme 'modus-operandi :no-confirm nil))
 ;;;;; load macros for init file
@@ -119,18 +119,18 @@ file is loaded."
 ;; all.  And again this is great for reducing startup time but I still want the
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
-(defhook! emacs-lisp-mode-hook&require-macros ()
+(defhook! require-macros (emacs-lisp-mode-hook)
   (require 'oo-base-macros))
 ;;;;; enable smartparens in the minibuffer
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
-(defhook! minibuffer-setup-hook&enable-smartparens-maybe ()
+(defhook! enable-smartparens-maybe (minibuffer-setup-hook)
   "Enable `smartparens-mode' in the minibuffer."
   (when (memq this-command '(eval-expression evil-ex))
     (require 'smartparens)
     (smartparens-strict-mode 1)))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! minibuffer-setup-hook&increase-garbage-collection ()
+(defhook! increase-garbage-collection (minibuffer-setup-hook)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
   [:depth 10]
   (oo-record-value 'gc-cons-threshold)
@@ -138,7 +138,7 @@ file is loaded."
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
-(defhook! minibuffer-exit-hook&decrease-garbage-collection ()
+(defhook! decrease-garbage-collection (minibuffer-exit-hook)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   [:depth 90]
   (oo-restore-value 'gc-cons-threshold)
@@ -156,14 +156,14 @@ file is loaded."
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
 
-(defhook! emacs-startup-hook&restore-startup-values ()
+(defhook! restore-startup-values (emacs-startup-hook)
   [:depth 91]
   (oo-restore-value 'file-name-handler-alist)
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection)
   (require 'oo-init-modeline))
 ;;;;; initial buffer
-(defhook! oo-initial-buffer-choice-hook&make-dashboard ()
+(defhook! make-dashboard (oo-initial-buffer-choice-hook)
   (when (require 'dashboard nil t)
     (aprog1 (get-buffer-create dashboard-buffer-name)
       (with-current-buffer it

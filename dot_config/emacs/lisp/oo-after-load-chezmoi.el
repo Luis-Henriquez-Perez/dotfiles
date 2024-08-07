@@ -38,7 +38,7 @@
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
 ;; already editing a target-file.
-(defhook! after-save-hook&chezmoi-write-maybe (&rest _)
+(defhook! chezmoi-write-maybe (after-save-hook &rest _)
   (when (aand (require 'chezmoi nil t)
               (buffer-file-name)
               (chezmoi-target-file it))

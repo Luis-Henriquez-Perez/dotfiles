@@ -29,8 +29,8 @@
 ;;;; vertico
 
 ;; (oo-add-hook 'marginalia-mode-hook #'all-the-icons-completion-mode :when #'display-graphic-p)
-(hook! vertico-mode-hook&vertico-buffer-mode)
-(hook! vertico-mode-hook&marginalia-mode)
+(oo-add-hook 'vertico-mode-hook #'vertico-buffer-mode)
+(oo-add-hook 'vertico-mode-hook #'marginalia-mode)
 
 
 (opt! vertico-quick1 "asdfgh")
@@ -47,7 +47,7 @@
         (direction . below)
         (window-height . ,(+ 3 vertico-count))))
 
-(defhook! vertico-mode-hook&enable-orderless ()
+(defhook! enable-orderless (vertico-mode-hook)
   (when (require 'orderless nil t)
     (setq completion-styles '(orderless))
     (setq completion-category-defaults nil)

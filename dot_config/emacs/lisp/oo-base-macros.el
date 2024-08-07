@@ -36,21 +36,28 @@
 (require 'oo-base-macros-progn-bang)
 (require 'oo-base-macros-with-map-bang)
 (require 'oo-base-macros-definers)
-;;;;; defhook!
-(defmacro! defhook! (name args &rest body)
+;;;; oo--defhook-arguments
+(defun! oo--defhook-arguments (args)
+  (set! name (pop args))
+  (set! arglist (pop args))
+  (while (oo-hook-symbol-p (car arglist))
+    (collecting! hooks (pop arglist)))
+  (when (stringp args)
+    (set! docstring (pop args)))
+  (when (vectorp (car args))
+    (alet (append (pop args) nil)
+      (set! depth (or (map-elt it :depth) (map-elt it :append)))
+      (set! local (map-elt it :local))))
+  (set! body args)
+  (list name arglist hooks body depth local))
+;;;; defhook!
+(defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME.
 NAME should be a hook symbol."
   (declare (indent defun))
-  (set! hook (oo-hook name))
-  (cl-assert hook t "%s is not a hook symbol" hook)
-  (when (vectorp (car body))
-    (alet (append (pop body) nil)
-      (set! params (list (or (map-elt it :depth) (map-elt it :append))
-                         (map-elt it :local)))))
-  `(prog1 ',name
-     (fset ',name (lambda ,args (progn! ,@body)))
-     (add-hook ',hook ',name ,@params)))
-;;;;; defadvice!
+  (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
+  (macroexp-progn (--map `(oo-generate-hook ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
+;;;; defadvice!
 (defmacro! defadvice! (name args &rest body)
   "Define an advice."
   (declare (indent defun))
@@ -59,7 +66,7 @@ NAME should be a hook symbol."
   `(progn
      (fset ',name (lambda ,args (progn! ,@body)))
      (advice-add ',symbol ,how ',name)))
-;;;;; opt!
+;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
 ;; TODO: need better error handling for when value producess an error.
