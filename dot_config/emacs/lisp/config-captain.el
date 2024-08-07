@@ -1,4 +1,4 @@
-;;; oo-after-load-captain.el --- captain configuration. -*- lexical-binding: t; -*-
+;;; config-captain.el --- captain configuration. -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -69,5 +69,5 @@
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;; provide
-(provide 'oo-after-load-captain)
-;;; oo-after-load-captain.el ends here
+(provide 'config-captain)
+;;; config-captain.el ends here
