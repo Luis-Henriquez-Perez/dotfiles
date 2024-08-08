@@ -80,6 +80,8 @@
 (require 'init-vertico-quick)
 (require 'init-notmuch)
 (require 'init-outli)
+(require 'init-highlight-quoted)
+(require 'init-lispyville)
 (require 'oo-init)
 (require 'oo-after-load)
 (require 'oo-autoloads)

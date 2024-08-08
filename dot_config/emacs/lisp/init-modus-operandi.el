@@ -1,4 +1,4 @@
-;;; oo-after-load-lispyville.el --- lispyville configuration -*- lexical-binding: t; -*-
+;;; init-modus-operandi.el --- initialize modus-operandi -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,14 +22,14 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for lispyville.
+;; Initialize modus-operandi.
 ;;
 ;;; Code:
-(require 'lispyville)
-;;;; lispyville
-;; Do not bind any keys by default.
-(opt! lispyville-key-theme nil)
-(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+(require 'base)
+
+(defhook! load-modus-operandi-theme (after-init-hook)
+  "Load `modus-operandi' theme."
+  (load-theme 'modus-operandi :no-confirm nil))
 ;;; provide
-(provide 'oo-after-load-lispyville)
-;;; oo-after-load-lispyville.el ends here
+(provide 'init-modus-operandi)
+;;; init-modus-operandi.el ends here

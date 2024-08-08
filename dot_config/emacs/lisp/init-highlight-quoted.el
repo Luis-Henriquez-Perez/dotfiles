@@ -1,4 +1,4 @@
-;;; oo-after-load-magit.el --- magit configuration -*- lexical-binding: t; -*-
+;;; init-highlight-quoted.el --- initialize highlight-quoted -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,13 +22,12 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for .
+;; Initialize highlight-quoted.
 ;;
 ;;; Code:
-;;;; magit
-(oo-call-after-load 'evil #'evil-magit-init)
+(require 'base)
 
-(oo-popup-at-bottom "\\`magit")
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 ;;; provide
-(provide 'oo-after-load-magit)
-;;; oo-after-load-magit.el ends here
+(provide 'init-highlight-quoted)
+;;; init-highlight-quoted.el ends here

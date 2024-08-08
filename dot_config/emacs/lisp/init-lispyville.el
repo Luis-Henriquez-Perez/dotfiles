@@ -1,4 +1,4 @@
-;;; oo-after-load-emms.el --- emms configuration -*- lexical-binding: t; -*-
+;;; init-lispyville.el --- initialize lispyville -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,22 +22,24 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for .
+;; Initialize lispyville.
 ;;
 ;;; Code:
-;;;; emms
-(opt! emms-source-file-default-directory (expand-file-name "Music/" "~/"))
-(opt! emms-directory (expand-file-name "emms/" oo-var-dir))
+(require 'base)
 
-;; TODO: Make this dependent on whether mpv is installed.  And also figure out
-;; how to do this lazily.  Ideally when I would intercept a "player-list is
-;; empty" error and if I have mpv installed, add it and play the file.  I can do
-;; this for `emms-play-file' but I need to check if to.
-(opt! emms-player-list '(emms-player-mpv))
-(require 'emms-player-mpv)
+;; Do not bind any keys by default.
+(oo-add-hook 'prog-mode-hook #'lispyville-mode)
+(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+(opt! lispyville-key-theme nil)
 
-;; TODO: Add a way of setting the volume without having to repeat the lower
-;; volume command, `emms-volume-lower'.
+(bind! i lispyville-mode-map "SPC" #'lispy-space)
+(bind! i lispyville-mode-map ";" #'lispy-comment)
+
+(bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
+(bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
+
+(bind! (n v) "g c" #'lispyville-comment-or-uncomment)
+(bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
 ;;; provide
-(provide 'oo-after-load-emms)
-;;; oo-after-load-emms.el ends here
+(provide 'init-lispyville)
+;;; init-lispyville.el ends here

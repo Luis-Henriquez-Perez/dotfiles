@@ -103,10 +103,6 @@ file is loaded."
   (oo-call-after-load-functions)
   (oo-add-hook 'after-load-functions #'oo-call-after-load-functions));;;;; html-mode
 (oo-add-hook 'html-mode-hook #'emmet-mode)
-;;;;; enable default theme - modus-operandi
-(defhook! load-modus-operandi-theme (after-init-hook)
-  "Load `modus-operandi' theme."
-  (load-theme 'modus-operandi :no-confirm nil))
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
