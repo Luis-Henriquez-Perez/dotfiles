@@ -52,7 +52,7 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
 - Extensive abbrev configuration
 - Spacemacs-like keybinding scheme
 - Uses [[https://github.com/progfolio/elpaca][elpaca]] an advanced package manager
-- Advanced macros such as [[./lisp/oo-progn-macro.el][progn!]], [[./lisp/oo-let-macro.el][lef!]], and [[./lisp/oo-let-macro.el][let!]]
+- Advanced macros such as [[./lisp/oo-progn-macro.el][block!]], [[./lisp/oo-let-macro.el][lef!]], and [[./lisp/oo-let-macro.el][let!]]
 - Avoids the use of macros such as [[https://github.com/jwiegley/use-package][use-package]], [[https://github.com/conao3/leaf.el][leaf]] and
   [[https://www.emacswiki.org/emacs/SetupEl][setup.el]]
 - Generated functions specifically designed to be hooks and advices
