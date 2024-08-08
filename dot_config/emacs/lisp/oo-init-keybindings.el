@@ -329,14 +329,6 @@
 (alt! describe-command helpful-command helpful)
 (alt! describe-variable helpful-variable helpful)
 (alt! describe-key helpful-key helpful)
-;;;;;; vertico
-(bind! vertico-map "TAB" #'vertico-next)
-(bind! vertico-map "C-k" #'vertico-previous)
-(bind! vertico-map "C-j" #'vertico-next)
-(bind! vertico-map ";" #'vertico-quick-exit)
-(bind! vertico-map "C-;" #'vertico-quick-exit)
-(bind! vertico-map [backtab] #'vertico-previous)
-(bind! vertico-map "C-o" #'embark-act)
 ;;;;;; consult
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
