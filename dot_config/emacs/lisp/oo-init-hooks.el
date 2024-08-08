@@ -33,7 +33,6 @@
 ;; when as opposed to the configuration for over 50 individual packages.  The
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
-;;;;; on-first-file-hook
 ;;;;; on-first-input-hook
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
