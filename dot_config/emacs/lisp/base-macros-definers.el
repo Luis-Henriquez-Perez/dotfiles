@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'oo-base-macros-with-map-bang)
-(require 'oo-base-macros-progn-bang)
+(require 'base-macros-block)
 
 (defun oo--arglist (arglist)
   "Return the list of argument symbols in ARGLIST."

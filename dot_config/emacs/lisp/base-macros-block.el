@@ -1,4 +1,4 @@
-;;; oo-progn-macro.el -*- lexical-binding: t; -*-
+;;; base-macros-block.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -178,5 +178,5 @@ Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
   (oo--generate-block-body body))
 
-(provide 'oo-base-macros-block)
-;;; oo-progn-macro.el ends here
+(provide 'base-macros-block)
+;;; base-macros-block.el ends here

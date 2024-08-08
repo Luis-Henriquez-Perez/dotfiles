@@ -33,7 +33,7 @@
 (require 'oo-base-macros-for-bang)
 (require 'base-macros-let)
 (require 'base-macros-lef)
-(require 'oo-base-macros-progn-bang)
+(require 'base-macros-block)
 (require 'oo-base-macros-with-map-bang)
 (require 'base-macros-definers)
 (require 'base-macros-bind)
