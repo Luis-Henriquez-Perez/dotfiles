@@ -27,10 +27,6 @@
 ;;; Code:
 ;;;; requirements
 (require 'base)
-(require 'init-no-littering)
-(require 'init-abbrev)
-(require 'oo-init-dashboard)
-(require 'init-recentf)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; disable old themes before enabling new ones
