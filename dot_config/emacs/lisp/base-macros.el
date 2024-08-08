@@ -58,15 +58,6 @@ NAME should be a hook symbol."
   (declare (indent defun))
   (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
   (macroexp-progn (--map `(oo-generate-hook ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
-;;;; defadvice!
-(defmacro! defadvice! (name args &rest body)
-  "Define an advice."
-  (declare (indent defun))
-  (set! (symbol how-name _) (oo-advice-components name))
-  (set! how (cdr (assoc how-name oo-advice-how-alist)))
-  `(progn
-     (fset ',name (lambda ,args (progn! ,@body)))
-     (advice-add ',symbol ,how ',name)))
 ;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
