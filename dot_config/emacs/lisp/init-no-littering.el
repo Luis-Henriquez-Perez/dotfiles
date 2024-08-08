@@ -25,7 +25,8 @@
 ;; Initialize no-littering.
 ;;
 ;;; Code:
-;;;;; no-littering
+(require 'base)
+
 (setq no-littering-etc-directory oo-etc-dir)
 (setq no-littering-var-directory oo-var-dir)
 
