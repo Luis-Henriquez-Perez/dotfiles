@@ -84,6 +84,8 @@
 (require 'init-lispyville)
 (require 'init-org)
 (require 'init-rainbow-delimiters)
+(require 'init-modus-operandi)
+(require 'init-marginalia)
 (require 'oo-init)
 (require 'oo-autoloads)
 ;;; provide init
