@@ -87,6 +87,11 @@
 (require 'init-rainbow-delimiters)
 (require 'init-modus-operandi)
 (require 'init-marginalia)
+(require 'init-helm)
+(require 'init-helpful)
+(require 'init-hungry-delete)
+(require 'init-tempel)
+(require 'init-re-builder)
 (require 'oo-init)
 (require 'oo-autoloads)
 ;;; provide init

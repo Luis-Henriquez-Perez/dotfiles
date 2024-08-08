@@ -324,29 +324,11 @@
 ;; Not sure what the difference is between block and form.
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
-;;;;;; helpful
-(alt! describe-function helpful-callable helpful)
-(alt! describe-command helpful-command helpful)
-(alt! describe-variable helpful-variable helpful)
-(alt! describe-key helpful-key helpful)
 ;;;;;; consult
 (alt! switch-to-buffer consult-buffer consult)
 (alt! yank-pop consult-yank-pop consult)
 (alt! apropos consult-apropos consult)
 (alt! man consult-man consult)
-;;;;;; helm
-(bind! i helm-map "TAB" #'helm-next-line)
-(bind! i helm-map [backtab] #'helm-previous-line)
-(bind! i helm-map "C-j" #'helm-next-line)
-(bind! i helm-map "C-k" #'helm-previous-line)
-
-(bind! i helm-map "C-a" #'helm-select-action)
-(bind! i helm-map "C-m" #'helm-toggle-visible-mark-forward)
-;; (bind! i helm-map :ie "RET" (lambda () (interactive) (funcall #'helm-select-nth-action 0)))
-;; This binding has a problem.  (:ie "C-i" #'helm-toggle-visible-mark-backward)
-(bind! i helm-map "S-TAB" #'helm-mark-current-line)
-
-(bind! i helm-map "C-;" #'ace-jump-helm-line)
 ;;;;;; corfu
 (bind! i corfu-map "<tab>"   #'corfu-next)
 (bind! i corfu-map [backtab] #'corfu-previous)
