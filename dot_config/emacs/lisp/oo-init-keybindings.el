@@ -314,11 +314,6 @@
 ;;;;;;;; comment
 (bind! (n v) "g c" #'lispyville-comment-or-uncomment)
 (bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
-;;;;;;;; exchange
-(bind! (n v) "g x" #'evil-exchange)
-(bind! (n v) "g X" #'evil-exchange-cancel)
-(bind! (n v) "g a" #'evil-exchange)
-(bind! (n v) "g A" #'evil-exchange-cancel)
 ;;;;;;;; g is kind of like the main prefix key of vim
 (bind! (n v) "g u" #'evil-upcase)
 (bind! (n v) "g U" #'evil-downcase)
