@@ -82,8 +82,9 @@
 (require 'init-outli)
 (require 'init-highlight-quoted)
 (require 'init-lispyville)
+(require 'init-org)
+(require 'init-rainbow-delimiters)
 (require 'oo-init)
-(require 'oo-after-load)
 (require 'oo-autoloads)
 ;;; provide init
 (provide 'init)
