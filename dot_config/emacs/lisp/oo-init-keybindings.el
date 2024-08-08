@@ -334,10 +334,6 @@
 (bind! evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;;;;;; block
 ;; Not sure what the difference is between block and form.
-(bind! evil-inner-text-objects-map "b" #'evil-textobj-anyblock-inner-block)
-(bind! evil-outer-text-objects-map "b" #'evil-textobj-anyblock-a-block)
-(bind! evil-inner-text-objects-map "f" #'evil-cp-inner-form)
-(bind! evil-outer-text-objects-map "f" #'evil-cp-a-form)
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
 ;;;;;; helpful
