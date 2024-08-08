@@ -27,7 +27,6 @@
 ;;; Code:
 (require 'base)
 (require 'recentf)
-(eval-when-compile (require 'base-macros-setters))
 
 (oo-add-hook 'emacs-startup-hook #'recentf-mode)
 ;; TODO: Figure out why this is an error with eldev eval.

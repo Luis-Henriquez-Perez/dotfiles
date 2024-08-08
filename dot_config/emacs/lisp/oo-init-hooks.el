@@ -38,7 +38,6 @@
 ;;;;; on-first-input-hook
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 (oo-add-hook 'on-first-input-hook #'vertico-mode)
-(oo-add-hook 'on-first-input-hook #'savehist-mode)
 ;;;;; emacs-lisp-mode-hook
 (oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
@@ -99,7 +98,6 @@
 (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 (oo-add-hook 'emacs-startup-hook #'evil-mode)
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a

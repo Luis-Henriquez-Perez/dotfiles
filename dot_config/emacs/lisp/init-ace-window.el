@@ -1,8 +1,7 @@
-;;; oo-after-load-smartparens.el --- smartparens configuration -*- lexical-binding: t; -*-
+;;; init-ace-window.el --- ace-window configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
-;; Author: Luis Henriquez-Perez <luis@luishp.xyz>
 ;; Homepage: https://github.com/Luis-Henriquez-Perez/dotfiles/
 ;;
 ;; This file is not part of GNU Emacs.
@@ -22,27 +21,15 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for smartparens.
+;; This is my configuration for ace window.
 ;;
 ;;; Code:
-(require 'smartparens)
-
-(opt! sp-highlight-wrap-tag-overlay nil)
-
-(opt! sp-highlight-pair-overlay nil)
-
-(opt! sp-highlight-wrap-overlay nil)
-
-(opt! sp-show-pair-delay 0.2)
-
-(sp-local-pair sp-lisp-modes "'" nil :actions nil)
-
-(sp-local-pair sp-lisp-modes "`" "'" :when '(sp-in-string-p sp-in-comment-p))
-
-(sp-local-pair 'minibuffer-mode "'" nil :actions nil)
-(sp-local-pair 'minibuffer-mode "`" nil :actions nil)
-
-(require 'smartparens-config)
+;;;; ace-window
+;;;;; swap
+(opt! aw-swap-invert t)
+;;;;; set the keys used by ace-window
+;; The character z conflicts.
+(opt! aw-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxb")))
 ;;; provide
-(provide 'oo-after-load-smartparens)
-;;; oo-after-load-smartparens.el ends here
+(provide 'init-ace-window)
+;;; init-ace-window.el ends here

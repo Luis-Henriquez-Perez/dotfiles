@@ -25,6 +25,7 @@
 ;; This is my configuration for which-key.
 ;;
 ;;; Code:
+(require 'base)
 (require 'which-key)
 
 (opt! which-key-sort-uppercase-first nil)

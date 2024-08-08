@@ -1,4 +1,4 @@
-;;; oo-after-load-savehist.el --- savehist configuration -*- lexical-binding: t; -*-
+;;; config-smartparens.el --- smartparens configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,20 +22,27 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for savehist.
+;; This is my configuration for smartparens.
 ;;
 ;;; Code:
-(require 'base)
-(require 'savehist)
+(require 'smartparens)
 
-(opt! savehist-save-minibuffer-history t)
-(opt! savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
-(opt! savehist-autosave-interval (* 60 5))
+(opt! sp-highlight-wrap-tag-overlay nil)
 
-(opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
+(opt! sp-highlight-pair-overlay nil)
 
-(defadvice! savehist-save@BFremove-kill-ring-properties (&rest _)
-  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+(opt! sp-highlight-wrap-overlay nil)
+
+(opt! sp-show-pair-delay 0.2)
+
+(sp-local-pair sp-lisp-modes "'" nil :actions nil)
+
+(sp-local-pair sp-lisp-modes "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+
+(sp-local-pair 'minibuffer-mode "'" nil :actions nil)
+(sp-local-pair 'minibuffer-mode "`" nil :actions nil)
+
+(require 'smartparens-config)
 ;;; provide
-(provide 'oo-after-load-savehist)
-;;; oo-after-load-savehist.el ends here
+(provide 'config-smartparens)
+;;; config-smartparens.el ends here

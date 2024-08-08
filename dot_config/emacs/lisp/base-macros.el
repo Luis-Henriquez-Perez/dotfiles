@@ -35,7 +35,8 @@
 (require 'base-macros-lef)
 (require 'oo-base-macros-progn-bang)
 (require 'oo-base-macros-with-map-bang)
-(require 'oo-base-macros-definers)
+(require 'base-macros-definers)
+(require 'base-macros-bind)
 ;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
   (set! name (pop args))

@@ -32,9 +32,8 @@
 (bind! tempel-map i "TAB" #'tempel-next)
 (bind! tempel-map i [backtab] #'tempel-previous)
 ;;;; make tempel an overriding map
-(with-eval-after-load 'evil
-  (with-no-warnings
-    (evil-make-overriding-map tempel-map)))
+(defhook! make-tempel-map-an-overriding-map (oo-after-load-evil-hook)
+  (evil-make-overriding-map tempel-map))
 ;;; provide
 (provide 'oo-after-load-tempel)
 ;;; oo-after-load-tempel.el ends here

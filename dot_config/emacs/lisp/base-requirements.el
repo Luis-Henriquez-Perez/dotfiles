@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 (require 'oo-base-packages)
+(require 'f)
 (require 'on)
 (require 'anaphora)
 (require 'dash)

@@ -25,7 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'oo-base-macros-bind-bang)
+(require 'base-macros-bind)
 
 (ert-deftest oo--bind-steps ()
   (should (equal (oo--bind-steps '(:char 105 :state state :keymap global-map :key "d" :def #'foo))

@@ -27,10 +27,10 @@
 ;;; Code:
 ;;;; requirements
 (require 'base)
-(require 'oo-init-no-littering)
+(require 'init-no-littering)
 (require 'init-abbrev)
 (require 'oo-init-dashboard)
-(require 'oo-init-recentf)
+(require 'init-recentf)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; disable old themes before enabling new ones

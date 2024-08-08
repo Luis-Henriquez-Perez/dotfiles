@@ -25,7 +25,7 @@
 ;; Test `oo-base-macro-definers'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-definers)
+(require 'base-macros-definers)
 
 (defun oo--map-contains-and-equal-p (map key value)
   (and (map-contains-key map key)

@@ -1,4 +1,4 @@
-;;; oo-after-load-em-alias.el --- em-alias configuration -*- lexical-binding: t; -*-
+;;; config-em-alias.el --- em-alias configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -124,5 +124,5 @@
 ;; convert -delay 5 -loop 0 thumbnail*.png animation.gif
 ;; maim -i $(xdotool getactivewindow) screenshot.png
 ;;; provide
-(provide 'oo-after-load-em-alias)
-;;; oo-after-load-em-alias.el ends here
+(provide 'config-em-alias)
+;;; config-em-alias.el ends here

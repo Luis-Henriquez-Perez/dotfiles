@@ -25,6 +25,8 @@
 ;; This is my configuration for avy.
 ;;
 ;;; Code:
+(require 'base)
+
 (opt! avy-style 'pre)
 
 (opt! avy-keys (eval-when-compile (string-to-list "jfkdlsaurieowncpqmxzb")))

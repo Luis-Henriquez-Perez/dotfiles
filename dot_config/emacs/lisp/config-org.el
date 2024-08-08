@@ -1,4 +1,4 @@
-;;; oo-after-load-org.el --- org configuration -*- lexical-binding: t; -*-
+;;; config-org.el --- org configuration -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -96,5 +96,5 @@
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
-(provide 'oo-after-load-org)
-;;; oo-after-load-org.el ends here
+(provide 'config-org)
+;;; config-org.el ends here

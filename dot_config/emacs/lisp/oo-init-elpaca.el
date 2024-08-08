@@ -45,6 +45,7 @@
 (elpaca beacon)
 ;; (elpaca benchmark-init)
 (elpaca burly)
+(elpaca f)
 ;; (elpaca buttercup)
 (elpaca cape)
 (elpaca caps-lock)
