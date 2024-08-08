@@ -78,6 +78,8 @@
 (require 'init-vertico)
 (require 'init-vertico-buffer)
 (require 'init-vertico-quick)
+(require 'init-notmuch)
+(require 'init-outli)
 (require 'oo-init)
 (require 'oo-after-load)
 (require 'oo-autoloads)
