@@ -83,6 +83,7 @@
 (require 'init-highlight-quoted)
 (require 'init-lispyville)
 (require 'init-org)
+(require 'init-org-appear)
 (require 'init-rainbow-delimiters)
 (require 'init-modus-operandi)
 (require 'init-marginalia)
