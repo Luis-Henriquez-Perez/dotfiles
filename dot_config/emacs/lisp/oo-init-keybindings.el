@@ -329,9 +329,6 @@
 (bind! (n v o) "f" #'oo-evilem-motion-char)
 (bind! (n v o) "H" #'oo-evilem-motion-beginning-of-line)
 ;;;;;;; text objects
-;;;;;;;; line
-(bind! evil-inner-text-objects-map "l" #'evil-inner-line)
-(bind! evil-outer-text-objects-map "l" #'evil-a-line)
 ;;;;;;;; block
 ;; Not sure what the difference is between block and form.
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
