@@ -1,4 +1,4 @@
-;;; oo-base-macros-let-bang.el --- let-binding macro -*- lexical-binding: t; -*-
+;;; base-macros-let.el --- let-binding macro -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,8 +28,8 @@
 ;;;; requirements
 (require 'cl-lib)
 (require 'pcase)
-(require 'oo-base-utils)
-(require 'oo-base-macros-ing)
+(require 'base-utils)
+(require 'base-macros-setters)
 ;;;; let!
 ;; I want `oo-tree-map-nodes' to be more flexible.  I want it to accept maybe an
 ;; alist of (PRED . FN) as opposed to a PRED, FN.
@@ -195,5 +195,5 @@ List markers are symbols that begin with `&' such as are `&rest' and
       `(let ,gensyms
          ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
-(provide 'oo-base-macros-let-bang)
-;;; oo-base-macros-let-bang.el ends here
+(provide 'base-macros-let)
+;;; base-macros-let.el ends here

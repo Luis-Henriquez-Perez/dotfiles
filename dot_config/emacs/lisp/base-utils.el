@@ -1,4 +1,4 @@
-;;; oo-base-utils.el -*- lexical-binding: t; -*-
+;;; base-utils.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -154,5 +154,5 @@ must be evaluated with `lexical-binding' enabled."
     (--each-while list (not (setq success (funcall fn it))))
     success))
 ;;; provide
-(provide 'oo-base-utils)
-;;; oo-base-utils.el ends here
+(provide 'base-utils)
+;;; base-utils.el ends here

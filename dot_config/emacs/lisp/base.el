@@ -1,4 +1,4 @@
-;;; oo-base.el --- everything needed for startup -*- lexical-binding: t; -*-
+;;; base.el --- everything needed for startup -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,14 +25,14 @@
 ;; This contains the core settings and functionality of my configuration.
 ;;
 ;;; Code:
-(require 'oo-base-vars)
-(require 'oo-base-settings)
-(require 'oo-base-lib)
+(require 'base-vars)
+(require 'base-settings)
+(require 'base-lib)
 (eval-when-compile (require 'oo-base-macros-hook-bang))
 (defmacro alt! (old new feature)
   `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
                 (gethash ',old oo-alternate-commands))
           (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))))
 ;;; provide
-(provide 'oo-base)
-;;; oo-base.el ends here
+(provide 'base)
+;;; base.el ends here

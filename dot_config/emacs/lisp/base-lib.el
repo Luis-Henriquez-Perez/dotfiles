@@ -1,4 +1,4 @@
-;;; oo-base-lib.el --- external package library -*- lexical-binding: t; -*-
+;;; base-lib.el --- external package library -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,8 +22,8 @@
 ;;
 ;;; Commentary:
 ;;
-;; Compared to `oo-base-utils' this library has functions that on external
-;; packages loaded in `oo-base-requirements'.
+;; Compared to `base-utils' this library has functions that on external
+;; packages loaded in `base-requirements'.
 
 ;; This file contains functions and macros directly used for customizing Emacs
 ;; by which I mean for doing things like adding hooks, adding advices, and
@@ -32,9 +32,9 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base-utils)
-(require 'oo-base-requirements)
-(eval-when-compile (require 'oo-base-macros))
+(require 'base-utils)
+(require 'base-requirements)
+(eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
 ;;;; logging
@@ -300,5 +300,5 @@ For what buffer is displayed in the case of a boolean see
 ;;     (push ,(oo--lambda-form alt '(&rest ) `(when ,condition ,alt)) (gethash ,orig oo-alternate-commands))
 ;;     ,@(oo--bind-generate-body metadata steps)))
 ;;; provide
-(provide 'oo-base-lib)
-;;; oo-base-lib.el ends here
+(provide 'base-lib)
+;;; base-lib.el ends here

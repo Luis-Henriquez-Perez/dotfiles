@@ -1,4 +1,4 @@
-;;; oo-base-vars.el --- core variables -*- lexical-binding: t; -*-
+;;; base-vars.el --- core variables -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -78,5 +78,5 @@ The --debug-init flag and setting the DEBUG envar will enable this at startup.")
 ;; (defvar oo-log-buffer (get-buffer-create "*oo-log*")
 ;;   "Buffer where information should be logged.")
 ;;; provide
-(provide 'oo-base-vars)
-;;; oo-base-vars.el ends here
+(provide 'base-vars)
+;;; base-vars.el ends here

@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test for `oo-base-macros-lef-bang'.
+;; Test for `base-macros-lef'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-lef-bang)
+(require 'base-macros-lef)
 
 ;; (defun oo--lef-)
 

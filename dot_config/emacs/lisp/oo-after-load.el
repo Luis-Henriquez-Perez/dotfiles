@@ -25,7 +25,7 @@
 ;; Register files that needs to be loaded lazily.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; lazy-load after-load files
 (progn!
   (set! regexp "\\`oo-after-load-\\(.+\\)")

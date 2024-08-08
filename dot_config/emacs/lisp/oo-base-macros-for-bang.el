@@ -25,7 +25,7 @@
 ;; Looping macros.
 ;;
 ;;; Code:
-(require 'oo-base-macros-let-bang)
+(require 'base-macros-let)
 (require 'cl-lib)
 (require 'seq)
 ;;;; for!

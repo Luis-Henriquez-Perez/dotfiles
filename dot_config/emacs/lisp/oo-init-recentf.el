@@ -25,9 +25,9 @@
 ;; Initialize `recentf'.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 (require 'recentf)
-(eval-when-compile (require 'oo-base-macros-ing))
+(eval-when-compile (require 'base-macros-setters))
 ;; TODO: Figure out why this is an error with eldev eval.
 ;; For some reason this gives an error when I use eldev eval. I have to figure
 ;; out what eldev is doing here.

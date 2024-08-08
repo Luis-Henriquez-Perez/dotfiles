@@ -33,8 +33,8 @@
 ;; abruptly try to run as many hook functions as you can.
 ;;
 ;;; Code:
-(require 'oo-base-vars)
-(require 'oo-base-lib)
+(require 'base-vars)
+(require 'base-lib)
 
 (defmacro! hook! (name &rest plist)
   "Define a function named NAME and add it to hook.

@@ -1,4 +1,4 @@
-;;; oo-base-settings.el --- core settings -*- lexical-binding: t; -*-
+;;; base-settings.el --- core settings -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -270,5 +270,5 @@ end-of-buffer signals; pass the rest to the default handler."
 ;;;;; dabbrev
 (setq dabbrev-check-all-buffers nil)
 ;;; provide
-(provide 'oo-base-settings)
-;;; oo-base-settings.el ends here
+(provide 'base-settings)
+;;; base-settings.el ends here

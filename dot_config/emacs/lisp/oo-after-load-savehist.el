@@ -25,7 +25,7 @@
 ;; This is my configuration for savehist.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 (require 'savehist)
 
 (opt! savehist-save-minibuffer-history t)

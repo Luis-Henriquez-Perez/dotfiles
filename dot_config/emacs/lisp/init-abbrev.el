@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'abbrev)
-(require 'oo-base)
+(require 'base)
 (require 'oo-abbrev-table-main)
 (require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
@@ -64,5 +64,5 @@ string or comment."
 ;; The behavior I want is if I type two spaces then replace with period
 ;; followed by two spaces.
 ;;; provide
-(provide 'oo-init-abbrev)
-;;; oo-init-abbrev.el ends here
+(provide 'init-abbrev)
+;;; init-abbrev.el ends here

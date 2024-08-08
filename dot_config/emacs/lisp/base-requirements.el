@@ -1,4 +1,4 @@
-;;; oo-base-requirements.el --- install essential packages -*- lexical-binding: t; -*-
+;;; base-requirements.el --- install essential packages -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -33,5 +33,5 @@
 (require 'lgr)
 (require 'treepy)
 ;;; provide
-(provide 'oo-base-requirements)
-;;; oo-base-requirements.el ends here
+(provide 'base-requirements)
+;;; base-requirements.el ends here

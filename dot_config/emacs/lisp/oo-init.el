@@ -26,9 +26,9 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'oo-base)
+(require 'base)
 (require 'oo-init-no-littering)
-(require 'oo-init-abbrev)
+(require 'init-abbrev)
 (require 'oo-init-dashboard)
 (require 'oo-init-recentf)
 (require 'oo-init-hooks)

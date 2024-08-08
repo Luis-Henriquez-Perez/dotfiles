@@ -26,7 +26,7 @@
 ;; other words, the hooks that cannot go into "after-load" files.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; hooks
 ;; I had been organizing the init file by packages and that is not entirely
 ;; useless but I think maybe an abstraction in which I look at what is happening
@@ -120,7 +120,7 @@ file is loaded."
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
 (defhook! require-macros (emacs-lisp-mode-hook)
-  (require 'oo-base-macros))
+  (require 'base-macros))
 ;;;;; enable smartparens in the minibuffer
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! enable-smartparens-maybe (minibuffer-setup-hook)

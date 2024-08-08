@@ -27,12 +27,12 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'pcase)
-(require 'oo-base-requirements)
-(require 'oo-base-utils)
-(require 'oo-base-macros-lef-bang)
-(require 'oo-base-macros-let-bang)
+(require 'base-requirements)
+(require 'base-utils)
+(require 'base-macros-lef)
+(require 'base-macros-let)
 (require 'oo-base-macros-for-bang)
-(require 'oo-base-macros-ing)
+(require 'base-macros-setters)
 ;;;; progn!
 ;;;;; helpers
 (defun oo--parse-progn-bang (data forms)

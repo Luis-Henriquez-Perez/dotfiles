@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Tests for `oo-base-lib'.
+;; Tests for `base-lib'.
 ;;
 ;;; Code:
-(require 'oo-base-lib)
+(require 'base-lib)
 (require 'evil)
 
 (ert-deftest oo--evil-char-to-state ()

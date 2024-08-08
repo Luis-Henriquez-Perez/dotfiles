@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test for `oo-base-macros-let-bang'.
+;; Test for `base-macros-let'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-let-bang)
+(require 'base-macros-let)
 
 (ert-deftest oo--mf-flatten---should-flatten-2d-lists ()
   (should (-same-items-p (oo--mf-flatten '(a b c d)) '(a b c d))))

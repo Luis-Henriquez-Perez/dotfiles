@@ -28,7 +28,7 @@
 ;; these functions are very specific to me and my workflow.
 ;;
 ;;; Code:
-(require 'oo-base)
+(require 'base)
 ;;;; custom functions
 (defun! oo-set-font-face ()
   "Apply an existing xfont to all graphical frames."
@@ -149,6 +149,12 @@ abbreviation at point. This function assumes the abbreviations file
       (oo-ensure-feature-matches-filename new))))
 
 (advice-add 'rename-file :around #'oo--dwim-rename-file)
+(advice-remove 'rename-file #'oo--dwim-rename-file)
+
+(defun! oo- ()
+  (dolist (file files)
+    ;; Get the filename and feature name.
+    (if )))
 
 (defun! oo-ensure-feature-matches-filename (file)
   "Change usages of feature in file to match filename."

@@ -1,4 +1,4 @@
-;;; oo-base-macros.el -*- lexical-binding: t; -*-
+;;; base-macros.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,11 +28,11 @@
 ;; easy to compile them away as opposed to intermingling them with functions.
 ;;
 ;;; Code:
-(require 'oo-base-utils)
-(require 'oo-base-macros-ing)
+(require 'base-utils)
+(require 'base-macros-setters)
 (require 'oo-base-macros-for-bang)
-(require 'oo-base-macros-let-bang)
-(require 'oo-base-macros-lef-bang)
+(require 'base-macros-let)
+(require 'base-macros-lef)
 (require 'oo-base-macros-progn-bang)
 (require 'oo-base-macros-with-map-bang)
 (require 'oo-base-macros-definers)
@@ -82,5 +82,5 @@ This is like `setq' but it is meant for configuring variables."
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;; provide
-(provide 'oo-base-macros)
-;;; oo-base-macros.el ends here
+(provide 'base-macros)
+;;; base-macros.el ends here
