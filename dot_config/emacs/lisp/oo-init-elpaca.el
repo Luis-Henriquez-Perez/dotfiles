@@ -38,6 +38,7 @@
 ;; (elpaca aas)
 (elpaca ace-jump-helm-line)
 (elpaca ace-link)
+(elpaca gumshoe)
 (elpaca aggressive-indent)
 ;; (elpaca ah)
 (elpaca anaphora)
