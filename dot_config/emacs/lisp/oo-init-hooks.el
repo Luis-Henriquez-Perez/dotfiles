@@ -36,7 +36,6 @@
 ;;;;; on-first-file-hook
 ;;;;; on-first-input-hook
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
-(oo-add-hook 'on-first-input-hook #'vertico-mode)
 ;;;;; emacs-lisp-mode-hook
 (oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
