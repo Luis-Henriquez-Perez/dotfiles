@@ -171,6 +171,18 @@ abbreviation at point. This function assumes the abbreviations file
         (message "NO MATCH FOR FOOTER")
       (replace-match feature nil nil nil 1)
       (replace-match feature nil nil nil 2))))
+
+(defun oo-bubble-up (item list)
+  (cons item (-remove-item item list)))
+
+(defun! oo-generate-requires ()
+  (set! dir "~/.local/share/chezmoi/dot_config/emacs/lisp/")
+  (set! files (directory-files dir t "\\`init-.+\\.el\\'"))
+  (setq files (oo-bubble-up "init-no-littering.el" files))
+  (dolist (file files)
+    (set! feature (intern (f-no-ext (f-base file))))
+    (collecting! forms `(require ',feature)))
+  forms)
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
