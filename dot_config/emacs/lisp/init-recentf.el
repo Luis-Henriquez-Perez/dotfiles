@@ -1,4 +1,4 @@
-;;; oo-init-recentf.el --- initialize recentf -*- lexical-binding: t; -*-
+;;; init-recentf.el --- initialize recentf -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,6 +28,8 @@
 (require 'base)
 (require 'recentf)
 (eval-when-compile (require 'base-macros-setters))
+
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
 ;; TODO: Figure out why this is an error with eldev eval.
 ;; For some reason this gives an error when I use eldev eval. I have to figure
 ;; out what eldev is doing here.
@@ -53,5 +55,5 @@
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
 (recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
-(provide 'oo-init-recentf)
-;;; oo-init-recentf.el ends here
+(provide 'init-recentf)
+;;; init-recentf.el ends here
