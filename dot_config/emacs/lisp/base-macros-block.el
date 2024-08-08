@@ -33,12 +33,12 @@
 (require 'base-macros-let)
 (require 'oo-base-macros-for-bang)
 (require 'base-macros-setters)
-;;;; progn!
+;;;; block!
 ;;;;; helpers
-(defun oo--parse-progn-bang (data forms)
+(defun oo--parse-block (data forms)
   "Return an updated list of (DATA FORMS) based on contents of FORMS.
 DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
-`progn!'."
+`block!'."
   (let ((zipper (treepy-list-zip forms)))
     (while (not (treepy-end-p zipper))
       (pcase (treepy-node zipper)
@@ -83,7 +83,7 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
     (list data (treepy-node zipper))))
 ;;;;; helpers
 (defmacro return! (&optional value)
-  "Exit `progn!' and return VALUE."
+  "Exit `block!' and return VALUE."
   `(throw 'return! ,value))
 
 (defmacro break! (&optional value)
@@ -101,26 +101,26 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
                           (cons sym syms))))
 
 (defmacro exclude! (&rest _)
-  "Signal to `progn!' not to let bind VARS.")
+  "Signal to `block!' not to let bind VARS.")
 (defalias 'without! 'exclude!)
 
 (defmacro stub! (name args &rest body)
   "Define a local function definition with `cl-flet'.
 NAME, ARGS and BODY are the same as in `defun'.
-Must be used in `progn!'."
+Must be used in `block!'."
   (declare (indent defun))
   (ignore name args body))
 (defalias 'flet! 'stub!)
 (defalias 'noflet! 'stub!)
 (defalias 'nflet! 'stub!)
-;;;;; generate the body of progn!
-(defun oo--generate-progn-bang-body (forms &optional lets nolets wrappers)
-  "Return the body for `progn!'.
+;;;;; generate the body of block!
+(defun oo--generate-block-body (forms &optional lets nolets wrappers)
+  "Return the body for `block!'.
 FORMS is the set of froms from which the resulting body will be generated.  LETS
 is a list of symbols to be bound.  NOLETS is a list of symbols that should not
 be bound and which takes precedence over LETS.  WRAPPERS a list of forms to wrap
 around the resulting body."
-  (let! (((data body) (oo--parse-progn-bang nil forms))
+  (let! (((data body) (oo--parse-block nil forms))
          (lets (append (mapcar #'list lets) (map-elt data :let)))
          (nolets (append nolets (map-elt data :nolet)))
          (wrappers (append wrappers (map-elt data :wrappers)))
@@ -128,7 +128,7 @@ around the resulting body."
     (appending! wrappers `((catch 'return!) (let ,binds)))
     (oo-wrap-forms wrappers body)))
 ;;;;; main macro
-(defmacro progn! (&rest body)
+(defmacro block! (&rest body)
   "Same as `cl-block' but modify BODY depending on particular forms.
 The following describes possible modifications.
 
@@ -176,7 +176,7 @@ with `(catch \\='continue!)'. LOOP can be `for!',
 
 Like `cl-block' `cl-return' and `cl-return-from' work in BODY."
   (declare (indent 0))
-  (oo--generate-progn-bang-body body))
+  (oo--generate-block-body body))
 
-(provide 'oo-base-macros-progn-bang)
+(provide 'oo-base-macros-block)
 ;;; oo-progn-macro.el ends here
