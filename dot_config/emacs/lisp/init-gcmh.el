@@ -28,6 +28,7 @@
 (require 'base)
 
 (oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
+
 (opt! gcmh-idle-delay 'auto)
 (opt! gcmh-high-cons-threshold (* 8 1024 1024))
 (opt! gcmh-low-cons-threshold (* 4 1024 1024))

@@ -290,8 +290,6 @@
 (bind! (n m) "-" #'text-scale-decrease)
 (bind! n "H" #'evil-first-non-blank)
 (bind! n "L" #'evil-last-non-blank)
-(bind! v "V" #'expreg-contract)
-(bind! v "v" #'expreg-expand)
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific

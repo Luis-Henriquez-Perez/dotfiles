@@ -34,7 +34,6 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-file-hook
-(oo-add-hook 'on-first-file-hook #'super-save-mode)
 ;;;;; on-first-input-hook
 (oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 (oo-add-hook 'on-first-input-hook #'vertico-mode)
@@ -95,7 +94,6 @@
 ;; settings and see if this flickering can be avoided.
 (oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 ;;;;; emacs-startup-hook
-(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 (oo-add-hook 'emacs-startup-hook #'evil-mode)
 (oo-add-hook 'emacs-startup-hook #'which-key-mode)
 (defhook! init-after-load-functions (emacs-startup-hook)
