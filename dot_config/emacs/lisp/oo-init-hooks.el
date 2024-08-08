@@ -67,9 +67,7 @@
 ;;;;; text-mode-hook
 (oo-add-hook 'text-mode-hook #'visual-line-mode)
 (oo-add-hook 'text-mode-hook #'auto-fill-mode)
-(oo-add-hook 'text-mode-hook #'abbrev-mode)
 ;;;;; emacs-startup-hook
-(oo-add-hook 'emacs-startup-hook #'which-key-mode)
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
