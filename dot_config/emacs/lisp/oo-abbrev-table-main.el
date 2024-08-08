@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("lke" "like")
+  '(("shoudnt" "should not")
+    ("actu" "actually")
+    ("lke" "like")
     ("tother" "together")
     ("usng" "using")
     ("advoid" "avoid")
