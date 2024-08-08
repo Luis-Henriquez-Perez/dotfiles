@@ -321,13 +321,6 @@
 ;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
 ;; Though I will say I am not 100% sure it is the equivalent.
 (bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
-;;;;;;; motions
-(bind! (n v) "w" #'oo-evilem-motion-beginning-of-word)
-(bind! (n v) "W" #'oo-evilem-motion-beginning-of-WORD)
-(bind! (n v) "e" #'oo-evilem-motion-end-of-word)
-(bind! (n v) "E" #'oo-evilem-motion-end-of-WORD)
-(bind! (n v o) "f" #'oo-evilem-motion-char)
-(bind! (n v o) "H" #'oo-evilem-motion-beginning-of-line)
 ;;;;;;; text objects
 ;;;;;;;; block
 ;; Not sure what the difference is between block and form.
