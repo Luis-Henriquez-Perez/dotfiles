@@ -1,4 +1,4 @@
-;;; init-super-save.el --- super-save configuration -*- lexical-binding: t; -*-
+;;; init-super-save.el --- initialize super-save -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,9 +22,11 @@
 ;;
 ;;; Commentary:
 ;;
-;; This is my configuration for super-save.
+;; Initialize super-save.
 ;;
 ;;; Code:
+(require 'base)
+
 (oo-add-hook 'on-first-file-hook #'super-save-mode)
 ;; The default auto-saving feature in emacs saves after a certain number of
 ;; characters are typed (see [[helpvar:auto-save-interval][auto-save-interval]]).  The problem is that if you're in
