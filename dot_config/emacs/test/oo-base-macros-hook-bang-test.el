@@ -28,21 +28,21 @@
 (require 'oo-base-macros-hook-bang)
 
 (ert-deftest hook! ()
-  (progn!
-    (set! run-list nil)
-    (defvar fake-hook nil)
-    (should-not fake-hook)
-    (nflet! a () (push 'a run-list))
-    (nflet! c () (push 'c run-list))
-    (nflet! b-error () (push 'b-error run-list) (/ 2 0))
-    (hook! fake-hook&a)
-    (hook! fake-hook&b-error)
-    (hook! fake-hook&c)
-    ;; All the hooks have been added.
-    (should (equal fake-hook '(fake-hook&c fake-hook&b-error fake-hook&a)))
-    (run-hooks 'fake-hook)
-    ;; Even the hook with the error should be in the list.
-    (should (equal run-list '(a b-error c)))))
+  (block!
+   (set! run-list nil)
+   (defvar fake-hook nil)
+   (should-not fake-hook)
+   (nflet! a () (push 'a run-list))
+   (nflet! c () (push 'c run-list))
+   (nflet! b-error () (push 'b-error run-list) (/ 2 0))
+   (hook! fake-hook&a)
+   (hook! fake-hook&b-error)
+   (hook! fake-hook&c)
+   ;; All the hooks have been added.
+   (should (equal fake-hook '(fake-hook&c fake-hook&b-error fake-hook&a)))
+   (run-hooks 'fake-hook)
+   ;; Even the hook with the error should be in the list.
+   (should (equal run-list '(a b-error c)))))
 ;;; provide
 (provide 'oo-base-macros-hook-bang-test)
 ;;; oo-base-macros-hook-bang-test.el ends here
