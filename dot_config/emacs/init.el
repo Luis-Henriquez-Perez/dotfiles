@@ -90,7 +90,7 @@
 (require 'init-lgr)
 (require 'init-lispyville)
 (require 'init-marginalia)
-(require 'init-modaled)
+;; (require 'init-modaled)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
 (require 'init-orderless)
