@@ -109,9 +109,9 @@
       (insert result)
       (comment-region it (point)))))
 ;;;;; evil-surround
-(oo-add-hook 'prog-mode-hook #'evil-surround-mode)
+(add-hook! prog-mode-hook evil-surround-mode)
 
-(oo-add-hook 'text-mode-hook #'evil-surround-mode)
+(add-hook! text-mode-hook evil-surround-mode)
 ;;; provide
 (provide 'config-evil)
 ;;; config-evil.el ends here

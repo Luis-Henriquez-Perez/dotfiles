@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-add-hook 'emacs-startup-hook #'which-key-mode)
+(add-hook! emacs-startup-hook which-key-mode)
 
 (opt! which-key-sort-uppercase-first nil)
 (opt! which-key-max-display-columns nil)

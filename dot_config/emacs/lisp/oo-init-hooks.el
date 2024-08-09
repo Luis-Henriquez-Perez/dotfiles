@@ -34,10 +34,10 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-input-hook
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+(add-hook! on-first-input-hook minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
-(oo-add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
+(add-hook! emacs-lisp-mode-hook aggressive-indent-mode)
+(add-hook! emacs-lisp-mode-hook highlight-quoted-mode)
 
 (defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
@@ -47,7 +47,7 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; oo-override-map
-(oo-add-hook 'after-init-hook #'oo-override-mode :depth -100)
+(add-hook! after-init-hook oo-override-mode :depth -100)
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
@@ -57,23 +57,23 @@
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; prog-mode-hook
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+(add-hook! prog-mode-hook hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
-;; (oo-add-hook 'prog-mode-hook #'flyspell-prog-mode)
-(oo-add-hook 'auto-fill-mode-hook #'filladapt-mode)
-(oo-add-hook 'prog-mode-hook #'auto-fill-mode)
+;; (add-hook! prog-mode-hook flyspell-prog-mode)
+(add-hook! auto-fill-mode-hook filladapt-mode)
+(add-hook! prog-mode-hook auto-fill-mode)
 ;;;;; text-mode-hook
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
-(oo-add-hook 'text-mode-hook #'auto-fill-mode)
+(add-hook! text-mode-hook visual-line-mode)
+(add-hook! text-mode-hook auto-fill-mode)
 ;;;;; emacs-startup-hook
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions));;;;; html-mode
-(oo-add-hook 'html-mode-hook #'emmet-mode)
+  (add-hook! after-load-functions oo-call-after-load-functions));;;;; html-mode
+(add-hook! html-mode-hook emmet-mode)
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat

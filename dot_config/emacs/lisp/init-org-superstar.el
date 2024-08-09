@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-add-hook 'org-mode-hook #'org-superstar-mode)
+(add-hook! org-mode-hook org-superstar-mode)
 
 (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
 (opt! org-superstar-leading-bullet ?\s)

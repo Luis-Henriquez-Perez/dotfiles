@@ -22,44 +22,105 @@
 ;;
 ;;; Commentary:
 ;;
-;; This file provides a macro `hook!' that generates functions that are designed
-;; to added to hooks.  These generated functions suppress errors when
-;; `oo-debug-p' is nil and log their usage.  The idea is part of my quest to
-;; make my configuration introspection-friendly.  I can see in a log buffer
-;; which hooks were called and when they were called.  The error suppression is
-;; to stop hooks from "short-circuiting" when an error is raised in one of their
-;; invoked functions.  As is, if there is an error is raised when a hook is run,
-;; all subsequent functions in that hook never get run.  Instead of stopping
-;; abruptly try to run as many hook functions as you can.
+;; This file provides a macros that generate functions that are designed to
+;; added to hooks.  These generated functions suppress errors when `oo-debug-p'
+;; is nil and log their usage.  The idea is to make my configuration
+;; introspection-friendly.  Logging lets me see which hook functions are called,
+;; when they are called and in what order.  The error suppression stop hooks
+;; from "short-circuiting" when an error is raised in a hook function.  As is,
+;; if there is an error is raised in a hook function when a hook is run, all
+;; subsequent functions in that hook never get run.  By suppressing (but
+;; logging) errors I am saying: if something goes wrong with one hook do not
+;; abort the hook, still run the rest.  Which is the behavior I want the vast
+;; majority of the time.
+;;
+;; Interestingly, I am also experimenting with converting the `after-load'
+;; mechanism to hook fashion.  The after-load mechanism I am referring to using
+;; `eval-after-load' to add to the `after-load-alist', essentially a way to
+;; evaluate code just after a feature is loaded.  The drawback is that it is not
+;; introspectable.  With hooks, for example, if you want to know the functions
+;; that are run you can just look at the hook.  The `after-load-alist' is simply
+;; too large to examine and usually contains predominately anonymous lambda.
+;; And of course.  Concretely, the idea is to.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'base-vars)
 (require 'base-lib)
-
-(defmacro! hook! (name &rest plist)
-  "Define a function named NAME and add it to hook.
-NAME is a symbol of the form HOOK&FUNCTION.  HOOK is the hook to which the
-symbol NAME will be added.  FUNCTION is the function NAME should call when
-invoked.  The defined function will log its usage and suppress errors whenever
-`oo-debug-p' is nil, logging them instead."
-  (set! append (or (plist-get plist :depth) (plist-get plist :append)))
-  (set! local (plist-get plist :local))
-  (alet (symbol-name name)
-    (string-match "\\([^[:space:]]+\\)&\\([^[:space:]]+\\)" it)
-    (set! hook (intern (match-string 1 it)))
-    (set! fn (intern (match-string 2 it))))
-  `(progn (defun ,name (&rest args)
-            (info! "Running hook %s -> %s..." ',hook ',fn)
-            (condition-case err
-                (apply #',fn args)
-              (error (if oo-debug-p
-                         (signal (car err) (cdr err))
-                       (error! "Error %s calling %s in %s because of %s"
-                               ',hook
-                               ',fn
-                               (car err)
-                               (cdr err))))))
-          (add-hook ',hook #',name ,append ,local)))
+(require 'base-requirements)
+(require 'base-macros-definers)
+;;;; hooks
+;;;;; oo-hook-symbol-p
+(defun! oo-hook-symbol-p (symbol)
+  "Return non-nil if SYMBOL is a hook symbol."
+  (declare (pure t) (side-effect-free t))
+  (when (symbolp symbol)
+    (set! name (symbol-name symbol))
+    (string-match-p "[^[:space:]]+-hook\\'" name)))
+;;;;; oo-generate-hook-forms
+;; I am hesitant about having the `oo-generate-hook' both generate the fn
+;; that produces the hook and add it to the hook, but as of yet I do not see a
+;; reason not to have it do this.  In other words, I cannot imagine a case where
+;; I would be using this function and not adding a hook.  If that changes I can
+;; just change this function.
+(defun! oo-generate-hook-forms (hook suffix fn depth local)
+  ""
+  (set! name (intern (format "%s&%s" hook suffix)))
+  `((defun ,name (&rest args)
+      (info! "Running hook %s..." ',name)
+      (condition-case err
+          (apply #',fn args)
+        (error (if oo-debug-p
+                   (signal (car err) (cdr err))
+                 (message "Error calling %s in %s because of %s"
+                          ',name
+                          (car err)
+                          (cdr err))))))
+    (add-hook ',hook #',name ,depth ,local)
+    ',name))
+;;;;; oo--after-load-hook-forms
+(defun! oo--after-load-hook-forms (hook)
+  "Return forms."
+  (set! name (symbol-name hook))
+  (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
+    (set! feature (match-string 1 name))
+    (set! run-fn (intern (format "run-after-load-%s-hooks" feature)))
+    `((defvar ,hook
+        ,(format "Hook run after %s is loaded." feature))
+      (unless (boundp ',hook)
+        (defun ,run-fn (&rest _)
+          ,(format "Run %s after %s has been loaded." hook feature)
+          (run-hooks ',hook))
+        (oo-call-after-load ',feature #',run-fn)))))
+;;;;; oo-add-hook!
+(cl-defmacro add-hook! (hook fn &key append depth local)
+  "Generate a hook that calls function."
+  `(progn ,@(oo--after-load-hook-forms hook)
+          ,@(oo-generate-hook-forms hook fn fn (or append depth) local)))
+;;;;; oo--defhook-arguments
+(defun! oo--defhook-arguments (args)
+  ""
+  (set! name (pop args))
+  (set! arglist (pop args))
+  (while (oo-hook-symbol-p (car arglist))
+    (collecting! hooks (pop arglist)))
+  (when (stringp args)
+    (set! docstring (pop args)))
+  (when (vectorp (car args))
+    (alet (append (pop args) nil)
+      (set! depth (or (map-elt it :depth) (map-elt it :append)))
+      (set! local (map-elt it :local))))
+  (set! body args)
+  (list name arglist hooks body depth local))
+;;;;; defhook!
+(defmacro! defhook! (&rest args)
+  "Add function to hook as specified by NAME."
+  (declare (indent defun))
+  (set! (fn-symbol arglist hooks body depth local) (oo--defhook-arguments args))
+  (dolist (hook hooks)
+    (set! lambda `(lambda ,arglist ,@body))
+    (appending! forms (oo-generate-hook-forms hook fn-symbol lambda depth local)))
+  `(progn ,@forms))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here

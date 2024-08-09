@@ -38,27 +38,6 @@
 (require 'base-macros-definers)
 (require 'base-macros-bind)
 (require 'base-macros-defadvice)
-;;;; oo--defhook-arguments
-(defun! oo--defhook-arguments (args)
-  (set! name (pop args))
-  (set! arglist (pop args))
-  (while (oo-hook-symbol-p (car arglist))
-    (collecting! hooks (pop arglist)))
-  (when (stringp args)
-    (set! docstring (pop args)))
-  (when (vectorp (car args))
-    (alet (append (pop args) nil)
-      (set! depth (or (map-elt it :depth) (map-elt it :append)))
-      (set! local (map-elt it :local))))
-  (set! body args)
-  (list name arglist hooks body depth local))
-;;;; defhook!
-(defmacro! defhook! (&rest args)
-  "Add function to hook as specified by NAME.
-NAME should be a hook symbol."
-  (declare (indent defun))
-  (set! (suffix arglist hooks body depth local) (oo--defhook-arguments args))
-  (macroexp-progn (--map `(oo-generate-hook ',it ',suffix (lambda ,arglist ,@body) ,depth ,local) hooks)))
 ;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
