@@ -1,4 +1,4 @@
-;;; oo-base-macros-for.el -*- lexical-binding: t; -*-
+;;; base-macros-for.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -67,5 +67,5 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
               (t
                (error "Unknown list predicate: %S" ',loop-struct)))))))
 ;;; provide
-(provide 'oo-base-macros-for)
-;;; oo-base-macros-for.el ends here
+(provide 'base-macros-for)
+;;; base-macros-for.el ends here

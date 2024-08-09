@@ -1,4 +1,4 @@
-;;; oo-base-macros-hook.el --- macro for adding hooks -*- lexical-binding: t; -*-
+;;; base-macros-hook.el --- macro for adding hooks -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -61,5 +61,5 @@ invoked.  The defined function will log its usage and suppress errors whenever
                                (cdr err))))))
           (add-hook ',hook #',name ,append ,local)))
 ;;; provide
-(provide 'oo-base-macros-hook)
-;;; oo-base-macros-hook.el ends here
+(provide 'base-macros-hook)
+;;; base-macros-hook.el ends here
