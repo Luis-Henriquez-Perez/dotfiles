@@ -66,12 +66,12 @@
 ;; I would be using this function and not adding a hook.  If that changes I can
 ;; just change this function.
 (defun! oo-generate-hook-forms (hook suffix fn depth local)
-  ""
   (set! name (intern (format "%s&%s" hook suffix)))
-  `((defun ,name (&rest args)
+  `(,@(oo--after-load-hook-forms hook)
+    (defun ,name (&rest args)
       (info! "Running hook %s..." ',name)
       (condition-case err
-          (apply #',fn args)
+          (apply ',fn args)
         (error (if oo-debug-p
                    (signal (car err) (cdr err))
                  (message "Error calling %s in %s because of %s"
@@ -88,17 +88,16 @@
     (set! feature (match-string 1 name))
     (set! run-fn (intern (format "run-after-load-%s-hooks" feature)))
     `((defvar ,hook
-        ,(format "Hook run after %s is loaded." feature))
+        ,(format "Hook run after feature `%s' is loaded." feature))
       (unless (boundp ',hook)
         (defun ,run-fn (&rest _)
-          ,(format "Run %s after %s has been loaded." hook feature)
+          ,(format "Run `%s' after feature `%s' has been loaded." hook feature)
           (run-hooks ',hook))
-        (oo-call-after-load ',feature #',run-fn)))))
-;;;;; oo-add-hook!
-(cl-defmacro add-hook! (hook fn &key append depth local)
+        (oo-call-after-load ',feature #',run-function)))))
+;;;;; hook!
+(cl-defmacro hook! (hook fn &key append depth local)
   "Generate a hook that calls function."
-  `(progn ,@(oo--after-load-hook-forms hook)
-          ,@(oo-generate-hook-forms hook fn fn (or append depth) local)))
+  (macroexp-progn (oo-generate-hook-forms hook fn fn (or append depth) local)))
 ;;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
   ""
@@ -125,12 +124,14 @@
   `(progn ,@forms))
 ;;;;; after!
 (defmacro after! (suffix expr &rest body)
+  "Evaluate BODY after EXPR is satisfied.
+Define a hook."
   (declare (indent defun))
   (pcase expr
     ((pred null) nil)
     ((and feature (pred symbolp))
      (set! hook (intern (format "oo-after-load-%s-hook" feature)))
-     `(aprog1 (defhook! ,suffix (,hook) ,@body)
+     `(aprog1 ,(macroexp-progn (oo-generate-hook-forms hook suffix `(lambda () ,@body) nil nil))
         (when (featurep ',feature) (funcall it))))
     (`(:or . ,exprs)
      `(progn ,@(--map `(after! ,suffix ,it ,@body) exprs)))
