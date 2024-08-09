@@ -123,6 +123,25 @@
     (set! lambda `(lambda ,arglist ,@body))
     (appending! forms (oo-generate-hook-forms hook fn-symbol lambda depth local)))
   `(progn ,@forms))
+;;;;; after!
+(defmacro after! (suffix expr &rest body)
+  (declare (indent defun))
+  (pcase expr
+    ((pred null) nil)
+    ((and feature (pred symbolp))
+     (set! hook (intern (format "oo-after-load-%s-hook" feature)))
+     `(aprog1 (defhook! ,suffix (,hook) ,@body)
+        (when (featurep ',feature) (funcall it))))
+    (`(:or . ,exprs)
+     `(progn ,@(--map `(after! ,suffix ,it ,@body) exprs)))
+    (`(,expr . nil)
+     `(after! ,suffix ,expr ,@body))
+    (`(,expr . ,exprs)
+     `(after! ,suffix ,expr (after! ,suffix ,exprs ,@body)))
+    (`(:and . ,exprs)
+     `(after! ,suffix ,exprs ,@body))
+    (_
+     (error "invalid expression `%S'" expr))))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
