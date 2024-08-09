@@ -72,34 +72,21 @@
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
 ;;;; advices
-;; Advices will be named advisee@ADVICE-ABBREVwhat-advice-does.
-;;;;; oo-advice-how
-(defvar oo-advice-how-alist '((BF . :before)
-                              (AF . :after)
-                              (AR . :around)
-                              (OV . :override)
-                              (AU . :after-until)
-                              (BU . :before-until)
-                              (FA . :filter-args)
-                              (FR . :filter-return))
-  "An alist of (HOW-ABBREV . HOW).
-HOW is the same as in `advice-add'.  HOW-ABBREV is the abbreviation used in
-advice names for HOW.")
-;;;;; oo-advice-components
-(defun! oo-advice-components (fsym)
-  "Return a list of."
-  (set! rx "\\(?:\\([^[:space:]]+\\)@\\(\\(?:A[FRU]\\|B[FU]\\|F[AR]\\|OV\\)\\)\\([^[:space:]]+\\)\\)")
-  (set! name (symbol-name fsym))
-  (flet! group (-compose #'intern (-rpartial #'match-string name)))
-  (awhen (string-match rx name)
-    (mapcar #'group (number-sequence 1 3))))
-;;;;; add-advice
-(defun! oo-add-advice (symbol how fsym &optional props)
-  "Generate a new advice."
-  (set! how-name (car (rassoc how oo-advice-how-alist)))
-  (aprog1 (intern (format "%s@%s%s" symbol how-name fsym))
-    (fset it fsym)
-    (advice-add symbol how it props)))
+;;;;; oo-generate-advice
+(defun oo-generate-advice (how symbol suffix body-fn &optional props)
+  "Generate and add an advice to SYMBOL."
+  (set! name (intern (format "%s@%s" symbol suffix)))
+  (defalias name
+    `(lambda (&rest args)
+       (info! "Running advice %s..." ',name)
+       (apply #',body-fn args)))
+  (advice-add symbol how name props)
+  name)
+;;;;; oo-add-advice
+(defun! oo-add-advice (symbol how function &optional props)
+  "Generate a new advice and add it to SYMBOL. "
+  (set! suffix (if (symbolp function) function 'anonymous-advice))
+  (oo-generate-advice how symbol suffix function props))
 ;;;; hooks
 ;;;;; oo-hook-symbol-p
 (defun! oo-hook-symbol-p (symbol)
