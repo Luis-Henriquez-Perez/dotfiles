@@ -183,6 +183,16 @@ abbreviation at point. This function assumes the abbreviations file
     (set! feature (intern (f-no-ext (f-base file))))
     (collecting! forms `(require ',feature)))
   forms)
+
+;; TODO: I want to do more complex things like loading a random theme with no
+;; repetitions in the current session and marking certain themes as favorite
+;; themes that have a greater likelihood of being displayed.
+(defun! oo-load-random-theme ()
+  "Load a random theme."
+  (interactive)
+  (set! theme (seq-random-elt (custom-available-themes)))
+  (message "Loading theme %s..." theme)
+  (load-theme theme))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
