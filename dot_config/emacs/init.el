@@ -90,6 +90,7 @@
 (require 'init-lgr)
 (require 'init-lispyville)
 (require 'init-marginalia)
+(require 'init-emacs-lock)
 ;; (require 'init-modaled)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
