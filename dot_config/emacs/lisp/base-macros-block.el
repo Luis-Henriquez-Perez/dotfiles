@@ -31,7 +31,7 @@
 (require 'base-utils)
 (require 'base-macros-lef)
 (require 'base-macros-let)
-(require 'oo-base-macros-for-bang)
+(require 'base-macros-for-bang)
 (require 'base-macros-setters)
 ;;;; block!
 ;;;;; helpers

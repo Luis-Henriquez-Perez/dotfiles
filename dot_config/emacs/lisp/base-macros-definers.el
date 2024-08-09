@@ -25,7 +25,7 @@
 ;; Define definer macros.
 ;;
 ;;; Code:
-(require 'oo-base-macros-with-map-bang)
+(require 'base-macros-with-map-bang)
 (require 'base-macros-block)
 
 (defun oo--arglist (arglist)

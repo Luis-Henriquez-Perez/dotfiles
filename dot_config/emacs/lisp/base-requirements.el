@@ -25,7 +25,7 @@
 ;; This file loads the essential external packages needed for my configuration.
 ;;
 ;;; Code:
-(require 'oo-base-packages)
+(require 'base-packages)
 (require 'f)
 (require 'on)
 (require 'anaphora)
