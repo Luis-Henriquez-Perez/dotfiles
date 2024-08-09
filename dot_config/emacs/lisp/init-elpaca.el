@@ -1,4 +1,4 @@
-;;; oo-init-elpaca.el --- initialize elpaca -*- lexical-binding: t; -*-
+;;; init-elpaca.el --- initialize elpaca -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -170,5 +170,5 @@
 (elpaca-process-queues)
 (elpaca-wait)
 ;;; provide
-(provide 'oo-init-elpaca)
-;;; oo-init-elpaca.el ends here
+(provide 'init-elpaca)
+;;; init-elpaca.el ends here
