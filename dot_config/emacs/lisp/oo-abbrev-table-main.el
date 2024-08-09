@@ -28,7 +28,15 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("loeaded" "loaded")
+  '(("examinging" "examining")
+    ("functinos" "functions")
+    ("iuwt" "if you want to")
+    ("eval" "evaluate")
+    ("teating" "treating")
+    ("abbort" "abort")
+    ("essntially" "essentially")
+    ("functoins" "functions")
+    ("loeaded" "loaded")
     ("appropr" "appropriate")
     ("pt" "point")
     ("befo" "before")
