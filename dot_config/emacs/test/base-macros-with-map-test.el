@@ -1,4 +1,4 @@
-;;; oo-base-macros-with-map-test.el -*- lexical-binding: t; -*-
+;;; base-macros-with-map-test.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,15 +22,15 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test `oo-base-macros-with-map'.
+;; Test `base-macros-with-map'.
 ;;
 ;;; Code:
 (require 'ert)
-(require 'oo-base-macros-with-map)
+(require 'base-macros-with-map)
 
 (ert-deftest with-map! ()
   (should (= 3 (with-map! '((a . 1) (b . 2)) (and !!a !!b (+ !a !b)))))
   (should (= 3 (with-map! '(a 1 b 2) (and !!a !!b (+ !a !b))))))
 ;;; provide
-(provide 'oo-base-macros-with-map-test)
-;;; oo-base-macros-with-map-test.el ends here
+(provide 'base-macros-with-map-test)
+;;; base-macros-with-map-test.el ends here

@@ -1,4 +1,4 @@
-;;; oo-base-macros-definers-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; base-macros-definers-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test `oo-base-macro-definers'.
+;; Test `base-macro-definers'.
 ;;
 ;;; Code:
 (require 'base-macros-definers)
@@ -84,5 +84,5 @@
   ;; (should-not (oo--prognify-components (oo--definer-components '(foo (a b c) "do" (+ 1 1)))))
   )
 ;;; provide
-(provide 'oo-base-macros-definers-test)
-;;; oo-base-macros-definers-test.el ends here
+(provide 'base-macros-definers-test)
+;;; base-macros-definers-test.el ends here

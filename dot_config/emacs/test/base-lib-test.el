@@ -1,4 +1,4 @@
-;;; oo-base-lib-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; base-lib-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -97,5 +97,5 @@
    (should (equal '((fn-A normal)) called))
    (should (equal '((116 fn-B)) oo-after-load-functions-alist))))
 ;;; provide
-(provide 'oo-base-lib-test)
-;;; oo-base-lib-test.el ends here
+(provide 'base-lib-test)
+;;; base-lib-test.el ends here

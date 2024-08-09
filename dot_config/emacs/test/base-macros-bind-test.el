@@ -1,4 +1,4 @@
-;;; oo-base-macros-bind-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; base-macros-bind-test.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -120,5 +120,5 @@
                      (:a-value . 1)
                      (:a . a))))))
 ;;; provide
-(provide 'oo-base-macros-bind-test)
-;;; oo-base-macros-bind-test.el ends here
+(provide 'base-macros-bind-test)
+;;; base-macros-bind-test.el ends here
