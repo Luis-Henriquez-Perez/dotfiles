@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("appropr" "appropriate")
+  '(("loeaded" "loaded")
+    ("appropr" "appropriate")
     ("pt" "point")
     ("befo" "before")
     ("ottomh" "off the top of my head")
