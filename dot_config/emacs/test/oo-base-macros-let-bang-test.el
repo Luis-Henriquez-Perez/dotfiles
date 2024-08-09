@@ -1,4 +1,4 @@
-;;; oo-base-macros-let-bang-test.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-let-test.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -86,5 +86,5 @@
                    (list a b c foo))
                  '(1 3 4 (3 . 4)))))
 ;;; provide
-(provide 'oo-base-macros-let-bang-test)
-;;; oo-base-macros-let-bang-test.el ends here
+(provide 'oo-base-macros-let-test)
+;;; oo-base-macros-let-test.el ends here

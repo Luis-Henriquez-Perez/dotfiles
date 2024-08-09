@@ -1,4 +1,4 @@
-;;; oo-base-macros-hook-bang-test.el --- Test `oo-base-macros-hook-bang' -*- lexical-binding: t; -*-
+;;; oo-base-macros-hook-test.el --- Test `oo-base-macros-hook' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test `oo-base-macros-hook-bang'.
+;; Test `oo-base-macros-hook'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-hook-bang)
+(require 'oo-base-macros-hook)
 
 (ert-deftest hook! ()
   (block!
@@ -44,5 +44,5 @@
    ;; Even the hook with the error should be in the list.
    (should (equal run-list '(a b-error c)))))
 ;;; provide
-(provide 'oo-base-macros-hook-bang-test)
-;;; oo-base-macros-hook-bang-test.el ends here
+(provide 'oo-base-macros-hook-test)
+;;; oo-base-macros-hook-test.el ends here

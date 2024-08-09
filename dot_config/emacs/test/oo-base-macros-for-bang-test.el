@@ -1,4 +1,4 @@
-;;; oo-base-macros-for-bang-test.el -*- lexical-binding: t; -*-
+;;; oo-base-macros-for-test.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,10 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Test `oo-base-macros-for-bang'.
+;; Test `oo-base-macros-for'.
 ;;
 ;;; Code:
-(require 'oo-base-macros-for-bang)
+(require 'oo-base-macros-for)
 
 (ert-deftest for!---properly-loops-with-predicate-being-repeat-N ()
   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n))))
@@ -50,5 +50,5 @@
 (ert-deftest for!---propertly-loops-with-predicate-being-INTEGER ()
   (should (= 11 (let ((n 1)) (for! 10 (cl-incf n)) n))))
 ;;; provide
-(provide 'oo-base-macros-for-bang-test)
-;;; oo-base-macros-for-bang-test.el ends here
+(provide 'oo-base-macros-for-test)
+;;; oo-base-macros-for-test.el ends here

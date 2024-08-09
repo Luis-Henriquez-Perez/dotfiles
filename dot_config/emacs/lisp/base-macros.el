@@ -30,11 +30,11 @@
 ;;; Code:
 (require 'base-utils)
 (require 'base-macros-setters)
-(require 'base-macros-for-bang)
+(require 'base-macros-for)
 (require 'base-macros-let)
 (require 'base-macros-lef)
 (require 'base-macros-block)
-(require 'base-macros-with-map-bang)
+(require 'base-macros-with-map)
 (require 'base-macros-definers)
 (require 'base-macros-bind)
 (require 'base-macros-defadvice)

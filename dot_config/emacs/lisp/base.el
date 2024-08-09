@@ -28,7 +28,7 @@
 (require 'base-vars)
 (require 'base-settings)
 (require 'base-lib)
-(eval-when-compile (require 'base-macros-hook-bang))
+(eval-when-compile (require 'base-macros-hook))
 (defmacro alt! (old new feature)
   `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
                 (gethash ',old oo-alternate-commands))

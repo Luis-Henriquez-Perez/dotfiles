@@ -1,4 +1,4 @@
-;;; oo-base-packages.el --- install core packages -*- lexical-binding: t; -*-
+;;; base-packages.el --- install core packages -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -27,5 +27,5 @@
 ;;; Code:
 (require 'oo-init-elpaca)
 ;;; provide
-(provide 'oo-base-packages)
-;;; oo-base-packages.el ends here
+(provide 'base-packages)
+;;; base-packages.el ends here
