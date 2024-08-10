@@ -31,15 +31,15 @@
 (require 'oo-abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
 ;;;; set abbrevs my way
-(defun oo-enable-text-abbrev-p ()
+(defun +abbrev-enable-text-abbrev-p ()
   "Return non-nil when text abbrevs should be enabled.
 This is when the current major-mode is derived from text-mode or point is in a
 string or comment."
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
 ;;;; all abbrevs
-(abbrev-table-put oo-abbrev-table-main :enable-function #'oo-enable-text-abbrev-p)
-(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'oo-enable-text-abbrev-p)
+(abbrev-table-put oo-abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
+(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
 
 (alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-abbrev-table-wikipedia-misspellings)
   (abbrev-table-put global-abbrev-table :parents it))
