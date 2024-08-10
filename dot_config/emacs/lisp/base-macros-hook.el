@@ -59,6 +59,21 @@
   (when (symbolp symbol)
     (set! name (symbol-name symbol))
     (string-match-p "[^[:space:]]+-hook\\'" name)))
+;;;;; oo--after-load-hook-forms
+(defun! oo--after-load-hook-forms (hook)
+  "Return a list of forms that generates an after-load hook."
+  (set! name (symbol-name hook))
+  (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
+    (set! feature (intern (match-string 1 name)))
+    (set! run-fn (intern (format "oo-run-after-load-%s-hook" feature)))
+    `((unless (boundp ',hook)
+        (defvar ,hook nil
+          ,(format "Hook run after feature `%s' is loaded." feature))
+        (defun ,run-fn (&rest _)
+          (info! "Running `%s'..." ',hook)
+          ,(format "Run `%s' after feature `%s' has been loaded." hook feature)
+          (run-hooks ',hook))
+        (oo-call-after-load ',feature #',run-fn)))))
 ;;;;; oo-generate-hook-forms
 ;; I am hesitant about having the `oo-generate-hook' both generate the fn
 ;; that produces the hook and add it to the hook, but as of yet I do not see a
@@ -81,21 +96,6 @@
                           (cdr err))))))
     (add-hook ',hook #',name ,depth ,local)
     ',name))
-;;;;; oo--after-load-hook-forms
-(defun! oo--after-load-hook-forms (hook)
-  "Return a list of forms that generates an after-load hook."
-  (set! name (symbol-name hook))
-  (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
-    (set! feature (intern (match-string 1 name)))
-    (set! run-fn (intern (format "oo-run-after-load-%s-hook" feature)))
-    `((unless (boundp ',hook)
-        (defvar ,hook nil
-          ,(format "Hook run after feature `%s' is loaded." feature))
-        (defun ,run-fn (&rest _)
-          (info! "Running `%s'..." ',hook)
-          ,(format "Run `%s' after feature `%s' has been loaded." hook feature)
-          (run-hooks ',hook))
-        (oo-call-after-load ',feature #',run-fn)))))
 ;;;;; hook!
 (cl-defmacro hook! (hook fn &key append depth local)
   "Generate a hook that calls function."
