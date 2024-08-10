@@ -68,7 +68,7 @@ string or comment."
 ;; not use the abbreviation file partly because I do not think it lends itself
 ;; well for version control--which I want for my abbrevs--and because I do not
 ;; like the indentation and code format with which it saves the abbrev table.
-(defun! oo-add-new-abbrev ()
+(defun! +abbrev-add-new-abbrev ()
   "Add abbreviation at point to `oo-abbrev-table-main'.
 Prompt for the expansion and insert the abbreviation directly into
 `oo-abbrev-table-main.el`.  Also evaluate the the file and expand the

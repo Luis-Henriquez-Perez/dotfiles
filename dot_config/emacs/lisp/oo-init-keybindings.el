@@ -274,7 +274,7 @@
 (oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
 (oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
 ;;;;; miscellaneous
-(bind! "C-c j" #'oo-add-new-abbrev)
+(bind! "C-c j" #'+abbrev-add-new-abbrev)
 (bind! "C-c k" #'unexpand-abbrev)
 (bind! i "TAB" #'completion-at-point)
 ;; (bind! n "x" #'hungry-delete-forward)
