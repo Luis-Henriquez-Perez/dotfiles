@@ -87,13 +87,14 @@
   (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
     (set! feature (match-string 1 name))
     (set! run-fn (intern (format "run-after-load-%s-hooks" feature)))
-    `((defvar ,hook
+    `((defvar ,hook nil
         ,(format "Hook run after feature `%s' is loaded." feature))
       (unless (boundp ',hook)
         (defun ,run-fn (&rest _)
+          (info! "Running `%s'..." ',hook)
           ,(format "Run `%s' after feature `%s' has been loaded." hook feature)
           (run-hooks ',hook))
-        (oo-call-after-load ',feature #',run-function)))))
+        (oo-call-after-load ',feature #',run-fn)))))
 ;;;;; hook!
 (cl-defmacro hook! (hook fn &key append depth local)
   "Generate a hook that calls function."
@@ -133,12 +134,12 @@
         (when (featurep ',feature) (funcall it))))
     (`(:or . ,exprs)
      `(progn ,@(--map `(after! ,suffix ,it ,@body) exprs)))
+    (`(:and . ,exprs)
+     `(after! ,suffix ,exprs ,@body))
     (`(,expr . nil)
      `(after! ,suffix ,expr ,@body))
     (`(,expr . ,exprs)
      `(after! ,suffix ,expr (after! ,suffix ,exprs ,@body)))
-    (`(:and . ,exprs)
-     `(after! ,suffix ,exprs ,@body))
     (_
      (error "invalid expression `%S'" expr))))
 ;;; provide
