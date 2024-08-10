@@ -66,6 +66,7 @@
 ;; I would be using this function and not adding a hook.  If that changes I can
 ;; just change this function.
 (defun! oo-generate-hook-forms (hook suffix forms depth local)
+  "Produce a form that generates a hook function."
   (set! name (intern (format "%s&%s" hook suffix)))
   `(,@(oo--after-load-hook-forms hook)
     (defun ,name (&rest args)
@@ -82,14 +83,14 @@
     ',name))
 ;;;;; oo--after-load-hook-forms
 (defun! oo--after-load-hook-forms (hook)
-  "Return forms."
+  "Return a list of forms that generates an after-load hook."
   (set! name (symbol-name hook))
   (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
-    (set! feature (match-string 1 name))
-    (set! run-fn (intern (format "run-after-load-%s-hooks" feature)))
-    `((defvar ,hook nil
-        ,(format "Hook run after feature `%s' is loaded." feature))
-      (unless (boundp ',hook)
+    (set! feature (intern (match-string 1 name)))
+    (set! run-fn (intern (format "oo-run-after-load-%s-hook" feature)))
+    `((unless (boundp ',hook)
+        (defvar ,hook nil
+          ,(format "Hook run after feature `%s' is loaded." feature))
         (defun ,run-fn (&rest _)
           (info! "Running `%s'..." ',hook)
           ,(format "Run `%s' after feature `%s' has been loaded." hook feature)
