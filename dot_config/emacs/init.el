@@ -97,7 +97,6 @@
 (require 'init-helpful)
 (require 'init-highlight-quoted)
 (require 'init-hungry-delete)
-(require 'init-lgr)
 (require 'init-lispyville)
 (require 'init-marginalia)
 (require 'init-emacs-lock)
