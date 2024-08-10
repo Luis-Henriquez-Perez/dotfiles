@@ -29,20 +29,25 @@
 
 (ert-deftest hook! ()
   (block!
-   (set! run-list nil)
-   (defvar fake-hook nil)
-   (should-not fake-hook)
-   (nflet! a () (push 'a run-list))
-   (nflet! c () (push 'c run-list))
-   (nflet! b-error () (push 'b-error run-list) (/ 2 0))
-   (hook! fake-hook&a)
-   (hook! fake-hook&b-error)
-   (hook! fake-hook&c)
-   ;; All the hooks have been added.
-   (should (equal fake-hook '(fake-hook&c fake-hook&b-error fake-hook&a)))
-   (run-hooks 'fake-hook)
-   ;; Even the hook with the error should be in the list.
-   (should (equal run-list '(a b-error c)))))
+    (set! run-list nil)
+    (defvar fake-hook nil)
+    (should-not fake-hook)
+    (nflet! a () (push 'a run-list))
+    (nflet! c () (push 'c run-list))
+    (nflet! b-error () (push 'b-error run-list) (/ 2 0))
+    (hook! fake-hook&a)
+    (hook! fake-hook&b-error)
+    (hook! fake-hook&c)
+    ;; All the hooks have been added.
+    (should (equal fake-hook '(fake-hook&c fake-hook&b-error fake-hook&a)))
+    (run-hooks 'fake-hook)
+    ;; Even the hook with the error should be in the list.
+    (should (equal run-list '(a b-error c)))))
+
+(ert-deftest defafter! ()
+  (after! foo (+ 1 1))
+  (after! (bar baz) (push '(1) some-list))
+  )
 ;;; provide
 (provide 'base-macros-hook-test)
 ;;; base-macros-hook-test.el ends here
