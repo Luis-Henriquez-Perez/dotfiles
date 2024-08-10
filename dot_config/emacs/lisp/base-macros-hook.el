@@ -34,16 +34,16 @@
 ;; abort the hook, still run the rest.  Which is the behavior I want the vast
 ;; majority of the time.
 ;;
-;; Interestingly, I am also experimenting with converting the `after-load'
-;; mechanism to hook fashion.  The after-load mechanism I am referring to using
+;; Notably, I am also experimenting with converting the `after-load' mechanism
+;; to hook fashion.  The after-load mechanism I am referring to using
 ;; `eval-after-load' to add to the `after-load-alist', essentially a way to
 ;; evaluate code just after a feature is loaded.  The drawback is that it is not
 ;; introspectable.  With hooks if you want to know the functions that are run
 ;; you can just look at the value of the hook.  Moreover, if you want to change
-;; what functions are being run you can simply add or remove from the hook.  The
-;; `after-load-alist' is simply too large to examine and usually contains
-;; predominately anonymous lambda.  Although it is easy to add to it, examining
-;; it and removing from it are out of the question.
+;; what functions are being run you can simply add or remove from the hook.  In
+;; contrast, `after-load-alist' is simply too large to examine and usually
+;; contains predominately anonymous lambda.  Although it is easy to add to it,
+;; examining it and removing from it are out of the question.
 ;;
 ;;; Code:
 ;;;; requirements
