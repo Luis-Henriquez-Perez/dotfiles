@@ -59,7 +59,7 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load requirements
 (require 'init-no-littering)
-;; Beg built-ins
+;; Built-in packages
 (require 'init-files)
 (require 'init-startup)
 (require 'init-custom)
@@ -68,7 +68,7 @@
 (require 'init-frame)
 (require 'init-window)
 (require 'init-loaddefs)
-;; End build-ins
+;; External packages
 (require 'init-consult)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
@@ -100,7 +100,6 @@
 (require 'init-lispyville)
 (require 'init-marginalia)
 (require 'init-emacs-lock)
-;; (require 'init-modaled)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
 (require 'init-orderless)
