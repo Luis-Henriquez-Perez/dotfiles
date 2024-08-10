@@ -68,6 +68,7 @@
 (require 'init-frame)
 (require 'init-window)
 (require 'init-loaddefs)
+(require 'init-minibuffer)
 ;; External packages
 (require 'init-consult)
 (require 'init-ace-window)
