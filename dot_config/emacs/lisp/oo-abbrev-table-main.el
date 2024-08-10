@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("examinging" "examining")
+  '(("reqed" "required")
+	("examinging" "examining")
     ("functinos" "functions")
     ("iuwt" "if you want to")
     ("eval" "evaluate")
