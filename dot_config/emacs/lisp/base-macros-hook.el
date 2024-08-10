@@ -59,8 +59,8 @@
   (when (symbolp symbol)
     (set! name (symbol-name symbol))
     (string-match-p "[^[:space:]]+-hook\\'" name)))
-;;;;; oo--after-load-hook-forms
-(defun! oo--after-load-hook-forms (hook)
+;;;;; oo--setup-after-load-hook-maybe
+(defun! oo--setup-after-load-hook-maybe (hook)
   "Return a list of forms that generates an after-load hook."
   (set! name (symbol-name hook))
   (when (string-match "\\`oo-after-load-\\(.+\\)-hook\\'" name)
@@ -83,7 +83,7 @@
 (defun! oo-generate-hook-forms (hook suffix forms depth local)
   "Produce a form that generates a hook function."
   (set! name (intern (format "%s&%s" hook suffix)))
-  `(,@(oo--after-load-hook-forms hook)
+  `(,@(oo--setup-after-load-hook-maybe hook)
     (defun ,name (&rest args)
       (info! "Running hook %s..." ',name)
       (condition-case err
@@ -124,6 +124,11 @@
     (appending! forms (oo-generate-hook-forms hook fn-symbol body depth local)))
   `(progn ,@forms))
 ;;;;; after!
+;; I made the decision to add a hook function to a hook regardless of whether
+;; the hook has already has been run.  But if the hook has been run the hook
+;; function is called individually.  The idea is that I do not want to just
+;; evaluate the body and have no record of it being evaluated other than it is
+;; side-effects.
 (defmacro after! (suffix expr &rest body)
   "Evaluate BODY after EXPR is satisfied."
   (declare (indent defun))
