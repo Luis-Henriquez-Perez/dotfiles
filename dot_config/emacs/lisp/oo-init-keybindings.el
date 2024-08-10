@@ -153,7 +153,6 @@
 
 (bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "i" #'imenu)
-(bind! oo-find-map "p" #'consult-yank-pop)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)
 (bind! oo-find-map "o" #'find-file)
@@ -161,12 +160,7 @@
 (bind! oo-find-map "d" #'display-buffer)
 
 (bind! oo-find-map "b" #'burly-open-bookmark)
-(bind! oo-find-map "k" #'consult-bookmark)
-(bind! oo-find-map "b" #'consult-bookmark)
-(bind! oo-find-map "l" #'consult-line)
 (bind! oo-find-map "a" #'find-library)
-(bind! oo-find-map "h" #'consult-outline)
-(bind! oo-find-map "g" #'consult-grep)
 ;;;;;; oo-help-map
 (defvar oo-help-map (make-sparse-keymap))
 (define-prefix-command 'oo-help-prefix-command 'oo-help-map)
@@ -293,12 +287,6 @@
 (bind! n "J" #'evil-scroll-page-down)
 (bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific
-;;;;;; consult
-(opt! consult-preview-key nil)
-
-(opt! consult-fontify-preserve nil)
-
-(alt! display-buffer oo-pop-to-buffer consult)
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
@@ -324,11 +312,6 @@
 ;; Not sure what the difference is between block and form.
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
-;;;;;; consult
-(alt! switch-to-buffer consult-buffer consult)
-(alt! yank-pop consult-yank-pop consult)
-(alt! apropos consult-apropos consult)
-(alt! man consult-man consult)
 ;;;;;; corfu
 (bind! i corfu-map "<tab>"   #'corfu-next)
 (bind! i corfu-map [backtab] #'corfu-previous)
