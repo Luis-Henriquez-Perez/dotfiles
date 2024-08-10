@@ -67,6 +67,7 @@
 (require 'init-abbrev)
 (require 'init-frame)
 (require 'init-window)
+(require 'init-loaddefs)
 ;; End build-ins
 (require 'init-consult)
 (require 'init-ace-window)
