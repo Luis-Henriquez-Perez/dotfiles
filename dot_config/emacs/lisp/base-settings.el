@@ -132,25 +132,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq sgml-basic-offset 4)
 ;;;;;; dabbrev
 ;; (setq dabbrev-check-all-buffers nil)
-;;;; custom
-;;;;; don't ask me for permission to enable a theme
-;; By default Emacs will ask you whether you are sure you want to enable a theme
-;; as a precaution because a theme could contain malicious code.  Downloading
-;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
-;; from wierd places online and evaluating them.  So I don't need.
-(setq custom-safe-themes t)
-;;;;; don't create a custom file
-;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
-;; interface is intended for people that don't know elisp.  For me it's completely
-;; unnecessary.  Every variable I customize is in my emacs configuration.
-(setq custom-file null-device)
-;;;; loaddefs
-;;;;; don't disable any commands
-;; If non-nil certain commands such as narrowing are disabled.  The idea is that
-;; a new user would think that emacs deleted the contents of their file if they
-;; accidentally narrowed the buffer.  I am experienced enough so that I don't
-;; Need this.
-(setq disabled-command-function nil)
 ;;;; emacs-lock
 ;;;;; prevent =*Messages*= and =*scratch*= buffers from being killed
 ;; "Locking" a file can mean two different things (or both of these things at
