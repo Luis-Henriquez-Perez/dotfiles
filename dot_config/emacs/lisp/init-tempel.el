@@ -50,7 +50,7 @@
 (bind! oo-quick-map "i" #'tempel-insert)
 (bind! oo-quick-map "l" #'tempel-insert)
 ;;;; load config
-(oo-call-after-load 'tempel #'require 'config-tempel)
+(require! config-tempel)
 ;;; provide
 (provide 'init-tempel)
 ;;; init-tempel.el ends here

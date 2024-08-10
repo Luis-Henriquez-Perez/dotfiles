@@ -54,7 +54,7 @@
 ;; Do not load keybindings for other modes.
 (opt! evil-want-keybinding nil)
 
-(oo-call-after-load 'evil #'require 'config-evil)
+(require! config-evil)
 
 (bind! n "H" #'evil-first-non-blank)
 (bind! n "L" #'evil-last-non-blank)

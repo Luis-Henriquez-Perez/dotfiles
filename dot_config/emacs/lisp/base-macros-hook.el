@@ -148,6 +148,14 @@
      `(after! ,suffix ,expr (after! ,suffix ,exprs ,@body)))
     (_
      (error "invalid expression `%S'" expr))))
+;;;;; require!
+(defmacro! require! (file &optional feature)
+  (set! name (intern (format "load-%s" file)))
+  (if feature
+      `(after! ,name (,feature) (require ',file))
+    (string-match "\\`config-\\(.+\\)\\'" (symbol-name file))
+    (set! feature (intern (match-string 1 (symbol-name file))))
+    `(after! ,name (,feature) (require ',file))))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here

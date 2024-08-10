@@ -1,4 +1,4 @@
-;;; init-rx.el --- initialize rx -*- lexical-binding: t; -*-
+;;; config-outli.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,12 +22,15 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize rx.
+;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'base)
+;; Different styling for stem and leaf characters.
+(setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 
-(require! config-rx)
+;; Properly update outlines after theme change.
+(defadvice! reset-outli-faces (after load-theme)
+  (outli-reset-all-faces))
 ;;; provide
-(provide 'init-rx)
-;;; init-rx.el ends here
+(provide 'config-outli)
+;;; config-outli.el ends here
