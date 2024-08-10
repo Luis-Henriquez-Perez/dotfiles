@@ -256,7 +256,6 @@
 (bind! oo-package-map "m" #'elpaca-manager)
 ;;;;; alternate bindings
 (alt! imenu consult-imenu consult)
-(alt! dired dirvish dirvish)
 ;;;;; localleaders
 (defun! oo-localleader-bind (keymap key def)
   "Convenience function for defining localleader bindings."
@@ -280,12 +279,6 @@
 ;; (bind! n "x" #'hungry-delete-forward)
 (bind! i "A-x" #'execute-extended-command)
 (bind! i "M-x" #'execute-extended-command)
-(bind! (n m) "+" #'text-scale-increase)
-(bind! (n m) "-" #'text-scale-decrease)
-(bind! n "H" #'evil-first-non-blank)
-(bind! n "L" #'evil-last-non-blank)
-(bind! n "J" #'evil-scroll-page-down)
-(bind! n "K" #'evil-scroll-page-up)
 ;;;;; package specific
 ;;;;;; evil
 ;;;;;;; operators
