@@ -59,8 +59,16 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load requirements
 (require 'init-no-littering)
-(require 'init-consult)
+;; Beg built-ins
+(require 'init-files)
+(require 'init-startup)
+(require 'init-custom)
+(require 'init-vc-hooks)
 (require 'init-abbrev)
+(require 'init-frame)
+(require 'init-window)
+;; End build-ins
+(require 'init-consult)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
