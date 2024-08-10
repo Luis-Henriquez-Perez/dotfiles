@@ -96,6 +96,7 @@
 (require 'init-eshell)
 (require 'init-helm)
 (require 'init-helpful)
+(require 'init-magit)
 (require 'init-highlight-quoted)
 (require 'init-hungry-delete)
 (require 'init-lispyville)
