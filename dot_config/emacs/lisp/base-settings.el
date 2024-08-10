@@ -132,83 +132,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq sgml-basic-offset 4)
 ;;;;;; dabbrev
 ;; (setq dabbrev-check-all-buffers nil)
-;;;; files
-;;;;; backup files to trash
-(setq backup-directory-alist '((".*" . "~/.Trash")))
-;;;;; don't make backups
-(setq make-backup-files nil)
-;;;;; don't pass case-insensitive to =auto-mode-alist=
-;; This is taken from =centaur-emacs=.  By default [[file:snapshots/*helpful variable: auto-mode-case-fold*.png][auto-mode-case-fold]] is
-;; non-nil; when enabled the auto-mode-alist is traversed twice.  This double
-;; traversal can be expensive and it seems unnecessary.
-(setq auto-mode-case-fold nil)
-;;;;; stop asking me whether I want to enable file local variables
-;; When installing packages with =quelpa=, I was prompted whether I wanted to apply
-;; file local variables.  I'm guessing =straight.el= and =elpaca= disable this.
-;; The value safe tells Emacs to only apply the "safe" local variables.  I'm
-;; assuming this means ones like "mode" which tell Emacs to open the buffer at a
-;; certain major mode.  At first I had this set to nil, but I wanted to open
-;; [[][]] in =common-lisp-mode= and I realized Emacs wasn't doing it because I
-;; told it not to with this variable.
-(setq enable-local-variables :safe)
-;;;;; ensure there's always a newline at the end of files
-;; Several linux programs require a newline at the end of a file, such as
-;; chrontab--this is more or less what noctuid said and I'll take his word for
-;; it.
-(setq require-final-newline t)
-;;;;; designate location of trash
-;; designate the location of the trash directory
-;; I accidentally sent files to the trash and I could not find them in my trash
-;; directory.  I was confused because I knew that the variable
-;; [[file:_helpful_variable__delete-by-moving-to-trash_.png][delete-by-moving-to-trash]] was non-nil and I even verified this to be the case
-;; with [[file:_helpful_function__helpful-variable_.png][helpful-variable]].  After reading the documentation of [[][]] I realized
-;; that emacs uses the [[][]].  To be honest I had no idea what this actually was
-;; but I extracted what looked like the location, [[][]].
-(setq trash-directory (expand-file-name "~/Trash"))
-;;;;; diable auto-save-mode
-(setq auto-save-default nil)
-(auto-save-mode -1)
-
-(setq idle-update-delay 1.0)
-;;;;; automatically kill any processes when exiting emacs
-;; If I start a process, like the =eat= shell for example, stop me from exiting
-;; to ask me whether I want to kill it, just do it.
-;; https://emacsredux.com/blog/2020/07/18/automatically-kill-running-processes-on-exit/
-(setq confirm-kill-processes nil)
-;;;; startup
-;;;;; don't show the startup screen
-;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
-;; think these variables are all aliases for eachother.
-(setq inhibit-startup-message t)
-(setq inhibit-startup-screen t)
-(setq inhibit-splash-screen t)
-;;;;; stop creating =auto-save-list= directory
-;; See [[https://emacs.stackexchange.com/questions/18677/prevent-auto-save-list-directory-to-be-created][#18677]].
-(setq auto-save-list-file-prefix nil)
-;;;;; set the initial major mode to =fundamental-mode=
-;; This improve startup time because packages enabled for emacs-lisp-mode are not
-;; loaded immediately.
-(setq initial-major-mode 'fundamental-mode)
-;;;;; disable initial scratch message
-;; Don't display any documentation--or any message at all--in the =*scratch*=
-;; buffer.  Emacs by default displays [[][a message in the scratch buffer]].
-(setq initial-scratch-message nil)
-;;;;; don't display message advertising gnu system
-;; They made the process of disabling this more difficult.
-(advice-add #'display-startup-echo-area-message :around #'ignore)
-;;;; window
-;;;;; don't add indent
-(setq-default indent-tabs-mode nil)
-;;;;; disable the blinking of matching parentheses
-;; This made scrolling the cursor really slow.  Maybe because it was enabled
-;; with =show-parens-mode= at the same time.  This isn't needed if I have
-;; =show-parens-mode= already enabled.
-(setq blink-matching-paren nil)
-;;;;; don't suggest keybindings or the like for me
-;; See [[https://stackoverflow.com/questions/19781529/how-to-disable-emacs-messages-like-you-can-run-the-command-x-with-y][this stackoverflow post]].  After invoking [[file:snapshots/*helpful command: execute-extended-command*.png][execute-extended-command]] on a
-;; command that has an existing keybinding, or something that could be abbreviated,
-;; emacs will suggest a shorter way.
-(setq suggest-key-bindings nil)
 ;;;; custom
 ;;;;; don't ask me for permission to enable a theme
 ;; By default Emacs will ask you whether you are sure you want to enable a theme
@@ -221,13 +144,6 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; interface is intended for people that don't know elisp.  For me it's completely
 ;; unnecessary.  Every variable I customize is in my emacs configuration.
 (setq custom-file null-device)
-;;;; vc-hooks
-;;;;; don't ask me whether to follow symlinks, just do it
-;; By default Emacs will prompt you when you want to open a file a symlink
-;; references.  It will ask you whether you want to follow the symlink.  For me
-;; the answer is predominately yes.
-(setq vc-follow-symlinks t)
-(setq vc-follow-link t)
 ;;;; loaddefs
 ;;;;; don't disable any commands
 ;; If non-nil certain commands such as narrowing are disabled.  The idea is that
@@ -251,11 +167,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq emacs-lock-default-locking-mode 'kill)
 (with-current-buffer "*Messages*" (emacs-lock-mode 1))
 (with-current-buffer "*scratch*" (emacs-lock-mode 1))
-;;;; window
-;;;;;; disable cursor blinking
-;; By default the cursor blinks.  The point is so that it is easier to find on the
-;; screen.  Usually, however, I have no trouble finding it so I disable it.
-(blink-cursor-mode -1)
 ;;;; re-builder
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
