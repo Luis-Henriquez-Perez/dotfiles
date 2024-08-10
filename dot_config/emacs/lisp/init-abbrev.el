@@ -32,7 +32,7 @@
 ;; Emacs loads abbreviation-mode automatically so instead of using something
 ;; like `with-eval-after-load' I am loading it in `abbrev-mode-hook'.
 (defhook! apply-config (abbrev-mode-hook)
-  (require 'oo-init-abbrev))
+  (require 'config-abbrev))
 ;;;; bindings
 (autoload #'+abbrev-add-new-abbrev "oo-commands" nil t 'function)
 (bind! "C-c j" #'+abbrev-add-new-abbrev)
