@@ -46,9 +46,9 @@
 
 (ert-deftest defafter! ()
   (should-not (boundp 'oo-after-load-foo-hook))
-  (after! foo (+ 1 1))
+  (after! do-something (foo) (+ 1 1))
   (should (boundp 'oo-after-load-foo-hook))
-  (should (equal '(oo-after-load-foo-hook&)))
+  (should (equal '(oo-after-load-foo-hook&do-something)))
   (provide 'foo)
   (should (equal))
   (after! (bar baz) (push 1 some-list))
@@ -57,8 +57,7 @@
   (provide 'baz)
   (should (equal some-list '(1)))
   (provide 'baz)
-  (should (equal some-list '(1)))
-  )
+  (should (equal some-list '(1))))
 ;;; provide
 (provide 'base-macros-hook-test)
 ;;; base-macros-hook-test.el ends here
