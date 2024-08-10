@@ -71,11 +71,11 @@
 (bind! (n v) "g t" #'evil-goto-first-line)
 (bind! (n v) "g b" #'evil-goto-line)
 
-(bind! (n v) "g g" #'oo-eval-operator)
-(bind! (n v) "g h" #'oo-eval-operator)
-(bind! (n v) "g r" #'oo-eval-replace-operator)
-(bind! (n v) "g l" #'oo-eval-print-operator)
-(bind! (n v) "g p" #'oo-eval-print-operator)
+(bind! (n v) "g g" #'+evil-eval-operator)
+(bind! (n v) "g h" #'+evil-eval-operator)
+(bind! (n v) "g r" #'+evil-eval-replace-operator)
+(bind! (n v) "g l" #'+evil-eval-print-operator)
+(bind! (n v) "g p" #'+evil-eval-print-operator)
 ;;; provide
 (provide 'init-evil)
 ;;; init-evil.el ends here
