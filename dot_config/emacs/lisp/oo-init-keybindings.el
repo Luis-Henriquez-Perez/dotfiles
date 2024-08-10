@@ -312,24 +312,6 @@
 ;; Not sure what the difference is between block and form.
 (bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
 (bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
-;;;;;; corfu
-(bind! i corfu-map "<tab>"   #'corfu-next)
-(bind! i corfu-map [backtab] #'corfu-previous)
-(bind! i corfu-map "S-TAB"   #'corfu-previous)
-(bind! i corfu-map "C-;"     #'corfu-quick-complete)
-(bind! i corfu-map "C-j"     #'corfu-next)
-(bind! i corfu-map "C-k"     #'corfu-previous)
-(bind! i corfu-map "C-p"     #'corfu-previous)
-(bind! i corfu-map ";"       #'corfu-quick-complete)
-(bind! i corfu-map "SPC"     #'corfu-insert)
-;;;;;; vertico
-(bind! i vertico-map "TAB"     #'vertico-next)
-(bind! i vertico-map "C-k"     #'vertico-previous)
-(bind! i vertico-map "C-j"     #'vertico-next)
-(bind! i vertico-map ";"       #'vertico-quick-exit)
-(bind! i vertico-map "C-;"     #'vertico-quick-exit)
-(bind! i vertico-map [backtab] #'vertico-previous)
-(bind! i vertico-map "C-o"     #'embark-act)
 ;;;;;; lispy
 (bind! i lispyville-mode-map "SPC" #'lispy-space)
 (bind! i lispyville-mode-map ";" #'lispy-comment)
