@@ -65,13 +65,13 @@
 ;; reason not to have it do this.  In other words, I cannot imagine a case where
 ;; I would be using this function and not adding a hook.  If that changes I can
 ;; just change this function.
-(defun! oo-generate-hook-forms (hook suffix fn depth local)
+(defun! oo-generate-hook-forms (hook suffix forms depth local)
   (set! name (intern (format "%s&%s" hook suffix)))
   `(,@(oo--after-load-hook-forms hook)
     (defun ,name (&rest args)
       (info! "Running hook %s..." ',name)
       (condition-case err
-          (apply ',fn args)
+          ,(macroexp-progn forms)
         (error (if oo-debug-p
                    (signal (car err) (cdr err))
                  (message "Error calling %s in %s because of %s"
@@ -97,7 +97,7 @@
 ;;;;; hook!
 (cl-defmacro hook! (hook fn &key append depth local)
   "Generate a hook that calls function."
-  (macroexp-progn (oo-generate-hook-forms hook fn fn (or append depth) local)))
+  (macroexp-progn (oo-generate-hook-forms hook fn `((funcall ',fn)) (or append depth) local)))
 ;;;;; oo--defhook-arguments
 (defun! oo--defhook-arguments (args)
   ""
@@ -119,8 +119,7 @@
   (declare (indent defun))
   (set! (fn-symbol arglist hooks body depth local) (oo--defhook-arguments args))
   (dolist (hook hooks)
-    (set! lambda `(lambda ,arglist ,@body))
-    (appending! forms (oo-generate-hook-forms hook fn-symbol lambda depth local)))
+    (appending! forms (oo-generate-hook-forms hook fn-symbol body depth local)))
   `(progn ,@forms))
 ;;;;; after!
 (defmacro after! (suffix expr &rest body)
@@ -130,7 +129,7 @@
     ((pred null) nil)
     ((and feature (pred symbolp))
      (set! hook (intern (format "oo-after-load-%s-hook" feature)))
-     `(aprog1 ,(macroexp-progn (oo-generate-hook-forms hook suffix `(lambda () ,@body) nil nil))
+     `(aprog1 ,(macroexp-progn (oo-generate-hook-forms hook suffix body nil nil))
         (when (featurep ',feature) (funcall it))))
     (`(:or . ,exprs)
      `(progn ,@(--map `(after! ,suffix ,it ,@body) exprs)))
