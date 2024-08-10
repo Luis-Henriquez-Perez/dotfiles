@@ -124,8 +124,7 @@
   `(progn ,@forms))
 ;;;;; after!
 (defmacro after! (suffix expr &rest body)
-  "Evaluate BODY after EXPR is satisfied.
-Define a hook."
+  "Evaluate BODY after EXPR is satisfied."
   (declare (indent defun))
   (pcase expr
     ((pred null) nil)
