@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(add-hook! html-mode-hook emmet-mode)
+(hook! html-mode-hook emmet-mode)
 ;;; provide
 (provide 'init-emmet)
 ;;; init-emmet.el ends here

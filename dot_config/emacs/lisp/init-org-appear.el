@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(add-hook! org-mode-hook org-appear-mode)
+(hook! org-mode-hook org-appear-mode)
 (opt! org-appear-autolinks t)
 ;;; provide
 (provide 'init-org-appear)

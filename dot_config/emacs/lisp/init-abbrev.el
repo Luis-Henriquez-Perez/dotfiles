@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'base)
 ;;;; hooks
-(add-hook! prog-mode-hook abbrev-mode)
-(add-hook! text-mode-hook abbrev-mode)
+(hook! prog-mode-hook abbrev-mode)
+(hook! text-mode-hook abbrev-mode)
 ;; Emacs loads abbreviation-mode automatically so instead of using something
 ;; like `with-eval-after-load' I am loading it in `abbrev-mode-hook'.
 (defhook! require-abbrev-config (abbrev-mode-hook)

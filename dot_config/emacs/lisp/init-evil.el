@@ -30,7 +30,7 @@
 (defhook! load-evil (after-init-hook)
   [:depth 10]
   (require 'evil nil t))
-(add-hook! emacs-startup-hook evil-mode)
+(hook! emacs-startup-hook evil-mode)
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different

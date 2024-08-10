@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(add-hook! prog-mode-hook outli-mode)
+(hook! prog-mode-hook outli-mode)
 
 ;; TODO: figure out how to make this a named advice.
 (defhook! configure-outli (oo-after-load-outli-hook)
