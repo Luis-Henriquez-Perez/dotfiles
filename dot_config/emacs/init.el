@@ -93,6 +93,7 @@
 (require 'init-gcmh)
 (require 'init-grugru)
 (require 'init-gumshoe)
+(require 'init-eshell)
 (require 'init-helm)
 (require 'init-helpful)
 (require 'init-highlight-quoted)
