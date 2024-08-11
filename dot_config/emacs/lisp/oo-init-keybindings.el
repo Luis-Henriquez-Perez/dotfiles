@@ -110,11 +110,6 @@
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
 
 (bind! oo-window-map "t" #'transpose-frame)
-(bind! oo-window-map "w" #'ace-window)
-(bind! oo-window-map "j" #'ace-window)
-(bind! oo-window-map "o" #'ace-window)
-(bind! oo-window-map "s" #'ace-swap-window)
-(bind! oo-window-map "S" #'burly-bookmark-windows)
 (bind! oo-window-map "b" #'balance-windows)
 (bind! oo-window-map "M" #'maximize-window)
 (bind! oo-window-map "v" #'split-window-horizontally)
