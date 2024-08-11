@@ -71,11 +71,6 @@
 (defconst oo-emacs-localleader-key "C-c l l"
   "The localleader prefix key for major-mode specific commands.")
 ;;;; keybindings
-;;;;; overriding map
-(bind! i oo-override-mode-map oo-insert-leader-key #'oo-leader-prefix-command)
-(bind! (n m v) oo-override-mode-map oo-normal-leader-key #'oo-leader-prefix-command)
-(bind! (n m v) oo-override-mode-map ";" #'execute-extended-command)
-(bind! (i e) [escape] #'evil-force-normal-state)
 ;;;;; leader keymap
 ;;;;;; root map
 (defvar oo-leader-map (make-sparse-keymap))
@@ -89,14 +84,6 @@
 
 (with-eval-after-load 'which-key
   (which-key-add-keymap-based-replacements oo-leader-map "l" "localleader"))
-;; One of the most common--if not the most common--command you use in Emacs is
-;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and
-;; upon pressing enter, then you execute the command.  The fact that this command is
-;; invoked so frequently suggests it should have one of the shortest, easiest to
-;; press bindings.  I chose to give it =SPC SPC= and =;=.  =SPC SPC= is short and
-;; quick to type as well as consistent with other =SPC= bindings.  While =;= is
-;; super fast to press as well and even faster than =SPC SPC=.
-(bind! oo-leader-map oo-normal-leader-key #'execute-extended-command)
 ;;;;;; oo-buffer-map
 (defvar oo-buffer-map (make-sparse-keymap))
 (define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
@@ -252,11 +239,6 @@
 (oo-localleader-bind emacs-lisp-mode-map "me" #'macrostep-expand)
 (oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
 (oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
-;;;;; miscellaneous
-(bind! i "TAB" #'completion-at-point)
-;; (bind! n "x" #'hungry-delete-forward)
-(bind! i "A-x" #'execute-extended-command)
-(bind! i "M-x" #'execute-extended-command)
 ;;;;; package specific
 (bind! oo-buffer-map "i" #'oo-open-emacs-init-file)
 (bind! oo-buffer-map "I" #'oo-open-emacs-config)
