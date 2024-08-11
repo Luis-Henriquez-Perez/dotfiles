@@ -54,7 +54,7 @@
 ;; well.
 (oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
 
-(require 'config-eshell)
+(require! config-eshell)
 (require! config-em-alias)
 
 (bind! oo-app-map "e" #'eshell)
