@@ -44,6 +44,7 @@
 ;; had this happen with.
 (bind! (n m) dired-mode-map "h" #'dired-up-directory)
 (bind! (n m) dired-mode-map "l" #'dired-find-file)
+(bind! (n m) dired-mode-map "RET" #'dired-find-file)
 ;;; provide
 (provide 'init-dired)
 ;;; init-dired.el ends here
