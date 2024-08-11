@@ -84,13 +84,6 @@ file is loaded."
 ;; load the `oo-macros' file.
 (defhook! require-macros (emacs-lisp-mode-hook)
   (require 'base-macros))
-;;;;; enable smartparens in the minibuffer
-;; This allows me to have parens completion when I invoke the command `eval-expression'.
-(defhook! enable-smartparens-maybe (minibuffer-setup-hook)
-  "Enable `smartparens-mode' in the minibuffer."
-  (when (memq this-command '(eval-expression evil-ex))
-    (require 'smartparens)
-    (smartparens-strict-mode 1)))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! increase-garbage-collection (minibuffer-setup-hook)
