@@ -1,4 +1,4 @@
-;;; oo-abbrev-table-wikipedia-misspellings.el --- misspellings table -*- lexical-binding: t; -*-
+;;; +abbrev-table-wikipedia-misspellings.el --- misspellings table -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -28,7 +28,7 @@
 ;;; Code:
 (require 'abbrev)
 
-(define-abbrev-table 'oo-abbrev-table-wikipedia-misspellings
+(define-abbrev-table '+abbrev-table-wikipedia-misspellings
   '(("abandonned" "abandoned")
     ("aberation" "aberration")
     ("abilityes" "abilities")
@@ -4126,5 +4126,5 @@
     ("todays" "today's")
     ("wasnt" "wasn't")))
 ;;; provide
-(provide 'oo-abbrev-table-wikipedia-misspellings)
+(provide '+abbrev-table-wikipedia-misspellings)
 ;;; oo-abbrev-wikipedia-misspellings.el ends here

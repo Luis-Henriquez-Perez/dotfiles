@@ -1,4 +1,4 @@
-;;; oo-abbrev-table-main.el -*- lexical-binding: t; -*-
+;;; +abbrev-table-main.el -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,12 +22,12 @@
 ;;
 ;;; Commentary:
 ;;
-;;  Define my main abbrev table, `oo-abbrev-table-main'.
+;;  Define my main abbrev table, `+abbrev-table-main'.
 ;;
 ;;; Code:
 (require 'abbrev)
 
-(define-abbrev-table 'oo-abbrev-table-main
+(define-abbrev-table '+abbrev-table-main
   '(("keybs" "keybindings")
 	("reqed" "required")
 	("examinging" "examining")
@@ -678,5 +678,5 @@
     ("dered" "considered"))
   "My main abbrev table for English text.")
 ;;; provide
-(provide 'oo-abbrev-table-main)
-;;; oo-abbrev-table-main.el ends here
+(provide '+abbrev-table-main)
+;;; +abbrev-table-main.el ends here

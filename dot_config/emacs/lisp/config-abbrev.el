@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'abbrev)
 (require 'base)
-(require 'oo-abbrev-table-main)
-(require 'oo-abbrev-table-wikipedia-misspellings)
+(require '+abbrev-table-main)
+(require '+abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
 ;;;; set abbrevs my way
 (defun +abbrev-enable-text-abbrev-p ()
@@ -38,10 +38,10 @@ string or comment."
   (or (derived-mode-p 'text-mode)
       (oo-in-string-or-comment-p)))
 ;;;; all abbrevs
-(abbrev-table-put oo-abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
-(abbrev-table-put oo-abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
+(abbrev-table-put +abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
+(abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
 
-(alet (-snoc (abbrev-table-get global-abbrev-table :parents) oo-abbrev-table-main oo-abbrev-table-wikipedia-misspellings)
+(alet (-snoc (abbrev-table-get global-abbrev-table :parents) +abbrev-table-main +abbrev-table-wikipedia-misspellings)
   (abbrev-table-put global-abbrev-table :parents it))
 ;;;; automatically add period
 ;; I do not like manually adding periods to the end of sentences.  Having moved
@@ -69,23 +69,23 @@ string or comment."
 ;; well for version control--which I want for my abbrevs--and because I do not
 ;; like the indentation and code format with which it saves the abbrev table.
 (defun! +abbrev-add-new-abbrev ()
-  "Add abbreviation at point to `oo-abbrev-table-main'.
+  "Add abbreviation at point to `+abbrev-table-main'.
 Prompt for the expansion and insert the abbreviation directly into
-`oo-abbrev-table-main.el`.  Also evaluate the the file and expand the
+`+abbrev-table-main.el`.  Also evaluate the the file and expand the
 abbreviation at point. This function assumes the abbreviations file
-`oo-abbrev-table-main.el` is located at
+`+abbrev-table-main.el` is located at
 '~/.local/share/chezmoi/dot_config/emacs/lisp/'."
   (interactive)
   (set! abbrev (downcase (substring-no-properties (thing-at-point 'word))))
   ;; Replace abbreviation?
-  (set! existing-expansion (abbrev-expansion abbrev oo-abbrev-table-main))
+  (set! existing-expansion (abbrev-expansion abbrev +abbrev-table-main))
   (set! prompt (format "Abbrev for %s already expands to %s, replace it?" abbrev existing-expansion))
   (nif! (or (not existing-expansion) (and existing-expansion (y-or-n-p prompt)))
       (message "O.K., cancelled replacing abbrev for %s." abbrev)
     (set! expansion (read-string (format "Expansion for '%s': " abbrev)))
     (message "Expansion for '%s': %s" abbrev expansion)
-    (set! regexp "^(define-abbrev-table 'oo-abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
-    (set! file "~/.local/share/chezmoi/dot_config/emacs/lisp/oo-abbrev-table-main.el")
+    (set! regexp "^(define-abbrev-table '+abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
+    (set! file "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-table-main.el")
     (set! buffer (find-file-noselect file))
     (with-current-buffer buffer
       (save-excursion
