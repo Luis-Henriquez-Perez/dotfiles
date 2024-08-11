@@ -130,6 +130,7 @@
 (require 'init-tempel)
 (require 'init-vertico-buffer)
 (require 'init-vertico-quick)
+(require 'init-simple)
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
