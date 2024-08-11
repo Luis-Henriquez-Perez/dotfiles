@@ -29,7 +29,7 @@
 (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 
 ;; Properly update outlines after theme change.
-(defadvice! reset-outli-faces (after load-theme)
+(defadvice! reset-outli-faces (after load-theme &rest _)
   (outli-reset-all-faces))
 ;;; provide
 (provide 'config-outli)
