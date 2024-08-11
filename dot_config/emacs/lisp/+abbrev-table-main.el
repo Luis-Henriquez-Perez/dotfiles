@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("commentar" "commentary")
+  '(("dup" "duplicate")
+	("dupli" "duplicate")
+	("commentar" "commentary")
 	("ppress" "press")
 	("keybs" "keybindings")
 	("reqed" "required")
