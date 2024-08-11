@@ -92,8 +92,6 @@ is already narrowed."
   (interactive)
   (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
 
-;; (defun oo- ()
-;;   )
 ;; You could actually do this via abbrev-mode as well.  And actually it might be
 ;; better in a sense because.
 (defun! oo-dwim-space ()
