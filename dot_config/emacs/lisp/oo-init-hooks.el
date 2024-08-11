@@ -36,9 +36,6 @@
 ;;;;; on-first-input-hook
 (hook! on-first-input-hook minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
-(hook! emacs-lisp-mode-hook aggressive-indent-mode)
-(hook! emacs-lisp-mode-hook highlight-quoted-mode)
-
 (defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
@@ -73,7 +70,6 @@ Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
   (hook! after-load-functions oo-call-after-load-functions));;;;; html-mode
-(hook! html-mode-hook emmet-mode)
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat

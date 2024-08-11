@@ -27,9 +27,6 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'chezmoi-find                       "chezmoi"                           nil t 'function)
-(autoload #'chezmoi-write                      "chezmoi"                           nil t 'function)
-(autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
 (autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-i-syntax                      "evil-textobj-syntax"               nil t 'function)
