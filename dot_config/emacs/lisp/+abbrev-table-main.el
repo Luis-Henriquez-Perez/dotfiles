@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("ppress" "press")
+  '(("commentar" "commentary")
+	("ppress" "press")
 	("keybs" "keybindings")
 	("reqed" "required")
 	("examinging" "examining")
