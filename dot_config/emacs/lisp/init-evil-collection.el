@@ -28,6 +28,9 @@
 ;; Load dired bindings.
 (autoload #'evil-collection-dired-setup "evil-collection" nil nil 'function)
 (hook! oo-after-load-dired-hook evil-collection-dired-setup)
+
+(autoload #'evil-collection-calc-setup "evil-collection" nil nil 'function)
+(hook! oo-after-load-calc-hook evil-collection-calc-setup)
 ;;; provide
 (provide 'init-evil-collection)
 ;;; init-evil-collection.el ends here
