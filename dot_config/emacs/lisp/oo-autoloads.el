@@ -27,8 +27,6 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
-(autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)
 (autoload #'oo/ensure-provide                  "" nil t 'function)
 (autoload #'oo/ensure-file-header              "" nil t 'function)
 (autoload #'oo-set-font-face                   "oo-commands"                       nil t 'function)
