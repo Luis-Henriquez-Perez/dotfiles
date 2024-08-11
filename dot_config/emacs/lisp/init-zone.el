@@ -1,4 +1,4 @@
-;;; init-zone.el --- initialization for zone -*- lexical-binding: t; -*-
+;;; init-zone.el --- Initialize zone -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

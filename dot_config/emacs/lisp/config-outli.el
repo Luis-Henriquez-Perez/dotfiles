@@ -1,4 +1,4 @@
-;;; config-outli.el --- initialization for outli -*- lexical-binding: t; -*-
+;;; config-outli.el --- Configure outli -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

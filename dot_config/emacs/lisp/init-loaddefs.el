@@ -1,4 +1,4 @@
-;;; init-loaddefs.el --- initialization for loaddefs -*- lexical-binding: t; -*-
+;;; init-loaddefs.el --- Initialize loaddefs -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

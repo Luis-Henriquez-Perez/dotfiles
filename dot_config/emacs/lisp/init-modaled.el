@@ -1,4 +1,4 @@
-;;; init-modaled.el --- initialization for modaled -*- lexical-binding: t; -*-
+;;; init-modaled.el --- Initialize modaled -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

@@ -1,4 +1,4 @@
-;;; oo-override-mode.el --- initialization for oo-override-mode -*- lexical-binding: t; -*-
+;;; oo-override-mode.el --- Initialize oo-override-mode -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

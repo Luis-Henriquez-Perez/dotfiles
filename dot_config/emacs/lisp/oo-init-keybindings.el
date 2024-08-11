@@ -152,6 +152,7 @@
 (bind! oo-leader-map "f" #'oo-find-prefix-command :wk "find")
 
 (bind! oo-find-map ";" #'save-buffer)
+(bind! oo-find-map "I" #'oo-open-emacs-config)
 (bind! oo-find-map "i" #'imenu)
 (bind! oo-find-map "j" #'oo-dwim-narrow)
 (bind! oo-find-map "n" #'oo-dwim-narrow)

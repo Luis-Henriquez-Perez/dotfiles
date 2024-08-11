@@ -66,15 +66,36 @@ is already narrowed."
   (interactive)
   (select-window (split-window-below)))
 
+(bind! oo-buffer-map "i" #'oo-open-emacs-init-file)
+(bind! oo-buffer-map "I" #'oo-open-emacs-config)
+(bind! oo-buffer-map "I" #'oo-open-emacs-lisp-dir)
+(bind! oo-toggle-map "g" #'grugru)
+
+;; A complicating factor is the fact that I use the chezmoi directory as the
+;; main way to edit these files.
+(defun! oo--chezmoi-source-path (target-dir)
+  "Get the source path for a given TARGET-DIR using chezmoi."
+  (cl-assert (executable-find "chezmoi"))
+  (set! command (format "chezmoi source-path %s" (shell-quote-argument target-dir)))
+  (set! source-path (string-trim (shell-command-to-string command)))
+  ;; Remove any trailing newlines from the output
+  (and (not (string-empty-p source-path))
+	   source-path))
+
 (defun oo-open-emacs-config ()
   "Open Emacs configuration."
   (interactive)
-  (display-buffer (dired user-emacs-directory)))
+  (switch-to-buffer (dired (oo--chezmoi-source-path user-emacs-directory))))
 
 (defun oo-open-emacs-init-file ()
   "Open init file."
   (interactive)
-  (display-buffer (find-file-noselect user-init-file)))
+  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path user-init-file))))
+
+(defun oo-open-emacs-lisp-dir ()
+  "Open init file."
+  (interactive)
+  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
 
 ;; You could actually do this via abbrev-mode as well.  And actually it might be
 ;; better in a sense because.
@@ -116,11 +137,6 @@ is already narrowed."
 
 ;; (advice-add 'rename-file :around #'oo--dwim-rename-file)
 ;; (advice-remove 'rename-file #'oo--dwim-rename-file)
-
-;; (defun! oo- ()
-;;   (dolist (file files)
-;;     ;; Get the filename and feature name.
-;;     (if )))
 
 ;; (defun! oo-ensure-feature-matches-filename (file)
 ;;   "Change usages of feature in file to match filename."

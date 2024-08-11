@@ -29,6 +29,8 @@
 
 (bind! i "C-c h" #'grugru)
 
+(bind! oo-quick-map "j" #'grugru)
+
 (require! config-grugru)
 ;;; provide
 (provide 'init-grugru)

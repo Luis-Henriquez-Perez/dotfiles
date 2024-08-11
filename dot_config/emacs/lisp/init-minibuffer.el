@@ -1,4 +1,4 @@
-;;; init-minibuffer.el --- initialization for minibuffer -*- lexical-binding: t; -*-
+;;; init-minibuffer.el --- Initialize minibuffer -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

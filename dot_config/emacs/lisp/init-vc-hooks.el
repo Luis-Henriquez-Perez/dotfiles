@@ -1,4 +1,4 @@
-;;; init-vc-hooks.el --- initialization for vc-hooks -*- lexical-binding: t; -*-
+;;; init-vc-hooks.el --- Initialize vc-hooks -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
