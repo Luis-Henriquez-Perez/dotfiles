@@ -71,6 +71,7 @@
 (require 'init-minibuffer)
 (require 'init-emacs-lock)
 (require 'init-simple)
+(require 'init-hideshow)
 ;; External packages
 (require 'init-burly)
 (require 'init-evil-collection)
