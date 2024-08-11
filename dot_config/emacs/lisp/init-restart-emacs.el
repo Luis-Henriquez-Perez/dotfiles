@@ -1,7 +1,7 @@
 ;;; init-restart-emacs.el --- initialization for restart-emacs -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialization for `restart-emacs'.
 ;;
 ;;; Code:
 ;;
@@ -27,7 +27,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `restart-emacs'.
 ;;
 ;;; Code:
 (require 'base)

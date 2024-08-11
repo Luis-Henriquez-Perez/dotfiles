@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `vc-hooks'.
 ;;
 ;;; Code:
 ;;;; don't ask me whether to follow symlinks, just do it

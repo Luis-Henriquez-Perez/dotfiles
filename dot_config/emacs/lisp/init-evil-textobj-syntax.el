@@ -22,11 +22,13 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize evil-textobj-syntax.
 ;;
 ;;; Code:
 (autoload #'evil-i-syntax "evil-textobj-syntax" nil t 'function)
 (autoload #'evil-a-syntax "evil-textobj-syntax" nil t 'function)
+(bind! evil-outer-text-objects-map "h" #'evil-a-syntax)
+(bind! evil-inner-text-objects-map "h" #'evil-i-syntax)
 ;;; provide
 (provide 'init-evil-textobj-syntax)
 ;;; init-evil-textobj-syntax.el ends here

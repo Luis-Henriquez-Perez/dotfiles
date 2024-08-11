@@ -39,6 +39,7 @@
 (opt! which-key-idle-delay 0.8)
 ;; (opt! line-spacing 3 :hook which-key-init-buffer-hook :local t)
 (opt! which-key-show-transient-maps t)
+(opt! which-key-allow-evil-operators t)
 (opt! which-key-show-operator-state-maps t)
 (opt! which-key-show-prefix 'top)
 ;;; provide

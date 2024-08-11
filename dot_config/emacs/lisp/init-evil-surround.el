@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `evil-surround'.
 ;;
 ;;; Code:
 ;;;; hooks

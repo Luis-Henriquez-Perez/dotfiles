@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize minibuffer.
 ;;
 ;;; Code:
 (defun oo-completion-in-region-function (&rest args)

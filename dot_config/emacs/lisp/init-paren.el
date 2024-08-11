@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `paren'.
 ;;
 ;;; Code:
 ;;;; do not auto-enable =show-paren-mode= in editing modes

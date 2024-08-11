@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `emacs-lock'.
 ;;
 ;;; Code:
 ;;;; prevent =*Messages*= and =*scratch*= buffers from being killed

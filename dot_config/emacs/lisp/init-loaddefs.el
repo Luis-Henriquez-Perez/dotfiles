@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `loaddefs'.
 ;;
 ;;; Code:
 ;;;; don't disable any commands

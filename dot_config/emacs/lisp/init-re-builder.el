@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `re-builder'.
 ;;
 ;;; Code:
 ;;;;; re-builder

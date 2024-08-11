@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize gumshoe.
 ;;
 ;;; Code:
 (require 'base)

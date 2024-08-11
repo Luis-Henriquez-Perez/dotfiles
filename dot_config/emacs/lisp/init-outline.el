@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `outline'.
 ;;
 ;;; Code:
 (oo-add-advice 'outline-cycle :around #'oo-funcall-silently)

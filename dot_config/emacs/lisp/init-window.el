@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize window.
 ;;
 ;;; Code:
 (bind! oo-buffer-map "j" #'next-buffer)
