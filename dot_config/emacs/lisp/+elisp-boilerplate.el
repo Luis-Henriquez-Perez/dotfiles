@@ -1,4 +1,4 @@
-;;; xx-package-boilerplate.el --- elisp file headers and footers -*- lexical-binding: t; -*-
+;;; oo-elisp-boilerplate.el --- elisp file headers and footers -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -158,5 +158,5 @@
   (oo-ensure-provide))
 ;;; TODO: when switching to scratch buffer, set it to emacs-lisp-mode
 ;;; provide
-(provide 'xx-package-boilerplate)
-;;; xx-package-boilerplate.el ends here
+(provide '+elisp-boilerplate)
+;;; +elisp-boilerplate.el ends here
