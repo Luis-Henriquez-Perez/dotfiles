@@ -1,4 +1,4 @@
-;;; init-emacs-lock.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-emacs-lock.el --- initialization for emacs-lock -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

@@ -1,4 +1,4 @@
-;;; base-macros-defadvice.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; base-macros-defadvice.el --- advising macros -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

@@ -1,4 +1,4 @@
-;;; init-minibuffer.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-minibuffer.el --- initialization for minibuffer -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

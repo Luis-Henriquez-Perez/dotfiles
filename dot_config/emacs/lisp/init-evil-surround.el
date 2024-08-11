@@ -1,4 +1,4 @@
-;;; init-evil-surround.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-evil-surround.el --- initialization for evil-surround -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

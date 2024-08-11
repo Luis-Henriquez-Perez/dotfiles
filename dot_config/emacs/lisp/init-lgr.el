@@ -1,4 +1,4 @@
-;;; init-lgr.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-lgr.el --- initialization for lgr -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

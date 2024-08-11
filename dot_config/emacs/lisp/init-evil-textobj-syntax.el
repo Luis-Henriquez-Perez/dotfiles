@@ -1,4 +1,4 @@
-;;; init-evil-textobj-syntax.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-evil-textobj-syntax.el --- initialization for evil-textobj-syntax -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

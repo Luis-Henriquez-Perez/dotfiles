@@ -1,4 +1,4 @@
-;;; init-paren.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-paren.el --- initialization for paren -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;

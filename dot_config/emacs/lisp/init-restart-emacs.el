@@ -1,4 +1,4 @@
-;;; init-restart-emacs.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-restart-emacs.el --- initialization for restart-emacs -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;
 ;; TODO: add commentary

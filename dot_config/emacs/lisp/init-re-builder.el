@@ -1,4 +1,4 @@
-;;; init-re-builder.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-re-builder.el --- initialization for re-builder -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
