@@ -30,7 +30,7 @@
 ;;;; hooks
 (hook! prog-mode-hook auto-fill-mode)
 (hook! text-mode-hook auto-fill-mode)
-(oo-add-hook 'text-mode-hook #'visual-line-mode)
+(hook! text-mode-hook visual-line-mode)
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
 (defadvice! prompt-clearly (around kill-buffer--possibly-save _ buffer &rest args)

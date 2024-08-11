@@ -70,6 +70,7 @@
 (require 'init-loaddefs)
 (require 'init-minibuffer)
 (require 'init-emacs-lock)
+(require 'init-simple)
 ;; External packages
 (require 'init-burly)
 (require 'init-evil-collection)
@@ -130,7 +131,6 @@
 (require 'init-tempel)
 (require 'init-vertico-buffer)
 (require 'init-vertico-quick)
-(require 'init-simple)
 (require 'init-vertico)
 (require 'init-wdired)
 (require 'init-which-key)
