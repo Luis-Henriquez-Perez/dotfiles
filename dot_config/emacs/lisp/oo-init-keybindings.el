@@ -261,29 +261,6 @@
 (bind! oo-buffer-map "i" #'oo-open-emacs-init-file)
 (bind! oo-buffer-map "I" #'oo-open-emacs-config)
 (bind! oo-buffer-map "I" #'oo-open-emacs-lisp-dir)
-;;;;;; evil
-;;;;;;; operators
-;;;;;;;; eval
-(bind! (n v) "g t" #'evil-goto-first-line)
-(bind! (n v) "g b" #'evil-goto-line)
-;;;;;;;; comment
-(bind! (n v) "g c" #'lispyville-comment-or-uncomment)
-(bind! (n v) "g l" #'lispyville-comment-and-clone-dwim)
-;;;;;;;; g is kind of like the main prefix key of vim
-(bind! (n v) "g u" #'evil-upcase)
-(bind! (n v) "g U" #'evil-downcase)
-;;;;;;;; make `evil-for'
-;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
-;; Though I will say I am not 100% sure it is the equivalent.
-(bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
-;;;;;;; text objects
-;;;;;;;; block
-;; Not sure what the difference is between block and form.
-(bind! evil-outer-text-objects-map "c" #'lispyville-outer-comment)
-(bind! evil-inner-text-objects-map "c" #'lispyville-inner-comment)
-;;;;;; lispy
-(bind! i lispyville-mode-map "SPC" #'lispy-space)
-(bind! i lispyville-mode-map ";" #'lispy-comment)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
