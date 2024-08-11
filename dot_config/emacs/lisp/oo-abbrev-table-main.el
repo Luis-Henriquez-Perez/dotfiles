@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table 'oo-abbrev-table-main
-  '(("reqed" "required")
+  '(("keybs" "keybindings")
+	("reqed" "required")
 	("examinging" "examining")
     ("functinos" "functions")
     ("iuwt" "if you want to")
