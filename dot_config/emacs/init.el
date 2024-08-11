@@ -69,6 +69,7 @@
 (require 'init-window)
 (require 'init-loaddefs)
 (require 'init-minibuffer)
+(require 'init-emacs-lock)
 ;; External packages
 (require 'init-evil-surround)
 (require 'init-consult)
@@ -103,7 +104,6 @@
 (require 'init-hungry-delete)
 (require 'init-lispyville)
 (require 'init-marginalia)
-(require 'init-emacs-lock)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
 (require 'init-orderless)
