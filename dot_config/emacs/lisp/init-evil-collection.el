@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 ;; Load dired bindings.
-(autoload 'evil-collection-dired-setup "evil-collection" nil t 'function)
+(autoload #'evil-collection-dired-setup "evil-collection" nil nil 'function)
 (hook! oo-after-load-dired-hook evil-collection-dired-setup)
 ;;; provide
 (provide 'init-evil-collection)
