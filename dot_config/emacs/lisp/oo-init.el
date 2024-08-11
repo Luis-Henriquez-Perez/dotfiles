@@ -29,22 +29,6 @@
 (require 'base)
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
-;;;; disable old themes before enabling new ones
-;; We end up with remants of the faces of old themes when we load a new
-;; one.  For this reason, I make sure to disable any enabled themes before applying
-;; a new theme.
-
-;; When you load a theme you'll end up with quite a surprise.  And it
-;; stacks as well when working on a big configuration change I didn't
-;; have this code and I could literally backtrack the themes.
-
-;; Don't know why deleting the previous theme before enabling a new
-;; one isn't the default behavior.  When would anyone want to layer
-;; the colors of one theme on top of an older one.
-(defadvice! disable-old-themes (around load-theme orig-fn &rest args)
-  "Disable old themes before loading new ones."
-  (mapc #'disable-theme custom-enabled-themes)
-  (apply orig-fn args))
 ;;;; set initial font
 (alet (or (font-spec :name "Martian Mono Nerd Font"
                      :weight 'normal
