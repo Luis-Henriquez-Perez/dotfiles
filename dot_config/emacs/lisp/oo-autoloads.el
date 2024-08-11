@@ -29,8 +29,6 @@
 ;;; Code:
 (autoload #'evil-inner-line                    "evil-textobj-line"                 nil t 'function)
 (autoload #'evil-a-line                        "evil-textobj-line"                 nil t 'function)
-(autoload #'evil-i-syntax                      "evil-textobj-syntax"               nil t 'function)
-(autoload #'evil-a-syntax                      "evil-textobj-syntax"               nil t 'function)
 (autoload #'oo/ensure-provide                  "" nil t 'function)
 (autoload #'oo/ensure-file-header              "" nil t 'function)
 (autoload #'oo-set-font-face                   "oo-commands"                       nil t 'function)
