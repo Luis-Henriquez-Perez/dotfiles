@@ -34,7 +34,7 @@
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)
 
-(bind! oo-app-map "d" #'dired)
+(bind! oo-app-map "d" #'dired-jump)
 ;; Dired is very picky about when these bindings happen.  It is the only package
 ;; I have had that is that picky.  I have noticed that unlike every other
 ;; package I have tried dired bindings do not work by trying to set them when
