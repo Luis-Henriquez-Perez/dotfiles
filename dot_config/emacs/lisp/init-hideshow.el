@@ -1,4 +1,4 @@
-;;; init-hideshow.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-hideshow.el --- Initialize `hideshow' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `hideshow'.
 ;;
 ;;; Code:
 (hook! prog-mode-hook hs-minor-mode)
