@@ -59,6 +59,9 @@
 
 (require! config-evil)
 
+(bind! n "+" #'text-scale-increase)
+(bind! n "-" #'text-scale-decrease)
+
 (bind! n "H" #'evil-first-non-blank)
 (bind! n "L" #'evil-last-non-blank)
 (bind! n "J" #'evil-scroll-page-down)
