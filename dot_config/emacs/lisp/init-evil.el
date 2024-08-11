@@ -31,6 +31,10 @@
   [:depth 10]
   (require 'evil nil t))
 (hook! emacs-startup-hook evil-mode)
+
+;; Must be set before evil is loaded.
+(setq evil-want-keybinding nil)
+
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
@@ -44,6 +48,7 @@
 (opt! evil-move-cursor-back nil)
 (opt! evil-move-beyond-eol nil)
 (opt! evil-search-wrap nil)
+
 (opt! evil-insert-state-cursor '((bar . 3) "chartreuse3"))
 (opt! evil-emacs-state-cursor '((bar . 3) "SkyBlue2"))
 (opt! evil-normal-state-cursor '(box "DarkGoldenrod2"))
@@ -51,8 +56,6 @@
 (opt! evil-operator-state-cursor '((hbar . 10) "hot pink"))
 (opt! evil-replace-state-cursor '(box "chocolate"))
 (opt! evil-motion-state-cursor '(box "plum3"))
-;; Do not load keybindings for other modes.
-(opt! evil-want-keybinding nil)
 
 (require! config-evil)
 
