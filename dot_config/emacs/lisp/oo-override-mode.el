@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Provide mode for overriding keybindings.
 ;;
 ;;; Code:
 ;; Creating a minor mode to hold the leader map allows us to toggle our leader
