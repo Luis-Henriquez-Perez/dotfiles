@@ -206,7 +206,6 @@
 (bind! oo-toggle-map "e" #'eval-expression)
 (bind! oo-toggle-map "f" #'oo-set-font-face)
 (bind! oo-toggle-map "r" #'read-only-mode)
-(bind! oo-toggle-map "t" #'load-theme)
 (bind! oo-toggle-map "d" #'toggle-debug-on-error)
 (bind! oo-toggle-map "P" #'profiler-stop)
 (bind! oo-toggle-map "s" #'smartparens-mode)
