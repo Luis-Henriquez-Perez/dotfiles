@@ -71,6 +71,7 @@
 (require 'init-minibuffer)
 (require 'init-emacs-lock)
 ;; External packages
+(require 'init-evil-collection)
 (require 'init-evil-surround)
 (require 'init-consult)
 (require 'init-ace-window)
