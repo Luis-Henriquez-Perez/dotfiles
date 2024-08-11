@@ -27,6 +27,8 @@
 ;;; Code:
 (require 'grugru)
 
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("open" "close")))
+
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("yes" "no")))
 
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("up" "down")))
