@@ -43,6 +43,8 @@
 
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("is" "was")))
 ;;;; emacs-lisp
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("pop-to-buffer" "display-buffer"))
+
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("let" "let*" "let!" "-let"))
 
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("define-key" "evil-define-key*"))
