@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; Configure `outli`.
+;; Configure `outli'.
 ;;
 ;;; Code:
 ;; Different styling for stem and leaf characters.
