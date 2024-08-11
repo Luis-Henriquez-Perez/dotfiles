@@ -53,6 +53,8 @@
   "Disable old themes before loading new ones."
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
+;;;; bindings
+(bind! oo-toggle-map "r" #'oo-load-random-theme)
 ;;; provide
 (provide 'init-custom)
 ;;; init-custom.el ends here
