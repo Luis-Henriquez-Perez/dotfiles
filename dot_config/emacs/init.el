@@ -70,6 +70,7 @@
 (require 'init-loaddefs)
 (require 'init-minibuffer)
 ;; External packages
+(require 'init-evil-surround)
 (require 'init-consult)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
