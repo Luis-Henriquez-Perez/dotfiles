@@ -25,26 +25,13 @@
 ;; Initialize `zone'.
 ;;
 ;;; Code:
-;; (setq)
-(require 'zone)
-
-(require 'zone-sl)
+;; (autoload #'+zone-choose "zone" nil t 'function)
 ;; https://www.emacswiki.org/emacs/ZoneMode
 (defun +zone-choose (pgm)
   "Choose a PGM to run for `zone'."
   (interactive (list (completing-read "Program: " (mapcar 'symbol-name zone-programs))))
-  (let ((zone-programs (vector (intern pgm)))) (zone)))
-
-(zone-select-add-program 'zone-pgm-sl)
-
-(unless (memq 'zone-pgm-sl (append zone-programs nil))
-  (setq zone-programs (vconcat zone-programs [zone-pgm-sl])))
-
-(unless (memq 'zone-rainbow (append zone-programs nil))
-  (setq zone-programs (vconcat zone-programs [zone-rainbow])))
-
-(unless (memq 'zone-tmux-clock (append zone-programs nil))
-  (setq zone-programs (vconcat zone-programs [zone-tmux-clock])))
+  (require 'zone)
+  (zone))
 ;;; provide
 (provide 'init-zone)
 ;;; init-zone.el ends here

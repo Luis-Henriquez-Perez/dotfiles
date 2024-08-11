@@ -66,11 +66,6 @@ is already narrowed."
   (interactive)
   (select-window (split-window-below)))
 
-(bind! oo-buffer-map "i" #'oo-open-emacs-init-file)
-(bind! oo-buffer-map "I" #'oo-open-emacs-config)
-(bind! oo-buffer-map "I" #'oo-open-emacs-lisp-dir)
-(bind! oo-toggle-map "g" #'grugru)
-
 ;; A complicating factor is the fact that I use the chezmoi directory as the
 ;; main way to edit these files.
 (defun! oo--chezmoi-source-path (target-dir)
@@ -97,6 +92,8 @@ is already narrowed."
   (interactive)
   (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
 
+;; (defun oo- ()
+;;   )
 ;; You could actually do this via abbrev-mode as well.  And actually it might be
 ;; better in a sense because.
 (defun! oo-dwim-space ()

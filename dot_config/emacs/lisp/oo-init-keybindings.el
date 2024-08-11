@@ -123,7 +123,6 @@
 (bind! oo-leader-map "w" #'oo-window-prefix-command :wk "window")
 
 (bind! oo-window-map "t" #'transpose-frame)
-(bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-window-map "w" #'ace-window)
 (bind! oo-window-map "j" #'ace-window)
 (bind! oo-window-map "o" #'ace-window)
@@ -160,7 +159,6 @@
 (bind! oo-find-map "f" #'switch-to-buffer)
 (bind! oo-find-map "d" #'display-buffer)
 
-(bind! oo-find-map "b" #'burly-open-bookmark)
 (bind! oo-find-map "a" #'find-library)
 ;;;;;; oo-help-map
 (defvar oo-help-map (make-sparse-keymap))
@@ -215,22 +213,6 @@
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
 (bind! oo-leader-map "d" #'oo-dotfile-prefix-command :wk "dotfile")
 
-(bind! oo-dotfile-map "f" #'chezmoi-find)
-;; I use the command =chezmoi-write= the most so far.  It syncs the current file
-;; with its corresponding chezmoi file.  If called while in the target file, it
-;; applies the changes in the target file to the source file and vice versa.
-;; Only caveat is that if there is a more recent change in the "other" file,
-;; then you have to use a prefix command to make sure you want to override those
-;; changes.
-(bind! oo-dotfile-map "w" #'chezmoi-write)
-;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
-;; homerow for QWERTY keyboards.
-(bind! oo-dotfile-map "d" #'chezmoi-write)
-;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
-;; it does something different depending on whether your in the source file or
-;; the target file.  If you are in the source file, you open the target file and
-;; vice versa.
-(bind! oo-dotfile-map "o" #'chezmoi-open-other)
 ;;;;;; oo-quit-map
 (defvar oo-quit-map (make-sparse-keymap))
 (define-prefix-command 'oo-quit-prefix-command 'oo-quit-map)
@@ -254,8 +236,6 @@
 (bind! oo-package-map "d" #'elpaca-delete)
 (bind! oo-package-map "l" #'elpaca-log)
 (bind! oo-package-map "m" #'elpaca-manager)
-;;;;; alternate bindings
-(alt! imenu consult-imenu consult)
 ;;;;; localleaders
 (defun! oo-localleader-bind (keymap key def)
   "Convenience function for defining localleader bindings."
@@ -273,13 +253,14 @@
 (oo-localleader-bind emacs-lisp-mode-map "mc" #'macrostep-collapse)
 (oo-localleader-bind emacs-lisp-mode-map "mC" #'macrostep-collapse-all)
 ;;;;; miscellaneous
-(bind! "C-c j" #'+abbrev-add-new-abbrev)
-(bind! "C-c k" #'unexpand-abbrev)
 (bind! i "TAB" #'completion-at-point)
 ;; (bind! n "x" #'hungry-delete-forward)
 (bind! i "A-x" #'execute-extended-command)
 (bind! i "M-x" #'execute-extended-command)
 ;;;;; package specific
+(bind! oo-buffer-map "i" #'oo-open-emacs-init-file)
+(bind! oo-buffer-map "I" #'oo-open-emacs-config)
+(bind! oo-buffer-map "I" #'oo-open-emacs-lisp-dir)
 ;;;;;; evil
 ;;;;;;; operators
 ;;;;;;;; eval
@@ -303,16 +284,6 @@
 ;;;;;; lispy
 (bind! i lispyville-mode-map "SPC" #'lispy-space)
 (bind! i lispyville-mode-map ";" #'lispy-comment)
-;;;;;; dired
-;; Dired is very picky about when these bindings happen.  It is the only package
-;; I have had that is that picky.  I have noticed that unlike every other
-;; package I have tried dired bindings do not work by trying to set them when
-;; `dired-mode-map' is bound.  You need to use (eval-after-load 'dired ...).
-;; Also, even if you have the `eval-after-load' it work work from the
-;; `config-dired' file--do not ask me why.  Again, only package I have
-;; had this happen with.
-(bind! (n m) dired-mode-map "h" #'dired-up-directory)
-(bind! (n m) dired-mode-map "l" #'dired-find-file)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
