@@ -54,18 +54,16 @@
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map oo-override-mode-map 'all t))
 ;;;;; prog-mode-hook
-(hook! prog-mode-hook hs-minor-mode)
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
 ;; (hook! prog-mode-hook flyspell-prog-mode)
-;;;;; text-mode-hook
 ;;;;; emacs-startup-hook
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (hook! after-load-functions oo-call-after-load-functions));;;;; html-mode
+  (hook! after-load-functions oo-call-after-load-functions))
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
