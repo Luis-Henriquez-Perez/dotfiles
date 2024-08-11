@@ -1,4 +1,4 @@
-;;; init-evil-collection.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-evil-collection.el --- Initialize `evil-collection' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize `evil-collection'.
 ;;
 ;;; Code:
 ;; Load dired bindings.
