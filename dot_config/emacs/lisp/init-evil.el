@@ -59,6 +59,24 @@
 
 (require! config-evil)
 
+(bind! i oo-override-mode-map oo-insert-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) oo-override-mode-map oo-normal-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) oo-override-mode-map ";" #'execute-extended-command)
+(bind! (i e) [escape] #'evil-force-normal-state)
+
+;; One of the most common--if not the most common--command you use in Emacs is
+;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and
+;; upon pressing enter, then you execute the command.  The fact that this command is
+;; invoked so frequently suggests it should have one of the shortest, easiest to
+;; press bindings.  I chose to give it =SPC SPC= and =;=.  =SPC SPC= is short and
+;; quick to type as well as consistent with other =SPC= bindings.  While =;= is
+;; super fast to press as well and even faster than =SPC SPC=.
+(bind! oo-leader-map oo-normal-leader-key #'execute-extended-command)
+
+(bind! i "TAB" #'completion-at-point)
+(bind! i "A-x" #'execute-extended-command)
+(bind! i "M-x" #'execute-extended-command)
+
 (bind! n "+" #'text-scale-increase)
 (bind! n "-" #'text-scale-decrease)
 
