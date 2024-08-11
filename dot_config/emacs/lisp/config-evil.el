@@ -81,7 +81,7 @@
 (oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
 ;;;; eval operator
 ;; This is shamelessly copied from `evil-extra-operator'.
-(evil-define-operator oo-eval-operator (beg end)
+(evil-define-operator +evil-eval-operator (beg end)
   "Evil operator for evaluating code."
   :move-point nil
   (interactive "<r>")
@@ -89,7 +89,7 @@
 
 ;; This is also shamelessly copied with the difference that the format string is
 ;; "%S" instead of "%s".  Honestly, I think not having it that way was a bug.
-(evil-define-operator oo-eval-replace-operator (beg end)
+(evil-define-operator +evil-eval-replace-operator (beg end)
   "Evil operator for replacing contents with result from eval."
   :move-point nil
   (interactive "<r>")
@@ -98,7 +98,7 @@
     (delete-region beg end)
     (insert result)))
 
-(evil-define-operator oo-eval-print-operator (beg end)
+(evil-define-operator +evil-eval-print-operator (beg end)
   "Evil operator for printing the results of contents below."
   :move-point nil
   (interactive "<r>")
@@ -108,10 +108,6 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
-;;;;; evil-surround
-(hook! prog-mode-hook evil-surround-mode)
-
-(hook! text-mode-hook evil-surround-mode)
 ;;; provide
 (provide 'config-evil)
 ;;; config-evil.el ends here
