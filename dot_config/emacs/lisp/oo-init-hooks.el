@@ -58,11 +58,8 @@
 ;; This outputs the message and causes a slight delay when opening a file in
 ;; prog-mode for the first time.
 ;; (hook! prog-mode-hook flyspell-prog-mode)
-(hook! auto-fill-mode-hook filladapt-mode)
-(hook! prog-mode-hook auto-fill-mode)
 ;;;;; text-mode-hook
 (hook! text-mode-hook visual-line-mode)
-(hook! text-mode-hook auto-fill-mode)
 ;;;;; emacs-startup-hook
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.
