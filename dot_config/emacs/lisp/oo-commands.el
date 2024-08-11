@@ -101,40 +101,6 @@ is already narrowed."
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 
-;; I am aware that there is already a command to add abbreviations to their abbrev-file but I do
-;; not use the abbreviation file partly because I do not think it lends itself
-;; well for version control--which I want for my abbrevs--and because I do not
-;; like the indentation and code format with which it saves the abbrev table.
-(defun! +abbrev-add-new-abbrev ()
-  "Add abbreviation at point to `+abbrev-table-main'.
-Prompt for the expansion and insert the abbreviation directly into
-`+abbrev-table-main.el`.  Also evaluate the the file and expand the
-abbreviation at point. This function assumes the abbreviations file
-`+abbrev-table-main.el` is located at
-'~/.local/share/chezmoi/dot_config/emacs/lisp/'."
-  (interactive)
-  (set! abbrev (downcase (substring-no-properties (thing-at-point 'word))))
-  ;; Replace abbreviation?
-  (set! existing-expansion (abbrev-expansion abbrev +abbrev-table-main))
-  (set! prompt (format "Abbrev for %s already expands to %s, replace it?" abbrev existing-expansion))
-  (nif! (or (not existing-expansion) (and existing-expansion (y-or-n-p prompt)))
-      (message "O.K., cancelled replacing abbrev for %s." abbrev)
-    (set! expansion (read-string (format "Expansion for '%s': " abbrev)))
-    (message "Expansion for '%s': %s" abbrev expansion)
-    (set! regexp "^(define-abbrev-table '+abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
-    (set! file "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-table-main.el")
-    (set! buffer (find-file-noselect file))
-    (with-current-buffer buffer
-      (save-excursion
-        (goto-char (point-min))
-        (re-search-forward regexp nil t nil)
-        (insert (format "(%S %S)\n" abbrev expansion))
-        (goto-char (match-beginning 0))
-        (lisp-indent-line)
-        (eval-buffer)))
-    (expand-abbrev)
-    (message "Mapped abbrev %S to expansion %S!" abbrev expansion)))
-
 (defun! oo-pop-to-buffer ()
   (interactive)
   (require 'consult)

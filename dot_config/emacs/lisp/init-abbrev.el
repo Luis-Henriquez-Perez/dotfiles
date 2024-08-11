@@ -34,7 +34,7 @@
 (defhook! apply-config (abbrev-mode-hook)
   (require 'config-abbrev))
 ;;;; bindings
-(autoload #'+abbrev-add-new-abbrev "oo-commands" nil t 'function)
+(autoload #'+abbrev-add-new-abbrev "config-abbrev" nil t 'function)
 (bind! "C-c j" #'+abbrev-add-new-abbrev)
 (bind! "C-c k" #'unexpand-abbrev)
 ;;;; do not save abbrevs to a file

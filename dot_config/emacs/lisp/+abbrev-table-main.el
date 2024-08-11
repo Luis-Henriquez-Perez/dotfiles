@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("keybs" "keybindings")
+  '(("ppress" "press")
+	("keybs" "keybindings")
 	("reqed" "required")
 	("examinging" "examining")
     ("functinos" "functions")

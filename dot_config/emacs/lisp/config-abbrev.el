@@ -84,7 +84,7 @@ abbreviation at point. This function assumes the abbreviations file
       (message "O.K., cancelled replacing abbrev for %s." abbrev)
     (set! expansion (read-string (format "Expansion for '%s': " abbrev)))
     (message "Expansion for '%s': %s" abbrev expansion)
-    (set! regexp "^(define-abbrev-table '+abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
+    (set! regexp "^(define-abbrev-table '\\+abbrev-table-main\n\\(?:^\\)[[:blank:]]+'(")
     (set! file "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-table-main.el")
     (set! buffer (find-file-noselect file))
     (with-current-buffer buffer
