@@ -1,4 +1,4 @@
-;;; init-macroexpand.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-macroexpand.el --- Initialize macroexpand -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize macroexpand.
 ;;
 ;;; Code:
 ;;;; localleaders

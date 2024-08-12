@@ -1,4 +1,4 @@
-;;; init-evil-goggles.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; init-evil-goggles.el --- Initialize evil-goggles -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; Initialize evil-goggles.
 ;;
 ;;; Code:
 ;; 1. advise all commands used by evil-goggles
