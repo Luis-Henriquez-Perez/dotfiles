@@ -47,11 +47,11 @@
 (define-prefix-command 'oo-buffer-prefix-command 'oo-buffer-map)
 (bind! oo-leader-map "b" #'oo-buffer-prefix-command :wk "buffer")
 ;;;;;; oo-git-map
-(defvar oo-magit-map (make-sparse-keymap))
-(define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
-(bind! oo-leader-map "g" #'oo-magit-prefix-command :wk "magit")
-(bind! oo-magit-map "n" #'vc-next-action)
-(bind! oo-magit-map "b" #'vc-create-branch)
+(defvar oo-git-map (make-sparse-keymap))
+(define-prefix-command 'oo-git-prefix-command 'oo-git-map)
+(bind! oo-leader-map "g" #'oo-git-prefix-command :wk "git")
+(bind! oo-git-map "n" #'vc-next-action)
+(bind! oo-git-map "b" #'vc-create-branch)
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)
