@@ -169,6 +169,14 @@ is already narrowed."
   (set! theme (seq-random-elt (custom-available-themes)))
   (message "Loading theme %s..." theme)
   (load-theme theme))
+
+;; This idea is based on the following link where xah lee talks about why the
+;; scratch buffer is outdated.
+;; http://xahlee.info/emacs/emacs/modernization_scratch_buffer.html
+(defun! oo-new-buffer ()
+  "Create a new blank buffer."
+  (interactive)
+  (switch-to-buffer (generate-new-buffer "untitled")))
 ;;;; miscellaneous
 (defun oo-kill-emacs-no-confirm ()
   "Kill Emacs without confirmation."
