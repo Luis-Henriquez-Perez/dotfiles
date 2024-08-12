@@ -52,7 +52,7 @@
   (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path user-init-file))))
 
 (defun oo-open-emacs-lisp-dir ()
-  "Open init file."
+  "Open lisp directory."
   (interactive)
   (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
 ;;;; window splitting
