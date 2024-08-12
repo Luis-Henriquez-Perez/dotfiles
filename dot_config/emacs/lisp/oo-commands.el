@@ -171,7 +171,9 @@ is already narrowed."
   (load-theme theme))
 
 ;; This idea is based on the following link where xah lee talks about why the
-;; scratch buffer is outdated.
+;; scratch buffer is outdated.  It does not follow the trend of "untitled1",
+;; "untitled2" as xah lee recommended because it is just easier and more
+;; consistent to use Emacs's buffer naming style.
 ;; http://xahlee.info/emacs/emacs/modernization_scratch_buffer.html
 (defun! oo-new-buffer ()
   "Create a new blank buffer."
