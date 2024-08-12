@@ -28,7 +28,12 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("simialr" "similar")
+  '(("rounda" "roundabout")
+	("lisence" "license")
+	("liscence" "license")
+	("generatioin" "generation")
+	("divishion" "division")
+	("simialr" "similar")
 	("cmnt" "comment")
 	("whites" "whitespace")
 	("dup" "duplicate")
