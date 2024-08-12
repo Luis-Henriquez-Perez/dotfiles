@@ -103,15 +103,6 @@
 (defvar oo-emms-map (make-sparse-keymap))
 (define-prefix-command 'oo-emms-prefix-command 'oo-emms-map)
 (bind! oo-leader-map "e" #'oo-emms-prefix-command :wk "emms")
-
-(bind! oo-emms-map "f" #'emms-play-file)
-(bind! oo-emms-map "p" #'emms-pause)
-(bind! oo-emms-map "P" #'emms-stop)
-(bind! oo-emms-map "r" #'emms-toggle-repeat-track)
-(bind! oo-emms-map "R" #'emms-toggle-repeat-playlist)
-(bind! oo-emms-map "v" #'emms-volume-lower)
-(bind! oo-emms-map "V" #'emms-volume-raise)
-(bind! oo-emms-map "s" #'emms-seek-to)
 ;;;;;; oo-toggle-map
 (defvar oo-toggle-map (make-sparse-keymap)
   "Keymap that contains bindings for things that should be toggled.")
