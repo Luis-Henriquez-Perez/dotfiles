@@ -27,10 +27,12 @@
 ;; enough to have it as snippets because I don't even want to go into every file
 ;; and setup the package header.  Instead, I want to just programmatically
 ;; invoke a command that adds them all for me--or fixes/updates it if need
-;; me.
+;; me.  Even better would be a command that generates and opens a config
+;; or init file.
 ;;
 ;;; Code:
 (defun oo-copyright-license ()
+  "Return the copyright license."
   (string-join (list ";;"
                      ";; Copyright (c) 2024 Free Software Foundation, Inc."
                      ";;"
@@ -112,7 +114,7 @@
                     (1+ nonl)
                     "-*- lexical-binding: t; -*-\n")))
 
-(defun oo--ensure-file-header (title commentary)
+(defun oo--ensure-file-header ()
   "Ensure that file has a title, description."
   ;; Make sure that the file has a title.
   (let* ((file (buffer-file-name))
@@ -121,18 +123,13 @@
          (lisence-rx (rx-to-string (oo-copyright-license)))
          (code-rx nil)
          (commentary "TODO: Add brief description."))
-    ;; Use lice to insert the copyright.
-    ;; But comment the uncommented blank lines in between.
-    ;; And add the appropriate information between the copyright.
-    ;; Ensure header.
     (save-excursion
       (goto-char (point-min))
       (if (looking-at header-rx)
-          ;; (replace-regexp-in-string "[[:blank:]]+" "\s" string)
           (progn (replace-match filename nil 'literal nil 1)
                  (goto-char (match-end 0)))
         (insert (format ";;; %s.el --- TODO: add commentary -*- lexical-binding: t; -*-\n" filename)))
-      ;; Ensure lisence.
+      ;; Ensure license.
       (unless (looking-at lisence-rx)
         (message "NO LICENSE")
         (insert (oo-copyright-license)))
@@ -149,24 +146,37 @@
   (interactive)
   (oo--ensure-file-header))
 
+(defun oo--create-lisp-dir-file (filename comment1 comment2)
+  "Auxiliary function."
+  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
+  (set! filename (expand-file-name filename lisp-dir))
+  (cl-assert (not (file-exists-p filename)))
+  (with-current-buffer (find-file filename)
+	(oo--ensure-file-header)
+	(goto-char (point-min))
+	;; This is a kind of roundabout way of doing it.  Not sure if it is the
+	;; "best" way whatever that means, but it works.
+	(search-forward "TODO: add commentary" nil t nil)
+	(replace-match comment1)
+	(search-forward "TODO: add commentary" nil t nil)
+	(replace-match comment2)
+	(save-excursion (oo--ensure-provide filename))))
+
 (defun! oo-create-new-init-file (feature)
   "Create a new init file for feature."
-  ;; Prompt for feature.
-  (interactive)
-  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
-  (set! filename (expand-file-name (format "init-%s.el" feature)))
-  (set! first-comment (format "Initialize %s" feature))
-  (set! second-comment (format "Initialize %s." feature))
-  (with-temp-file filename
-	(oo--ensure-file-header first-comment second-comment)
-	(oo--ensure-provide)))
+  (interactive "sFeature: ")
+  (set! filename (format "init-%s.el" feature))
+  (set! comment1 (format "Initialize %s" feature))
+  (set! comment2 (format "Initialize %s." feature))
+  (oo--create-lisp-dir-file filename comment1 comment2))
 
-(defun oo-create-new-config-file (feature)
+(defun! oo-create-new-config-file (feature)
   "Create a new config file for feature."
-  (interactive)
-  ())
-
-;; TODO: create a test file for a file
+  (interactive "sFeature: ")
+  (set! filename (format "config-%s.el" feature))
+  (set! comment1 (format "Configure %s" feature))
+  (set! comment2 (format "Configure %s." feature))
+  (oo--create-lisp-dir-file filename comment1 comment2))
 
 ;;;###autoload
 (defun oo-ensure-boilerplate ()
