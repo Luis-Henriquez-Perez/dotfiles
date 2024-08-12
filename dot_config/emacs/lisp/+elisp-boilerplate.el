@@ -97,7 +97,7 @@
              ;; the end if there is one.  We will re-add it now.
              (goto-char (point-max))
              (insert (format ";;; provide\n(provide '%s)\n%s" feature footer-commentary)))))))
-;;;###autoload
+
 (defun oo-ensure-provide ()
   (interactive)
   (oo--ensure-provide (buffer-file-name)))
@@ -112,7 +112,7 @@
                     (1+ nonl)
                     "-*- lexical-binding: t; -*-\n")))
 
-(defun oo--ensure-file-header ()
+(defun oo--ensure-file-header (title commentary)
   "Ensure that file has a title, description."
   ;; Make sure that the file has a title.
   (let* ((file (buffer-file-name))
@@ -148,6 +148,23 @@
 (defun oo-ensure-file-header ()
   (interactive)
   (oo--ensure-file-header))
+
+(defun! oo-create-new-init-file (feature)
+  "Create a new init file for feature."
+  ;; Prompt for feature.
+  (interactive)
+  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
+  (set! filename (expand-file-name (format "init-%s.el" feature)))
+  (set! first-comment (format "Initialize %s" feature))
+  (set! second-comment (format "Initialize %s." feature))
+  (with-temp-file filename
+	(oo--ensure-file-header first-comment second-comment)
+	(oo--ensure-provide)))
+
+(defun oo-create-new-config-file (feature)
+  "Create a new config file for feature."
+  (interactive)
+  ())
 
 ;; TODO: create a test file for a file
 
