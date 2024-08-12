@@ -118,7 +118,6 @@
 (bind! oo-toggle-map "r" #'read-only-mode)
 (bind! oo-toggle-map "d" #'toggle-debug-on-error)
 (bind! oo-toggle-map "P" #'profiler-stop)
-(bind! oo-toggle-map "s" #'smartparens-mode)
 ;;;;;; oo-dotfile-map
 (defvar oo-dotfile-map (make-sparse-keymap))
 (define-prefix-command 'oo-dotfile-prefix-command 'oo-dotfile-map)
