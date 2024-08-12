@@ -40,6 +40,8 @@
 ;; By default the cursor blinks.  The point is so that it is easier to find on the
 ;; screen.  Usually, however, I have no trouble finding it so I disable it.
 (blink-cursor-mode -1)
+
+(bind! oo-toggle-map "c" #'blink-cursor-mode)
 ;;; provide
 (provide 'init-frame)
 ;;; init-frame.el ends here
