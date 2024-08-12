@@ -54,8 +54,6 @@ Replace `kill-buffer--possibly-save' as advice."
     (?s (with-current-buffer buffer (save-buffer)) t)
     (?d t)
     (t nil)))
-
-(advice-add 'kill-buffer--possibly-save :around #'oo--prompt-in-less-confusing-way)
 ;;;; keybindings
 (bind! oo-buffer-map "x" #'kill-current-buffer)
 ;;; provide
