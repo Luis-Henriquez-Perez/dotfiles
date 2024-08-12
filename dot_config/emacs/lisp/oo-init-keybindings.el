@@ -135,6 +135,11 @@
 (bind! oo-package-map "d" #'elpaca-delete)
 (bind! oo-package-map "l" #'elpaca-log)
 (bind! oo-package-map "m" #'elpaca-manager)
+;;;;; opening Emacs places
+(bind! oo-find-map "E" #'oo-open-emacs-config)
+(bind! oo-find-map "I" #'oo-open-emacs-init-file)
+(bind! oo-find-map "L" #'oo-open-emacs-lisp-dir)
+(bind! oo-find-map "G" #'rgrep)
 ;;; provide
 (provide 'oo-init-keybindings)
 ;;; oo-init-keybindings.el ends here
