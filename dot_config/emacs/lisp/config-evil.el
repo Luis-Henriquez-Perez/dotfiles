@@ -57,9 +57,10 @@
     (evil-change-state oo-evil-state-before-minibuffer)
     (setq oo-evil-state-before-minibuffer nil)))
 
-(defadvice! refresh-cursor (around load-theme fn &rest args)
+(defadvice! refresh-cursor (around load-theme orig-fn &rest args)
   (when (bound-and-true-p evil-mode)
-	(evil-refresh-cursor)))
+	(evil-refresh-cursor))
+  (apply orig-fn args))
 ;;;; escape
 (defvar oo-escape-hook nil
   "Hook run after escaping.")
