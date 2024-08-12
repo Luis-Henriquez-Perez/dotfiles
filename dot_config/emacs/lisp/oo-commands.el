@@ -177,6 +177,11 @@ is already narrowed."
   "Create a new blank buffer."
   (interactive)
   (switch-to-buffer (generate-new-buffer "untitled")))
+
+;; This has to do with chezmoi.
+(defun! update-emacs-config ()
+  ;; Clear the existing files that are not part of chezmoi.
+  ())
 ;;;; miscellaneous
 (defun oo-kill-emacs-no-confirm ()
   "Kill Emacs without confirmation."

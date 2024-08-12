@@ -146,9 +146,8 @@
   (interactive)
   (oo--ensure-file-header))
 
-(defun oo--create-lisp-dir-file (filename comment1 comment2)
+(defun oo--create-lisp-dir-file (name dir comment1 comment2)
   "Auxiliary function."
-  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
   (set! filename (expand-file-name filename lisp-dir))
   (cl-assert (not (file-exists-p filename)))
   (with-current-buffer (find-file filename)
@@ -165,6 +164,7 @@
 (defun! oo-create-new-init-file (feature)
   "Create a new init file for feature."
   (interactive "sFeature: ")
+  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
   (set! filename (format "init-%s.el" feature))
   (set! comment1 (format "Initialize %s" feature))
   (set! comment2 (format "Initialize %s." feature))
@@ -173,9 +173,19 @@
 (defun! oo-create-new-config-file (feature)
   "Create a new config file for feature."
   (interactive "sFeature: ")
+  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
   (set! filename (format "config-%s.el" feature))
   (set! comment1 (format "Configure %s" feature))
   (set! comment2 (format "Configure %s." feature))
+  (oo--create-lisp-dir-file filename comment1 comment2))
+
+(defun! oo-create-new-test-file (file)
+  "Create a new config file for feature."
+  (interactive "sFile: ")
+  (set! dir oo-test-dir)
+  (set! filename (format "base-%s-test.el" feature))
+  (set! comment1 (format "Test %s" feature))
+  (set! comment2 (format "Test %s." feature))
   (oo--create-lisp-dir-file filename comment1 comment2))
 
 ;;;###autoload
