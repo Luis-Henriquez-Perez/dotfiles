@@ -50,13 +50,8 @@
 (defvar oo-magit-map (make-sparse-keymap))
 (define-prefix-command 'oo-magit-prefix-command 'oo-magit-map)
 (bind! oo-leader-map "g" #'oo-magit-prefix-command :wk "magit")
-
-(bind! oo-magit-map "s" #'magit-status)
-(bind! oo-magit-map "p" #'magit-push)
 (bind! oo-magit-map "n" #'vc-next-action)
-(bind! oo-magit-map "c" #'magit-commit)
 (bind! oo-magit-map "b" #'vc-create-branch)
-(bind! oo-magit-map "B" #'magit-branch)
 ;;;;;; oo-window-map
 (defvar oo-window-map (make-sparse-keymap))
 (define-prefix-command 'oo-window-prefix-command 'oo-window-map)
