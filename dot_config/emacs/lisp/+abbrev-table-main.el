@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("prop" "property")
+  '(("realestate" "real-estate.")
+	("scrreen" "screen")
+	("prop" "property")
 	("rfine" "refine")
 	("previosu" "previous")
 	("ther" "there")
