@@ -108,44 +108,6 @@
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 ;;;; custom functions
-(defun oo-dwim-narrow (keep-narrowing-p)
-  "Widen if buffer is narrowed, narrow-dwim otherwise.
-Dwim means: narrow to region, outline heading, org-src-block, org-subtree, or
-defun, whichever applies first.
-
-With prefix KEEP-NARROWING-P, don't widen, just narrow even if buffer
-is already narrowed."
-  (interactive "P")
-  (cond ((and (buffer-narrowed-p) (not keep-narrowing-p)) (widen))
-        ((region-active-p)
-         (narrow-to-region (region-beginning)
-                           (region-end)))
-        ((equal 'comment (oo-in-string-or-comment-p))
-         (save-excursion (outli-toggle-narrow-to-subtree)))
-        ((derived-mode-p 'org-mode)
-         (or (ignore-errors (org-narrow-to-block) t)
-             (org-narrow-to-subtree)))
-        (t
-         (narrow-to-defun))))
-;; You could actually do this via abbrev-mode as well.  And actually it might be
-;; better in a sense because.
-(defun! oo-dwim-space ()
-  "Replace two consecutive spaces with a period."
-  (interactive)
-  (set! rx "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
-  (cond ((and (or (derived-mode-p 'text-mode)
-                  (oo-in-string-or-comment-p))
-              (looking-back "\\([[:word:]]\\)[[:space:]]\\{2,\\}" nil))
-         (replace-match "\\1.\s\s"))
-        (t
-         (insert "\s"))))
-
-(defun! oo-pop-to-buffer ()
-  (interactive)
-  (require 'consult)
-  (set! consult--buffer-display #'pop-to-buffer)
-  (call-interactively #'consult-buffer))
-
 ;; Helper for maintaining my Emacs configuration.
 ;; (defun! oo--dwim-rename-file (orig-fn old new &optional ok-p)
 ;;   (prog1 (apply orig-fn old new ok-p)
@@ -187,6 +149,50 @@ is already narrowed."
 ;; TODO: I want to do more complex things like loading a random theme with no
 ;; repetitions in the current session and marking certain themes as favorite
 ;; themes that have a greater likelihood of being displayed.
+;;;; miscellaneous
+(defun oo-dwim-narrow (keep-narrowing-p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: narrow to region, outline heading, org-src-block, org-subtree, or
+defun, whichever applies first.
+
+With prefix KEEP-NARROWING-P, don't widen, just narrow even if buffer
+is already narrowed."
+  (interactive "P")
+  (cond ((and (buffer-narrowed-p) (not keep-narrowing-p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning)
+                           (region-end)))
+        ((equal 'comment (oo-in-string-or-comment-p))
+         (save-excursion (outli-toggle-narrow-to-subtree)))
+        ((derived-mode-p 'org-mode)
+         (or (ignore-errors (org-narrow-to-block) t)
+             (org-narrow-to-subtree)))
+        (t
+         (narrow-to-defun))))
+;; You could actually do this via abbrev-mode as well.  And actually it might be
+;; better in a sense because.
+(defun! oo-dwim-space ()
+  "Replace two consecutive spaces with a period."
+  (interactive)
+  (set! rx "\\([[:word:]]\\)\\([[:space:]][[:space:]]\\)\\([^[:space:]]+\\)")
+  (cond ((and (or (derived-mode-p 'text-mode)
+                  (oo-in-string-or-comment-p))
+              (looking-back "\\([[:word:]]\\)[[:space:]]\\{2,\\}" nil))
+         (replace-match "\\1.\s\s"))
+        (t
+         (insert "\s"))))
+
+(defun! oo-pop-to-buffer ()
+  (interactive)
+  (require 'consult)
+  (set! consult--buffer-display #'pop-to-buffer)
+  (call-interactively #'consult-buffer))
+
+(defun oo-kill-emacs-no-confirm ()
+  "Kill Emacs without confirmation."
+  (let (confirm-kill-emacs)
+	(call-interactively #'kill-emacs)))
+
 (defun! oo-load-random-theme ()
   "Load a random theme."
   (interactive)
@@ -208,11 +214,6 @@ is already narrowed."
 (defun! update-emacs-config ()
   ;; Clear the existing files that are not part of chezmoi.
   ())
-;;;; miscellaneous
-(defun oo-kill-emacs-no-confirm ()
-  "Kill Emacs without confirmation."
-  (let (confirm-kill-emacs)
-	(call-interactively #'kill-emacs)))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
