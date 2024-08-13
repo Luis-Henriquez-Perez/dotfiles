@@ -25,11 +25,11 @@
 ;; This is my configuration for abbrev.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'abbrev)
 (require 'base)
 (require '+abbrev-table-main)
 (require '+abbrev-table-wikipedia-misspellings)
-;;;; abbrevs
 ;;;; set abbrevs my way
 (defun! +abbrev-enable-text-abbrev-p ()
   "Return non-nil when text abbrevs should be enabled.
