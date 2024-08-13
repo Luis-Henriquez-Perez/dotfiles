@@ -72,6 +72,24 @@
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
 ;;;; sorting
+;; This is meant to.
+(defun! oo-sort-dwim ()
+  "Do the right sort at point."
+  (interactive)
+  (flet! found-p (regexp)
+	(save-excursion
+	  (goto-char (line-beginning-position))
+	  (re-search-forward regexp (line-end-position) t nil)))
+  (set! elpaca-rx "(elpaca")
+  (set! autoload-rx "(autoload")
+  (set! require-rx "(require")
+  (cond ((found-p elpaca-rx)
+		 (oo-sort-elpaca-forms))
+		((found-p autoload-rx)
+		 (oo-sort-autoload-forms))
+		((found-p require-rx)
+		 (oo-sort-require-forms))))
+
 (defun! oo-sort-elpaca-forms ()
   "Sort elpaca forms lexicographically by package name."
   (interactive)
@@ -82,6 +100,12 @@
   "Sort autoload forms lexicographically by package name."
   (interactive)
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
+  (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
+
+(defun! oo-sort-require-forms ()
+  "Sort autoload forms lexicographically by package name."
+  (interactive)
+  (set! rx (seq "(require" (one-or-more blank) "#'" (one-or-more (not space)) (one-or-more blank) "\"" (group (+? nonl)) "\"" (+? nonl) eol))
   (save-excursion (sort-regexp-fields nil rx "\\1" (point-min) (point-max))))
 ;;;; custom functions
 (defun oo-dwim-narrow (keep-narrowing-p)
@@ -178,7 +202,7 @@ is already narrowed."
 (defun! oo-new-buffer ()
   "Create a new blank buffer."
   (interactive)
-  (switch-to-buffer (generate-new-buffer "untitled")))
+  (display-buffer (generate-new-buffer "untitled")))
 
 ;; This has to do with chezmoi.
 (defun! update-emacs-config ()
