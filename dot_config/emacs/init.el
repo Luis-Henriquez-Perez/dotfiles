@@ -76,6 +76,7 @@
 (require 'init-rx)
 (require 'init-dired)
 ;; External packages
+(require 'init-tab-bar)
 (require 'init-macroexpand)
 (require 'init-burly)
 (require 'init-evil-collection)
