@@ -148,7 +148,7 @@
 
 (defun oo--create-lisp-dir-file (name dir comment1 comment2)
   "Auxiliary function."
-  (set! filename (expand-file-name filename lisp-dir))
+  (set! filename (expand-file-name name dir))
   (cl-assert (not (file-exists-p filename)))
   (with-current-buffer (find-file filename)
 	(oo--ensure-file-header)
@@ -168,7 +168,7 @@
   (set! filename (format "init-%s.el" feature))
   (set! comment1 (format "Initialize %s" feature))
   (set! comment2 (format "Initialize %s." feature))
-  (oo--create-lisp-dir-file filename comment1 comment2))
+  (oo--create-lisp-dir-file filename lisp-dir comment1 comment2))
 
 (defun! oo-create-new-config-file (feature)
   "Create a new config file for feature."
@@ -177,7 +177,7 @@
   (set! filename (format "config-%s.el" feature))
   (set! comment1 (format "Configure %s" feature))
   (set! comment2 (format "Configure %s." feature))
-  (oo--create-lisp-dir-file filename comment1 comment2))
+  (oo--create-lisp-dir-file filename lisp-dir comment1 comment2))
 
 (defun! oo-create-new-test-file (file)
   "Create a new config file for feature."
@@ -186,7 +186,7 @@
   (set! filename (format "base-%s-test.el" feature))
   (set! comment1 (format "Test %s" feature))
   (set! comment2 (format "Test %s." feature))
-  (oo--create-lisp-dir-file filename comment1 comment2))
+  (oo--create-lisp-dir-file filename test-dir comment1 comment2))
 
 ;;;###autoload
 (defun oo-ensure-boilerplate ()
