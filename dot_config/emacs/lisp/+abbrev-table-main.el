@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("realestate" "real-estate.")
+  '(("abbreviatons" "abbreviations")
+	("norml" "normal")
+	("inappripriate" "inappropriate")
+	("enalbe" "enable")
+	("realestate" "real-estate.")
 	("scrreen" "screen")
 	("prop" "property")
 	("rfine" "refine")
