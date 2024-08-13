@@ -92,19 +92,16 @@
 
 (defun! oo-sort-elpaca-forms ()
   "Sort elpaca forms lexicographically by package name."
-  (interactive)
   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 
 (defun! oo-sort-autoload-forms ()
   "Sort autoload forms lexicographically by package name."
-  (interactive)
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 
 (defun! oo-sort-require-forms ()
   "Sort require forms lexicographically by feature name."
-  (interactive)
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 ;;;; custom functions
