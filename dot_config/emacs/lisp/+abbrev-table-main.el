@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("previosu" "previous")
+  '(("prop" "property")
+	("rfine" "refine")
+	("previosu" "previous")
 	("ther" "there")
 	("rote" "wrote")
 	("partl" "partly")
