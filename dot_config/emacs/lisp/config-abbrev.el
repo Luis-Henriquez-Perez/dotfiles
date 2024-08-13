@@ -40,11 +40,13 @@ string or comment."
 	  ;; string or comment when in some programming mode.
 	  (acase (oo-in-string-or-comment-p)
 		(string
-		 (set! beg (car (bounds-of-thing-at-point 'string)))
-		 (looking-back "\\<\\(\\sw+\\)\\Sw*" beg))
+		 (set! string-beg (car (bounds-of-thing-at-point 'string)))
+		 (set! word-beg (save-excursion (backward-word) (point)))
+		 (> word-beg string-beg))
 		(comment
-		 (set! beg (save-excursion (comment-beginning) (point)))
-		 (looking-back "\\<\\(\\sw+\\)\\Sw*" beg))
+		 (set! comment-beg (save-excursion (comment-beginning) (point)))
+		 (set! word-beg (save-excursion (backward-word) (point)))
+		 (> word-beg comment-beg))
 		(t
 		 it))))
 ;;;; all abbrevs
