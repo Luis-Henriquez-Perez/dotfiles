@@ -36,9 +36,14 @@
 This is when the current major-mode is derived from text-mode or point is in a
 string or comment."
   (or (derived-mode-p 'text-mode)
+	  ;; These cases prevent abbreviation from expanding words outside of a
+	  ;; string or comment when in some programming mode.
 	  (acase (oo-in-string-or-comment-p)
 		(string
 		 (set! beg (car (bounds-of-thing-at-point 'string)))
+		 (looking-back "\\<\\(\\sw+\\)\\Sw*" beg))
+		(comment
+		 (set! beg (save-excursion (comment-beginning) (point)))
 		 (looking-back "\\<\\(\\sw+\\)\\Sw*" beg))
 		(t
 		 it))))
