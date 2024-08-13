@@ -31,12 +31,17 @@
 (require '+abbrev-table-wikipedia-misspellings)
 ;;;; abbrevs
 ;;;; set abbrevs my way
-(defun +abbrev-enable-text-abbrev-p ()
+(defun! +abbrev-enable-text-abbrev-p ()
   "Return non-nil when text abbrevs should be enabled.
 This is when the current major-mode is derived from text-mode or point is in a
 string or comment."
   (or (derived-mode-p 'text-mode)
-      (oo-in-string-or-comment-p)))
+	  (acase (oo-in-string-or-comment-p)
+		(string
+		 (set! beg (car (bounds-of-thing-at-point 'string)))
+		 (looking-back "\\<\\(\\sw+\\)\\Sw*" beg))
+		(t
+		 it))))
 ;;;; all abbrevs
 (abbrev-table-put +abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
 (abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
