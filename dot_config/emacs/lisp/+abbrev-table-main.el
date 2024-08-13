@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("procise" "precise")
+  '(("sev" "several")
+	("procise" "precise")
 	("whenn" "when")
 	("rounda" "roundabout")
 	("lisence" "license")
