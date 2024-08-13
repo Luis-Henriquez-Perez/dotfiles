@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("rounda" "roundabout")
+  '(("procise" "precise")
+	("whenn" "when")
+	("rounda" "roundabout")
 	("lisence" "license")
 	("liscence" "license")
 	("generatioin" "generation")
