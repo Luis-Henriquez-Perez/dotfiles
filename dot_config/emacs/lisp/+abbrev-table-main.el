@@ -28,7 +28,13 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("sev" "several")
+  '(("previosu" "previous")
+	("ther" "there")
+	("rote" "wrote")
+	("partl" "partly")
+	("ro" "or")
+	("abbrrevs" "abbrevs")
+	("sev" "several")
 	("procise" "precise")
 	("whenn" "when")
 	("rounda" "roundabout")
