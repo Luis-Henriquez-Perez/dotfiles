@@ -38,7 +38,7 @@ string or comment."
   (or (derived-mode-p 'text-mode)
 	  ;; These cases prevent abbreviation from expanding words outside of a
 	  ;; string or comment when in some programming mode.
-	  (acase (oo-in-string-or-comment-p)
+	  (cl-case (oo-in-string-or-comment-p)
 		(string
 		 (set! string-beg (car (bounds-of-thing-at-point 'string)))
 		 (set! word-beg (save-excursion (backward-word) (point)))
@@ -46,9 +46,7 @@ string or comment."
 		(comment
 		 (set! comment-beg (save-excursion (comment-beginning) (point)))
 		 (set! word-beg (save-excursion (backward-word) (point)))
-		 (> word-beg comment-beg))
-		(t
-		 it))))
+		 (> word-beg comment-beg)))))
 ;;;; all abbrevs
 (abbrev-table-put +abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
 (abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
