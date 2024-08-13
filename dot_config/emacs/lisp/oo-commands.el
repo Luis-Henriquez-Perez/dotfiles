@@ -72,7 +72,7 @@
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
 ;;;; sorting
-;; This is meant to.
+;; This is meant to sort certain lines I have.
 (defun! oo-sort-dwim ()
   "Do the right sort at point."
   (interactive)
@@ -90,6 +90,8 @@
 		((found-p require-rx)
 		 (oo-sort-require-forms))))
 
+;; This is meant to sort the great number of install package forms I have in
+;; `init-elpaca'.
 (defun! oo-sort-elpaca-forms ()
   "Sort elpaca forms lexicographically by package name."
   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
@@ -100,6 +102,7 @@
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 
+;; This is meant to sort the great number of `require' forms in the init file.
 (defun! oo-sort-require-forms ()
   "Sort require forms lexicographically by feature name."
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
