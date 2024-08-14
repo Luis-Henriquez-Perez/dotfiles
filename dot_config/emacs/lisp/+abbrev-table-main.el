@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("determne" "determine")
+  '(("thatss" "that is")
+	("nwo" "now")
+	("determne" "determine")
 	("abbreviatons" "abbreviations")
 	("norml" "normal")
 	("inappripriate" "inappropriate")
