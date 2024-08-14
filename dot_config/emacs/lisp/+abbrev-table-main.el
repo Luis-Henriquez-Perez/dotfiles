@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("successfullyy" "successfully")
+  '(("perosnally" "personally")
+	("successfullyy" "successfully")
 	("thatss" "that is")
 	("nwo" "now")
 	("determne" "determine")
