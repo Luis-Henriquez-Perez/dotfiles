@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("aamof" "as a matter of fact")
+  '(("inadvertedly" "inadvertently")
+	("aamof" "as a matter of fact")
 	("eamcs" "emacs")
 	("oep" "open")
 	("tendencis" "tendencies")
