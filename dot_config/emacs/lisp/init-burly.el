@@ -29,6 +29,8 @@
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-find-map "b" #'burly-open-bookmark)
 
+;; The mode `burly-tabs-mode' causes opening a burly bookmark to enable
+;; `tab-bar-mode' automatically and create a new tab.
 (hook! oo-after-load-burly-hook #'burly-tabs-mode)
 ;;; provide
 (provide 'init-burly)
