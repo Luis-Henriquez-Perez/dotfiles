@@ -26,10 +26,10 @@
 ;;
 ;;; Code:
 (defun! oo--load-evil-goggles (fn &rest args)
-  (unless (minibufferp)
+  (unless (or (minibufferp)
+			  (bound-and-true-p evil-goggles-mode))
 	(require 'evil-goggles)
-	(unless (bound-and-true-p evil-goggles-mode)
-	  (evil-goggles-mode 1)))
+	(evil-goggles-mode 1))
   (apply fn args))
 
 (after! register-evil-goggles-commands (evil-goggles lispyville)
