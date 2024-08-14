@@ -34,6 +34,9 @@
 
 (autoload #'evil-collection-info-setup "evil-collection" nil nil 'function)
 (hook! oo-after-load-info-hook evil-collection-info-setup)
+
+(autoload #'evil-collection-ibuffer-setup "evil-collection" nil nil 'function)
+(hook! oo-after-load-ibuffer-hook evil-collection-ibuffer-setup)
 ;;; provide
 (provide 'init-evil-collection)
 ;;; init-evil-collection.el ends here
