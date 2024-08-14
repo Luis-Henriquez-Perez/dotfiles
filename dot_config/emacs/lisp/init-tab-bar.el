@@ -38,6 +38,8 @@
   (interactive)
   (opt! tab-bar-show (not tab-bar-show)))
 
+;; https://mmk2410.org/2022/02/11/using-emacs-tab-bar-mode
+
 ;; TODO: set the initial buffer when a new tab is created.
 ;; TODO: save information from tab with `burly-bookmark-windows' so when I
 ;; restore a bookmark it creates a tab with the same name as it was.  I do not
