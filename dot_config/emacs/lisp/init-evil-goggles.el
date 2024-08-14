@@ -56,18 +56,17 @@
 (oo-add-advice 'evil-paste-after			:around #'oo--load-evil-goggles)
 
 (defun! oo--load-evil-goggles (fn &rest args)
-  (nif! (featurep 'evil-goggles)
-	  (advice-remove fn #'oo--load-evil-goggles)
-	(require 'evil-goggles)
-	(evil-goggles-mode 1))
+  (require 'evil-goggles)
+  (unless (bound-and-true-p evil-goggles-mode)
+	(shut-up (evil-goggles-mode 1)))
+  (advice-remove fn #'oo--load-evil-goggles)
   (apply fn args))
 
-(defun! oo--load-evil-goggles (new old fn &rest args)
+(defun! oo--associate-with-evil-goggles-command (new old fn &rest args)
   (require 'evil-goggles)
-  (evil-goggles-mode 1)
   (awhen (assoc old evil-goggles--commands)
     (pushing! evil-goggles--commands (cons new (cdr it))))
-  (advice-remove fn #'oo--load-evil-goggles)
+  (advice-remove fn #'oo--associate-with-evil-goggles-command)
   (apply fn args))
 
 ;; Then register any command that needs registering.
