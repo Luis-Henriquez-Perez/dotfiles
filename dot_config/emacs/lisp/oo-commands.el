@@ -193,12 +193,20 @@ is already narrowed."
   (let (confirm-kill-emacs)
 	(call-interactively #'kill-emacs)))
 
+;; Keep track of the themes that I have loaded and do not allow repetitions.
+(defvar oo-loaded-themes nil
+  "Themes that have already been loaded.")
+
 (defun! oo-load-random-theme ()
   "Load a random theme."
   (interactive)
-  (set! theme (seq-random-elt (custom-available-themes)))
-  (message "Loading theme %s..." theme)
-  (load-theme theme))
+  (set! not-loaded (-difference (custom-available-themes) oo-loaded-themes))
+  (set! theme (seq-random-elt not-loaded))
+  (condition-case err
+	  (progn (load-theme theme)
+			 (push theme oo-loaded-themes)
+			 (message "Loaded theme `%s'..." theme))
+	(signal (car err) (cdr err))))
 
 ;; This idea is based on the following link where xah lee talks about why the
 ;; scratch buffer is outdated.  It does not follow the trend of "untitled1",
