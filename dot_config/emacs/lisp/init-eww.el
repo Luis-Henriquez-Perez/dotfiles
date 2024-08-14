@@ -25,6 +25,8 @@
 ;; Initialize eww.
 ;;
 ;;; Code:
+(opt! eww-auto-rename-buffer t)
+
 (bind! eww-mode-map n "R" #'eww-reload)
 ;;; provide
 (provide 'init-eww)
