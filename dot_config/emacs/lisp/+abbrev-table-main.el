@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("perosnally" "personally")
+  '(("tendencis" "tendencies")
+	("magitcal" "magical")
+	("perosnally" "personally")
 	("successfullyy" "successfully")
 	("thatss" "that is")
 	("nwo" "now")
