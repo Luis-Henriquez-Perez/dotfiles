@@ -25,10 +25,18 @@
 ;; Initialize magit.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'base)
-
-(oo-call-after-load '(magit evil) #'evil-magit-init)
+;;;; popup
 (oo-popup-at-bottom "\\`magit")
+;;;; enter insert state on commit
+;; Note that I cannot use `evil-set-initial-state' for this because
+;; `git-commit-mode' is a minor-mode.
+(defhook! enter-insert-state (git-commit-mode-hook)
+  (when (bound-and-true-p evil-mode)
+	(evil-insert-state 1)))
+;;;; bindings
+(oo-call-after-load '(magit evil) #'evil-magit-init)
 
 (bind! oo-git-map "s" #'magit-status)
 (bind! oo-git-map "p" #'magit-push)
