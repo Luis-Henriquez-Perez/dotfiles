@@ -72,6 +72,7 @@
 (elpaca eshell-prompt-extras)
 (elpaca eshell-up)
 (elpaca eshell-z)
+(elpaca eshell-syntax-highlighting)
 (elpaca esup)
 (elpaca evil)
 (elpaca evil-cleverparens)
