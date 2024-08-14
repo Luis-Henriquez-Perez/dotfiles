@@ -40,6 +40,12 @@
 
 (autoload #'evil-collection-eww-setup "evil-collection" nil nil 'function)
 (hook! oo-after-load-eww-hook evil-collection-eww-setup)
+
+(autoload #'evil-collection-eshell-setup "evil-collection" nil nil 'function)
+(hook! oo-after-load-eshell-hook evil-collection-eshell-setup)
+
+(autoload #'evil-collection-w3m-setup "evil-collection" nil nil 'function)
+(hook! oo-after-load-w3m-hook evil-collection-w3m-setup)
 ;;; provide
 (provide 'init-evil-collection)
 ;;; init-evil-collection.el ends here
