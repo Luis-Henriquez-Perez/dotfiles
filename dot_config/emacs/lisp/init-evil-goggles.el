@@ -70,17 +70,17 @@
   (apply fn args))
 
 ;; Then register any command that needs registering.
-(oo-add-advice 'lispyville-yank :around (-partial)) (evil-yank                 . lispyville-yank)
-(oo-add-advice 'lispyville-delete :around (-partial)) (evil-delete               . lispyville-delete)
-(oo-add-advice 'lispyville-change :around (-partial)) (evil-change               . lispyville-change)
-(oo-add-advice 'lispyville-yank-line :around (-partial)) (evil-yank-line            . lispyville-yank-line)
-(oo-add-advice 'lispyville-delete-line :around (-partial)) (evil-delete-line          . lispyville-delete-line)
-(oo-add-advice 'lispyville-change-line :around (-partial)) (evil-change-line          . lispyville-change-line)
-(oo-add-advice 'lispyville-delete-char-or-splice :around (-partial)) (evil-delete-char          . lispyville-delete-char-or-splice)
-(oo-add-advice 'lispyville-delete-char-or-splice-backwards :around (-partial)) (evil-delete-backward-char . lispyville-delete-char-or-splice-backwards)
-(oo-add-advice 'lispyville-substitute :around (-partial)) (evil-substitute           . lispyville-substitute)
-(oo-add-advice 'lispyville-change-whole-line :around (-partial)) (evil-change-whole-line    . lispyville-change-whole-line)
-(oo-add-advice 'lispyville-join :around (-partial)) (evil-join                 . lispyville-join)
+(oo-add-advice 'lispyville-yank :around (-partial (evil-yank                 . lispyville-yank)))
+(oo-add-advice 'lispyville-delete :around (-partial (evil-delete               . lispyville-delete)))
+(oo-add-advice 'lispyville-change :around (-partial (evil-change               . lispyville-change)))
+(oo-add-advice 'lispyville-yank-line :around (-partial (evil-yank-line            . lispyville-yank-line)))
+(oo-add-advice 'lispyville-delete-line :around (-partial (evil-delete-line          . lispyville-delete-line)))
+(oo-add-advice 'lispyville-change-line :around (-partial (evil-change-line          . lispyville-change-line)))
+(oo-add-advice 'lispyville-delete-char-or-splice :around (-partial (evil-delete-char          . lispyville-delete-char-or-splice)))
+(oo-add-advice 'lispyville-delete-char-or-splice-backwards :around (-partial (evil-delete-backward-char . lispyville-delete-char-or-splice-backwards)))
+(oo-add-advice 'lispyville-substitute :around (-partial (evil-substitute           . lispyville-substitute)))
+(oo-add-advice 'lispyville-change-whole-line :around (-partial (evil-change-whole-line    . lispyville-change-whole-line)))
+(oo-add-advice 'lispyville-join :around (-partial (evil-join                 . lispyville-join)))
 ;;; provide
 (provide 'init-evil-goggles)
 ;;; init-evil-goggles.el ends here
