@@ -33,6 +33,7 @@
 ;; Note that I cannot use `evil-set-initial-state' for this because
 ;; `git-commit-mode' is a minor-mode.
 (defhook! enter-insert-state (git-commit-mode-hook)
+  "Enter `evil-insert-state' after `git-commit-mode'"
   (when (bound-and-true-p evil-mode)
 	(evil-insert-state 1)))
 ;;;; bindings
