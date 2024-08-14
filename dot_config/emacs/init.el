@@ -76,6 +76,7 @@
 (require 'init-vc-hooks)
 (require 'init-window)
 ;; External packages
+(require 'init-evil-goggles)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
