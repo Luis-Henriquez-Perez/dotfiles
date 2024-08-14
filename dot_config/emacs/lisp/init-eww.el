@@ -1,4 +1,4 @@
-;;; init-evil-collection.el --- Initialize `evil-collection' -*- lexical-binding: t; -*-
+;;; init-eww.el --- Initialize eww -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,24 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize `evil-collection'.
+;; Initialize eww.
 ;;
 ;;; Code:
-;; Load dired bindings.
-(autoload #'evil-collection-dired-setup "evil-collection" nil nil 'function)
-(hook! oo-after-load-dired-hook evil-collection-dired-setup)
-
-(autoload #'evil-collection-calc-setup "evil-collection" nil nil 'function)
-(hook! oo-after-load-calc-hook evil-collection-calc-setup)
-
-(autoload #'evil-collection-info-setup "evil-collection" nil nil 'function)
-(hook! oo-after-load-info-hook evil-collection-info-setup)
-
-(autoload #'evil-collection-ibuffer-setup "evil-collection" nil nil 'function)
-(hook! oo-after-load-ibuffer-hook evil-collection-ibuffer-setup)
-
-(autoload #'evil-collection-eww-setup "evil-collection" nil nil 'function)
-(hook! oo-after-load-eww-hook evil-collection-eww-setup)
+(bind! eww-mode-map n "R" #'eww-reload)
 ;;; provide
-(provide 'init-evil-collection)
-;;; init-evil-collection.el ends here
+(provide 'init-eww)
+;;; init-eww.el ends here
