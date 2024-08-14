@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("abbreviatons" "abbreviations")
+  '(("determne" "determine")
+	("abbreviatons" "abbreviations")
 	("norml" "normal")
 	("inappripriate" "inappropriate")
 	("enalbe" "enable")
