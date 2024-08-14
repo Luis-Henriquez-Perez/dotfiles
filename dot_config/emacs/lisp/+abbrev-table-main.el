@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("tendencis" "tendencies")
+  '(("oep" "open")
+	("tendencis" "tendencies")
 	("magitcal" "magical")
 	("perosnally" "personally")
 	("successfullyy" "successfully")
