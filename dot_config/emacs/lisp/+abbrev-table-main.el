@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("thatss" "that is")
+  '(("successfullyy" "successfully")
+	("thatss" "that is")
 	("nwo" "now")
 	("determne" "determine")
 	("abbreviatons" "abbreviations")
