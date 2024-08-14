@@ -27,6 +27,8 @@
 ;;; Code:
 (require 'grugru)
 
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("always" "never")))
+
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("open" "close")))
 
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("yes" "no")))
@@ -45,6 +47,8 @@
 
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("is" "was")))
 ;;;; emacs-lisp
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("unless" "when"))
+
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("pop-to-buffer" "display-buffer"))
 
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("let" "let*" "let!" "-let"))
