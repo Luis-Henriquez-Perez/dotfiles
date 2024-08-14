@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("eamcs" "emacs")
+  '(("aamof" "as a matter of fact")
+	("eamcs" "emacs")
 	("oep" "open")
 	("tendencis" "tendencies")
 	("magitcal" "magical")
