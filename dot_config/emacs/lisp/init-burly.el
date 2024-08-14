@@ -28,6 +28,8 @@
 (bind! oo-window-map "S" #'burly-bookmark-windows)
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-find-map "b" #'burly-open-bookmark)
+
+(hook! oo-after-load-burly-hook #'burly-tabs-mode)
 ;;; provide
 (provide 'init-burly)
 ;;; init-burly.el ends here
