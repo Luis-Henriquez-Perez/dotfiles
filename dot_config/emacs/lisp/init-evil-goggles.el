@@ -25,6 +25,8 @@
 ;; Initialize evil-goggles.
 ;;
 ;;; Code:
+(opt! evil-goggles-duration 0.1)
+
 (defun! oo--load-evil-goggles (fn &rest args)
   (unless (or (minibufferp)
 			  (bound-and-true-p evil-goggles-mode))
