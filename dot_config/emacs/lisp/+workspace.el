@@ -1,4 +1,4 @@
-;;; +wbuffce.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; +workspace.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -38,10 +38,14 @@
 ;; - Save workspaces at the end of the session.
 ;;
 ;;; Code:
+;;;; reqs
+(require 'tab-bar)
+(require 'burly)
+;;;; internal
 (defun +workspace--make-bookmark ())
 ;; I might need a new data structure for the workspace that holds which buffers
 ;; belong to it.
-
+;;;; commands
 ;; On a side-note I am thinking that I should associate tabs to their buffers
 ;; somehow and that I wished that burly could associate more buffers than what
 ;; are just visible in the frame.
@@ -49,6 +53,9 @@
   "Create a new workspace."
   (interactive "sWorkspace name: ")
   (message "New workspace `%s'!" name)
+  ;; 1. Clear current window configuration.
+  ;; 2. Switch to untitled buffer.
+  ;; 3. Create a burly bookmark for this.
   ;; This should be the default.
   ;; Prompt for workspace name.
   ;; (oo--make-untitled-buffer)
