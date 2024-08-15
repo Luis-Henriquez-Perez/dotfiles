@@ -31,6 +31,8 @@
 (hook! eshell-mode-hook smartparens-mode)
 (hook! eshell-mode-hook eat-eshell-mode)
 (hook! eshell-mode-hook eshell-syntax-highlighting-mode)
+;; Do not let me kill the eshell buffer, at least not easily.
+(hook! eshell-mode-hook emacs-lock-mode)
 
 (autoload #'eshell-z "eshell-z" nil t 'function)
 (autoload #'eshell-up "eshell-up" nil t 'function)
