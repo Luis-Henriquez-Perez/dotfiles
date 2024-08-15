@@ -47,8 +47,30 @@
            (: bol (not ,comment-start) (* any) eol "\n"))
        (: bol (zero-or-more blank) (= 2 ,comment-start) blank))))
 
-(defun oo--prog-mode-should-capitalize-p ()
-  "Return point if."
+(defvar oo--definer-list '("defun"
+						   "defmacro"
+						   "cl-defun"
+						   "cl-defmacro"
+						   "defun*"
+						   "defmacro*"
+						   "lambda"
+						   "defmacro!"
+						   "defun!"
+						   "-lambda"))
+
+;; Influenced from smartparens.  This does it for emacs-lisp but I wonder if
+;; there is a general way to determine.
+(defun! oo--in-docstring-p ()
+  "Return the bounds of docstring."
+  (awhen (bounds-of-thing-at-point 'string)
+	(save-excursion
+	  (goto-char (car it))
+	  (ignore-errors (backward-sexp 3))
+	  (looking-at-p (regexp-opt oo--definer-list)))
+	it))
+
+(defun! oo--prog-mode-should-capitalize-p ()
+  "Return point where sentense should be capitalized."
   (pcase (oo-in-string-or-comment-p)
     ('comment
      (or (save-match-data
@@ -57,9 +79,8 @@
                 (match-end 0)))
          (captain--default-sentence-start)))
     ('string
-     ;; If it's a docstring capitalize the first word of the doc-string.
-     (when (looking-back oo-docstring-regexp (line-beginning-position 0))
-       (match-end 0)))))
+	 (aand (car (oo--in-docstring-p))
+		   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))))
 
 (defhook! set-captain-local-vars (text-mode-hook)
   "Initialize `captain' for text-mode."
@@ -67,7 +88,7 @@
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 
 ;; TODO: figure out the best way to add these things.
-(defhook! set-captain-local-vars (prog-mode-hook)
+(defhook! set-captain-local-vars (emacs-lisp-mode-hook)
   "Initialize `captain' for prog-mode."
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
