@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("bufers" "buffers")
+  '(("mabe" "maybe")
+	("ti" "it")
+	("bufers" "buffers")
 	("bookmakrs" "bookmarks")
 	("ais" "as it stands,")
 	("ais" "as it stands")
