@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("bookmakr" "bookmark")
+  '(("takin" "taking")
+	("bookmakr" "bookmark")
 	("thatd" "that would")
 	("delimeter" "delimiter")
 	("defualt" "default")
