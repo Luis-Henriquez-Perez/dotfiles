@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("frmae" "frame")
+  '(("bufers" "buffers")
+	("bookmakrs" "bookmarks")
+	("ais" "as it stands,")
+	("ais" "as it stands")
+	("frmae" "frame")
 	("somehwo" "somehow")
 	("wa" "way")
 	("advisig" "advising")
