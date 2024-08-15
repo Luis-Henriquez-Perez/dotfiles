@@ -116,6 +116,7 @@
 (require 'init-modus-operandi)
 (require 'init-notmuch)
 (require 'init-orderless)
+(require 'init-emmet)
 (require 'init-org)
 (require 'init-org-appear)
 (require 'init-org-capture)
