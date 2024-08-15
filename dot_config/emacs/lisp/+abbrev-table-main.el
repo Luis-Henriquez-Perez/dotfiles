@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("defualt" "default")
+  '(("thatd" "that would")
+	("delimeter" "delimiter")
+	("defualt" "default")
 	("creae" "create")
 	("reqs" "requirements")
 	("mabe" "maybe")
