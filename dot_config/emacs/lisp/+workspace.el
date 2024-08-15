@@ -53,16 +53,20 @@
   "Create a new workspace."
   (interactive "sWorkspace name: ")
   (message "New workspace `%s'!" name)
+  (burly-tabs-mode -1)
+  (unless (bound-and-true-p tab-bar-mode)
+	(require 'tab-bar)
+	(tab-bar-mode 1))
   ;; 1. Clear current window configuration.
   ;; 2. Switch to untitled buffer.
   ;; 3. Create a burly bookmark for this.
   ;; This should be the default.
   ;; Prompt for workspace name.
-  ;; (oo--make-untitled-buffer)
-  ;; (burly-bookmark-windows)
-  ;; (tab-bar-new-tab)
-  ;; (tab-bar)
-  )
+  (generate-new-buffer "untitled")
+  ;; Save the workspace.
+  (tab-new)
+  (tab-rename name)
+  (burly-bookmark-windows name))
 
 (defun +workspace-show-tabs ()
   "Show workspaces as tabs.")
