@@ -39,7 +39,9 @@
 ;; really be killed. See [[https://www.emacswiki.org/emacs/ProtectingBuffers][ProtectingBuffers]].
 (setq emacs-lock-default-locking-mode 'kill)
 (with-current-buffer "*Messages*" (emacs-lock-mode 1))
-(with-current-buffer "*scratch*" (emacs-lock-mode 1))
+
+;; This buffer is useless.  I do not want it taking up space.
+(kill-buffer "*scratch*")
 ;;; provide
 (provide 'init-emacs-lock)
 ;;; init-emacs-lock.el ends here
