@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("mabe" "maybe")
+  '(("creae" "create")
+	("reqs" "requirements")
+	("mabe" "maybe")
 	("ti" "it")
 	("bufers" "buffers")
 	("bookmakrs" "bookmarks")

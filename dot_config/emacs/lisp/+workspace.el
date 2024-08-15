@@ -1,4 +1,4 @@
-;;; +workspace.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; +wbuffce.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -38,17 +38,24 @@
 ;; - Save workspaces at the end of the session.
 ;;
 ;;; Code:
+(defun +workspace--make-bookmark ())
+;; I might need a new data structure for the workspace that holds which buffers
+;; belong to it.
+
 ;; On a side-note I am thinking that I should associate tabs to their buffers
 ;; somehow and that I wished that burly could associate more buffers than what
 ;; are just visible in the frame.
-(defun +workspace-new ()
-  "Create a new workspace"
+(defun +workspace-new (name)
+  "Create a new workspace."
+  (interactive "sWorkspace name: ")
+  (message "New workspace `%s'!" name)
   ;; This should be the default.
   ;; Prompt for workspace name.
-  (oo--make-untitled-buffer)
-  (burly-bookmark-windows)
-  (tab-bar-new-tab)
-  (tab-bar))
+  ;; (oo--make-untitled-buffer)
+  ;; (burly-bookmark-windows)
+  ;; (tab-bar-new-tab)
+  ;; (tab-bar)
+  )
 
 (defun +workspace-show-tabs ()
   "Show workspaces as tabs.")
@@ -58,6 +65,16 @@
 
 (defun +workspace-rename ()
   )
+
+;; TODO: potentially kill the buffers corresponding to the workspace, maybe that
+;; should be an option.
+(defun +workspace-close ()
+  ""
+  (interactive)
+  (burly-book)
+  (tab-bar-close)
+  (dolist (buffer (workspace-buffers))
+	(kill-buffer buffer)))
 ;;; provide
 (provide '+workspace)
 ;;; +workspace.el ends here
