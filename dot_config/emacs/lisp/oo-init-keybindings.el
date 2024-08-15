@@ -104,6 +104,7 @@
 (define-prefix-command 'oo-toggle-prefix-command 'oo-toggle-map)
 (bind! oo-leader-map "t" #'oo-toggle-prefix-command :wk "toggle")
 
+(bind! oo-toggle-map "w" #'whitespace-mode)
 (bind! oo-toggle-map "l" #'display-line-numbers-mode)
 (bind! oo-toggle-map "u" #'toggle-truncate-lines)
 (bind! oo-toggle-map "n" #'oo-dwim-narrow)
