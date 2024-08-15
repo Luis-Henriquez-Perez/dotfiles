@@ -56,7 +56,7 @@ This is like `setq' but it is meant for configuring variables."
 ;;;; setq-hook!
 (defmacro! setq-hook! (hooks symbol value)
   "Set the local value of hook."
-  (set! name (intern (format "set-local-variable-%s" symbol)))
+  (set! name (intern (format "set-local-var-%s" symbol)))
   `(defhook! ,name ,(ensure-list hooks)
      ,(format "Set local variable `%S' locally." symbol value)
      (setq-local ,symbol ,value)))
