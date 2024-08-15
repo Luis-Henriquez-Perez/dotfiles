@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("wa" "way")
+  '(("frmae" "frame")
+	("somehwo" "somehow")
+	("wa" "way")
 	("advisig" "advising")
 	("inadvertedly" "inadvertently")
 	("aamof" "as a matter of fact")
