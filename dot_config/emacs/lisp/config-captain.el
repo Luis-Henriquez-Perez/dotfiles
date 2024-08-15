@@ -33,7 +33,7 @@
 (require 'rx)
 ;;;; determine where I am
 ;; TODO: generalize regexp with `defun!', `cl-defun', etc.
-(defvar oo-docstring-regexp "(defun[[:blank:]]\\([^[:space:]]+\\)[[:blank:]](\\(.*\\))\n[[:blank:]]*\"")
+(defvar oo-docstring-regexp "(\\(?:def\\(?:advice!\\|hook!\\|macro\\|un!?\\)\\)[[:blank:]]\\([^[:space:]]+\\)[[:blank:]](\\(.*\\))\n[[:blank:]]*\"")
 
 ;; TODO: generalize this regexp for comments in different languages.
 (defun oo--beg-comment-block-rx ()
@@ -62,11 +62,13 @@
        (match-end 0)))))
 
 (defhook! set-captain-local-vars (text-mode-hook)
+  "Initialize `captain' for text-mode."
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 
 ;; TODO: figure out the best way to add these things.
 (defhook! set-captain-local-vars (prog-mode-hook)
+  "Initialize `captain' for prog-mode."
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))
 ;;; provide
