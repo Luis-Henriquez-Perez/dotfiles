@@ -108,16 +108,6 @@
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
   (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
 ;;;; custom functions
-;; Helper for maintaining my Emacs configuration.
-;; (defun! oo--dwim-rename-file (orig-fn old new &optional ok-p)
-;;   (prog1 (apply orig-fn old new ok-p)
-;;     (set! emacs-dir (f-full "~/.local/share/chezmoi/dot_config/emacs/"))
-;;     (when (and (f-ancestor-of-p emacs-dir old) (equal "el" (f-ext old)))
-;;       (oo-ensure-feature-matches-filename new))))
-
-;; (advice-add 'rename-file :around #'oo--dwim-rename-file)
-;; (advice-remove 'rename-file #'oo--dwim-rename-file)
-
 ;; (defun! oo-ensure-feature-matches-filename (file)
 ;;   "Change usages of feature in file to match filename."
 ;;   (with-temp-file file
