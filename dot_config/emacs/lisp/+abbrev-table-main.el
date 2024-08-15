@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("creae" "create")
+  '(("defualt" "default")
+	("creae" "create")
 	("reqs" "requirements")
 	("mabe" "maybe")
 	("ti" "it")
