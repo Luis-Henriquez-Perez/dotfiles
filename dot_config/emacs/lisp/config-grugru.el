@@ -27,6 +27,10 @@
 ;;; Code:
 (require 'grugru)
 
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("big" "medium" "small")))
+
+(grugru-define-global 'symbol (grugru-metagenerator-keep-case '("word" "sentence" "paragraph")))
+
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("always" "never")))
 
 (grugru-define-global 'symbol (grugru-metagenerator-keep-case '("open" "close")))
