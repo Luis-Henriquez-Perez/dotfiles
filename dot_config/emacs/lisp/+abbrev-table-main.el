@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("advisig" "advising")
+  '(("wa" "way")
+	("advisig" "advising")
 	("inadvertedly" "inadvertently")
 	("aamof" "as a matter of fact")
 	("eamcs" "emacs")
