@@ -62,16 +62,19 @@
 	(evil-refresh-cursor))
   (apply orig-fn args))
 ;;;; escape
-(defvar oo-escape-hook nil
-  "Hook run after escaping.")
+;; (defvar oo-escape-hook nil
+;;   "Hook run after escaping.")
+;; ((run-hook-with-args-until-success 'oo-escape-hook))
 
-(defun @exit-everything (&rest _)
+(defun! @exit-everything (&rest _)
   "Exits out of whatever is happening after escape."
   (cond ((minibuffer-window-active-p (minibuffer-window))
-         (abort-recursive-edit))
-        ((run-hook-with-args-until-success 'oo-escape-hook))
-        ((or defining-kbd-macro executing-kbd-macro) nil)
-        (t (keyboard-quit))))
+		 (if (or defining-kbd-macro executing-kbd-macro)
+			 (minibuffer-keyboard-quit)
+           (abort-recursive-edit)))
+		((or defining-kbd-macro executing-kbd-macro) nil)
+        (t
+		 (keyboard-quit))))
 
 (oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
 ;;;; eval operator
