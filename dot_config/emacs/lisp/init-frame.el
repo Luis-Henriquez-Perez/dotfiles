@@ -39,7 +39,13 @@
 ;;;; disable cursor blinking
 ;; By default the cursor blinks.  The point is so that it is easier to find on the
 ;; screen.  Usually, however, I have no trouble finding it so I disable it.
-(blink-cursor-mode -1)
+(blink-cursor-mode 1)
+;; By default after a certain amount of blinks the cursor becomes solid.  By
+;; setting this to a negative value I make the cursor blink forever.
+(opt! blink-cursor-blinks -1)
+
+;; Increase the blink interval slightly.
+(opt! blink-cursor-interval 0.4)
 
 (bind! oo-toggle-map "c" #'blink-cursor-mode)
 ;;; provide
