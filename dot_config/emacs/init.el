@@ -78,6 +78,7 @@
 ;; External packages
 (require 'init-htmlize)
 (require 'init-eww)
+(require 'init-window)
 (require 'init-evil-goggles)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
