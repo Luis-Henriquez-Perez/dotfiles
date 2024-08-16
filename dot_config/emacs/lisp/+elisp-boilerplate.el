@@ -151,15 +151,15 @@
   (set! filename (expand-file-name name dir))
   (cl-assert (not (file-exists-p filename)))
   (with-current-buffer (find-file filename)
-	(oo--ensure-file-header)
-	(goto-char (point-min))
-	;; This is a kind of roundabout way of doing it.  Not sure if it is the
-	;; "best" way whatever that means, but it works.
-	(search-forward "TODO: add commentary" nil t nil)
-	(replace-match comment1)
-	(search-forward "TODO: add commentary" nil t nil)
-	(replace-match comment2)
-	(save-excursion (oo--ensure-provide filename))))
+    (oo--ensure-file-header)
+    (goto-char (point-min))
+    ;; This is a kind of roundabout way of doing it.  Not sure if it is the
+    ;; "best" way whatever that means, but it works.
+    (search-forward "TODO: add commentary" nil t nil)
+    (replace-match comment1)
+    (search-forward "TODO: add commentary" nil t nil)
+    (replace-match comment2)
+    (save-excursion (oo--ensure-provide filename))))
 
 (defun! oo-create-new-init-file (feature)
   "Create a new init file for feature."

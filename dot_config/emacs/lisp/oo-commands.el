@@ -39,7 +39,7 @@
   (set! source-path (string-trim (shell-command-to-string command)))
   ;; Remove any trailing newlines from the output
   (and (not (string-empty-p source-path))
-	   source-path))
+       source-path))
 
 (defun oo-open-emacs-config ()
   "Open Emacs configuration."
@@ -77,18 +77,18 @@
   "Do the right sort at point."
   (interactive)
   (flet! found-p (regexp)
-	(save-excursion
-	  (goto-char (line-beginning-position))
-	  (re-search-forward regexp (line-end-position) t nil)))
+    (save-excursion
+      (goto-char (line-beginning-position))
+      (re-search-forward regexp (line-end-position) t nil)))
   (set! elpaca-rx "(elpaca")
   (set! autoload-rx "(autoload")
   (set! require-rx "(require")
   (cond ((found-p elpaca-rx)
-		 (oo-sort-elpaca-forms))
-		((found-p autoload-rx)
-		 (oo-sort-autoload-forms))
-		((found-p require-rx)
-		 (oo-sort-require-forms))))
+         (oo-sort-elpaca-forms))
+        ((found-p autoload-rx)
+         (oo-sort-autoload-forms))
+        ((found-p require-rx)
+         (oo-sort-require-forms))))
 
 ;; This is meant to sort the great number of install package forms I have in
 ;; `init-elpaca'.
@@ -181,7 +181,7 @@ is already narrowed."
 (defun oo-kill-emacs-no-confirm ()
   "Kill Emacs without confirmation."
   (let (confirm-kill-emacs)
-	(call-interactively #'kill-emacs)))
+    (call-interactively #'kill-emacs)))
 
 ;; Keep track of the themes that I have loaded and do not allow repetitions.
 (defvar oo-loaded-themes nil
@@ -193,10 +193,10 @@ is already narrowed."
   (set! not-loaded (-difference (custom-available-themes) oo-loaded-themes))
   (set! theme (seq-random-elt not-loaded))
   (condition-case err
-	  (progn (load-theme theme)
-			 (push theme oo-loaded-themes)
-			 (message "Loaded theme `%s'..." theme))
-	(signal (car err) (cdr err))))
+      (progn (load-theme theme)
+             (push theme oo-loaded-themes)
+             (message "Loaded theme `%s'..." theme))
+    (signal (car err) (cdr err))))
 
 ;; This idea is based on the following link where xah lee talks about why the
 ;; scratch buffer is outdated.  It does not follow the trend of "untitled1",
