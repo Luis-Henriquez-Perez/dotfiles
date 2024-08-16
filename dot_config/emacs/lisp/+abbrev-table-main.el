@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("recom" "recommended")
+  '(("settingns" "settings")
+	("recom" "recommended")
 	("unwiedly" "unwieldy")
 	("bufer" "buffer")
 	("takin" "taking")
