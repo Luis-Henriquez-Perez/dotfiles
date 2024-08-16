@@ -76,6 +76,14 @@
 ;;   ;; (forward-line (1- line-number))
 ;;   )
 ;; (eshell/alias "clear" )
+;;;; eshell
+(defun! eshell/less (&rest files)
+  "Essentially an alias to the `view-file' function."
+  (set! (first . rest) files)
+  (when files
+	(view-file first)
+	(when rest
+	  (mapc #'view-file-other-window rest))))
 ;;; provide
 (provide 'config-eshell)
 ;;; config-eshell.el ends here
