@@ -76,7 +76,7 @@
 ;; If it is interactive and I do not have a region selected use the beginning
 ;; of the current line and the end of the buffer.
 (defun! oo-sort-dwim (beg end)
-  "Do the right sort at point."
+  "Sort lines the way I like it."
   (interactive
    (if (region-active-p)
 	   (list (region-beginning) (region-end))
@@ -88,7 +88,8 @@
   (cl-case (match-string 1)
 	("autoload" (oo-sort-autoload-forms beg end))
 	("require" (oo-sort-require-forms beg end))
-	("elpaca" (oo-sort-elpaca-forms beg end))))
+	("elpaca" (oo-sort-elpaca-forms beg end))
+	(t (error "No sorting method detected"))))
 
 ;; This is meant to sort the great number of install package forms I have in
 ;; `init-elpaca'.
