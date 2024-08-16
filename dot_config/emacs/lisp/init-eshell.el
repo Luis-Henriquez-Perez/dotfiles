@@ -45,6 +45,9 @@
 (opt! eshell-highlight-prompt nil)
 (opt! eshell-prompt-function 'epe-theme-lambda)
 (opt! eshell-hist-ignoredups t)
+(opt! eshell-prefer-lisp-functions t)
+;; Represent buffers as #<buffer-name>
+(opt! eshell-buffer-shorthand t)
 ;; boost eshell history-size
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
