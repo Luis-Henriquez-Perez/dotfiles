@@ -46,6 +46,7 @@
 ;; (elpaca benchmark-init)
 (elpaca burly)
 ;; (elpaca buttercup)
+(elpaca elmacro)
 (elpaca cape)
 (elpaca caps-lock)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
