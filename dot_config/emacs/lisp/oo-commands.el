@@ -72,73 +72,35 @@
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
 ;;;; sorting
-;; This is meant to sort certain lines I have.
-(defun! oo-sort-dwim ()
+(defun! oo-sort-dwim (beg end)
   "Do the right sort at point."
   (interactive)
-  (flet! found-p (regexp)
-    (save-excursion
-      (goto-char (line-beginning-position))
-      (re-search-forward regexp (line-end-position) t nil)))
-  (set! elpaca-rx "(elpaca")
-  (set! autoload-rx "(autoload")
-  (set! require-rx "(require")
-  (cond ((found-p elpaca-rx)
-         (oo-sort-elpaca-forms))
-        ((found-p autoload-rx)
-         (oo-sort-autoload-forms))
-        ((found-p require-rx)
-         (oo-sort-require-forms))))
+  (let! regexp (rx "(" (group (or "autoload" "require" "elpaca"))))
+  (save-excursion
+    (goto-char beg)
+    (re-search-forward regexp end t nil))
+  (cl-case (match-string 1)
+	("autoload" (oo-sort-autoload-forms beg end))
+	("require" (oo-sort-require-forms beg end))
+	("elpaca" (oo-sort-elpaca-forms beg end))))
 
 ;; This is meant to sort the great number of install package forms I have in
 ;; `init-elpaca'.
-(defun! oo-sort-elpaca-forms ()
+(defun! oo-sort-elpaca-forms (beg end)
   "Sort elpaca forms lexicographically by package name."
   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
-  (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
+  (save-excursion (sort-regexp-fields nil rx "\\1" beg end)))
 
-(defun! oo-sort-autoload-forms ()
+(defun! oo-sort-autoload-forms (beg end)
   "Sort autoload forms lexicographically by package name."
   (set! rx "(autoload[[:blank:]]+#'[^[:space:]]+[[:blank:]]+\"\\(.+?\\)\".+?$")
-  (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
+  (save-excursion (sort-regexp-fields nil rx "\\1" beg end)))
 
 ;; This is meant to sort the great number of `require' forms in the init file.
-(defun! oo-sort-require-forms ()
+(defun! oo-sort-require-forms (beg end)
   "Sort require forms lexicographically by feature name."
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
-  (save-excursion (sort-regexp-fields nil rx "\\1" (line-beginning-position) (point-max))))
-;;;; custom functions
-;; (defun! oo-ensure-feature-matches-filename (file)
-;;   "Change usages of feature in file to match filename."
-;;   (with-temp-file file
-;;     (insert-file-contents file)
-;;     (set! feature (file-name-sans-extension (file-name-nondirectory (directory-file-name file))))
-;;     (goto-char (point-min))
-;;     (set! header "\\`;;;[[:blank:]]\\(?1:.+\\)\\.el")
-;;     (if (re-search-forward header nil t nil)
-;;         (replace-match feature nil nil nil 1)
-;;       (message "NO MATCH FOR HEADER"))
-;;     (set! footer "\\(?:^(provide[[:blank:]]'\\(?1:.+\\))\n;;;[[:blank:]]\\(?2:.+\\)\\.el ends here$\\)\n\\'")
-;;     (nif! (re-search-forward footer nil t nil)
-;;         (message "NO MATCH FOR FOOTER")
-;;       (replace-match feature nil nil nil 1)
-;;       (replace-match feature nil nil nil 2))))
-
-;; (defun oo-bubble-up (item list)
-;;   (cons item (-remove-item item list)))
-
-;; (defun! oo-generate-requires ()
-;;   (set! dir "~/.local/share/chezmoi/dot_config/emacs/lisp/")
-;;   (set! files (directory-files dir t "\\`init-.+\\.el\\'"))
-;;   (setq files (oo-bubble-up "init-no-littering.el" files))
-;;   (dolist (file files)
-;;     (set! feature (intern (f-no-ext (f-base file))))
-;;     (collecting! forms `(require ',feature)))
-;;   forms)
-
-;; TODO: I want to do more complex things like loading a random theme with no
-;; repetitions in the current session and marking certain themes as favorite
-;; themes that have a greater likelihood of being displayed.
+  (save-excursion (sort-regexp-fields nil rx "\\1" beg end)))
 ;;;; miscellaneous
 (defun oo-dwim-narrow (keep-narrowing-p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
