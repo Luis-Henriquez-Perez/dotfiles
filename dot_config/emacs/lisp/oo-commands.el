@@ -72,6 +72,9 @@
   (set! font (completing-read "Choose font: " (x-list-fonts "*")))
   (set-frame-font font nil t))
 ;;;; sorting
+;; If I have a region selected, use that.
+;; If it is interactive and I do not have a region selected use the beginning
+;; of the current line and the end of the buffer.
 (defun! oo-sort-dwim (beg end)
   "Do the right sort at point."
   (interactive
