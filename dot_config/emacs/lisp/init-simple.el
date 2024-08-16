@@ -31,7 +31,10 @@
 (hook! prog-mode-hook auto-fill-mode)
 (hook! text-mode-hook auto-fill-mode)
 (hook! text-mode-hook visual-line-mode)
-
+;;;; always use spaces instead of tabs
+;; https://home.cs.colorado.edu/~main/cs1300/doc/emacs/emacs_24.html
+;; https://stackoverflow.com/questions/9383070/tell-emacs-never-to-insert-tabs
+(setq-default indent-tabs-mode nil)
 ;;;; handle trailing whitespace
 (setq-default show-trailing-whitespace nil)
 
