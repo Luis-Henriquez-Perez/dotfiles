@@ -46,6 +46,7 @@
 ;; (elpaca benchmark-init)
 (elpaca burly)
 ;; (elpaca buttercup)
+(elpaca monkeytype)
 (elpaca elmacro)
 (elpaca cape)
 (elpaca caps-lock)
