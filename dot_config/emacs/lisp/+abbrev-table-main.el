@@ -28,7 +28,13 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("settingns" "settings")
+  '(("anem" "name")
+    ("contrl" "control")
+    ("jumpt" "jump to")
+    ("thatt" "that")
+    ("thatt" "that")
+    ("lcoation" "location")
+    ("settingns" "settings")
 	("recom" "recommended")
 	("unwiedly" "unwieldy")
 	("bufer" "buffer")
