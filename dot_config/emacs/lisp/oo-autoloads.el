@@ -13,8 +13,8 @@
 ;; License, or (at your option) any later version.
 ;;
 ;; This program is distributed in the hope that it will be useful, but
-;; WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+;; WITHoUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FoR A PARTICULAR PURPOSE. See the GNU
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
@@ -27,13 +27,21 @@
 ;; this out of the way, it is one less thing I have todo.
 ;;
 ;;; Code:
-(autoload #'oo-ensure-provide "" nil t 'function)
-(autoload #'oo-ensure-file-header "" nil t 'function)
 (autoload #'oo-set-font-face "oo-commands" nil t 'function)
-(autoload #'oo-sort-elpaca-forms "oo-commands" nil t 'function)
+(autoload #'oo-create-new-test-file "Oo-commands" nil t 'function)
+(autoload #'oo-create-new-config-file "Oo-commands" nil t 'function)
+(autoload #'oo-create-new-init-file "Oo-commands" nil t 'function)
+(autoload #'oo-kill-emacs-no-confirm "Oo-commands" nil t 'function)
+(autoload #'oo-open-emacs-config "oo-commands" nil t 'function)
+(autoload #'oo-open-emacs-init-file "oo-commands" nil t 'function)
+(autoload #'update-emacs-config "oo-commands" nil t 'function)
+(autoload #'oo-new-buffer "oo-commands" nil t 'function)
+(autoload #'oo-load-random-theme "oo-commands" nil t 'function)
+(autoload #'oo-dwim-space "oo-commands" nil t 'function)
+(autoload #'oo-sort-dwim "oo-commands" nil t 'function)
+(autoload #'oo-open-emacs-lisp-dir "oo-commands" nil t 'function)
 (autoload #'oo-split-window-below-and-focus "oo-commands" nil t 'function)
 (autoload #'oo-split-window-right-and-focus "oo-commands" nil t 'function)
-(autoload #'oo-open-emacs-init-file "oo-commands" nil t 'function)
 (autoload #'oo-pop-to-buffer "oo-commands" nil t 'function)
 (autoload #'oo-dwim-narrow "oo-commands" nil t 'function)
 ;;; provide
