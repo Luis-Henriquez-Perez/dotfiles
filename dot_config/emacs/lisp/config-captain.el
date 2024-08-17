@@ -73,11 +73,11 @@
   "Return point where sentense should be capitalized."
   (pcase (oo-in-string-or-comment-p)
     ('comment
-     (or (save-match-data
-           ;; Limit the look back to the start of the previous line.
-           (and (looking-back (oo--beg-comment-block-rx) (line-beginning-position 0))
-                (match-end 0)))
-         (captain--default-sentence-start)))
+     nil
+     (save-excursion (backward-sentence)
+                     (when (looking-at comment-start-skip)
+                       (goto-char (match-end 0)))
+                     (point)))
     ('string
 	 (aand (car (oo--in-docstring-p))
 		   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))))
