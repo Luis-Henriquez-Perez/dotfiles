@@ -99,7 +99,7 @@
    (if (region-active-p)
 	   (list (region-beginning) (region-end))
 	 (list (line-beginning-position) (point-max))))
-  (let! regexp (rx "(" (group (or "autoload" "require" "elpaca"))))
+  (set! regexp (rx "(" (group (or "autoload" "require" "elpaca"))))
   (save-excursion
     (goto-char beg)
     (re-search-forward regexp end t nil))
