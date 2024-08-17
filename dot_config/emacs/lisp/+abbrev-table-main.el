@@ -32,7 +32,6 @@
     ("contrl" "control")
     ("jumpt" "jump to")
     ("thatt" "that")
-    ("thatt" "that")
     ("lcoation" "location")
     ("settingns" "settings")
 	("recom" "recommended")
