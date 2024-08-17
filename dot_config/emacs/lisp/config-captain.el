@@ -73,7 +73,6 @@
   "Return point where sentense should be capitalized."
   (pcase (oo-in-string-or-comment-p)
     ('comment
-     nil
      (save-excursion (backward-sentence)
                      (when (looking-at comment-start-skip)
                        (goto-char (match-end 0)))
