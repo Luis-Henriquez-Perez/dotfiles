@@ -34,6 +34,10 @@
 (opt! avy-background nil)
 
 (opt! avy-timeout-seconds 0.3)
+
+;; Probably not the best binding, but I just want it to be bound to something
+;; for now.
+(bind! oo-find-map "z" #'ace-link)
 ;;; provide
 (provide 'init-avy)
 ;;; init-avy.el ends here
