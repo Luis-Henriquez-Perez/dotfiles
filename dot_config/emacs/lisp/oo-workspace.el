@@ -1,4 +1,4 @@
-;;; +workspace.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; oo-workspace.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -42,14 +42,14 @@
 (require 'tab-bar)
 (require 'burly)
 ;;;; internal
-(defun +workspace--make-bookmark ())
+(defun oo-workspace--make-bookmark ())
 ;; I might need a new data structure for the workspace that holds which buffers
 ;; belong to it.
 ;;;; commands
 ;; On a side-note I am thinking that I should associate tabs to their buffers
 ;; somehow and that I wished that burly could associate more buffers than what
 ;; are just visible in the frame.
-(defun +workspace-new (name)
+(defun oo-workspace-create (name)
   "Create a new workspace."
   (interactive "sWorkspace name: ")
   (message "New workspace `%s'!" name)
@@ -68,18 +68,18 @@
   (tab-rename name)
   (burly-bookmark-windows name))
 
-(defun +workspace-show-tabs ()
+(defun oo-workspace-show-tabs ()
   "Show workspaces as tabs.")
 
-(defun +workspace-switch ()
+(defun oo-workspace-switch ()
   )
 
-(defun +workspace-rename ()
+(defun oo-workspace-rename ()
   )
 
 ;; TODO: potentially kill the buffers corresponding to the workspace, maybe that
 ;; should be an option.
-(defun +workspace-close ()
+(defun oo-workspace-close ()
   ""
   (interactive)
   (burly-book)
@@ -87,5 +87,5 @@
   (dolist (buffer (workspace-buffers))
 	(kill-buffer buffer)))
 ;;; provide
-(provide '+workspace)
-;;; +workspace.el ends here
+(provide 'oo-workspace)
+;;; oo-workspace.el ends here
