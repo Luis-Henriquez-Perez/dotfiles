@@ -44,9 +44,12 @@ string or comment."
 		 (set! word-beg (save-excursion (backward-word) (point)))
 		 (> word-beg string-beg))
 		(comment
+         (message "SHOULD EXPAND ABBREV")
 		 (set! comment-beg (save-excursion (comment-beginning) (point)))
 		 (set! word-beg (save-excursion (backward-word) (point)))
-		 (> word-beg comment-beg)))))
+         ;; The first word of a comment actually starts at `comment-beg' but
+         ;; this never happens for a string.
+         (>= word-beg comment-beg)))))
 ;;;; all abbrevs
 (abbrev-table-put +abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
 (abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
