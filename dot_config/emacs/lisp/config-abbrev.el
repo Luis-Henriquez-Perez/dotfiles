@@ -44,7 +44,6 @@ string or comment."
 		 (set! word-beg (save-excursion (backward-word) (point)))
 		 (> word-beg string-beg))
 		(comment
-         (message "SHOULD EXPAND ABBREV")
 		 (set! comment-beg (save-excursion (comment-beginning) (point)))
 		 (set! word-beg (save-excursion (backward-word) (point)))
          ;; The first word of a comment actually starts at `comment-beg' but
