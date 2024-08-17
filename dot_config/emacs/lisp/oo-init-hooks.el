@@ -44,7 +44,6 @@
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t)))))
 ;;;;; oo-override-map
-(hook! after-init-hook oo-override-mode :depth -100)
 ;; To ensure that =oo-override-mode-map= takes priority over evil states, we need
 ;; to make it an intercept map for all evil states.  In evil, intercept maps are
 ;; maps that take priority (intercept) evil bindings when they have a different
@@ -52,7 +51,7 @@
 ;; override an evil keymap).
 (defhook! make-intercept-map (evil-mode-hook)
   "Register `oo-override-map' as an intercept map."
-  (evil-make-intercept-map oo-override-mode-map 'all t))
+  (evil-make-intercept-map override-global-map 'all t))
 ;;;;; emacs-startup-hook
 (defhook! init-after-load-functions (emacs-startup-hook)
   "Call `oo-call-after-load-functions' once.

@@ -58,9 +58,9 @@
 
 (require! config-evil)
 
-(bind! i oo-override-mode-map oo-insert-leader-key #'oo-leader-prefix-command)
-(bind! (n m v) oo-override-mode-map oo-normal-leader-key #'oo-leader-prefix-command)
-(bind! (n m v) oo-override-mode-map ";" #'execute-extended-command)
+(bind! i override-global-map oo-insert-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) override-global-map oo-normal-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) override-global-map ";" #'execute-extended-command)
 (bind! (i e) [escape] #'evil-force-normal-state)
 
 ;; One of the most common--if not the most common--command you use in Emacs is

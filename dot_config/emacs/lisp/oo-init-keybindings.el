@@ -26,8 +26,11 @@
 ;;
 ;;; Code:
 (require 'base)
-(require 'oo-override-mode)
+;; This contains bind-key.
+(require 'bind-key)
 (eval-when-compile (require 'base-macros-bind))
+;;;; declare override-mode
+(hook! after-init-hook override-global-mode :depth -100)
 ;;;; keybindings
 ;;;;; leader keymap
 ;;;;;; root map
@@ -37,8 +40,8 @@
 ;; This is the keymap that's going to contain my main bindings.  I like to think
 ;; about it as the root of a tree.  From this root I can access any of the leaves.  It will be bound
 ;; to my leader keys.
-(bind! oo-override-mode-map oo-emacs-leader-key  #'oo-leader-prefix-command)
-(bind! oo-override-mode-map "C-c SPC"  #'oo-leader-prefix-command)
+(bind! override-global-map oo-emacs-leader-key  #'oo-leader-prefix-command)
+(bind! override-global-map "C-c SPC"  #'oo-leader-prefix-command)
 
 (with-eval-after-load 'which-key
   (which-key-add-keymap-based-replacements oo-leader-map "l" "localleader"))
