@@ -313,7 +313,6 @@
     ("desc" "description")
     ("hes" "he is")
     ("impressoin" "impression")
-    ("n" "and")
     ("wsa" "was")
     ("var" "variable")
     ("vars" "variables")
