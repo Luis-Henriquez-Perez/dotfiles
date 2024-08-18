@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("happ" "happy")
+  '(("aleady" "already")
+    ("happ" "happy")
     ("capitalizatoin" "capitalization")
     ("anem" "name")
     ("contrl" "control")
