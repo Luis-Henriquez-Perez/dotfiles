@@ -25,6 +25,11 @@
 ;; Initialize burly.
 ;;
 ;;; Code:
+;; Do I really need a prefix to differentiate burly bookmarks?  I do not know.
+;; I guess so.  But at least I want it to be short.
+;; Do not differentiate.
+(opt! burly-bookmark-prefix "")
+
 (bind! oo-window-map "S" #'burly-bookmark-windows)
 (bind! oo-window-map "b" #'burly-bookmark-windows)
 (bind! oo-find-map "b" #'burly-open-bookmark)
