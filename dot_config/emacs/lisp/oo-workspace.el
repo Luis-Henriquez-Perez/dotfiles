@@ -37,18 +37,20 @@
 ;; - Use a `switch-to-buffer' variant that only considers the buffers in the workspace.
 ;; - Save workspaces at the end of the session.
 ;;
+;; The tab-bar package has a lot of emphasis on the location of the tabs and
+;; that is something that I do not care at all.  Why would I bother tracking
+;; the location of these tabs?  Who cares?  I just want them to exist and to
+;; jump to to them.  Why would I give myself a headache and manage their
+;; locations?
 ;;; Code:
 ;;;; reqs
 (require 'tab-bar)
 (require 'burly)
-;;;; internal
-(defun oo-workspace--make-bookmark ())
-;; I might need a new data structure for the workspace that holds which buffers
-;; belong to it.
 ;;;; commands
 ;; On a side-note I am thinking that I should associate tabs to their buffers
 ;; somehow and that I wished that burly could associate more buffers than what
 ;; are just visible in the frame.
+;; TODO: prevent creating one if the a workspace of same name already exists.
 (defun oo-workspace-create (name)
   "Create a new workspace."
   (interactive "sWorkspace name: ")
@@ -57,21 +59,29 @@
   (unless (bound-and-true-p tab-bar-mode)
 	(require 'tab-bar)
 	(tab-bar-mode 1))
-  ;; 1. Clear current window configuration.
-  ;; 2. Switch to untitled buffer.
-  ;; 3. Create a burly bookmark for this.
-  ;; This should be the default.
-  ;; Prompt for workspace name.
-  (generate-new-buffer "untitled")
-  ;; Save the workspace.
-  (tab-new)
-  (tab-rename name)
+  (tab-bar-new-tab)
+  (tab-bar-rename-tab name)
   (burly-bookmark-windows name))
+
+;; If name exists switch to it.
+(defun oo-workspace-open (name)
+  "Open a new workspace."
+  (interactive (list (completing-read "Open Burly bookmark: " (burly-bookmark-names)
+			                          nil nil burly-bookmark-prefix)))
+  (burly-tabs-mode -1)
+  (unless (bound-and-true-p tab-bar-mode)
+	(require 'tab-bar)
+	(tab-bar-mode 1))
+  (tab-bar-new-tab)
+  (tab-bar-rename-tab name)
+  (bookmark-jump name))
 
 (defun oo-workspace-show-tabs ()
   "Show workspaces as tabs.")
 
 (defun oo-workspace-switch ()
+  ""
+  ()
   )
 
 (defun oo-workspace-rename ()
@@ -82,7 +92,7 @@
 (defun oo-workspace-close ()
   ""
   (interactive)
-  (burly-book)
+  (burly-bookmark-windows name)
   (tab-bar-close)
   (dolist (buffer (workspace-buffers))
 	(kill-buffer buffer)))
