@@ -166,6 +166,7 @@
 (elpaca (treepy :repo "Luis-Henriquez-Perez/treepy.el" :fetcher github))
 (elpaca vc-auto-commit)
 (elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github))
+(elpaca w3m)
 (elpaca wgrep)
 (elpaca which-key)
 (elpaca ws-butler)
