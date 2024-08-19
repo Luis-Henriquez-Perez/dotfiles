@@ -120,6 +120,7 @@
 (elpaca lispyville)
 (elpaca loopy)
 (elpaca lorem-ipsum)
+(elpaca lua-mode)
 (elpaca macrostep)
 (elpaca (magit :depth nil :tag "v3.3.0"))
 (elpaca marginalia)
