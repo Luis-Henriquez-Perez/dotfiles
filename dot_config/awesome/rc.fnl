@@ -1,5 +1,5 @@
 ;;; Fennel config
-;;;; Notes on migrating to fennel 
+;;;; Notes on migrating to fennel
 ;; I do not know if its a good idea overall.  I think there is justification.
 ;; For example, lisp support is leagues ahead of lua support in emacs.  If I can
 ;; program in lisp it lets me reuse all that lisp support when editing the
@@ -9,7 +9,7 @@
 ;; would be more difficult in lua.
 
 ;; I essentially had to go thought the while rc.lua file.
-;;;; Libraries 
+;;;; Libraries
 ;; Standard awesome library
 (local awful (require :awful))
 (local gears (require :gears))
@@ -34,7 +34,7 @@
 ;; Enable hotkeys help widget for VIM and other apps
 ;; when client with a matching name is opened:
 ;; (require :awful.hotkeys_popup.keys)
-;;;; Error Handling 
+;;;; Error Handling
 (when awesome.startup_errors
   (naughty.notify {:preset naughty.config.presets.critical
                    :title "Oops, there were errors during startup!"
@@ -110,8 +110,8 @@
 ;; Create a textclock widget
 (local mytextclock (wibox.widget.textclock))
 
-(local taglist-buttons 
-  (gears.table.join 
+(local taglist-buttons
+  (gears.table.join
     (awful.button [] 1 (fn [tag] (tag:view_only)))
     (awful.button [modkey] 1 (fn [tag] (when client.focus (client.focus:move_to_tag tag))))
     (awful.button [] 3 awful.tag.viewtoggle)
@@ -119,8 +119,8 @@
     (awful.button [] 4 (fn [tag] (awful.tag.viewnext (tag.screen))))
     (awful.button [] 5 (fn [tag] (awful.tag.viewprev (tag.screen))))))
 
-(local tasklist-buttons 
-  (gears.table.join 
+(local tasklist-buttons
+  (gears.table.join
     (awful.button [] 1 (fn [c] (if (= c client.focus) (set c.minimized true) (c:emit_signal "request::activate" "tasklist" {:raise true}))))
     (awful.button [] 3 (fn [] (awful.menu.client_list {:theme {:width 250}})))
     (awful.button [] 4 (fn [] (awful.client.focus.byidx 1)))
@@ -156,7 +156,7 @@
   (set screen.mytasklist (awful.widget.tasklist {:screen screen
                                                  :filter awful.widget.tasklist.filter.currenttags
                                                  :buttons tasklist-buttons}))
-  
+
   (set screen.mywibox (awful.wibar {:position "top" :screen screen}))
   (screen.mywibox:setup {:layout wibox.layout.align.horizontal
                          1 {:layout wibox.layout.fixed.horizontal
@@ -232,7 +232,7 @@
 (global-key [modkey] "r" (fn [] (let [s (awful.screen.focused)] (s.mypromptbox:run))) {:description "run prompt" :group "launcher"})
 ;;;;; Set Global Keys
 (root.keys globalkeys)
-;;;;; Manipulate Tags 
+;;;;; Manipulate Tags
 ;; (fn view-tag-only []
 ;;   (local screen (awful.screen.focused))
 ;;   (local tag (. screen.tags i))
@@ -351,7 +351,7 @@
 ;;                                        (c:emit_signal "request::activate" "titlebar" {:raise true})
 ;;                                        (awful.mouse.client.move c)))
 
-;;                   (awful.button [] 3 (fn [] 
+;;                   (awful.button [] 3 (fn []
 ;;                                        (c:emit_signal "request::activate" "titlebar" {:raise true})
 ;;                                        (awful.mouse.client.resize c)))])
 ;;   (local titlebar (awful.titlebar c))
