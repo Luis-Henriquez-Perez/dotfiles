@@ -25,6 +25,13 @@
 ;; Initialize tab-bar.
 ;;
 ;;; Code:
+(defun oo-new-untitled-buffer ()
+  "Return the new buffer."
+  (generate-new-buffer "untitled"))
+
+;; Control the initial buffer of a new tab.  In my case, make a new tab start
+;; with an untitled buffer.
+(opt! tab-bar-new-tab-choice #'oo-new-untitled-buffer)
 ;; Do not show the tabs.  I prefer to save as much screen real-estate as
 ;; possible.
 
