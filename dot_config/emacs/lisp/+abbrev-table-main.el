@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("sente" "sentence")
+  '(("mins" "minutes")
+    ("happengin" "happening")
+    ("tme" "time")
+    ("sente" "sentence")
     ("begi" "beginning")
     ("aroudn" "around")
     ("xpansion" "expansion")
