@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("xpansion" "expansion")
+  '(("sente" "sentence")
+    ("begi" "beginning")
+    ("aroudn" "around")
+    ("xpansion" "expansion")
     ("nt" "not")
     ("entier" "entire")
     ("unfor" "unfortunately")
