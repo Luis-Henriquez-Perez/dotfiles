@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("dirs" "directories")
+  '(("applicatioin" "application")
+    ("dirs" "directories")
     ("avg" "average")
     ("aleady" "already")
     ("happ" "happy")
