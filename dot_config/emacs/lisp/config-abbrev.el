@@ -28,6 +28,7 @@
 ;;;; requirements
 (require 'abbrev)
 (require 'base)
+(require 'pulse)
 (require '+abbrev-table-main)
 (require '+abbrev-table-wikipedia-misspellings)
 ;;;; set abbrevs my way
