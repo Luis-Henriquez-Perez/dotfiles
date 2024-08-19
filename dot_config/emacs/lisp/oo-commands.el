@@ -103,11 +103,11 @@
   (save-excursion
     (goto-char beg)
     (re-search-forward regexp end t nil))
-  (cl-case (match-string 1)
+  (pcase (match-string 1)
 	("autoload" (oo-sort-autoload-forms beg end))
 	("require" (oo-sort-require-forms beg end))
 	("elpaca" (oo-sort-elpaca-forms beg end))
-	(t (error "No sorting method detected"))))
+	(_ (error "No sorting method detected"))))
 
 ;;;; miscellaneous
 (defun oo-dwim-narrow (keep-narrowing-p)
