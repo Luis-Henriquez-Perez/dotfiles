@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("nt" "not")
+  '(("xpansion" "expansion")
+    ("nt" "not")
     ("entier" "entire")
     ("unfor" "unfortunately")
     ("applicatioin" "application")
