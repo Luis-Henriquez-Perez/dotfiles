@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("aleady" "already")
+  '(("dirs" "directories")
+    ("avg" "average")
+    ("aleady" "already")
     ("happ" "happy")
     ("capitalizatoin" "capitalization")
     ("anem" "name")
