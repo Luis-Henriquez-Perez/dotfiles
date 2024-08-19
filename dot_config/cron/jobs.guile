@@ -1,3 +1,4 @@
+; -*- mode: Lisp;-*-
 ;;; mcron
 ;; Why use mcron over cron.
 ;; https://wiki.gentoo.org/wiki/Cron
@@ -12,20 +13,20 @@
 ;; file.  Maybe I would need to integrate this with stumpwm.
 ;;;; email
 ;; Download and index my email every 5 minutes.
-(job '(next-minute (range 0 60 5)) "~/download_and_index_mail.sh")
+;; (job '(next-minute (range 0 60 5)) "~/download_and_index_mail.sh")
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
-;;;;; Clean the cache 
+;;;;; Clean the cache
 ;;;; chezmoi
 ;; TODO: There are ways I can better dynamically choose when this script should
 ;; be run.  One way is I could check to see if emacs is actually open because
 ;; that is what I am likely going to be using to edit my files.
-(job '(next-minute (range 0 60 7)) "~/scripts/chezmoi_state_sync.sh")
-;;;; wallpaper 
+;; (job '(next-minute (range 0 60 7)) "~/scripts/chezmoi_state_sync.sh")
+;;;; wallpaper
 ;;;;; change my wallpaper every 15 minutes
 ;; Change my wallpaper every 15 minutes.
 ;; Is there an expand path thing here?
-(job '(next-minute (range 0 60 15)) "~/scripts/set_wallpaper.sh")
+(job '(next-minute (range 0 60 2)) "~/scripts/set_wallpaper.sh")
 ;;;;; Clean my wallpapers
 ;; TODO: I plan a setup where I can start by downloading wallpapers and then if
 ;; a wallpaper I do not like is displayed, I can press a keybinding to replace
