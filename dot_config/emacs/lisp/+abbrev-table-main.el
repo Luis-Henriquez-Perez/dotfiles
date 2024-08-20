@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("betw" "between")
+  '(("supp" "support")
+    ("betw" "between")
     ("tat" "that")
     ("arbi" "arbitrary")
     ("regiser" "register")
