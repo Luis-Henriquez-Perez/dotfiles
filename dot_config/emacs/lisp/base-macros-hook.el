@@ -156,9 +156,6 @@
     (string-match "\\`config-\\(.+\\)\\'" (symbol-name file))
     (set! feature (intern (match-string 1 (symbol-name file))))
     `(after! ,name (,feature) (require ',file))))
-;;;;; load!
-;; This is a conveni
-;; (defmacro load!)
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
