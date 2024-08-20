@@ -111,7 +111,6 @@
 (elpaca htmlize)
 (elpaca humanoid-themes)
 (elpaca hungry-delete)
-;; (elpaca idle-require)
 (elpaca immaterial-theme)
 (elpaca inkpot-theme)
 (elpaca leuven-theme)
