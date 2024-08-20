@@ -74,16 +74,16 @@ file is loaded."
 (defhook! increase-garbage-collection (minibuffer-setup-hook)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
   [:depth 10]
-  (oo-record-value 'gc-cons-threshold)
-  (oo-record-value 'gc-cons-percentage)
+  (set-register :gc-cons-threshold gc-cons-threshold)
+  (set-register :gc-cons-percentage gc-cons-percentage)
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
 (defhook! decrease-garbage-collection (minibuffer-exit-hook)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   [:depth 90]
-  (oo-restore-value 'gc-cons-threshold)
-  (oo-restore-value 'gc-cons-percentage))
+  (setq gc-cons-threshold (get-register :gc-cons-threshold))
+  (setq gc-cons-percentage (get-register :gc-cons-percentage)))
 ;;;;; garbage collection
 (defun! oo-lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
@@ -96,13 +96,6 @@ file is loaded."
            (setq gc-cons-percentage 0.4))
           (t
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
-
-(defhook! restore-startup-values (emacs-startup-hook)
-  [:depth 91]
-  (oo-restore-value 'file-name-handler-alist)
-  (setq gc-cons-threshold (* 32 1024 1024))
-  (run-with-timer 5 nil #'oo-lower-garbage-collection)
-  (require 'oo-init-modeline))
 ;;; provide
 (provide 'oo-init-hooks)
 ;;; oo-init-hooks.el ends here

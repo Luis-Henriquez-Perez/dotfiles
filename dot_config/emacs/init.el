@@ -31,13 +31,7 @@
 ;;
 ;;; Code:
 ;;;; startup
-;;;;; set startup variables
-(defvar oo-symbol-values-alist nil)
-(defun oo-record-value (symbol)
-  (push (cons symbol (symbol-value symbol)) oo-symbol-values-alist))
-(defun oo-restore-value (symbol)
-  (set symbol (alist-get symbol oo-symbol-values-alist)))
-;;;;;; disable garbage collection until I'm done with startup
+;;;;; disable garbage collection until I'm done with startup
 ;; This variable controls how often.  Setting it to =most-positive-fixnum=, a
 ;; very big number, essentially disables garbage collection.  The garbage
 ;; collection is later reset to a reasonable value.
@@ -47,8 +41,8 @@
 (setq gc-cons-threshold most-positive-fixnum)
 ;; This is the percentage of the heap before.
 (setq gc-cons-percentage 0.8)
-;;;;;; don't search for whenever a package is loaded
-(oo-record-value 'file-name-handler-alist)
+;;;;; don't search for whenever a package is loaded
+(set-register :file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 ;;;;;; prevent flashing of unstyled modeline
 ;; Don't render the modeline on startup.  For one thing, the startup looks
