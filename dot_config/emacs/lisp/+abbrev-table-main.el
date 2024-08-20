@@ -28,7 +28,11 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("mins" "minutes")
+  '(("thme" "them")
+    ("nesly" "necessarily")
+    ("enof" "enough")
+    ("andto" "and to")
+    ("mins" "minutes")
     ("happengin" "happening")
     ("tme" "time")
     ("sente" "sentence")
