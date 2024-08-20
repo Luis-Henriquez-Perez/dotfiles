@@ -296,8 +296,6 @@
     ("understandibly" "understandably")
     ("subborn" "stubborn")
     ("dever" "developer")
-    ("html" "HTML")
-    ("css" "CSS")
     ("dev" "development")
     ("mgiht" "might")
     ("despa" "desparate")
