@@ -48,7 +48,7 @@
 ;;;; emacs-startup-hook
 (defhook! restore-startup-values (emacs-startup-hook)
   [:depth 91]
-  (require 'oo-modeline)
+  (require 'oo-init-modeline)
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
   (setq gc-cons-threshold (* 32 1024 1024))
   (run-with-timer 5 nil #'oo-lower-garbage-collection))
