@@ -28,7 +28,13 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("thme" "them")
+  '(("betw" "between")
+    ("tat" "that")
+    ("arbi" "arbitrary")
+    ("regiser" "register")
+    ("afaict" "as far as I can tell")
+    ("writig" "writing")
+    ("thme" "them")
     ("nesly" "necessarily")
     ("enof" "enough")
     ("andto" "and to")
