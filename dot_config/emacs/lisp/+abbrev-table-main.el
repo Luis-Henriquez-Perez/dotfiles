@@ -488,8 +488,6 @@
     ("iat" "in addition to")
     ("elisp" "emacs-lisp")
     ("idl" "I do not like")
-    ("y" "why")
-    ("r" "are")
     ;; "id" is actually a word, but I use it so infrequently and I use the phrase I
     ;; would so frequently that it is worth having it be an abbrev for I.
     ;; ("wm" "which")
