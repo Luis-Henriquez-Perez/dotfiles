@@ -28,7 +28,10 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("certa" "certain")
+  '(("interediary" "intermediary")
+    ("agan" "again")
+    ("spefically" "specifically")
+    ("certa" "certain")
     ("godod" "good")
     ("wlel" "well")
     ("temporl" "temporarily")
