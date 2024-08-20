@@ -171,6 +171,7 @@
 (elpaca ws-butler)
 (elpaca xr)
 (elpaca yeetube)
+(elpaca (zone-matrix :host github :repo "ober/zone-matrix" :branch "master" :ref "d6c627e"))
 ;;; process
 (elpaca-process-queues)
 (elpaca-wait)
