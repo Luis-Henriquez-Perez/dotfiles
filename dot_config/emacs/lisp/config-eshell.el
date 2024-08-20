@@ -31,7 +31,6 @@
 (oo-popup-at-bottom "\\*eshell")
 ;;;; hooks
 (hook! eshell-mode-hook abbrev-mode)
-
 (hook! eshell-mode-hook smartparens-mode)
 ;;;; prevent eshell from printing out messages on load
 ;; Eshell prints various messages about loading modules.  These messages
