@@ -28,7 +28,17 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("supp" "support")
+  '(("certa" "certain")
+    ("godod" "good")
+    ("wlel" "well")
+    ("temporl" "temporarily")
+    ("prob" "probably")
+    ("bookms" "bookmarks")
+    ("anythig" "anything")
+    ("boookmark" "bookmark")
+    ("sess" "session")
+    ("bookmaks" "bookmarks")
+    ("supp" "support")
     ("betw" "between")
     ("tat" "that")
     ("arbi" "arbitrary")
