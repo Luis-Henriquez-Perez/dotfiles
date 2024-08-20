@@ -28,7 +28,14 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("interediary" "intermediary")
+  '(("alty" "Alternatively")
+    ("albeti" "albeit")
+    ("bookmarkd" "bookmarked")
+    ("whatev" "whatever")
+    ("simplyfing" "simplifying")
+    ("satisfiying" "satisfying")
+    ("chara" "character")
+    ("interediary" "intermediary")
     ("agan" "again")
     ("spefically" "specifically")
     ("certa" "certain")
