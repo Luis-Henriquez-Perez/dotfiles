@@ -28,7 +28,7 @@
 (require 'base-macros-block)
 
 ;;;; helpers
-(fset 'parse (apply-partially #'oo--parse-progn nil))
+(fset 'parse (apply-partially #'oo--parse-block nil))
 
 (defun body (body) (cadr (parse body)))
 
@@ -43,14 +43,14 @@
 (defun lvalue (sym body)
   (car (map-elt (let-binds body) sym)))
 ;;;; main
-;; (ert-deftest oo--parse-progn ()
-;;   (should-not (oo--parse-progn nil `(dotimes (n 3)
+;; (ert-deftest oo--parse-block ()
+;;   (should-not (oo--parse-block nil `(dotimes (n 3)
 ;;                                            (and (= 1 n) (continue!))
 ;;                                            (collecting! nums n)))))
 
-(ert-deftest oo--generate-progn-body ()
-  (should (equal '(catch 'return! (let nil))  (oo--generate-progn-body nil)))
-  ;; (should-not (oo--generate-progn-body '((+ 1 1))))
+(ert-deftest oo--generate-block-body ()
+  (should (equal '(catch 'return! (let nil))  (oo--generate-block-body nil)))
+  ;; (should-not (oo--generate-block-body '((+ 1 1))))
   )
 
 (ert-deftest block!---ignores-quoted-forms ()
@@ -105,7 +105,7 @@
                                :nolet))))
 
 ;; ;; (ert-deftest bind ()
-;; ;;   (pcase-let* ((`(,data ,body) (oo--parse-progn nil '(alet! (+ 1 1)))))
+;; ;;   (pcase-let* ((`(,data ,body) (oo--parse-block nil '(alet! (+ 1 1)))))
 ;; ;;     (should (equal (map-elt data :let) '((it bind () nil))))))
 
 ;; ;; (ert-deftest bind-to-value-specified-by-aprog1 ()
