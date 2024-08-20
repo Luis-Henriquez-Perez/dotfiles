@@ -49,7 +49,7 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 `let!'."
   (declare (indent 1))
   (pcase loop-struct
-    (`(repeat ,n)
+    ((or (and (pred integerp) n) `(repeat ,n))
      `(dotimes (_ ,n) ,@body))
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
      (cl-with-gensyms (elt)
