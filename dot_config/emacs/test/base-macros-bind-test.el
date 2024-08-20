@@ -28,7 +28,7 @@
 (require 'base-macros-bind)
 
 (ert-deftest oo--bind-steps ()
-  (should (equal (oo--bind-steps '(:char 105 :state state :keymap global-map :key "d" :def #'foo))
+  (should (equal (oo--bind-steps '(:char-value 105 :state state :keymap global-map :key "d" :def #'foo))
                  '(oo--bind-evil-define-key
                    oo--bind-check-errors
                    oo--bind-kbd
