@@ -30,6 +30,7 @@
 ;;;; open eshell at bottom
 (oo-popup-at-bottom "\\*eshell")
 ;;;; hooks
+(hook! eshell-mode-hook eat-eshell-mode)
 (hook! eshell-mode-hook abbrev-mode)
 (hook! eshell-mode-hook smartparens-mode)
 ;;;; prevent eshell from printing out messages on load
@@ -51,8 +52,6 @@
 ;; boost eshell history-size
 ;; Increase the history size from 128 to 1000.
 (opt! eshell-history-size 1000)
-;;;; enable eat
-(hook! eshell-mode-hook eat-eshell-mode)
 ;;;; clear
 ;; Unexpectedly for me the eshell clear scrolled to the bottom.  As seen in a
 ;; stackoverflow answer as well as multiple blog posts, the solution is to use
