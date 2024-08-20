@@ -766,7 +766,7 @@
     ("pakcages" "packages")
     ("motn" "more often than not")
     ("itc" "in that case")
-    ("prob" "problem")
+    ("probl" "problem")
     ("dered" "considered"))
   "My main abbrev table for English text.")
 ;;; provide
