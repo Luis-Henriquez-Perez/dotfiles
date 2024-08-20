@@ -12,6 +12,13 @@
 # that escape is used often to get out of states.
 setxkbmap -option caps:escape
 
+### set the wallpaper for the first time
+# I am not sure whether to do this here or not.  It is possible to do this in
+# awesome or stumpwm itself but I do not want to do it ever time for ever window
+# manager.  This script sets the current wallpaper.
+
+~/scripts/set-wallpaper.sh
+
 ### start the picom daemon
 # The compositor.  See [[][the config]].
 picom &
@@ -24,14 +31,9 @@ picom &
 # See ~/.config/jobs.guile
 mcron &
 
+ntpd &
 ### start emacsclient
 # TODO: fix that this took a long time.  It is definitely noticeable, the
 # difference taken to startup with emacs starting as a daemon beforehand.  It is
 # still worth doing it because I am going to startup emacs anyway.
 # emacs --daemon
-
-### set the wallpaper for the first time
-# I am not sure whether to do this here or not.  It is possible to do this in
-# awesome or stumpwm itself but I do not want to do it ever time for ever window
-# manager.  This script sets the current wallpaper.
-~/scripts/set-wallpaper.sh
