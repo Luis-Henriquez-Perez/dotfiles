@@ -63,6 +63,8 @@
 
 (grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("gethash" "puthash"))
 
+(grugru-define-on-major-mode 'emacs-lisp-mode 'symbol '("get-register" "set-register"))
+
 (grugru-define-on-major-mode 'c-mode 'symbol '("unsigned" "signed"))
 ;;; provide
 (provide 'config-grugru)
