@@ -29,9 +29,10 @@
 (defhook! make-tempel-map-overriding (oo-after-load-evil-hook)
   (evil-make-overriding-map tempel-map))
 ;;;; Specify rules for abbrev expansion
-(defun +abbrev-enable-prog-p ()
+(defun +abbrev-emacs-lisp-mode-enable-p ()
   "Do not enable programming mode abbrevs in docstrings or comments."
-  (not (oo-in-string-or-comment-p)))
+  (and (derived-mode-p 'emacs-lisp-mode)
+       (not (oo-in-string-or-comment-p))))
 ;;;; Abbrev snippets
 ;; TODO: make a function or (most likely) macro for this.
 ;; These are the rules that must be strictly followed for a snippet abbrev to
@@ -45,11 +46,14 @@
 ;;    not be active until a state change.
 ;; 4. The definition of the abbrev must be an empty string.
 ;; 5. The hook function must return t.
-(put '+abbrev-insert-fn 'no-self-insert t)
-(defun +abbrev-insert-fn ()
+(put '+abbrev-insert-defun 'no-self-insert t)
+(defun +abbrev-insert-defun ()
+  (tempel-insert 'fn)
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
+
+(define-abbrev +abbrev-table-main "fun" "" '+abbrev-insert-defun :enable-function #'+abbrev-emacs-lisp-mode-enable-p)
 
 (put '+abbrev-insert-alias 'no-self-insert t)
 (defun +abbrev-insert-alias ()
@@ -57,9 +61,22 @@
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
-;; (define-abbrev emacs-lisp-mode-abbrev-table "fun" "" '+abbrev-insert-fn)
-;; (define-abbrev emacs-lisp-mode-abbrev-table "als" "" '+abbrev-insert-alias)
-;; (define-abbrev emacs-lisp-mode-abbrev-table "msg" "message")
+(define-abbrev +abbrev-table-main "als" "" '+abbrev-insert-alias :enable-function #'+abbrev-emacs-lisp-mode-enable-p)
+
+(put '+abbrev-insert-defvar 'no-self-insert t)
+(defun +abbrev-insert-defvar ()
+  (tempel-insert 'vr)
+  (when (bound-and-true-p evil-mode)
+    (evil-normalize-keymaps))
+  t)
+;; I found a surprising interaction with abbrev tables and enable functions.
+;; Prior to this I had thought that if I added an enable property to a table I
+;; could override this property for an individual abbrev by specifying its
+;; enable function explicitly.  However, it seems that the enable function of
+;; the table is still considered.  Adding an enable function makes it so that
+;; both the table's enable function and the abbrev's enable function have to
+;; return true.
+(define-abbrev +abbrev-table-main "dv" "" '+abbrev-insert-defvar :enable-function #'+abbrev-emacs-lisp-mode-enable-p)
 ;;; provide
 (provide 'config-tempel)
 ;;; config-tempel.el ends here
