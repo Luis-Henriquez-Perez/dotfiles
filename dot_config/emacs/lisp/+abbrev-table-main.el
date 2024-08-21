@@ -28,7 +28,8 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("defini" "definition")
+  '(("vry" "every")
+    ("defini" "definition")
     ("bindngs" "bindings")
     ("regexps" "regular expression")
     ("alty" "Alternatively")
