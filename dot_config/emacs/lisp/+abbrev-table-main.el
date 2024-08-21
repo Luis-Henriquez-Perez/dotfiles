@@ -28,7 +28,9 @@
 (require 'abbrev)
 
 (define-abbrev-table '+abbrev-table-main
-  '(("regexps" "regular expression")
+  '(("defini" "definition")
+    ("bindngs" "bindings")
+    ("regexps" "regular expression")
     ("alty" "Alternatively")
     ("albeti" "albeit")
     ("bookmarkd" "bookmarked")
