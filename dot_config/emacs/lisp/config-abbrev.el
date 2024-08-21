@@ -31,7 +31,7 @@
 (require '+abbrev-table-main)
 (require '+abbrev-table-wikipedia-misspellings)
 ;;;; set abbrevs my way
-(defun! +abbrev-enable-text-abbrev-p ()
+(defun! +abbrev-text-mode-enable-p ()
   "Return non-nil when text abbrevs should be enabled.
 This is when the current major-mode is derived from text-mode or point is in a
 string or comment."
@@ -50,8 +50,7 @@ string or comment."
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
 ;;;; all abbrevs
-(abbrev-table-put +abbrev-table-main :enable-function #'+abbrev-enable-text-abbrev-p)
-(abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-enable-text-abbrev-p)
+(abbrev-table-put +abbrev-table-wikipedia-misspellings :enable-function #'+abbrev-text-mode-enable-p)
 
 (alet (-snoc (abbrev-table-get global-abbrev-table :parents) +abbrev-table-main +abbrev-table-wikipedia-misspellings)
   (abbrev-table-put global-abbrev-table :parents it))
