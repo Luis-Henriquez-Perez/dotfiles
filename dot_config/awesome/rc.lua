@@ -228,6 +228,24 @@ root.buttons(gears.table.join(
 ))
 -- }}}
 
+local function rotate_clients_forward()
+    awful.client.cycle(true)
+    local master = awful.client.getmaster()
+    if master then
+        client.focus = master
+        master:raise()
+    end
+end
+
+local function rotate_clients_backward()
+    awful.client.cycle(false)
+    local master = awful.client.getmaster()
+    if master then
+        client.focus = master
+        master:raise()
+    end
+end
+
 -- {{{ Key bindings
 globalkeys = gears.table.join(
     awful.key({ modkey }, "b",
@@ -235,8 +253,10 @@ globalkeys = gears.table.join(
             myscreen = awful.screen.focused()
             myscreen.mywibox.visible = not myscreen.mywibox.visible
         end,
-        {description = "toggle statusbar"}
+        {description = "toggle statusbar", group="awesome"}
     ),
+    awful.key({ modkey,           }, "q",      rotate_clients_forward,
+              {description="rotate clients forward", group="awesome"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -246,17 +266,11 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
-    awful.key({ modkey,           }, "j",
-        function ()
-            awful.client.focus.byidx( 1)
-        end,
-        {description = "focus next by index", group = "client"}
+    awful.key({ modkey,           }, "j", rotate_clients_forward,
+        {description = "rotate clients forward", group = "client"}
     ),
-    awful.key({ modkey,           }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "focus previous by index", group = "client"}
+    awful.key({ modkey,           }, "k", rotate_clients_backward,
+        {description = "rotate clients forward", group = "client"}
     ),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
