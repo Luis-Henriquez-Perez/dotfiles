@@ -76,13 +76,13 @@ config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
 # Note that this applies to every webpage opened after enabling this.
 # As in, it changes the default.
 # I need to find away to only enable it for the
-config.bind('<Space>je', ':set content.javascript.enabled true')
+# config.bind('<Space>je', ':set content.javascript.enabled true')
 
 # javascript disable
-config.bind('<Space>jd', ':set content.javascript.enabled false')
+# config.bind('<Space>jd', ':set content.javascript.enabled false')
 ### open new pages with =<space>ff=
-config.bind('<Space>ff', 'set-cmd-text -s :open')
+# config.bind('<Space>ff', 'set-cmd-text -s :open')
 ### hide titlebars from qutebrowser
 config.set('window.hide_decoration', True)
 ### save with monolith
-config.bind('<Ctrl-S>', 'spawn --userscript save_with_monolith.sh')
+# config.bind('<Ctrl-S>', 'spawn --userscript save_with_monolith.sh')
