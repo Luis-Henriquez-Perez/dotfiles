@@ -31,8 +31,11 @@
 (hook! text-mode-hook abbrev-mode)
 ;; Emacs loads abbreviation-mode automatically so instead of using something
 ;; like `with-eval-after-load' I am loading it in `abbrev-mode-hook'.
-(defhook! apply-config (abbrev-mode-hook)
-  (require 'config-abbrev))
+(defun +abbrev-mode-hook&require-abbrev-config ()
+  (require 'config-abbrev)
+  (info! "Loaded `config-abbrev'...")
+  (remove-hook 'abbrev-mode-hook #'+abbrev-mode-hook&require-abbrev-config))
+(add-hook 'abbrev-mode-hook #'+abbrev-mode-hook&require-abbrev-config)
 ;;;; bindings
 (autoload #'+abbrev-add-new-abbrev "config-abbrev" nil t 'function)
 (bind! "C-c j" #'+abbrev-add-new-abbrev)

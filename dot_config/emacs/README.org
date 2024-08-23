@@ -77,6 +77,12 @@ configurations these files are named after some functionality the files are
 adding--a name might be for example "init-editing" or "init-completion".  I
 specifically choose not to do this because I find that the category is
 opinionated an has a tendency to become nebulous and obscure.
+* Naming Convention
+I prefix internal functions with =oo=.  But if I feel a function is an extension
+for another feature then I make the extension =+FEATURE=.  I took this idea from
+doom and the reasoning--for me at least, I do not know for doom--is that this
+name is concise and it connotes that it is an extension for said feature.  It
+greatly reduces the amount of functions prefixed with =oo=.
 * why the name =OO=?
 :PROPERTIES:
 :ID:       20240408T215953.404277
