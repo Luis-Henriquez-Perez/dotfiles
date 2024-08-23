@@ -28,8 +28,28 @@
 ;;;; requirements
 (require 'abbrev)
 (require 'base)
-(require '+abbrev-plain-text-abbrevs)
-(require '+abbrev-elisp-abbrevs)
+;;;; lazy-load abbrev hook
+(defvar +abbrev-lazy-load-hook nil)
+
+(defadvice! lazy-load-abbrevs (around abbrev--default-expand expand-fn)
+  (run-hooks '+abbrev-lazy-load-hook)
+  (funcall expand-fn))
+
+(defun +abbrev-lazy-load-hook&load-plain-text-abbrevs ()
+  (require '+abbrev-enable-functions)
+  (when (+abbrev-enable-plain-text-abbrevs-p)
+    (info! "Requiring `+abbrev-plain-text-abbrevs'...")
+    (require '+abbrev-plain-text-abbrevs))
+  (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-plain-text-abbrevs))
+(add-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-plain-text-abbrevs)
+
+(defun +abbrev-lazy-load-hook&load-elisp-abbrevs ()
+  (require '+abbrev-enable-functions)
+  (when (+abbrev-enable-elisp-abbrevs-p)
+    (info! "Requiring `+abbrev-elisp-abbrevs'...")
+    (require '+abbrev-elisp-abbrevs))
+  (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-elisp-abbrevs))
+(add-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-elisp-abbrevs)
 ;;;; automatically add period
 ;; I do not like manually adding periods to the end of sentences.  Having moved
 ;; from using one space after a sentence to two, I find it particularl daunting
@@ -50,7 +70,7 @@
              (replace-match "\\1."))))))
 ;; The behavior I want is if I type two spaces then replace with period
 ;; followed by two spaces.
-;;;; Pulse expansion
+;;;; pulse expansion
 ;; You would be surprised at how much of an aesthetic improvement little things
 ;; like this can make a difference.
 (defadvice! pulse-expansion (around abbrev--default-expand expand-fn)
