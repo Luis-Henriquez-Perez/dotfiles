@@ -36,6 +36,7 @@
 ;; TODO: add bindings for lorem ipsum.
 ;; This is temporary--ideally I would want.
 ;; (elpaca aas)
+(elpaca dimmer)
 (elpaca ace-jump-helm-line)
 (elpaca ace-link)
 (elpaca aggressive-indent)
