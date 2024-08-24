@@ -28,7 +28,10 @@
 (require 'base)
 
 (opt! denote-directory "~/Documents/notes/")
-(opt! denote-file-type 'text)
+(opt! denote-file-type 'org)
+(opt! denote-prompts nil)
+(opt! denote-org-front-matter "#+title: %1$s\n#+filetags: %3$s\n#+identifier: %4$s\n")
+(opt! denote-save-buffers t)
 ;;; provide
 (provide 'init-denote)
 ;;; init-denote.el ends here
