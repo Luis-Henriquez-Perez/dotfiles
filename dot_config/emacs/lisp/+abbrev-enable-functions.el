@@ -27,6 +27,13 @@
 ;; were complicated.
 ;;
 ;;; Code:
+;;;; org abbrevs
+(defun +abbrev-enable-org-abbrevs-p ()
+  "Return non-nil when emacs-lisp-mode abbrevs should expand.
+This is when `org' is enabled and point is not in a string or
+comment."
+  (and (derived-mode-p 'org-mode)
+       (not (oo-in-string-or-comment-p))))
 ;;;; emacs-lisp abbrevs
 (defun +abbrev-enable-elisp-abbrevs-p ()
   "Return non-nil when emacs-lisp-mode abbrevs should expand.

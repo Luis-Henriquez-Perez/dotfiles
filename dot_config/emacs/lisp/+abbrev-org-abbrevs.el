@@ -25,6 +25,8 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'abbrev)
+
 (put '+abbrev-insert-elisp-src-block 'no-self-insert t)
 
 (defun +abbrev-insert-elisp-src-block ()
@@ -33,8 +35,8 @@
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
-
-(define-abbrev global-abbrev-table "esrc" "" '+abbrev-insert-elisp-src-block :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "als" "" '+abbrev-insert-alias :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "esrc" "" '+abbrev-insert-elisp-src-block :enable-function #'+abbrev-enable-org-abbrevs-p)
 ;;; provide
 (provide '+abbrev-org-abbrevs)
 ;;; +abbrev-org-abbrevs.el ends here
