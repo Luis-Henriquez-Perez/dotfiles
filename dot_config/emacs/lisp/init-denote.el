@@ -32,6 +32,29 @@
 (opt! denote-prompts nil)
 (opt! denote-org-front-matter "#+title: %1$s\n#+filetags: %3$s\n#+identifier: %4$s\n")
 (opt! denote-save-buffers t)
+(hook! oo-after-load-denote-hook denote-rename-buffer-mode)
+;; Set denote to insert state after entering.
+(defhook! enter-insert-state (denote-after-new-note-hook)
+  "Enter insert state after entering denote buffer."
+  ;; (message "LOG %s : %S" (format-time-string "%X") (current-buffer))
+  (when (bound-and-true-p evil-mode)
+    (evil-insert-state 1)))
+
+(opt! denote-rename-confirmations nil)
+;; Add to the kill buffer function telling it to delete the file if the note is empty.
+;; How do I determine if the note is empty?
+;; I need to go past the front matter and check the buffer.
+
+;; (defhook! delete-file-if-empty (kill-buffer-hook)
+;;   ()
+;;   )
+;; Name buffers after their.
+;; (opt! denote-rename-buffer-function #'denote-rename-buffer)
+
+;; (defun! +denote-rename-buffer (&optional buffer)
+;;   (set! file (buffer-file-name file))
+;;   (set! title (denote-retrieve-front-matter-title-value file denote-file-type))
+;;   (rename-buffer title :unique))
 ;;; provide
 (provide 'init-denote)
 ;;; init-denote.el ends here
