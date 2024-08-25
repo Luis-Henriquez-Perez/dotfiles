@@ -75,6 +75,19 @@
 ;; both the table's enable function and the abbrev's enable function have to
 ;; return true.
 (define-abbrev global-abbrev-table "dv" "" '+abbrev-insert-defvar :enable-function '+abbrev-enable-elisp-abbrevs-p)
+
+(put '+abbrev-insert-msg 'no-self-insert t)
+(defun +abbrev-insert-msg ()
+  (require 'tempel)
+  (tempel-insert 'lg)
+  (when (bound-and-true-p evil-mode)
+    (evil-normalize-keymaps))
+  t)
+
+(define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-enable-elisp-abbrevs-p)
+
+
+(define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
 ;;; provide
 (provide '+abbrev-elisp-abbrevs)
 ;;; +abbrev-elisp-abbrevs.el ends here
