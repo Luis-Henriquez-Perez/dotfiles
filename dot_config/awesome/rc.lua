@@ -229,6 +229,15 @@ root.buttons(gears.table.join(
 -- }}}
 
 local function rotate_clients_forward()
+   local c = client.focus
+
+    -- Check if the client is in fullscreen mode and exit fullscreen if it is
+    -- This fullscreen functionality was provided by chatgpt.
+    if c and c.fullscreen then
+        c.fullscreen = false
+        c:emit_signal('request::redraw') -- Force a redraw to ensure changes take effect
+    end
+
     awful.client.cycle(true)
     local master = awful.client.getmaster()
     if master then
