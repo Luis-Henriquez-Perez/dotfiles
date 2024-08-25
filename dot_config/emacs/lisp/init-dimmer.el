@@ -30,6 +30,7 @@
 ;; I as in--even when I only had two open.
 ;;
 ;;; Code:
+(opt! dimmer-fraction 0.5)
 ;;; provide
 (provide 'init-dimmer)
 ;;; init-dimmer.el ends here
