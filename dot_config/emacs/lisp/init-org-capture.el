@@ -27,10 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-popup-at-bottom "CAPTURE[^z-a]+")
-(opt! org-archive-save-context-info nil)
-(opt! org-archive-location (concat org-directory "archive.org::"))
-(hook! org-insert-heading-hook org-id-get-create)
+(require! config-org-capture)
 ;;; provide
 (provide 'init-org-capture)
 ;;; init-org-capture.el ends here
