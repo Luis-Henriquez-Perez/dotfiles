@@ -32,6 +32,7 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "remov"          "remove"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "iddnt"          "did not"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "expressoins"    "expressions"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "regexes"        "regular expressions"           nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
