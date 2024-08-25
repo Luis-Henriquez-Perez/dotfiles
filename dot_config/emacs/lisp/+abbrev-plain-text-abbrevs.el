@@ -32,6 +32,8 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "messag" "message" nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "rignt" "right" nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "crating" "creating" nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "preciese" "precise" nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "narrowng" "narrowing" nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
