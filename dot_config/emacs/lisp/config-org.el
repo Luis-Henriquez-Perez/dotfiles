@@ -25,9 +25,9 @@
 ;; This is my configuration for org.
 ;;
 ;;; Code:
-;;;; org
+;;;; requirements
 (require 'org)
-;;;;; miscellaneous
+;;;; miscellaneous
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
