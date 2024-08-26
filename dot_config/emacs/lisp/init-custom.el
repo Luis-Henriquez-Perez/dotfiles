@@ -54,8 +54,8 @@
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
 ;;;; bindings
-(bind! oo-toggle-map "r" #'load-theme)
-(bind! oo-toggle-map "t" #'oo-load-random-theme)
+(bind! oo-toggle-map "r" #'oo-load-random-theme)
+(bind! oo-toggle-map "t" #'load-theme)
 ;;; provide
 (provide 'init-custom)
 ;;; init-custom.el ends here
