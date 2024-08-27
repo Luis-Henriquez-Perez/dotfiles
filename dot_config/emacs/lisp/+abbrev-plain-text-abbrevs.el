@@ -32,6 +32,10 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "soemties"          "sometimes"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "upate"          "update"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "itd"          "it would"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "enginnering"          "engineering"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "lang"          "language"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "langs"          "languages"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "dspite"          "despite"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
