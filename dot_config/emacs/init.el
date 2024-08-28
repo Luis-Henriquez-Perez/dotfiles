@@ -63,6 +63,7 @@
 (require 'init-no-littering)
 ;; Built-in packages
 (require 'init-abbrev)
+(require 'init-auto-insert)
 (require 'init-custom)
 (require 'init-dired)
 (require 'init-emacs-lock)
