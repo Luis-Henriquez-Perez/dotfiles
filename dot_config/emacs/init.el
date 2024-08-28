@@ -142,6 +142,7 @@
 (require 'init-vertico)
 (require 'init-vertico-buffer)
 (require 'init-vertico-quick)
+(require 'init-w3m)
 (require 'init-wdired)
 (require 'init-which-key)
 (require 'init-window)
