@@ -88,6 +88,10 @@
 
 
 (define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+
+(define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+
+(define-abbrev global-abbrev-table "pmax" "(point-max)" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
 ;;; provide
 (provide '+abbrev-elisp-abbrevs)
 ;;; +abbrev-elisp-abbrevs.el ends here
