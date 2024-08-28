@@ -32,6 +32,11 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "wordd"          "word"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+;; Note that wether is actually a word meaning "a castrated male sheep or goat"
+;; but I do not expect to be using this word at all.  I expect 99% of the time
+;; that when I use it I will actually mean whether.
+(define-abbrev global-abbrev-table "wether"          "whether"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "effici"          "efficient"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "situ"          "situation"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "sepd"          "separated"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
