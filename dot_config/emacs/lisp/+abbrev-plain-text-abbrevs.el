@@ -32,6 +32,9 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "aloading"          "autoloading"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "shoud"          "should"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "dong"          "doing"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "wordd"          "word"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 ;; Note that wether is actually a word meaning "a castrated male sheep or goat"
 ;; but I do not expect to be using this word at all.  I expect 99% of the time
