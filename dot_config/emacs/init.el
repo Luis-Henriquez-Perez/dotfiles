@@ -114,6 +114,7 @@
 (require 'init-highlight-quoted)
 (require 'init-htmlize)
 (require 'init-hungry-delete)
+(require 'init-keyfreq)
 (require 'init-lispyville)
 (require 'init-macroexpand)
 (require 'init-magit)
