@@ -32,6 +32,7 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "mulitple"       "multiple"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "iiee"           "It is easy enough"             nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "mab"            "maybe"                         nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "automl"         "automatically"                 nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
