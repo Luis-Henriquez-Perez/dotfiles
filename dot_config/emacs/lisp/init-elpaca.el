@@ -81,6 +81,7 @@
 (elpaca evil-cleverparens)
 (elpaca evil-collection)
 (elpaca (evil-easymotion :fetcher github :repo "Luis-Henriquez-Perez/evil-easymotion"))
+(elpaca evil-embrace)
 (elpaca evil-exchange)
 (elpaca evil-goggles)
 (elpaca evil-iedit-state)
