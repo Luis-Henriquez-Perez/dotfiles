@@ -27,6 +27,8 @@
 ;;; Code:
 (require 'base)
 
+(opt! org-directory (f-full "~/Documents/org/"))
+(opt! org-agenda-files (mapcar #'f-full "~/Documents/org/notes.org"))
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
