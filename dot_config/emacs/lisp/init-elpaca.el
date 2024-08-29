@@ -169,6 +169,7 @@
 (elpaca vc-auto-commit)
 (elpaca (vertico :host github :branch "main" :repo "minad/vertico" :fetcher github))
 (elpaca w3m)
+(elpaca web-mode)
 (elpaca wgrep)
 (elpaca which-key)
 (elpaca ws-butler)
