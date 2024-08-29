@@ -50,7 +50,7 @@
   "Return the file to be used for capturing.
 Progressively try to see if a notes file exists if the current one is too big
 make a new one."
-  (f-full "~/Documents/notes/notes.org"))
+  (f-full (f-expand "notes.org" org-directory)))
 ;;;; main capture template
 (defun +org-main-capture-template ()
   "Return capture template as a string."
