@@ -52,7 +52,7 @@ Progressively try to see if a notes file exists if the current one is too big
 make a new one."
   (f-full (f-expand "notes.org" org-directory)))
 ;;;; main capture template
-(defun +org-main-capture-template ()
+(defun +org-plain-capture-template ()
   "Return capture template as a string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :title-text "%?")
@@ -66,17 +66,29 @@ make a new one."
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
+(defun +org-bug-capture-template ()
+  "Return the bug capture template as a string."
+  (require 'org-ml)
+  (->> (org-ml-build-headline! :level 1 :todo-keyword "BUG" :title-text "%?")
+       (org-ml-headline-set-node-property "ID" (org-id-new))
+       (org-ml-to-string)))
+
 (setq org-capture-templates
       (append (doct (list (list "todo"
                                 :prepend t
                                 :keys "t"
                                 :file #'+org-capture-file
                                 :template #'+org-todo-capture-template)))
-              (doct (list (list "main"
+              (doct (list (list "bug"
                                 :prepend t
                                 :keys "p"
                                 :file #'+org-capture-file
-                                :template #'+org-main-capture-template)))))
+                                :template #'+org-plain-capture-template)))
+              (doct (list (list "plain"
+                                :prepend t
+                                :keys "p"
+                                :file #'+org-capture-file
+                                :template #'+org-plain-capture-template)))))
 ;;; provide
 (provide 'config-org-capture)
 ;;; config-org-capture.el ends here
