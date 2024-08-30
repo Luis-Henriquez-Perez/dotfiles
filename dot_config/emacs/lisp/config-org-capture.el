@@ -90,7 +90,7 @@ make a new one."
                                 :prepend t
                                 :keys "p"
                                 :file #'+org-capture-file
-                                :template #'+org-capture-plain-template)))
+                                :template #'+org-capture-bug-template)))
               (doct (list (list "question"
                                 :prepend t
                                 :keys "q"
