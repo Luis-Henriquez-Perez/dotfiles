@@ -60,21 +60,21 @@ make a new one."
        (org-ml-to-string)))
 
 (defun +org-capture-todo-template ()
-  "Return the todo capture template as a string."
+  "Return the TODO capture template as a string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword "TODO" :title-text "%?")
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
 (defun +org-capture-bug-template ()
-  "Return the bug capture template as a string."
+  "Return the BUG capture template as a string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword "BUG" :title-text "%?")
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
 (defun +org-capture-question-template ()
-  "Return the bug capture template as a string."
+  "Return the QUESTION capture template as a string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword "QUESTION" :title-text "%?")
        (org-ml-headline-set-node-property "ID" (org-id-new))
