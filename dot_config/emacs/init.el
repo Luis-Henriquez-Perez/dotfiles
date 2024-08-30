@@ -79,6 +79,7 @@
 (require 'init-vc-hooks)
 (require 'init-window)
 ;; External packages
+(require 'init-web-mode)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)

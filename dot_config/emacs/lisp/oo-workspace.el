@@ -76,17 +76,6 @@
   (tab-bar-rename-tab name)
   (bookmark-jump name))
 
-(defun oo-workspace-show-tabs ()
-  "Show workspaces as tabs.")
-
-(defun oo-workspace-switch ()
-  ""
-  ()
-  )
-
-(defun oo-workspace-rename ()
-  )
-
 ;; TODO: potentially kill the buffers corresponding to the workspace, maybe that
 ;; should be an option.
 (defun oo-workspace-close ()
