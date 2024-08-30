@@ -73,6 +73,13 @@ make a new one."
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
+(defun +org-question-capture-template ()
+  "Return the bug capture template as a string."
+  (require 'org-ml)
+  (->> (org-ml-build-headline! :level 1 :todo-keyword "QUESTION" :title-text "%?")
+       (org-ml-headline-set-node-property "ID" (org-id-new))
+       (org-ml-to-string)))
+
 (setq org-capture-templates
       (append (doct (list (list "todo"
                                 :prepend t
@@ -84,6 +91,11 @@ make a new one."
                                 :keys "p"
                                 :file #'+org-capture-file
                                 :template #'+org-plain-capture-template)))
+              (doct (list (list "question"
+                                :prepend t
+                                :keys "q"
+                                :file #'+org-capture-file
+                                :template #'+org-question-capture-template)))
               (doct (list (list "plain"
                                 :prepend t
                                 :keys "p"

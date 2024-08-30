@@ -32,7 +32,7 @@
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
-                          (sequence "ASK" "ANSWER")))
+                          (sequence "QUESTION" "ANSWERED")))
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
