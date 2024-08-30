@@ -29,26 +29,29 @@
 (require 'abbrev)
 (require 'base)
 ;;;; lazy-load abbrev hook
-(defvar +abbrev-lazy-load-hook nil)
+(defvar +abbrev-lazy-load-hook nil
+  "Hook run to load abbrevs lazily.")
 
 (defadvice! lazy-load-abbrevs (around abbrev--default-expand expand-fn)
+  (info! "Running `+abbrev-lazy-load-hook'...")
   (run-hooks '+abbrev-lazy-load-hook)
   (funcall expand-fn))
 
 (defun +abbrev-lazy-load-hook&load-plain-text-abbrevs ()
   (require '+abbrev-enable-functions)
+  (info! "Enable abbrevs -> %S" (+abbrev-enable-plain-text-abbrevs-p))
   (when (+abbrev-enable-plain-text-abbrevs-p)
     (info! "Requiring `+abbrev-plain-text-abbrevs'...")
-    (require '+abbrev-plain-text-abbrevs))
-  (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-plain-text-abbrevs))
+    (require '+abbrev-plain-text-abbrevs)
+    (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-plain-text-abbrevs)))
 (add-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-plain-text-abbrevs)
 
 (defun +abbrev-lazy-load-hook&load-elisp-abbrevs ()
   (require '+abbrev-enable-functions)
   (when (+abbrev-enable-elisp-abbrevs-p)
     (info! "Requiring `+abbrev-elisp-abbrevs'...")
-    (require '+abbrev-elisp-abbrevs))
-  (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-elisp-abbrevs))
+    (require '+abbrev-elisp-abbrevs)
+    (remove-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-elisp-abbrevs)))
 (add-hook '+abbrev-lazy-load-hook '+abbrev-lazy-load-hook&load-elisp-abbrevs)
 ;;;; automatically add period
 ;; I do not like manually adding periods to the end of sentences.  Having moved
