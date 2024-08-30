@@ -52,43 +52,38 @@ Progressively try to see if a notes file exists if the current one is too big
 make a new one."
   (f-full (f-expand "notes.org" org-directory)))
 ;;;; main capture template
-(defun +org-capture-plain-template ()
-  "Return capture template as a string."
+(defun +org-capture--todo-template (&optional todo-keyword)
+  "Return template string."
   (require 'org-ml)
-  (->> (org-ml-build-headline! :level 1 :title-text "%?")
+  (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
-(defun +org-capture-todo-template ()
+(defun +org-capture-plain-template ()
+  "Return capture template as a string."
+  (+org-capture--todo-template))
+
+(defun +org-capture-open-template ()
   "Return the TODO capture template as a string."
-  (require 'org-ml)
-  (->> (org-ml-build-headline! :level 1 :todo-keyword "TODO" :title-text "%?")
-       (org-ml-headline-set-node-property "ID" (org-id-new))
-       (org-ml-to-string)))
+  (+org-capture--todo-template "OPEN"))
 
 (defun +org-capture-bug-template ()
   "Return the BUG capture template as a string."
-  (require 'org-ml)
-  (->> (org-ml-build-headline! :level 1 :todo-keyword "BUG" :title-text "%?")
-       (org-ml-headline-set-node-property "ID" (org-id-new))
-       (org-ml-to-string)))
+  (+org-capture--todo-template "BUG"))
 
 (defun +org-capture-question-template ()
   "Return the QUESTION capture template as a string."
-  (require 'org-ml)
-  (->> (org-ml-build-headline! :level 1 :todo-keyword "QUESTION" :title-text "%?")
-       (org-ml-headline-set-node-property "ID" (org-id-new))
-       (org-ml-to-string)))
+  (+org-capture--todo-template "QUESTION"))
 
 (setq org-capture-templates
-      (append (doct (list (list "todo"
+      (append (doct (list (list "open"
                                 :prepend t
-                                :keys "t"
+                                :keys "o"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-todo-template)))
               (doct (list (list "bug"
                                 :prepend t
-                                :keys "p"
+                                :keys "b"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-bug-template)))
               (doct (list (list "question"
