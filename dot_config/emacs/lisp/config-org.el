@@ -28,8 +28,6 @@
 ;;;; requirements
 (require 'org)
 ;;;; miscellaneous
-(opt! org-src-fontify-natively t)
-(opt! org-hide-emphasis-markers t)
 ;;; provide
 (provide 'config-org)
 ;;; config-org.el ends here
