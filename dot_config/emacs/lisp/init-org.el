@@ -27,8 +27,12 @@
 ;;; Code:
 (require 'base)
 
+;; Add extra todo.
 (opt! org-directory (f-full "~/Documents/org/"))
-(opt! org-agenda-files (mapcar #'f-full "~/Documents/org/notes.org"))
+(opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
+(opt! org-todo-keywords '((sequence "TODO" "DONE")
+                          (sequence "BUG" "FIXED")
+                          (sequence "ASK" "ANSWER")))
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;; provide
