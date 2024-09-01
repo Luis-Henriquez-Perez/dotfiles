@@ -26,8 +26,8 @@
 ;;
 ;;; Code:
 (opt! auto-insert-query nil)
-;; (hook! emacs-startup-hook auto-insert-mode)
-(hook! on-first-file-hook auto-insert-mode)
+;; (oo-add-hook 'emacs-startup-hook #'auto-insert-mode)
+(oo-add-hook 'on-first-file-hook #'auto-insert-mode)
 (define-auto-insert "\\.el$" #'oo-auto-insert-elisp-template)
 (define-auto-insert "\\.html$" #'oo-auto-insert-html-template)
 (require 'config-auto-insert)

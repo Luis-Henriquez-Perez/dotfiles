@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! on-first-input-hook vertico-mode)
+(oo-add-hook 'on-first-input-hook #'vertico-mode)
 
 (opt! vertico-count-format '("%-6s " . "%2$s"))
 (opt! vertico-count 15)

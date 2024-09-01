@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! prog-mode-hook outli-mode)
+(oo-add-hook 'prog-mode-hook #'outli-mode)
 
 (require! config-outli)
 ;;; provide

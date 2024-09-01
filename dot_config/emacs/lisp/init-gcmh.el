@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! emacs-startup-hook gcmh-mode :depth 91)
+(oo-add-hook 'emacs-startup-hook #'gcmh-mode :depth 91)
 
 (opt! gcmh-idle-delay 'auto)
 (opt! gcmh-high-cons-threshold (* 8 1024 1024))

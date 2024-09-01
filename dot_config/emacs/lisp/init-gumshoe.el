@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! on-first-input-hook global-gumshoe-mode)
+(oo-add-hook 'on-first-input-hook #'global-gumshoe-mode)
 ;;; provide
 (provide 'init-gumshoe)
 ;;; init-gumshoe.el ends here

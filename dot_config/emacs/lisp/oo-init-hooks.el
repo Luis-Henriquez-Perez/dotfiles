@@ -34,7 +34,7 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-input-hook
-(hook! on-first-input-hook minibuffer-depth-indicate-mode)
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
 (defhook! enable-font-lock (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
@@ -58,7 +58,7 @@
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
   (oo-call-after-load-functions)
-  (hook! after-load-functions oo-call-after-load-functions))
+  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat

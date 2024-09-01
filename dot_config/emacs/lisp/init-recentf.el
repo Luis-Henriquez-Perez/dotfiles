@@ -28,11 +28,11 @@
 (require 'base)
 (require 'recentf)
 
-(hook! emacs-startup-hook recentf-mode)
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
 ;; TODO: Figure out why this is an error with eldev eval.
 ;; For some reason this gives an error when I use eldev eval. I have to figure
 ;; out what eldev is doing here.
-(hook! kill-emacs-hook recentf-save-list)
+(oo-add-hook 'kill-emacs-hook #'recentf-save-list)
 
 (oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
 
