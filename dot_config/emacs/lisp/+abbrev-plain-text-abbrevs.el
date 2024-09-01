@@ -32,6 +32,8 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "abbrevx"        "abbrevs"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "oos"            "out of scope"                  nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "ano"            "another"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "woud"           "would"                         nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "hty"            "they"                          nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
@@ -163,7 +165,7 @@
 (define-abbrev global-abbrev-table "ecape"          "escape"                        nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "coud"           "could"                         nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "replacment"     "replacement"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
-(define-abbrev global-abbrev-table "appl"           "application"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "applic"         "application"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "lsip"           "lisp"                          nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "txt"            "text"                          nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "impo"           "important"                     nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
