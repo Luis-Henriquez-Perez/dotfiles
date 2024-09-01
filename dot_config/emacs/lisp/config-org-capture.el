@@ -80,7 +80,7 @@ make a new one."
                                 :prepend t
                                 :keys "o"
                                 :file #'+org-capture-file
-                                :template #'+org-capture-todo-template)))
+                                :template #'+org-capture-open-template)))
               (doct (list (list "bug"
                                 :prepend t
                                 :keys "b"
