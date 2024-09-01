@@ -32,6 +32,7 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "atst"           "at the same time"              nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "abbrevx"        "abbrevs"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "oos"            "out of scope"                  nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "ano"            "another"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
