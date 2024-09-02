@@ -63,6 +63,10 @@ make a new one."
   "Return capture template as a string."
   (+org-capture--todo-template))
 
+(defun +org-capture-todo-template ()
+  "Return the TODO capture template as a string."
+  (+org-capture--todo-template "TODO"))
+
 (defun +org-capture-open-template ()
   "Return the TODO capture template as a string."
   (+org-capture--todo-template "OPEN"))
@@ -76,7 +80,12 @@ make a new one."
   (+org-capture--todo-template "QUESTION"))
 
 (setq org-capture-templates
-      (append (doct (list (list "open"
+      (append (doct (list (list "todo"
+                                :prepend t
+                                :keys "o"
+                                :file #'+org-capture-file
+                                :template #'+org-capture-todo-template)))
+              (doct (list (list "open"
                                 :prepend t
                                 :keys "o"
                                 :file #'+org-capture-file
