@@ -27,6 +27,9 @@
 ;;; Code:
 (require 'base)
 
+(bind! oo-app-map "c" #'org-capture)
+(alt! org-capture +org-capture-choose-template "org-capture")
+
 (require! config-org-capture)
 ;;; provide
 (provide 'init-org-capture)
