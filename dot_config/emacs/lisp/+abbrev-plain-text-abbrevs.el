@@ -32,6 +32,10 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "parti"          "particular"                    nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "sh"             "should have"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "desb"           "describe"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "efficl"         "efficiently"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "rath"           "rather"                        nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "experd"         "experienced"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "exper"          "experience"                    nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
