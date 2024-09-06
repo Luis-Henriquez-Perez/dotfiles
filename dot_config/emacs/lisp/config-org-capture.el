@@ -72,7 +72,7 @@ make a new one."
 
 (defun +org-capture-plain-template ()
   "Return capture template as a string."
-  (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
+  (->> (org-ml-build-headline! :level 1 :title-text "%?")
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 

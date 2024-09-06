@@ -53,21 +53,32 @@
 ;; Do not use a special character for the block separator.
 (setq org-agenda-block-separator ?-)
 ;;;; views
-(defun +org-agenda-main-view ()
+(defun +org-agenda-day-view ()
   "Main agenda."
   (interactive)
   (let ((org-agenda-custom-commands
-         `(("_" "Daily agenda and top priority tasks"
-            ,(+org-agenda-main-commands)))))
+         `(("_" "Daily Agenda"
+            ((todo "TODO" ((org-agenda-overriding-header "\nTasks")
+                           (org-agenda-sorting-strategy '(user-defined-down))
+                           (org-agenda-max-entries 5)))
+             (agenda "" ((org-agenda-overriding-header "\nSchedule")
+                         (org-agenda-start-on-weekday nil)
+                         (org-scheduled-past-days 0)
+                         (org-deadline-warning-days 0)
+                         (org-agenda-span 1))))))))
     (org-agenda nil "_")))
 
 (defun +org-agenda-emacs-view ()
   "Emacs agenda."
   (interactive)
   (let ((org-agenda-custom-commands
-         `(("_" "Daily agenda and top priority tasks"
-            ,(+org-agenda-emacs-commands)))))
+         `(("_" "Daily agenda and top priority tasks"))))
     (org-agenda nil "_")))
+
+(defun +org-agenda-week-view ()
+  ""
+  (interactive)
+  )
 ;;;; sorting entries
 ;; I do not use timestamps, instead I have time-based IDs.
 (setq org-agenda-cmp-user-defined #'+org-agenda-sort-by-id)
@@ -85,22 +96,28 @@
 ;; propertized strings.  These strings have references to the headline it refers to.
 (defun! +org-agenda-sort-by-id (a b)
   "Compare two entries A and B based on their ID property to sort by oldest first."
-  (set! id-a (+org-agenda-entry-id a))
-  (set! id-b (+org-agenda-entry-id b))
-  (if (string< id-a id-b) -1 1))
-;;;; uncategorized
-(defun! +org-agenda-main-commands ()
-  "Custom agenda for use in `org-agenda-custom-commands'."
-  (set! sorting-strategy '(deadline-up user-defined-up))
-  `((todo "TODO" ((org-agenda-overriding-header "\nTasks")
-                  (org-agenda-sorting-strategy ',sorting-strategy)
-                  (org-agenda-max-entries 5)))
-    (agenda "" ((org-agenda-overriding-header "\nSchedule")
-                (org-agenda-start-on-weekday nil)
-                (org-scheduled-past-days 0)
-                (org-deadline-warning-days 0)
-                (org-agenda-span 1)))))
+  (set! id-a (+org-id-to-time (+org-agenda-entry-id a)))
+  (set! id-b (+org-id-to-time (+org-agenda-entry-id b)))
+  (if (time-less-p id-a id-b) 1 -1))
 
+(defun +org-id-to-time (org-id)
+  "Convert an Org ID string into an Emacs time object.
+ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
+  (let* ((date-str (substring org-id 0 8))
+         (time-str (substring org-id 9 15))
+         (microseconds-str (substring org-id 16))
+         (year (string-to-number (substring date-str 0 4)))
+         (month (string-to-number (substring date-str 4 6)))
+         (day (string-to-number (substring date-str 6 8)))
+         (hour (string-to-number (substring time-str 0 2)))
+         (minute (string-to-number (substring time-str 2 4)))
+         (second (string-to-number (substring time-str 4 6)))
+         ;; (microseconds (string-to-number microseconds-str))
+         (time (encode-time second minute hour day month year)))
+    ;; Add microseconds to the time object
+    ;; (setf (nth 6 (decode-time time)) microseconds)
+    time))
+;;;; uncategorized
 (defun! +org-agenda-emacs-commands ()
   "Custom agenda for use in `org-agenda-custom-commands'."
   (set! sorting-strategy '(deadline-up user-defined-up))

@@ -33,15 +33,16 @@
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
+                          (sequence "FUNCTION" "DEFINED")
                           (sequence "DECIDE" "DECIDED")))
 
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 ;;;; org-agenda
 (require! config-org-agenda)
-(autoload #'+org-agenda-main-view "config-org-agenda" nil t nil)
+(autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
 (autoload #'+org-agenda-emacs-view "config-org-agenda" nil t nil)
-(bind! oo-leader-map ";" #'+org-agenda-main-view)
+(bind! oo-leader-map ";" #'+org-agenda-day-view)
 ;;;; org-capture
 (autoload #'+org-capture-plain "config-org-capture" nil t 'function)
 (autoload #'+org-capture-todo "config-org-capture" nil t 'function)
