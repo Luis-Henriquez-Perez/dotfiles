@@ -59,7 +59,7 @@
   (let ((org-agenda-custom-commands
          `(("_" "Daily Agenda"
             ((todo "TODO" ((org-agenda-overriding-header "\nTasks")
-                           (org-agenda-sorting-strategy '(user-defined-down))
+                           (org-agenda-sorting-strategy '(user-defined-up))
                            (org-agenda-max-entries 5)))
              (agenda "" ((org-agenda-overriding-header "\nSchedule")
                          (org-agenda-start-on-weekday nil)
