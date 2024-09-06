@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 ;;;; Requirements
+(require 'base)
 (require 'doct)
 (require 'org-ml)
 (require 'ts)
@@ -69,43 +70,52 @@ make a new one."
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
-;; (defun! +org-capture--todo-template (&optional todo-keyword)
-;;   "Return template string."
-;;   (require 'org-ml)
-;;   (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
-;;        (org-ml-headline-set-planning (org-ml-build-planning! :deadline timestamp))
-;;        (org-ml-headline-set-node-property "ID" (org-id-new))
-;;        (org-ml-to-string)))
-
 (defun +org-capture-plain-template ()
   "Return capture template as a string."
-  (interactive)
-  (+org-capture--todo-template))
+  (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
+       (org-ml-headline-set-node-property "ID" (org-id-new))
+       (org-ml-to-string)))
 
 (defun +org-capture-todo-template ()
   "Return the TODO capture template as a string."
-  (interactive)
   (+org-capture--todo-template "TODO"))
 
 (defun +org-capture-open-template ()
-  "Return the TODO capture template as a string."
-  (interactive)
+  "Return the OPEN capture template as a string."
   (+org-capture--todo-template "OPEN"))
 
 (defun +org-capture-bug-template ()
   "Return the BUG capture template as a string."
-  (interactive)
   (+org-capture--todo-template "BUG"))
 
 (defun +org-capture-question-template ()
   "Return the QUESTION capture template as a string."
-  (interactive)
   (+org-capture--todo-template "QUESTION"))
+
+(defun +org-capture-plain ()
+  (interactive)
+  (org-capture nil "p"))
+
+(defun +org-capture-todo ()
+  (interactive)
+  (org-capture nil "t"))
+
+(defun +org-capture-open ()
+  (interactive)
+  (org-capture nil "o"))
+
+(defun +org-capture-bug ()
+  (interactive)
+  (org-capture nil "b"))
+
+(defun +org-capture-question ()
+  (interactive)
+  (org-capture nil "q"))
 
 (setq org-capture-templates
       (append (doct (list (list "todo"
                                 :prepend t
-                                :keys "o"
+                                :keys "t"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-todo-template)))
               (doct (list (list "open"
