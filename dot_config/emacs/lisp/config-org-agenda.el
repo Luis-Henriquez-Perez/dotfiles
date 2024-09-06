@@ -36,11 +36,19 @@
 (setq org-agenda-show-outline-path nil)
 (setq org-agenda-window-setup 'current-window)
 (setq org-agenda-prefix-format
-      '((agenda . " %i %-12:c%?-12t% s")
+      '((agenda . " %i %?-12t")
         ;; Remove the category displayed on the left of entries.
         (todo   . " ")
         (tags   . " ")
         (search . " %i %-12:c")))
+
+;; Always show the time grid even if I do not have anything scheduled or any
+;; deadlines.
+;; Also, increase the sequence of numbers shown on the grid.
+(setq org-agenda-time-grid `((daily today)
+                             ,(number-sequence 300 2300 100)
+                             "-------------- "
+                             "---------------"))
 ;;;; views
 (defun +org-agenda-main-view ()
   "Main agenda."
