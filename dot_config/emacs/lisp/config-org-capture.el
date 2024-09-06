@@ -60,7 +60,7 @@ make a new one."
   (let* ((now (ts-adjust 'day 5 (ts-now)))
          (time (list (ts-year now) (ts-month now) (ts-day now) (ts-hour now)
                      (ts-min now))))
-    (org-ml-build-planning! :scheduled time :deadline time)))
+    (org-ml-build-planning! :deadline time)))
 
 (defun! +org-capture--todo-template (&optional todo-keyword)
   "Return template string."
