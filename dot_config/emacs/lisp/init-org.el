@@ -41,6 +41,7 @@
 (require! config-org-agenda)
 (autoload #'+org-agenda-main-view "config-org-agenda" nil t nil)
 (autoload #'+org-agenda-emacs-view "config-org-agenda" nil t nil)
+(bind! oo-leader-map ";" #'+org-agenda-main-view)
 ;;;; org-capture
 (autoload #'+org-capture-plain "config-org-capture" nil t 'function)
 (autoload #'+org-capture-todo "config-org-capture" nil t 'function)
