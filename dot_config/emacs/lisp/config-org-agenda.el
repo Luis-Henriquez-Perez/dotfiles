@@ -93,9 +93,8 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
          (day (string-to-number (substring date-str 6 8)))
          (hour (string-to-number (substring time-str 0 2)))
          (minute (string-to-number (substring time-str 2 4)))
-         (second (string-to-number (substring time-str 4 6)))
-         (time (encode-time second minute hour day month year)))
-    time))
+         (second (string-to-number (substring time-str 4 6))))
+    (encode-time second minute hour day month year)))
 
 ;; I do not use timestamps, instead I have time-based IDs.
 (setq org-agenda-cmp-user-defined #'+org-agenda-sort-by-id)
