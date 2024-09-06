@@ -54,7 +54,7 @@
 (setq org-agenda-block-separator ?-)
 ;;;; views
 (defun +org-agenda-day-view ()
-  "Main agenda."
+  "Day agenda."
   (interactive)
   (let ((org-agenda-custom-commands
          `(("_" "Daily Agenda"
