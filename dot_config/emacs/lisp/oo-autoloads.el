@@ -28,10 +28,10 @@
 ;;
 ;;; Code:
 (autoload #'oo-set-font-face "oo-commands" nil t 'function)
-(autoload #'oo-create-new-test-file "Oo-commands" nil t 'function)
-(autoload #'oo-create-new-config-file "Oo-commands" nil t 'function)
-(autoload #'oo-create-new-init-file "Oo-commands" nil t 'function)
-(autoload #'oo-kill-emacs-no-confirm "Oo-commands" nil t 'function)
+(autoload #'oo-create-new-test-file "oo-commands" nil t 'function)
+(autoload #'oo-create-new-config-file "oo-commands" nil t 'function)
+(autoload #'oo-create-new-init-file "oo-commands" nil t 'function)
+(autoload #'oo-kill-emacs-no-confirm "oo-commands" nil t 'function)
 (autoload #'oo-open-emacs-config "oo-commands" nil t 'function)
 (autoload #'oo-open-emacs-init-file "oo-commands" nil t 'function)
 (autoload #'update-emacs-config "oo-commands" nil t 'function)
