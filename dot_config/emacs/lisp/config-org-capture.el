@@ -28,6 +28,8 @@
 ;;;; Requirements
 (require 'doct)
 (require 'org-ml)
+(require 'ts)
+(require 'org-capture)
 ;;;; disable header-line
 (setq-hook! org-capture-mode-hook header-line-format nil)
 ;;;; enable evil-insert-state
@@ -52,31 +54,52 @@ Progressively try to see if a notes file exists if the current one is too big
 make a new one."
   (f-full (f-expand "notes.org" org-directory)))
 ;;;; main capture template
-(defun +org-capture--todo-template (&optional todo-keyword)
+(defun +org-planning ()
+  "Return a timestamp."
+  (let* ((now (ts-adjust 'day 5 (ts-now)))
+         (time (list (ts-year now) (ts-month now) (ts-day now) (ts-hour now)
+                     (ts-min now))))
+    (org-ml-build-planning! :scheduled time :deadline time)))
+
+(defun! +org-capture--todo-template (&optional todo-keyword)
   "Return template string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
+       (org-ml-headline-set-planning (+org-planning))
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
+;; (defun! +org-capture--todo-template (&optional todo-keyword)
+;;   "Return template string."
+;;   (require 'org-ml)
+;;   (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
+;;        (org-ml-headline-set-planning (org-ml-build-planning! :deadline timestamp))
+;;        (org-ml-headline-set-node-property "ID" (org-id-new))
+;;        (org-ml-to-string)))
+
 (defun +org-capture-plain-template ()
   "Return capture template as a string."
+  (interactive)
   (+org-capture--todo-template))
 
 (defun +org-capture-todo-template ()
   "Return the TODO capture template as a string."
+  (interactive)
   (+org-capture--todo-template "TODO"))
 
 (defun +org-capture-open-template ()
   "Return the TODO capture template as a string."
+  (interactive)
   (+org-capture--todo-template "OPEN"))
 
 (defun +org-capture-bug-template ()
   "Return the BUG capture template as a string."
+  (interactive)
   (+org-capture--todo-template "BUG"))
 
 (defun +org-capture-question-template ()
   "Return the QUESTION capture template as a string."
+  (interactive)
   (+org-capture--todo-template "QUESTION"))
 
 (setq org-capture-templates
