@@ -68,18 +68,35 @@
                          (org-agenda-span 1))))))))
     (org-agenda nil "_")))
 
-(defun +org-agenda-emacs-view ()
-  "Emacs agenda."
-  (interactive)
-  (let ((org-agenda-custom-commands
-         `(("_" "Daily agenda and top priority tasks"))))
-    (org-agenda nil "_")))
-
 (defun +org-agenda-week-view ()
   ""
   (interactive)
-  )
+  (let ((org-agenda-custom-commands
+         `(("_" "Week Agenda"
+            ((agenda "" ((org-agenda-overriding-header "\nSchedule")
+                         (org-agenda-start-on-weekday nil)
+                         (org-scheduled-past-days 0)
+                         (org-deadline-warning-days 0)
+                         (org-agenda-span 3))))))))
+    (org-agenda nil "_")))
 ;;;; sorting entries
+;; I am ignoring the microseconds.  I should not be making capture templates
+;; within microseconds of each other.
+(defun +org-id-to-time (org-id)
+  "Convert an Org ID string into an Emacs time object.
+ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
+  (let* ((date-str (substring org-id 0 8))
+         (time-str (substring org-id 9 15))
+         (microseconds-str (substring org-id 16))
+         (year (string-to-number (substring date-str 0 4)))
+         (month (string-to-number (substring date-str 4 6)))
+         (day (string-to-number (substring date-str 6 8)))
+         (hour (string-to-number (substring time-str 0 2)))
+         (minute (string-to-number (substring time-str 2 4)))
+         (second (string-to-number (substring time-str 4 6)))
+         (time (encode-time second minute hour day month year)))
+    time))
+
 ;; I do not use timestamps, instead I have time-based IDs.
 (setq org-agenda-cmp-user-defined #'+org-agenda-sort-by-id)
 
@@ -98,32 +115,7 @@
   "Compare two entries A and B based on their ID property to sort by oldest first."
   (set! id-a (+org-id-to-time (+org-agenda-entry-id a)))
   (set! id-b (+org-id-to-time (+org-agenda-entry-id b)))
-  (if (time-less-p id-a id-b) 1 -1))
-
-(defun +org-id-to-time (org-id)
-  "Convert an Org ID string into an Emacs time object.
-ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
-  (let* ((date-str (substring org-id 0 8))
-         (time-str (substring org-id 9 15))
-         (microseconds-str (substring org-id 16))
-         (year (string-to-number (substring date-str 0 4)))
-         (month (string-to-number (substring date-str 4 6)))
-         (day (string-to-number (substring date-str 6 8)))
-         (hour (string-to-number (substring time-str 0 2)))
-         (minute (string-to-number (substring time-str 2 4)))
-         (second (string-to-number (substring time-str 4 6)))
-         ;; (microseconds (string-to-number microseconds-str))
-         (time (encode-time second minute hour day month year)))
-    ;; Add microseconds to the time object
-    ;; (setf (nth 6 (decode-time time)) microseconds)
-    time))
-;;;; uncategorized
-(defun! +org-agenda-emacs-commands ()
-  "Custom agenda for use in `org-agenda-custom-commands'."
-  (set! sorting-strategy '(deadline-up user-defined-up))
-  `((tags-todo "emacs" ((org-agenda-overriding-header "\nEmacs Tasks")
-                        (org-agenda-sorting-strategy ',sorting-strategy)
-                        (org-agenda-max-entries 5)))))
+  (if (time-less-p id-a id-b) -1 1))
 ;;; provide
 (provide 'config-org-agenda)
 ;;; config-org-agenda.el ends here
