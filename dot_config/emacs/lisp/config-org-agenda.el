@@ -49,6 +49,9 @@
                              ,(number-sequence 300 2300 100)
                              "-------------- "
                              "---------------"))
+
+;; Do not use a special character for the block separator.
+(setq org-agenda-block-separator ?-)
 ;;;; views
 (defun +org-agenda-main-view ()
   "Main agenda."
