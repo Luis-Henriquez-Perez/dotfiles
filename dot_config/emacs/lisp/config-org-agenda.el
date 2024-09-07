@@ -69,7 +69,7 @@
     (org-agenda nil "_")))
 
 (defun +org-agenda-week-view ()
-  ""
+  "Week view."
   (interactive)
   (let ((org-agenda-custom-commands
          `(("_" "Week Agenda"
@@ -81,7 +81,7 @@
     (org-agenda nil "_")))
 ;;;; sorting entries
 ;; I am ignoring the microseconds.  I should not be making capture templates
-;; within microseconds of each other.
+;; within microseconds of each other.  I got this function from chatgpt.
 (defun +org-id-to-time (org-id)
   "Convert an Org ID string into an Emacs time object.
 ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
