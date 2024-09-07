@@ -46,11 +46,12 @@
 ;; deadlines.
 ;; Also, increase the sequence of numbers shown on the grid.
 (setq org-agenda-time-grid `((daily today)
-                             ,(number-sequence 300 2300 100)
+                             ,(number-sequence 300 2300 200)
                              "-------------- "
                              "---------------"))
 
-;; Do not use a special character for the block separator.
+;; Do not use a special character for the block separator.  I like it to look
+;; old-fashionish.
 (setq org-agenda-block-separator ?-)
 ;;;; views
 (defun +org-agenda-day-view ()
@@ -60,12 +61,15 @@
          `(("_" "Daily Agenda"
             ((todo "TODO" ((org-agenda-overriding-header "\nTasks")
                            (org-agenda-sorting-strategy '(priority-down user-defined-up))
+                           (org-agenda-before-sorting-filter-function #'+org-agenda--filter-parents-with-undone-children)
                            (org-agenda-max-entries 5)))
              (agenda "" ((org-agenda-overriding-header "\nSchedule")
                          (org-agenda-start-on-weekday nil)
                          (org-scheduled-past-days 0)
                          (org-deadline-warning-days 0)
-                         (org-agenda-span 1))))))))
+                         (org-agenda-span 1)))
+             (todo "DONE" ((org-agenda-overriding-header "\nRecently Done")
+                           (org-agenda-max-entries 5))))))))
     (org-agenda nil "_")))
 
 (defun +org-agenda-week-view ()
@@ -136,6 +140,25 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
     (unless (zerop result)
       (return! result)))
   0)
+
+(defun +org-agenda--filter-parents-with-undone-children (entry)
+  (when (not (+org-agenda-call-at-entry entry #'+org-has-tasks-to-be-done))
+    entry))
+
+;; For now hard-code whether done.
+(defun! +org-has-tasks-to-be-done ()
+  "Return non-nil if current headline has any subtasks that need to be done."
+  (interactive)
+  (flet! not-done-p ()
+    (aand (substring-no-properties (org-get-todo-state))
+          (not (member it '("DONE" "CANCELLED")))))
+  (save-excursion
+    (when (org-goto-first-child)
+      (when (not-done-p)
+        (return! t))
+      (while (org-goto-sibling)
+        (when (not-done-p)
+          (return! t))))))
 ;;; provide
 (provide 'config-org-agenda)
 ;;; config-org-agenda.el ends here
