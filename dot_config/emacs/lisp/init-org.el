@@ -38,6 +38,9 @@
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 (opt! org-log-done 'note)
+(opt! org-priority-lowest ?F)
+(opt! org-priority-highest ?A)
+(opt! org-default-priority ?C)
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
