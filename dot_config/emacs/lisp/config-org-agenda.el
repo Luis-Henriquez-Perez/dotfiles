@@ -96,17 +96,20 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
          (second (string-to-number (substring time-str 4 6))))
     (encode-time second minute hour day month year)))
 
+(defun +org-agenda-call-at-entry (entry fn)
+  "Call function from entry."
+  (set! marker (get-text-property 0 'org-marker entry))
+  (unless marker (error "Entry: %S" entry))
+  (with-current-buffer (marker-buffer marker)
+    (goto-char (marker-position marker))
+    (funcall fn)))
+
 ;; I do not use timestamps, instead I have time-based IDs.
 (setq org-agenda-cmp-user-defined #'+org-agenda-sort-by-id)
 
 (defun! +org-agenda-entry-id (entry)
   "Return ID corresponding to entry."
-  (set! marker (get-text-property 0 'org-marker entry))
-  (unless marker (error "Entry: %S" entry))
-  (with-current-buffer (marker-buffer marker)
-    (goto-char (marker-position marker))
-    (set! id (org-id-get)))
-  id)
+  (+org-agenda-call-at-entry entry #'org-id-get))
 
 ;; The sort function accepts two entries and by entries the manual means
 ;; propertized strings.  These strings have references to the headline it refers to.
@@ -115,6 +118,24 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
   (set! id-a (+org-id-to-time (+org-agenda-entry-id a)))
   (set! id-b (+org-id-to-time (+org-agenda-entry-id b)))
   (if (time-less-p id-a id-b) -1 1))
+
+(defun! +org-agenda-tag-comparator (a b)
+  "Compare two entries A and B based on their tags."
+  (set! tag-weights '(("blog" . 2) ("emacs" . 1)))
+  (funcall (-on #'> #'+org-agenda--tag-weights) a b)
+  (if (> (+org-agenda--tag-weights a)) -1 1)
+  (cond ((> weights-a weights-b) 1)
+        ((< weights-a weights-b) -1)
+        (t 0)))
+
+(defun +org-agenda-decide-entry-order (a b)
+  "Return whether A should be ordered before B."
+  (while user-sorters
+    (set! sorter (pop user-sorters))
+    (set! result (funcall sorter a b))
+    (unless (zerop result)
+      (return! result)))
+  0)
 ;;; provide
 (provide 'config-org-agenda)
 ;;; config-org-agenda.el ends here
