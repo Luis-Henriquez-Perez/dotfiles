@@ -28,16 +28,16 @@
 ;;;; requirements
 (require 'base)
 ;;;; general
-(setq org-default-notes-file (make-temp-file "emacs-org-notes-")) ; send it to oblivion
+(opt! org-default-notes-file (make-temp-file "emacs-org-notes-")) ; send it to oblivion
 (opt! org-directory (f-full "~/Documents/org/"))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
-                          (sequence "FUNCTION" "DEFINED")
                           (sequence "DECIDE" "DECIDED")))
 
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
+(opt! org-log-done 'note)
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
