@@ -73,74 +73,84 @@
        (with-current-buffer (marker-buffer ,marker)
          (goto-char (marker-position ,marker))
          (progn ,@body)))))
-
-;; A task is overdue if the deadline of the task is past the current time.
-(defun +org-overdue-entry-p (entry)
-  "Return non-nil if entry is overdue."
-  (with-entry! entry
-    (aand (org-get-deadline-time (point))
-          (< (float-time (time-subtract it (current-time))) 0))))
-
-(defsubst oo-negative-p (number)
-  "Return non-nil if NUMBER is negative."
-  (< number 0))
-
-(defsubst oo-positive-p (number)
-  "Return non-nil if NUMBER is negative."
-  (> number 0))
-
-(defun +org-agenda--agenda-filter (entry)
-  (if (and (get-text-property 0 'org-marker entry)
-           (+org-overdue-entry-p entry))
-      nil
-    entry))
-
-(defun! +org-agenda--overdue-string ()
-  "Return string indicating deadline status."
-  (set! now (current-time))
-  (or (aand (org-get-deadline-time (point))
-            (< (float-time (time-subtract it now)) 0)
-            "OVERDUE\s")
-      ""))
-
-(defun! +org-agenda-overdue-comparator (a b)
+;;;;; comparators
+;; These are comparators I have written to aid me with sorting entries.
+;;;;;; effort
+(defun +org-agenda-effort-comparator (a b)
+  "Return 1 if A requires less effort than B.
+If B requires more effort than A, return -1.  Otherwise, return 0."
+  (* -1 (or (org-cmp-effort a b) 0)))
+;;;;;; priority
+(defun! +org-agenda-priority-comparator (a b)
+  "Return 1 if priority A is greater than priority B.
+Return -1 if priority B is greater than priority A.  Otherwise, if return 0."
+  (or (org-cmp-values a b 'priority) 0))
+;;;;;; tag comparator
+(defun! +org-agenda-tag-comparator (a b)
+  "Compare two entries A and B based on their tags."
+  (set! tag-weights '(("blog" . 2) ("emacs" . 1)))
+  (flet! weight (tag)
+    (alist-get (substring-no-properties tag) tag-weights 0 nil #'equal))
+  (set! weight-a (-sum (mapcar #'weight (get-text-property 0 'tags a))))
+  (set! weight-b (-sum (mapcar #'weight (get-text-property 0 'tags b))))
+  (cond ((> weight-a weight-b) 1)
+        ((< weight-a weight-b) -1)
+        (t 0)))
+;;;;;; overdue deadline comparator
+(defun! +org-agenda-overdue-deadline-comparator (a b)
   "Return 1 if A is more overdue than B.
-Return -1 if B is more overdue than A."
+Return -1 if B is more overdue than A.  Otherwise return 0."
+  (set! da (with-entry! a (org-get-deadline-time (point))))
+  (set! db (with-entry! b (org-get-deadline-time (point))))
   (set! now (current-time))
-  (flet! deadline-time (entry)
-    (+org-agenda-call-at-entry entry (lambda () (org-get-deadline-time (point)))))
-  ;; This should be a positive number of seconds if we have not passed the deadline.
-  (flet! overdue-time (entry)
-    (awhen (deadline-time entry) (float-time (time-subtract it now))))
-  ;; A negative number.
-  ;; (make-timestamp)
-  (set! diff-a (overdue-time a))
-  (set! diff-b (overdue-time b))
-  (cond ((not (or diff-a diff-b))
+  (set! diff-a (and da (float-time (time-subtract da now))))
+  (set! diff-b (and db (float-time (time-subtract db now))))
+  (cond ((or (and (not diff-a) (not diff-b))
+             (and diff-a (oo-positive-p diff-a) (not diff-b))
+             (and (not diff-a) diff-b (oo-positive-p diff-b))
+             (and diff-a diff-b (oo-positive-p diff-a) (oo-positive-p diff-b))
+             (and diff-a diff-b (= diff-a diff-b)))
          0)
-        ((and diff-a (not diff-b))
+        ((and diff-a (oo-negative-p diff-a) (not diff-b))
          1)
-        ((and diff-b (not diff-a))
+        ((and (not diff-a) diff-b (oo-negative-p diff-b))
          -1)
-        ;; When the deadline has not passed prefer the element closest to the
-        ;; deadline--which is the lesser one.
-        ((and (> diff-a 0) (> diff-b 0) (< diff-a diff-b))
+        ((and (oo-negative-p diff-a) (oo-positive-p diff-b))
          1)
-        ((and (> diff-a 0) (> diff-b 0) (> diff-a diff-b))
+        ((and (oo-positive-p diff-a) (oo-negative-p diff-b))
          -1)
-        ;; When either one of the deadlines has passed.
-        ((and (< diff-a 0) (> diff-b 0))
+        ((and (oo-negative-p diff-a) (oo-negative-p diff-b) (/= diff-a diff-b))
+         (if (> diff-a diff-b) 1 -1))))
+
+(defun +org-agenda-has-deadline-comparator (a b)
+  (set! da (with-entry! a (org-get-deadline-time (point))))
+  (set! db (with-entry! b (org-get-deadline-time (point))))
+  (cond ((and da (not db)) 1)
+        ((and (not da) db) -1)
+        (t 0)))
+;;;;;; closest deadline comparator
+(defun +org-agenda-closest-deadline-comparator (a b)
+  "Prioritize entries with the closest non-overdue deadline.
+This assumes that an entry with a non-overdue deadline is always closer than one
+with no deadline."
+  (set! da (with-entry! a (org-get-deadline-time (point))))
+  (set! db (with-entry! b (org-get-deadline-time (point))))
+  (set! now (current-time))
+  (set! diff-a (and da (float-time (time-subtract da now))))
+  (set! diff-b (and db (float-time (time-subtract db now))))
+  (cond ((and diff-a (oo-positive-p diff-a) (not diff-b))
          1)
-        ((and (> diff-a 0) (< diff-b 0))
+        ((and diff-b (oo-positive-p diff-b) (not diff-a))
          -1)
-        ;; Both of the deadlines have passed.
-        ((and (< diff-a 0) (< diff-b 0) (< (abs a) (abs b)))
+        ((and diff-a diff-b (oo-positive-p diff-a) (oo-positive-p diff-b))
+         (if (< diff-a diff-b) 1 (if (> diff-a diff-b) -1 0)))
+        ((and diff-a (oo-positive-p diff-a) diff-b (oo-negative-p diff-b))
          1)
-        ((and (< diff-a 0) (< diff-b 0) (> (abs a) (abs b)))
+        ((and diff-b (oo-positive-p diff-b) diff-a (oo-negative-p diff-a))
          -1)
         (t
          0)))
-;;;;; ID comparator
+;;;;;; timestamp ID comparator
 ;; I am ignoring the microseconds.  I should not be making capture templates
 ;; within microseconds of each other.  I got this function from chatgpt.
 (defun +org-id-to-time (org-id)
@@ -157,10 +167,6 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
          (second (string-to-number (substring time-str 4 6))))
     (encode-time second minute hour day month year)))
 
-(defun! +org-agenda-entry-id (entry)
-  "Return ID corresponding to entry."
-  (+org-agenda-call-at-entry entry #'org-id-get))
-
 ;; The sort function accepts two entries and by entries the manual means
 ;; propertized strings.  These strings have references to the headline it refers to.
 (defun! +org-agenda-tsid-comparator (a b)
@@ -169,14 +175,41 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
             (time-b (with-entry! b (org-id-get)))
             (id-a (+org-id-to-time time-a))
             (id-b (+org-id-to-time time-b)))
-      (if (time-less-p id-a id-b) -1 1)
+      (if (time-less-p id-a id-b) 1 -1)
     0))
-;;;;; dealing with composite tasks
-(defun +org-agenda--filter-parents-with-undone-children (entry)
-  (when (not (+org-agenda-call-at-entry entry #'+org-has-tasks-to-be-done))
-    entry))
+;;;;; replace `org-agenda-sorting-strategy'
+;; The mechanism for adding your own sorting to org-agenda provided via
+;; `org-agenda-sorting-strategy' assumes the user would only ever want to add
+;; just one additional sorting strategy.  It is design makes it inconvenient to
+;; add more sorters.  I have decided to scrap the default sorters and use my
+;; own.
+(defun! +org-agenda-main-comparator (a b)
+  "Return whether entry A should be ordered before entry B."
+  (set! comparators +org-agenda-comparators)
+  (while comparators
+    (set! comparator (pop comparators))
+    (set! result (funcall comparator a b))
+    (unless (zerop result)
+      (return! result)))
+  0)
 
-;; For now hard-code whether done.
+(setq org-agenda-cmp-user-defined #'+org-agenda-main-comparator)
+
+(defvar +org-agenda-comparators nil
+  "Comparators used for sorting org agenda.
+This is a more flexible replacement for `org-agenda-sorting-strategy'.")
+
+(setq +org-agenda-comparators '(
+                                ;; +org-agenda-overdue-deadline-comparator
+                                +org-agenda-priority-comparator
+                                +org-agenda-closest-deadline-comparator
+                                +org-agenda-tag-comparator
+                                +org-agenda-effort-comparator
+                                +org-agenda-tsid-comparator))
+;;;;; dealing with composite tasks
+;; Composite tasks are entries that contain one or more subtasks.  These are
+;; created when.  They have certain props.
+
 (defun! +org-has-tasks-to-be-done ()
   "Return non-nil if current headline has any subtasks that need to be done."
   (interactive)
@@ -190,10 +223,39 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
       (while (org-goto-sibling)
         (when (not-done-p)
           (return! t))))))
+
+(defun +org-agenda--filter-parents-with-undone-children (entry)
+  (when (not (+org-agenda-call-at-entry entry #'+org-has-tasks-to-be-done))
+    entry))
+;;;;; miscellaneous
+;; A task is overdue if the deadline of the task is past the current time.
+(defun +org-overdue-entry-p (entry)
+  "Return non-nil if entry is overdue."
+  (with-entry! entry
+    (aand (org-get-deadline-time (point))
+          (< (float-time (time-subtract it (current-time))) 0))))
+
+(defun +org-agenda--agenda-filter (entry)
+  (if (and (get-text-property 0 'org-marker entry)
+           (+org-overdue-entry-p entry))
+      nil
+    entry))
+
+(defun! +org-agenda--overdue-string ()
+  "Return string indicating deadline status."
+  (set! now (current-time))
+  (or (aand (org-get-deadline-time (point))
+            (< (float-time (time-subtract it now)) 0)
+            "OVERDUE\s")
+      ""))
 ;;;; views
 ;; The main view is the day view.
 ;; Overdue items are first, then items with high priority, then items with low
 ;; effort, and then items that were created first.
+
+;; effort-up -> prioritize headlines that have an effort from "easiest" to
+;; "hardest"--or lowest effort to highest.
+;; priority-down -> order headlines from the highest priority to the lowest
 (defun +org-agenda-day-view ()
   "Day agenda."
   (interactive)
@@ -206,7 +268,7 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
              (agenda "" ((org-agenda-overriding-header "\nSchedule")
                          (org-agenda-start-on-weekday nil)
                          ;; Do not show overdue items in agenda.  Overdue items
-                         ;; are displaed akwardly at the end of the agenda which
+                         ;; are displaced awkwardly at the end of the agenda which
                          ;; is confusing because I am thinking they are at the
                          ;; end of the day.  ID rather have them in the TODO
                          ;; section or their own dedicated section.
