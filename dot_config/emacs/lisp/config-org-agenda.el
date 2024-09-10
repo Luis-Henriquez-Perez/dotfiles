@@ -63,34 +63,7 @@
   (with-current-buffer (marker-buffer marker)
     (goto-char (marker-position marker))
     (funcall fn)))
-;;;;; setup sorting
-;; I do not use timestamps, instead I have time-based IDs.
-(setq org-agenda-cmp-user-defined #'+org-agenda-main-comparator)
 
-(setq +org-agenda-comparators '(+org-agenda-overdue-comparator +org-agenda-tsid-comparator))
-
-(defvar +org-agenda-comparators nil
-  "Comparators used for sorting org agenda.")
-
-(defun! +org-agenda-main-comparator (a b)
-  "Return whether A should be ordered before B."
-  (set! user-sorters +org-agenda-comparators)
-  (while user-sorters
-    (set! sorter (pop user-sorters))
-    (set! result (funcall sorter a b))
-    (unless (zerop result)
-      (return! result)))
-  0)
-;;;;; tag comparator
-(defun! +org-agenda-tag-comparator (a b)
-  "Compare two entries A and B based on their tags."
-  (set! tag-weights '(("blog" . 2) ("emacs" . 1)))
-  (funcall (-on #'> #'+org-agenda--tag-weights) a b)
-  (if (> (+org-agenda--tag-weights a)) -1 1)
-  (cond ((> weights-a weights-b) 1)
-        ((< weights-a weights-b) -1)
-        (t 0)))
-;;;;; overdue deadline comparator
 (defmacro with-entry! (entry &rest body)
   (declare (indent 1))
   (cl-with-gensyms (e marker)

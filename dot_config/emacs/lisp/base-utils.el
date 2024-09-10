@@ -153,6 +153,22 @@ must be evaluated with `lexical-binding' enabled."
   (let (success)
     (--each-while list (not (setq success (funcall fn it))))
     success))
+;;;; numbers
+(defsubst oo-negative-p (number)
+  "Return non-nil if NUMBER is less than zero."
+  (< number 0))
+
+(defsubst oo-positive-p (number)
+  "Return non-nil if NUMBER is greater than zero."
+  (> number 0))
+;;;; other
+(defun oo-alist (&rest args)
+  "Create an alist from ARGS.
+Odd elements of ARGS are the keys, even elements are the values."
+  (let (alist)
+    (while args
+      (push (cons (pop args) (pop args)) alist))
+    (setq alist (nreverse alist))))
 ;;; provide
 (provide 'base-utils)
 ;;; base-utils.el ends here
