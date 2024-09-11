@@ -33,6 +33,7 @@
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
+                          (sequence "BUY" "BOUGHT")
                           (sequence "DECIDE" "DECIDED")))
 
 (opt! org-src-fontify-natively t)
