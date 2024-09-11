@@ -44,6 +44,8 @@
 (opt! org-default-priority ?C)
 (opt! org-enforce-todo-dependencies t)
 (opt! org-tags-column 0)
+(opt! org-archive-location (format "%s::" (expand-file-name "archive.org" org-directory)))
+(opt! org-archive-mark-done t)
 
 (require! config-org)
 ;;;; org-agenda
