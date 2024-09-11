@@ -43,6 +43,8 @@
 (opt! org-default-priority ?C)
 (opt! org-enforce-todo-dependencies t)
 (opt! org-tags-column 0)
+
+(require! config-org)
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
