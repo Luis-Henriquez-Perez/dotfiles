@@ -88,7 +88,7 @@ Return -1 if priority B is greater than priority A.  Otherwise, if return 0."
 ;;;;;; tag comparator
 (defun! +org-agenda-tag-comparator (a b)
   "Compare two entries A and B based on their tags."
-  (set! tag-weights '(("blog" . 2) ("emacs" . 1)))
+  (set! tag-weights '(("job" . 2) ("blog" . 1) ("emacs" . 0)))
   (flet! weight (tag)
     (alist-get (substring-no-properties tag) tag-weights 0 nil #'equal))
   (set! weight-a (-sum (mapcar #'weight (get-text-property 0 'tags a))))
@@ -276,7 +276,8 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
                          (org-scheduled-past-days 0)
                          (org-deadline-warning-days 0)
                          (org-agenda-span 1)))
-             (todo "DONE" ((org-agenda-overriding-header "\nDone")
+             (todo "DONE" ((org-agenda-files (list (f-expand "archive.org" org-directory)))
+                           (org-agenda-overriding-header "\nDone")
                            (org-agenda-max-entries 5))))))))
     (org-agenda nil "_")))
 ;;; provide
