@@ -69,6 +69,9 @@
 (alt! org-capture +org-capture-choose-template org-capture)
 (autoload #'+org-capture-choose-template "config-org-capture" nil t 'function)
 (require! config-org-capture)
+
+(bind! n org-mode-map "T" #'org-todo)
+(bind! n org-mode-map "t" #'+org-choose-tags)
 ;;;; org-refile
 (opt! org-refile-allow-creating-parent-nodes t)
 ;; The variable =org-refile-targets= specifies the places from which information is
