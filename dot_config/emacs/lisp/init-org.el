@@ -28,7 +28,7 @@
 ;;;; requirements
 (require 'base)
 ;;;; general
-(opt! org-default-notes-file (make-temp-file "emacs-org-notes-")) ; send it to oblivion
+(opt! org-default-notes-file (make-temp-file "emacs-org-notes-"))
 (opt! org-directory (f-full "~/Documents/org/"))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
@@ -46,8 +46,15 @@
 (opt! org-tags-column 0)
 (opt! org-archive-location (format "%s::" (expand-file-name "archive.org" org-directory)))
 (opt! org-archive-mark-done t)
+(opt! org-global-properties `(("Effort_ALL"
+                               ,(string-join (-map (-partial #'format "0:%.2d")
+                                                   (number-sequence 5 55 5))
+                                             "\s"))))
 
 (require! config-org)
+;;;; keybindings
+(bind! n org-mode-map "T" #'org-todo)
+(bind! n org-mode-map "t" #'+org-choose-tags)
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
@@ -59,6 +66,8 @@
 (autoload #'+org-capture-open "config-org-capture" nil t 'function)
 (autoload #'+org-capture-question "config-org-capture" nil t 'function)
 (autoload #'+org-capture-bug "config-org-capture" nil t 'function)
+(autoload #'+org-capture-choose-template "config-org-capture" nil t 'function)
+
 (bind! oo-app-map "a a" #'+org-capture-plain)
 (bind! oo-app-map "a p" #'+org-capture-plain)
 (bind! oo-app-map "a s" #'+org-capture-todo)
@@ -70,21 +79,17 @@
 (bind! oo-app-map "a ;" #'+org-capture-question)
 (bind! oo-app-map "a q" #'+org-capture-question)
 (alt! org-capture +org-capture-choose-template org-capture)
-(autoload #'+org-capture-choose-template "config-org-capture" nil t 'function)
 (require! config-org-capture)
-
-(bind! n org-mode-map "T" #'org-todo)
-(bind! n org-mode-map "t" #'+org-choose-tags)
 ;;;; org-refile
 (opt! org-refile-allow-creating-parent-nodes t)
-;; The variable =org-refile-targets= specifies the places from which information is
-;; taken to create the list of possible refile targets.  So, for example,
+;; The variable =org-refile-targets= specifies the places from which information
+;; is taken to create the list of possible refile targets.  So, for example,
 (opt! org-refile-targets '((oo-directory-files :maxlevel . 10)))
 (opt! org-outline-path-complete-in-steps nil)
 (opt! org-refile-use-cache nil)
-;; Without this setting, you can't actually refile to a generic file with refiling;
-;; you can only refile to existing headings within that file.  The way I use
-;; refiling, I'm refiling to files most of the time.
+;; Without this setting, you can't actually refile to a generic file with
+;; refiling; you can only refile to existing headings within that file.  The way
+;; I use refiling, I'm refiling to files most of the time.
 (opt! org-refile-use-outline-path 'file)
 ;; Although it is possible to have a parent headline that also has a source
 ;; block, I prefer not to.  I guess it is a stylistic thing.

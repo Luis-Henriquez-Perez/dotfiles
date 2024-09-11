@@ -32,6 +32,9 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "hg"       "heading"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "hl"       "headline"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "ahs"       "has"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "iwb"       "it would be"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "sba"       "should be a"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "sb"       "should be"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
@@ -911,7 +914,7 @@
 (define-abbrev global-abbrev-table "incs"           "increase"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "decs"           "deccrease"                     nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 ;; TODO: Add a condition preventng it from expanding if I am writing a file path.
-(define-abbrev global-abbrev-table "config"         "configuration"                 nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "configg"         "configuration"                 nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "obvl"            "obviously"                     nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "obv"            "obvious"                     nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "appr"           "appropriate"                   nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
