@@ -38,7 +38,7 @@
 (setq org-agenda-prefix-format
       '((agenda . " %i %?-12t")
         ;; Remove the category displayed on the left of entries.
-        (todo   . " ")
+        (todo   . " %(+org-agenda--overdue-string)")
         (tags   . " ")
         (search . " %i %-12:c")))
 
@@ -262,7 +262,6 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
          `(("_" "Daily Agenda"
             ((todo "TODO" ((org-agenda-overriding-header "\nTODO")
                            (org-agenda-sorting-strategy '(user-defined-down))
-                           (org-agenda-prefix-format '((todo . " %(+org-agenda--overdue-string)")))
                            ;; (org-agenda-before-sorting-filter-function #'+org-agenda--filter-parents-with-undone-children)
                            (org-agenda-max-entries 5)))
              (agenda "" ((org-agenda-overriding-header "\nSchedule")
