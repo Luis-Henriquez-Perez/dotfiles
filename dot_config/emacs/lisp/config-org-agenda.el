@@ -177,6 +177,18 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
             (id-b (+org-id-to-time time-b)))
       (if (time-less-p id-a id-b) 1 -1)
     0))
+;;;;;; STARTED comparator
+;; I should prefer entries that have already been started.
+(defun! +org-agenda-started-comparator (a b)
+  "Prefer entries that have a \"STARTED\" TODO keyword."
+  (flet! started-p (entry)
+    (equal "STARTED" (substring-no-properties (+org-agenda-call-at-entry (org-get-todo-state)))))
+  (cond ((and (not (started-p a)) (not (started-p b)))
+         0)
+        ((and (started-p a) (not (started-p b)))
+         1)
+        ((and (not (started-p a)) (started-p b))
+         -1)))
 ;;;;; replace `org-agenda-sorting-strategy'
 ;; The mechanism for adding your own sorting to org-agenda provided via
 ;; `org-agenda-sorting-strategy' assumes the user would only ever want to add
