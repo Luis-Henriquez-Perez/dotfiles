@@ -246,10 +246,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 (defun! +org-agenda--overdue-string ()
   "Return string indicating deadline status."
   (set! now (current-time))
-  (or (aand (org-get-deadline-time (point))
-            (< (float-time (time-subtract it now)) 0)
-            "OVERDUE\s")
-      ""))
+  (if (+org-overdue-p) "OVERDUE\s" ""))
 ;;;; views
 ;; The main view is the day view.
 ;; Overdue items are first, then items with high priority, then items with low
