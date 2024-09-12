@@ -146,6 +146,7 @@
 (elpaca org-tidy)
 (elpaca orglink)
 (elpaca (outli :fetcher github :repo "jdtsmith/outli"))
+(elpaca password-store)
 (elpaca pcre2el)
 (elpaca polymode)
 (elpaca rainbow-delimiters)
