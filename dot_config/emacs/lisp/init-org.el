@@ -31,7 +31,7 @@
 (opt! org-default-notes-file (make-temp-file "emacs-org-notes-"))
 (opt! org-directory (f-full "~/Documents/org/"))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
-(opt! org-todo-keywords '((sequence "TODO" "DONE")
+(opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h@)" "|" "DONE")
                           (sequence "BUG" "FIXED")
                           (sequence "BUY" "BOUGHT")))
 (opt! org-src-fontify-natively t)
