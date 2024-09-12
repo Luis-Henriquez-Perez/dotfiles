@@ -28,8 +28,6 @@
 ;; https://emacs.stackexchange.com/questions/57677/how-to-set-effort-all-globally
 (add-to-list 'org-modules 'org-habit :append)
 ;; (string-join (--map (format "0:%.2d" it) (number-sequence 5 55 5)) "\s")
-(opt! org-global-properties
-      (list (cons "Effort_ALL"  "0:05 0:10 0:15 0:20 0:25 0:30 0:35 0:40 0:45 0:50 0:55")))
 
 (defun! +org-choose-tags ()
   "Choose tags to add to current headline.
