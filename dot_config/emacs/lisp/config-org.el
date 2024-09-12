@@ -48,6 +48,11 @@ in alphabetical order."
     (alet (org-ml-get-property :tags headline)
       (org-ml-set-property :tags (-sort #'string< it) headline)))
   (org-ml-do-headlines #'fn))
+
+(defadvice! suppress-window-deletion (around org-capture orig-fn &rest args)
+  "Suppress window deletion."
+  (nflet! delete-other-windows #'ignore)
+  (apply orig-fn args))
 ;;; provide
 (provide 'config-org)
 ;;; config-org.el ends here
