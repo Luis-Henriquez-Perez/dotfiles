@@ -67,8 +67,8 @@
 (defmacro with-entry! (entry &rest body)
   (declare (indent 1))
   (cl-with-gensyms (e marker)
-    `(let* ((,e ,entry)
-            (,marker (get-text-property 0 'org-marker ,e)))
+    `(when-let* ((,e ,entry)
+                 (,marker (get-text-property 0 'org-marker ,e)))
        (unless ,marker (error "Entry: %S" ,e))
        (with-current-buffer (marker-buffer ,marker)
          (goto-char (marker-position ,marker))
@@ -229,17 +229,17 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
     entry))
 ;;;;; miscellaneous
 ;; A task is overdue if the deadline of the task is past the current time.
-(defun +org-overdue-entry-p (entry)
+(defun +org-overdue-p ()
   "Return non-nil if entry is overdue."
-  (with-entry! entry
-    (aand (org-get-deadline-time (point))
-          (< (float-time (time-subtract it (current-time))) 0))))
+  (aand (org-get-deadline-time (point))
+        (< (float-time (time-subtract it (current-time))) 0)
+        (not (org-entry-is-done-p))))
 
 (defun +org-agenda--agenda-filter (entry)
   "Do not show overdue or done entries."
-  (if (and (get-text-property 0 'org-marker entry)
-           (or (+org-overdue-entry-p entry)
-               (+org-agenda-call-at-entry entry #'org-entry-is-done-p)))
+  (if (with-entry! entry
+        (or (+org-overdue-p)
+            (org-entry-is-done-p)))
       nil
     entry))
 
