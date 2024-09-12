@@ -271,10 +271,12 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
   (interactive)
   (let ((org-agenda-custom-commands
          `(("_" "Daily Agenda"
-            ((todo "TODO" ((org-agenda-overriding-header "\nTODO")
-                           (org-agenda-sorting-strategy '(user-defined-down))
-                           ;; (org-agenda-before-sorting-filter-function #'+org-agenda--filter-parents-with-undone-children)
-                           (org-agenda-max-entries 5)))
+            ((tags "TODO=\"STARTED\"|TODO=\"TODO\""
+                   ((org-agenda-overriding-header "\nTODO")
+                    (org-agenda-sorting-strategy '(user-defined-down))
+                    ;; (org-agenda-before-sorting-filter-function #'+org-agenda--filter-parents-with-undone-children)
+                    (org-agenda-max-entries 5)))
+             (todo "ON-HOLD" ((org-agenda-overriding-header "\nON-HOLD")))
              (agenda "" ((org-agenda-overriding-header "\nSchedule")
                          (org-agenda-start-on-weekday nil)
                          ;; Do not show overdue items in agenda.  Overdue items
