@@ -34,7 +34,6 @@
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
                           (sequence "BUY" "BOUGHT")))
-
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 (opt! org-log-done 'note)
