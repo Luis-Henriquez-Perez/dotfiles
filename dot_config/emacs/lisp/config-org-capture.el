@@ -112,29 +112,33 @@ make a new one."
   (interactive)
   (org-capture nil "q"))
 
+(defun +org-capture--refile ()
+  (org-back-to-heading)
+  (call-interactively #'org-refile))
+
 (setq org-capture-templates
-      (append (doct (list (list "todo"
-                                :prepend t
+      (append (doct (list (list "subtask"
+                                :keys "s"
+                                :prepare-hook #'+org-capture-file
+                                :file #'+org-capture-file
+                                :template #'+org-capture-todo-template)))
+              (doct (list (list "todo"
                                 :keys "t"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-todo-template)))
               (doct (list (list "open"
-                                :prepend t
                                 :keys "o"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-open-template)))
               (doct (list (list "bug"
-                                :prepend t
                                 :keys "b"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-bug-template)))
               (doct (list (list "question"
-                                :prepend t
                                 :keys "q"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-question-template)))
               (doct (list (list "plain"
-                                :prepend t
                                 :keys "p"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-plain-template)))))
