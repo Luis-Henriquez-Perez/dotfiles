@@ -236,8 +236,10 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
           (< (float-time (time-subtract it (current-time))) 0))))
 
 (defun +org-agenda--agenda-filter (entry)
+  "Do not show overdue or done entries."
   (if (and (get-text-property 0 'org-marker entry)
-           (+org-overdue-entry-p entry))
+           (or (+org-overdue-entry-p entry)
+               (+org-agenda-call-at-entry entry #'org-entry-is-done-p)))
       nil
     entry))
 
