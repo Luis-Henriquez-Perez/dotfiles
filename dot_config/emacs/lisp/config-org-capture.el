@@ -53,7 +53,7 @@
   "Return the file to be used for capturing.
 Progressively try to see if a notes file exists if the current one is too big
 make a new one."
-  (f-full (f-expand "notes.org" org-directory)))
+  (f-full (f-expand "inbox.org" org-directory)))
 ;;;; main capture template
 (defun +org-planning ()
   "Return a timestamp."
