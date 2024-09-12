@@ -30,7 +30,7 @@
 ;;;; settings
 (setq org-agenda-files `(,org-directory))
 (setq org-agenda-span 'week)
-(setq org-agenda-start-on-weekday 1)  ; Monday
+(setq org-agenda-start-on-weekday 1)
 (setq org-agenda-confirm-kill t)
 (setq org-agenda-show-all-dates t)
 (setq org-agenda-show-outline-path nil)
