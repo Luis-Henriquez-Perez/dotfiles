@@ -257,7 +257,6 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 
 (defun! +org-agenda--overdue-string ()
   "Return string indicating deadline status."
-  (set! now (current-time))
   (if (+org-overdue-p) "OVERDUE\s" ""))
 ;;;; views
 ;; The main view is the day view.
