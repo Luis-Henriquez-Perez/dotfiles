@@ -40,6 +40,14 @@ in alphabetical order."
   (set! selected (completing-read-multiple "Choose tag: " all))
   (set! new (append (-difference selected current) (-difference current selected)))
   (org-set-tags (-sort #'string< new)))
+
+(defun! +org-alphabetize-tags ()
+  "Alphabetize tags in current buffer."
+  (interactive)
+  (flet! fn (headline)
+    (alet (org-ml-get-property :tags headline)
+      (org-ml-set-property :tags (-sort #'string< it) headline)))
+  (org-ml-do-headlines #'fn))
 ;;; provide
 (provide 'config-org)
 ;;; config-org.el ends here

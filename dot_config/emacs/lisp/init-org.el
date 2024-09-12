@@ -33,8 +33,7 @@
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO" "DONE")
                           (sequence "BUG" "FIXED")
-                          (sequence "BUY" "BOUGHT")
-                          (sequence "DECIDE" "DECIDED")))
+                          (sequence "BUY" "BOUGHT")))
 
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
@@ -58,7 +57,6 @@
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
-(autoload #'+org-agenda-emacs-view "config-org-agenda" nil t nil)
 (bind! oo-leader-map ";" #'+org-agenda-day-view)
 ;;;; org-capture
 (autoload #'+org-capture-plain "config-org-capture" nil t 'function)
@@ -68,6 +66,8 @@
 (autoload #'+org-capture-bug "config-org-capture" nil t 'function)
 (autoload #'+org-capture-choose-template "config-org-capture" nil t 'function)
 
+(bind! oo-app-map "c" #'org-capture)
+(bind! oo-app-map "a c" #'org-capture)
 (bind! oo-app-map "a a" #'+org-capture-plain)
 (bind! oo-app-map "a p" #'+org-capture-plain)
 (bind! oo-app-map "a s" #'+org-capture-todo)
@@ -78,6 +78,7 @@
 (bind! oo-app-map "a o" #'+org-capture-open)
 (bind! oo-app-map "a ;" #'+org-capture-question)
 (bind! oo-app-map "a q" #'+org-capture-question)
+
 (alt! org-capture +org-capture-choose-template org-capture)
 (require! config-org-capture)
 ;;;; org-refile
@@ -106,7 +107,7 @@
 (opt! org-src-window-setup 'plain)
 ;;;; org-superstar
 (hook! org-mode-hook org-superstar-mode)
-;; (opt! org-superstar-headline-bullets-list '("✖" "✚" "▶" "◉" "○"))
+
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items t)
 ;;; provide
