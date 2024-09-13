@@ -26,8 +26,7 @@
 ;;
 ;;; Code:
 (require 'base)
-
-(opt! notmuch-sort-oldest-first nil)
+(opt! notmuch-search-oldest-first nil)
 
 (bind! oo-app-map "n" #'notmuch)
 ;;; provide
