@@ -66,8 +66,9 @@ make a new one."
   "Return template string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
-       (org-ml-headline-set-planning (+org-planning))
+       ;; (org-ml-headline-set-planning (+org-planning))
        (org-ml-headline-set-node-property "ID" (org-id-new))
+       (org-ml-headline-set-node-property "Effort" "0:05")
        (org-ml-to-string)))
 
 (defun +org-capture-plain-template ()
@@ -79,10 +80,6 @@ make a new one."
 (defun +org-capture-todo-template ()
   "Return the TODO capture template as a string."
   (+org-capture--todo-template "TODO"))
-
-(defun +org-capture-open-template ()
-  "Return the OPEN capture template as a string."
-  (+org-capture--todo-template "OPEN"))
 
 (defun +org-capture-bug-template ()
   "Return the BUG capture template as a string."
@@ -100,10 +97,6 @@ make a new one."
   (interactive)
   (org-capture nil "t"))
 
-(defun +org-capture-open ()
-  (interactive)
-  (org-capture nil "o"))
-
 (defun +org-capture-bug ()
   (interactive)
   (org-capture nil "b"))
@@ -117,19 +110,10 @@ make a new one."
   (call-interactively #'org-refile))
 
 (setq org-capture-templates
-      (append (doct (list (list "subtask"
-                                :keys "s"
-                                :prepare-hook #'+org-capture-file
-                                :file #'+org-capture-file
-                                :template #'+org-capture-todo-template)))
-              (doct (list (list "todo"
+      (append (doct (list (list "todo"
                                 :keys "t"
                                 :file #'+org-capture-file
                                 :template #'+org-capture-todo-template)))
-              (doct (list (list "open"
-                                :keys "o"
-                                :file #'+org-capture-file
-                                :template #'+org-capture-open-template)))
               (doct (list (list "bug"
                                 :keys "b"
                                 :file #'+org-capture-file
