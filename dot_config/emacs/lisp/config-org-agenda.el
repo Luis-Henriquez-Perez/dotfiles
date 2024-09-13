@@ -181,14 +181,13 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
 ;; I should prefer entries that have already been started.
 (defun! +org-agenda-started-comparator (a b)
   "Prefer entries that have a \"STARTED\" TODO keyword."
-  (flet! started-p (entry)
-    (equal "STARTED" (substring-no-properties (+org-agenda-call-at-entry (org-get-todo-state)))))
-  (cond ((and (not (started-p a)) (not (started-p b)))
-         0)
-        ((and (started-p a) (not (started-p b)))
-         1)
-        ((and (not (started-p a)) (started-p b))
-         -1)))
+  (flet! started-or-not (entry)
+    (if (equal "STARTED" (with-entry! entry (org-get-todo-state))) "STARTED" ""))
+  (pcase (mapcar #'started-or-not (list a b))
+    (`("" "") 0)
+    (`("STARTED" "") 1)
+    (`("" "STARTED") -1)
+    (`("STARTED" "STARTED") 0)))
 ;;;;; replace `org-agenda-sorting-strategy'
 ;; The mechanism for adding your own sorting to org-agenda provided via
 ;; `org-agenda-sorting-strategy' assumes the user would only ever want to add
@@ -257,7 +256,17 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 
 (defun! +org-agenda--overdue-string ()
   "Return string indicating deadline status."
-  (if (+org-overdue-p) "OVERDUE\s" ""))
+  (awhen (org-get-deadline-time (point))
+    (set! now (ts-now))
+    (set! deadline-time (make-ts :unix (float-time it)))
+    (unless (ts> now deadline-time)
+      (return! ""))
+    (set! overdue-time (ts-difference now deadline-time))
+    (set! plist (ts-human-duration overdue-time))
+    (dolist (key (map-keys plist))
+      (unless (zerop (set! n (plist-get plist key)))
+        (return! (format "%d %s overdue " n (intern (seq-rest (symbol-name key))))))))
+  "")
 ;;;; views
 ;; The main view is the day view.
 ;; Overdue items are first, then items with high priority, then items with low
