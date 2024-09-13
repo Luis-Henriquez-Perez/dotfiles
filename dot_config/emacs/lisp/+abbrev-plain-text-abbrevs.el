@@ -32,6 +32,12 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "david"       "David"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "workflwo"       "workflow"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "amnt"       "amount"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "gtd"       "GTD"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "whatd"       "what would"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "watd"       "what would"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "aot"       "any of these"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "imn"       "I am not"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "honl"       "honestly"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
