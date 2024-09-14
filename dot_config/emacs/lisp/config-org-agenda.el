@@ -80,7 +80,7 @@
   "Return 1 if A requires less effort than B.
 If B requires more effort than A, return -1.  Otherwise, return 0."
   (* -1 (or (org-cmp-effort a b) 0)))
-;;;;;; priority
+;;;;;; priority comparator
 (defun! +org-agenda-priority-comparator (a b)
   "Return 1 if priority A is greater than priority B.
 Return -1 if priority B is greater than priority A.  Otherwise, if return 0."
@@ -96,6 +96,7 @@ Return -1 if priority B is greater than priority A.  Otherwise, if return 0."
   (cond ((> weight-a weight-b) 1)
         ((< weight-a weight-b) -1)
         (t 0)))
+;;;;;; schedule comparator
 ;;;;;; overdue deadline comparator
 (defun! +org-agenda-overdue-deadline-comparator (a b)
   "Return 1 if A is more overdue than B.
@@ -121,7 +122,7 @@ Return -1 if B is more overdue than A.  Otherwise return 0."
          -1)
         ((and (oo-negative-p diff-a) (oo-negative-p diff-b) (/= diff-a diff-b))
          (if (> diff-a diff-b) 1 -1))))
-
+;;;;;; deadline comparator
 (defun +org-agenda-has-deadline-comparator (a b)
   (set! da (with-entry! a (org-get-deadline-time (point))))
   (set! db (with-entry! b (org-get-deadline-time (point))))
