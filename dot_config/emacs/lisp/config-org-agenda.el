@@ -27,6 +27,7 @@
 ;;; Code:
 ;;;; requirements
 (require 'org-agenda)
+(require 'ts)
 ;;;; settings
 (setq org-agenda-files `(,org-directory))
 (setq org-agenda-span 'week)
