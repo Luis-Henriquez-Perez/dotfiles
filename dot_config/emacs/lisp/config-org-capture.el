@@ -48,12 +48,9 @@
   (if key
       (org-capture nil key)
     (error "No capture template corresponding to %S" choosen)))
-;;;; org-capture-file
-(defun! +org-capture-file ()
-  "Return the file to be used for capturing.
-Progressively try to see if a notes file exists if the current one is too big
-make a new one."
-  (f-full (f-expand "inbox.org" org-directory)))
+;;;; +org-todo-file
+(defvar +org-todo-file (f-full (f-expand "todo.org" org-directory))
+  "Return the file to be used for capturing TODOs.")
 ;;;; main capture template
 (defun +org-planning ()
   "Return a timestamp."
@@ -66,7 +63,6 @@ make a new one."
   "Return template string."
   (require 'org-ml)
   (->> (org-ml-build-headline! :level 1 :todo-keyword todo-keyword :title-text "%?")
-       ;; (org-ml-headline-set-planning (+org-planning))
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-headline-set-node-property "Effort" "0:05")
        (org-ml-to-string)))
@@ -112,19 +108,19 @@ make a new one."
 (setq org-capture-templates
       (append (doct (list (list "todo"
                                 :keys "t"
-                                :file #'+org-capture-file
+                                :file +org-todo-file
                                 :template #'+org-capture-todo-template)))
               (doct (list (list "bug"
                                 :keys "b"
-                                :file #'+org-capture-file
+                                :file +org-todo-file
                                 :template #'+org-capture-bug-template)))
               (doct (list (list "question"
                                 :keys "q"
-                                :file #'+org-capture-file
+                                :file +org-todo-file
                                 :template #'+org-capture-question-template)))
               (doct (list (list "plain"
                                 :keys "p"
-                                :file #'+org-capture-file
+                                :file org-default-notes-file
                                 :template #'+org-capture-plain-template)))))
 ;;; provide
 (provide 'config-org-capture)
