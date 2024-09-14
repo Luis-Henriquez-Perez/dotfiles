@@ -119,6 +119,16 @@
 
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items t)
+;;;; org-id
+(opt! org-id-track-globally t)
+(opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
+
+;; The way I see it, if I can have a universally unique identifier that also tells
+;; me the date my headline was created; we hit two birds with one stone.  That way I
+;; never need a =date-created= property.
+(opt! org-id-method 'ts)
+
+(opt! org-id-link-to-org-use-id t)
 ;;; provide
 (provide 'init-org)
 ;;; init-org.el ends here
