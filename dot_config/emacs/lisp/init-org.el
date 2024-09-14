@@ -28,13 +28,12 @@
 ;;;; requirements
 (require 'base)
 ;;;; general
-(opt! org-default-notes-file (make-temp-file "emacs-org-notes-"))
 (opt! org-directory (f-full "~/Documents/org/"))
+(opt! org-default-notes-file (f-expand "notes.org" org-directory))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
-(opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h@)" "|"
-                                    "DONE(d)" "CANCELLED(c)")
-                          (sequence "BUG" "FIXED")
-                          (sequence "BUY" "BOUGHT")))
+(opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h@)"
+                                    "BLOCKED(b)" "COOLDOWN(o)" "|" "DONE(d)"
+                                    "CANCELLED(c)")))
 (opt! org-src-fontify-natively t)
 (opt! org-hide-emphasis-markers t)
 (opt! org-log-done 'note)
@@ -83,10 +82,14 @@
 (alt! org-capture +org-capture-choose-template org-capture)
 (require! config-org-capture)
 ;;;; org-refile
+(defun +org-directory-files ()
+  "Return a list of org files."
+  (directory-files org-directory t "\\.org\\'"))
+
 (opt! org-refile-allow-creating-parent-nodes t)
 ;; The variable =org-refile-targets= specifies the places from which information
 ;; is taken to create the list of possible refile targets.  So, for example,
-(opt! org-refile-targets '((oo-directory-files :maxlevel . 10)))
+(opt! org-refile-targets '((+org-directory-files :maxlevel . 10)))
 (opt! org-outline-path-complete-in-steps nil)
 (opt! org-refile-use-cache nil)
 ;; Without this setting, you can't actually refile to a generic file with
@@ -106,6 +109,11 @@
 (opt! org-src-preserve-indentation t)
 (opt! org-edit-src-content-indentation 0)
 (opt! org-src-window-setup 'plain)
+;;;; org-clock
+;; TODO: do not load org-clock on `org-mode-hook'.
+(hook! org-mode-hook org-clock-persistence-insinuate)
+(opt! org-clock-persist t)
+(opt! org-clock-sound (f-full "~/Downloads/ding-101492.wav"))
 ;;;; org-superstar
 (hook! org-mode-hook org-superstar-mode)
 
