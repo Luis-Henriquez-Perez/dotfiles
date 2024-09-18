@@ -87,6 +87,8 @@
 (define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-enable-elisp-abbrevs-p)
 
 
+(define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+
 (define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
 
 (define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)

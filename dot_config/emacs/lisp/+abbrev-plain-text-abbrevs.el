@@ -32,6 +32,8 @@
 (require '+abbrev-enable-functions)
 (require '+abbrev-wikipedia-typo-abbrevs)
 
+(define-abbrev global-abbrev-table "itme"       "item"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "io"       "instead of"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "menaul"       "manual"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "entr"       "entry"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "das"       "days"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
@@ -1003,7 +1005,7 @@
 (define-abbrev global-abbrev-table "wont"           "will not"                      nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "thats"          "that is"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "u"              "you"                           nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
-(define-abbrev global-abbrev-table "ul"             "you'll"                        nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
+(define-abbrev global-abbrev-table "ul"             "you will"                        nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "dont"           "do not"                        nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "dnt"            "don't"                         nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
 (define-abbrev global-abbrev-table "wo"             "without"                       nil :enable-function #'+abbrev-enable-plain-text-abbrevs-p)
