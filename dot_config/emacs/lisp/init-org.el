@@ -39,7 +39,7 @@
 (opt! org-log-done 'note)
 (opt! org-priority-lowest ?F)
 (opt! org-priority-highest ?A)
-(opt! org-default-priority ?C)
+(opt! org-default-priority ?D)
 (opt! org-enforce-todo-dependencies t)
 (opt! org-tags-column 0)
 (opt! org-archive-location (alet (f-expand "archive.org" org-directory)
