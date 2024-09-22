@@ -1,3 +1,4 @@
+--- Requirements
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -18,7 +19,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- {{{ Error handling
+--- Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -41,9 +42,8 @@ do
         in_error = false
     end)
 end
--- }}}
 
--- {{{ Variable definitions
+--- Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 beautiful.useless_gap = 10
@@ -79,9 +79,62 @@ awful.layout.layouts = {
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
--- }}}
 
--- {{{ Menu
+--- Functions
+local function my_toggle_wibox ()
+    myscreen = awful.screen.focused()
+    myscreen.mywibox.visible = not myscreen.mywibox.visible
+end
+
+local function my_rotate_clients_forward ()
+   local c = client.focus
+    -- Check if the client is in fullscreen mode and exit fullscreen if it is
+    -- This fullscreen functionality was provided by chatgpt.
+    if c and c.fullscreen then
+        c.fullscreen = false
+        c:emit_signal('request::redraw') -- Force a redraw to ensure changes take effect
+    end
+    awful.client.cycle(true)
+    local master = awful.client.getmaster()
+    if master then
+        client.focus = master
+        master:raise()
+    end
+end
+
+local function my_rotate_clients_backward()
+    awful.client.cycle(false)
+    local master = awful.client.getmaster()
+    if master then
+        client.focus = master
+        master:raise()
+    end
+end
+
+-- local function global_key(modifiers, key, action, description, group)
+--     local newkey = awful.key(modifiers, key, action, { description = description, group = group })
+--     globalkeys = gears.table.join(globalkeys, newkey)
+-- end
+
+local function my_spawn_emacs ()
+    awful.spawn("Emacs")
+end
+
+local function my_focus_previous_screen ()
+    awful.screen.focus_relative(-1)
+end
+
+local function my_focus_previous_client ()
+    awful.client.focus.history.previous()
+    if client.focus then
+        client.focus:raise()
+    end
+end
+
+local function my_focus_next_screen ()
+    awful.screen.focus_relative( 1)
+end
+--- Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
    { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
@@ -105,8 +158,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
-
--- {{{ Wibar
+--- Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
 
@@ -220,51 +272,18 @@ awful.screen.connect_for_each_screen(function(s)
 end)
 -- }}}
 
--- {{{ Mouse bindings
+--- Mouse bindings
 root.buttons(gears.table.join(
     awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
--- }}}
-
-local function rotate_clients_forward()
-   local c = client.focus
-
-    -- Check if the client is in fullscreen mode and exit fullscreen if it is
-    -- This fullscreen functionality was provided by chatgpt.
-    if c and c.fullscreen then
-        c.fullscreen = false
-        c:emit_signal('request::redraw') -- Force a redraw to ensure changes take effect
-    end
-
-    awful.client.cycle(true)
-    local master = awful.client.getmaster()
-    if master then
-        client.focus = master
-        master:raise()
-    end
-end
-
-local function rotate_clients_backward()
-    awful.client.cycle(false)
-    local master = awful.client.getmaster()
-    if master then
-        client.focus = master
-        master:raise()
-    end
-end
-
--- {{{ Key bindings
+--- Global Bindings
 globalkeys = gears.table.join(
-    awful.key({ modkey }, "b",
-        function ()
-            myscreen = awful.screen.focused()
-            myscreen.mywibox.visible = not myscreen.mywibox.visible
-        end,
+    awful.key({ modkey }, "b", my_toggle_wibox,
         {description = "toggle statusbar", group="awesome"}
     ),
-    awful.key({ modkey,           }, "q",      rotate_clients_forward,
+    awful.key({ modkey,           }, "q",      my_rotate_clients_forward,
               {description="rotate clients forward", group="awesome"}),
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -275,11 +294,11 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
               {description = "go back", group = "tag"}),
 
-    awful.key({ modkey,           }, "j", rotate_clients_forward,
+    awful.key({ modkey,           }, "j", my_rotate_clients_forward,
         {description = "rotate clients forward", group = "client"}
     ),
     awful.key({ modkey,           }, "k", rotate_clients_backward,
-        {description = "rotate clients forward", group = "client"}
+        {description = "rotate clients backward", group = "client"}
     ),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
