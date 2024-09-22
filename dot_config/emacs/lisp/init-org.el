@@ -31,7 +31,7 @@
 (opt! org-directory (f-full "~/Documents/org/"))
 (opt! org-default-notes-file (f-expand "notes.org" org-directory))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
-(opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h@)"
+(opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h)"
                                     "BLOCKED(b)" "COOLDOWN(o)" "|" "DONE(d)"
                                     "CANCELLED(c)")))
 (opt! org-src-fontify-natively t)
@@ -45,7 +45,7 @@
 (opt! org-archive-location (alet (f-expand "archive.org" org-directory)
                              (format "%s::" it)))
 (opt! org-archive-mark-done t)
-(opt! org-global-properties `(("Effort_ALL"
+(opt! org-global-properties `(("Effort_ALL" .
                                ,(string-join (-map (-partial #'format "0:%.2d")
                                                    (number-sequence 5 55 5))
                                              "\s"))))
@@ -118,7 +118,7 @@
 (hook! org-mode-hook org-superstar-mode)
 
 (opt! org-superstar-leading-bullet ?\s)
-(opt! org-superstar-special-todo-items t)
+(opt! org-superstar-special-todo-items nil)
 ;;;; org-id
 (opt! org-id-track-globally t)
 (opt! org-id-locations-file (expand-file-name "org-id-locations" oo-data-dir))
@@ -129,6 +129,8 @@
 (opt! org-id-method 'ts)
 
 (opt! org-id-link-to-org-use-id t)
+;;;; org-timer
+(opt! org-timer-default-timer "0:05:00")
 ;;; provide
 (provide 'init-org)
 ;;; init-org.el ends here
