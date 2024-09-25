@@ -29,6 +29,13 @@
 
 (hook! prog-mode-hook outli-mode)
 
+(opt! outli-heading-config (cons '(lua-mode "--" ?- nil t) outli-heading-config))
+
+(defhook! setup-outlines-in-other-modes (oo-outli-after-load-hook)
+  (setf (alist-get 'lua-mode outli-heading-config) '("--" nil t))
+  (setf (alist-get 'fennel-mode outli-heading-config)
+        (alist-get 'emacs-lisp-mode outli-heading-config)))
+
 (require! config-outli)
 ;;; provide
 (provide 'init-outli)
