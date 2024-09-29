@@ -117,7 +117,6 @@
 (require 'init-hungry-delete)
 (require 'init-lispyville)
 (require 'init-macroexpand)
-(require 'init-magit)
 (require 'init-marginalia)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
