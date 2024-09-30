@@ -1,4 +1,4 @@
-;;; +abbrev-wikipedia-typo-abbrevs.el --- misspellings table -*- lexical-binding: t; -*-
+;;; +abbrev-wikipedia-typo-abbrevs.el --- table of wikipedia typos -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
