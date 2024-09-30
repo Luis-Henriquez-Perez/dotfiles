@@ -31,7 +31,7 @@
 (require 'base)
 ;;;; define abbrev table
 (defvar +abbrev-wikipedia-typo-abbrev-table (make-abbrev-table)
-  "Abbrev table that contains plain text.")
+  "Abbrev table containing wikipedia typos.")
 ;;;; define abbrevs
 (define-abbrev +abbrev-wikipedia-typo-abbrev-table "abandonned"          "abandoned")
 (define-abbrev +abbrev-wikipedia-typo-abbrev-table "aberation"           "aberration")
