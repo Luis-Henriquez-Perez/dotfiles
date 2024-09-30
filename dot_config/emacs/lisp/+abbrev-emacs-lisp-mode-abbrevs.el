@@ -102,5 +102,5 @@ comment."
 
 (define-abbrev global-abbrev-table "optionaal" "optional" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
 ;;; provide
-(provide '+abbrev-elisp-abbrevs)
+(provide '+abbrev-emacs-lisp-mode-abbrevs)
 ;;; +abbrev-emacs-lisp-mode-abbrevs.el ends here
