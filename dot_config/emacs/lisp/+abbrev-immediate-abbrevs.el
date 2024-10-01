@@ -34,9 +34,11 @@
 ;;;; abbrevs that expand immediately
 (defhook! expand-immediate-abbrevs (post-self-insert-hook)
   "Expand abbrevs used for immediate expansion."
-  (require 'oo-immediate-abbrevs)
-  (let ((local-abbrev-table +abbrev-immediate-abbrev-table))
-    (funcall abbrev-expand-function)))
+  (when (bound-and-true-p abbrev-mode)
+    (let ((local-abbrev-table +abbrev-immediate-abbrev-table))
+      (unwind-protect (progn (abbrev-table-put global-abbrev-table :enable-function #'ignore)
+                             (expand-abbrev))
+        (abbrev-table-put global-abbrev-table :enable-function nil)))))
 ;;; provide
 (provide '+abbrev-immediate-abbrevs)
 ;;; +abbrev-immediate-abbrevs.el ends here
