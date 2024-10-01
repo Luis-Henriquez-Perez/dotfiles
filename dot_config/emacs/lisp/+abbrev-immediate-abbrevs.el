@@ -29,8 +29,7 @@
 (require 'abbrev)
 (require 'base)
 ;;;; code for defining immediate abbrevs
-(defvar +abbrev-immediate-abbrevs
-  (make-abbrev-table)
+(defvar +abbrev-immediate-abbrevs (make-abbrev-table)
   "A abbrev table containing abbrevs that should be expanded immediately.")
 ;;;; abbrevs that expand immediately
 (defhook! expand-abbrevs (post-self-insert-hook)
