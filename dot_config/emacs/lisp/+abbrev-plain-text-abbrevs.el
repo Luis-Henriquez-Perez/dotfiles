@@ -52,7 +52,7 @@ string or comment."
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
 ;;;; Immediate abbrevs
-(define-abbrev oo-immediate-abbrev-table "ddd" "$")
+(define-abbrev +abbrev-immediate-abbrev-table "ddd" "$")
 ;;;; define abbrevs
 (define-abbrev global-abbrev-table "wikip"          "wikipedia"                     nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "incon"          "inconsistent"                  nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
@@ -1117,5 +1117,5 @@ string or comment."
 (define-abbrev global-abbrev-table "probl"          "problem"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "dered"          "considered"                    nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 ;;; provide
-(provide 'global-abbrev-table)
+(provide '+abbrev-plain-text-abbrevs)
 ;;; +abbrev-plain-text-abbrevs.el ends here
