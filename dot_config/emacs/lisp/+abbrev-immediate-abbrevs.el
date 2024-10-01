@@ -29,13 +29,13 @@
 (require 'abbrev)
 (require 'base)
 ;;;; code for defining immediate abbrevs
-(defvar +abbrev-immediate-abbrevs (make-abbrev-table)
+(defvar +abbrev-immediate-abbrev-table (make-abbrev-table)
   "A abbrev table containing abbrevs that should be expanded immediately.")
 ;;;; abbrevs that expand immediately
 (defhook! expand-immediate-abbrevs (post-self-insert-hook)
   "Expand abbrevs used for immediate expansion."
   (require 'oo-immediate-abbrevs)
-  (let ((local-abbrev-table oo-immediate-abbrev-table))
+  (let ((local-abbrev-table +abbrev-immediate-abbrev-table))
     (funcall abbrev-expand-function)))
 ;;; provide
 (provide '+abbrev-immediate-abbrevs)
