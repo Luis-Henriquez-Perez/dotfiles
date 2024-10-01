@@ -28,7 +28,7 @@
 ;;;; requirements
 (require 'abbrev)
 ;;;; emacs-lisp
-(defun +abbrev-enable-elisp-abbrevs-p ()
+(defun +abbrev-use-emacs-lisp-mode-abbrevs-p ()
   "Return non-nil when emacs-lisp-mode abbrevs should expand.
 This is when `emacs-lisp-mode' is enabled and point is not in a string or
 comment."
@@ -55,7 +55,7 @@ comment."
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "fun" "" '+abbrev-insert-defun :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "fun" "" '+abbrev-insert-defun :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
 (put '+abbrev-insert-alias 'no-self-insert t)
 (defun +abbrev-insert-alias ()
@@ -64,7 +64,7 @@ comment."
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
-(define-abbrev global-abbrev-table "als" "" '+abbrev-insert-alias :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "als" "" '+abbrev-insert-alias :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
 (put '+abbrev-insert-defvar 'no-self-insert t)
 (defun +abbrev-insert-defvar ()
@@ -80,7 +80,7 @@ comment."
 ;; the table is still considered.  Adding an enable function makes it so that
 ;; both the table's enable function and the abbrev's enable function have to
 ;; return true.
-(define-abbrev global-abbrev-table "dv" "" '+abbrev-insert-defvar :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "dv" "" '+abbrev-insert-defvar :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
 (put '+abbrev-insert-msg 'no-self-insert t)
 (defun +abbrev-insert-msg ()
@@ -90,17 +90,17 @@ comment."
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "pmax" "(point-max)" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "pmax" "(point-max)" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "optionaal" "optional" nil  :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(define-abbrev global-abbrev-table "optionaal" "optional" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 ;;; provide
 (provide '+abbrev-emacs-lisp-mode-abbrevs)
 ;;; +abbrev-emacs-lisp-mode-abbrevs.el ends here
