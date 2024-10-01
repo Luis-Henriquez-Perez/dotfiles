@@ -32,7 +32,7 @@
 (defvar +abbrev-immediate-abbrevs (make-abbrev-table)
   "A abbrev table containing abbrevs that should be expanded immediately.")
 ;;;; abbrevs that expand immediately
-(defhook! expand-abbrevs (post-self-insert-hook)
+(defhook! expand-immediate-abbrevs (post-self-insert-hook)
   "Expand abbrevs used for immediate expansion."
   (require 'oo-immediate-abbrevs)
   (let ((local-abbrev-table oo-immediate-abbrev-table))
