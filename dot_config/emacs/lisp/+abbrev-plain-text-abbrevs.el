@@ -30,6 +30,7 @@
 ;;;; requirements
 (require 'base)
 (require 'abbrev)
+(require '+abbrev-immediate-abbrevs)
 (require '+abbrev-wikipedia-typo-abbrevs)
 ;;;; plain text abbrevs
 (defun! +abbrev-use-plain-text-abbrev-p ()
@@ -50,6 +51,8 @@ string or comment."
          ;; The first word of a comment actually starts at `comment-beg' but
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
+;;;; Immediate abbrevs
+(define-abbrev oo-immediate-abbrev-table "ddd" "$")
 ;;;; define abbrevs
 (define-abbrev global-abbrev-table "wikip"          "wikipedia"                     nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "incon"          "inconsistent"                  nil :enable-function #'+abbrev-use-plain-text-abbrev-p)

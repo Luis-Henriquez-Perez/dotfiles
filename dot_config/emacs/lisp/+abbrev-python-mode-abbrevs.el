@@ -1,4 +1,4 @@
-;;; +abbrev-org-abbrevs.el --- TODO: add commentary -*- lexical-binding: t; -*-
+;;; +abbrev-python-mode-abbrevs.el --- TODO: add commentary -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -25,18 +25,13 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
-(require 'abbrev)
+(put '+abbrev-insert-ifmain 'no-self-insert t)
 
-(put '+abbrev-insert-elisp-src-block 'no-self-insert t)
-
-(defun +abbrev-insert-elisp-src-block ()
+(defun +abbrev-insert-ifmain ()
   (require 'tempel)
-  (tempel-insert 'elsp)
+  (tempel-insert 'ifmain)
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "esrc" "" '+abbrev-insert-elisp-src-block :enable-function #'+abbrev-enable-org-abbrevs-p)
-;;; provide
-(provide '+abbrev-org-abbrevs)
-;;; +abbrev-org-abbrevs.el ends here
+(define-abbrev global-abbrev-table "fun" "" '+abbrev-insert-ifmain :enable-function '+abbrev-enable-elisp-abbrevs-p)
