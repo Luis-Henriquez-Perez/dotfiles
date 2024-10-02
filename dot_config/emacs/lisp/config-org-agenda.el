@@ -1,4 +1,4 @@
-;;; config-org-agenda.el --- Configure nil -*- lexical-binding: t; -*-
+;;; config-org-agenda.el --- Configure `org-agenda' -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; Configure nil.
+;; Configure `org-agenda'.
 ;;
 ;;; Code:
 ;;;; requirements
@@ -39,7 +39,7 @@
 (setq org-agenda-prefix-format
       '((agenda . " %i %?-12t")
         ;; Remove the category displayed on the left of entries.
-        (todo   . " %(+org-agenda--overdue-string)")
+        ;; (todo   . " %(+org-agenda--overdue-string)")
         (tags   . " ")
         (search . " %i %-12:c")))
 
