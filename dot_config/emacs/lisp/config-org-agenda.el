@@ -65,15 +65,10 @@
     (goto-char (marker-position marker))
     (funcall fn)))
 
-(defmacro with-entry! (entry &rest body)
+(defmacro org-with-entry! (entry &rest body)
   (declare (indent 1))
-  (cl-with-gensyms (e marker)
-    `(when-let* ((,e ,entry)
-                 (,marker (get-text-property 0 'org-marker ,e)))
-       (unless ,marker (error "Entry: %S" ,e))
-       (with-current-buffer (marker-buffer ,marker)
-         (goto-char (marker-position ,marker))
-         (progn ,@body)))))
+  `(org-with-point-at (get-text-property 0 'org-hd-marker ,entry)
+     (progn ,@body)))
 ;;;;; comparators
 ;; These are comparators I have written to aid me with sorting entries.
 ;;;;;; effort
@@ -102,8 +97,8 @@ Return -1 if priority B is greater than priority A.  Otherwise, if return 0."
 (defun! +org-agenda-overdue-deadline-comparator (a b)
   "Return 1 if A is more overdue than B.
 Return -1 if B is more overdue than A.  Otherwise return 0."
-  (set! da (with-entry! a (org-get-deadline-time (point))))
-  (set! db (with-entry! b (org-get-deadline-time (point))))
+  (set! da (org-with-entry! a (org-get-deadline-time (point))))
+  (set! db (org-with-entry! b (org-get-deadline-time (point))))
   (set! now (current-time))
   (set! diff-a (and da (float-time (time-subtract da now))))
   (set! diff-b (and db (float-time (time-subtract db now))))
@@ -125,8 +120,8 @@ Return -1 if B is more overdue than A.  Otherwise return 0."
          (if (> diff-a diff-b) 1 -1))))
 ;;;;;; deadline comparator
 (defun +org-agenda-has-deadline-comparator (a b)
-  (set! da (with-entry! a (org-get-deadline-time (point))))
-  (set! db (with-entry! b (org-get-deadline-time (point))))
+  (set! da (org-with-entry! a (org-get-deadline-time (point))))
+  (set! db (org-with-entry! b (org-get-deadline-time (point))))
   (cond ((and da (not db)) 1)
         ((and (not da) db) -1)
         (t 0)))
@@ -135,8 +130,8 @@ Return -1 if B is more overdue than A.  Otherwise return 0."
   "Prioritize entries with the closest non-overdue deadline.
 This assumes that an entry with a non-overdue deadline is always closer than one
 with no deadline."
-  (set! da (with-entry! a (org-get-deadline-time (point))))
-  (set! db (with-entry! b (org-get-deadline-time (point))))
+  (set! da (org-with-entry! a (org-get-deadline-time (point))))
+  (set! db (org-with-entry! b (org-get-deadline-time (point))))
   (set! now (current-time))
   (set! diff-a (and da (float-time (time-subtract da now))))
   (set! diff-b (and db (float-time (time-subtract db now))))
@@ -173,8 +168,8 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
 ;; propertized strings.  These strings have references to the headline it refers to.
 (defun! +org-agenda-tsid-comparator (a b)
   "Compare two entries A and B based on their ID property to sort by oldest first."
-  (if-let* ((time-a (with-entry! a (org-id-get)))
-            (time-b (with-entry! b (org-id-get)))
+  (if-let* ((time-a (org-with-entry! a (org-id-get)))
+            (time-b (org-with-entry! b (org-id-get)))
             (id-a (+org-id-to-time time-a))
             (id-b (+org-id-to-time time-b)))
       (if (time-less-p id-a id-b) 1 -1)
@@ -184,7 +179,7 @@ ORG-ID should be in the format 'YYYYMMDDTHHMMSS.SSSSSS'."
 (defun! +org-agenda-started-comparator (a b)
   "Prefer entries that have a \"STARTED\" TODO keyword."
   (flet! started-or-not (entry)
-    (if (equal "STARTED" (with-entry! entry (org-get-todo-state))) "STARTED" ""))
+    (if (equal "STARTED" (org-with-entry! entry (org-get-todo-state))) "STARTED" ""))
   (pcase (mapcar #'started-or-not (list a b))
     (`("" "") 0)
     (`("STARTED" "") 1)
@@ -256,7 +251,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 
 (defun +org-agenda--agenda-filter (entry)
   "Do not show overdue or done entries."
-  (if (with-entry! entry
+  (if (org-with-entry! entry
         (or (+org-overdue-p)
             (org-entry-is-done-p)))
       nil
