@@ -29,8 +29,6 @@
 (require 'abbrev)
 (require 'base)
 (require '+abbrev-plain-text-abbrevs)
-(require '+abbrev-emacs-lips-mode-abbrevs)
-(require '+abbrev-python-mode-abbrevs)
 ;;;; automatically add period
 ;; I do not like manually adding periods to the end of sentences.  Having moved
 ;; from using one space after a sentence to two, I find it particularl daunting
