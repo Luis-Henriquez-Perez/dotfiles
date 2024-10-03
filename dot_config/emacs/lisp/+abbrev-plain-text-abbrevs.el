@@ -54,6 +54,15 @@ string or comment."
 ;;;; Immediate abbrevs
 (define-abbrev +abbrev-immediate-abbrev-table "ddd" "$")
 ;;;; define abbrevs
+(define-abbrev global-abbrev-table "bol"            "beginning of the line"         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "cts"            "check to see"                  nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "cheks"          "checks"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "esh"            "eshell"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "ali"            "alias"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "unk"            "unknown"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "y"              "why"                           nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "tcb"            "this could be"                 nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "alte"           "alternative"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "wikip"          "wikipedia"                     nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "incon"          "inconsistent"                  nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "defs"           "definitions"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
@@ -866,7 +875,6 @@ string or comment."
 (define-abbrev global-abbrev-table "nto"            "not"                           nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "mone"           "money"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "hve"            "have"                          nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "m"              "my"                            nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "swich"          "switch"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "actuall"        "actually"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "evalt"          "evaluate"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
