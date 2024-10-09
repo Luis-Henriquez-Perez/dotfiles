@@ -28,24 +28,17 @@
 ;;; requirements
 (eval-and-compile (require 'oo-elpaca-bootstrap))
 ;;; recipes
-;; This adds extra operators for evaluating.
 ;; Eldev complains about `buttercup' already being loaded.  So I have to think
 ;; about how I will go about installing it for normal usage.  In any case the
 ;; only reason I want it is for proper indenting and syntax highlighting when I
 ;; am actually editing my test files.
-;; TODO: add bindings for lorem ipsum.
-;; This is temporary--ideally I would want.
-;; (elpaca aas)
 (elpaca ace-jump-helm-line)
 (elpaca ace-link)
 (elpaca aggressive-indent)
-;; (elpaca ah)
 (elpaca anaphora)
 (elpaca annalist)
 (elpaca beacon)
-;; (elpaca benchmark-init)
 (elpaca burly)
-;; (elpaca buttercup)
 (elpaca cape)
 (elpaca caps-lock)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
@@ -82,7 +75,6 @@
 (elpaca evil-cleverparens)
 (elpaca evil-collection)
 (elpaca (evil-easymotion :fetcher github :repo "Luis-Henriquez-Perez/evil-easymotion"))
-;; (elpaca evil-embrace)
 (elpaca evil-exchange)
 (elpaca evil-goggles)
 (elpaca evil-iedit-state)
@@ -141,7 +133,6 @@
 (elpaca noccur)
 (elpaca notmuch)
 (elpaca (on :host github :repo "ajgrf/on.el"))
-;; (elpaca (once :host github :repo "emacs-magus/once"))
 (elpaca orderless)
 (elpaca org-appear)
 (elpaca org-bookmark-heading)
