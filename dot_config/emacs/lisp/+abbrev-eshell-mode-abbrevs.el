@@ -40,8 +40,9 @@
 (define-abbrev global-abbrev-table "ga"    "git commit --amend"      nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
 (define-abbrev global-abbrev-table "glast" "git log -1 HEAD --stat"  nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
 ;;;;; Miscellaneous
-(define-abbrev global-abbrev-table "cl"    "clear"                   nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
-(define-abbrev global-abbrev-table "dj"    "dired-jump"              nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "py" "python"     nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "cl" "clear"      nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "dj" "dired-jump" nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
 ;;;;; snippet abbrevs
 (put '+abbrev-insert-drop-stash 'no-self-insert t)
 (defun +abbrev-insert-drop-stash ()
