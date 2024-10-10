@@ -233,7 +233,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
           (return! t))))))
 
 (defun +org-agenda--filter-parents-with-undone-children (entry)
-  (when (not (+org-agenda-call-at-entry entry #'+org-has-tasks-to-be-done))
+  (when (not (org-with-entry! entry (+org-has-tasks-to-be-done-p)))
     entry))
 ;;;;;; Update agenda after certain actions
 (defun oo--update-agenda (orig-fn &rest args)
