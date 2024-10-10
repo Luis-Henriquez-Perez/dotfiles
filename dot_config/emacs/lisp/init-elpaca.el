@@ -105,6 +105,7 @@
 (elpaca htmlize)
 (elpaca humanoid-themes)
 (elpaca hungry-delete)
+(elpaca hy-mode)
 (elpaca immaterial-theme)
 (elpaca leuven-theme)
 (elpaca lgr)
