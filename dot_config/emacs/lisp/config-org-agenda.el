@@ -251,9 +251,9 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 
 (defun +org-agenda--agenda-filter (entry)
   "Do not show overdue or done entries."
-  (if (org-with-entry! entry
-        (or (+org-overdue-p)
-            (org-entry-is-done-p)))
+  (if (ignore-errors (org-with-entry! entry
+                       (or (+org-overdue-p)
+                           (org-entry-is-done-p))))
       nil
     entry))
 
