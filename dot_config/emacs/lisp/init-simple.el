@@ -35,6 +35,8 @@
 ;; https://home.cs.colorado.edu/~main/cs1300/doc/emacs/emacs_24.html
 ;; https://stackoverflow.com/questions/9383070/tell-emacs-never-to-insert-tabs
 (setq-default indent-tabs-mode nil)
+;;;; do not suggest keybindings for me
+(setq suggest-key-bindings nil)
 ;;;; handle trailing whitespace
 (setq-default show-trailing-whitespace nil)
 
