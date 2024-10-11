@@ -90,6 +90,16 @@ comment."
     (evil-normalize-keymaps))
   t)
 
+(put '+abbrev-insert-set-bang 'no-self-insert t)
+(defun +abbrev-insert-set-bang ()
+  (require 'tempel)
+  (tempel-insert '("(set! " (p "variable") " " (p "value") ")"))
+  (when (bound-and-true-p evil-mode)
+    (evil-normalize-keymaps))
+  t)
+
+(define-abbrev global-abbrev-table "sett" "" '+abbrev-insert-set-bang :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+
 (define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
 
 (define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
