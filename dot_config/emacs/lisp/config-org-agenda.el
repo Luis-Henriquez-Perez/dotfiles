@@ -218,7 +218,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 ;; Composite tasks are entries that contain one or more subtasks.  These are
 ;; created when.  They have certain props.
 
-(defun! +org-has-tasks-to-be-done ()
+(defun! +org-has-tasks-to-be-done-p ()
   "Return non-nil if current headline has any subtasks that need to be done."
   (interactive)
   (flet! not-done-p ()

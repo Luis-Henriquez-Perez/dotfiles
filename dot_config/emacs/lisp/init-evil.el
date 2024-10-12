@@ -72,7 +72,6 @@
 ;; super fast to press as well and even faster than =SPC SPC=.
 (bind! oo-leader-map oo-normal-leader-key #'execute-extended-command)
 
-(bind! i "TAB" #'completion-at-point)
 (bind! i "A-x" #'execute-extended-command)
 (bind! i "M-x" #'execute-extended-command)
 
