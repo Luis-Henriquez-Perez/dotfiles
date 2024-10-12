@@ -34,4 +34,9 @@
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "fun" "" '+abbrev-insert-ifmain :enable-function '+abbrev-enable-elisp-abbrevs-p)
+(defun +abbrev-enable-python-abbrev-p ()
+  (derived-mode-p 'python-mode))
+
+(define-abbrev global-abbrev-table "mmain" "" '+abbrev-insert-ifmain :enable-function '+abbrev-enable-python-abbrev-p)
+
+(define-abbrev global-abbrev-table "isoup" "from bs4 import BeautifulSoup" nil :enable-function '+abbrev-enable-python-abbrev-p)
