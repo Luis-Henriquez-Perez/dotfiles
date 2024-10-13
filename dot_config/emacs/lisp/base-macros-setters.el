@@ -103,6 +103,11 @@ SETTER is the same as in `appending!'."
   "Set PLACE to the union of PLACE and LIST.
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   `(,setter ,place (cl-union ,place ,list :test ,test :test-not ,test-not :key ,key)))
+
+(defalias 'adding! 'cl-incf)
+(defalias 'summing! 'cl-incf)
+(defalias 'subtracting! 'cl-decf)
+(defalias 'minusing! 'cl-decf)
 ;;; provide
 (provide 'base-macros-setters)
 ;;; base-macros-setters.el ends here
