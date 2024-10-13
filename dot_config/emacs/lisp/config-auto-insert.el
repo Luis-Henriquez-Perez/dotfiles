@@ -25,6 +25,8 @@
 ;; Configure auto-insert.
 ;;
 ;;; Code:
+(require 'base)
+
 (defun! oo-auto-insert-elisp-template ()
   "Insert emacs-lisp template in file."
   (set! filename (buffer-file-name))
