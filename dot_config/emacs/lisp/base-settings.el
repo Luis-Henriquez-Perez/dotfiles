@@ -31,6 +31,9 @@
 ;;; Code:
 ;;; built-in settings
 ;;;; c source code
+;;;;; user information
+(setq user-full-name "Luis Henriquez")
+(setq user-mail-address "luis@luishp.xyz")
 ;;;;; load newer files
 (setq-default load-prefer-newer t)
 ;;;;; by default do not wrap lines
@@ -132,7 +135,6 @@ end-of-buffer signals; pass the rest to the default handler."
 (setq sgml-basic-offset 4)
 ;;;;;; dabbrev
 ;; (setq dabbrev-check-all-buffers nil)
-;;;; re-builder
 ;;;;; re-builder
 ;; By default, use `rx' syntax.  It is my preferred syntax.
 (setq reb-re-syntax 'rx)
