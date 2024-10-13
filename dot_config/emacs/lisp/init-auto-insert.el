@@ -30,6 +30,7 @@
 (hook! on-first-file-hook auto-insert-mode)
 (define-auto-insert "\\.el$" #'oo-auto-insert-elisp-template)
 (define-auto-insert "\\.html$" #'oo-auto-insert-html-template)
+(define-auto-insert "\\.py$" #'oo-auto-insert-python-file-header)
 (require 'config-auto-insert)
 ;; (autoload 'oo-auto-insert-elisp-template "oo-auto-insert-templates")
 ;;; provide
