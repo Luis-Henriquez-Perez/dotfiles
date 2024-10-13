@@ -52,7 +52,7 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
          (alet (cl-case name
                  ((maxing! maximizing!) most-negative-fixnum)
                  ((minning! minimizing!) most-positive-fixnum)
-                 (counting! 0))
+                 ((adding! counting!) 0))
            (adjoining! (map-elt data :let) (list symbol it) :test #'equal :key #'car))
          (setq zipper (treepy-next zipper)))
         (`(set! ,(and sym (pred symbolp)) ,value . ,(and plist (guard t)))
