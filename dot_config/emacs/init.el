@@ -109,7 +109,6 @@
 (require 'init-fill-adapt)
 (require 'init-gcmh)
 (require 'init-grugru)
-(require 'init-gumshoe)
 (require 'init-helm)
 (require 'init-helpful)
 (require 'init-highlight-quoted)
