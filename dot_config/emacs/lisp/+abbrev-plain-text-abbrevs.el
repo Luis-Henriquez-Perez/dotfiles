@@ -880,7 +880,6 @@ string or comment."
 (define-abbrev global-abbrev-table "rl"             "really"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "args"           "arguments"                     nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "ppl"            "people"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "o"              "of"                            nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "urself"         "yourself"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "ab"             "about"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "ret"            "return"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
@@ -943,7 +942,6 @@ string or comment."
 (define-abbrev global-abbrev-table "shiftk"         "SHIFT"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "nots"           "number of times"               nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "num"            "number"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "f"              "of"                            nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "lins"           "lines"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 ;; I thought that this could be a bad abbrev because it is too much line.  Nil :enable-function oo-enable-text-abbrev-pa
 ;; spelling mistake of =the=, but then I thought if I do misspell "the" it I nil :enable-function oo-enable-text-abbrev-ps
