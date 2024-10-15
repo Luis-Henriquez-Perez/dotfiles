@@ -110,6 +110,7 @@
 (elpaca hungry-delete)
 (elpaca hy-mode)
 (elpaca immaterial-theme)
+(elpaca jannet-mode)
 (elpaca leuven-theme)
 (elpaca lgr)
 (elpaca lispy)
