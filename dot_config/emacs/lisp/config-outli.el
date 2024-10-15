@@ -28,6 +28,13 @@
 ;; Different styling for stem and leaf characters.
 (setf (cl-fourth (assoc 'emacs-lisp-mode outli-heading-config)) nil)
 
+(setf (alist-get 'lua-mode    outli-heading-config) '("--" ?- nil t))
+(setf (alist-get 'python-mode outli-heading-config) '("#" ?# nil t))
+(setf (alist-get 'fennel-mode outli-heading-config)
+      (alist-get 'emacs-lisp-mode outli-heading-config))
+(setf (alist-get 'hy-mode     outli-heading-config)
+      (alist-get 'emacs-lisp-mode outli-heading-config))
+
 ;; Properly update outlines after theme change.
 (defadvice! reset-outli-faces (after load-theme &rest _)
   (outli-reset-all-faces))
