@@ -44,6 +44,8 @@ define_key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
 define_key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
 define_key([mod], "j", lazy.layout.down(), desc="Move focus down"),
 define_key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+define_key([mod], "e", lazy.spawn("emacs"), desc="Open emacs"),
+define_key([mod], "i", lazy.spawn("qutebrowser"), desc="Open qutebrowser"),
 define_key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
 # Move windows between left/right columns or move up/down in current stack.
 # Moving out of range in Columns layout will create new column.
