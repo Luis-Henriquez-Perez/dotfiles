@@ -79,7 +79,6 @@
 (require 'init-vc-hooks)
 (require 'init-window)
 ;; External packages
-(require 'init-web-mode)
 (require 'init-ace-window)
 (require 'init-aggressive-indent)
 (require 'init-avy)
@@ -114,6 +113,7 @@
 (require 'init-highlight-quoted)
 (require 'init-htmlize)
 (require 'init-hungry-delete)
+(require 'init-hy-mode)
 (require 'init-lispyville)
 (require 'init-macroexpand)
 (require 'init-marginalia)
@@ -137,6 +137,7 @@
 (require 'init-vertico-quick)
 (require 'init-w3m)
 (require 'init-wdired)
+(require 'init-web-mode)
 (require 'init-which-key)
 (require 'init-window)
 (require 'oo-autoloads)
