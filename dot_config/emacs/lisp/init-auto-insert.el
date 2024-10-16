@@ -26,13 +26,21 @@
 ;;
 ;;; Code:
 (opt! auto-insert-query nil)
-;; (hook! emacs-startup-hook auto-insert-mode)
 (hook! on-first-file-hook auto-insert-mode)
+
+(autoload #'oo-auto-insert-elisp-template "config-auto-insert" nil t 'function)
+(autoload #'oo-auto-insert-python-file-header "config-auto-insert" nil t 'function)
+(autoload #'oo-auto-insert-html-template "config-auto-insert" nil t 'function)
+(autoload #'oo-auto-insert-hy-file-header "config-auto-insert" nil t 'function)
+(autoload #'oo-auto-insert-bash-file-header "config-auto-insert" nil t 'function)
+
 (define-auto-insert "\\.el$" #'oo-auto-insert-elisp-template)
 (define-auto-insert "\\.html$" #'oo-auto-insert-html-template)
 (define-auto-insert "\\.py$" #'oo-auto-insert-python-file-header)
+(define-auto-insert "\\.sh$" #'oo-auto-insert-bash-file-header)
+(define-auto-insert "\\.hy$" #'oo-auto-insert-hy-file-header)
+
 (require 'config-auto-insert)
-;; (autoload 'oo-auto-insert-elisp-template "oo-auto-insert-templates")
 ;;; provide
 (provide 'init-auto-insert)
 ;;; init-auto-insert.el ends here
