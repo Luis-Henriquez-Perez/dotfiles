@@ -14,7 +14,6 @@ config = config  # type: ConfigAPI
 c = c  # type: ConfigContainer
 
 config.load_autoconfig(False)
-
 config.set('content.cookies.accept', 'no-3rdparty', 'chrome-devtools://*')
 ### always open new windows
 # Allow the window manager to manage the windows.  I would rather avoid having
@@ -45,44 +44,38 @@ c.auto_save.session = False
 # Wrap around at the top and bottom of the page when advancing through
 # text matches using `:search-next` and `:search-prev`.
 # Type: Bool
-c.search.wrap = False
-### disable javascript everywhere except on DDG
-# Disable JS globally
-# c.content.javascript.enabled = False
-# This is an equivalent form, I re-write in this other form for uniformity's sake in this particular block.
-# c.content.javascript.enabled = False
+# c.search.wrap = False
+### enable/disable javascript except on certain sites
+c.content.javascript.enabled = False
 config.set('content.javascript.enabled', False)
-
-# Enable it on DDG
-config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
-
-# And on github
-# config.set('content.javascript.enabled', True, '*://duckduckgo.com/')
-### provide java
-# Surprisingly to me the [[][author]] I got this configuration from said that
-# he noticed qutebrowser had some big performance issues compared to firefox.
-# That would be insane because I moved from firefox to qutebrowser to run away
-# from these performance issues.
-
-# "Just looking at htop, looks like qutebrowser use more CPU than Firefox (in
-# comparable conditions)."
-# Though I will admit I do not know what "comparable conditions" mean.
-
-# TODO: An improvement over what the [[][author]] provided would be to reload
-# the page afterwards because when you enable javascript from a page where
-# javascript had been disabled, you need to reload it to actually see the
-# result.
-# javascript enable
-# Note that this applies to every webpage opened after enabling this.
-# As in, it changes the default.
+config.set('content.javascript.enabled', False, "*://mangadass.com/*")
+config.set('content.javascript.enabled', False, "*://www.geeksforgeeks.org/*")
+config.set('content.javascript.enabled', True, '*://github.com/*')
+config.set('content.javascript.enabled', True, '*://duckduckgo.com/*')
+config.set('content.javascript.enabled', True, '*://www.freelancer.com/*')
+config.set('content.javascript.enabled', True, '*://www.upwork.com/*')
+config.set('content.javascript.enabled', True, '*://chatgpt.com/*')
 # I need to find away to only enable it for the
 # config.bind('<Space>je', ':set content.javascript.enabled true')
-
 # javascript disable
 # config.bind('<Space>jd', ':set content.javascript.enabled false')
 ### open new pages with =<space>ff=
 # config.bind('<Space>ff', 'set-cmd-text -s :open')
 ### hide titlebars from qutebrowser
-config.set('window.hide_decoration', True)
+c.window.hide_decoration = True
 ### save with monolith
-# config.bind('<Ctrl-S>', 'spawn --userscript save_with_monolith.sh')
+config.bind('<Ctrl-S>', 'spawn --userscript webpage-snapshot.hy')
+### use old.reddit.com instead of www.reddit.com
+# Reddit is a really bloated site causing it to be super slow despite only
+# needing static output for the most part.
+import qutebrowser.api.interceptor
+
+def rewrite(request: qutebrowser.api.interceptor.Request):
+    if request.request_url.host() == 'www.reddit.com':
+        request.request_url.setHost('old.reddit.com')
+        try:
+            request.redirect(request.request_url)
+        except:
+            pass
+
+qutebrowser.api.interceptor.register(rewrite)
