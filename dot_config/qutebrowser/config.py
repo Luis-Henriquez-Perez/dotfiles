@@ -49,18 +49,24 @@ c.auto_save.session = False
 c.content.javascript.enabled = False
 config.set('content.javascript.enabled', False)
 # Qutebrowser uses javascript to display directories.
+config.set('content.javascript.enabled', True, "*://privateemail.com/*")
+config.set('content.javascript.enabled', True, "*://www.paypal.com/*")
+config.set('content.javascript.enabled', True, "*://ap.www.namecheap.com/*")
+config.set('content.javascript.enabled', True, "*://privateemail.com/*")
+config.set('content.javascript.enabled', True, "*://www.namecheap.com/*")
 config.set('content.javascript.enabled', True, "file://*")
 config.set('content.javascript.enabled', False, "*://mangadass.com/*")
 config.set('content.javascript.enabled', False, "*://www.geeksforgeeks.org/*")
-config.set('content.javascript.enabled', True, '*://github.com/*')
-config.set('content.javascript.enabled', True, '*://duckduckgo.com/*')
-config.set('content.javascript.enabled', True, '*://www.freelancer.com/*')
-config.set('content.javascript.enabled', True, '*://www.upwork.com/*')
-config.set('content.javascript.enabled', True, '*://chatgpt.com/*')
+config.set('content.javascript.enabled', True, "*://github.com/*")
+config.set('content.javascript.enabled', True, "*://duckduckgo.com/*")
+config.set('content.javascript.enabled', True, "*://www.freelancer.com/*")
+config.set('content.javascript.enabled', True, "*://www.upwork.com/*")
+config.set('content.javascript.enabled', True, "*://chatgpt.com/*")
 # I need to find away to only enable it for the
-# config.bind('<Space>je', ':set content.javascript.enabled true')
+# config.bind('<Ctr-e>', ':set content.javascript.enabled true')
 # javascript disable
-# config.bind('<Space>jd', ':set content.javascript.enabled false')
+# config.bind('<Ctr>j', ':set content.javascript.enabled false')
+config.bind('<Ctrl+j>', 'set content.javascript.enabled !content.javascript.enabled')
 ### open new pages with =<space>ff=
 # config.bind('<Space>ff', 'set-cmd-text -s :open')
 ### hide titlebars from qutebrowser
