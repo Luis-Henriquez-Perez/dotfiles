@@ -116,6 +116,7 @@
 (require 'init-hy-mode)
 (require 'init-lispyville)
 (require 'init-macroexpand)
+(require 'init-magit)
 (require 'init-marginalia)
 (require 'init-modus-operandi)
 (require 'init-notmuch)
