@@ -47,8 +47,8 @@ c.auto_save.session = False
 # c.search.wrap = False
 ### enable/disable javascript except on certain sites
 c.content.javascript.enabled = False
-config.set('content.javascript.enabled', False)
 # Qutebrowser uses javascript to display directories.
+config.set('content.javascript.enabled', True, '*://www.indeed.com/*')
 config.set('content.javascript.enabled', True, "*://privateemail.com/*")
 config.set('content.javascript.enabled', True, "*://www.paypal.com/*")
 config.set('content.javascript.enabled', True, "*://ap.www.namecheap.com/*")
