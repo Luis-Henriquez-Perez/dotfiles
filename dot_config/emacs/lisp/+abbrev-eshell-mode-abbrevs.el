@@ -34,11 +34,13 @@
   (derived-mode-p 'eshell-mode))
 ;;;; abbrevs
 ;;;;; git abbrevs
-(define-abbrev global-abbrev-table "gs"    "git status -s"           nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
-(define-abbrev global-abbrev-table "gp"    "git push"                nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
-(define-abbrev global-abbrev-table "gl"    "git log --oneline -n 15" nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
-(define-abbrev global-abbrev-table "ga"    "git commit --amend"      nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
-(define-abbrev global-abbrev-table "glast" "git log -1 HEAD --stat"  nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "gba"   "git --no-pager branch -a" nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "gb"    "git --no-pager branch"    nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "gs"    "git status -s"            nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "gp"    "git push"                 nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "gl"    "git log --oneline -n 15"  nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "ga"    "git commit --amend"       nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
+(define-abbrev global-abbrev-table "glast" "git log -1 HEAD --stat"   nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
 ;;;;; Miscellaneous
 (define-abbrev global-abbrev-table "py" "python"     nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
 (define-abbrev global-abbrev-table "cl" "clear"      nil :enable-function #'+abbrev-use-eshell-mode-abbrev-p)
