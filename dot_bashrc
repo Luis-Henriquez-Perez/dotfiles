@@ -48,3 +48,5 @@ export PATH=$PATH:~/.roswell/bin
 
 ### add my scripts to the PATH
 export PATH=$PATH:/home/luis/scripts
+
+source ~/myenv/bin/activate
