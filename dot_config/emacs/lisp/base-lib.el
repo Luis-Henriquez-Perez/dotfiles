@@ -52,16 +52,12 @@
   (set! filename (format-time-string "%Y%m%d%H%M%S-log.txt"))
   (set! log-file (expand-file-name filename log-dir))
   ;; Define the appenders.
-  (set! file-appender (lgr-appender-file :file log-file))
   (set! buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
   (lgr-set-layout buffer-appender formatter)
-  (lgr-set-layout file-appender formatter)
   ;; Add the formatter to the appenders.
   (lgr-set-layout buffer-appender formatter)
-  (lgr-set-layout file-appender formatter)
   ;; Add the appenders to the logger.
-  (lgr-add-appender oo-logger buffer-appender)
-  (lgr-add-appender oo-logger file-appender))
+  (lgr-add-appender oo-logger buffer-appender))
 
 ;; I do not want to have to pass in the logger every single time.
 (defmacro info! (msg &rest meta)
