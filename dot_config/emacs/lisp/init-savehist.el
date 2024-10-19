@@ -36,6 +36,8 @@
 
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
 
+(opt! savehist-additional-variables (cl-adjoin 'evil-markers-alist savehist-additional-variables))
+
 (defadvice! remove-kill-ring-properties (before savehist-save &rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 ;;; provide
