@@ -38,26 +38,43 @@
 
 (defvar evil-state-properties)
 ;;;; logging
-;; TODO: figure out how to change the log format
-;; I do not really utilize the logging enough yet because I need to understand
-;; `lgr' more.  I considered removing the package, but I still got it to work.
-;; And logging a little is better than nothing.
-(defvar oo-lgr (block! (set! logger (lgr-get-logger "oo"))
-                       (set! log-buffer (get-buffer-create "*lgr*"))
-                       (lgr-add-appender logger (lgr-appender-buffer :buffer log-buffer)))
+(defvar oo-logger (lgr-get-logger "main")
   "Object used for logging.")
 
+(block!
+  ;; Define a formatter.
+  (set! ts "%Y-%m-%d %H:%M:%S")
+  (set! format "%t [%L] %m")
+  (set! formatter (lgr-layout-format :format format :timestamp-format ts))
+  ;; Define the log file.
+  ;; Each emacs session will have its own log saved.
+  (set! log-dir (expand-file-name "logs" oo-data-dir))
+  (set! filename (format-time-string "%Y%m%d%H%M%S-log.txt"))
+  (set! log-file (expand-file-name filename log-dir))
+  ;; Define the appenders.
+  (set! file-appender (lgr-appender-file :file log-file))
+  (set! buffer-appender (lgr-appender-buffer :buffer log-buffer))
+  (lgr-set-layout buffer-appender formatter)
+  (lgr-set-layout file-appender formatter)
+  ;; Add the formatter to the appenders.
+  (lgr-set-layout buffer-appender formatter)
+  (lgr-set-layout file-appender formatter)
+  ;; Add the appenders to the logger.
+  (lgr-add-appender logger buffer-appender)
+  (lgr-add-appender logger file-appender))
+
+;; I do not want to have to pass in the logger every single time.
 (defmacro info! (msg &rest meta)
-  `(lgr-info oo-lgr ,msg ,@meta))
+  `(lgr-info oo-logger ,msg ,@meta))
 
 (defmacro error! (msg &rest meta)
-  `(lgr-error oo-lgr ,msg ,@meta))
+  `(lgr-error oo-logger ,msg ,@meta))
 
 (defmacro warn! (msg &rest meta)
-  `(lgr-warn oo-lgr ,msg ,@meta))
+  `(lgr-warn oo-logger ,msg ,@meta))
 
 (defmacro fatal! (msg &rest meta)
-  `(lgr-fatal oo-lgr ,msg ,@meta))
+  `(lgr-fatal oo-logger ,msg ,@meta))
 ;;;; reporting errors
 (defun oo-report-error (fn error)
   "Register ERROR and FN in `oo-errors'."
