@@ -51,6 +51,7 @@ string or comment."
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
 ;;;; define abbrevs
+(define-abbrev global-abbrev-table "envyronmen"     "environment"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "directries"     "directories"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "qt"             "qutebrowser"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "qtbrowser"      "qutebrowser"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
