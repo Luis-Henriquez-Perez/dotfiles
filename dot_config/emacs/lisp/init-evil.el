@@ -56,6 +56,8 @@
 (opt! evil-emacs-state-modes nil)
 (opt! evil-motion-state-modes nil)
 
+(opt! savehist-additional-variables (cl-adjoin 'evil-markers-alist savehist-additional-variables))
+
 (require! config-evil)
 
 (bind! i override-global-map oo-insert-leader-key #'oo-leader-prefix-command)
