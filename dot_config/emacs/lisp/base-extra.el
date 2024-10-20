@@ -28,8 +28,8 @@
 ;;;; Prevent =devaralias= from generating a warning
 ;; The built-in package `woman' overwrites the existing variable
 ;; `woman-topic-history' by aliasing it to `Man-topic-history' and emacs tells
-;; you this by popping up a *Warnings* buffer.  This whole thing is probably
-;; some bug.  So I do this to stop this whole thing from happening.
+;; you this by popping up a *Warnings* buffer whenever woman.el is loaded.  This
+;; whole thing is probably some bug.  So I stop this whole thing from happening.
 (defun! oo--suppress-woman-warning (orig-fn &rest args)
   (pcase args
     (`(woman-topic-history Man-topic-history . ,_)
