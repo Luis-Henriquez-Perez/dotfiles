@@ -37,6 +37,7 @@
 (elpaca aggressive-indent)
 (elpaca anaphora)
 (elpaca annalist)
+(elpaca base16-themes)
 (elpaca beacon)
 (elpaca burly)
 (elpaca cape)
