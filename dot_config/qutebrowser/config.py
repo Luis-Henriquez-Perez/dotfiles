@@ -68,7 +68,7 @@ config.set('content.javascript.enabled', True, "*://chatgpt.com/*")
 # config.bind('<Ctr-e>', ':set content.javascript.enabled true')
 # javascript disable
 # config.bind('<Ctr>j', ':set content.javascript.enabled false')
-config.bind('<Ctrl+j>', 'set content.javascript.enabled !content.javascript.enabled')
+config.bind('<Ctrl+j>', 'set content.javascript.enabled true')
 ### open new pages with =<space>ff=
 # config.bind('<Space>ff', 'set-cmd-text -s :open')
 ### hide titlebars from qutebrowser
