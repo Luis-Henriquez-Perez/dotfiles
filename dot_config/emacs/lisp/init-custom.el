@@ -49,10 +49,12 @@
 ;; Don't know why deleting the previous theme before enabling a new
 ;; one isn't the default behavior.  When would anyone want to layer
 ;; the colors of one theme on top of an older one.
-(defadvice! disable-old-themes (around load-theme orig-fn &rest args)
+(defun! oo--disable-old-themes (orig-fn &rest args)
   "Disable old themes before loading new ones."
   (mapc #'disable-theme custom-enabled-themes)
   (apply orig-fn args))
+
+(advice-add 'load-theme :around #'oo--disable-old-themes)
 ;;;; bindings
 (bind! oo-toggle-map "r" #'oo-load-random-theme)
 (bind! oo-toggle-map "t" #'load-theme)

@@ -37,7 +37,7 @@
 ;; it is converted into period space space.  Additionally, if I end a sentence
 ;; line with two spaces and I press ESC, the trailing two spaces are replaced
 ;; with a period.
-(defadvice! add-period-maybe (around abbrev--default-expand expand-fn)
+(defun! oo--add-period-maybe (expand-fn)
   "Add a period when necessary."
   (prog1 (funcall expand-fn)
     (when (or (derived-mode-p 'text-mode) (oo-in-string-or-comment-p))
@@ -52,7 +52,7 @@
 ;;;; pulse expansion
 ;; You would be surprised at how much of an aesthetic improvement little things
 ;; like this can make a difference.
-(defadvice! pulse-expansion (around abbrev--default-expand expand-fn)
+(defun! oo--pulse-expansion (expand-fn)
   "Pulse around the expansion of an abbrev."
   (aprog1 (funcall expand-fn)
     (and it
@@ -65,7 +65,7 @@
 ;; captializes a word during `post-insert-hook' and a multi-word expansion will
 ;; skip calling that hook after each word except the last one.  So here I call
 ;; the hook myself at the proper places.
-(defadvice! ensure-self-insert (around abbrev--default-expand expand-fn)
+(defun! oo--ensure-self-insert (expand-fn)
   "Run `post-insert-hook' after each word in a multi-word expansion."
   (aprog1 (funcall expand-fn)
     (when (and it last-abbrev-location)

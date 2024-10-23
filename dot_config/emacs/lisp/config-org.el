@@ -49,10 +49,12 @@ in alphabetical order."
       (org-ml-set-property :tags (-sort #'string< it) headline)))
   (org-ml-do-headlines #'fn))
 
-(defadvice! suppress-window-deletion (around org-capture orig-fn &rest args)
+(defun! oo--suppress-window-deletion (orig-fn &rest args)
   "Suppress window deletion."
   (nflet! delete-other-windows #'ignore)
   (apply orig-fn args))
+
+(advice-add 'org-capture :around #'oo--suppress-window-deletion)
 ;;; provide
 (provide 'config-org)
 ;;; config-org.el ends here

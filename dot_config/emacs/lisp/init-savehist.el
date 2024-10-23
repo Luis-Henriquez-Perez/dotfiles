@@ -36,8 +36,10 @@
 
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
 
-(defadvice! remove-kill-ring-properties (before savehist-save &rest _)
+(defun! remove-kill-ring-properties (&rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+
+(advice-add 'savehist-save :before #'oo--remove-kill-ring-properties)
 ;;; provide
 (provide 'init-savehist)
 ;;; init-savehist.el ends here
