@@ -29,7 +29,7 @@
 
 ;; Do not bind any keys by default.
 (hook! emacs-lisp-mode-hook lispyville-mode)
-(oo-add-advice #'lispyville-normal-state :after #'@exit-everything)
+(advice-add #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
 
 (bind! i lispyville-mode-map "SPC" #'lispy-space)

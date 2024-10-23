@@ -54,11 +54,11 @@
 ;; Eshell prints various messages about loading modules.  These messages
 ;; originate from the function [[][eshell-unload-all-modules]].  I would rather
 ;; not see these messages.
-(oo-add-advice #'eshell-unload-all-modules :around #'oo-funcall-silently)
+(advice-add #'eshell-unload-all-modules :around #'oo-funcall-silently)
 ;; At first I thought the culprit was this function, but I was wrong.  The
 ;; printing comes from =eshell-mode=.  In any case, however, I silence it as
 ;; well.
-(oo-add-advice #'eshell-mode :around #'oo-funcall-silently)
+(advice-add #'eshell-mode :around #'oo-funcall-silently)
 
 (require! config-eshell)
 (require! config-em-alias)

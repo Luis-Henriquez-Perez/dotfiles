@@ -36,7 +36,7 @@
 
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
 
-(defun! remove-kill-ring-properties (&rest _)
+(defun! oo--remove-kill-ring-properties (&rest _)
   (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
 
 (advice-add 'savehist-save :before #'oo--remove-kill-ring-properties)

@@ -84,22 +84,6 @@
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;;;; advices
-;;;;; oo-generate-advice
-(defun oo-generate-advice (how symbol suffix body-fn &optional props)
-  "Generate and add an advice to SYMBOL."
-  (set! name (intern (format "%s@%s" symbol suffix)))
-  (defalias name
-    `(lambda (&rest args)
-       (info! "Running advice %s..." ',name)
-       (apply #',body-fn args)))
-  (advice-add symbol how name props)
-  name)
-;;;;; oo-add-advice
-(defun! oo-add-advice (symbol how function &optional props)
-  "Generate a new advice and add it to SYMBOL. "
-  (set! suffix (if (symbolp function) function 'anonymous-advice))
-  (oo-generate-advice how symbol suffix function props))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)

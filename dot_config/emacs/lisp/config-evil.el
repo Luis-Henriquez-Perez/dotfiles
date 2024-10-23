@@ -78,7 +78,7 @@
         (t
 		 (keyboard-quit))))
 
-(oo-add-advice #'evil-force-normal-state :after #'@exit-everything)
+(advice-add #'evil-force-normal-state :after #'@exit-everything)
 ;;;; eval operator
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator +evil-eval-operator (beg end)

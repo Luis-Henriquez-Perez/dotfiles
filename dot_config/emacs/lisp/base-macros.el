@@ -37,7 +37,6 @@
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
 (require 'base-macros-bind)
-(require 'base-macros-defadvice)
 ;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.

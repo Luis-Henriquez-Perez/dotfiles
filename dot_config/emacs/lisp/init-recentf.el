@@ -34,11 +34,11 @@
 ;; out what eldev is doing here.
 (hook! kill-emacs-hook recentf-save-list)
 
-(oo-add-advice #'recentf-save-list :before #'recentf-cleanup)
+(advice-add #'recentf-save-list :before #'recentf-cleanup)
 
-(oo-add-advice #'recentf-cleanup :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-save-list :around #'oo-funcall-silently)
-(oo-add-advice #'recentf-mode :around #'oo-funcall-silently)
+(advice-add #'recentf-cleanup :around #'oo-funcall-silently)
+(advice-add #'recentf-save-list :around #'oo-funcall-silently)
+(advice-add #'recentf-mode :around #'oo-funcall-silently)
 
 (setq recentf-filename-handlers '(file-truename))
 

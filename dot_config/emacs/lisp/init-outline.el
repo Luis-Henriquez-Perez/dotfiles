@@ -25,7 +25,7 @@
 ;; Initialize `outline'.
 ;;
 ;;; Code:
-(oo-add-advice 'outline-cycle :around #'oo-funcall-silently)
+(advice-add 'outline-cycle :around #'oo-funcall-silently)
 ;;; provide
 (provide 'init-outline)
 ;;; init-outline.el ends here
