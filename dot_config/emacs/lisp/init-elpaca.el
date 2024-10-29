@@ -104,6 +104,7 @@
 (elpaca helm-system-packages)
 (elpaca helpful)
 (elpaca hemera-theme)
+(elpaca hide-mode-line)
 (elpaca highlight-indent-guides)
 (elpaca highlight-quoted)
 (elpaca htmlize)
