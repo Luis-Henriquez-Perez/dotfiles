@@ -51,10 +51,14 @@ string or comment."
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
 ;;;; define abbrevs
-(define-abbrev global-abbrev-table "prov"           "provide"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "lib"           "library"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "whe"           "whether"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "gona"           "going to"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "str"            "string"                        nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "sentense"       "sentence"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "isd"            "I should"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "ish"            "I should"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "prov"           "provide"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "lib"            "library"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "whe"            "whether"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "gona"           "going to"                      nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "thig"           "thing"                         nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "dels"           "deletes"                       nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "envyronmen"     "environment"                   nil :enable-function #'+abbrev-use-plain-text-abbrev-p)
