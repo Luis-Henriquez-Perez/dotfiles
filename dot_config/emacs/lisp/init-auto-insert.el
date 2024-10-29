@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (opt! auto-insert-query nil)
-(hook! on-first-file-hook auto-insert-mode)
+(oo-add-hook 'on-first-file-hook #'auto-insert-mode)
 
 (autoload #'oo-auto-insert-elisp-template "config-auto-insert" nil t 'function)
 (autoload #'oo-auto-insert-python-file-header "config-auto-insert" nil t 'function)

@@ -34,7 +34,7 @@
 ;;;; disable header-line
 (setq-hook! org-capture-mode-hook header-line-format nil)
 ;;;; enable evil-insert-state
-(defhook! enter-evil-state (org-capture-mode-hook)
+(defhook! oo-enter-evil-state-h (org-capture-mode-hook)
   "Do not show header line."
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))

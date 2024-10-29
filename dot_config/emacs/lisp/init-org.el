@@ -57,7 +57,7 @@
 ;;;; org-agenda
 (require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
-(bind! oo-leader-map ";" #'+org-agenda-day-view)
+;; (bind! oo-leader-map ";" #'+org-agenda-day-view)
 ;;;; org-capture
 (autoload #'+org-capture-plain "config-org-capture" nil t 'function)
 (autoload #'+org-capture-todo "config-org-capture" nil t 'function)
@@ -111,11 +111,11 @@
 (opt! org-src-window-setup 'plain)
 ;;;; org-clock
 ;; TODO: do not load org-clock on `org-mode-hook'.
-(hook! org-mode-hook org-clock-persistence-insinuate)
+(oo-add-hook 'org-mode-hook #'org-clock-persistence-insinuate)
 (opt! org-clock-persist t)
 (opt! org-clock-sound (f-full "~/Downloads/ding-101492.wav"))
 ;;;; org-superstar
-(hook! org-mode-hook org-superstar-mode)
+(oo-add-hook 'org-mode-hook #'org-superstar-mode)
 
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items nil)

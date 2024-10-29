@@ -1,4 +1,4 @@
-;;; init-evil-lispy.el --- Initialize evil-lispy -*- lexical-binding: t; -*-
+;;; init-evil-fringe-mark.el --- Initialize evil-fringe-mark -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,13 +22,21 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize evil-lispy.
+;; Initialize evil-fringe-mark.
 ;;
 ;;; Code:
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-(oo-add-hook 'clojure-mode-hook #'evil-lispy-mode)
+(require 'base)
 
-;; (bind! emacs-lisp-mode-map)
+(defun oo-enable-evil-fringe-mark-a (orig-fn &rest args)
+  "Enable `evil-fringe-mark'."
+  (prog1 (apply orig-fn args)
+    (cond ((require 'evil-fringe-mark nil t)
+           (global-evil-fringe-mark-mode 1)
+           (advice-remove 'evil-set-marker #'oo-enable-evil-fringe-mark-a))
+          (t
+           (warn! "Could not load `evil-fringe-mark-mode'.")))))
+
+(advice-add 'evil-set-marker :around #'oo-enable-evil-fringe-mark-a)
 ;;; provide
-(provide 'init-evil-lispy)
-;;; init-evil-lispy.el ends here
+(provide 'init-evil-fringe-mark)
+;;; init-evil-fringe-mark.el ends here

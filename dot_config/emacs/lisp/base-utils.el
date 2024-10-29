@@ -61,7 +61,27 @@
   "Return quoted form unquoted, otherwise return form."
   (declare (pure t) (side-effect-free t))
   (if (oo-quoted-p form) form (macroexp-quote form)))
-;;;; oo-wrap-forms
+;;;; numbers
+(defsubst oo-negative-p (number)
+  "Return non-nil if NUMBER is less than zero."
+  (< number 0))
+
+(defsubst oo-positive-p (number)
+  "Return non-nil if NUMBER is greater than zero."
+  (> number 0))
+;;;; miscellaneous
+(defun oo-hook-symbol-p (obj)
+  "Return non-nil if SYMBOL is a hook symbol."
+  (declare (pure t) (side-effect-free t))
+  (and (symbolp obj)
+       (string-match-p "[^[:space:]]+-hook\\'" (symbol-name obj))))
+
+(defun oo-true-list-p (object)
+  "Return non-nil if OBJECT is a true list.
+A \"true list\" is a list whose CDR is also a list."
+  (declare (pure t) (side-effect-free error-free))
+  (and (listp object) (listp (cdr-safe object))))
+
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
 FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
@@ -122,16 +142,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
   `(if (not ,cond) ,then ,@else))
 
 (defalias 'nif! 'if-not!)
-;;;; oo-once-only-fn
-(defun oo-only-once-fn (fn)
-  "Return a function behaves the same as FN the first time it is called.
-After the first call, it does nothing and returns nil.  Note that this function
-must be evaluated with `lexical-binding' enabled."
-  (let ((first-call-p t))
-    (lambda (&rest args)
-      (when first-call-p
-        (setq first-call-p nil)
-        (apply fn args)))))
 ;;;; oo-funcall-silently
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."

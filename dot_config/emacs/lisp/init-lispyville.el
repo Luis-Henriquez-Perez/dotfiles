@@ -28,7 +28,7 @@
 (require 'base)
 
 ;; Do not bind any keys by default.
-(hook! emacs-lisp-mode-hook lispyville-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'lispyville-mode)
 (advice-add #'lispyville-normal-state :after #'@exit-everything)
 (opt! lispyville-key-theme nil)
 

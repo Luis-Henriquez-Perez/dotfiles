@@ -25,7 +25,7 @@
 ;; Initialize hy-mode.
 ;;
 ;;; Code:
-(hook! hy-mode-hook lispyville-mode)
+(oo-add-hook 'hy-mode-hook #'lispyville-mode)
 ;;; provide
 (provide 'init-hy-mode)
 ;;; init-hy-mode.el ends here

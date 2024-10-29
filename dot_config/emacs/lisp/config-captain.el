@@ -92,13 +92,13 @@
     	   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))
     ))
 
-(defhook! set-captain-local-vars (text-mode-hook)
+(defhook! oo-set-captain-local-vars-h (text-mode-hook)
   "Initialize `captain' for text-mode."
   (setq-local captain-predicate #'always)
   (setq-local captain-sentence-start-function #'captain--default-sentence-start))
 
 ;; TODO: figure out the best way to add these things.
-(defhook! set-captain-local-vars (emacs-lisp-mode-hook)
+(defhook! oo-set-captain-local-vars-h (emacs-lisp-mode-hook)
   "Initialize `captain' for prog-mode."
   (setq-local captain-predicate #'oo-in-string-or-comment-p)
   (setq-local captain-sentence-start-function #'oo--prog-mode-should-capitalize-p))

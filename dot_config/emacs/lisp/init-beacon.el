@@ -1,4 +1,4 @@
-;;; init-evil-lispy.el --- Initialize evil-lispy -*- lexical-binding: t; -*-
+;;; init-beacon.el --- Initialize beacon -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,13 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize evil-lispy.
+;; Initialize beacon.
 ;;
 ;;; Code:
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-(oo-add-hook 'clojure-mode-hook #'evil-lispy-mode)
-
-;; (bind! emacs-lisp-mode-map)
+(oo-add-hook 'on-first-input-hook #'beacon-mode)
 ;;; provide
-(provide 'init-evil-lispy)
-;;; init-evil-lispy.el ends here
+(provide 'init-beacon)
+;;; init-beacon.el ends here

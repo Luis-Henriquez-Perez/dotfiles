@@ -28,25 +28,19 @@
 (require 'base)
 (require 'recentf)
 
-(hook! emacs-startup-hook recentf-mode)
-;; TODO: Figure out why this is an error with eldev eval.
-;; For some reason this gives an error when I use eldev eval. I have to figure
-;; out what eldev is doing here.
-(hook! kill-emacs-hook recentf-save-list)
+(oo-add-hook 'emacs-startup-hook #'recentf-mode)
 
 (advice-add #'recentf-save-list :before #'recentf-cleanup)
-
-(advice-add #'recentf-cleanup :around #'oo-funcall-silently)
 (advice-add #'recentf-save-list :around #'oo-funcall-silently)
-(advice-add #'recentf-mode :around #'oo-funcall-silently)
+(advice-add #'recentf-cleanup   :around #'oo-funcall-silently)
+(advice-add #'recentf-mode      :around #'oo-funcall-silently)
 
-(setq recentf-filename-handlers '(file-truename))
+(adjoin! recentf-filename-handlers #'file-true-name)
+(adjoin! recentf-filename-handlers #'abbreviate-file-name)
+(adjoin! recentf-filename-handlers #'substring-no-properties)
 
-(adjoining! recentf-filename-handlers #'abbreviate-file-name)
-(adjoining! recentf-filename-handlers #'substring-no-properties)
-
-(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
-(adjoining! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
+(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
+(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
 
 (setq recentf-max-saved-items nil)
 ;;;; TODO always keep important files in recentf-list

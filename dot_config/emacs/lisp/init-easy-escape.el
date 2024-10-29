@@ -1,4 +1,4 @@
-;;; init-evil-lispy.el --- Initialize evil-lispy -*- lexical-binding: t; -*-
+;;; init-easy-escape.el --- Initialize easy-escape -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,13 +22,14 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize evil-lispy.
+;; Initialize easy-escape.
 ;;
 ;;; Code:
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-(oo-add-hook 'clojure-mode-hook #'evil-lispy-mode)
+(require 'base)
 
-;; (bind! emacs-lisp-mode-map)
+;; Replace 'lisp-mode-hook with 'prog-mode-hook to enable everywhere
+(oo-add-hook 'lisp-mode-hook 'easy-escape-minor-mode)
+(oo-add-hook 'emacs-lisp-mode-hook 'easy-escape-minor-mode)
 ;;; provide
-(provide 'init-evil-lispy)
-;;; init-evil-lispy.el ends here
+(provide 'init-easy-escape)
+;;; init-easy-escape.el ends here

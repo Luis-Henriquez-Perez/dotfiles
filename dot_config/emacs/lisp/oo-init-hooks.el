@@ -34,9 +34,9 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-input-hook
-(hook! on-first-input-hook minibuffer-depth-indicate-mode)
+(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
-(defhook! enable-font-lock (emacs-lisp-mode-hook)
+(defhook! oo-enable-elisp-font-lock-h (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
   (font-lock-add-keywords
    'emacs-lisp-mode
@@ -49,16 +49,19 @@
 ;; maps that take priority (intercept) evil bindings when they have a different
 ;; binding for the same key (this is opposed to =overriding-maps=, which completely
 ;; override an evil keymap).
-(defhook! make-intercept-map (evil-mode-hook)
+(defhook! oo-make-intercept-map-h (evil-mode-hook)
   "Register `oo-override-map' as an intercept map."
   (evil-make-intercept-map override-global-map 'all t))
 ;;;;; emacs-startup-hook
-(defhook! init-after-load-functions (emacs-startup-hook)
+(oo-call-after-load 'evil #'oo-call-after-load-functions)
+
+(defhook! oo-init-after-load-functions-h (on-first-input-hook)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
+  [:depth 99]
   (oo-call-after-load-functions)
-  (hook! after-load-functions oo-call-after-load-functions))
+  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
@@ -67,11 +70,11 @@ file is loaded."
 ;; all.  And again this is great for reducing startup time but I still want the
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
-(defhook! require-macros (emacs-lisp-mode-hook)
+(defhook! oo-require-macros-h (emacs-lisp-mode-hook)
   (require 'base-macros))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! increase-garbage-collection (minibuffer-setup-hook)
+(defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
   [:depth 10]
   (set-register :gc-cons-threshold gc-cons-threshold)
@@ -79,7 +82,7 @@ file is loaded."
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
-(defhook! decrease-garbage-collection (minibuffer-exit-hook)
+(defhook! oo-decrease-garbage-collection-h (minibuffer-exit-hook)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   [:depth 90]
   (setq gc-cons-threshold (get-register :gc-cons-threshold))

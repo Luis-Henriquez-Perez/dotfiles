@@ -41,49 +41,72 @@
 (defvar oo-logger (lgr-get-logger "main")
   "Object used for logging.")
 
+(defvar oo-error-logger (lgr-get-logger "error")
+  "Object used for logging errors.")
+
 (block!
   ;; Define a formatter.
   (set! ts "%Y-%m-%d %H:%M:%S")
   (set! format "%t [%L] %m")
   (set! formatter (lgr-layout-format :format format :timestamp-format ts))
+  (set! message-format "[%L] %m")
+  (set! message-formatter (lgr-layout-format :format message-format))
   ;; Define the log file.
   ;; Each emacs session will have its own log saved.
   (set! log-dir (expand-file-name "logs" oo-data-dir))
   (set! filename (format-time-string "%Y%m%d%H%M%S-log.txt"))
   (set! log-file (expand-file-name filename log-dir))
   ;; Define the appenders.
-  (set! buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
-  (lgr-set-layout buffer-appender formatter)
+  (set! log-buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
+  (set! message-buffer-appender (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
   ;; Add the formatter to the appenders.
-  (lgr-set-layout buffer-appender formatter)
+  (lgr-set-layout log-buffer-appender formatter)
+  (lgr-set-layout message-buffer-appender message-formatter)
   ;; Add the appenders to the logger.
-  (lgr-add-appender oo-logger buffer-appender))
+  (lgr-add-appender oo-logger log-buffer-appender)
+  (lgr-add-appender oo-error-logger message-buffer-appender)
+  (lgr-add-appender oo-error-logger log-buffer-appender))
 
 ;; I do not want to have to pass in the logger every single time.
 (defmacro info! (msg &rest meta)
   `(lgr-info oo-logger ,msg ,@meta))
 
 (defmacro error! (msg &rest meta)
-  `(lgr-error oo-logger ,msg ,@meta))
+  `(lgr-error oo-error-logger ,msg ,@meta))
 
 (defmacro warn! (msg &rest meta)
   `(lgr-warn oo-logger ,msg ,@meta))
 
 (defmacro fatal! (msg &rest meta)
   `(lgr-fatal oo-logger ,msg ,@meta))
-;;;; reporting errors
-(defun oo-report-error (fn error)
-  "Register ERROR and FN in `oo-errors'."
-  (error! "%s raised an %s error because of %s" fn (car error) (cdr error))
-  (cl-pushnew (cons fn error) oo-errors :key #'car))
 
-(defun oo-report-error-fn (fn)
-  "Return a function that will report error instead of raising it."
-  (oo-condition-case-fn fn (lambda (e &rest _) (oo-report-error fn e))))
+(defmacro trace! (msg &rest meta)
+  `(lgr-trace oo-logger ,msg ,@meta))
+
+(defmacro debug! (msg &rest meta)
+  `(lgr-debug oo-logger ,msg ,@meta))
 ;;;; silently
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
+;;;; hook
+(cl-defun oo-add-hook (hook function &key depth append local)
+  "Add hook to function."
+  (alet (intern (format "%s&%s" hook function))
+    (fset it
+          `(lambda (&rest args)
+             (info! "HOOK: %s -> %s" ',hook ',function)
+             (condition-case err
+                 (apply #',function args)
+               (error
+                (cond (oo-debug-p
+                       (signal (car err) (cdr err)))
+                      (t
+                       (error! "Error calling %s in %s because of %s"
+                               ',it
+                               (car err)
+                               (cdr err))))))))
+    (add-hook hook it (or depth append) local)))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
@@ -111,18 +134,18 @@
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
   (pcase expr
+    ((pred null)
+     (funcall fn nil))
     (`(:or . ,exprs)
      (--each exprs (oo--call-after-load it fn)))
     (`(:and . ,exprs)
-     (apply #'oo--call-after-load exprs fn))
-    ((or (pred null) (and (pred symbolp) (pred featurep)))
-     (funcall fn))
-    (`(,expr . ,exprs)
-     (oo--call-after-load expr (apply-partially #'oo--call-after-load exprs fn)))
-    ((and feature (pred symbolp))
+     (oo--call-after-load exprs fn))
+    ((or `(,(and feature (pred symbolp))) (and feature (pred symbolp)))
      (if (featurep feature)
-         (funcall fn)
-       (eval-after-load feature fn)))
+         (funcall fn feature)
+       (eval-after-load feature (-partial #'oo--call-after-load feature fn))))
+    (`(,expr . ,exprs)
+     (oo--call-after-load expr `(lambda (_) (oo--call-after-load ',exprs #',fn))))
     (_
      (error "invalid expression `%S'" expr))))
 
@@ -134,7 +157,7 @@
 ;; 3 - stop worrying about variables that haven't been bound
 ;; 4 - stop worrying about whether a variable is a custom variable or not
 ;; Some variables are custom variables.  Meaning they have some function that.
-(defun! oo-call-after-load (expr fn &rest args)
+(defun oo-call-after-load (expr fn)
   "Call FN with ARGS after EXPR resolves.
 EXPR can be a feature (symbol), a list of CONDITIONS, a list whose CAR is
 either `:or' or `:and' and whose CDR is a list of EXPRS.  If CONDITION is a
@@ -144,7 +167,22 @@ EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
 EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
-  (alet (oo-only-once-fn (oo-report-error-fn (apply #'apply-partially fn args)))
+  (alet (eval `(let ((first-call-p t))
+                 (lambda (&optional feature)
+                   (when first-call-p
+                     (setq first-call-p nil)
+                     (info! "AFTER-LOAD: %s -> %s" feature #',fn)
+                     (condition-case err
+                         (funcall #',fn)
+                       (error
+                        (cond (oo-debug-p
+                               (signal (car err) (cdr err)))
+                              (t
+                               (error! "Error calling %s in %s because of %s"
+                                       ',fn
+                                       (car err)
+                                       (cdr err)))))))))
+              t)
     (oo--call-after-load expr it)))
 ;;;; oo-after-load-hash-table
 ;; This alist is meant to call certain functions whenever a file is loaded.  It

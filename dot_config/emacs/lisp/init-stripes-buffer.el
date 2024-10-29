@@ -1,4 +1,4 @@
-;;; config-tempel.el --- Configure tempel -*- lexical-binding: t; -*-
+;;; init-stripes-buffer.el --- Initialize stripes-buffer -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,12 +22,10 @@
 ;;
 ;;; Commentary:
 ;;
-;; Configure tempel.
+;; Initialize stripes-buffer.
 ;;
 ;;; Code:
-;;;; Make tempel-map an overriding map
-(defhook! make-tempel-map-overriding (oo-after-load-evil-hook)
-  (evil-make-overriding-map tempel-map))
+(oo-add-hook 'dired-mode-hook #'stripe-buffer-mode)
 ;;; provide
-(provide 'config-tempel)
-;;; config-tempel.el ends here
+(provide 'init-stripes-buffer)
+;;; init-stripes-buffer.el ends here

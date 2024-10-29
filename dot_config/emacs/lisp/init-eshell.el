@@ -27,12 +27,12 @@
 ;;; Code:
 (require 'base)
 
-(hook! eshell-mode-hook abbrev-mode)
-(hook! eshell-mode-hook smartparens-mode)
-(hook! eshell-mode-hook eat-eshell-mode)
-(hook! eshell-mode-hook eshell-syntax-highlighting-mode)
+(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
+(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
+(oo-add-hook 'eshell-mode-hook #'eat-eshell-mode)
+(oo-add-hook 'eshell-mode-hook #'eshell-syntax-highlighting-mode)
 ;; Do not let me kill the eshell buffer, at least not easily.
-(hook! eshell-mode-hook emacs-lock-mode)
+(oo-add-hook 'eshell-mode-hook #'emacs-lock-mode)
 
 (autoload #'eshell-z "eshell-z" nil t 'function)
 (autoload #'eshell-up "eshell-up" nil t 'function)

@@ -27,8 +27,6 @@
 ;;; Code:
 (require 'base)
 
-(hook! emacs-startup-hook which-key-mode)
-
 (opt! which-key-sort-uppercase-first nil)
 (opt! which-key-max-display-columns nil)
 (opt! which-key-add-column-padding 1)

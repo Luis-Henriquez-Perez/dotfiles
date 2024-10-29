@@ -90,25 +90,36 @@
   (set! rx (rx (seq "(require" (one-or-more blank) "'" (group (1+ nonl))")")))
   (save-excursion (sort-regexp-fields nil rx "\\1" beg end)))
 
-;; If I have a region selected, use that.
-;; If it is interactive and I do not have a region selected use the beginning
-;; of the current line and the end of the buffer.
 (defun! oo-sort-dwim (beg end)
   "Sort lines the way I like it."
   (interactive
-   (if (region-active-p)
-	   (list (region-beginning) (region-end))
-	 (list (line-beginning-position) (point-max))))
-  (set! regexp (rx "(" (group (or "autoload" "require" "elpaca"))))
+   (cond ((region-active-p)
+	      (list (region-beginning) (region-end)))
+	     ((save-excursion (aand "(\\(\\(?:autoload\\|elpaca\\|require\\)\\)"
+                                (re-search-forward it end t nil)))
+          (list (match-beginning 0) (point-max)))
+         (t
+          (list nil nil))))
   (save-excursion
     (goto-char beg)
-    (re-search-forward regexp end t nil))
-  (pcase (match-string 1)
-	("autoload" (oo-sort-autoload-forms beg end))
-	("require" (oo-sort-require-forms beg end))
-	("elpaca" (oo-sort-elpaca-forms beg end))
-	(_ (error "No sorting method detected"))))
-
+    (pcase (match-string 1)
+	  ("autoload" (oo-sort-autoload-forms beg end))
+	  ("require" (oo-sort-require-forms beg end))
+	  ("elpaca" (oo-sort-elpaca-forms beg end))
+	  (_ (error "No sorting method detected")))))
+;;;; alignment
+(defun! oo-dwim-align (beg end)
+  (interactive
+   (cond ((region-active-p)
+	      (list (region-beginning) (region-end)))
+	     ((save-excursion (goto-char (point-min))
+                          (re-search-forward "^(define-abbrev" (point-max) t nil))
+          (list (match-beginning 0) (point-max)))
+         (t
+          (list nil nil))))
+  (set! regexp "(define-abbrev\\(?1:\\s-+\\)\\S-+\\(?2:\\s-+\\)\".*?\"\\(?3:\\s-+\\)\".*?\"\\(?4:\\s-+\\)\\S-+\\(?5:\\s-+\\):enable-function\\(?6:\\s-+\\).+)")
+  (set! rules `((rule1 . ((regexp . ,regexp) (group . (1 2 3 4 5 6))))))
+  (align (point-min) (point-max) nil rules))
 ;;;; miscellaneous
 (defun oo-dwim-narrow (keep-narrowing-p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
@@ -178,10 +189,6 @@ is already narrowed."
   (interactive)
   (display-buffer (generate-new-buffer "untitled")))
 
-;; This has to do with chezmoi.
-(defun! update-emacs-config ()
-  ;; Clear the existing files that are not part of chezmoi.
-  ())
 (defun oo-copyright-license ()
   "Return the copyright license."
   (string-join (list ";;"

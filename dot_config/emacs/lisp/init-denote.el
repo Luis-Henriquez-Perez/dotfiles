@@ -32,9 +32,9 @@
 (opt! denote-prompts nil)
 (opt! denote-org-front-matter "#+title: %1$s\n#+filetags: %3$s\n#+identifier: %4$s\n")
 (opt! denote-save-buffers t)
-(hook! oo-after-load-denote-hook denote-rename-buffer-mode)
+(oo-call-after-load 'denote #'denote-rename-buffer-mode)
 ;; Set denote to insert state after entering.
-(defhook! enter-insert-state (denote-after-new-note-hook)
+(defhook! oo-enter-insert-state-h (denote-after-new-note-hook)
   "Enter insert state after entering denote buffer."
   ;; (message "LOG %s : %S" (format-time-string "%X") (current-buffer))
   (when (bound-and-true-p evil-mode)

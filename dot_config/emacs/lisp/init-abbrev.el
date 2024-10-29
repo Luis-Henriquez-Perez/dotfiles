@@ -27,24 +27,38 @@
 ;;; Code:
 (require 'base)
 ;;;; hooks
-(hook! prog-mode-hook abbrev-mode)
-(hook! text-mode-hook abbrev-mode)
-;; Emacs loads abbreviation-mode automatically so instead of using something
-;; like `with-eval-after-load' I am loading it in `abbrev-mode-hook'.
-(defun +abbrev-mode-hook&require-abbrev-config ()
-  (require 'config-abbrev)
-  (info! "Loaded `config-abbrev'...")
-  (remove-hook 'abbrev-mode-hook #'+abbrev-mode-hook&require-abbrev-config))
-(add-hook 'abbrev-mode-hook #'+abbrev-mode-hook&require-abbrev-config)
+(oo-add-hook 'prog-mode-hook #'abbrev-mode)
+(oo-add-hook 'text-mode-hook #'abbrev-mode)
+;;;; mode hook
+;; There is an idea of loading the abbrevs just before they are needed--as in
+;; right as your typing--but doing that would actually cause a noticable delay
+;; when typing a character.
+(defun oo-load-plain-text-abbrevs-h (abbrev-mode-hook)
+  (when (derived-mode-p 'text-mode)
+    (require 'oo-plain-text-abbrevs))
+  (remove-hook 'abbrev-mode-hook #'oo-load-plain-text-abbrevs-h))
+
+(defhook! oo-load-emacs-lisp-mode-abbrevs-h (emacs-lisp-mode-hook)
+  (when (derived-mode-p 'emacs-lisp-mode)
+    (require 'oo-emacs-lisp-mode-abbrevs))
+  (remove-hook 'emacs-lisp-mode-hook #'oo-load-emacs-lisp-mode-abbrevs-h))
+
+(defhook! oo-load-eshell-mode-abbrevs-h (eshell-mode-hook)
+  (when (derived-mode-p 'eshell-mode)
+    (require 'oo-eshell-mode-abbrevs))
+  (remove-hook 'eshell-mode-hook #'oo-load-eshell-mode-abbrevs-h))
 ;;;; bindings
-(autoload #'+abbrev-add-new-abbrev "config-abbrev" nil t 'function)
-(bind! "C-c j" #'+abbrev-add-new-abbrev)
 (bind! "C-c k" #'unexpand-abbrev)
 ;;;; do not save abbrevs to a file
 (advice-add 'read-abbrev-file :around #'ignore)
 (advice-add 'write-abbrev-file :around #'ignore)
 (advice-add 'abbrev--possibly-save :around #'ignore)
 (advice-add 'quietly-read-abbrev-file :around #'ignore)
+;;;; setup advices
+(autoload 'oo--pulse-expansion "config-abbrev" nil nil 'function)
+(autoload 'oo--add-period-maybe "config-abbrev" nil nil 'function)
+(autoload 'oo--ensure-self-insert "config-abbrev" nil nil 'function)
+
 (advice-add 'abbrev--default-expand :around #'oo--pulse-expansion)
 (advice-add 'abbrev--default-expand :around #'oo--add-period-maybe)
 (advice-add 'abbrev--default-expand :around #'oo--ensure-self-insert)

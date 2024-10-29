@@ -32,14 +32,14 @@
 (autoload #'tempel-insert "tempel" nil t 'function)
 (autoload #'tempel-expand "tempel" nil t 'function)
 ;;;; capf
-(defhook! register-tempel-for-completion (prog-mode-hook text-mode-hook)
+;; `tempel-expand' only triggers on exact matches. Alternatively use
+;; `tempel-complete' if you want to see all matches, but then you
+;; should also configure `tempel-trigger-prefix', such that Tempel
+;; does not trigger too often when you don't expect it. NOTE: We add
+;; `tempel-expand' *before* the main programming mode Capf, such
+;; that it will be tried first.
+(defhook! oo-setup-tempel-completion-h (prog-mode-hook text-mode-hook)
   "Add the Tempel Capf to `completion-at-point-functions'."
-  ;; `tempel-expand' only triggers on exact matches. Alternatively use
-  ;; `tempel-complete' if you want to see all matches, but then you
-  ;; should also configure `tempel-trigger-prefix', such that Tempel
-  ;; does not trigger too often when you don't expect it. NOTE: We add
-  ;; `tempel-expand' *before* the main programming mode Capf, such
-  ;; that it will be tried first.
   (pushing! completion-at-point-functions #'tempel-expand :setter setq-local))
 ;;;; keybindings
 (bind! i tempel-map "C-j" #'tempel-next)
@@ -49,8 +49,6 @@
 
 (bind! oo-quick-map "i" #'tempel-insert)
 (bind! oo-quick-map "l" #'tempel-insert)
-;;;; load config
-(require! config-tempel)
 ;;; provide
 (provide 'init-tempel)
 ;;; init-tempel.el ends here

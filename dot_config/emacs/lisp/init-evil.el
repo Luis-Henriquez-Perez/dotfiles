@@ -27,10 +27,10 @@
 ;;; Code:
 (require 'base)
 
-(defhook! load-evil (after-init-hook)
+(defhook! oo-load-evil-h (after-init-hook)
   [:depth 10]
   (require 'evil nil t))
-(hook! emacs-startup-hook evil-mode)
+(oo-add-hook 'emacs-startup-hook #'evil-mode)
 
 ;; Must be set before evil is loaded.
 (setq evil-want-keybinding nil)
@@ -92,10 +92,10 @@
 ;; Though I will say I am not 100% sure it is the equivalent.
 (bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
 
-(bind! (n v) "g t" #'evil-goto-first-line)
-(bind! (n v) "g b" #'evil-goto-line)
+;; (bind! (n v) "g t" #'evil-goto-first-line)
+;; (bind! (n v) "g b" #'evil-goto-line)
 
-(bind! (n v) "g g" #'+evil-eval-operator)
+;; (bind! (n v) "g g" #'+evil-eval-operator)
 (bind! (n v) "g h" #'+evil-eval-operator)
 (bind! (n v) "g r" #'+evil-eval-replace-operator)
 (bind! (n v) "g l" #'+evil-eval-print-operator)

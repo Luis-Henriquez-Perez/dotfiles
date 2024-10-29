@@ -1,3 +1,5 @@
+# -*- mode: sh -*-
+
 ## .bashrc
 # I used the bullet headings in this file because having mutiple comment
 # syntaxes next to each other does not work in this file.  Is it a bug?  I
@@ -10,10 +12,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 
-### set emacsclient as my preferred editor 
+### set emacsclient as my preferred editor
 # Indicate to the shell (or bash?) that I want to use emacsclient as my editor
 # of choice when opening a file to read with a terminal program.  This taken
 # as advice from [[https://www.emacswiki.org/emacs/EmacsClient][the emacs wiki]].
@@ -49,4 +50,10 @@ export PATH=$PATH:~/.roswell/bin
 ### add my scripts to the PATH
 export PATH=$PATH:/home/luis/scripts
 
+# Set qutebrowser as default browser.
+export BROWSER=qutebrowser
+
 source ~/myenv/bin/activate
+
+# Needed to resolve kitty driver issue (see https://github.com/kovidgoyal/kitty/discussions/3359).
+export LIBGL_ALWAYS_SOFTWARE=1

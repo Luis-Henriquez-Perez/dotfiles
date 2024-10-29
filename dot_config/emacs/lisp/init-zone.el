@@ -38,7 +38,7 @@
   (zone))
 
 ;; TODO: get rid of some zones.
-(defhook! start-zone-timer (emacs-startup-hook)
+(defhook! oo-start-zone-timer-h (emacs-startup-hook)
   (setq oo-zone-timer (run-with-idle-timer 5 t #'oo-enable-zone)))
 
 (defun oo-cancel-zone ()

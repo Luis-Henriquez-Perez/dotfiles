@@ -44,17 +44,17 @@
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
 
-(defhook! preserve-prior-evil-state (minibuffer-setup-hook)
+(defhook! oo-preserve-prior-evil-state-h (minibuffer-setup-hook)
   "Save state before entering the minibuffer and enter insert state."
   (when (bound-and-true-p evil-mode)
     (setq oo-evil-state-before-minibuffer evil-state)
     (evil-insert-state)))
 
-(defhook! minibuffer-exit-hook (restore-prior-evil-state)
+(defhook! oo-restore-prior-evil-state-h (minibuffer-exit-hook)
   "Restore state after minibuffer."
-  ;; :on evil-mode
   (when (bound-and-true-p evil-mode)
-    (evil-change-state oo-evil-state-before-minibuffer)
+    (when oo-evil-state-before-minibuffer
+      (evil-change-state oo-evil-state-before-minibuffer))
     (setq oo-evil-state-before-minibuffer nil)))
 
 (defun! oo--refresh-cursor (orig-fn &rest args)
@@ -64,11 +64,7 @@
 
 (advice-add 'load-theme :around 'oo--refresh-cursor)
 ;;;; escape
-;; (defvar oo-escape-hook nil
-;;   "Hook run after escaping.")
-;; ((run-hook-with-args-until-success 'oo-escape-hook))
-
-(defun! @exit-everything (&rest _)
+(defun! oo--exit-everything (&rest _)
   "Exits out of whatever is happening after escape."
   (cond ((minibuffer-window-active-p (minibuffer-window))
 		 (if (or defining-kbd-macro executing-kbd-macro)
@@ -78,7 +74,7 @@
         (t
 		 (keyboard-quit))))
 
-(advice-add #'evil-force-normal-state :after #'@exit-everything)
+(advice-add #'evil-force-normal-state :after #'oo--exit-everything)
 ;;;; eval operator
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator +evil-eval-operator (beg end)
@@ -108,6 +104,31 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
+;;;; insert state hook
+(defhook! +evil-enter-insert-state-h ()
+  "Enter insert state if `evil-mode' is enabled."
+  (when (bound-and-true-p evil-mode)
+    (evil-insert-state 1)))
+;;;; cross-configuration
+;;;;; org-capture
+(oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)
+;;;;; git-commit
+;; Note that I cannot use `evil-set-initial-state' for this because
+;; `git-commit-mode' is a minor-mode.
+(oo-add-hook 'git-commit-mode-hook #'+evil-enter-insert-state-h)
+;;;;; denote
+(oo-add-hook 'denote-after-new-note-hook #'+evil-enter-insert-state-h)
+;;;;; corfu
+;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
+;; because the maps are overridden by evil.  In order for them to work, we need
+;; to boost give the maps greater precedence.
+(defafter! oo-make-corfu-map-an-overriding-map (corfu)
+  (evil-make-overriding-map corfu-map)
+  (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+  (advice-add 'corfu--teardown :after 'evil-normalize-keymaps))
+;;;;; tempel
+(defafter! oo-make-tempel-map-an-overriding-map (tempel)
+  (evil-make-overriding-map tempel-map))
 ;;; provide
 (provide 'config-evil)
 ;;; config-evil.el ends here

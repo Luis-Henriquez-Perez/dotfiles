@@ -1,4 +1,4 @@
-;;; +abbrev-emacs-lisp-mode-abbrevs.el --- abbrevs for emacs-lisp-mode -*- lexical-binding: t; -*-
+;;; oo-emacs-lisp-mode-abbrevs.el --- abbrevs for emacs-lisp-mode -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,19 +22,19 @@
 ;;
 ;;; Commentary:
 ;;
-;; TODO: add commentary
+;; These are abbrevs for emacs-lisp-mode.
 ;;
 ;;; Code:
 ;;;; requirements
 (require 'abbrev)
 ;;;; emacs-lisp
-(defun +abbrev-use-emacs-lisp-mode-abbrevs-p ()
+(defun oo--use-emacs-lisp-mode-abbrevs-p ()
   "Return non-nil when emacs-lisp-mode abbrevs should expand.
 This is when `emacs-lisp-mode' is enabled and point is not in a string or
 comment."
   (and (derived-mode-p 'emacs-lisp-mode)
        (not (oo-in-string-or-comment-p))))
-;;;; Abbrev snippets
+;;;; abbrev snippets
 ;; TODO: make a function or (most likely) macro for this.
 ;; These are the rules that must be strictly followed for a snippet abbrev to
 ;; work with tempel.
@@ -47,27 +47,27 @@ comment."
 ;;    not be active until a state change.
 ;; 4. The definition of the abbrev must be an empty string.
 ;; 5. The hook function must return t.
-(put '+abbrev-insert-defun 'no-self-insert t)
-(defun +abbrev-insert-defun ()
+(put 'oo--insert-defun-template 'no-self-insert t)
+(defun oo--insert-defun-template ()
   (require 'tempel)
   (tempel-insert 'fn)
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "fun" "" '+abbrev-insert-defun :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "fun" "" 'oo--insert-defun-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(put '+abbrev-insert-alias 'no-self-insert t)
-(defun +abbrev-insert-alias ()
+(put 'oo--insert-alias-template 'no-self-insert t)
+(defun oo--insert-alias-template ()
   (require 'tempel)
   (tempel-insert 'als)
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
-(define-abbrev global-abbrev-table "als" "" '+abbrev-insert-alias :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "als" "" 'oo--insert-alias-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(put '+abbrev-insert-defvar 'no-self-insert t)
-(defun +abbrev-insert-defvar ()
+(put 'oo--insert-defvar-template 'no-self-insert t)
+(defun oo--insert-defvar-template ()
   (require 'tempel)
   (tempel-insert 'vr)
   (when (bound-and-true-p evil-mode)
@@ -80,37 +80,48 @@ comment."
 ;; the table is still considered.  Adding an enable function makes it so that
 ;; both the table's enable function and the abbrev's enable function have to
 ;; return true.
-(define-abbrev global-abbrev-table "dv" "" '+abbrev-insert-defvar :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "dv" "" 'oo--insert-defvar-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(put '+abbrev-insert-msg 'no-self-insert t)
-(defun +abbrev-insert-msg ()
+(put 'oo--insert-msg-template 'no-self-insert t)
+(defun oo--insert-msg-template ()
   (require 'tempel)
   (tempel-insert 'lg)
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
 
-(put '+abbrev-insert-set-bang 'no-self-insert t)
-(defun +abbrev-insert-set-bang ()
+(put 'oo--insert-set-bang-template 'no-self-insert t)
+(defun oo--insert-set-bang-template ()
   (require 'tempel)
   (tempel-insert '("(set! " (p "variable") " " (p "value") ")"))
   (when (bound-and-true-p evil-mode)
     (evil-normalize-keymaps))
   t)
 
-(define-abbrev global-abbrev-table "sett" "" '+abbrev-insert-set-bang :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(put 'oo--insert-set-bang-template 'no-self-insert t)
 
-(define-abbrev global-abbrev-table "msg" "" '+abbrev-insert-msg :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(defun oo--insert-rsf-template ()
+  (require 'tempel)
+  (tempel-insert '("(re-search-forward " (p "regexp") " " (p "beg") ")"))
+  (when (bound-and-true-p evil-mode)
+    (evil-normalize-keymaps))
+  t)
 
-(define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "rsf" "" 'oo--insert-rsf-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "sett" "" 'oo--insert-set-bang-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "msg" "" 'oo--insert-msg-template :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "pmax" "(point-max)" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "rnn" "return non-nil if" nil  :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 
-(define-abbrev global-abbrev-table "optionaal" "optional" nil  :enable-function '+abbrev-use-emacs-lisp-mode-abbrevs-p)
+(define-abbrev global-abbrev-table "nl" "nil" nil  :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
+
+(define-abbrev global-abbrev-table "pmin" "(point-min)" nil  :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
+
+(define-abbrev global-abbrev-table "pmax" "(point-max)" nil  :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
+
+(define-abbrev global-abbrev-table "optionaal" "optional" nil  :enable-function 'oo--use-emacs-lisp-mode-abbrevs-p)
 ;;; provide
-(provide '+abbrev-emacs-lisp-mode-abbrevs)
-;;; +abbrev-emacs-lisp-mode-abbrevs.el ends here
+(provide 'oo-emacs-lisp-mode-abbrevs)
+;;; oo-emacs-lisp-mode-abbrevs.el ends here

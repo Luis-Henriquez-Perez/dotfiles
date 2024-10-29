@@ -30,9 +30,9 @@
 ;;;; open eshell at bottom
 (oo-popup-at-bottom "\\*eshell")
 ;;;; hooks
-(hook! eshell-mode-hook eat-eshell-mode)
-(hook! eshell-mode-hook abbrev-mode)
-(hook! eshell-mode-hook smartparens-mode)
+(oo-add-hook 'eshell-mode-hook #'eat-eshell-mode)
+(oo-add-hook 'eshell-mode-hook #'abbrev-mode)
+(oo-add-hook 'eshell-mode-hook #'smartparens-mode)
 ;;;; prevent eshell from printing out messages on load
 ;; Eshell prints various messages about loading modules.  These messages
 ;; originate from the function [[][eshell-unload-all-modules]].  I would rather

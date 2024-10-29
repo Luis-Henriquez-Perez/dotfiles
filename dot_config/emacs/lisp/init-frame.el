@@ -32,7 +32,7 @@
 ;; theme first or the order of setting the window-divider, or maybe I can
 ;; specify the default theme to load beforehand.  I need to play around with
 ;; settings and see if this flickering can be avoided.
-(hook! after-init-hook window-divider-mode :depth 12)
+(oo-add-hook 'after-init-hook #'window-divider-mode :depth 12)
 (opt! window-divider-default-bottom-width 7)
 (opt! window-divider-default-right-width 7)
 (opt! window-divider-default-places t)

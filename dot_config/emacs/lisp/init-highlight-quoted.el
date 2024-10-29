@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(hook! emacs-lisp-mode-hook highlight-quoted-mode)
+(oo-add-hook 'emacs-lisp-mode-hook #'highlight-quoted-mode)
 ;;; provide
 (provide 'init-highlight-quoted)
 ;;; init-highlight-quoted.el ends here

@@ -32,7 +32,7 @@
 ;;;; enter insert state on commit
 ;; Note that I cannot use `evil-set-initial-state' for this because
 ;; `git-commit-mode' is a minor-mode.
-(defhook! enter-insert-state (git-commit-mode-hook)
+(defhook! oo-enter-insert-state-h (git-commit-mode-hook)
   "Enter `evil-insert-state' after `git-commit-mode'"
   (when (bound-and-true-p evil-mode)
 	(evil-insert-state 1)))
@@ -40,6 +40,7 @@
 (oo-call-after-load '(magit evil) #'evil-magit-init)
 
 (bind! oo-git-map "s" #'magit-status)
+(bind! oo-git-map "g" #'magit-status)
 (bind! oo-git-map "p" #'magit-push)
 (bind! oo-git-map "c" #'magit-commit)
 (bind! oo-git-map "B" #'magit-branch)
