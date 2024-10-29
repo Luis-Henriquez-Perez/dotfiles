@@ -157,6 +157,7 @@
 (elpaca spacemacs-theme)
 (elpaca ssh-agency)
 (elpaca standard-themes)
+(elpaca sudo-edit)
 (elpaca super-save)
 (elpaca tango-plus-theme)
 (elpaca tempel)
