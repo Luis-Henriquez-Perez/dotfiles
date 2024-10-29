@@ -63,32 +63,34 @@
 ;; there is a general way to determine.
 (defun! oo--in-docstring-p ()
   "Return the bounds of docstring."
-  (awhen (bounds-of-thing-at-point 'string)
-	(save-excursion
-	  (goto-char (car it))
-	  (ignore-errors (backward-sexp 3))
-	  (looking-at-p (regexp-opt oo--definer-list)))
-	it))
+  (alet (bounds-of-thing-at-point 'string)
+    (and (derived-mode-p 'emacs-lisp-mode)
+         (save-excursion
+	       (goto-char (car it))
+	       (ignore-errors (backward-sexp 3))
+	       (looking-at-p (regexp-opt oo--definer-list)))
+         it)))
 
 (defun! oo--prog-mode-should-capitalize-p ()
   "Return point where sentense should be capitalized."
   (pcase (oo-in-string-or-comment-p)
     ('comment
-      ;; For now use `lispy--bounds-comment' because I do not think there is a
-      ;; built-in alternative.
-      (set! beg (car (lispy--bounds-comment)))
-      ;; The reason I go forwared one character is that I could be at the first
-      ;; word of the sentence.  I am doubtful this method is perfect but I could
-      ;; not think of a better way yet.
-      (save-excursion (goto-char (1+ (point)))
-                      (backward-sentence)
-                      (goto-char (max (point) beg))
-                      (when (looking-at comment-start-skip)
-                        (goto-char (match-end 0)))
-                      (point)))
+     ;; For now use `lispy--bounds-comment' because I do not think there is a
+     ;; built-in alternative.
+     (set! beg (car (lispy--bounds-comment)))
+     ;; The reason I go forwared one character is that I could be at the first
+     ;; word of the sentence.  I am doubtful this method is perfect but I could
+     ;; not think of a better way yet.
+     (save-excursion (goto-char (1+ (point)))
+                     (backward-sentence)
+                     (goto-char (max (point) beg))
+                     (when (looking-at comment-start-skip)
+                       (goto-char (match-end 0)))
+                     (point)))
     ('string
-      (aand (car (oo--in-docstring-p))
-    	    (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))))
+     (aand (car (oo--in-docstring-p))
+    	   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))
+    ))
 
 (defhook! set-captain-local-vars (text-mode-hook)
   "Initialize `captain' for text-mode."
