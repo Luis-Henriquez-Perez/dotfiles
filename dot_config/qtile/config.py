@@ -29,7 +29,7 @@ keys = []
 def define_key(mod, key, command, desc=""):
     """
     Define a keybinding and add it to the 'keys' list.
-    
+
     :param mod: Modifier key (e.g., ["mod4"] for the Super key)
     :param key: The key to bind
     :param command: The command to execute
