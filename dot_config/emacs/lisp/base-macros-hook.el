@@ -80,7 +80,7 @@
 (defmacro! require! (file &optional feature)
   (set! name (intern (format "oo--load-%s" file)))
   (string-match "\\`config-\\(.+\\)\\'" (symbol-name file))
-  (set! feature (intern (match-string 1 (symbol-name file))))
+  (set! feature (or feature (intern (match-string 1 (symbol-name file)))))
   `(progn (unless (fboundp ',name)
             (defun ,name ()
               (require ',file)))
