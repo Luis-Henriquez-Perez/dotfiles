@@ -61,14 +61,6 @@
   "Return quoted form unquoted, otherwise return form."
   (declare (pure t) (side-effect-free t))
   (if (oo-quoted-p form) form (macroexp-quote form)))
-;;;; numbers
-(defsubst oo-negative-p (number)
-  "Return non-nil if NUMBER is less than zero."
-  (< number 0))
-
-(defsubst oo-positive-p (number)
-  "Return non-nil if NUMBER is greater than zero."
-  (> number 0))
 ;;;; miscellaneous
 (defun oo-hook-symbol-p (obj)
   "Return non-nil if SYMBOL is a hook symbol."
