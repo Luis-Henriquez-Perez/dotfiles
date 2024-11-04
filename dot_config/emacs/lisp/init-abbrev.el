@@ -33,7 +33,7 @@
 ;; There is an idea of loading the abbrevs just before they are needed--as in
 ;; right as your typing--but doing that would actually cause a noticable delay
 ;; when typing a character.
-(defun oo-load-plain-text-abbrevs-h (abbrev-mode-hook)
+(defhook! oo-load-plain-text-abbrevs-h (abbrev-mode-hook)
   (when (derived-mode-p 'text-mode)
     (require 'oo-plain-text-abbrevs))
   (remove-hook 'abbrev-mode-hook #'oo-load-plain-text-abbrevs-h))
