@@ -138,7 +138,6 @@
 (require 'init-vertico-quick)
 (require 'init-w3m)
 (require 'init-wdired)
-(require 'init-web-mode)
 (require 'init-which-key)
 (require 'init-window)
 (require 'oo-autoloads)
