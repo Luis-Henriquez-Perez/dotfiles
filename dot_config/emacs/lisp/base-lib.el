@@ -55,7 +55,6 @@
   ;; Each emacs session will have its own log saved.
   (set! log-dir (expand-file-name "logs" oo-data-dir))
   (set! filename (format-time-string "%Y%m%d%H%M%S-log.txt"))
-  (set! log-file (expand-file-name filename log-dir))
   ;; Define the appenders.
   (set! log-buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
   (set! message-buffer-appender (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
