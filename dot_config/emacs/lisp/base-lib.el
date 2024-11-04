@@ -37,6 +37,7 @@
 (eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
+(declare-function evil-define-key* "evil")
 ;;;; logging
 (defvar oo-logger (lgr-get-logger "main")
   "Object used for logging.")
