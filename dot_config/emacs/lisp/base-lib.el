@@ -53,7 +53,6 @@
   (set! message-formatter (lgr-layout-format :format message-format))
   ;; Define the log file.
   ;; Each emacs session will have its own log saved.
-  (set! log-dir (expand-file-name "logs" oo-data-dir))
   (set! filename (format-time-string "%Y%m%d%H%M%S-log.txt"))
   ;; Define the appenders.
   (set! log-buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
