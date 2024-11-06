@@ -1,7 +1,7 @@
-# * mbsync (isync)
+# -*- mode: conf -*-
+## mbsync (isync)
 # https://brian-thompson.medium.com/setting-up-isync-mbsync-on-linux-e9fe10c692c0
-# ** define the account
-
+### luis@luishp.xyz
 # This is the name that will refer to the account.
 IMAPAccount luishp
 Host mail.privateemail.com
@@ -40,7 +40,12 @@ Create Both
 Expunge Both
 # Save the synchronization state files in the relevant directory
 SyncState *
-
+### luishenriquezperez@gmail.com
+IMAPAccount legacy
+Host imap.gmail.com
+User luishenriquezperez@gmail.com
+PassCMD "pass email/luishenriquezperez@gmail.com"
+### mom account
 # IMAPAccount mom
 # # Address to connect to
 # Host mail.privateemail.com

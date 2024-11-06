@@ -30,6 +30,7 @@
 
 (setf (alist-get 'lua-mode    outli-heading-config) '("--" ?- nil t))
 (setf (alist-get 'python-mode outli-heading-config) '("#" ?# nil t))
+(setf (alist-get 'conf-mode outli-heading-config) '("#" ?# nil t))
 (setf (alist-get 'fennel-mode outli-heading-config)
       (alist-get 'emacs-lisp-mode outli-heading-config))
 (setf (alist-get 'hy-mode     outli-heading-config)
