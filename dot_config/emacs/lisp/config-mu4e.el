@@ -34,7 +34,7 @@
                     t)))
 
 (defun +mu4e--main-enter-message ()
-  (only-once! (call-process "mu --init %s"))
+  ;; (only-once! (call-process "mu --init %s"))
   (info! "Entering main account."))
 
 (defun +mu4e--main-leave-message ()
@@ -42,7 +42,7 @@
   (info! "Exiting main account."))
 
 (defun +mu4e--legacy-enter-message ()
-  (only-once! (call-process "mu --init %s"))
+  ;; (only-once! (call-process "mu --init %s"))
   (info! "Entering main account."))
 
 (defun +mu4e--legacy-leave-message ()
