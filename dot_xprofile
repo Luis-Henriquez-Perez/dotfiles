@@ -37,3 +37,8 @@ ntpd &
 # difference taken to startup with emacs starting as a daemon beforehand.  It is
 # still worth doing it because I am going to startup emacs anyway.
 # emacs --daemon
+
+# Needed to resolve kitty driver issue (see https://github.com/kovidgoyal/kitty/discussions/3359).
+export LIBGL_ALWAYS_SOFTWARE=1
+
+source ~/myenv/bin/activate
