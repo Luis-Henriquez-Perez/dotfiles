@@ -48,11 +48,6 @@
 (defun +mu4e--legacy-leave-message ()
   "Log when `luishenriquezperez@gmail.com' is entered."
   (info! "Exiting main account."))
-
-(defun oo--mail-signature ()
-  (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n")))
-
-(defun! oo--ensure-email-address-is-registered ())
 ;;; provide
 (provide 'config-mu4e)
 ;;; config-mu4e.el ends here

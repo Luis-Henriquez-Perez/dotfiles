@@ -37,13 +37,17 @@
 (opt! message-signature #'oo--mail-signature)
 
 (opt! mu4e-maildir (f-full "~/.mail"))
-(opt! mue4e-headers-skip-duplicates t)
+(opt! mu4e-headers-skip-duplicates t)
 (opt! mu4e-view-show-images t)
 (opt! mu4e-view-show-addresses t)
 (opt! mu4e-compose-format-flowed nil)
 (opt! mu4e-headers-date-format "%Y/%m/%d")
 (opt! mu4e-change-filenames-when-moving t)
 (opt! mu4e-attachments-dir (f-full "~/Downloads"))
+(opt! mu4e-compose-signature '(funcall #'oo--message-signature))
+
+(defun oo--message-signature (&rest _)
+  (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n")))
 
 (opt! mu4e-contexts
       (list (make-mu4e-context
@@ -55,10 +59,9 @@
                      (mu4e-refile-folder     . ,(f-full "/luishp/archive"))
                      (mu4e-drafts-folder     . ,(f-full "/luishp/drafts"))
                      (mu4e-sent-folder       . ,(f-full "/luishp/sent"))
-                     (mu4e-trash-folder      . ,(f-full "/luishp/trash"))
-                     (mu4e-compose-signature . ,message-signature)))
+                     (mu4e-trash-folder      . ,(f-full "/luishp/trash"))))
             (make-mu4e-context
-             :name "luishenriquezperez@gmail.com"
+             :name "gmail"
              :enter-func #'+mu4e--legacy-enter-message
              :leave-func #'+mu4e--legacy-leave-message
              :vars `((user-mail-address      . "luishenriquezperez@gmail.com")
@@ -66,8 +69,7 @@
                      (mu4e-refile-folder     . "/luishenriquezperez/archive")
                      (mu4e-drafts-folder     . ,(f-full "/luishenriquezperez/drafts"))
                      (mu4e-sent-folder       . ,(f-full "/luishenriquezperez/sent"))
-                     (mu4e-trash-folder      . ,(f-full "/luishenriquezperez/trash"))
-                     (mu4e-compose-signature . ,message-signaure)))))
+                     (mu4e-trash-folder      . ,(f-full "/luishenriquezperez/trash"))))))
 
 (opt! message-send-mail-function   'smtpmail-send-it)
 (opt! smtpmail-default-smtp-server "smtp.fastmail.com")
