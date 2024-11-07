@@ -54,7 +54,6 @@ export ALTERNATE_EDITOR=""
 # I would rather open with the GUI.
 export EDITOR="emacsclient -c"                  # $EDITOR opens in GUI mode
 export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
-
 ### add roswell to path
 # This was recommended by [[https://lem-project.github.io/installation/ncurses/linux/][lem github.io website]]. To be honest I am not sure how
 # good of an idea it was to install things via roswell.  To some extent I feel
