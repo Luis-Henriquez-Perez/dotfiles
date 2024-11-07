@@ -34,8 +34,9 @@
 (autoload #'+mu4e--legacy-leave-message "config-mu4e" nil t 'function)
 (autoload #'oo--mail-signature "config-mu4e" nil t 'function)
 
-(defun oo--message-signature (&rest _)
-  (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n")))
+(defun! oo--message-signature (&rest _)
+  "Produce a signature for a message."
+  (insert (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n"))))
 
 (opt! message-signature '(funcall #'oo--message-signature))
 
