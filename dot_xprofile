@@ -36,7 +36,49 @@ ntpd &
 # TODO: fix that this took a long time.  It is definitely noticeable, the
 # difference taken to startup with emacs starting as a daemon beforehand.  It is
 # still worth doing it because I am going to startup emacs anyway.
-# emacs --daemon
+emacs --daemon
+
+### set emacsclient as my preferred editor
+# Indicate to the shell (or bash?) that I want to use emacsclient as my editor
+# of choice when opening a file to read with a terminal program.  This taken
+# as advice from [[https://www.emacswiki.org/emacs/EmacsClient][the emacs wiki]].
+
+# On a side note, I have got to say that I wished I were writing this headline
+# in org.  This is exactly what I am talking about with the power of org.  If it
+# had been in org I would have had this heading as a subtree of the "emacs"
+# heading, putting all the stuff that pertains to emacs in one place because
+# that is the easiest way for me to think about these things.  But since I am
+# not using org, I am more or less tied to having to follow the rules.
+export ALTERNATE_EDITOR=""
+# Using the argument =-c= would make emacs open in the terminal.  But obviously
+# I would rather open with the GUI.
+export EDITOR="emacsclient -c"                  # $EDITOR opens in GUI mode
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
+
+### add [[https://roswell.github.io/Home.html][roswell]] to path
+# This was recommended by [[https://lem-project.github.io/installation/ncurses/linux/][lem github.io website]]. To be honest I am not sure how
+# good of an idea it was to install things via roswell.  To some extent I feel
+# that it makes things more complicated because now it seems like I have two
+# different package managers (I am not counting emacs's).  Not that I think ros
+# is bad or anything, it is just that I think its overkill for my purposes at
+# the current moment.  The additional complexity does not benefit me.  It seems
+# more geared to testing different versions of sbcl, which I am not doing right
+# now.
+export PATH=$PATH:~/.roswell/bin
+
+# Provided by the package [[][eat]].  I am not sure if I want to keep this.
+# Honestly, I just want to see the support the package spoke about.
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+  source "$EAT_SHELL_INTEGRATION_DIR/bash"
+
+export PATH=$PATH:/home/luis/scripts
+### variables
+
+# Set qutebrowser as default browser.
+export BROWSER=qutebrowser
+
+# Needed to resolve kitty driver issue (see https://github.com/kovidgoyal/kitty/discussions/3359).
+# export LIBGL_ALWAYS_SOFTWARE=1
 
 # Needed to resolve kitty driver issue (see https://github.com/kovidgoyal/kitty/discussions/3359).
 export LIBGL_ALWAYS_SOFTWARE=1
