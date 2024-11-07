@@ -46,8 +46,6 @@ SyncState *
 IMAPAccount gmail
 Host imap.gmail.com
 User luishenriquezperez@gmail.com
-# PassCMD "pass email/luishenriquezperez@gmail.com"
-"kugh rjbw blnr vwvf"
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
