@@ -87,6 +87,7 @@ config.set('content.javascript.enabled', True, "*://www.freelancer.com/*")
 config.set('content.javascript.enabled', True, "*://www.upwork.com/*")
 config.set('content.javascript.enabled', True, "*://chatgpt.com/*")
 config.set('content.javascript.enabled', True, "*://www.bankofamerica.com/*")
+config.set('content.javascript.enabled', True, "*://twitter.com/*")
 # I need to find away to only enable it for the
 # config.bind('<Ctr-e>', ':set content.javascript.enabled true')
 # javascript disable
