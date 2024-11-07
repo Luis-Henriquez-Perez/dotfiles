@@ -40,11 +40,30 @@ Create Both
 Expunge Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+
 ### luishenriquezperez@gmail.com
-IMAPAccount legacy
+IMAPAccount gmail
 Host imap.gmail.com
 User luishenriquezperez@gmail.com
-PassCMD "pass email/luishenriquezperez@gmail.com"
+# PassCMD "pass email/luishenriquezperez@gmail.com"
+"kugh rjbw blnr vwvf"
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+SubFolders Verbatim
+Path ~/.mail/luishenriquezperez/
+Inbox ~/.mail/luishenriquezperez/Inbox
+
+Channel gmail
+Far :gmail-remote:
+Near :gmail-local:
+Create Both
+Expunge Both
+SyncState *
 ### mom account
 # IMAPAccount mom
 # # Address to connect to
