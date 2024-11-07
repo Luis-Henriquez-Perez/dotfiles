@@ -34,7 +34,10 @@
 (autoload #'+mu4e--legacy-leave-message "config-mu4e" nil t 'function)
 (autoload #'oo--mail-signature "config-mu4e" nil t 'function)
 
-(opt! message-signature #'oo--mail-signature)
+(defun oo--message-signature (&rest _)
+  (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n")))
+
+(opt! message-signature '(funcall #'oo--message-signature))
 
 (opt! mu4e-maildir (f-full "~/.mail"))
 (opt! mu4e-headers-skip-duplicates t)
@@ -45,9 +48,6 @@
 (opt! mu4e-change-filenames-when-moving t)
 (opt! mu4e-attachments-dir (f-full "~/Downloads"))
 (opt! mu4e-compose-signature '(funcall #'oo--message-signature))
-
-(defun oo--message-signature (&rest _)
-  (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n")))
 
 (opt! mu4e-contexts
       (list (make-mu4e-context
