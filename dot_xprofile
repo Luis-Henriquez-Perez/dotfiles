@@ -5,17 +5,17 @@
 # the xsession before the window manager is loaded.  I should mention this is not
 # a crazy hardset rule.  I could execute these commands in [[][]] or [[][]].
 # The system's xprofile [[/etc/xprofile]]
-### remap caps-lock with escape
-# I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
-# the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
-# that escape is used often to get out of states.
-setxkbmap -option caps:escape
 ### set the wallpaper for the first time
 # I am not sure whether to do this here or not.  It is possible to do this in
 # awesome or stumpwm itself but I do not want to do it ever time for ever window
 # manager.  This script sets the current wallpaper.
 
-~/scripts/set-wallpaper.sh
+~/scripts/set_wallpaper.sh
+### remap caps-lock with escape
+# I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
+# the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
+# that escape is used often to get out of states.
+setxkbmap -option caps:escape
 ### start the picom daemon
 # The compositor.  See [[][the config]].
 picom &
