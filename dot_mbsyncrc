@@ -48,6 +48,7 @@ Host imap.gmail.com
 User luishenriquezperez@gmail.com
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
+PassCMD "pass show email/luishenriquezperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
 
 IMAPStore gmail-remote
 Account gmail
