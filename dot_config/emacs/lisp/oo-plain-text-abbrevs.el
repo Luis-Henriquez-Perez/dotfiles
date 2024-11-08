@@ -51,9 +51,10 @@ string or comment."
          ;; this never happens for a string.
          (>= word-beg comment-beg)))))
 ;;;; define abbrevs
-(define-abbrev global-abbrev-table "mult"           "multiple"                    nil :enable-function #'oo--use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "multipul"           "multiple"                    nil :enable-function #'oo--use-plain-text-abbrev-p)
-(define-abbrev global-abbrev-table "har"           "character"                    nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "emplate"        "template"                      nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "mult"           "multiple"                      nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "multipul"       "multiple"                      nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "har"            "character"                     nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "defi"           "definitely"                    nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "woudl"          "would"                         nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "awk"            "awkward"                       nil :enable-function #'oo--use-plain-text-abbrev-p)
