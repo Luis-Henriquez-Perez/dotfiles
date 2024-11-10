@@ -27,6 +27,8 @@
 ;;; Code:
 (require 'base)
 
+;; Whenever
+(opt! dired-deletion-confirmer #'always)
 (oo-add-hook 'dired-mode-hook #'hl-line-mode)
 ;; This omits:
 ;; 1. Backup files
