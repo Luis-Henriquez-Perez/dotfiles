@@ -26,9 +26,10 @@
 ;;
 ;;; Code:
 (opt! browse-url-generic-program
-      (cond ((eq system-type 'darwin) "open")
-            ((eq system-type 'windows-nt) "start")
-            (t "xdg-open")))
+      (pcase system-type
+        ('darwin "open")
+        ('windows-nt "start")
+        (_ "xdg-open")))
 ;;; provide
 (provide 'init-browse-url)
 ;;; init-browse-url.el ends here
