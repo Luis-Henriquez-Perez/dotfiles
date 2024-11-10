@@ -25,14 +25,14 @@
 ;; Initialize mu4e.
 ;;
 ;;; Code:
-;; Add mu4e to the load-path:
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 
 (autoload #'mu4e "mu4e" nil t 'function)
-(autoload #'+mu4e--main-enter-message "config-mu4e" nil t 'function)
-(autoload #'+mu4e--main-leave-message "config-mu4e" nil t 'function)
-(autoload #'+mu4e--legacy-enter-message "config-mu4e" nil t 'function)
+(autoload #'+mu4e--main-enter-message "config-mu4e" nil nil 'function)
+(autoload #'+mu4e--main-leave-message "config-mu4e" nil nil 'function)
+(autoload #'+mu4e--legacy-enter-message "config-mu4e" nil nil 'function)
 (autoload #'+mu4e--legacy-leave-message "config-mu4e" nil t 'function)
+(autoload #'+mu4e-jump-to-maildir "config-mu4e" nil t 'function)
 (autoload #'oo--mail-signature "config-mu4e" nil t 'function)
 
 (defun! oo--message-signature (&rest _)
