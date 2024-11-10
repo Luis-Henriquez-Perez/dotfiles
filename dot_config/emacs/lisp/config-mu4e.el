@@ -48,6 +48,11 @@
 (defun +mu4e--legacy-leave-message ()
   "Log when `luishenriquezperez@gmail.com' is entered."
   (info! "Exiting main account."))
+
+(defun! +mu4e-jump-to-maildir ()
+  (interactive)
+  (set! maildir (completing-read "Maildir: " (mu4e-get-maildirs)))
+  (mu4e-headers-search (format "maildir:\"%s\"" maildir)))
 ;;; provide
 (provide 'config-mu4e)
 ;;; config-mu4e.el ends here
