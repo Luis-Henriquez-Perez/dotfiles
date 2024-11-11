@@ -34,6 +34,8 @@
 (setf (alist-get 'sh-mode outli-heading-config) '("#" ?# nil t))
 (setf (alist-get 'fennel-mode outli-heading-config)
       (alist-get 'emacs-lisp-mode outli-heading-config))
+(setf (alist-get 'lisp-mode outli-heading-config)
+      (alist-get 'emacs-lisp-mode outli-heading-config))
 (setf (alist-get 'hy-mode     outli-heading-config)
       (alist-get 'emacs-lisp-mode outli-heading-config))
 
