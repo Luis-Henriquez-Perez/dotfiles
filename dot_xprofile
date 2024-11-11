@@ -10,7 +10,7 @@
 # awesome or stumpwm itself but I do not want to do it ever time for ever window
 # manager.  This script sets the current wallpaper.
 
-~/scripts/set_wallpaper.sh
+python ~/scripts/set_wallpaper.py
 ### remap caps-lock with escape
 # I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
 # the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
