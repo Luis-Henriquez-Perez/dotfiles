@@ -47,7 +47,7 @@
 ;; They are easier to deal with and do not occupy unnecessary lines.
 (setq print-escape-newlines t)
 ;;;;; set the fill-column 80 by default
-(setq-default fill-column 80)
+(setq-default fill-column 100)
 ;;;;; use =yes-or-no-p= instead of =y-or-n-p=
 ;; Essentially, I am telling all Emacs functions that prompt the user for a =yes=
 ;; or =no= to instead allow me to type =y= or =p=.  [[helpfn:yes-or-no-p][yes-or-no-p]] is defined in c
