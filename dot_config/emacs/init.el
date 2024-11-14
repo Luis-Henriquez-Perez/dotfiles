@@ -105,6 +105,7 @@
 (require 'init-evil-textobj-anyblock)
 (require 'init-evil-textobj-line)
 (require 'init-evil-textobj-syntax)
+(require 'init-telephone-line)
 (require 'init-eww)
 (require 'init-expreg)
 (require 'init-fill-adapt)

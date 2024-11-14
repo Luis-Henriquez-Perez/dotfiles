@@ -109,6 +109,53 @@
   "Enter insert state if `evil-mode' is enabled."
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))
+;;;; Evil cursor color support
+;; Did not realize for the longest time that evil cursor can be a function that
+;; changes the cursor.  With this in mind, the best way to set the cursor size
+;; and shape dynamically is to set the corresponding cursor symbols to functions.
+
+(defun +evil-normal-state-cursor ()
+  (evil-set-cursor t)
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-normal :background nil t)))))
+
+(defun +evil-insert-state-cursor ()
+  (evil-set-cursor '(bar . 2))
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-insert :background nil t)))))
+
+(defun +evil-visual-state-cursor ()
+  (evil-set-cursor t)
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-visual :background nil t)))))
+
+(defun +evil-motion-state-cursor ()
+  (evil-set-cursor t)
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-motion :background nil t)))))
+
+(defun +evil-replace-state-cursor ()
+  (evil-set-cursor t)
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-replace :background nil t)))))
+
+(defun +evil-operator-state-cursor ()
+  (evil-set-cursor '(hbar . 9))
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-operator :background nil t)))))
+
+(defun +evil-emacs-state-cursor ()
+  (evil-set-cursor t)
+  (cond ((bound-and-true-p telephone-line-mode)
+         (evil-set-cursor-color (face-attribute 'telephone-line-evil-emacs :background nil t)))))
+
+(opt! evil-normal-state-cursor #'+evil-normal-state-cursor)
+(opt! evil-insert-state-cursor #'+evil-insert-state-cursor)
+(opt! evil-visual-state-cursor #'+evil-visual-state-cursor)
+(opt! evil-motion-state-cursor #'+evil-motion-state-cursor)
+(opt! evil-replace-state-cursor #'+evil-replace-state-cursor)
+(opt! evil-operator-state-cursor #'+evil-operator-state-cursor)
+(opt! evil-emacs-state-cursor #'+evil-emacs-state-cursor)
 ;;;; cross-configuration
 ;;;;; org-capture
 (oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)

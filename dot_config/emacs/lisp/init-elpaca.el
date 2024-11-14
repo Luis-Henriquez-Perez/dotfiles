@@ -164,6 +164,7 @@
 (elpaca sudo-edit)
 (elpaca super-save)
 (elpaca tango-plus-theme)
+(elpaca telephone-line)
 (elpaca tempel)
 (elpaca tempel-collection)
 (elpaca textsize)
