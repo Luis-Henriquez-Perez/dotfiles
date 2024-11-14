@@ -87,7 +87,7 @@
 ;;;; Start emacs server
 ;; This is so that if I need to use some sort of program to open a file, it will
 ;; use he running emacs daemon.
-(unless (server-running-p) (server-start))
+;; (unless (server-running-p) (server-start))
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
