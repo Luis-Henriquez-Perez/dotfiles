@@ -149,13 +149,13 @@
   (cond ((bound-and-true-p telephone-line-mode)
          (evil-set-cursor-color (face-attribute 'telephone-line-evil-emacs :background nil t)))))
 
-(opt! evil-normal-state-cursor #'+evil-normal-state-cursor)
-(opt! evil-insert-state-cursor #'+evil-insert-state-cursor)
-(opt! evil-visual-state-cursor #'+evil-visual-state-cursor)
-(opt! evil-motion-state-cursor #'+evil-motion-state-cursor)
-(opt! evil-replace-state-cursor #'+evil-replace-state-cursor)
+(opt! evil-normal-state-cursor   #'+evil-normal-state-cursor)
+(opt! evil-insert-state-cursor   #'+evil-insert-state-cursor)
+(opt! evil-visual-state-cursor   #'+evil-visual-state-cursor)
+(opt! evil-motion-state-cursor   #'+evil-motion-state-cursor)
+(opt! evil-replace-state-cursor  #'+evil-replace-state-cursor)
 (opt! evil-operator-state-cursor #'+evil-operator-state-cursor)
-(opt! evil-emacs-state-cursor #'+evil-emacs-state-cursor)
+(opt! evil-emacs-state-cursor    #'+evil-emacs-state-cursor)
 ;;;; cross-configuration
 ;;;;; org-capture
 (oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)
