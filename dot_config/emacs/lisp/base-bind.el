@@ -111,8 +111,7 @@ If evil is not loaded defer until it is loaded."
   "Set keybinding as specified by METADATA."
   (setf (map-elt metadata :key) (kbd (map-elt metadata :key)))
   (setf (map-elt metadata :key) (or (map-contains-p metadata :keymap) global-map))
-  (or (-first (-rpartial #'funcall metadata) oo-kbd-handlers)
-      (error "No handler available for %S" metadata)))
+  (oo--kbd-perform-binding metadata))
 
 (cl-defun oo-define-key (keymap key def &rest plist)
   (oo-kbd :keymap keymap :key key :def def))
