@@ -42,7 +42,8 @@
   (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(i org-mode-map "d" #'foo))))
   ;; (bind! (n m v) "d" #'foo)
-  (should (equal (oo--kbd-forms '((n m v) "d" #'foo))))
+  (should (equal '(oo-kbd :states '(?n ?m ?v) :keymap global-map :key "d" :def #'foo)
+                 (oo--kbd-forms '((n m v) "d" #'foo))))
   )
 ;;; provide
 (provide 'base-bind-test)
