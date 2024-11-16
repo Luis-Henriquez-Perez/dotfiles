@@ -59,6 +59,11 @@
   ;; 10 (bind! org-mode-map (n m v) "d" #'foo)
   (should (equal `(oo-kbd :states '(?n ?m ?v) :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(org-mode-map (n m v) "d" #'foo))))
+  ;; 11 (bind! org-mode-map (normal motion visual) "d" #'foo)
+  (should (equal `(oo-kbd :states '(normal motion visual) :keymap org-mode-map :key "d" :def #'foo)
+                 (oo--kbd-forms '(org-mode-map (normal motion visual) "d" #'foo))))
+  ;; 12 (bind! (n m v) org-mode-map "d" #'foo)
+  (should (equal ))
   )
 ;;; provide
 (provide 'base-bind-test)
