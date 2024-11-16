@@ -50,6 +50,7 @@
   ;; 7 (bind! org-mode-map i "d" #'foo)
   (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(org-mode-map i "d" #'foo))))
+  ;; 8 (bind! (n m v) "d" #'foo)
   )
 ;;; provide
 (provide 'base-bind-test)
