@@ -116,7 +116,7 @@ If evil is not loaded defer until it is loaded."
 (cl-defun oo-define-key (keymap key def &rest plist)
   (oo-kbd :keymap keymap :key key :def def))
 
-(defun! oo--kbd-forms (args)
+(defun! oo--kbd-parse-args (args)
   (lef! ((letter-to-char (-compose #'string-to-char #'symbol-name))
          (letterp (obj) (and (symbolp obj) (= 1 (length (symbol-name obj)))))
          (keymap-symbol-p (obj) (and (symbolp obj) (string-match-p "[^[:space:]]+-map\\'" (symbol-name obj))))
@@ -201,6 +201,9 @@ If evil is not loaded defer until it is loaded."
        `(:states nil :keymap global-map :key ,key :def ,def))
       (_
        (error "cannot parse arguments...")))))
+
+(defmacro bind! (&rest args)
+  (oo--kbd-generate-forms (oo--kbd-parse-args args)))
 ;;; provide
 (provide 'base-bind)
 ;;; base-bind.el ends here
