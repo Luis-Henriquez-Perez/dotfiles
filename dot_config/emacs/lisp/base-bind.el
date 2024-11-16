@@ -85,8 +85,9 @@ If evil is not loaded defer until it is loaded."
   (set! keymap (map-elt metadata :keymap))
   (set! key    (map-elt metadata :key))
   (set! def    (map-elt metadata :def))
-  (when (-all-p (-partial #'map-contains-key metadata) '(:keymap :key :def))
-    (oo--do-kbd metadata #'keymap-set keymap key def)))
+  (if (-all-p (-partial #'map-contains-key metadata) '(:keymap :key :def))
+      (oo--do-kbd metadata #'keymap-set keymap key def)
+    (oo--kbd-perform-binding metadata)))
 
 (defun! oo-kbd-with-which-key (wk fn)
   (nif! wk
