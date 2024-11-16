@@ -104,8 +104,7 @@ If evil is not loaded defer until it is loaded."
       (funcall (oo--kbd-with-which-key wk (-partial #'apply fn args)))
     (error (if oo-debug-p
                (signal (car err) (cdr err))
-             (error! "Error %S with binding because of %S." (car err) (cdr err)))))
-  t)
+             (error! "Error %S with binding because of %S." (car err) (cdr err))))))
 
 (defun! oo-kbd (&rest metadata)
   "Set keybinding as specified by METADATA."
