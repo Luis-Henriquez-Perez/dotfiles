@@ -36,10 +36,8 @@
 ;;; Code:
 (require 'base)
 
-(defvar oo-keybinding-handlers '(oo--kbd-do-evil-kbd oo--kbd-do-kbd)
-  "List of functions that handle keybindings.
-These functions are called one by one until one of then returns non-nil.  Said
-function handles binding the key.")
+(defvar oo-bind-entry-fn oo--kbd-do-evil-kbd
+  "")
 
 ;; General things I need to do:
 ;; 1. Decide on which keybinding function to apply based on the given metadata.
