@@ -170,7 +170,7 @@ If evil is not loaded defer until it is loaded."
       (`(,(and (pred symbol-list-p) states) ,(and (pred not-keyword-p) key)
          ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
-       `(oo-kbd :states ,chars :key ,key :def ,def))
+       `(oo-kbd :states ',states :key ,key :def ,def))
       ;; ;; (bind! org-mode-map (n m v) "d" #'foo)
       ;; (`(,(and (pred keymap-symbol-p) keymap) ,(and (pred letter-list-p) letters)
       ;;    ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
