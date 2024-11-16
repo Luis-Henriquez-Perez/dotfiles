@@ -58,7 +58,6 @@ If evil is not loaded defer until it is loaded."
   (set! key    (map-elt metadata :key))
   (set! def    (map-elt metadata :def))
   (set! mode   (map-elt metadata :mode))
-  (set! mode   (map-elt metadata :mode))
   (cond ((not (-all-p (-partial #'map-contains-key metadata) :states :keymap :key :def))
          (oo--kbd-do-keybinding metadata))
         ((not (boundp 'evil-mode))
