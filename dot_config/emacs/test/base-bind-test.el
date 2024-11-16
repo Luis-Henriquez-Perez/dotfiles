@@ -38,6 +38,9 @@
   ;; (bind! insert org-mode-map "d" #'foo)
   (should (equal '(oo-kbd :states 'insert :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(insert org-mode-map "d" #'foo))))
+  ;; (bind! i "d" #'foo)
+  (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
+                 (oo--kbd-forms '(i org-mode-map "d" #'foo))))
   )
 ;;; provide
 (provide 'base-bind-test)
