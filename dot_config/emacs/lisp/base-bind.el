@@ -164,7 +164,7 @@ If evil is not loaded defer until it is loaded."
          ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
        (set! chars (--map (string-to-char (symbol-name it)) letters))
-       `(oo-kbd :states ,chars :key ,key :def ,def)
+       `(oo-kbd :states ',chars :key ,key :def ,def)
        )
       ;; (bind! (normal insert visual) "d" #'foo)
       (`(,(and (pred symbol-list-p) states) ,(and (pred not-keyword-p) key)
