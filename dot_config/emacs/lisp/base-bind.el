@@ -51,7 +51,7 @@
   `(not (or ,@args)))
 
 (defun oo--kbd-generate-forms (steps meta forms)
-  (funcall (or (cdr steps) 'ignore) meta forms))
+  (funcall (or (car steps) 'ignore) (cdr steps) meta forms))
 
 (defun! oo--kbd-do-evil-kbd (steps meta forms)
   "Apply evil keybinding.
