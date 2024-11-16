@@ -116,8 +116,6 @@ If evil is not loaded defer until it is loaded."
 (cl-defun oo-define-key (keymap key def &key)
   (oo-kbd :keymap keymap :key key :def def))
 
-;; (bind! global-map "d" #'foo)
-
 (defun! oo--kbd-forms (args)
   (lef! ((letter-to-char (-compose #'string-to-char #'symbol-name))
          (letterp (obj) (and (symbolp obj) (= 1 (length (symbol-name obj)))))
