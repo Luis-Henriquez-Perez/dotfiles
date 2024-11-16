@@ -63,12 +63,14 @@
   (should (equal `(oo-kbd :states '(normal motion visual) :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(org-mode-map (normal motion visual) "d" #'foo))))
   ;; 12 (bind! (n m v) org-mode-map "d" #'foo)
-  (should (equal
-           '(oo-kbd :states '(?n ?m ?v) :keymap org-mode-map :key "d" :def #'foo)))
+  (should (equal '(oo-kbd :states '(?n ?m ?v) :keymap org-mode-map :key "d" :def #'foo)
+                 (oo--kbd-forms '(org-mode-map (normal motion visual) "d" #'foo))))
   ;; 13 (bind! (normal motion visual) org-mode-map "d" #'foo)
-  (should (equal
-           `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def)))
-  )
+  (should (equal `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def)
+                 (oo--kbd-forms '(org-mode-map (normal motion visual) "d" #'foo))))
+  ;; 14 (bind! "d" #'foo)
+  (should (equal `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def)
+                 (oo--kbd-forms '(org-mode-map (normal motion visual) "d" #'foo)))))
 ;;; provide
 (provide 'base-bind-test)
 ;;; base-bind-test.el ends here
