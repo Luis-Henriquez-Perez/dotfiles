@@ -37,7 +37,7 @@
 (require 'base)
 
 (defvar oo-bind-entry-fn #'oo--kbd-do-evil-kbd
-  "")
+  "Function that triggers.")
 
 ;; General things I need to do:
 ;; 1. Decide on which keybinding function to apply based on the given metadata.
