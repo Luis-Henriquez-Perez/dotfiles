@@ -50,7 +50,10 @@
 (defmacro nor! (&rest args)
   `(not (or ,@args)))
 
-(defun! oo--kbd-do-evil-kbd (meta forms)
+(defun oo--kbd-generate-forms (steps meta forms)
+  (funcall (or (cdr steps) 'ignore) meta forms))
+
+(defun! oo--kbd-do-evil-kbd (steps meta forms)
   "Apply evil keybinding.
 If evil is not loaded defer until it is loaded."
   (set! states (map-elt meta :states))
@@ -59,12 +62,13 @@ If evil is not loaded defer until it is loaded."
   (set! def    (map-elt meta :def))
   (set! mode   (map-elt meta :mode))
   (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
-         (oo--kbd-do-keybinding meta))
+         (oo--kbd-generate-forms (cdr steps) meta forms))
         ((not (boundp 'evil-mode))
+         (append forms ())
          (oo-call-after-load 'evil #'oo--kbd-do-evil-kbd meta))
         ((--each (-list (or states 'global))
            (cond ((member it '(nil global ?g))
-                  (oo--kbd-do-keybinding meta))
+                  (oo--kbd-generate-forms meta))
                  ((characterp it)
                   (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
                   (oo-call-after-evil-state-char it (-partial fn meta)))
@@ -77,7 +81,7 @@ If evil is not loaded defer until it is loaded."
                   (oo--do-kbd meta #'evil-define-key* it keymap key def))))
          t)))
 
-(defun oo--kbd-do-kbd (meta forms)
+(defun oo--kbd-do-kbd (steps meta forms)
   "Apply keybinding."
   (set! keymap (map-elt meta :keymap))
   (set! key    (map-elt meta :key))
