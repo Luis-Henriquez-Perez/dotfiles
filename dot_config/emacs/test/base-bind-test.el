@@ -51,6 +51,9 @@
   (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(org-mode-map i "d" #'foo))))
   ;; 8 (bind! (n m v) "d" #'foo)
+  (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
+                 (oo--kbd-forms '((n m v) "d" #'foo))))
+  ;; 9 (bind! (normal insert visual) "d" #'foo)
   )
 ;;; provide
 (provide 'base-bind-test)
