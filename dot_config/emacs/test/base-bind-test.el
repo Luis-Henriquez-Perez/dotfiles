@@ -33,10 +33,12 @@
                  (oo--kbd-forms '(global-map "d" #'foo))))
   (should (equal '(oo-kbd :states 'insert :key "d" :def #'foo)
                  (oo--kbd-forms '(insert "d" #'foo))))
-  (should (equal '(oo-kbd :states 'insert :keymap org-mode-map :key "d" :def #'foo)
+  (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(i org-mode-map "d" #'foo))))
+  ;; (bind! insert org-mode-map "d" #'foo)
   (should (equal '(oo-kbd :states 'insert :keymap org-mode-map :key "d" :def #'foo)
-                 (oo--kbd-forms '(i org-mode-map "d" #'foo)))))
+                 (oo--kbd-forms '(insert org-mode-map "d" #'foo))))
+  )
 ;;; provide
 (provide 'base-bind-test)
 ;;; base-bind-test.el ends here
