@@ -55,7 +55,8 @@
                  (oo--kbd-forms '((n m v) "d" #'foo))))
   ;; 9 (bind! (normal insert visual) "d" #'foo)
   (should (equal '(oo-kbd :states '(normal insert visual) :key "d" :def #'foo)
-                 (oo--kbd-forms '((n m v) "d" #'foo))))
+                 (oo--kbd-forms '((normal insert visual) "d" #'foo))))
+  ;; 10 (bind! org-mode-map (n m v) "d" #'foo)
   )
 ;;; provide
 (provide 'base-bind-test)
