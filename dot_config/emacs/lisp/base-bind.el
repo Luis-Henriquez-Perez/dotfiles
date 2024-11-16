@@ -160,7 +160,7 @@ If evil is not loaded defer until it is loaded."
       (`(,(and (pred keymap-symbol-p) keymap) ,(and (pred letterp) letter)
          ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
-       `(oo-kbd :states ,(string-to-char (symbol-name letter)) :keymap ,keymap))
+       `(oo-kbd :states ,(string-to-char (symbol-name letter)) :keymap ,keymap :key ,key :def ,def))
       ;; ;; (bind! (n m v) "d" #'foo)
       ;; (`(,(and (pred letter-list-p) letters) ,(and (pred not-keyword-p) key)
       ;;    ,(and (pred not-keyword-p) def)
