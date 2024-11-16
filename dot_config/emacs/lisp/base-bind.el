@@ -184,7 +184,8 @@ If evil is not loaded defer until it is loaded."
       (`(,(and (pred letter-list-p) letters) ,(and (pred keymap-symbol-p) keymap)
          ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
-       `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def))
+       (set! chars (--map (string-to-char (symbol-name it)) letters))
+       `(oo-kbd :states ',chars :keymap ,keymap :key ,key :def ,def))
       ;; (bind! (normal motion visual) org-mode-map "d" #'foo)
       (`(,(and (pred symbol-list-p) states) ,(and (pred keymap-symbol-p) keymap)
          ,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
@@ -193,7 +194,7 @@ If evil is not loaded defer until it is loaded."
       ;; (bind! "d" #'foo)
       (`(,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
-       `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def))
+       `(oo-kbd :key ,key :def ,def))
       (_
        (error "cannot parse arguments...")))))
 ;;; provide
