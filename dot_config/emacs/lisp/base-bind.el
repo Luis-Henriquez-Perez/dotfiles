@@ -62,14 +62,12 @@ If evil is not loaded defer until it is loaded."
   (set! mode   (map-elt metadata :mode))
   (set! mode   (map-elt metadata :mode))
   (cond ((not (-all-p (-partial #'map-contains-key metadata) :states :keymap :key :def))
-         (return!))
-        ((not states)
-         (oo--kbd-do-kbd metadata))
+         (oo--kbd-do-keybinding metadata))
         ((not (boundp 'evil-mode))
          (oo-call-after-load 'evil #'oo--kbd-do-evil-kbd metadata))
-        ((--each (-list states)
+        ((--each (-list (or states 'global))
            (cond ((member it '(nil global ?g))
-                  (oo--kbd-do-kbd metadata))
+                  (oo--kbd-do-keybinding metadata))
                  ((characterp it)
                   (set! fn (lambda (metadata state) (oo--kbd-do-evil-kbd (map-insert metadata :state state))))
                   (oo-call-after-evil-state-char it (-partial fn metadata)))
@@ -79,7 +77,8 @@ If evil is not loaded defer until it is loaded."
                  (mode
                   (oo--do-kbd meta #'evil-define-minor-mode-key it mode key def))
                  (t
-                  (oo--do-kbd meta #'evil-define-key* it keymap key def)))))))
+                  (oo--do-kbd meta #'evil-define-key* it keymap key def))))
+         t)))
 
 (defun oo--kbd-do-kbd (metadata)
   "Apply keybinding."
@@ -104,7 +103,8 @@ If evil is not loaded defer until it is loaded."
       (funcall (oo--kbd-with-which-key wk (-partial #'apply fn args)))
     (error (if oo-debug-p
                (signal (car err) (cdr err))
-             (error! "Error %S with binding because of %S." (car err) (cdr err))))))
+             (error! "Error %S with binding because of %S." (car err) (cdr err)))))
+  t)
 
 (defun! oo-kbd (&rest metadata)
   "Set keybinding as specified by METADATA."
