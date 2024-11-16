@@ -195,8 +195,7 @@ If evil is not loaded defer until it is loaded."
       ;; (bind! "d" #'foo)
       (`(,(and (pred not-keyword-p) key) ,(and (pred not-keyword-p) def)
          . ,(and (pred plist-p) plist))
-       `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def)
-       )
+       `(oo-kbd :states ',states :keymap ,keymap :key ,key :def ,def))
       (_
        (error "cannot parse arguments...")))))
 ;;; provide
