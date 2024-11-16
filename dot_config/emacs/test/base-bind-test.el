@@ -29,10 +29,13 @@
 (require 'base-bind)
 
 (ert-deftest oo--kbd-forms ()
+  ;; (bind! global-map "d" #'foo)
   (should (equal '(oo-kbd :keymap global-map :key "d" :def #'foo)
                  (oo--kbd-forms '(global-map "d" #'foo))))
+  ;; (bind! insert "d" #'foo)
   (should (equal '(oo-kbd :states 'insert :key "d" :def #'foo)
                  (oo--kbd-forms '(insert "d" #'foo))))
+  ;; (bind! i org-mode-map "d" #'foo)
   (should (equal '(oo-kbd :states ?i :keymap org-mode-map :key "d" :def #'foo)
                  (oo--kbd-forms '(i org-mode-map "d" #'foo))))
   ;; (bind! insert org-mode-map "d" #'foo)
