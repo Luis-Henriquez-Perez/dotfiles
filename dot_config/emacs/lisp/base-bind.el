@@ -36,7 +36,7 @@
 ;;; Code:
 (require 'base)
 
-(defvar oo-bind-entry-fn oo--kbd-do-evil-kbd
+(defvar oo-bind-entry-fn #'oo--kbd-do-evil-kbd
   "")
 
 ;; General things I need to do:
