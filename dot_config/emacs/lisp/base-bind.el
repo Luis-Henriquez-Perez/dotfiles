@@ -133,6 +133,8 @@
 (defmacro nor! (&rest args)
   `(not (or ,@args)))
 
+;; (defer-keymap defer-evil bind)
+
 (defun! oo--kbd-key-binding-forms (meta)
   (set! states (map-elt meta :states))
   (set! keymap (map-elt meta :keymap))
@@ -142,7 +144,8 @@
   (set! states (-list (or states 'global)))
   (dolist (state states)
     (cond ((member state '(nil global ?g))
-           (appending! forms (oo--kbd-form meta #'keymap-set keymap key def)))
+           (oo--defer-keymap-forms meta (oo-- (oo--keymap-set-forms meta _)))
+           (appending! forms ()))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (appending! forms (oo--bind-defer-evil-state ( fn meta))))
@@ -152,12 +155,28 @@
            (appending! forms (oo--kbd-form meta #'evil-define-key* state keymap key def)))))
   forms)
 
+(defun oo--keymap-set-forms (meta _)
+  (set! keymap (map-elt meta :keymap))
+  (set! key    (map-elt meta :key))
+  (set! def    (map-elt meta :def))
+  `((keymap-set ,keymap ,key ,def)))
+
+(defun oo--evil-define-key-form (meta _)
+  (set! states (map-elt meta :states))
+  (set! keymap (map-elt meta :keymap))
+  (set! key    (map-elt meta :key))
+  (set! def    (map-elt meta :def))
+  `((evil-define-key* ,states ,keymap ,key ,def)))
+
 (defun oo--let-bind ()
   ""
   )
-(defun oo--defer-keymap (metadata forms)
-  `(())
-  )
+(defun oo--kbd-defer-keymap-forms (meta forms)
+  (set! keymap (map-elt meta :keymap))
+  `((if (boundp ',keymap)
+        (progn ,@forms)
+      (defvar ,keymap)
+      (oo-call-after-bound ',keymap (lambda () ,@forms)))))
 
 (defun! oo-kbd-with-which-key (wk fn)
   (nif! wk
@@ -168,13 +187,12 @@
     (set! lefbinds `((define-key ,fn) (keymap-set ,fn)))
     `(lambda () (lef! ,lefbinds (funcall ',fn)))))
 
-(defun! oo--kbd-form (meta fn &rest args)
-  (set! wk (or (map-elt meta :wk) (map-elt meta :which-key)))
-  `(condition-case err
-       (funcall (oo--kbd-with-which-key wk (-partial #'apply fn args)))
-     (error (if oo-debug-p
-                (signal (car err) (cdr err))
-              (error! "Error %S with binding because of %S." (car err) (cdr err))))))
+(defun! oo--kbd-error-forms (meta forms)
+  `((condition-case err
+        (progn ,@forms)
+      (error (if oo-debug-p
+                 (signal (car err) (cdr err))
+               (error! "Error %S with binding because of %S." (car err) (cdr err)))))))
 
 (defun! oo-kbd (&rest metadata)
   "Set keybinding as specified by METADATA."
