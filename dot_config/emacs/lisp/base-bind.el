@@ -145,15 +145,13 @@
   (dolist (state states)
     (cond ((member state '(nil global ?g))
            '(defer-keymap check-error which-key keymap-set)
-           ;; (oo--defer-keymap-forms meta (oo-- (oo--keymap-set-forms meta _)))
-           (appending! forms ()))
+           (appending! forms))
           ((characterp state)
-           (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
-           (appending! forms (oo--bind-defer-evil-state ( fn meta))))
+           (appending! forms))
           (mode
-           (appending! forms (oo--kbd-form meta #'evil-define-minor-mode-key state mode key def)))
+           (appending! forms))
           (t
-           (appending! forms (oo--kbd-form meta #'evil-define-key* state keymap key def)))))
+           (appending! forms))))
   forms)
 
 (defun oo--keymap-set-forms (meta _)
