@@ -162,7 +162,14 @@
   (set! def    (map-elt meta :def))
   `((keymap-set ,keymap ,key ,def)))
 
-(defun oo--evil-define-key-form (meta _)
+(defun oo--evil-define-key-forms (meta _)
+  (set! states (map-elt meta :states))
+  (set! keymap (map-elt meta :keymap))
+  (set! key    (map-elt meta :key))
+  (set! def    (map-elt meta :def))
+  `((evil-define-key* ,states ,keymap ,key ,def)))
+
+(defun oo--evil-define-minor-mode-key-forms (meta _)
   (set! states (map-elt meta :states))
   (set! keymap (map-elt meta :keymap))
   (set! key    (map-elt meta :key))
@@ -172,7 +179,8 @@
 (defun oo--let-bind ()
   ""
   )
-(defun oo--kbd-defer-keymap-forms (meta forms)
+
+(defun! oo--kbd-defer-keymap-forms (meta forms)
   (set! keymap (map-elt meta :keymap))
   `((if (boundp ',keymap)
         (progn ,@forms)
@@ -182,7 +190,8 @@
 (defun! oo-kbd-with-which-key (meta forms)
   (set! wk    (map-elt meta :wk))
   (set! lefbinds `((define-key ,fn) (keymap-set ,fn)))
-  `((lef! (()())
+  `((lef! ((define-key)
+           (keymap-set))
       ,@forms)))
 
 (defun! oo--check-error-forms (meta forms)
@@ -197,9 +206,6 @@
   (setf (map-elt metadata :key) (kbd (map-elt metadata :key)))
   (setf (map-elt metadata :key) (or (map-contains-p metadata :keymap) global-map))
   (oo--kbd-perform-binding metadata))
-
-(cl-defun oo-define-key (keymap key def &rest plist)
-  (oo-kbd :keymap keymap :key key :def def))
 
 (defmacro bind! (&rest args)
   (oo--kbd-keybinding-form (oo--kbd-parse-args args)))
