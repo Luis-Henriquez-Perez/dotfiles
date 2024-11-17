@@ -145,19 +145,18 @@
            (appending! forms (oo--kbd-form meta #'keymap-set keymap key def)))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
-           (oo-call-after-evil-state-char state (-partial fn meta)))
+           (appending! forms (oo--bind-defer-evil-state ( fn meta))))
           (mode
            (appending! forms (oo--kbd-form meta #'evil-define-minor-mode-key state mode key def)))
           (t
-           (oo--kbd-form meta #'evil-define-key* state keymap key def))))
-  forms
-  ;; (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
-  ;;        (appending! forms (oo--kbd-generate-forms (cdr steps) meta forms)))
-  ;;       ((not (boundp 'evil-mode))
-  ;;        (append forms ())
-  ;;        (oo-call-after-load 'evil #'oo--kbd-do-evil-kbd meta))
-  ;;       (
-  ;;        t))
+           (appending! forms (oo--kbd-form meta #'evil-define-key* state keymap key def)))))
+  forms)
+
+(defun oo--let-bind ()
+  ""
+  )
+(defun oo--defer-keymap (metadata forms)
+  `(())
   )
 
 (defun! oo-kbd-with-which-key (wk fn)
