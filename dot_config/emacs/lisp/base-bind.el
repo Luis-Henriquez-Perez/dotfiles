@@ -150,7 +150,7 @@ If evil is not loaded defer until it is loaded."
   (set! states (-list (or states 'global)))
   (dolist (state states)
     (cond ((member state '(nil global ?g))
-           (oo--kbd-generate-forms meta))
+           (appending! forms (oo--kbd-generate-forms meta)))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (oo-call-after-evil-state-char state (-partial fn meta)))
@@ -161,6 +161,7 @@ If evil is not loaded defer until it is loaded."
            (oo--do-kbd meta #'evil-define-minor-mode-key state mode key def))
           (t
            (oo--do-kbd meta #'evil-define-key* state keymap key def))))
+  forms
   ;; (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
   ;;        (appending! forms (oo--kbd-generate-forms (cdr steps) meta forms)))
   ;;       ((not (boundp 'evil-mode))
