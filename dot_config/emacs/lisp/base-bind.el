@@ -150,7 +150,7 @@ If evil is not loaded defer until it is loaded."
   (set! states (-list (or states 'global)))
   (dolist (state states)
     (cond ((member state '(nil global ?g))
-           (appending! forms (oo--kbd-generate-forms meta)))
+           (appending! forms (oo--do-kbd meta #'keymap-set keymap key def)))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (oo-call-after-evil-state-char state (-partial fn meta)))
@@ -158,6 +158,7 @@ If evil is not loaded defer until it is loaded."
            (error "No evil state %s" state))
           ((ignore (set! meta (map-insert meta :states state))))
           (mode
+           (appending! forms ())
            (oo--do-kbd meta #'evil-define-minor-mode-key state mode key def))
           (t
            (oo--do-kbd meta #'evil-define-key* state keymap key def))))
@@ -170,15 +171,6 @@ If evil is not loaded defer until it is loaded."
   ;;       (
   ;;        t))
   )
-
-(defun oo--kbd-do-kbd (steps meta forms)
-  "Apply keybinding."
-  (set! keymap (map-elt meta :keymap))
-  (set! key    (map-elt meta :key))
-  (set! def    (map-elt meta :def))
-  (if (-all-p (-partial #'map-contains-key meta) '(:keymap :key :def))
-      (append (oo--do-kbd meta #'keymap-set keymap key def) forms)
-    (append (oo--kbd-perform-binding meta) forms)))
 
 (defun! oo-kbd-with-which-key (wk fn)
   (nif! wk
