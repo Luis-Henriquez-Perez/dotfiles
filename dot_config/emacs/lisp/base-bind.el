@@ -139,7 +139,7 @@
 (defun oo--kbd-generate-forms (steps meta forms)
   (funcall (or (car steps) 'ignore) (cdr steps) meta forms))
 
-(defun! oo--kbd-do-evil-kbd (steps meta forms)
+(defun! oo--kbd-do-evil-kbd (steps meta)
   "Apply evil keybinding.
 If evil is not loaded defer until it is loaded."
   (set! states (map-elt meta :states))
@@ -147,25 +147,28 @@ If evil is not loaded defer until it is loaded."
   (set! key    (map-elt meta :key))
   (set! def    (map-elt meta :def))
   (set! mode   (map-elt meta :mode))
-  (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
-         (appending! forms (oo--kbd-generate-forms (cdr steps) meta forms)))
-        ((not (boundp 'evil-mode))
-         (append forms ())
-         (oo-call-after-load 'evil #'oo--kbd-do-evil-kbd meta))
-        ((--each (-list (or states 'global))
-           (cond ((member it '(nil global ?g))
-                  (oo--kbd-generate-forms meta))
-                 ((characterp it)
-                  (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
-                  (oo-call-after-evil-state-char it (-partial fn meta)))
-                 ((not (assoc it evil-state-properties))
-                  (error "No evil state %s" it))
-                 ((ignore (set! meta (map-insert meta :states it))))
-                 (mode
-                  (oo--do-kbd meta #'evil-define-minor-mode-key it mode key def))
-                 (t
-                  (oo--do-kbd meta #'evil-define-key* it keymap key def))))
-         t)))
+  (set! states (-list (or states 'global)))
+  (dolist (state states)
+    (cond ((member state '(nil global ?g))
+           (oo--kbd-generate-forms meta))
+          ((characterp state)
+           (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
+           (oo-call-after-evil-state-char state (-partial fn meta)))
+          ((not (assoc state evil-state-properties))
+           (error "No evil state %s" state))
+          ((ignore (set! meta (map-insert meta :states state))))
+          (mode
+           (oo--do-kbd meta #'evil-define-minor-mode-key state mode key def))
+          (t
+           (oo--do-kbd meta #'evil-define-key* state keymap key def))))
+  ;; (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
+  ;;        (appending! forms (oo--kbd-generate-forms (cdr steps) meta forms)))
+  ;;       ((not (boundp 'evil-mode))
+  ;;        (append forms ())
+  ;;        (oo-call-after-load 'evil #'oo--kbd-do-evil-kbd meta))
+  ;;       (
+  ;;        t))
+  )
 
 (defun oo--kbd-do-kbd (steps meta forms)
   "Apply keybinding."
