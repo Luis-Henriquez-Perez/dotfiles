@@ -139,9 +139,7 @@
 (defun oo--kbd-generate-forms (steps meta forms)
   (funcall (or (car steps) 'ignore) (cdr steps) meta forms))
 
-(defun! oo--kbd-do-evil-kbd (steps meta)
-  "Apply evil keybinding.
-If evil is not loaded defer until it is loaded."
+(defun! oo--kbd-key-binding-form (steps meta)
   (set! states (map-elt meta :states))
   (set! keymap (map-elt meta :keymap))
   (set! key    (map-elt meta :key))
