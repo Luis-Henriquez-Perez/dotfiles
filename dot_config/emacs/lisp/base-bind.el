@@ -136,7 +136,7 @@
 (defmacro nor! (&rest args)
   `(not (or ,@args)))
 
-(defun! oo--kbd-key-binding-form (meta)
+(defun! oo--kbd-key-binding-forms (meta)
   (set! states (map-elt meta :states))
   (set! keymap (map-elt meta :keymap))
   (set! key    (map-elt meta :key))
@@ -145,18 +145,15 @@
   (set! states (-list (or states 'global)))
   (dolist (state states)
     (cond ((member state '(nil global ?g))
-           (appending! forms (oo--do-kbd meta #'keymap-set keymap key def)))
+           (appending! forms (oo--kbd-form meta #'keymap-set keymap key def)))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (oo-call-after-evil-state-char state (-partial fn meta)))
-          ((not (assoc state evil-state-properties))
-           (error "No evil state %s" state))
-          ((ignore (set! meta (map-insert meta :states state))))
           (mode
-           (appending! forms ())
-           (oo--do-kbd meta #'evil-define-minor-mode-key state mode key def))
+           (appending! forms (oo--kbd-form meta #'evil-define-minor-mode-key state mode key def))
+           )
           (t
-           (oo--do-kbd meta #'evil-define-key* state keymap key def))))
+           (oo--kbd-form meta #'evil-define-key* state keymap key def))))
   forms
   ;; (cond ((not (-all-p (-partial #'map-contains-key meta) :states :keymap :key :def))
   ;;        (appending! forms (oo--kbd-generate-forms (cdr steps) meta forms)))
@@ -176,13 +173,13 @@
     (set! lefbinds `((define-key ,fn) (keymap-set ,fn)))
     `(lambda () (lef! ,lefbinds (funcall ',fn)))))
 
-(defun! oo--do-kbd (metadata fn &rest args)
-  (set! wk (or (map-elt metadata :wk) (map-elt metadata :which-key)))
-  (condition-case err
-      (funcall (oo--kbd-with-which-key wk (-partial #'apply fn args)))
-    (error (if oo-debug-p
-               (signal (car err) (cdr err))
-             (error! "Error %S with binding because of %S." (car err) (cdr err))))))
+(defun! oo--kbd-form (meta fn &rest args)
+  (set! wk (or (map-elt meta :wk) (map-elt meta :which-key)))
+  `(condition-case err
+       (funcall (oo--kbd-with-which-key wk (-partial #'apply fn args)))
+     (error (if oo-debug-p
+                (signal (car err) (cdr err))
+              (error! "Error %S with binding because of %S." (car err) (cdr err))))))
 
 (defun! oo-kbd (&rest metadata)
   "Set keybinding as specified by METADATA."
@@ -194,7 +191,7 @@
   (oo-kbd :keymap keymap :key key :def def))
 
 (defmacro bind! (&rest args)
-  (oo--kbd-generate-forms steps (oo--kbd-parse-args args) nil))
+  (oo--kbd-keybinding-form (oo--kbd-parse-args args)))
 ;;; provide
 (provide 'base-bind)
 ;;; base-bind.el ends here
