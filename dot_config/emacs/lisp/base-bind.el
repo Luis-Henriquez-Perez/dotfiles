@@ -174,7 +174,7 @@
   (set! keymap (map-elt meta :keymap))
   (set! key    (map-elt meta :key))
   (set! def    (map-elt meta :def))
-  `((evil-define-key* ,states ,keymap ,key ,def)))
+  `((evil-define-minor-mode-key ,states ,mode ,key ,def)))
 
 (defun oo--let-bind ()
   ""
