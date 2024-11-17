@@ -146,8 +146,7 @@
     (cond ((member state '(nil global ?g))
            '(defer-keymap check-error which-key keymap-set)
            ;; (oo--defer-keymap-forms meta (oo-- (oo--keymap-set-forms meta _)))
-           ;; (appending! forms ())
-           )
+           (appending! forms ()))
           ((characterp state)
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (appending! forms (oo--bind-defer-evil-state ( fn meta))))
@@ -181,13 +180,10 @@
       (oo-call-after-bound ',keymap (lambda () ,@forms)))))
 
 (defun! oo-kbd-with-which-key (meta forms)
-  (nif! wk
-      fn
-    (set! fn `(lambda (keymap key def)
-                (oo-call-after-load 'which-key (-partial #',wk-fn keymap key ,!wk))
-                (funcall this-fn keymap key def)))
-    (set! lefbinds `((define-key ,fn) (keymap-set ,fn)))
-    `(lambda () (lef! ,lefbinds (funcall ',fn)))))
+  (set! wk    (map-elt meta :wk))
+  (set! lefbinds `((define-key ,fn) (keymap-set ,fn)))
+  `((lef! (()())
+      ,@forms)))
 
 (defun! oo--check-error-forms (meta forms)
   `((condition-case err
