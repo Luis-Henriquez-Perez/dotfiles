@@ -150,8 +150,7 @@
            (set! fn (lambda (meta state) (oo--kbd-do-evil-kbd (map-insert meta :state state))))
            (oo-call-after-evil-state-char state (-partial fn meta)))
           (mode
-           (appending! forms (oo--kbd-form meta #'evil-define-minor-mode-key state mode key def))
-           )
+           (appending! forms (oo--kbd-form meta #'evil-define-minor-mode-key state mode key def)))
           (t
            (oo--kbd-form meta #'evil-define-key* state keymap key def))))
   forms
