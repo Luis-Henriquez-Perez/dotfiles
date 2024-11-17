@@ -136,9 +136,6 @@
 (defmacro nor! (&rest args)
   `(not (or ,@args)))
 
-(defun oo--kbd-generate-forms (steps meta forms)
-  (funcall (or (car steps) 'ignore) (cdr steps) meta forms))
-
 (defun! oo--kbd-key-binding-form (meta)
   (set! states (map-elt meta :states))
   (set! keymap (map-elt meta :keymap))
