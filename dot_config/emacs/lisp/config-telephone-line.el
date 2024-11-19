@@ -77,9 +77,12 @@
              (not (string-empty-p pomodoro-mode-line-string)))
     (require 'all-the-icons-nerd-fonts)
     ;; (seq-rest pomodoro-mode-line-string)
-    (string-join (list (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0)
-                       (seq-rest pomodoro-mode-line-string))
+    (string-join (list
+                  ;; (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0)
+                  (all-the-icons-nerd-cod "coffee" :face 'error :v-adjust 0)
+                  (seq-rest pomodoro-mode-line-string))
                  "\s")
+
     ))
 ;;;;; org timer (what I use as pomodoro)
 ;; (telephone-line-defsegment* +telephone-line-org-timer-segment ()
