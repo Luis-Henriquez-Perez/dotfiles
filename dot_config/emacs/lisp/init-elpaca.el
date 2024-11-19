@@ -150,6 +150,7 @@
 (elpaca pcre2el)
 (elpaca php-mode)
 (elpaca polymode)
+(elpaca pomodoro)
 (elpaca rainbow-delimiters)
 (elpaca redacted)
 (elpaca restart-emacs)
