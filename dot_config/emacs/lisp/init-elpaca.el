@@ -91,6 +91,7 @@
 (elpaca evil-visual-mark-mode)
 (elpaca expreg)
 (elpaca f)
+(elpaca fancy-narrow)
 (elpaca fennel-mode)
 (elpaca filladapt)
 (elpaca fit-text-scale)
