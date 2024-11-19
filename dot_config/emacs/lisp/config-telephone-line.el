@@ -45,7 +45,42 @@
     "NARROWED"))
 ;;;;; buffer
 (telephone-line-defsegment* +telephone-line-buffer-segment ()
-  (telephone-line-raw mode-line-buffer-identification t))
+  (block!
+    (set! buffer-name (telephone-line-raw mode-line-buffer-identification t))
+    (pushing! segment buffer-name)
+    (cond (buffer-read-only
+           (set! icon (cond ((not (and (display-graphic-p) (require 'all-the-icons)))
+                             "X")
+                            (t
+                             (all-the-icons-material "lock" :face 'error))))
+           (pushing! segment icon))
+          ((buffer-modified-p)
+           (require 'all-the-icons)
+           (set! icon (all-the-icons-material "save" :face 'error))
+           (pushing! segment icon)))
+    ;; (when (or (and defining-kbd-macro
+    ;;                (require 'all-the-icons-nerd-fonts)
+    ;;                (pushing! segment (all-the-icons-nerd-md "record-circle"))
+    ;;                ;; (pushing! segment (all-the-icons-nerd-cod "record"))
+    ;;                (format "DEFINING KBD MACRO..."))
+    ;;           (and executing-kbd-macro
+    ;;                (format "EXECUTING KBD MACRO..."))))
+    (when (or (buffer-narrowed-p)
+              (and (bound-and-true-p fancy-narrow-mode)
+                   (fancy-narrow-active-p))
+              (bound-and-true-p dired-narrow-mode))
+      (pushing! segment (all-the-icons-material "unfold_less" :face 'warning)))
+    (string-join segment "\s")))
+;;;;; pomodoro
+(telephone-line-defsegment* +telephone-line-pomodoro-segment ()
+  (when (and (bound-and-true-p pomodoro-mode-line-string)
+             (not (string-empty-p pomodoro-mode-line-string)))
+    (require 'all-the-icons-nerd-fonts)
+    ;; (seq-rest pomodoro-mode-line-string)
+    (string-join (list (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0)
+                       (seq-rest pomodoro-mode-line-string))
+                 "\s")
+    ))
 ;;;;; org timer (what I use as pomodoro)
 ;; (telephone-line-defsegment* +telephone-line-org-timer-segment ()
 ;;   (when (bound-and-true-p org-timer-countdown-timer)
@@ -112,6 +147,7 @@
 ;; `mode-line-format'.
 (defun oo-update-modeline ()
   "Render the updated modeline."
+  (interactive)
   (dolist (buffer (buffer-list))
     (with-current-buffer buffer
       (setq-local mode-line-format (default-value 'mode-line-format))))

@@ -37,6 +37,7 @@ the modeline is updated."
   (oo-add-hook 'telephone-line-mode-hook #'oo-update-modeline))
 
 ;; Add a timer to toggle the separators.
+;; (opt! telephone-line-height 30)
 (opt! telephone-line-height 24)
 (opt! telephone-line-evil-use-short-tag nil)
 ;;;; allow toggling different separators
@@ -87,12 +88,14 @@ the modeline is updated."
 
 (opt! telephone-line-lhs
       '((evil   telephone-line-evil-tag-segment)
-        (accent +telephone-line-vc-segment +telephone-line-read-only-segment +telephone-line-narrow-segment telephone-line-process-segment)
+        (accent +telephone-line-vc-segment telephone-line-process-segment)
         (nil    +telephone-line-buffer-segment)))
 
 (opt! telephone-line-rhs
       '((nil    telephone-line-misc-info-segment)
-        (accent +telephone-line-major-mode-segment +telephone-line-kbd-macro-segment)
+        (accent +telephone-line-pomodoro-segment
+                +telephone-line-major-mode-segment
+                +telephone-line-kbd-macro-segment)
         (evil +telephone-line-current-time-segment)))
 ;;; provide
 (provide 'init-telephone-line)
