@@ -47,7 +47,7 @@
 (setq powerline-height 33)
 ;;;; define custom segments
 (spaceline-define-segment my-kbd-macro
-  "Buffer read-only."
+  "Indicate if"
   (or (and defining-kbd-macro
            (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
       (and executing-kbd-macro
@@ -56,12 +56,14 @@
            )))
 
 (spaceline-define-segment my-narrow
-  "Buffer read-only."
+  ""
   (when (or (buffer-narrowed-p)
             (and (bound-and-true-p fancy-narrow-mode)
                  (fancy-narrow-active-p))
             (bound-and-true-p dired-narrow-mode))
-    (all-the-icons-material "unfold_less" :face 'warning)))
+    (if (and (display-graphic-p))
+        (all-the-icons-material "unfold_less" :face 'warning)
+      "><")))
 
 (spaceline-define-segment my-buffer-read-only
   "Buffer read-only."
