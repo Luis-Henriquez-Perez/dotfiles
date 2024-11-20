@@ -28,12 +28,14 @@
 (require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
+(require 'all-the-icons)
 (require 'all-the-icons-nerd-fonts)
 ;; =spaceline-highlight-face-func= to =spaceline-highlight-face-evil-state
 ;; (oo-update-modeline)
 (setq powerline-height 33)
-
-(setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
+;; When you disable the scroll-bar via early-init.el powerline does not realize
+;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
+(set-scroll-bar-mode nil)
 
 (oo-add-hook 'oo-after-load-theme-hook #'powerline-reset)
 
@@ -106,6 +108,8 @@
     ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
     (version-control+ :face 'powerline-active0))
   '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "telephone-line-evil-%s" evil-state)))))
+
+(setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
 ;;; provide
 (provide 'init-spaceline)
 ;;; init-spaceline.el ends here
