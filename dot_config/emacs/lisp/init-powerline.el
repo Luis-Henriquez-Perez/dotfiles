@@ -71,11 +71,12 @@
 (oo-update-modeline)
 (opt! powerline-default-separator 'arrow)
 
-(defun +powerline--evil-state-segment ()
+(defun +powerline--evil-state-segment (face0 face1)
   (when (bound-and-true-p evil-mode)
-    (string-join (list (powerline-raw (symbol-name evil-state) face0)
-                       (funcall separator-left face0 face1))
-                 "\s")))
+    (list (powerline-raw (symbol-name evil-state) face0)
+          (funcall (+powerline-left-separator) face0 face1))))
+
+(+powerline--evil-state-segment 'powerline-active0 'powerline-active1)
 
 (defun oo--buffer-info-segment ()
   (cond (buffer-read-only
@@ -104,8 +105,7 @@
   (set! face3 (list t :foreground (face-attribute 'error :foreground) :background (face-attribute face0 :background)))
   ;; (set! face3 (list t :foreground 'warning :background (face-attribute face0 :background)))
   (set! lhs (list
-             (+powerline--evil-state-segment)
-             (+powerline--buffer-info-segment)
+             ;; (+powerline--buffer-info-segment)
              (powerline-raw (buffer-name) face0)
              ;; (powerline-raw (oo--buffer-info) face0)
              ;; (powerline-buffer-id `(mode-line-buffer-id ,face0) nil)
@@ -123,6 +123,7 @@
              ;; (when (bound-and-true-p nyan-mode)
              ;;   (powerline-raw (list (nyan-create)) face2 'l))
              ))
+  (prepending! lhs (+powerline--evil-state-segment face0 face1))
   (set! rhs (list (powerline-raw global-mode-string face2 'r)
                   (funcall separator-right face2 face1)
                   (unless window-system
@@ -138,8 +139,9 @@
                   (powerline-fill face0 0)))
   (concat (powerline-render lhs)
           (powerline-fill face2 (powerline-width rhs))
-          ;; (powerline-render rhs)
+          (powerline-render rhs)
           ))
+(oo-main-modeline)
 ;; (defun oo--dired-modeline ()
 ;;   ""
 ;;   )
