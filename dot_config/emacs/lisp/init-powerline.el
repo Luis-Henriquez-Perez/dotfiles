@@ -66,7 +66,7 @@
 ;; I change the modeline function, my modeline is automatically changed.
 ;; Probably this is less effect than trying to make it ino a raw string but so
 ;; be it.
-(progn (opt! powerline-height 30)
+(progn (opt! powerline-height 33)
        (opt! powerline-default-separator 'arrow)
        (setq-default mode-line-format '(:eval (oo-main-modeline)))
        (oo-update-modeline)
@@ -124,7 +124,6 @@
                     ;;       ;; (+powerline--buffer-info-segment)
                     ;;       ;; (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
                     ;;       ;;   (powerline-raw erc-modified-channels-object face1 'l))
-                    ;;       (powerline-major-mode face1 'l)
                     ;;       ;; (powerline-process face1)
                     ;;       ;; (powerline-minor-modes face1 'l)
                     ;;       (powerline-narrow face1 'l)
@@ -133,23 +132,39 @@
                     ;;       (powerline-vc 'org-level-4 'r)
                     ;;       (funcall separator-left face1 face0))
                     ))
-  (set! rhs (list nil
-                  ;; (funcall separator-right face2 face1)
-                  ;; (unless window-system
-                  ;;   (powerline-raw (char-to-string #xe0a1) face1 'l))
-                  ;; (powerline-raw "%4l " face1 'l)
-                  ;; (powerline-raw ":" face1 'l)
-                  ;; (powerline-raw "%3c" face1 'r)
-                  ;; (funcall separator-right face1 evil-face)
-                  ;; (powerline-raw " " evil-face)
-                  ;; (powerline-raw "foo" evil-face 'r)
-                  ;; (when powerline-display-hud
-                  ;;   (powerline-hud face0 face2))
-                  ;; (powerline-fill evil-face 0)
-                  ))
-  (concat (powerline-render lhs)
+  (set! rhs (append nil
+                    (when (and (bound-and-true-p pomodoro-mode-line-string) (not (string-empty-p pomodoro-mode-line-string)))
+                      (require 'all-the-icons-nerd-fonts)
+                      (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
+                      (set! type (match-string 1 pomodoro-mode-line-string))
+                      (set! time (match-string 2 pomodoro-mode-line-string))
+                      (list (funcall separator-right face1 face2)
+                            (pcase type
+                              ("w" (powerline-raw (all-the-icons-nerd-pom "pomodoro-ticking" :face face2 :v-adjust 0) face2 'r))
+                              ("b" (powerline-raw (all-the-icons-nerd-cod "coffee" :face face2 :v-adjust 0) face2 'r)))
+                            (powerline-raw time face2 'r)))
+                    (list (funcall separator-right face0 face1)
+                          (powerline-major-mode face1 'r))
+                    (list (funcall separator-right face1 evil-face)
+                          (powerline-raw (format-time-string "%m-%d %H:%M") evil-face 'r))
+                    ;; (unless window-system
+                    ;;   (powerline-raw (char-to-string #xe0a1) face1 'l))
+                    ;; (powerline-raw "%4l " face1 'l)
+                    ;; (powerline-raw ":" face1 'l)
+                    ;; (powerline-raw "%3c" face1 'r)
+                    ;; (funcall separator-right face1 evil-face)
+                    ;; (powerline-raw " " evil-face)
+                    ;; (powerline-raw "foo" evil-face 'r)
+                    ;; (when powerline-display-hud
+                    ;;   (powerline-hud face0 face2))
+                    ))
+  (set! left (powerline-render lhs))
+  (set! right (powerline-render rhs))
+  ;; (set! n (- (window-width) (length left) (length right) 6))
+  (concat left
+          ;; (make-string n ? )
           (powerline-fill face2 (powerline-width rhs))
-          (powerline-render rhs)))
+          right))
 ;;; provide
 (provide 'init-powerline)
 ;;; init-powerline.el ends here
