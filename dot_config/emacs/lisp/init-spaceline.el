@@ -46,6 +46,7 @@
   (when (buffer-modified-p)
     (require 'all-the-icons)
     (all-the-icons-material "save" :face 'error)))
+
 (spaceline-define-segment +version-control
   ""
   (when buffer-file-name
@@ -54,12 +55,17 @@
           (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
           (string-trim it))))
 
+(spaceline-define-segment +evil-state
+  ""
+  (when (bound-and-true-p evil-mode)
+    (symbol-name evil-state)))
+
 (spaceline-compile
   'main
-  '((evil-state :face (intern (format "telephone-line-evil-%s" evil-state)))
-    ((+buffer-read-only +buffer-modified buffer-size buffer-id remote-host)
+  '((+evil-state :face (intern (format "telephone-line-evil-%s" evil-state)))
+    ((+buffer-read-only +buffer-modified buffer-id remote-host)
      :priority 98)
-    +version-control)
+    (+version-control :face 'powerline-active2))
   '(major-mode
     buffer-position))
 ;;; provide

@@ -44,6 +44,7 @@
                            (all-the-icons-material "lock" :face 'error))))
          (pushing! segment icon))
         ((buffer-modified-p)
+
          (require 'all-the-icons)
          (set! icon (all-the-icons-material "save" :face 'error))
          (pushing! segment icon)))
