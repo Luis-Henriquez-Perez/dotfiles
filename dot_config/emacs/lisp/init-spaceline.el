@@ -66,7 +66,7 @@
       "><")))
 
 (spaceline-define-segment my-buffer-read-only
-  "Buffer read-only."
+  "Display"
   (when buffer-read-only
     (if (not (and (display-graphic-p) (require 'all-the-icons)))
         "X"
@@ -79,7 +79,7 @@
     (all-the-icons-material "save" :face 'error)))
 
 (spaceline-define-segment my-pomodoro
-  "Buffer modified"
+  "Display time."
   (block!
     (when (and (bound-and-true-p pomodoro-mode-line-string)
                (not (string-empty-p pomodoro-mode-line-string)))
