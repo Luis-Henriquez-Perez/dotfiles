@@ -31,6 +31,7 @@
 (require 'spaceline-segments)
 (require 'all-the-icons)
 (require 'all-the-icons-nerd-fonts)
+(require 'nerd-icons)
 ;;;; formally disable scroll-bar
 ;; When you disable the scroll-bar via early-init.el powerline does not realize
 ;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
@@ -70,13 +71,17 @@
   (when buffer-read-only
     (if (not (and (display-graphic-p) (require 'all-the-icons)))
         "X"
-      (all-the-icons-material "lock" :face 'error))))
+      (nerd-icons-faicon "nf-fa-lock")
+      ;; (all-the-icons-material "lock" :face 'error)
+      )))
 
 (spaceline-define-segment my-buffer-modified
   "Buffer modified"
   (when (buffer-modified-p)
     (require 'all-the-icons)
-    (all-the-icons-material "save" :face 'error)))
+    (nerd-icons-faicon "nf-fa-save")
+    ;; (all-the-icons-material "save" :face 'error)
+    ))
 
 (spaceline-define-segment my-pomodoro
   "Display time."
