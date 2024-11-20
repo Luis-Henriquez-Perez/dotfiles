@@ -25,20 +25,27 @@
 ;; Initialize spaceline.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'all-the-icons)
 (require 'all-the-icons-nerd-fonts)
-;; =spaceline-highlight-face-func= to =spaceline-highlight-face-evil-state
-;; (oo-update-modeline)
-(setq powerline-height 33)
+;;;; formally disable scroll-bar
 ;; When you disable the scroll-bar via early-init.el powerline does not realize
 ;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
 (set-scroll-bar-mode nil)
+;;;; reset powerline after theme change
+(defun! oo-reset-powerline-a (orig-fn &rest args)
+  (prog1 (apply orig-fn args)
+    (powerline-reset)))
 
-(oo-add-hook 'oo-after-load-theme-hook #'powerline-reset)
-
+(advice-add 'load-theme :around #'oo-reset-powerline-a)
+;;;; set powerline height
+;; =spaceline-highlight-face-func= to =spaceline-highlight-face-evil-state
+;; (oo-update-modeline)
+(setq powerline-height 33)
+;;;; define custom segments
 (spaceline-define-segment my-kbd-macro
   "Buffer read-only."
   (or (and defining-kbd-macro
@@ -101,7 +108,7 @@
 
 (spaceline-define-segment my-current-time
   (format-time-string "%m-%d %H:%M"))
-
+;;;; initialize modeline at startup
 (defhook! oo-initialize-modeline (after-init-hook)
   (spaceline-compile
     'main
