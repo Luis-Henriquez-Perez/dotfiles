@@ -102,14 +102,14 @@
 (spaceline-define-segment my-current-time
   (format-time-string "%m-%d %H:%M"))
 
-(spaceline-compile
-  'main
-  '((my-evil-state :face (intern (format "telephone-line-evil-%s" evil-state)))
-    ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
-    (version-control+ :face 'powerline-active0))
-  '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "telephone-line-evil-%s" evil-state)))))
-
-(setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
+(defhook! oo-initialize-modeline (after-init-hook)
+  (spaceline-compile
+    'main
+    '((my-evil-state :face (intern (format "spaceline-evil-%s" evil-state)))
+      ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
+      (version-control+ :face 'powerline-active0))
+    '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "spaceline-evil-%s" evil-state)))))
+  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
 (provide 'init-spaceline)
 ;;; init-spaceline.el ends here
