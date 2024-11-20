@@ -35,8 +35,9 @@
 
 (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
 
+(oo-add-hook 'oo-after-load-theme-hook #'powerline-reset)
 
-(spaceline-define-segment kbd-macro+
+(spaceline-define-segment my-kbd-macro
   "Buffer read-only."
   (or (and defining-kbd-macro
            (all-the-icons-nerd-cod "record" :face 'error :v-adjust 0))
@@ -45,7 +46,7 @@
            ;; (format "EXECUTING KBD MACRO...")
            )))
 
-(spaceline-define-segment narrow+
+(spaceline-define-segment my-narrow
   "Buffer read-only."
   (when (or (buffer-narrowed-p)
             (and (bound-and-true-p fancy-narrow-mode)
@@ -53,20 +54,20 @@
             (bound-and-true-p dired-narrow-mode))
     (all-the-icons-material "unfold_less" :face 'warning)))
 
-(spaceline-define-segment buffer-read-only+
+(spaceline-define-segment my-buffer-read-only
   "Buffer read-only."
   (when buffer-read-only
     (if (not (and (display-graphic-p) (require 'all-the-icons)))
         "X"
       (all-the-icons-material "lock" :face 'error))))
 
-(spaceline-define-segment buffer-modified+
+(spaceline-define-segment my-buffer-modified
   "Buffer modified"
   (when (buffer-modified-p)
     (require 'all-the-icons)
     (all-the-icons-material "save" :face 'error)))
 
-(spaceline-define-segment pomodoro+
+(spaceline-define-segment my-pomodoro
   "Buffer modified"
   (block!
     (when (and (bound-and-true-p pomodoro-mode-line-string)
@@ -76,14 +77,13 @@
       (set! type (match-string 1 pomodoro-mode-line-string))
       (set! time (match-string 2 pomodoro-mode-line-string))
       (string-join (list
-                    ;; (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0)
                     (pcase type
                       ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
                       ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0)))
                     time)
                    "\s"))))
 
-(spaceline-define-segment version-control+
+(spaceline-define-segment my-version-control
   ""
   (when buffer-file-name
     (require 'vc)
@@ -91,21 +91,21 @@
           (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
           (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it)))))
 
-(spaceline-define-segment evil-state+
+(spaceline-define-segment my-evil-state
   ""
   (when (bound-and-true-p evil-mode)
 
     (symbol-name evil-state)))
 
-(spaceline-define-segment current-time+
+(spaceline-define-segment my-current-time
   (format-time-string "%m-%d %H:%M"))
 
 (spaceline-compile
   'main
-  '((evil-state+ :face (intern (format "telephone-line-evil-%s" evil-state)))
-    ((narrow+ kbd-macro+ buffer-read-only+ buffer-modified+ buffer-id remote-host) :priority 98)
+  '((my-evil-state :face (intern (format "telephone-line-evil-%s" evil-state)))
+    ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
     (version-control+ :face 'powerline-active0))
-  '((pomodoro+ :face 'powerline-active0) major-mode (current-time+ :face (intern (format "telephone-line-evil-%s" evil-state)))))
+  '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "telephone-line-evil-%s" evil-state)))))
 ;;; provide
 (provide 'init-spaceline)
 ;;; init-spaceline.el ends here
