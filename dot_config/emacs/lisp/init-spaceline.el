@@ -46,11 +46,20 @@
   (when (buffer-modified-p)
     (require 'all-the-icons)
     (all-the-icons-material "save" :face 'error)))
+(spaceline-define-segment +version-control
+  ""
+  (when buffer-file-name
+    (require 'vc)
+    (aand (vc-backend buffer-file-name)
+          (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
+          (string-trim it))))
 
 (spaceline-compile
   'main
   '((evil-state :face (intern (format "telephone-line-evil-%s" evil-state)))
-    ((+buffer-read-only +buffer-modified buffer-size buffer-id remote-host) :priority 98))
+    ((+buffer-read-only +buffer-modified buffer-size buffer-id remote-host)
+     :priority 98)
+    +version-control)
   '(major-mode
     buffer-position))
 ;;; provide
