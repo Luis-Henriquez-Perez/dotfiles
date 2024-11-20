@@ -71,7 +71,7 @@
 (oo-update-modeline)
 (opt! powerline-default-separator 'arrow)
 
-(defun +powerline--evil-state-segment (face0 face1)
+(defun! +powerline--evil-state-segment (face0 face1)
   (when (bound-and-true-p evil-mode)
     (list (powerline-raw (symbol-name evil-state) face0)
           (funcall (+powerline-left-separator) face0 face1))))
