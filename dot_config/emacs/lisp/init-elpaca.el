@@ -161,6 +161,7 @@
 (elpaca shut-up)
 (elpaca sly)
 (elpaca smartparens)
+(elpaca spaceline)
 (elpaca spacemacs-theme)
 (elpaca ssh-agency)
 (elpaca standard-themes)

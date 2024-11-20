@@ -73,21 +73,7 @@
     (string-join segment "\s")))
 ;;;;; pomodoro
 (telephone-line-defsegment* +telephone-line-pomodoro-segment ()
-  (block!
-    (when (and (bound-and-true-p pomodoro-mode-line-string)
-               (not (string-empty-p pomodoro-mode-line-string)))
-      (require 'all-the-icons-nerd-fonts)
-      (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
-      (set! type (match-string 1 pomodoro-mode-line-string))
-      (set! time (match-string 2 pomodoro-mode-line-string))
-      (string-join (list
-                    ;; (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0)
-                    (pcase type
-                      ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'error :v-adjust 0))
-                      ("b" (all-the-icons-nerd-cod "coffee" :face 'error :v-adjust 0)))
-                    time)
-                   "\s")
-      )))
+  )
 ;;;;; org timer (what I use as pomodoro)
 ;; (telephone-line-defsegment* +telephone-line-org-timer-segment ()
 ;;   (when (bound-and-true-p org-timer-countdown-timer)
