@@ -40,7 +40,7 @@
 (spaceline-define-segment my-kbd-macro
   "Buffer read-only."
   (or (and defining-kbd-macro
-           (all-the-icons-nerd-cod "record" :face 'error :v-adjust 0))
+           (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
       (and executing-kbd-macro
            (all-the-icons-faicon "play" :face 'error)
            ;; (format "EXECUTING KBD MACRO...")
