@@ -66,27 +66,11 @@
 ;; I change the modeline function, my modeline is automatically changed.
 ;; Probably this is less effect than trying to make it ino a raw string but so
 ;; be it.
-(progn (opt! powerline-height 24)
+(progn (opt! powerline-height 30)
        (opt! powerline-default-separator 'arrow)
        (setq-default mode-line-format '(:eval (oo-main-modeline)))
        (oo-update-modeline)
        (powerline-reset))
-
-(defun! +powerline--evil-state-segment (face0 face1)
-  (when (bound-and-true-p evil-mode)
-    (set! face (intern (format "telephone-line-evil-%s" evil-state)))
-    (powerline-raw (symbol-name evil-state) face)
-    ))
-
-(+powerline--evil-state-segment 'powerline-active0 'powerline-active1)
-
-(defun oo--buffer-info-segment ()
-  (cond (buffer-read-only
-         (all-the-icons-material "lock" :face face3))
-        ((buffer-modified-p)
-         (require 'all-the-icons)
-         (concat (all-the-icons-material "save" :face face3)
-                 (powerline-raw " " face0)))))
 
 (defun +powerline-left-separator ()
   (intern (format "powerline-%s-%s" (powerline-current-separator) (car powerline-default-separator-dir))))
@@ -94,16 +78,13 @@
 (defun +powerline-right-separator ()
   (intern (format "powerline-%s-%s" (powerline-current-separator) (cdr powerline-default-separator-dir))))
 
-'(evil accent mode-line)
-(setq +powerline-length "")
-
 (defun! oo-main-modeline ()
   (set! active (powerline-selected-window-active))
   (set! mode-line-buffer-id (if active 'mode-line-buffer-id 'mode-line-buffer-id-inactive))
   (set! mode-line (if active 'mode-line 'mode-line-inactive))
   ;; (set! face0 (if active 'mode-line 'mode-line-inactive))
   ;; (set! face1 (if active 'powerline-active0 'powerline-inactive0))
-  (set! face1 (if active 'org-level-2 'powerline-inactive0))
+  (set! face1 (if active 'powerline-active0 'powerline-inactive0))
   ;; (set! face1 (if active 'telephone-line-accent-active 'telephone-line-accent-inactive))
   (set! face0 (if active 'powerline-active1 'powerline-inactive1))
   (set! face2 (if active 'powerline-active2 'powerline-inactive2))
@@ -115,8 +96,7 @@
                       (set! evil-face (intern (format "telephone-line-evil-%s" evil-state)))
                       (list (powerline-raw (symbol-name evil-state) evil-face 'l)
                             (powerline-raw " " evil-face)
-                            (funcall separator-left evil-face face0)
-                            (powerline-raw " " face0)))
+                            (funcall separator-left evil-face face2)))
                     (list (when buffer-read-only
                             (cond ((not (and (display-graphic-p) (require 'all-the-icons)))
                                    "X")
@@ -127,27 +107,29 @@
                           ;; (powerline-buffer-id `(mode-line-buffer-id ,face0) nil)
                           ;; (powerline-raw " " face0)
                           (funcall separator-left face0 face1))
-                    (list nil
-                          ;; (+powerline--buffer-info-segment)
-                          ;; (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
-                          ;;   (powerline-raw erc-modified-channels-object face1 'l))
-                          (powerline-major-mode face1 'l)
-                          ;; (powerline-process face1)
-                          ;; (powerline-minor-modes face1 'l)
-                          (powerline-narrow face1 'l)
-                          (powerline-raw " " face1)
-                          (funcall separator-left face1 face0)
-                          (powerline-vc 'org-level-4 'r)
-                          (funcall separator-left face1 face0))))
-  (set! rhs (list (funcall separator-right face2 face1)
+                    ;; (list nil
+                    ;;       ;; (+powerline--buffer-info-segment)
+                    ;;       ;; (when (and (boundp 'erc-track-minor-mode) erc-track-minor-mode)
+                    ;;       ;;   (powerline-raw erc-modified-channels-object face1 'l))
+                    ;;       (powerline-major-mode face1 'l)
+                    ;;       ;; (powerline-process face1)
+                    ;;       ;; (powerline-minor-modes face1 'l)
+                    ;;       (powerline-narrow face1 'l)
+                    ;;       (powerline-raw " " face1)
+                    ;;       (funcall separator-left face1 face0)
+                    ;;       (powerline-vc 'org-level-4 'r)
+                    ;;       (funcall separator-left face1 face0))
+                    ))
+  (set! rhs (list nil
+                  ;; (funcall separator-right face2 face1)
                   ;; (unless window-system
                   ;;   (powerline-raw (char-to-string #xe0a1) face1 'l))
-                  (powerline-raw "%4l " face1 'l)
+                  ;; (powerline-raw "%4l " face1 'l)
                   ;; (powerline-raw ":" face1 'l)
                   ;; (powerline-raw "%3c" face1 'r)
-                  (funcall separator-right face1 evil-face)
-                  (powerline-raw " " evil-face)
-                  (powerline-raw (format-time-string "%m-%d %H:%M") evil-face 'r)
+                  ;; (funcall separator-right face1 evil-face)
+                  ;; (powerline-raw " " evil-face)
+                  ;; (powerline-raw "foo" evil-face 'r)
                   ;; (when powerline-display-hud
                   ;;   (powerline-hud face0 face2))
                   ;; (powerline-fill evil-face 0)
@@ -155,13 +137,6 @@
   (concat (powerline-render lhs)
           (powerline-fill face2 (powerline-width rhs))
           (powerline-render rhs)))
-;; (defun oo--dired-modeline ()
-;;   ""
-;;   )
-
-;; (defun oo--eshell-modeline ()
-;;   ""
-;;   )
 ;;; provide
 (provide 'init-powerline)
 ;;; init-powerline.el ends here
