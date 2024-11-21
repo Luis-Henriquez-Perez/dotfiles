@@ -130,24 +130,31 @@
          (face-attribute 'spaceline-evil-normal :background nil t))))
 
 (defun! +evil-normal-state-cursor ()
+  "Set cursor for normal state."
   (evil-set-cursor (list t (+evil--cursor-color 'normal))))
 
 (defun! +evil-insert-state-cursor ()
+  "Set cursor for insert state."
   (evil-set-cursor (list '(bar . 2) (+evil--cursor-color 'insert))))
 
 (defun! +evil-visual-state-cursor ()
+  "Set cursor for visual state."
   (evil-set-cursor (list t (+evil--cursor-color 'visual))))
 
 (defun! +evil-motion-state-cursor ()
+  "Set cursor for motion state."
   (evil-set-cursor (list t (+evil--cursor-color 'motion))))
 
 (defun! +evil-replace-state-cursor ()
+  "Set cursor for replace state."
   (evil-set-cursor (list t (+evil--cursor-color 'replace))))
 
 (defun! +evil-operator-state-cursor ()
+  "Set cursor for operator state."
   (evil-set-cursor (list '(hbar . 9))))
 
 (defun! +evil-emacs-state-cursor ()
+  "Set cursor for emacs state."
   (evil-set-cursor (list t (+evil--cursor-color 'emacs))))
 
 (opt! evil-normal-state-cursor   #'+evil-normal-state-cursor)
