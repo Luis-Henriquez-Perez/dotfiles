@@ -50,7 +50,9 @@
 (spaceline-define-segment my-kbd-macro
   "Indicate if"
   (or (and defining-kbd-macro
-           (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
+           (nerd-icons-codicon "nf-cod-record")
+           ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
+           )
       (and executing-kbd-macro
            (all-the-icons-faicon "play" :face 'error)
            ;; (format "EXECUTING KBD MACRO...")
@@ -63,7 +65,9 @@
                  (fancy-narrow-active-p))
             (bound-and-true-p dired-narrow-mode))
     (if (and (display-graphic-p))
-        (all-the-icons-material "unfold_less" :face 'warning)
+        (progn nil
+               ;; (all-the-icons-material "unfold_less" :face 'warning)
+               (nerd-icons-octicon "nf-oct-fold" :face 'warning))
       "><")))
 
 (spaceline-define-segment my-buffer-read-only
