@@ -122,43 +122,33 @@
 ;; Did not realize for the longest time that evil cursor can be a function that
 ;; changes the cursor.  With this in mind, the best way to set the cursor size
 ;; and shape dynamically is to set the corresponding cursor symbols to functions.
-(defun +evil--dwim-set-cursor (shape state)
-  "Helper function for setting cursor."
-  (evil-set-cursor shape)
+(defun +evil--cursor-color (state)
+  "Return the cursor color for state as a string."
   (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-normal :background nil t))
-         (evil-set-cursor-color bg))
+         (face-attribute 'telephone-line-evil-normal :background nil t))
         ((facep 'spaceline-evil-normal)
-         (set! bg (face-attribute 'spaceline-evil-normal :background nil t))
-         (evil-set-cursor-color bg))))
+         (face-attribute 'spaceline-evil-normal :background nil t))))
 
 (defun! +evil-normal-state-cursor ()
-  (+evil--dwim-set-cursor-color t 'normal))
+  (evil-set-cursor (list t (+evil--cursor-color 'normal))))
 
 (defun! +evil-insert-state-cursor ()
-  (+evil--dwim-set-cursor-color '(bar . 2) 'insert))
+  (evil-set-cursor (list '(bar . 2) (+evil--cursor-color 'insert))))
 
 (defun! +evil-visual-state-cursor ()
-  (+evil--dwim-set-cursor-color t 'visual))
+  (evil-set-cursor (list t (+evil--cursor-color 'visual))))
 
 (defun! +evil-motion-state-cursor ()
-  (+evil--dwim-set-cursor-color t 'motion))
+  (evil-set-cursor (list t (+evil--cursor-color 'motion))))
 
 (defun! +evil-replace-state-cursor ()
-  (+evil--dwim-set-cursor-color t 'replace))
+  (evil-set-cursor (list t (+evil--cursor-color 'replace))))
 
 (defun! +evil-operator-state-cursor ()
-  (evil-set-cursor '(hbar . 9))
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-operator :background nil t))
-         (evil-set-cursor-color bg))
-        ;; ((facep 'spaceline-evil-operator)
-        ;;  (set! bg (face-attribute 'spaceline-evil-operator :background nil t))
-        ;;  (evil-set-cursor-color bg))
-        ))
+  (evil-set-cursor (list '(hbar . 9))))
 
 (defun! +evil-emacs-state-cursor ()
-  (+evil--dwim-set-cursor-color t 'emacs))
+  (evil-set-cursor (list t (+evil--cursor-color 'emacs))))
 
 (opt! evil-normal-state-cursor   #'+evil-normal-state-cursor)
 (opt! evil-insert-state-cursor   #'+evil-insert-state-cursor)
