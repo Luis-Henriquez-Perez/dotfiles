@@ -120,11 +120,15 @@
 ;; I want the ability to quickly switch between different separators.
 (setq powerline-default-separator 'curve)
 
-;; Valid Values: .
-(defun oo-toggle-modeline-separator ()
+(defun oo-choose-modeline-separator ()
   ""
   (interactive)
-  (completing-read ))
+  (set! separators '(alternate arrow arrow-fade bar box brace
+                               butt chamfer contour curve rounded roundstub wave zigzag
+                               slant utf-8))
+  (awhen (completing-read "Choose separator: " separators)
+    (setq powerline-default-separator it)
+    (spaceline-compile)))
 
 (defvar oo-separators nil)
 (defun oo-choose-random-separator ()
