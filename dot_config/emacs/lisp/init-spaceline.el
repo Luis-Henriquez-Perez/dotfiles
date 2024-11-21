@@ -29,8 +29,6 @@
 (require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
-;; (require 'all-the-icons)
-(require 'all-the-icons-nerd-fonts)
 (require 'nerd-icons)
 ;;;; reset powerline after theme change
 (defun! oo-reset-powerline-a (orig-fn &rest args)
