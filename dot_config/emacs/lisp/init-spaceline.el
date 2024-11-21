@@ -126,7 +126,7 @@
   (interactive)
   (completing-read ))
 
-(defvar oo-separators)
+(defvar oo-separators nil)
 (defun oo-choose-random-separator ()
   "Choose a different separator.
 It is not completely random, its random without replacement."
