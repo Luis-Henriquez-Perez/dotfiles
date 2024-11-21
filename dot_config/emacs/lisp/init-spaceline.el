@@ -104,7 +104,9 @@
         (require 'vc)
         (vc-backend buffer-file-name)
         (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))))
+        (format "%s %s" (nerd-icons-octicon "nf-oct-git_branch" :v-adjust 0) (string-trim it))
+        ;; (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))
+        ))
 
 (spaceline-define-segment my-evil-state
   "Display the current evil state if evil-mode is enabled."
