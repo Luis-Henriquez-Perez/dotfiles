@@ -118,7 +118,7 @@
   (prog1 (apply orig args)
     (unless (equal bg (face-attribute 'cursor :background))
       (set-cursor-color bg))))
-;;;; Evil cursor color support
+;;;; evil cursor color support
 ;; Did not realize for the longest time that evil cursor can be a function that
 ;; changes the cursor.  With this in mind, the best way to set the cursor size
 ;; and shape dynamically is to set the corresponding cursor symbols to functions.
