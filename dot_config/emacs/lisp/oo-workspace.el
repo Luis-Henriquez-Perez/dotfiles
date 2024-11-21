@@ -68,6 +68,7 @@
   "Open a new workspace."
   (interactive (list (completing-read "Open Burly bookmark: " (burly-bookmark-names)
 			                          nil nil burly-bookmark-prefix)))
+  (require 'burly)
   (burly-tabs-mode -1)
   (unless (bound-and-true-p tab-bar-mode)
 	(require 'tab-bar)

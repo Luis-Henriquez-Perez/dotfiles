@@ -125,9 +125,9 @@
 (defun +evil--cursor-color (state)
   "Return the cursor color for state as a string."
   (cond ((bound-and-true-p telephone-line-mode)
-         (face-attribute 'telephone-line-evil-normal :background nil t))
-        ((facep 'spaceline-evil-normal)
-         (face-attribute 'spaceline-evil-normal :background nil t))))
+         (face-attribute (intern (format "telephone-line-evil-%s" state)) :background nil t))
+        ((facep (intern (format "spaceline-evil-%s" state)))
+         (face-attribute (intern (format "spaceline-evil-%s" state)) :background nil t))))
 
 (defun! +evil-normal-state-cursor ()
   "Set cursor for normal state."
