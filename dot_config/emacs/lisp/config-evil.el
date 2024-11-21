@@ -109,11 +109,18 @@
   "Enter insert state if `evil-mode' is enabled."
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))
+;;;; prevent cursor color from changing with eldoc
+;; For some reason the cursor color changes with eldoc.  Here I tell.
+(advice-add 'elisp-eldoc-funcall :around #'+elisp-eldoc-funcall@preserve-cursor-color-a)
+(defun! +elisp-eldoc-funcall@preserve-cursor-color (orig &rest args)
+  (set! bg (face-attribute 'cursor :background))
+  (prog1 (apply orig args)
+    (unless (equal bg (face-attribute 'cursor :background))
+      (set-cursor-color bg))))
 ;;;; Evil cursor color support
 ;; Did not realize for the longest time that evil cursor can be a function that
 ;; changes the cursor.  With this in mind, the best way to set the cursor size
 ;; and shape dynamically is to set the corresponding cursor symbols to functions.
-
 (defun! +evil-normal-state-cursor ()
   (evil-set-cursor t)
   (cond ((bound-and-true-p telephone-line-mode)
@@ -158,10 +165,10 @@
     (prog1 (ignore-errors (apply orig args))
       (message "after-function -> evil-state color -> %s" (face-attribute 'cursor :background)))))
 
-(advice-add 'eldoc-schedule-timer :around #'oo-ignore-errors-a)
-(advice-remove 'eldoc-schedule-timer #'oo-ignore-errors-a)
-(advice-add 'eldoc-pre-command-refresh-echo-area :around #'oo-ignore-errors-a)
-(advice-remove 'eldoc-pre-command-refresh-echo-area #'oo-ignore-errors-a)
+;; (advice-add 'eldoc-schedule-timer :around #'oo-ignore-errors-a)
+;; (advice-remove 'eldoc-schedule-timer #'oo-ignore-errors-a)
+;; (advice-add 'eldoc-pre-command-refresh-echo-area :around #'oo-ignore-errors-a)
+;; (advice-remove 'eldoc-pre-command-refresh-echo-area #'oo-ignore-errors-a)
 (defun oo-print-before-cursor-color-h ()
   (unless (equal evil-state 'normal)
     (message "before hook color -> %s" (face-attribute 'cursor :background))))
@@ -169,21 +176,6 @@
 (defun oo-print-after-cursor-color-h ()
   (unless (equal evil-state 'normal)
     (message "after color -> %s" (face-attribute 'cursor :background))))
-
-(add-hook 'pre-command-hook #'oo-print-before-cursor-color-h t)
-(add-hook 'pre-command-hook #'oo-print-after-cursor-color-h 100 t)
-(remove-hook 'pre-command-hook #'oo-print-before-cursor-color-h t)
-(remove-hook 'pre-command-hook #'oo-print-after-cursor-color-h t)
-
-(add-hook 'pre-command-hook #'oo-print-after-cursor-color-h 100)
-
-(add-hook 'post-command-hook #'oo-print-before-cursor-color-h t)
-(add-hook 'post-command-hook #'oo-print-after-cursor-color-h 100 t)
-
-(remove-hook 'post-command-hook #'oo-print-before-cursor-color-h)
-(remove-hook 'post-command-hook #'oo-print-after-cursor-color-h)
-(remove-hook 'post-command-hook #'oo-print-before-cursor-color-h t)
-(remove-hook 'post-command-hook #'oo-print-after-cursor-color-h t)
 
 (defun! +evil-replace-state-cursor ()
   (evil-set-cursor t)
