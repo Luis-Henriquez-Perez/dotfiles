@@ -143,6 +143,10 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; modes).  I want to control when to enable this mode normally--as in, add it to
 ;; hooks myself if I want it enabled.  Therefore, I disable it here.
 (setq show-paren-predicate nil)
+;;;; formally disable scroll-bar
+;; When you disable the scroll-bar via early-init.el powerline does not realize
+;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
+(setq scroll-bar-mode nil)
 ;;; provide
 (provide 'base-settings)
 ;;; base-settings.el ends here

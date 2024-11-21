@@ -32,10 +32,6 @@
 ;; (require 'all-the-icons)
 (require 'all-the-icons-nerd-fonts)
 (require 'nerd-icons)
-;;;; formally disable scroll-bar
-;; When you disable the scroll-bar via early-init.el powerline does not realize
-;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
-(set-scroll-bar-mode nil)
 ;;;; reset powerline after theme change
 (defun! oo-reset-powerline-a (orig-fn &rest args)
   (prog1 (apply orig-fn args)
