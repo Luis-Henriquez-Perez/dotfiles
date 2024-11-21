@@ -75,7 +75,7 @@
 
 (spaceline-define-segment my-buffer-modified
   "Buffer modified"
-  (when (buffer-modified-p)
+  (when (and (buffer-file-name) (buffer-modified-p))
     ;; (require 'all-the-icons)
     (nerd-icons-faicon "nf-fa-save")
     ;; (all-the-icons-material "save" :face 'error)
@@ -139,14 +139,18 @@ It is not completely random, its random without replacement."
   ;; butt, chamfer, contour, curve, rounded, roundstub, wave, zigzag,
   ;; slant, utf-8
   )
+(defun +spaceline-evil-face ()
+  "Return the evil-face."
+  (alet (intern (format "spaceline-evil-%s" evil-state))
+    (and (facep it) it)))
 ;;;; initialize modeline at startup
 (defhook! oo-init-modeline-h (after-init-hook)
   (spaceline-compile
     'main
-    '((my-evil-state :face (intern (format "spaceline-evil-%s" evil-state)))
+    '((my-evil-state :face (+spaceline-evil-face))
       ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
       (my-version-control :face 'powerline-active0))
-    '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "spaceline-evil-%s" evil-state)))))
+    '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
 (provide 'init-spaceline)

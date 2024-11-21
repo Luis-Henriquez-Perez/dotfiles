@@ -150,6 +150,41 @@
          (set! bg (face-attribute 'spaceline-evil-motion :background nil t))
          (evil-set-cursor-color bg))))
 
+(defun oo-ignore-errors-a (orig &rest args)
+  "Advice that ignore errors in call to ORIGINAL."
+  (when (not (equal evil-state 'normal))
+    (message "pre-command-refresh-echo-area")
+    (message "before function -> evil-state color -> %s" (face-attribute 'cursor :background))
+    (prog1 (ignore-errors (apply orig args))
+      (message "after-function -> evil-state color -> %s" (face-attribute 'cursor :background)))))
+
+(advice-add 'eldoc-schedule-timer :around #'oo-ignore-errors-a)
+(advice-remove 'eldoc-schedule-timer #'oo-ignore-errors-a)
+(advice-add 'eldoc-pre-command-refresh-echo-area :around #'oo-ignore-errors-a)
+(advice-remove 'eldoc-pre-command-refresh-echo-area #'oo-ignore-errors-a)
+(defun oo-print-before-cursor-color-h ()
+  (unless (equal evil-state 'normal)
+    (message "before hook color -> %s" (face-attribute 'cursor :background))))
+
+(defun oo-print-after-cursor-color-h ()
+  (unless (equal evil-state 'normal)
+    (message "after color -> %s" (face-attribute 'cursor :background))))
+
+(add-hook 'pre-command-hook #'oo-print-before-cursor-color-h t)
+(add-hook 'pre-command-hook #'oo-print-after-cursor-color-h 100 t)
+(remove-hook 'pre-command-hook #'oo-print-before-cursor-color-h t)
+(remove-hook 'pre-command-hook #'oo-print-after-cursor-color-h t)
+
+(add-hook 'pre-command-hook #'oo-print-after-cursor-color-h 100)
+
+(add-hook 'post-command-hook #'oo-print-before-cursor-color-h t)
+(add-hook 'post-command-hook #'oo-print-after-cursor-color-h 100 t)
+
+(remove-hook 'post-command-hook #'oo-print-before-cursor-color-h)
+(remove-hook 'post-command-hook #'oo-print-after-cursor-color-h)
+(remove-hook 'post-command-hook #'oo-print-before-cursor-color-h t)
+(remove-hook 'post-command-hook #'oo-print-after-cursor-color-h t)
+
 (defun! +evil-replace-state-cursor ()
   (evil-set-cursor t)
   (cond ((bound-and-true-p telephone-line-mode)
@@ -164,9 +199,10 @@
   (cond ((bound-and-true-p telephone-line-mode)
          (set! bg (face-attribute 'telephone-line-evil-operator :background nil t))
          (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-operator)
-         (set! bg (face-attribute 'spaceline-evil-operator :background nil t))
-         (evil-set-cursor-color bg))))
+        ;; ((facep 'spaceline-evil-operator)
+        ;;  (set! bg (face-attribute 'spaceline-evil-operator :background nil t))
+        ;;  (evil-set-cursor-color bg))
+        ))
 
 (defun! +evil-emacs-state-cursor ()
   (evil-set-cursor t)
