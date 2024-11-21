@@ -120,7 +120,7 @@
 ;; I want the ability to quickly switch between different separators.
 (setq powerline-default-separator 'curve)
 
-(defun oo-choose-modeline-separator ()
+(defun! oo-choose-modeline-separator ()
   ""
   (interactive)
   (set! separators '(alternate arrow arrow-fade bar box brace
@@ -130,15 +130,16 @@
     (setq powerline-default-separator it)
     (spaceline-compile)))
 
-(defvar oo-separators nil)
-(defun oo-choose-random-separator ()
-  "Choose a different separator.
-It is not completely random, its random without replacement."
+(defun! oo-choose-random-separator ()
+  "Set a random separator."
   (interactive)
-  ;; alternate, arrow, arrow-fade, bar, box, brace,
-  ;; butt, chamfer, contour, curve, rounded, roundstub, wave, zigzag,
-  ;; slant, utf-8
-  )
+  (set! separators '(alternate arrow arrow-fade bar box brace
+                               butt chamfer contour curve rounded roundstub wave zigzag
+                               slant utf-8))
+  (setq powerline-default-separator (seq-random-elt separators))
+  (spaceline-compile)
+  (message "set separator to %s" powerline-default-separator))
+
 (defun +spaceline-evil-face ()
   "Return the evil-face."
   (alet (intern (format "spaceline-evil-%s" evil-state))
