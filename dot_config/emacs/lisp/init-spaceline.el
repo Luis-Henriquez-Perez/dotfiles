@@ -103,18 +103,19 @@
 
 (spaceline-define-segment my-version-control
   "Display current git branch."
-  (when buffer-file-name
-    (require 'vc)
-    (aand (vc-backend buffer-file-name)
-          (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
-          (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it)))))
+  (aand buffer-file-name
+        (require 'vc)
+        (vc-backend buffer-file-name)
+        (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))))
 
 (spaceline-define-segment my-evil-state
-  "Display the current evil state."
+  "Display the current evil state if evil-mode is enabled."
   (when (bound-and-true-p evil-mode)
     (symbol-name evil-state)))
 
 (spaceline-define-segment my-current-time
+  "Display the current time."
   (format-time-string "%m-%d %H:%M"))
 ;;;; initialize modeline at startup
 (defhook! oo-init-modeline-h (after-init-hook)
