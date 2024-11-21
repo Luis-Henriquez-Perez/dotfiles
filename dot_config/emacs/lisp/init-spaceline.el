@@ -80,7 +80,7 @@
 (spaceline-define-segment my-buffer-modified
   "Buffer modified"
   (when (buffer-modified-p)
-    (require 'all-the-icons)
+    ;; (require 'all-the-icons)
     (nerd-icons-faicon "nf-fa-save")
     ;; (all-the-icons-material "save" :face 'error)
     ))
