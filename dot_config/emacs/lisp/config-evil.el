@@ -151,7 +151,7 @@
 
 (defun! +evil-operator-state-cursor ()
   "Set cursor for operator state."
-  (evil-set-cursor (list '(hbar . 9))))
+  (evil-set-cursor (list '(hbar . 9) (+evil--cursor-color 'operator))))
 
 (defun! +evil-emacs-state-cursor ()
   "Set cursor for emacs state."
