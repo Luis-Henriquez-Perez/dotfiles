@@ -110,7 +110,8 @@
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))
 ;;;; prevent cursor color from changing with eldoc
-;; For some reason the cursor color changes with eldoc.  Here I tell.
+;; For some reason the cursor color changes with eldoc.  Here I tell.  This also
+;; fixes the cursor color change when expanding a tempel snippet.
 (advice-add 'elisp-eldoc-funcall :around #'+elisp-eldoc-funcall@preserve-cursor-color)
 (defun! +elisp-eldoc-funcall@preserve-cursor-color (orig &rest args)
   (set! bg (face-attribute 'cursor :background))
