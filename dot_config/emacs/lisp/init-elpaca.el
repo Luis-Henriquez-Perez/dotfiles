@@ -161,7 +161,7 @@
 (elpaca shut-up)
 (elpaca sly)
 (elpaca smartparens)
-(elpaca spaceline)
+(elpaca spaceline :host github :branch "add-evil-operator-state-face" :repo "Luis-Henriquez-Perez/spaceline")
 (elpaca spacemacs-theme)
 (elpaca ssh-agency)
 (elpaca standard-themes)
