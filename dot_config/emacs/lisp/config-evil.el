@@ -172,6 +172,9 @@
   (evil-set-cursor t)
   (cond ((bound-and-true-p telephone-line-mode)
          (set! bg (face-attribute 'telephone-line-evil-emacs :background nil t))
+         (evil-set-cursor-color bg))
+        ((facep 'spaceline-evil-emacs)
+         (set! bg (face-attribute 'spaceline-evil-emacs :background nil t))
          (evil-set-cursor-color bg))))
 
 (opt! evil-normal-state-cursor   #'+evil-normal-state-cursor)
