@@ -57,7 +57,7 @@
            )))
 
 (spaceline-define-segment my-narrow
-  ""
+  "Display an icon to indicate when the current buffer is narrowed."
   (when (or (buffer-narrowed-p)
             (and (bound-and-true-p fancy-narrow-mode)
                  (fancy-narrow-active-p))
