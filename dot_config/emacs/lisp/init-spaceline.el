@@ -29,7 +29,7 @@
 (require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
-(require 'all-the-icons)
+;; (require 'all-the-icons)
 (require 'all-the-icons-nerd-fonts)
 (require 'nerd-icons)
 ;;;; formally disable scroll-bar
@@ -43,12 +43,10 @@
 
 (advice-add 'load-theme :around #'oo-reset-powerline-a)
 ;;;; set powerline height
-;; =spaceline-highlight-face-func= to =spaceline-highlight-face-evil-state
-;; (oo-update-modeline)
 (setq powerline-height 33)
 ;;;; define custom segments
 (spaceline-define-segment my-kbd-macro
-  "Indicate if"
+  "Display an icon to represent when."
   (or (and defining-kbd-macro
            (nerd-icons-codicon "nf-cod-record")
            ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
@@ -120,7 +118,7 @@
 (spaceline-define-segment my-current-time
   (format-time-string "%m-%d %H:%M"))
 ;;;; initialize modeline at startup
-(defhook! oo-initialize-modeline (after-init-hook)
+(defhook! oo-init-modeline (after-init-hook)
   (spaceline-compile
     'main
     '((my-evil-state :face (intern (format "spaceline-evil-%s" evil-state)))
