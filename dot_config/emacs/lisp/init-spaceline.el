@@ -102,7 +102,7 @@
                    "\s"))))
 
 (spaceline-define-segment my-version-control
-  ""
+  "Display current git branch."
   (when buffer-file-name
     (require 'vc)
     (aand (vc-backend buffer-file-name)
@@ -110,20 +110,19 @@
           (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it)))))
 
 (spaceline-define-segment my-evil-state
-  ""
+  "Display the current evil state."
   (when (bound-and-true-p evil-mode)
-
     (symbol-name evil-state)))
 
 (spaceline-define-segment my-current-time
   (format-time-string "%m-%d %H:%M"))
 ;;;; initialize modeline at startup
-(defhook! oo-init-modeline (after-init-hook)
+(defhook! oo-init-modeline-h (after-init-hook)
   (spaceline-compile
     'main
     '((my-evil-state :face (intern (format "spaceline-evil-%s" evil-state)))
       ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
-      (version-control+ :face 'powerline-active0))
+      (my-version-control :face 'powerline-active0))
     '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (intern (format "spaceline-evil-%s" evil-state)))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
