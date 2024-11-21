@@ -122,8 +122,9 @@
 ;; Did not realize for the longest time that evil cursor can be a function that
 ;; changes the cursor.  With this in mind, the best way to set the cursor size
 ;; and shape dynamically is to set the corresponding cursor symbols to functions.
-(defun! +evil-normal-state-cursor ()
-  (evil-set-cursor t)
+(defun +evil--dwim-set-cursor (shape state)
+  "Helper function for setting cursor."
+  (evil-set-cursor shape)
   (cond ((bound-and-true-p telephone-line-mode)
          (set! bg (face-attribute 'telephone-line-evil-normal :background nil t))
          (evil-set-cursor-color bg))
@@ -131,61 +132,20 @@
          (set! bg (face-attribute 'spaceline-evil-normal :background nil t))
          (evil-set-cursor-color bg))))
 
+(defun! +evil-normal-state-cursor ()
+  (+evil--dwim-set-cursor-color t 'normal))
+
 (defun! +evil-insert-state-cursor ()
-  (evil-set-cursor '(bar . 2))
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-insert :background nil t))
-         (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-insert)
-         (set! bg (face-attribute 'spaceline-evil-insert :background nil t))
-         (evil-set-cursor-color bg))))
+  (+evil--dwim-set-cursor-color '(bar . 2) 'insert))
 
 (defun! +evil-visual-state-cursor ()
-  (evil-set-cursor t)
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-visual :background nil t))
-         (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-visual)
-         (set! bg (face-attribute 'spaceline-evil-visual :background nil t))
-         (evil-set-cursor-color bg))))
+  (+evil--dwim-set-cursor-color t 'visual))
 
 (defun! +evil-motion-state-cursor ()
-  (evil-set-cursor t)
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-motion :background nil t))
-         (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-motion)
-         (set! bg (face-attribute 'spaceline-evil-motion :background nil t))
-         (evil-set-cursor-color bg))))
-
-(defun oo-ignore-errors-a (orig &rest args)
-  "Advice that ignore errors in call to ORIGINAL."
-  (when (not (equal evil-state 'normal))
-    (message "pre-command-refresh-echo-area")
-    (message "before function -> evil-state color -> %s" (face-attribute 'cursor :background))
-    (prog1 (ignore-errors (apply orig args))
-      (message "after-function -> evil-state color -> %s" (face-attribute 'cursor :background)))))
-
-;; (advice-add 'eldoc-schedule-timer :around #'oo-ignore-errors-a)
-;; (advice-remove 'eldoc-schedule-timer #'oo-ignore-errors-a)
-;; (advice-add 'eldoc-pre-command-refresh-echo-area :around #'oo-ignore-errors-a)
-;; (advice-remove 'eldoc-pre-command-refresh-echo-area #'oo-ignore-errors-a)
-(defun oo-print-before-cursor-color-h ()
-  (unless (equal evil-state 'normal)
-    (message "before hook color -> %s" (face-attribute 'cursor :background))))
-
-(defun oo-print-after-cursor-color-h ()
-  (unless (equal evil-state 'normal)
-    (message "after color -> %s" (face-attribute 'cursor :background))))
+  (+evil--dwim-set-cursor-color t 'motion))
 
 (defun! +evil-replace-state-cursor ()
-  (evil-set-cursor t)
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-replace :background nil t))
-         (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-replace)
-         (set! bg (face-attribute 'spaceline-evil-replace :background nil t))
-         (evil-set-cursor-color bg))))
+  (+evil--dwim-set-cursor-color t 'replace))
 
 (defun! +evil-operator-state-cursor ()
   (evil-set-cursor '(hbar . 9))
@@ -198,13 +158,7 @@
         ))
 
 (defun! +evil-emacs-state-cursor ()
-  (evil-set-cursor t)
-  (cond ((bound-and-true-p telephone-line-mode)
-         (set! bg (face-attribute 'telephone-line-evil-emacs :background nil t))
-         (evil-set-cursor-color bg))
-        ((facep 'spaceline-evil-emacs)
-         (set! bg (face-attribute 'spaceline-evil-emacs :background nil t))
-         (evil-set-cursor-color bg))))
+  (+evil--dwim-set-cursor-color t 'emacs))
 
 (opt! evil-normal-state-cursor   #'+evil-normal-state-cursor)
 (opt! evil-insert-state-cursor   #'+evil-insert-state-cursor)
