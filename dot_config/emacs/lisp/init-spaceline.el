@@ -126,8 +126,10 @@
   (interactive)
   (completing-read ))
 
+(defvar oo-separators)
 (defun oo-choose-random-separator ()
-  ""
+  "Choose a different separator.
+It is not completely random, its random without replacement."
   (interactive)
   ;; alternate, arrow, arrow-fade, bar, box, brace,
   ;; butt, chamfer, contour, curve, rounded, roundstub, wave, zigzag,
