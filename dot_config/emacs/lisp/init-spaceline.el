@@ -116,6 +116,23 @@
 (spaceline-define-segment my-current-time
   "Display the current time."
   (format-time-string "%m-%d %H:%M"))
+;;;; toggle default separator
+;; I want the ability to quickly switch between different separators.
+(setq powerline-default-separator 'curve)
+
+;; Valid Values: .
+(defun oo-toggle-modeline-separator ()
+  ""
+  (interactive)
+  (completing-read ))
+
+(defun oo-choose-random-separator ()
+  ""
+  (interactive)
+  ;; alternate, arrow, arrow-fade, bar, box, brace,
+  ;; butt, chamfer, contour, curve, rounded, roundstub, wave, zigzag,
+  ;; slant, utf-8
+  )
 ;;;; initialize modeline at startup
 (defhook! oo-init-modeline-h (after-init-hook)
   (spaceline-compile
