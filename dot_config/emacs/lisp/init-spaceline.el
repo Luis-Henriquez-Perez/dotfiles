@@ -48,15 +48,35 @@
       (t
        "REC"))
 ;;;; defsegment!
-(defmacro defsegment! (name docstring body)
+;; This lets me use block! in the body of the macro and expresses the segments
+;; as functions that I can freely modify and re-evaluate to make the segment
+;; change in real time.
+(defmacro! +spaceline-define-segment! (name value &rest props)
   (declare (indent 1) (doc-string 2))
+  (set! fn (intern (format "+spaceline-%s-segment" name)))
+  (set! meta (when (stringp (car-safe value)) (list (pop value))))
   `(progn
-     (defun! ,(intern (format "+spaceline-%s-segment")) ()
-       ,@body)
-     (spaceline-define-segment ,name ,docstring (funcall #',))))
+     (defun! ,fn () ,@(append meta value))
+     (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
 ;;;; set powerline height
 (setq powerline-height 33)
 ;;;; define custom segments
+(+spaceline-define-segment! my-kbd-macro
+  "Display an icon to represent when."
+  (or (and defining-kbd-macro
+           (cond (t
+                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
+                  ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
+                  )
+                 (t
+                  (nerd-icons-codicon "nf-cod-record"))
+                 (t
+                  "REC")))
+      (and executing-kbd-macro
+           (all-the-icons-faicon "play" :face 'error)
+           ;; (format "EXECUTING KBD MACRO...")
+           )))
+
 (spaceline-define-segment my-kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
@@ -164,7 +184,7 @@
   (setq powerline-default-separator (seq-random-elt separators))
   (spaceline-compile)
   (message "set separator to %s" powerline-default-separator))
-
+;;;; evil face
 (defun +spaceline-evil-face ()
   "Return the evil-face."
   (alet (intern (format "spaceline-evil-%s" evil-state))
