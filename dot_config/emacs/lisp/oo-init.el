@@ -47,7 +47,7 @@
       (set-face-attribute 'default nil :family font :height 100)
       (done!)))
   (set! default-font (face-attribute 'default :family))
-  (info! "Unable to set font to any in `oo-default-font-list', defaulting to %s."))
+  (info! "Unable to set font to any in `oo-default-font-list', defaulting to `%s'." default-font))
 
 (add-hook 'after-init-hook #'oo-set-default-font-h 80)
 ;;;; sort lines
