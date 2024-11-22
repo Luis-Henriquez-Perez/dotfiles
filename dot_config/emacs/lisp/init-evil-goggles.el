@@ -28,7 +28,6 @@
 (require 'base)
 
 (opt! evil-goggles-duration 0.1)
-;;;; Register evil goggles command
 ;;;; register lispyville commands
 (defafter! register-evil-goggles-commands (evil-goggles)
   (set! list '((+evil-eval-operator evil-change)
