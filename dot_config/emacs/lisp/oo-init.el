@@ -40,10 +40,11 @@
 
 (defun! oo-set-default-font-h ()
   "Set the default font based on available fonts."
-  (dolist (font fonts)
-    (when (find-font (font-spec :name font))
+  (dolist (font oo-default-font-list)
+    (trace! "Checking whether %s font is available..." font)
+    (awhen (find-font (font-spec :name font))
+      (info! "Found it, setting font to...%s" it)
       (set-face-attribute 'default nil :family font :height 100)
-      (info! "Set font to...")
       (done!)))
   (info! "Unable to set font to %s, defaulting to %s"))
 
