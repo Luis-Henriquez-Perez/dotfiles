@@ -38,15 +38,15 @@
 (advice-add 'load-theme :around #'oo-reset-powerline-a)
 ;;;; representation
 ;; Do not throw away information.
-(defun oo-icon (nerd-name all-the-icons-name text)
-  ""
-  )
-(cond (t
-       (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
-      (t
-       (nerd-icons-codicon "nf-cod-record"))
-      (t
-       "REC"))
+;; (defun oo-icon (nerd-name all-the-icons-name text)
+;;   ""
+;;   )
+;; (cond (t
+;;        (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
+;;       (t
+;;        (nerd-icons-codicon "nf-cod-record"))
+;;       (t
+;;        "REC"))
 ;;;; defsegment!
 ;; This lets me use block! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
@@ -61,21 +61,21 @@
 ;;;; set powerline height
 (setq powerline-height 33)
 ;;;; define custom segments
-(+spaceline-define-segment! my-kbd-macro
-  "Display an icon to represent when."
-  (or (and defining-kbd-macro
-           (cond (t
-                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
-                  ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
-                  )
-                 (t
-                  (nerd-icons-codicon "nf-cod-record"))
-                 (t
-                  "REC")))
-      (and executing-kbd-macro
-           (all-the-icons-faicon "play" :face 'error)
-           ;; (format "EXECUTING KBD MACRO...")
-           )))
+;; (+spaceline-define-segment! my-kbd-macro
+;;   "Display an icon to represent when."
+;;   (or (and defining-kbd-macro
+;;            (cond (t
+;;                   (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
+;;                   ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
+;;                   )
+;;                  (t
+;;                   (nerd-icons-codicon "nf-cod-record"))
+;;                  (t
+;;                   "REC")))
+;;       (and executing-kbd-macro
+;;            (all-the-icons-faicon "play" :face 'error)
+;;            ;; (format "EXECUTING KBD MACRO...")
+;;            )))
 
 (spaceline-define-segment my-kbd-macro
   "Display an icon to represent when."
@@ -189,8 +189,18 @@
   "Return the evil-face."
   (alet (intern (format "spaceline-evil-%s" evil-state))
     (and (facep it) it)))
+;;;; Do not byte-compile the modeline at startup
+;; Although this saves time the longer you use the modeline, it means that the
+;; call to `spaceline-compile' is called takes significantly longer which is
+;; particularly undesirable during startup.  Despite what the README says the
+;; rendering/updating of the modeline does not make a noticeable difference to
+;; me.  I imagine it matters more for particularly expensive modeline segments.
+;; Still I will byte-compile it but not during startup, at some point during
+;; idle time.
+(setq spaceline-byte-compile nil)
 ;;;; initialize modeline at startup
-(defhook! oo-init-modeline-h (after-init-hook)
+;; TODO: during idle time byte-compile the spaceline function.
+(defun oo-init-modeline-h ()
   (spaceline-compile
     'main
     '((my-evil-state :face (+spaceline-evil-face))
@@ -198,6 +208,8 @@
       (my-version-control :face 'powerline-active0))
     '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
+
+(add-hook 'after-init-hook #'oo-init-modeline-h 90)
 ;;; provide
 (provide 'init-spaceline)
 ;;; init-spaceline.el ends here

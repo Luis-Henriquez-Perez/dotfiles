@@ -63,7 +63,22 @@
 (bind! i override-global-map oo-insert-leader-key #'oo-leader-prefix-command)
 (bind! (n m v) override-global-map oo-normal-leader-key #'oo-leader-prefix-command)
 (bind! (n m v) override-global-map ";" #'execute-extended-command)
-(bind! (i e) [escape] #'evil-force-normal-state)
+
+(defun! oo-dwim-escape ()
+  "Exits out of whatever is happening after escape."
+  (interactive)
+  (when (bound-and-true-p evil-mode)
+    (evil-normal-state 1))
+  (cond ((minibuffer-window-active-p (minibuffer-window))
+		 (if (or defining-kbd-macro executing-kbd-macro)
+			 (minibuffer-keyboard-quit)
+           (abort-recursive-edit)))
+		((or defining-kbd-macro executing-kbd-macro) nil)
+        (t
+		 (keyboard-quit))))
+
+;; (advice-add #'evil-force-normal-state :after #'oo--exit-everything)
+(bind! (i e) [escape] #'oo-dwim-escape)
 
 ;; One of the most common--if not the most common--command you use in Emacs is
 ;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and

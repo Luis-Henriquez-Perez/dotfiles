@@ -63,18 +63,6 @@
   (apply orig-fn args))
 
 (advice-add 'load-theme :around 'oo--refresh-cursor)
-;;;; escape
-(defun! oo--exit-everything (&rest _)
-  "Exits out of whatever is happening after escape."
-  (cond ((minibuffer-window-active-p (minibuffer-window))
-		 (if (or defining-kbd-macro executing-kbd-macro)
-			 (minibuffer-keyboard-quit)
-           (abort-recursive-edit)))
-		((or defining-kbd-macro executing-kbd-macro) nil)
-        (t
-		 (keyboard-quit))))
-
-(advice-add #'evil-force-normal-state :after #'oo--exit-everything)
 ;;;; eval operator
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator +evil-eval-operator (beg end)

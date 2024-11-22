@@ -93,6 +93,7 @@
 (elpaca evil-textobj-syntax)
 (elpaca evil-visual-mark-mode)
 (elpaca expreg)
+;; (elpaca exwm)
 (elpaca f)
 (elpaca fancy-narrow)
 (elpaca fennel-mode)
