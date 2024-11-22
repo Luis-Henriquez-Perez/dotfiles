@@ -77,7 +77,6 @@
         (t
 		 (keyboard-quit))))
 
-;; (advice-add #'evil-force-normal-state :after #'oo--exit-everything)
 (bind! (i e) [escape] #'oo-dwim-escape)
 
 ;; One of the most common--if not the most common--command you use in Emacs is
