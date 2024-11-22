@@ -86,6 +86,9 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
   "Exit `block!' and return VALUE."
   `(throw 'return! ,value))
 
+(defmacro done! ()
+  (return! nil))
+
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE."
   `(throw 'break! ,value))
