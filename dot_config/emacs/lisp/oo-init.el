@@ -30,22 +30,22 @@
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; set initial font
-(find-font (font-spec :name font-name))
+;;
+(defmacro each-until (list pred body)
+  `(progn (while (not ()))
+          (progn ,@body)))
+
 (--first (find-font (font-spec :name it))
-         '("Cascadia Code" "Fira Code" "Jetbrains Mono"
-           "SF Mono" "Hack" "Source Code Pro" "Menlo"
-           "Monaco" "DejaVu Sans Mono" "Consolas"))
-(cl-loop for font in
-         when (find-font (font-spec :name font))
-         return (set-face-attribute 'default nil
-                                    :family font
-                                    :height 100))
-;; (alet (or
-;;        (font-spec :name "Rec"
-;;                   :weight 'normal
-;;                   :slant 'normal
-;;                   :size 15))
-;;   (set-face-attribute 'default nil :font it))
+         )
+'("Cascadia Code" "Fira Code" "Jetbrains Mono"
+  "SF Mono" "Hack" "Source Code Pro" "Menlo"
+  "Monaco" "DejaVu Sans Mono" "Consolas")
+
+(defun! oo-set-default-font-h ()
+  (--each-while fonts (find-font (font-spec :name font))
+    (set-face-attribute 'default nil :family font :height 100)))
+
+(add-hook 'after-init-hook #'oo-set-default-font-h 80)
 ;;;; sort lines
 (defun! oo-sort-elpaca-forms-h ()
   "Sort elpaca package forms in current buffer."
