@@ -40,7 +40,7 @@
 (opt! evil-search-wrap nil)
 
 (opt! evil-visualstar/persistent t)
-;;;; minibuffer
+;;;; go into insert state when typing in minibuffer
 (defvar oo-evil-state-before-minibuffer nil
   "Store the evil state before entering the minibuffer.")
 
@@ -92,11 +92,6 @@
     (alet (point)
       (insert result)
       (comment-region it (point)))))
-;;;; insert state hook
-(defhook! +evil-enter-insert-state-h ()
-  "Enter insert state if `evil-mode' is enabled."
-  (when (bound-and-true-p evil-mode)
-    (evil-insert-state 1)))
 ;;;; prevent cursor color from changing with eldoc
 ;; For some reason the cursor color changes with eldoc.  Here I tell.  This also
 ;; fixes the cursor color change when expanding a tempel snippet.
@@ -106,7 +101,7 @@
   (prog1 (apply orig args)
     (unless (equal bg (face-attribute 'cursor :background))
       (set-cursor-color bg))))
-;;;; evil cursor color support
+;;;; change cursor color and shape according to current evil state
 ;; Did not realize for the longest time that evil cursor can be a function that
 ;; changes the cursor.  With this in mind, the best way to set the cursor size
 ;; and shape dynamically is to set the corresponding cursor symbols to functions.
@@ -152,6 +147,11 @@
 (opt! evil-replace-state-cursor  #'+evil-replace-state-cursor)
 (opt! evil-operator-state-cursor #'+evil-operator-state-cursor)
 (opt! evil-emacs-state-cursor    #'+evil-emacs-state-cursor)
+;;;; insert state hook
+(defhook! +evil-enter-insert-state-h ()
+  "Enter insert state if `evil-mode' is enabled."
+  (when (bound-and-true-p evil-mode)
+    (evil-insert-state 1)))
 ;;;; cross-configuration
 ;;;;; org-capture
 (oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)
