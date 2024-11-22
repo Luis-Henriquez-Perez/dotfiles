@@ -26,6 +26,16 @@
 ;;
 ;;; Code:
 (require 'base)
+;;;; Use a different face
+;; I want to make `evil-goggles-default-face' the same as that of
+;; `spaceline-evil-operator'.  That is what makes the most sense to me because
+;; most of the evil-goggles-commands will perform their function in
+;; evil-operator state--think of yanking, deleting as well as the eval
+;; operators.
+;; TODO: put in an after block.
+(custom-theme-set-faces
+ 'user
+ '(evil-goggles-default-face ((t (:inherit spaceline-evil-operator)))))
 ;;;; register lispyville commands
 (block! (set! list '((+evil-eval-operator evil-change)
                      (+evil-eval-replace-operator evil-change)
