@@ -29,6 +29,7 @@
 (oo-call-after-load 'dired (-partial #'require 'all-the-icons))
 ;; Do not touch the mode-line.
 (advice-add 'dirvish--setup-mode-line :override #'ignore)
+;; (setq nerd-icons-scale-factor 1.0)
 (opt! dirvish-use-mode-line t)
 (opt! dirvish-mode-line-format nil)
 (opt! dirvish-use-header-line nil)
@@ -44,15 +45,15 @@
 ;; dirvish-yank-new-name-style 'append-to-ext
 (opt! dirvish-mode-line-format nil)
 
-(set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'append)
-(set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'append)
-(set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'append)
-(set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'append)
-(set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'append)
-(set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'append)
+;; (set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'append)
 
-(set-fontset-font t 'unicode "FontAwesome" nil 'prepend)
-(set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil)
+;; (set-fontset-font t 'unicode "FontAwesome" nil 'prepend)
+;; (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil)
 ;;;; make a specific modeline for dirvish
 ;; (defhook! oo-set-dired-modeline-h ()
 ;;   (setq-local mode-line-format))

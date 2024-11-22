@@ -29,22 +29,41 @@
 (require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
-(require 'nerd-icons)
+(require 'all-the-icons)
 ;;;; reset powerline after theme change
 (defun! oo-reset-powerline-a (orig-fn &rest args)
   (prog1 (apply orig-fn args)
     (powerline-reset)))
 
 (advice-add 'load-theme :around #'oo-reset-powerline-a)
+;;;; representation
+;; Do not throw away information.
+(defun oo-icon (nerd-name all-the-icons-name text)
+  ""
+  )
+(cond (t
+       (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
+      (t
+       (nerd-icons-codicon "nf-cod-record"))
+      (t
+       "REC"))
+;;;; Defsegment!
+(defmacro defsegment! (name)
+  `(progn
+     ()
+     (spaceline-define-segment ,name ,docstring (funcall #',))))
 ;;;; set powerline height
 (setq powerline-height 33)
 ;;;; define custom segments
 (spaceline-define-segment my-kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
-           (nerd-icons-codicon "nf-cod-record")
-           ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
-           )
+           (cond (t
+                  (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
+                 (t
+                  (nerd-icons-codicon "nf-cod-record"))
+                 (t
+                  "REC")))
       (and executing-kbd-macro
            (all-the-icons-faicon "play" :face 'error)
            ;; (format "EXECUTING KBD MACRO...")
@@ -56,20 +75,24 @@
             (and (bound-and-true-p fancy-narrow-mode)
                  (fancy-narrow-active-p))
             (bound-and-true-p dired-narrow-mode))
-    (if (and (display-graphic-p))
-        (progn nil
-               ;; (all-the-icons-material "unfold_less" :face 'warning)
-               (nerd-icons-octicon "nf-oct-fold" :face 'warning))
-      "><")))
+    (cond ((fboundp 'all-the-icons-material)
+           (all-the-icons-material "unfold_less" :face 'warning))
+          ((fboundp 'nerd-icons-octicon)
+           (nerd-icons-octicon "nf-oct-fold" :face 'warning))
+          (t
+           "><"))))
 
 (spaceline-define-segment my-buffer-read-only
   "Display"
   (when buffer-read-only
     (if (not (and (display-graphic-p) (require 'all-the-icons)))
         "X"
-      (nerd-icons-faicon "nf-fa-lock")
-      ;; (all-the-icons-material "lock" :face 'error)
-      )))
+      (cond ((fboundp 'all-the-icons-material)
+             (all-the-icons-material "lock" :face 'error))
+            ((fboundp 'nerd-icons-octicon)
+             (nerd-icons-faicon "nf-fa-lock"))
+            (t
+             "LOCK")))))
 
 (spaceline-define-segment my-buffer-modified
   "Buffer modified"

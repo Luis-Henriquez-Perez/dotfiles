@@ -30,27 +30,22 @@
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; set initial font
-(alet (or (font-spec :name "Iosevka Comfy Wide"
-                     :weight 'normal
-                     :slant 'normal
-                     :size 15)
-          (font-spec :name "Nimbus Mono PS"
-                     :weight 'normal
-                     :slant 'normal
-                     :size 15)
-          (font-spec :name "Martian Mono Nerd Font"
-                     :weight 'normal
-                     :slant 'normal
-                     :size 14)
-          (font-spec :name "SpaceMono Nerd Font"
-                     :weight 'normal
-                     :slant 'normal
-                     :size 15)
-          (font-spec :name "iMWritingMono Nerd Font Mono"
-                     :weight 'normal
-                     :slant 'normal
-                     :size 15))
-  (set-face-attribute 'default nil :font it))
+(find-font (font-spec :name font-name))
+(--first (find-font (font-spec :name it))
+         '("Cascadia Code" "Fira Code" "Jetbrains Mono"
+           "SF Mono" "Hack" "Source Code Pro" "Menlo"
+           "Monaco" "DejaVu Sans Mono" "Consolas"))
+(cl-loop for font in
+         when (find-font (font-spec :name font))
+         return (set-face-attribute 'default nil
+                                    :family font
+                                    :height 100))
+;; (alet (or
+;;        (font-spec :name "Rec"
+;;                   :weight 'normal
+;;                   :slant 'normal
+;;                   :size 15))
+;;   (set-face-attribute 'default nil :font it))
 ;;;; sort lines
 (defun! oo-sort-elpaca-forms-h ()
   "Sort elpaca package forms in current buffer."
