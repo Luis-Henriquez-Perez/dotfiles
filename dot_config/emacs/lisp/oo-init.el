@@ -33,18 +33,23 @@
 ;; This is very basic font setting based on available faces.  I have seen much
 ;; more complex font setups like in minemacs (which probably got its from doom)
 ;; but for now this will do.
-(defvar oo-default-font-list '("Cascadia Code" "Fira Code" "Jetbrains Mono"
-                               "SF Mono" "Hack" "Source Code Pro" "Menlo"
-                               "Monaco" "DejaVu Sans Mono" "Consolas")
+;; '("Cascadia Code" "Fira Code" "Jetbrains Mono"
+;;   "SF Mono" "Hack" "Source Code Pro" "Menlo"
+;;   "Monaco" "DejaVu Sans Mono" "Consolas")
+
+(defvar oo-default-fonts (list (font-spec :family "CaskaydiaCove Nerd Font Mono"
+                                          :weight 'light
+                                          :slant 'normal
+                                          :width 'normal :size 18))
   "List of fonts to check.")
 
 (defun! oo-set-default-font-h ()
   "Set the default font based on available fonts."
-  (dolist (font oo-default-font-list)
+  (dolist (font oo-default-fonts)
     (trace! "Checking whether %s font is available..." font)
-    (awhen (find-font (font-spec :name font))
+    (awhen (find-font font)
       (info! "Setting font to...%s" it)
-      (set-face-attribute 'default nil :family font :height 100)
+      (set-face-attribute 'default nil :font font)
       (done!)))
   (set! default-font (face-attribute 'default :family))
   (info! "Unable to set font to any in `oo-default-font-list', defaulting to `%s'." default-font))
