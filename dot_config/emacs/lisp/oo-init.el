@@ -43,10 +43,10 @@
   (dolist (font oo-default-font-list)
     (trace! "Checking whether %s font is available..." font)
     (awhen (find-font (font-spec :name font))
-      (info! "Found it, setting font to...%s" it)
+      (info! "Setting font to...%s" it)
       (set-face-attribute 'default nil :family font :height 100)
       (done!)))
-  (info! "Unable to set font to %s, defaulting to %s"))
+  (info! "Unable to set font to %s, defaulting to %s."))
 
 (add-hook 'after-init-hook #'oo-set-default-font-h 80)
 ;;;; sort lines
