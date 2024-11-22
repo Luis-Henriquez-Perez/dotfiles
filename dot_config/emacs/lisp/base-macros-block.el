@@ -88,7 +88,7 @@ DATA is a plist.  FORMS is a list of forms.  For how FORMS is interpreted see
 
 (defmacro done! ()
   "Same as `return!' but always throws nil."
-  (return! nil))
+  `(return! nil))
 
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE."
