@@ -25,8 +25,9 @@
 ;; Initialize evil-goggles.
 ;;
 ;;; Code:
-(opt! evil-goggles-duration 0.1)
+(require 'base)
 
+(opt! evil-goggles-duration 0.1)
 ;;;; register evil commands
 (defun! oo-require-evil-goggles-a (fn &rest args)
   (unless (or (minibufferp)

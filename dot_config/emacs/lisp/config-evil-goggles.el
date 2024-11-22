@@ -25,6 +25,7 @@
 ;; Configure evil-goggles.
 ;;
 ;;; Code:
+(require 'base)
 ;;;; register lispyville commands
 (block! (set! list '((+evil-eval-operator evil-change)
                      (+evil-eval-replace-operator evil-change)
