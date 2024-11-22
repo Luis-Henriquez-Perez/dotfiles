@@ -63,7 +63,7 @@
   (apply orig-fn args))
 
 (advice-add 'load-theme :around 'oo--refresh-cursor)
-;;;; eval operator
+;;;; define eval operators
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator +evil-eval-operator (beg end)
   "Evil operator for evaluating code."
