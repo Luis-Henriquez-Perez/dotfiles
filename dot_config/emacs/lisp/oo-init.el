@@ -42,6 +42,7 @@
   "Monaco" "DejaVu Sans Mono" "Consolas")
 
 (defun! oo-set-default-font-h ()
+  "Set the default font based on available fonts."
   (--each-while fonts (find-font (font-spec :name font))
     (set-face-attribute 'default nil :family font :height 100)))
 
