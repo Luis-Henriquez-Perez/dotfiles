@@ -117,6 +117,7 @@
 (require 'init-htmlize)
 (require 'init-hungry-delete)
 (require 'init-hy-mode)
+(require 'init-dirvish)
 (require 'init-lispyville)
 (require 'init-macroexpand)
 (require 'init-magit)
