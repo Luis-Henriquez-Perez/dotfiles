@@ -47,10 +47,12 @@
        (nerd-icons-codicon "nf-cod-record"))
       (t
        "REC"))
-;;;; Defsegment!
-(defmacro defsegment! (name)
+;;;; defsegment!
+(defmacro defsegment! (name docstring body)
+  (declare (indent 1) (doc-string 2))
   `(progn
-     ()
+     (defun! ,(intern (format "+spaceline-%s-segment")) ()
+       ,@body)
      (spaceline-define-segment ,name ,docstring (funcall #',))))
 ;;;; set powerline height
 (setq powerline-height 33)
@@ -59,7 +61,7 @@
   "Display an icon to represent when."
   (or (and defining-kbd-macro
            (cond (t
-                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.1)
+                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
                   ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
                   )
                  (t
@@ -99,10 +101,8 @@
 (spaceline-define-segment my-buffer-modified
   "Buffer modified"
   (when (and (buffer-file-name) (buffer-modified-p))
-    ;; (require 'all-the-icons)
-    (nerd-icons-faicon "nf-fa-save")
-    ;; (all-the-icons-material "save" :face 'error)
-    ))
+    (cond (t (all-the-icons-material "save" :face 'error))
+          (t (all-the-icons-material "save" :face 'error)))))
 
 (spaceline-define-segment my-pomodoro
   "Display left for pomodoro."
