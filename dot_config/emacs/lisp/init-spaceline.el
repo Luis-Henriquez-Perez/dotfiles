@@ -189,7 +189,7 @@
   "Return the evil-face."
   (alet (intern (format "spaceline-evil-%s" evil-state))
     (and (facep it) it)))
-;;;; Do not byte-compile the modeline at startup
+;;;; do not byte-compile the modeline at startup
 ;; Although this saves time the longer you use the modeline, it means that the
 ;; call to `spaceline-compile' is called takes significantly longer which is
 ;; particularly undesirable during startup.  Despite what the README says the
