@@ -44,7 +44,7 @@
     (when (find-font (font-spec :name font))
       (set-face-attribute 'default nil :family font :height 100)
       (info! "Set font to...")
-      (return!)))
+      (done!)))
   (info! "Unable to set font to %s, defaulting to %s"))
 
 (add-hook 'after-init-hook #'oo-set-default-font-h 80)
