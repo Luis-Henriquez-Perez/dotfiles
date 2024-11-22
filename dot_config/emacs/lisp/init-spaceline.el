@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'powerline)
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'all-the-icons)
@@ -50,7 +49,8 @@
 ;;;; defsegment!
 ;; This lets me use block! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
-;; change in real time.
+;; change in real time.  This makes it much easier to debug segments or even to
+;; determine if they work beforehand.
 (defmacro! +spaceline-define-segment! (name value &rest props)
   (declare (indent 1) (doc-string 2))
   (set! fn (intern (format "+spaceline-%s-segment" name)))
@@ -149,8 +149,8 @@
         (require 'vc)
         (vc-backend buffer-file-name)
         (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
-        (format "%s %s" (nerd-icons-octicon "nf-oct-git_branch" :v-adjust 0) (string-trim it))
-        ;; (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))
+        ;; (format "%s %s" (nerd-icons-octicon "nf-oct-git_branch" :v-adjust 0) (string-trim it))
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))
         ))
 
 (spaceline-define-segment my-evil-state
@@ -197,9 +197,9 @@
 ;; me.  I imagine it matters more for particularly expensive modeline segments.
 ;; Still I will byte-compile it but not during startup, at some point during
 ;; idle time.
+;; TODO: during idle time byte-compile the spaceline function.
 (setq spaceline-byte-compile nil)
 ;;;; initialize modeline at startup
-;; TODO: during idle time byte-compile the spaceline function.
 (defun oo-init-modeline-h ()
   (spaceline-compile
     'main
