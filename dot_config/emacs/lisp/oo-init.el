@@ -30,21 +30,22 @@
 (require 'oo-init-hooks)
 (require 'oo-init-keybindings)
 ;;;; set initial font
-;;
-(defmacro each-until (list pred body)
-  `(progn (while (not ()))
-          (progn ,@body)))
-
-(--first (find-font (font-spec :name it))
-         )
-'("Cascadia Code" "Fira Code" "Jetbrains Mono"
-  "SF Mono" "Hack" "Source Code Pro" "Menlo"
-  "Monaco" "DejaVu Sans Mono" "Consolas")
+;; This is very basic font setting based on available faces.  I have seen much
+;; more complex font setups like in minemacs (which probably got its from doom)
+;; but for now this will do.
+(defvar oo-default-font-list '("Cascadia Code" "Fira Code" "Jetbrains Mono"
+                               "SF Mono" "Hack" "Source Code Pro" "Menlo"
+                               "Monaco" "DejaVu Sans Mono" "Consolas")
+  "List of fonts to check.")
 
 (defun! oo-set-default-font-h ()
   "Set the default font based on available fonts."
-  (--each-while fonts (find-font (font-spec :name font))
-    (set-face-attribute 'default nil :family font :height 100)))
+  (dolist (font fonts)
+    (when (find-font (font-spec :name font))
+      (set-face-attribute 'default nil :family font :height 100)
+      (info! "Set font to...")
+      (return!)))
+  (info! "Unable to set font to %s, defaulting to %s"))
 
 (add-hook 'after-init-hook #'oo-set-default-font-h 80)
 ;;;; sort lines
