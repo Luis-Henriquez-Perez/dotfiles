@@ -59,7 +59,9 @@
   "Display an icon to represent when."
   (or (and defining-kbd-macro
            (cond (t
-                  (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
+                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.1)
+                  ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
+                  )
                  (t
                   (nerd-icons-codicon "nf-cod-record"))
                  (t
