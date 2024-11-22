@@ -109,7 +109,6 @@
 ;; (bind! (n v) "g t" #'evil-goto-first-line)
 ;; (bind! (n v) "g b" #'evil-goto-line)
 
-;; (bind! (n v) "g g" #'+evil-eval-operator)
 (bind! (n v) "g h" #'+evil-eval-operator)
 (bind! (n v) "g r" #'+evil-eval-replace-operator)
 (bind! (n v) "g l" #'+evil-eval-print-operator)
