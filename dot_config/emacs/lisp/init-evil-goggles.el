@@ -28,6 +28,27 @@
 (require 'base)
 
 (opt! evil-goggles-duration 0.1)
+;;;; Register evil goggles command
+;;;; register lispyville commands
+(defafter! register-evil-goggles-commands (evil-goggles)
+  (set! list '((+evil-eval-operator evil-change)
+               (+evil-eval-replace-operator evil-change)
+               (+evil-eval-print-operator evil-change)
+               (lispyville-delete-line evil-delete-line)
+			   (lispyville-yank-line evil-yank-line)
+			   (lispyville-change-line evil-change-line)
+			   (lispyville-delete-char-or-splice evil-delete-char)
+			   (lispyville-delete-char-or-splice-backwards evil-delete-backward-char)
+			   (lispyville-substitute evil-substitute)
+			   (lispyville-change-whole-line evil-change-whole-line)
+			   (lispyville-join evil-join)
+			   (lispyville-change evil-change)
+			   (lispyville-delete evil-delete)
+			   (lispyville-yank evil-yank)))
+  (for! ((new old) list)
+    (set! elt (cons new (cdr (assoc old evil-goggles--commands))))
+    (cl-pushnew elt evil-goggles--commands :key #'car))
+  (cl-assert (--all-p (assoc it list) (mapcar #'car list))))
 ;;;; register evil commands
 (defun! oo-require-evil-goggles-a (fn &rest args)
   (unless (or (minibufferp)

@@ -33,28 +33,9 @@
 ;; evil-operator state--think of yanking, deleting as well as the eval
 ;; operators.
 ;; TODO: put in an after block.
-(custom-theme-set-faces
- 'user
- '(evil-goggles-default-face ((t (:inherit spaceline-evil-operator)))))
-;;;; register lispyville commands
-(block! (set! list '((+evil-eval-operator evil-change)
-                     (+evil-eval-replace-operator evil-change)
-                     (+evil-eval-print-operator evil-change)
-                     (lispyville-delete-line evil-delete-line)
-			         (lispyville-yank-line evil-yank-line)
-			         (lispyville-change-line evil-change-line)
-			         (lispyville-delete-char-or-splice evil-delete-char)
-			         (lispyville-delete-char-or-splice-backwards evil-delete-backward-char)
-			         (lispyville-substitute evil-substitute)
-			         (lispyville-change-whole-line evil-change-whole-line)
-			         (lispyville-join evil-join)
-			         (lispyville-change evil-change)
-			         (lispyville-delete evil-delete)
-			         (lispyville-yank evil-yank)))
-        (for! ((new old) list)
-          (set! elt (cons new (cdr (assoc old evil-goggles--commands))))
-          (cl-pushnew elt evil-goggles--commands :key #'car))
-        (cl-assert (--all-p (assoc it list) (mapcar #'car list))))
+;; (custom-theme-set-faces
+;;  'user
+;;  '(evil-goggles-default-face ((t (:inherit spaceline-evil-operator)))))
 ;;; provide
 (provide 'config-evil-goggles)
 ;;; config-evil-goggles.el ends here
