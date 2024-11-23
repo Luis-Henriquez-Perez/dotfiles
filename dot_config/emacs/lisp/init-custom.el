@@ -67,7 +67,8 @@
 ;; after theme change.
 
 (defvar oo-custom-faces-alist nil
-  "Hash")
+  "An alist of faces to be applied.
+Each element is of the form (theme . faces).")
 
 ;; The original function made advices but honestly I think it is better practice
 ;; to minimize the number of advices added for each function.
@@ -77,8 +78,7 @@ Advise `enable-theme' with a function that customizes FACES when
 THEME is enabled.  If THEME is already enabled, also applies
 faces immediately."
   (declare (indent defun))
-  (when (or (member theme custom-enabled-themes)
-            (equal theme 'user))
+  (when (or (equal theme 'user) (member theme custom-enabled-themes))
     (let ((custom--inhibit-theme-enable nil))
       (apply #'custom-theme-set-faces theme faces)))
   (setf (alist-get theme oo-custom-faces-alist)
@@ -88,7 +88,8 @@ faces immediately."
   "Apply any faces that need to be applied."
   (let! custom--inhibit-theme-enable nil)
   (for! ((theme . faces) oo-custom-faces-alist)
-    (when (or (member theme custom-enabled-themes) (equal theme 'user))
+    (when (or (equal theme 'user) (member theme custom-enabled-themes))
+      (info! "Applying faces for %s..." theme)
       (apply #'custom-theme-set-faces theme faces))))
 
 (oo-add-hook 'oo-after-load-theme-hook #'oo-apply-custom-faces-h)
