@@ -59,13 +59,13 @@
 (bind! oo-toggle-map "r" #'oo-load-random-theme)
 (bind! oo-toggle-map "t" #'load-theme)
 ;;;; Enable faces
-;; By default, the function `custom-theme-set-faces' and `custom-set-faces' do
-;; not actually
-;; effect the variable `custom--inhibit-theme-enable' needs to be nil.  And you
-;; will notice that even after customizing a themes faces the customization does
-;; not persist.  This function addresses both of these issues ensuring that as
-;; expected the faces are set immediately and that these changes persist even
-;; after theme change.
+;; Surprisingly, the function `custom-theme-set-faces' and `custom-set-faces' do
+;; not by default actually change any faces.  For that to happen the variable
+;; `custom--inhibit-theme-enable' needs to be nil.  Furthermore, because I
+;; disable existing themes before enabling new ones even after customizing a
+;; theme the customization does not persist.  This function addresses both of
+;; these issues ensuring that as expected the faces are set immediately if the
+;; theme is loaded and that these changes persist even after theme change.
 (defvar oo-custom-faces-alist nil
   "An alist of faces to be applied.
 Each element is of the form (theme . faces).  THEME is the customized theme and
@@ -85,7 +85,7 @@ faces immediately."
         (cl-union faces (alist-get theme oo-custom-faces-alist) :key #'car)))
 
 (defun! oo-apply-custom-faces-a (orig-fn &rest args)
-  "Apply any faces that need to be applied."
+  "Apply any faces that need to be applied from `oo-custom-faces-alist'."
   (prog1 (apply orig-fn args)
     (for! ((theme . faces) oo-custom-faces-alist)
       (when (or (equal theme 'user) (member theme custom-enabled-themes))
