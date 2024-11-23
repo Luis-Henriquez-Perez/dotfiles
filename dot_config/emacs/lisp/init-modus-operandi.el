@@ -30,6 +30,17 @@
 (defhook! oo-load-modus-operandi-theme-h (after-init-hook)
   "Load `modus-operandi' theme."
   (load-theme 'modus-operandi :no-confirm nil))
+;;;; Set custom faces
+(oo-custom-set-faces
+ 'modus-operandi
+ ;; Evil state faces
+ '(spaceline-evil-normal ((t (:background "#005bbb" :foreground "#ffffff"))))
+ '(spaceline-evil-insert ((t (:background "#007400" :foreground "#ffffff"))))
+ '(spaceline-evil-visual ((t (:background "#aa2200" :foreground "#ffffff"))))
+ '(spaceline-evil-replace ((t (:background "#aa2200" :foreground "#ffffff"))))
+ '(spaceline-evil-motion ((t (:background "#783c00" :foreground "#ffffff"))))
+ '(spaceline-evil-operator ((t (:background "#783c00" :foreground "#ffffff"))))
+ '(spaceline-evil-emacs ((t (:background "#4f0090" :foreground "#ffffff")))))
 ;;; provide
 (provide 'init-modus-operandi)
 ;;; init-modus-operandi.el ends here

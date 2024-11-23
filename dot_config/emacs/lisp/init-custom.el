@@ -78,7 +78,8 @@ Advise `enable-theme' with a function that customizes FACES when
 THEME is enabled.  If THEME is already enabled, also applies
 faces immediately."
   (declare (indent defun))
-  (when (or (equal theme 'user) (member theme custom-enabled-themes))
+  (when (and after-init-time
+             (or (equal theme 'user) (member theme custom-enabled-themes)))
     (let ((custom--inhibit-theme-enable nil))
       (apply #'custom-theme-set-faces theme faces)))
   (setf (alist-get theme oo-custom-faces-alist)
