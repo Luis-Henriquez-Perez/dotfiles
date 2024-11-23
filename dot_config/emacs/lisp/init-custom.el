@@ -62,6 +62,40 @@
 ;;;; bindings
 (bind! oo-toggle-map "r" #'oo-load-random-theme)
 (bind! oo-toggle-map "t" #'load-theme)
+;;;; Enable faces
+;; By default, the function `custom-theme-set-faces' and `custom-set-faces' do
+;; effect the variable `custom--inhibit-theme-enable' needs to be nil.  And you
+;; will notice that even after customizing a themes faces the customization does
+;; not persist.  This function addresses both of these issues ensuring that as
+;; expected the faces are set immediately and that these changes persist even
+;; after theme change.
+
+(defvar oo-custom-faces-ht nil
+  "Hash")
+
+;; The original function made advices but honestly I think it is better practice
+;; to minimize the number of advices added for each function.
+(defun oo-custom-set-faces (theme &rest faces)
+  "Customize THEME with FACES.
+Advise `enable-theme' with a function that customizes FACES when
+THEME is enabled.  If THEME is already enabled, also applies
+faces immediately.  Calls `custom-theme-set-faces', which see."
+  (declare (indent defun))
+  (when (or (member theme custom-enabled-themes)
+            (equal theme 'user))
+    (let ((custom--inhibit-theme-enable nil))
+      (apply #'custom-theme-set-faces theme faces)))
+  (setf (gethash theme oo-custom-faces-ht)
+        (cl-union faces (gethash theme oo-custom-faces-ht) :key #'car)))
+
+(defun! oo-apply-custom-faces-h ()
+  "Apply any faces that need to be applied."
+  (let! custom--inhibit-theme-enable nil)
+  (for! ((theme . faces) oo-custom-faces-ht)
+    (when (or (member theme custom-enabled-themes) (equal theme 'user))
+      (apply #'custom-theme-set-faces theme faces))))
+
+(oo-add-hook 'oo-after-load-theme-hook #'oo-apply-custom-faces-h)
 ;;; provide
 (provide 'init-custom)
 ;;; init-custom.el ends here
