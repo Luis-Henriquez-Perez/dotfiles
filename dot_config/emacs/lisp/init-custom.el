@@ -32,10 +32,6 @@
 ;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
 ;; from wierd places online and evaluating them.  So I don't need.
 (setq custom-safe-themes t)
-;;;; make changes to a theme immediately
-;; By default customizations to a theme done via `' do not take effect, they
-;; merely record information.  I want them to take effect.
-(setq custom--inhibit-theme-enable nil)
 ;;;; don't create a custom file
 ;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
 ;; interface is intended for people that don't know elisp.  For me it's completely
@@ -70,7 +66,7 @@
 ;; expected the faces are set immediately and that these changes persist even
 ;; after theme change.
 
-(defvar oo-custom-faces-ht nil
+(defvar oo-custom-faces-alist nil
   "Hash")
 
 ;; The original function made advices but honestly I think it is better practice
@@ -79,19 +75,19 @@
   "Customize THEME with FACES.
 Advise `enable-theme' with a function that customizes FACES when
 THEME is enabled.  If THEME is already enabled, also applies
-faces immediately.  Calls `custom-theme-set-faces', which see."
+faces immediately."
   (declare (indent defun))
   (when (or (member theme custom-enabled-themes)
             (equal theme 'user))
     (let ((custom--inhibit-theme-enable nil))
       (apply #'custom-theme-set-faces theme faces)))
-  (setf (gethash theme oo-custom-faces-ht)
-        (cl-union faces (gethash theme oo-custom-faces-ht) :key #'car)))
+  (setf (alist-get theme oo-custom-faces-alist)
+        (cl-union faces (alist-get theme oo-custom-faces-alist) :key #'car)))
 
 (defun! oo-apply-custom-faces-h ()
   "Apply any faces that need to be applied."
   (let! custom--inhibit-theme-enable nil)
-  (for! ((theme . faces) oo-custom-faces-ht)
+  (for! ((theme . faces) oo-custom-faces-alist)
     (when (or (member theme custom-enabled-themes) (equal theme 'user))
       (apply #'custom-theme-set-faces theme faces))))
 
