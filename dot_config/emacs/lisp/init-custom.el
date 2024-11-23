@@ -84,15 +84,16 @@ faces immediately."
   (setf (alist-get theme oo-custom-faces-alist)
         (cl-union faces (alist-get theme oo-custom-faces-alist) :key #'car)))
 
-(defun! oo-apply-custom-faces-h ()
+(defun! oo-apply-custom-faces-a (orig-fn &rest args)
   "Apply any faces that need to be applied."
-  (let! custom--inhibit-theme-enable nil)
-  (for! ((theme . faces) oo-custom-faces-alist)
-    (when (or (equal theme 'user) (member theme custom-enabled-themes))
-      (info! "Applying faces for %s..." theme)
-      (apply #'custom-theme-set-faces theme faces))))
+  (prog1 (apply orig-fn args)
+    (for! ((theme . faces) oo-custom-faces-alist)
+      (when (or (equal theme 'user) (member theme custom-enabled-themes))
+        (info! "Applying faces for %s..." theme)
+        (let ((custom--inhibit-theme-enable nil))
+          (apply #'custom-theme-set-faces theme faces))))))
 
-(oo-add-hook 'oo-after-load-theme-hook #'oo-apply-custom-faces-h)
+(advice-add 'enable-theme :around #'oo-apply-custom-faces-a)
 ;;; provide
 (provide 'init-custom)
 ;;; init-custom.el ends here
