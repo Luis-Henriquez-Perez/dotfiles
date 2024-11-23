@@ -68,7 +68,8 @@
 
 (defvar oo-custom-faces-alist nil
   "An alist of faces to be applied.
-Each element is of the form (theme . faces).")
+Each element is of the form (theme . faces).  THEME is the customized theme and
+FACES is the list of customized faces for THEME.")
 
 ;; The original function made advices but honestly I think it is better practice
 ;; to minimize the number of advices added for each function.
