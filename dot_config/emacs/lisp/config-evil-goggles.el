@@ -53,9 +53,8 @@
 ;; evil-operator state--think of yanking, deleting as well as the eval
 ;; operators.
 ;; TODO: put in an after block.
-;; (custom-theme-set-faces
-;;  'user
-;;  '(evil-goggles-default-face ((t (:inherit spaceline-evil-operator)))))
+(custom-set-faces
+ '(evil-goggles-default-face ((t (:inherit spaceline-evil-operator)))))
 ;;; provide
 (provide 'config-evil-goggles)
 ;;; config-evil-goggles.el ends here
