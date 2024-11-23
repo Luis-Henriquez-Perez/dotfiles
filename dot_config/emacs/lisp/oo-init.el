@@ -40,6 +40,10 @@
 (defvar oo-default-fonts (list (font-spec :family "CaskaydiaCove Nerd Font Mono"
                                           :weight 'light
                                           :slant 'normal
+                                          :width 'normal :size 18)
+                               (font-spec :family "Mononoki Nerd Font"
+                                          :weight 'regular
+                                          :slant 'normal
                                           :width 'normal :size 18))
   "List of fonts to check.")
 
