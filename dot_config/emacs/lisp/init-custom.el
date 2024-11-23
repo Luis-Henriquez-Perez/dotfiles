@@ -94,7 +94,7 @@ faces immediately."
         (let ((custom--inhibit-theme-enable nil))
           (apply #'custom-theme-set-faces theme faces))))))
 
-(advice-add 'enable-theme :around #'oo-apply-custom-faces-a)
+(advice-add 'load-theme :around #'oo-apply-custom-faces-a)
 ;;; provide
 (provide 'init-custom)
 ;;; init-custom.el ends here
