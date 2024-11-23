@@ -60,19 +60,17 @@
 (bind! oo-toggle-map "t" #'load-theme)
 ;;;; Enable faces
 ;; By default, the function `custom-theme-set-faces' and `custom-set-faces' do
+;; not actually
 ;; effect the variable `custom--inhibit-theme-enable' needs to be nil.  And you
 ;; will notice that even after customizing a themes faces the customization does
 ;; not persist.  This function addresses both of these issues ensuring that as
 ;; expected the faces are set immediately and that these changes persist even
 ;; after theme change.
-
 (defvar oo-custom-faces-alist nil
   "An alist of faces to be applied.
 Each element is of the form (theme . faces).  THEME is the customized theme and
 FACES is the list of customized faces for THEME.")
 
-;; The original function made advices but honestly I think it is better practice
-;; to minimize the number of advices added for each function.
 (defun oo-custom-set-faces (theme &rest faces)
   "Customize THEME with FACES.
 Advise `enable-theme' with a function that customizes FACES when
