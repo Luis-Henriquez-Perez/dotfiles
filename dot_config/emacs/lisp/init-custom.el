@@ -58,7 +58,7 @@
 ;;;; bindings
 (bind! oo-toggle-map "r" #'oo-load-random-theme)
 (bind! oo-toggle-map "t" #'load-theme)
-;;;; Enable faces
+;;;; make setting faces actually work
 ;; Surprisingly, the function `custom-theme-set-faces' and `custom-set-faces' do
 ;; not by default actually change any faces.  For that to happen the variable
 ;; `custom--inhibit-theme-enable' needs to be nil.  Furthermore, because I
