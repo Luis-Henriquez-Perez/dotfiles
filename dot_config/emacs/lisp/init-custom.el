@@ -32,6 +32,10 @@
 ;; themes with elpaca is safe.  I don't make a habit of grabbing random themes
 ;; from wierd places online and evaluating them.  So I don't need.
 (setq custom-safe-themes t)
+;;;; make changes to a theme immediately
+;; By default customizations to a theme done via `' do not take effect, they
+;; merely record information.  I want them to take effect.
+(setq custom--inhibit-theme-enable nil)
 ;;;; don't create a custom file
 ;; I don't need it.  I'll be honest; to me it seems like the emacs's custom
 ;; interface is intended for people that don't know elisp.  For me it's completely
