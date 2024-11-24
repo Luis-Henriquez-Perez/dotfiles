@@ -33,7 +33,7 @@
 (require 'base-macros-for)
 (require 'base-macros-let)
 (require 'base-macros-lef)
-(require 'base-macros-block)
+(require 'base-macros-autolet)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
 (require 'base-macros-bind)
