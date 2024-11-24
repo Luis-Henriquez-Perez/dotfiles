@@ -27,62 +27,28 @@
 ;;; Code:
 (require 'base-macros-definers)
 
-(defun oo--map-contains-and-equal-p (map key value)
-  (and (map-contains-key map key)
-       (equal (map-elt map key) value)))
-
-(defun oo-map-same-elements-p (map1 map2)
-  "Return non-nil if MAP1 has the same elements as MAP2."
-  (map-every-p (apply-partially #'oo--map-contains-and-equal-p map2) map1))
-
-(defun oo-map-exactly-same-elements-p (map1 map2)
-  (and (oo-map-same-elements-p map1 map2)
-       (oo-map-same-elements-p map2 map1)))
-
-;; (should (oo-map-same-elements-p '(:a 1 :b 2 :c 3) '(:a 1 :b 2 :c 3)))
-;; (should-not (oo-map-same-elements-p '(:a 1 :b 2 :c 3 :d 4) '(:a 1 :b 2 :c 3)))
-
-(ert-deftest oo--arglist ()
-  (should (equal '(a b c) (oo--arglist '(a b &rest c))))
-  (should (equal '(a b c d) (oo--arglist '(a b c d)))))
-
-(ert-deftest oo--interactive-p ()
-  (should (oo--interactive-p '(interactive)))
-  (should-not (oo--interactive-p '(declare (indent)))))
-
-(ert-deftest oo--declaration-p ()
-  (should-not (oo--declaration-p '(interactive)))
-  (should (oo--declaration-p '(declare (indent)))))
-
-;; (ert-deftest oo--extract-options ()
-;;   (should (equal '((:a 1 :b 2) ((+ 1 1) 2)) (oo--extract-options '(:a 1 :b 2 (+ 1 1) 2))))
-;;   (should (equal '(nil (+ 1 1)) (oo--extract-options '(+ 1 1))))
-;;   (should (equal '((:a 1 :b 2 :c 3) ((+ 1 1))) (oo--extract-options '(:a 1 :b 2 :c 3 (+ 1 1))))))
-
-(ert-deftest oo--definer-components-1 ()
-  (should (equal '("foo" nil nil ((+ 1 1)))                 (oo--definer-components-1 '("foo" (+ 1 1)))))
-  (should (equal '("foo" (declare) nil ((+ 1 1)))           (oo--definer-components-1 '("foo" (declare) (+ 1 1)))))
-  (should (equal '("foo" nil (interactive) ((+ 1 1)))       (oo--definer-components-1 '("foo" (interactive) (+ 1 1)))))
-  (should (equal '("foo" (declare) (interactive) ((+ 1 1))) (oo--definer-components-1 '("foo" (declare) (interactive) (+ 1 1)))))
-  (should (equal '(nil nil (interactive) ((+ 1 1)))         (oo--definer-components-1 '((interactive) (+ 1 1))))))
+(ert-deftest oo--arglist-symbols ()
+  (should (equal '(a b c) (oo--arglist-symbols '(a b &rest c)))))
 
 (ert-deftest oo--definer-components ()
-  (should (equal '(:name foo :arglist (a b c) :docstring "do" :declaration nil :interactive nil :body ((+ 1 1)))
-                 (oo--definer-components '(foo (a b c) "do" (+ 1 1)))))
-  (should (equal '(:name foo :arglist (a b c) :docstring "do" :declaration nil :interactive nil :body ((+ 1 1)))
-                 (oo--definer-components '(foo (a b c) "do" (+ 1 1))))))
+  (should (equal '(bar (a) ("foo") ((+ 1 1)))
+                 (oo--definer-components '(bar (a) "foo" (+ 1 1)))))
+  (should (equal '(bar (a) ("foo" (declare (indent defun))) ((+ 1 1)))
+                 (oo--definer-components '(bar (a) "foo" (declare (indent defun)) (+ 1 1)))))
+  (should (equal '(bar (a) ("foo" (interactive)) ((+ 1 1)))
+                 (oo--definer-components '(bar (a) "foo" (interactive) (+ 1 1)))))
+  (should (equal '(bar (a) ("foo" (declare) (interactive)) ((+ 1 1)))
+                 (oo--definer-components '(bar (a) "foo" (declare) (interactive) (+ 1 1))))))
 
-(ert-deftest oo--prognify-components ()
-  (should (equal '(:name foo :arglist (a b c) :docstring "do" :declaration nil :interactive nil :body ((catch 'return! (let nil (collecting! a 1) (+ 1 1)))))
-                 (oo--prognify-components (oo--definer-components '(foo (a b c) "do" (collecting! a 1) (+ 1 1))))))
-  (should (equal (oo--prognify-components (oo--definer-components '(foo (a b c) "do" (+ 1 1))))
-                 '(:name foo :arglist (a b c) :docstring "do" :declaration nil :interactive nil :body ((catch 'return! (let nil (+ 1 1))))))))
-
-(ert-deftest oo--finalize-components ()
-  (should (equal '(foo (a b c) "do" (catch 'return! (let nil (collecting! a 1) (+ 1 1))))
-                 (oo--finalize-components '(:name foo :arglist (a b c) :docstring "do" :declaration nil :interactive nil :body ((catch 'return! (let nil (collecting! a 1) (+ 1 1))))))))
-  ;; (should-not (oo--prognify-components (oo--definer-components '(foo (a b c) "do" (+ 1 1)))))
-  )
+(ert-deftest oo--defun ()
+  (should-not (macroexpand-1 '(defun! oo--suppress-woman-warning (orig-fn &rest args)
+                                (pcase args
+                                  (`(woman-topic-history Man-topic-history . ,_)
+                                   (advice-remove 'defvaralias #'oo--suppress-woman-warning))
+                                  (_
+                                   (apply orig-fn args))))))
+  (should (equal '(defun foo (a) "foo" (autolet! (exclude! a) (+ 1 1)))
+                 (macroexpand-1 '(defun! foo (a) "foo" (+ 1 1))))))
 ;;; provide
 (provide 'base-macros-definers-test)
 ;;; base-macros-definers-test.el ends here

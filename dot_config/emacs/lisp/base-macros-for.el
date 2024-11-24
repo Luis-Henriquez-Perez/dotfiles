@@ -30,7 +30,7 @@
 (require 'seq)
 ;;;; for!
 ;; There is a huge question of whether to automatically wrap loops with
-;; =block!=, but I decided to.
+;; =autolet!=, but I decided to.
 (defalias 'dolist! 'for!)
 (defalias 'for! 'loop!)
 (defmacro loop! (loop-struct &rest body)

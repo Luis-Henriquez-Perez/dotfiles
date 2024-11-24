@@ -28,7 +28,7 @@
 (require 'base-macros-hook)
 
 ;; (ert-deftest hook! ()
-;;   (block!
+;;   (autolet!
 ;;     (set! run-list nil)
 ;;     (defvar fake-hook nil)
 ;;     (should-not fake-hook)
@@ -45,33 +45,33 @@
 ;;     (should (equal run-list '(a b-error c)))))
 
 (ert-deftest after! ()
-  (block!
-    (should-not (boundp 'oo-after-load-foo-hook))
-    (set! some-list nil)
-    (set! other-list nil)
-    (after! do-something (foo) (push 1 other-list))
-    (should (boundp 'oo-after-load-foo-hook))
-    (should (fboundp 'oo-run-after-load-foo-hook))
-    (should (equal oo-after-load-foo-hook '(oo-after-load-foo-hook&do-something)))
-    (should-not other-list)
-    (provide 'foo)
-    ;; Adds 1 to other-list when `foo' is provided.
-    (should (equal 1 (car other-list)))
-    (after! do-thing (bar baz) (push 1 some-list))
-    (provide 'bar)
-    (should-not some-list)
-    (provide 'baz)
-    ;; Adds 1 to other-list when `foo' and `bar' are provided.
-    (should (equal some-list '(1)))
-    (provide 'baz)
-    (provide 'baz)
-    ;; Does not run hook more than once.
-    (should (equal some-list '(1)))
-    (after! do-another-thing (baz) (push 2 some-list))
-    ;; Calls function immediately.
-    (should (equal some-list '(2 1)))
-    (provide 'baz)
-    (should (equal some-list '(2 1)))))
+  (autolet!
+   (should-not (boundp 'oo-after-load-foo-hook))
+   (set! some-list nil)
+   (set! other-list nil)
+   (after! do-something (foo) (push 1 other-list))
+   (should (boundp 'oo-after-load-foo-hook))
+   (should (fboundp 'oo-run-after-load-foo-hook))
+   (should (equal oo-after-load-foo-hook '(oo-after-load-foo-hook&do-something)))
+   (should-not other-list)
+   (provide 'foo)
+   ;; Adds 1 to other-list when `foo' is provided.
+   (should (equal 1 (car other-list)))
+   (after! do-thing (bar baz) (push 1 some-list))
+   (provide 'bar)
+   (should-not some-list)
+   (provide 'baz)
+   ;; Adds 1 to other-list when `foo' and `bar' are provided.
+   (should (equal some-list '(1)))
+   (provide 'baz)
+   (provide 'baz)
+   ;; Does not run hook more than once.
+   (should (equal some-list '(1)))
+   (after! do-another-thing (baz) (push 2 some-list))
+   ;; Calls function immediately.
+   (should (equal some-list '(2 1)))
+   (provide 'baz)
+   (should (equal some-list '(2 1)))))
 ;;; provide
 (provide 'base-macros-hook-test)
 ;;; base-macros-hook-test.el ends here
