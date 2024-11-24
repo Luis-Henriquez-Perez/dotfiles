@@ -33,10 +33,6 @@
 ;; This is very basic font setting based on available faces.  I have seen much
 ;; more complex font setups like in minemacs (which probably got its from doom)
 ;; but for now this will do.
-;; '("Cascadia Code" "Fira Code" "Jetbrains Mono"
-;;   "SF Mono" "Hack" "Source Code Pro" "Menlo"
-;;   "Monaco" "DejaVu Sans Mono" "Consolas")
-
 (defvar oo-default-fonts (list (font-spec :family "CaskaydiaCove Nerd Font Mono"
                                           :weight 'light
                                           :slant 'normal
