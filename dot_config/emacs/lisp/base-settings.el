@@ -143,6 +143,15 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; modes).  I want to control when to enable this mode normally--as in, add it to
 ;; hooks myself if I want it enabled.  Therefore, I disable it here.
 (setq show-paren-predicate nil)
+;;;;; do not use dialog box
+;; https://olddeuteronomy.github.io/post/some-excerpts-from-my-emacs-config/
+;; Don’t use dialog boxes.
+(setq use-dialog-box nil)
+;;;;; speed up cursor movement
+;; https://olddeuteronomy.github.io/post/some-excerpts-from-my-emacs-config/
+;; https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
+(setq auto-window-vscroll nil)
+;;;;; scrolling
 ;;;; formally disable scroll-bar
 ;; When you disable the scroll-bar via early-init.el powerline does not realize
 ;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
