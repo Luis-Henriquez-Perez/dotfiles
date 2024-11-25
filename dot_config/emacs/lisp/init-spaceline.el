@@ -143,6 +143,7 @@
                     time)
                    "\s"))))
 
+;; The value of vc-mode is not always correct.
 (spaceline-define-segment my-version-control
   "Display current git branch."
   (aand buffer-file-name
