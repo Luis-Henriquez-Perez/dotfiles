@@ -51,13 +51,13 @@
 ;; as functions that I can freely modify and re-evaluate to make the segment
 ;; change in real time.  This makes it much easier to debug segments or even to
 ;; determine if they work beforehand.
-(defmacro! +spaceline-define-segment! (name value &rest props)
-  (declare (indent 1) (doc-string 2))
-  (set! fn (intern (format "+spaceline-%s-segment" name)))
-  (set! meta (when (stringp (car-safe value)) (list (pop value))))
-  `(progn
-     (defun! ,fn () ,@(append meta value))
-     (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
+;; (defmacro! +spaceline-define-segment! (name value &rest props)
+;;   (declare (indent 1) (doc-string 2))
+;;   (set! fn (intern (format "+spaceline-%s-segment" name)))
+;;   (set! meta (when (stringp (car-safe value)) (list (pop value))))
+;;   `(progn
+;;      (defun! ,fn () ,@(append meta value))
+;;      (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
 ;;;; set powerline height
 (setq powerline-height 33)
 ;;;; define custom segments
