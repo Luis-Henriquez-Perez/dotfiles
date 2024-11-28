@@ -31,16 +31,27 @@
   "Load `modus-operandi' theme."
   (load-theme 'modus-operandi :no-confirm nil))
 ;;;; Set custom faces
-(oo-custom-set-faces
- 'modus-operandi
- ;; Evil state faces
- '(spaceline-evil-normal ((t (:background "#005bbb" :foreground "#ffffff"))))
- '(spaceline-evil-insert ((t (:background "#007400" :foreground "#ffffff"))))
- '(spaceline-evil-visual ((t (:background "#aa2200" :foreground "#ffffff"))))
- '(spaceline-evil-replace ((t (:background "#aa2200" :foreground "#ffffff"))))
- '(spaceline-evil-motion ((t (:background "#783c00" :foreground "#ffffff"))))
- '(spaceline-evil-operator ((t (:background "#783c00" :foreground "#ffffff"))))
- '(spaceline-evil-emacs ((t (:background "#4f0090" :foreground "#ffffff")))))
+(defun oo-apply-custom-faces-for-modus-themes-h (theme)
+  "Add custom faces for `modus-themes'.
+This hook is meant to be added to `enabled-theme-functions'."
+  (when (bound-and-true-p modus-themes-items)
+    (when (and (not (assoc theme oo-custom-faces-alist)) (member theme modus-themes-items))
+      (info! "Specifying custom faces for theme `%s'" theme)
+      (modus-themes-with-colors
+        (oo-custom-set-faces
+          theme
+          `(spaceline-evil-normal   ((t (:background ,magenta-cooler :foreground ,bg-main))))
+          `(spaceline-evil-insert   ((t (:background ,green          :foreground ,bg-main))))
+          `(spaceline-evil-visual   ((t (:background ,magenta        :foreground ,bg-main))))
+          `(spaceline-evil-replace  ((t (:background ,red            :foreground ,bg-main))))
+          `(spaceline-evil-motion   ((t (:background ,yellow         :foreground ,bg-main))))
+          `(spaceline-evil-operator ((t (:background ,yellow         :foreground ,bg-main))))
+          `(spaceline-evil-emacs    ((t (:background ,blue           :foreground ,bg-main)))))))
+    (unless (-difference modus-themes-items (mapcar #'car oo-custom-faces-alist))
+      (info! "Done setting specific modus-themes faces.")
+      (remove-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h))))
+
+(add-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h)
 ;;; provide
 (provide 'init-modus-operandi)
 ;;; init-modus-operandi.el ends here
