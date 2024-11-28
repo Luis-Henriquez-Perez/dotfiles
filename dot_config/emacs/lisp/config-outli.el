@@ -42,7 +42,7 @@
 (defun! oo-reset-outli-faces-h (_)
   (outli-reset-all-faces))
 
-(add-hook 'enable-theme-functions #'oo-reset-outli-face-h)
+(add-hook 'enable-theme-functions #'oo-reset-outli-faces-h)
 ;;; provide
 (provide 'config-outli)
 ;;; config-outli.el ends here
