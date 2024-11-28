@@ -156,6 +156,7 @@
 (elpaca polymode)
 (elpaca pomodoro)
 (elpaca rainbow-delimiters)
+(elpaca rainbow-mode)
 (elpaca redacted)
 (elpaca restart-emacs)
 (elpaca s)
