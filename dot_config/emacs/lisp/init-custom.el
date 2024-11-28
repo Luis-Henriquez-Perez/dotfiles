@@ -73,8 +73,7 @@ FACES is the list of customized faces for THEME.")
 
 (defun oo-custom-set-faces (theme &rest faces)
   "Customize THEME with FACES.
-Advise `enable-theme' with a function that customizes FACES when
-THEME is enabled.  If THEME is already enabled, also applies
+If THEME is already enabled, also applies
 faces immediately."
   (declare (indent defun))
   (when (and after-init-time
