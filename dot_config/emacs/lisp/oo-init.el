@@ -37,18 +37,27 @@
 ;;   "SF Mono" "Hack" "Source Code Pro" "Menlo"
 ;;   "Monaco" "DejaVu Sans Mono" "Consolas")
 
-(defvar oo-default-fonts (list (font-spec :family "CaskaydiaCove Nerd Font Mono"
-                                          :weight 'light
-                                          :slant 'normal
-                                          :width 'normal :size 18)
-                               (font-spec :family "Mononoki Nerd Font"
-                                          :weight 'regular
-                                          :slant 'normal
-                                          :width 'normal :size 18)
-                               (font-spec :family "JetBrainsMono Nerd Font"
-                                          :weight 'regular
-                                          :slant 'normal
-                                          :width 'normal :size 18))
+(defvar oo-default-fonts (list
+                          (font-spec :family "RecMonoDuotone Nerd Font"
+                                     :weight 'regular
+                                     :slant 'normal
+                                     :width 'normal
+                                     :size 18)
+                          (font-spec :family "CaskaydiaCove Nerd Font Mono"
+                                     :weight 'light
+                                     :slant 'normal
+                                     :width 'normal
+                                     :size 18)
+                          (font-spec :family "Mononoki Nerd Font"
+                                     :weight 'regular
+                                     :slant 'normal
+                                     :width 'normal
+                                     :size 18)
+                          (font-spec :family "JetBrainsMono Nerd Font"
+                                     :weight 'regular
+                                     :slant 'normal
+                                     :width 'normal
+                                     :size 18))
   "List of fonts to check.")
 
 (defun! oo-set-default-font-h ()
