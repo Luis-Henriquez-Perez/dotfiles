@@ -30,11 +30,10 @@
 (require 'spaceline-segments)
 (require 'all-the-icons)
 ;;;; reset powerline after theme change
-(defun! oo-reset-powerline-a (orig-fn &rest args)
-  (prog1 (apply orig-fn args)
-    (powerline-reset)))
+(defun oo-reset-modeline-h (_)
+  (powerline-reset))
 
-(advice-add 'load-theme :around #'oo-reset-powerline-a)
+(add-hook 'enable-theme-functions #'oo-reset-modeline-h)
 ;;;; representation
 ;; Do not throw away information.
 ;; (defun oo-icon (nerd-name all-the-icons-name text)

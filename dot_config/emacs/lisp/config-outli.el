@@ -39,11 +39,10 @@
 (setf (alist-get 'hy-mode     outli-heading-config)
       (alist-get 'emacs-lisp-mode outli-heading-config))
 
-;; Properly update outlines after theme change.
-(defun! oo--reset-outli-faces (&rest _)
+(defun! oo-reset-outli-faces-h (_)
   (outli-reset-all-faces))
 
-(advice-add 'load-theme :after #'oo--reset-outli-faces)
+(add-hook 'enable-theme-functions #'oo-reset-outli-face-h)
 ;;; provide
 (provide 'config-outli)
 ;;; config-outli.el ends here

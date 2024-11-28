@@ -58,12 +58,11 @@
       (evil-change-state oo-evil-state-before-minibuffer))
     (setq oo-evil-state-before-minibuffer nil)))
 
-(defun! oo--refresh-cursor (orig-fn &rest args)
+(defun! oo-refresh-evil-cursor-h (_)
   (when (bound-and-true-p evil-mode)
-	(evil-refresh-cursor))
-  (apply orig-fn args))
+    (evil-refresh-cursor)))
 
-(advice-add 'load-theme :around 'oo--refresh-cursor)
+(add-hook 'enable-theme-functions #'oo-refresh-evil-cursor-h)
 ;;;; define eval operators
 ;; This is shamelessly copied from `evil-extra-operator'.
 (evil-define-operator +evil-eval-operator (beg end)
