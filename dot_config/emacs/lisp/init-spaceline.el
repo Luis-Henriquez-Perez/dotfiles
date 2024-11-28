@@ -146,13 +146,11 @@
 ;; The value of vc-mode is not always correct.
 (spaceline-define-segment my-version-control
   "Display current git branch."
-  (aand buffer-file-name
-        (require 'vc)
-        (vc-backend buffer-file-name)
-        (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
-        ;; (format "%s %s" (nerd-icons-octicon "nf-oct-git_branch" :v-adjust 0) (string-trim it))
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face 'powerline-active0 :v-adjust 0) (string-trim it))
-        ))
+  (let ((default-directory (or (and buffer-file-name
+                                    (locate-dominating-file buffer-file-name ".git"))
+                               default-directory)))
+    (when (and default-directory (file-directory-p (concat default-directory ".git")))
+      (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))))
 
 (spaceline-define-segment my-evil-state
   "Display the current evil state if evil-mode is enabled."
