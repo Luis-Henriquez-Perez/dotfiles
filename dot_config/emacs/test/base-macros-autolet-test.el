@@ -70,8 +70,6 @@
 ;;;; main
 (defmacro sautolet! (a b)
   `(should (,a (car (oo--autolet-data ,b)))))
-(defmacro sautolet! (a b)
-  `(should (,(eval a) (car (oo--autolet-data ,b)))))
 
 (ert-deftest autolet!---correctly-processes-keywords ()
   (sautolet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
