@@ -207,6 +207,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
       (while (not done-p)
         (pcase stack
           (`((t nil ,form))
+           (message "pred ((t nil form)) -> t")
+           (message "done")
            (setq done-p t))
           (`((nil ,join-fn ,(and (pred vectorp) vector)) . ,(guard t))
            (pop stack)
