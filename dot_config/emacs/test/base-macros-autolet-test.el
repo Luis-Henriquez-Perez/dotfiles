@@ -68,11 +68,20 @@
 (defun letbinds (form) (cl-second (macroexpand-1 form)))
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
-(defmacro letbinds! (a b)
-  (cl-set-difference ,a (car (oo--autolet-data ,b))))
-
+(defmacro autolet? (a b)
+  `(null (cl-set-difference ',a (car (oo--autolet-data ,b)))))
+(null
+ (cl-set-difference
+  '((a 10)
+    (b 1))
+  (car
+   (oo--autolet-data
+    (:init
+     ((a 10))
+     (set! a 1)
+     (set! b 1))))))
 (ert-deftest autolet!---correctly-processes-keywords ()
-  (sautolet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
+  (should (autolet? ((a 10) (b 1)) (:init ((a 10)) (set! a 1) (set! b 1))))
   (sautolet! '((a 10)) '(:init ((a 10)) (set! a 1)))
   (sautolet! nil '(autolet! :noinit (a) (set! a 1))))
 
