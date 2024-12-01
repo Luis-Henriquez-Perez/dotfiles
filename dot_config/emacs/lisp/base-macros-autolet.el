@@ -180,7 +180,45 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
        (list ,inits ,noinits))))
 
 (alet '(:init a :noinits (a b c))
-  (getinits! it))
+  (let
+      (inits1132 noinits1133)
+    (while
+        (member
+         (car it)
+         '(:noinit :init))
+      (pcase
+          (car it)
+        ((or :init :let)
+         (pop it)
+         (pcase
+             (car it)
+           ((pred symbolp)
+            (push
+             (list
+              (pop it)
+              nil)
+             inits1132))
+           (`(,_)
+            (push
+             (append
+              (pop it)
+              (list nil))
+             inits1132))
+           (`(,_ ,_)
+            (push
+             (pop it)
+             inits1132)))
+         (setq inits1132
+               (append inits1132
+                       (pop it))))
+        (:noinit
+         (pop it)
+         (setq noinits1133
+               (append noinits1133
+                       (ensure-list
+                        (pop it)))))))
+    (list inits1132 noinits1133)))
+;; => (((a nil) . :noinits) nil)
 ;;;; main macro
 (defmacro autolet! (&rest body)
   "Let-bind symbols and transform forms based on indicators in BODY.
