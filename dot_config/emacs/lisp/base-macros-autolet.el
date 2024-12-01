@@ -192,7 +192,7 @@ variables or modify expressions.
                                (push (list (pop ,bodyvar) nil) ,inits))
                               ((pred ))
                               (_
-                               ()))
+                               (push (pop ,bodyvar) ,inits)))
                             (setq ,inits (append ,inits (pop ,bodyvar))))
                            (:noinit
                             (pop ,bodyvar)
