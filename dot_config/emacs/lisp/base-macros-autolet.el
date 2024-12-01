@@ -166,7 +166,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                  (pop ,sym)
                  (dolist (,letbind (pop ,sym))
                    (pcase ,letbind
-                     ())))
+                     ((pred symbolp)
+                      (push (list ,letbind nil) ,)))))
                 ((setq ,inits (append ,inits (pop ,sym))))
                 (:noinit
                  (pop ,sym)
