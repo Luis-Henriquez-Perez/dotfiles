@@ -68,7 +68,7 @@
 (defun letbinds (form) (cl-second (macroexpand-1 form)))
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
-(defmacro)
+(defmacro should-have-same-items)
 (ert-deftest autolet!---correctly-processes-keywords ()
   (let ())
   (pcase-let ((data '(:init ((a 10)) (set! a 1) (set! b 1)))
