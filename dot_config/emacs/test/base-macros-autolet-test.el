@@ -107,7 +107,7 @@
 (ert-deftest autolet!---binds-symbol-specified-by-minning-to-most-positive-fixnum ()
   "Binds symbol specified by `minning!' to `most-positive-fixnum'"
   ;; (should-not (expand '(autolet! (maximizing! a 1))))
-  (should (equal '((a most-negative-fixnum)) (letbinds '(autolet! (maximizing! a 1)))))
+  (should (equal '((a most-negative-fixnum)) (car (oo--autolet-data '((maximizing! a 1))))))
   (should (equal '((a most-positive-fixnum)) (letbinds '(autolet! (minimizing! a 1)))))
   (should (equal '((minimizing! a 1)) (body '(autolet! (minimizing! a 1)))))
   (should (equal '((a 0)) (letbinds '(autolet! (counting! a 1)))))
