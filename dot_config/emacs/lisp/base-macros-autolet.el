@@ -190,7 +190,7 @@ variables or modify expressions.
                             (setq ,inits (append ,inits (pop ,bodyvar))))
                            (:noinit
                             (pop ,bodyvar)
-                            (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
+                            (setq ,noinits (append ,noinits (ensure-list (pop ,bodyvar)))))))
                        (setq init (mapcar (lambda (x) (cond ((symbolp x)
                                                              (list x nil))
                                                             ((not (nthcdr 1 x))
