@@ -302,14 +302,14 @@ variables or modify expressions.
              (setf (cl-first (car stack)) t)
              (print! stack))))
         (print! (list bindings (cl-third (car stack))))
-        (list bindings (cl-third (car stack))))))
-  ;; Normalize init format.
-  (dolist (binding bindings)
-    (when (and (not (member (car-safe binding) noinit))
-               (not (assoc (car-safe binding) init)))
-      (push binding temp)))
-  (setq bindings (append init temp))
-  )
+        (list bindings (cl-third (car stack)))))))
+
+(dolist (binding bindings)
+  (when (and (not (member (car-safe binding) noinit))
+             (not (assoc (car-safe binding) init)))
+    (push binding temp)))
+(setq bindings (append init temp))
+
 ;;; provide
 (provide 'base-macros-autolet)
 ;;; base-macros-autolet.el ends here
