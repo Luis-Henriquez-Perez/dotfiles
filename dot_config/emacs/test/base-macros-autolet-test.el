@@ -78,9 +78,9 @@
 
 (ert-deftest autolet!---skips-loops-with-continue ()
   (autolet? '((nums nil))
-             (dotimes (n 3)
-               (and (= 1 n) (continue!))
-               (collecting! nums n)))
+             '(dotimes (n 3)
+                (and (= 1 n) (continue!))
+                (collecting! nums n)))
   (autolet! (dotimes (n 3)
               (and (= 1 n) (continue!))
               (collecting! nums n))
