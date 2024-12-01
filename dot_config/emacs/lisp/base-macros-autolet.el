@@ -172,13 +172,14 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                       (push (append ,letbind (list nil)) ,inits))
                      (`(,_ ,_)
                       (push ,letbind ,inits)))))
-                (`(:noinit ,(pred listp))
+                (`(:noinit ,(pred listp) . ,(guard t))
                  (pop ,sym)
                  (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
        (list ,inits ,noinits))))
 
-(alet '(:init (a) :noinits (a b c))
+(alet '(:init (a) :noinit (a b c))
   (getinits! it))
+;; => (((a nil)) nil)
 ;; => (((a nil)) nil)
 ;; => (((a nil) . :noinits) nil)
 ;;;; main macro
