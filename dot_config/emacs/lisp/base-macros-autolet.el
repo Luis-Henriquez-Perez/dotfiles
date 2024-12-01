@@ -206,8 +206,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                (loop-join (loop pred car cdr) `(catch 'break! (,loop ,pred (catch 'continue! ,@(cons car cdr)))))
                (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred))
                (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
-      (while (or (not done-p) (> i 1000))
-        (ignore! (message "iteration -> %s" (cl-incf i)))
+      (while (or (not done-p) (> i 10000000))
+        (cl-incf i)
         (pcase stack
           (`((t nil ,form))
            (ignore! (message "pred ((t nil form)) -> t"))
@@ -280,6 +280,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (ignore! (message "stack -> %s" stack)))))
       (setq bindings (append init (cl-remove-if #'should-remove-p bindings)))
       (setq body (cl-third (car stack)))
+      (message "iteration -> %s" (cl-incf i))
       (list bindings body))))
 ;;;; main macro
 (defmacro autolet! (&rest body)
