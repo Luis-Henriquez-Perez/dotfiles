@@ -161,7 +161,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
         (noinits (gensym "noinits")))
     `(let (,inits ,noinits)
        (while (pcase ,sym
-                (`(:init ,(pred symbolp) . ,(guard t))
+                (`(:init ,(pred listp) . ,(guard t))
                  (pop ,sym)
                  (push (list (pop ,sym) nil) ,inits))
                 (`(:init ,(pred listp) . ,(guard t))
