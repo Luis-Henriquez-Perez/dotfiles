@@ -179,7 +179,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                  t)))
        (list ,inits ,noinits))))
 ;;;; helper
-(defun oo--autolet-process (body)
+(defun oo--autolet-data (body)
   "Return a list of bindings and forms."
   (pcase-let ((`(,init ,noinit) (autolet-inits! body))
               (stack (list (list nil nil body)))
