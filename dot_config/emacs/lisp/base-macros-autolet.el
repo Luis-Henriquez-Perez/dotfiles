@@ -190,7 +190,7 @@ variables or modify expressions.
                             (pcase (car ,bodyvar)
                               ((pred symbolp)
                                (push (list (pop ,bodyvar) nil) ,inits))
-                              ((pred )
+                              ((guard (nthcdr 1 ,list))
                                (push (append (pop ,bodyvar) (list nil))))
                               (_
                                (push (pop ,bodyvar) ,inits)))
