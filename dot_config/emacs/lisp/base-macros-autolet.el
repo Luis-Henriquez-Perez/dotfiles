@@ -156,7 +156,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 (defalias 'subtracting! 'cl-decf)
 (defalias 'minusing! 'cl-decf)
 
-(defmacro getinits! ()
+(defmacro getinits! (bodyvar)
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits")))
     `(let (,inits ,noinits)
@@ -175,7 +175,46 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (:noinit
             (pop ,bodyvar)
             (setq ,noinits (append ,noinits (ensure-list (pop ,bodyvar)))))))
-       (list ,inits ,noinit))))
+       (list ,inits ,noinits))))
+(let
+    (inits17704 noinits17705)
+  (while
+      (member
+       (car body)
+       '(:noinit :init))
+    (pcase
+        (car body)
+      ((or :init :let)
+       (pop body)
+       (pcase
+           (car body)
+         ((pred symbolp)
+          (push
+           (list
+            (pop body)
+            nil)
+           inits17704))
+         ((guard
+           (nthcdr 1
+                   (car body)))
+          (push
+           (append
+            (pop body)
+            (list nil))))
+         (_
+          (push
+           (pop body)
+           inits17704)))
+       (setq inits17704
+             (append inits17704
+                     (pop body))))
+      (:noinit
+       (pop body)
+       (setq noinits17705
+             (append noinits17705
+                     (ensure-list
+                      (pop body)))))))
+  (list inits17704 noinits17705))
 ;;;; main macro
 (defmacro autolet! (&rest body)
   "Let-bind symbols and transform forms based on indicators in BODY.
