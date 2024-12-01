@@ -72,10 +72,10 @@
   (pcase-let ((data '(:init ((a 10)) (set! a 1) (set! b 1)))
               (`(,letbinds ,body) ))
     (oo--autolet-data )
-    (should (cl-set-difference '((a 10) (b 1)) ))
+    (should (cl-set-difference '((a 10) (b 1))
+                                (car '(:init ((a 10)) (set! a 1) (set! b 1)))))
     (should (-same-items-p
-             (letbinds '(:init ((a 10)) (set! a 1) (set! b 1))))))
-  ;; (should (equal '((a 10) (b nil)) ))
+             (letbinds ))))  ;; (should (equal '((a 10) (b nil)) ))
   (should (equal '((a 10)) (oo--autolet-data '(:init ((a 10)) (set! a 1)))))
   (should (equal '(autolet! :noinit (a b c) (set! a 1)))))
 
