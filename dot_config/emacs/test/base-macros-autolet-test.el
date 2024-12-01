@@ -68,7 +68,9 @@
 (defun letbinds (form) (cl-second (macroexpand-1 form)))
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
-(defmacro autolet-shouldlet! ())
+(defmacro should-autolet! (a b)
+  `(should (,a ((oo--autolet-data ,b)))))
+
 (ert-deftest autolet!---correctly-processes-keywords ()
   (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
   (shouldlet! '((a 10)) '(:init ((a 10)) (set! a 1)))
