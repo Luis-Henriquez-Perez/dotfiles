@@ -73,8 +73,8 @@
 
 (ert-deftest autolet!---correctly-processes-keywords ()
   (sautolet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
-  (should-autolet! '((a 10)) '(:init ((a 10)) (set! a 1)))
-  (should-autolet! nil '(autolet! :noinit (a) (set! a 1))))
+  (sautolet! '((a 10)) '(:init ((a 10)) (set! a 1)))
+  (sautolet! nil '(autolet! :noinit (a) (set! a 1))))
 
 (ert-deftest autolet!---skips-loops-with-continue ()
   (autolet! (dotimes (n 3)
