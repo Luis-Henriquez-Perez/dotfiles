@@ -25,6 +25,7 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'pcase)
 (require 'dash)
 (require 'base-macros-autolet)
 
