@@ -272,7 +272,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (push (list nil #'cons (pop (cl-third (car stack)))) stack)
            (message "stack -> %s" stack))
           (_
-           (message "pred %S -> t" _)
+           (message "pred %S -> t" '_)
            (setf (cl-first (car stack)) t)
            (message "stack -> %s" stack))))
       (setq bindings (append init (cl-remove-if #'should-remove-p bindings)))
