@@ -234,7 +234,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (setf (caar stack) t))
           (`((nil ,fn (,(and loop (pred loop-symbol-p)) ,pred . ,(and body (guard t)))) . ,(guard t))
            (setq stack (cdr stack))
-           (push (list nil fn rest) stack)
+           (push (list nil fn body) stack)
            (push (list nil (loop-join-fn loop pred) nil) stack))
           (`((nil ,_ (set! ,pattern ,_ . ,(guard t))) . ,(guard t))
            (if (symbolp pattern)
