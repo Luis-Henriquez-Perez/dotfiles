@@ -248,7 +248,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            ;; (print! stack)
            )
           (`((nil ,_ (,(and name (pred ing-symbol-p)) ,symbol . ,(guard t))) . ,(guard t))
-           (log! "pred ing-symbol-p -> t")
+           ;; (log! "pred ing-symbol-p -> t")
            (cl-case name
              ((maxing! maximizing!)
               (push `(,symbol most-negative-fixnum) bindings))
