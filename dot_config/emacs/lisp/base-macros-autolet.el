@@ -155,19 +155,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 (defalias 'summing! 'cl-incf)
 (defalias 'subtracting! 'cl-decf)
 (defalias 'minusing! 'cl-decf)
-;;;; autolet
-;; Initially, I wrote this function recursively--which is the easiest way to write it.  But this is.
-(defun! oo--process-autolet-body (body)
-  "Iteratively generate body of `autolet!'."
-  )
 ;;;; main macro
-(defun oo--extract-plist (body)
-  "Return plist at top of body.")
-
-(defmacro oo--autolet-plist (bodyvar)
-  ""
-  )
-
 (defmacro autolet! (&rest body)
   "Let-bind symbols and transform forms based on indicators in BODY.
 
