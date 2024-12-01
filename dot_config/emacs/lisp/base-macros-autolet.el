@@ -163,7 +163,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
        (while (member (car ,sym) '(:noinit :init))
          (pcase ,sym
            (`(:init ,(pred symbolp) . ,(guard t))
-            (push (pop ,sym) ,inits))
+            (pop ,sym)
+            (push (list (pop ,sym) nil) ,inits))
            (`(:init (,_) . ,(guard t)))
            (`(:init))
            ((setq ,inits (append ,inits (pop ,sym))))
