@@ -183,6 +183,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   "Return a list of bindings and forms."
   (pcase-let ((`(,init ,noinit) (autolet-inits! body))
               (stack (list (list nil nil body)))
+              (i 0)
               (bindings nil)
               (done-p nil)
               (letbind-alist '((macrolet! . cl-macrolet)
@@ -205,6 +206,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
       (unless body (return! nil))
       (while (not done-p)
+        (message "iteration -> %s" (cl-incf i))
         (pcase stack
           (`((t nil ,form))
            (message "pred ((t nil form)) -> t")
