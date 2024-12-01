@@ -25,9 +25,10 @@
 ;; TODO: add commentary
 ;;
 ;;; Code:
+(require 'dash)
 (require 'base-macros-autolet)
 
-(macroexpand-1 '(autolet! :noinit (foo) (set! foo 2)))
+;; (macroexpand-1 '(autolet! :noinit (foo) (set! foo 2)))
 ;; ;; => (catch 'return! (set! foo 2))
 ;; (macroexpand-1 '(autolet! :init ((b 1)) (set! foo 2)))
 ;; ;; => (catch 'return! (let ((b 1) (foo nil)) (set! foo 2)))
