@@ -73,7 +73,7 @@
   (let ())
   (pcase-let ((data )
               (`(,letbinds ,body) ))
-    (should! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
+    (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
     (should (cl-set-difference '((a 10) (b 1))
                                 (car '(:init ((a 10)) (set! a 1) (set! b 1)))))
     (should (-same-items-p
