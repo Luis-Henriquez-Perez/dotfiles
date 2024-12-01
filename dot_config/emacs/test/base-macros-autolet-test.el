@@ -88,6 +88,8 @@
   (autolet! (dotimes (n 3)
               (and (= 1 n) (continue!))
               (collecting! nums n))
+            (progn (collecting! a 1))
+            (collecting! nums n)
             ;; (should (equal nums '(0 2)))
             )
   )
