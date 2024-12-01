@@ -77,6 +77,10 @@
   (autolet? nil '(autolet! :noinit (a) (set! a 1))))
 
 (ert-deftest autolet!---skips-loops-with-continue ()
+  (autolet? '(())
+             (dotimes (n 3)
+               (and (= 1 n) (continue!))
+               (collecting! nums n)))
   (autolet! (dotimes (n 3)
               (and (= 1 n) (continue!))
               (collecting! nums n))
