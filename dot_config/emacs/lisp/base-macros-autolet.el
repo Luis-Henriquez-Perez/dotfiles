@@ -187,7 +187,7 @@ variables or modify expressions.
                          (pcase (car ,bodyvar)
                            ((or :init :let)
                             (pop ,bodyvar)
-                            (setq ,inits (append init (pop ,bodyvar))))
+                            (setq ,inits (append ,inits (pop ,bodyvar))))
                            (:noinit
                             (pop ,bodyvar)
                             (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
