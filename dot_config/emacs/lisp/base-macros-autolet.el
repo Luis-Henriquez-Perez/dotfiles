@@ -207,6 +207,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
       (unless body (return! nil))
       (while (not done-p)
         (message "iteration -> %s" (cl-incf i))
+        (when (> i 1000) ())
         (pcase stack
           (`((t nil ,form))
            (message "pred ((t nil form)) -> t")
@@ -219,7 +220,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (push (list nil join-fn (append (seq-rest vector) nil)) stack)
            (push (list nil vcons (seq-first vector)) stack)
            (message "stack -> %s" stack))
-          (`((nil nil nil) . ,(guard t))
+          (`((nil ,_ nil) . ,(guard t))
            (message "pred %S -> t" '`((nil nil nil) . ,(guard t)))
            (setf (caar stack) t)
            (message "stack -> %s" stack))
