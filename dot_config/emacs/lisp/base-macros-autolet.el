@@ -302,12 +302,8 @@ variables or modify expressions.
              (print! stack))))
         (print! (list bindings (cl-third (car stack))))
         (list bindings (cl-third (car stack)))))))
-(cl-remove-if (or (member (car x) noinit) (assoc (car x) init)) bindings)
-(cl-remove-if (assoc (car x) init) bindings)
-(dolist (binding bindings)
-  (when (and (not (member (car-safe binding) noinit))
-             (not (assoc (car-safe binding) init)))
-    (push binding temp)))
+(append init (cl-remove-if (or (member (car x) noinit) (assoc (car x) init)) bindings))
+
 (setq bindings (append init temp))
 ;;; provide
 (provide 'base-macros-autolet)
