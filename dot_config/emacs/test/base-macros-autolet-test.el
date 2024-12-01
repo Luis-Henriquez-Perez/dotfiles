@@ -108,7 +108,7 @@
   "Binds symbol specified by `minning!' to `most-positive-fixnum'"
   (autolet? '((a most-negative-fixnum)) '((maximizing! a 1)))
   (autolet? '((a most-positive-fixnum)) '((minimizing! a 1)))
-  (autolet? '((minimizing! a 1)) (body '((minimizing! a 1))))
+  ;; (autolet? '((minimizing! a 1)) '((minimizing! a 1)))
   (autolet? '((a 0)) '((counting! a 1)))
   (autolet? '((a nil)) '((collecting! a 1)))
   (autolet? '((a nil)) '((appending! a 1)))
