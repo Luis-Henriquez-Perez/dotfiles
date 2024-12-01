@@ -85,13 +85,18 @@
              '((dotimes (n 3)
                  (and (= 1 n) (continue!))
                  (collecting! nums n))))
-  (autolet! (dotimes (n 3)
-              (and (= 1 n) (continue!))
-              (collecting! nums n))
-            (progn (collecting! a 1))
-            (collecting! nums n)
-            ;; (should (equal nums '(0 2)))
-            )
+  (message "----------------------------")
+  (message "START")
+  (message "----------------------------")
+  (catch 'return!
+    (catch 'break!
+      (dotimes
+          (n 3)
+        (catch 'continue! nil
+                (and
+                 (= 1 n)
+                 (continue!))
+                (collecting! nums n)))))
   )
 
 (ert-deftest autolet!---exits-body-when-return-is-invoked ()
