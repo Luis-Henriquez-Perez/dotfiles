@@ -70,16 +70,9 @@
 ;;;; main
 (defmacro should! ())
 (ert-deftest autolet!---correctly-processes-keywords ()
-  (let ())
-  (pcase-let ((data )
-              (`(,letbinds ,body) ))
-    (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
-    (should (cl-set-difference '((a 10) (b 1))
-                                (car '(:init ((a 10)) (set! a 1) (set! b 1)))))
-    (should (-same-items-p
-             (letbinds ))))  ;; (should (equal '((a 10) (b nil)) ))
-  (should (equal '((a 10)) (oo--autolet-data '(:init ((a 10)) (set! a 1)))))
-  (should (equal '(autolet! :noinit (a b c) (set! a 1)))))
+  (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
+  (shouldlet! '((a 10)) '(:init ((a 10)) (set! a 1)))
+  (shouldlet! nil '(autolet! :noinit (a) (set! a 1))))
 
 (ert-deftest autolet!---skips-loops-with-continue ()
   (autolet! (dotimes (n 3)
