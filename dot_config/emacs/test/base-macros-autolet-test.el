@@ -70,8 +70,8 @@
 ;;;; main
 (defmacro autolet? (a b)
   `(null (cl-set-difference ,a (car (oo--autolet-data ,b)) :test #'equal)))
-(autolet? '((a 10) (b nil)) '(:init ((a 10)) (set! a 1) (set! b 1)))
 (ert-deftest autolet!---correctly-processes-keywords ()
+  (should (autolet? '((a 10) (b nil)) '(:init ((a 10)) (set! a 1) (set! b 1))))
   (should (autolet? ((a 10) (b 1)) (:init ((a 10)) (set! a 1) (set! b 1))))
   (sautolet! '((a 10)) '(:init ((a 10)) (set! a 1)))
   (sautolet! nil '(autolet! :noinit (a) (set! a 1))))
