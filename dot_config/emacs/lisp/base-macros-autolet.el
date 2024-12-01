@@ -169,7 +169,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                (push (list (pop ,bodyvar) nil) ,inits))
               ;; List of 1 element.
               (`(,_)
-               (push (append (pop ,bodyvar) (list nil))))
+               (push (append (pop ,bodyvar) (list nil)) ,inits))
               ;; List of element and value.
               (`(,_ ,_)
                (push (pop ,bodyvar) ,inits)))
@@ -180,43 +180,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
        (list ,inits ,noinits))))
 
 (alet '(:init a :noinits (a b c))
-  (let
-      (inits1027 noinits1028)
-    (while
-        (member
-         (car it)
-         '(:noinit :init))
-      (pcase
-          (car it)
-        ((or :init :let)
-         (pop it)
-         (pcase
-             (car it)
-           ((pred symbolp)
-            (push
-             (list
-              (pop it)
-              nil)
-             inits1027))
-           (`(,_)
-            (push
-             (append
-              (pop it)
-              (list nil))))
-           (`(,_ ,_)
-            (push
-             (pop it)
-             inits1027)))
-         (setq inits1027
-               (append inits1027
-                       (pop it))))
-        (:noinit
-         (pop it)
-         (setq noinits1028
-               (append noinits1028
-                       (ensure-list
-                        (pop it)))))))
-    (list inits1027 noinits1028)))
+  (getinits! it))
 ;;;; main macro
 (defmacro autolet! (&rest body)
   "Let-bind symbols and transform forms based on indicators in BODY.
