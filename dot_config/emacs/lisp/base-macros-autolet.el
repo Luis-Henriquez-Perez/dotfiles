@@ -163,9 +163,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
        (while (pcase ,sym
                 (`(:init ,(pred listp) . ,(guard t))
                  (pop ,sym)
-                 (push (list (pop ,sym) nil) ,inits))
-                (`(:init ,(pred listp) . ,(guard t))
-                 (pop ,sym)
+                 (dolist )
                  (push (list (pop ,sym) nil) ,inits))
                 (`(:init))
                 ((setq ,inits (append ,inits (pop ,sym))))
