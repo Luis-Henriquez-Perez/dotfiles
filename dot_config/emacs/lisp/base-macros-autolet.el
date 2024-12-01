@@ -156,7 +156,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 (defalias 'subtracting! 'cl-decf)
 (defalias 'minusing! 'cl-decf)
 
-(defmacro getinits! (sym)
+(defmacro autolet-inits! (sym)
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits"))
         (letbind (gensym "letbind")))
@@ -202,7 +202,7 @@ variables or modify expressions.
   ;; Process init bindings
   (cl-macrolet ((log! (msg &rest meta) `(lgr-info oo-autolet-logger ,msg ,@meta))
                 (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form)))
-    (pcase-let (`(,init ,noinit) (getinits body)
+    (pcase-let (`(,init ,noinit) (autolet-inits! body)
                 (stack (list (list nil nil body)))
                 (bindings nil)
                 (done-p nil)
