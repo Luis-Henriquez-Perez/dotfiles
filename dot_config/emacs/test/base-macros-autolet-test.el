@@ -72,9 +72,9 @@
   `(should (,a (car (oo--autolet-data ,b)))))
 
 (ert-deftest autolet!---correctly-processes-keywords ()
-  (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
-  (shouldlet! '((a 10)) '(:init ((a 10)) (set! a 1)))
-  (shouldlet! nil '(autolet! :noinit (a) (set! a 1))))
+  (should-autolet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
+  (should-autolet! '((a 10)) '(:init ((a 10)) (set! a 1)))
+  (should-autolet! nil '(autolet! :noinit (a) (set! a 1))))
 
 (ert-deftest autolet!---skips-loops-with-continue ()
   (autolet! (dotimes (n 3)
