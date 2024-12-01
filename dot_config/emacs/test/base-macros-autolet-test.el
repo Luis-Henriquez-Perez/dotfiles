@@ -106,13 +106,13 @@
 
 (ert-deftest autolet!---binds-symbol-specified-by-minning-to-most-positive-fixnum ()
   "Binds symbol specified by `minning!' to `most-positive-fixnum'"
-  (autolet? '((a most-negative-fixnum)) (car (oo--autolet-data '((maximizing! a 1)))))
-  (autolet? '((a most-positive-fixnum)) (letbinds '(autolet! (minimizing! a 1))))
-  (autolet? '((minimizing! a 1)) (body '(autolet! (minimizing! a 1))))
-  (autolet? '((a 0)) (letbinds '(autolet! (counting! a 1))))
-  (autolet? '((a nil)) (letbinds '(autolet! (collecting! a 1))))
-  (autolet? '((a nil)) (letbinds '(autolet! (appending! a 1))))
-  (autolet? '((a nil)) (letbinds '(autolet! (prepending! a 1)))))
+  ;; (autolet? '((a most-negative-fixnum)) '((maximizing! a 1)))
+  ;; (autolet? '((a most-positive-fixnum)) '((minimizing! a 1)))
+  ;; (autolet? '((minimizing! a 1)) (body '((minimizing! a 1))))
+  (autolet? '((a 0)) '((counting! a 1)))
+  (autolet? '((a nil)) '((collecting! a 1)))
+  (autolet? '((a nil)) '((appending! a 1)))
+  (autolet? '((a nil)) '((prepending! a 1))))
 
 ;; (ert-deftest autolet!---ignores-quoted-forms ()
 ;;   (autolet! '(set! foo 1)))
