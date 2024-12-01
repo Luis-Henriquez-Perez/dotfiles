@@ -68,12 +68,12 @@
 (defun letbinds (form) (cl-second (macroexpand-1 form)))
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
-(defmacro should-have-same-items)
+(defmacro should! ())
 (ert-deftest autolet!---correctly-processes-keywords ()
   (let ())
-  (pcase-let ((data '(:init ((a 10)) (set! a 1) (set! b 1)))
+  (pcase-let ((data )
               (`(,letbinds ,body) ))
-    (oo--autolet-data )
+    (should! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
     (should (cl-set-difference '((a 10) (b 1))
                                 (car '(:init ((a 10)) (set! a 1) (set! b 1)))))
     (should (-same-items-p
