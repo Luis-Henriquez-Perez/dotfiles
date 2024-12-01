@@ -191,15 +191,13 @@ variables or modify expressions.
                            (:noinit
                             (pop ,bodyvar)
                             (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
-                       ()
                        (setq init (mapcar (lambda (x) (cond ((symbolp x)
                                                              (list x nil))
                                                             ((not (nthcdr 1 x))
                                                              (append x (list nil)))
                                                             (t
                                                              x))) init))
-                       (list ,inits ,noinit)))
-                  ))
+                       (list ,inits ,noinit)))))
     (pcase-let (`(,init ,noinit) (getinits body)
                 (stack (list (list nil nil body)))
                 (bindings nil)
