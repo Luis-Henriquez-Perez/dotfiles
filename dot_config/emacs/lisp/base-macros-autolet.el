@@ -205,9 +205,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred))
                (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
       (unless body (return! nil))
-      (while (not done-p)
+      (while (or (not done-p) (> i 1000))
         (message "iteration -> %s" (cl-incf i))
-        (when (> i 1000) ())
         (pcase stack
           (`((t nil ,form))
            (message "pred ((t nil form)) -> t")
