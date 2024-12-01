@@ -166,25 +166,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 
 (defmacro oo--autolet-plist (bodyvar)
   ""
-  (let ((inits (gensym "inits"))
-        (noinit (gensym "noinits")))
-    `(progn
-       (while (member (car ,bodyvar) '(:noinit :init :let))
-         (pcase (car ,bodyvar)
-           ((or :init :let)
-            (pop ,bodyvar)
-            (setq init (append init (pop ,bodyvar))))
-           (:noinit
-            (pop ,bodyvar)
-            (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
-       ()
-       (setq init (mapcar (lambda (x) (cond ((symbolp x)
-                                             (list x nil))
-                                            ((not (nthcdr 1 x))
-                                             (append x (list nil)))
-                                            (t
-                                             x))) init))
-       (list ,inits ,noinit))))
+  )
 
 (defmacro autolet! (&rest body)
   "Let-bind symbols and transform forms based on indicators in BODY.
@@ -208,7 +190,28 @@ variables or modify expressions.
 (LOOP CONDITION . BODY) Replace with `(catch 'return! (LOOP CONDITION (catch 'break! BODY)))'."
   ;; Process init bindings
   (cl-macrolet ((log! (msg &rest meta) `(lgr-info oo-autolet-logger ,msg ,@meta))
-                (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form)))
+                (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form))
+                (plist (bodyvar)
+                  (let ((inits (gensym "inits"))
+                        (noinit (gensym "noinits")))
+                    `(progn
+                       (while (member (car ,bodyvar) '(:noinit :init :let))
+                         (pcase (car ,bodyvar)
+                           ((or :init :let)
+                            (pop ,bodyvar)
+                            (setq init (append init (pop ,bodyvar))))
+                           (:noinit
+                            (pop ,bodyvar)
+                            (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
+                       ()
+                       (setq init (mapcar (lambda (x) (cond ((symbolp x)
+                                                             (list x nil))
+                                                            ((not (nthcdr 1 x))
+                                                             (append x (list nil)))
+                                                            (t
+                                                             x))) init))
+                       (list ,inits ,noinit)))
+                  ))
     (pcase-let (`(,init ,noinit) (oo--autolet-inits body)
                 (stack (list (list nil nil body)))
                 (bindings nil)
