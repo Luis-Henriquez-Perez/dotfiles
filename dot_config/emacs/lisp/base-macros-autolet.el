@@ -232,7 +232,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
              (t
               (push `(,symbol nil) bindings)))
            (setf (caar stack) t))
-          (`((nil ,fn (,(and loop (pred loop-symbol-p)) ,pred . ,(and rest (guard t)))) . ,(guard t))
+          (`((nil ,fn (,(and loop (pred loop-symbol-p)) ,pred . ,(and args (guard t)))) . ,(guard t))
            (setq stack (cdr stack))
            (push (list nil fn rest) stack)
            (push (list nil (loop-join-fn loop pred) nil) stack))
