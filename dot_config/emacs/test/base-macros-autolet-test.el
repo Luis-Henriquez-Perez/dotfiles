@@ -94,6 +94,7 @@
 (ert-deftest autolet!---exits-loop-if-break ()
   (should (= 2 (autolet! 2)))
   (should (= 2 (catch 'break! (break! 2) 4)))
+  (should (= 2 (autolet! (dolist (x 3) (when (= x 2) (break! x))))))
   (should (= 2 (autolet! (dotimes (x 3) (when (= x 2) (break! x))))))
   (should (= 2 (autolet! (dotimes (n 10) (return! 2)) 3)))
   (should (= 5 (autolet! (dotimes (i 10) (when (= 5 i) (break! 5)))))))
