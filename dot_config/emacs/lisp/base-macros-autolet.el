@@ -302,7 +302,7 @@ variables or modify expressions.
              (print! stack))))
         (print! (list bindings (cl-third (car stack))))
         (list bindings (cl-third (car stack)))))))
-(cl-remove-if (member (car x) noinit) bindings)
+(cl-remove-if (or (member (car x) noinit) (assoc (car x) init)) bindings)
 (cl-remove-if (assoc (car x) init) bindings)
 (dolist (binding bindings)
   (when (and (not (member (car-safe binding) noinit))
