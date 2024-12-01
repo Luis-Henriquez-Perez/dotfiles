@@ -212,6 +212,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (setq done-p t)
            (message "stack -> %s" stack))
           (`((nil ,join-fn ,(and (pred vectorp) vector)) . ,(guard t))
+           (message "")
            (pop stack)
            (push (list nil join-fn (append (seq-rest vector) nil)) stack)
            (push (list nil vcons (seq-first vector)) stack)
