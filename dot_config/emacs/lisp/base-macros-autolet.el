@@ -220,7 +220,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            ;; (print! stack)
            )
           (`((nil ,join-fn ,(and (pred vectorp) vector)) . ,(guard t))
-           (log! "pred vector -> t")
+           ;; (log! "pred vector -> t")
            (pop stack)
            (push (list nil join-fn (append (seq-rest vector) nil)) stack)
            (push (list nil vcons (seq-first vector)) stack)
