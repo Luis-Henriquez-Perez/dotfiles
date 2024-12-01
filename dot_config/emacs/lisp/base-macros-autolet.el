@@ -156,30 +156,30 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 (defalias 'subtracting! 'cl-decf)
 (defalias 'minusing! 'cl-decf)
 
-(defmacro getinits! (bodyvar)
+(defmacro getinits! (sym)
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits")))
     `(let (,inits ,noinits)
-       (while (member (car ,bodyvar) '(:noinit :init))
-         (pcase ,bodyvar
+       (while (member (car ,sym) '(:noinit :init))
+         (pcase ,sym
            (`(:init ,_ . ,(guard t))
-            (pop ,bodyvar)
+            (pop ,sym)
             )
            ((or :init :let)
-            (pop ,bodyvar)
-            (pcase (car ,bodyvar)
+            (pop ,sym)
+            (pcase (car ,sym)
               ((pred symbolp)
-               (push (list (pop ,bodyvar) nil) ,inits))
+               (push (list (pop ,sym) nil) ,inits))
               ;; List of 1 element.
               (`(,_)
-               (push (append (pop ,bodyvar) (list nil)) ,inits))
+               (push (append (pop ,sym) (list nil)) ,inits))
               ;; List of element and value.
               (`(,_ ,_)
-               (push (pop ,bodyvar) ,inits)))
-            (setq ,inits (append ,inits (pop ,bodyvar))))
+               (push (pop ,sym) ,inits)))
+            (setq ,inits (append ,inits (pop ,sym))))
            (:noinit
-            (pop ,bodyvar)
-            (setq ,noinits (append ,noinits (ensure-list (pop ,bodyvar)))))))
+            (pop ,sym)
+            (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
        (list ,inits ,noinits))))
 
 (alet '(:init a :noinits (a b c))
