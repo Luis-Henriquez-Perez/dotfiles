@@ -111,9 +111,6 @@
   (autolet? '((a nil)) '((appending! a 1)))
   (autolet? '((a nil)) '((prepending! a 1))))
 
-;; (ert-deftest autolet!---ignores-quoted-forms ()
-;;   (autolet! '(set! foo 1)))
-
 (ert-deftest autolet!---stubbing-macros-work ()
   "wraps subsequent forms with lef!"
   ;; (should (equal '((cl-flet ((plus (a b) (+ a (* 2 b)))) (plus 1)))
@@ -124,11 +121,6 @@
   (should (= 10 (autolet! (flet! plus #'+) (plus 5 5))))
   (should (= 10 (autolet! (nflet! + (a b) (funcall this-fn 1 (* a b))) (+ 3 3))))
   (should (= 9 (autolet! (flet! four () 4) (flet! five () 5) (+ (four) (five))))))
-
-;; (ert-deftest autolet!---gensym ()
-;;   "wraps subsequent forms with lef!"
-;;   (should (equal '(foo bar baz) (let-binds '((gensym! foo bar baz)))))
-;;   (should (equal '((gensym! foo)) (body '((gensym! foo))))))
 ;;; provide
 (provide 'base-macros-block-autolet)
 ;;; base-macros-block-autolet.el ends here
