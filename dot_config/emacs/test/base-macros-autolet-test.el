@@ -69,7 +69,7 @@
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
 (defmacro should-autolet! (a b)
-  `(should (,a ((oo--autolet-data ,b)))))
+  `(should (,a (car (oo--autolet-data ,b)))))
 
 (ert-deftest autolet!---correctly-processes-keywords ()
   (shouldlet! '((a 10) (b 1)) '(:init ((a 10)) (set! a 1) (set! b 1)))
