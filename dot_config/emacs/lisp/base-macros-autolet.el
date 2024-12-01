@@ -177,7 +177,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                  (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
        (list ,inits ,noinits))))
 
-(alet '(:init a :noinits (a b c))
+(alet '(:init (a) :noinits (a b c))
   (getinits! it))
 ;; => (((a nil) . :noinits) nil)
 ;;;; main macro
