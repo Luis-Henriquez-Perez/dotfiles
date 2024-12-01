@@ -165,7 +165,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (`(:init ,(pred symbolp) . ,(guard t))
             (pop ,sym)
             (push (list (pop ,sym) nil) ,inits))
-           (`(:init (,_) . ,(guard t))
+           (`(:init ,(pred listp) . ,(guard t))
             (pop ,sym)
             (push (list (pop ,sym) nil) ,inits))
            (`(:init))
