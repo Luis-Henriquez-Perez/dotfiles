@@ -287,7 +287,7 @@ variables or modify expressions.
             (`((nil ,_ (set! ,pattern ,_ . ,(guard t))) . ,(guard t))
              (log! "pred set! symbol -> t")
              (if (symbolp pattern)
-                 (cl-pushnew (list symbol nil) bindings :key #'car)
+                 (cl-pushnew (list pattern nil) bindings :key #'car)
                (dolist (sym (reverse (oo--set-flatten pattern)))
                  (cl-pushnew (list sym nil) bindings :key #'car)))
              (setf (caar stack) t)
