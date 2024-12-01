@@ -162,7 +162,9 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
     `(let (,inits ,noinits)
        (while (member (car ,bodyvar) '(:noinit :init))
          (pcase ,bodyvar
-           (`(:init ,_ . ,(guard t)))
+           (`(:init ,_ . ,(guard t))
+            (pop ,bodyvar)
+            )
            ((or :init :let)
             (pop ,bodyvar)
             (pcase (car ,bodyvar)
