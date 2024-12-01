@@ -164,7 +164,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
          (pcase ,sym
            (`(:init ,(pred symbolp) . ,(guard t))
             (pop ,sym))
-           (`(:init ,(pred) . ,(guard t)))
+           (`(:init ,(pred listp) . ,(guard t)))
            (`(:init))
            ((or :init :let)
             (pop ,sym)
