@@ -183,7 +183,7 @@ variables or modify expressions.
                   (let ((inits (gensym "inits"))
                         (noinits (gensym "noinits")))
                     `(let (,inits ,noinits)
-                       (while (member (car ,bodyvar) '(:noinit :init :let))
+                       (while (member (car ,bodyvar) '(:noinit :init))
                          (pcase (car ,bodyvar)
                            ((or :init :let)
                             (pop ,bodyvar)
