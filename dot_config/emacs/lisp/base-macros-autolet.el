@@ -308,7 +308,6 @@ variables or modify expressions.
              (not (assoc (car-safe binding) init)))
     (push binding temp)))
 (setq bindings (append init temp))
-
 ;;; provide
 (provide 'base-macros-autolet)
 ;;; base-macros-autolet.el ends here
