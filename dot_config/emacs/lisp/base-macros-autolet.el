@@ -179,6 +179,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                  t)))
        (list ,inits ,noinits))))
 ;;;; helper
+;; Although I only use the helper function here, it makes `autolet' much easier
+;; to test.
 (defun oo--autolet-data (body)
   "Return a list of bindings and forms."
   (pcase-let ((`(,init ,noinit) (autolet-inits! body))
