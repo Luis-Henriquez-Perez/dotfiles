@@ -201,8 +201,7 @@ variables or modify expressions.
 (LOOP CONDITION . BODY) Replace with `(catch 'return! (LOOP CONDITION (catch 'break! BODY)))'."
   ;; Process init bindings
   (cl-macrolet ((log! (msg &rest meta) `(lgr-info oo-autolet-logger ,msg ,@meta))
-                (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form))
-                )
+                (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form)))
     (pcase-let (`(,init ,noinit) (getinits body)
                 (stack (list (list nil nil body)))
                 (bindings nil)
