@@ -67,9 +67,11 @@
 (defun body (form) (cddr (cl-third (macroexpand-1 form))))
 ;;;; main
 (ert-deftest autolet!---correctly-processes-keywords ()
-  (oo--autolet-data '(:init ((a 10)) (set! a 1) (set! b 1)))
-  (should (equal (alist-get 'a letbinds)))
-  (should (equal '((a 10) (b nil)) ))
+  (pcase-let ((`(,letbinds ,body) ))
+    (oo--autolet-data '(:init ((a 10)) (set! a 1) (set! b 1)))
+    (should (= (alist-get 'a letbinds) 10))
+    )
+  ;; (should (equal '((a 10) (b nil)) ))
   (should (equal '((a 10)) (oo--autolet-data '(:init ((a 10)) (set! a 1)))))
   (should (equal '(autolet! :noinit (a b c) (set! a 1)))))
 
