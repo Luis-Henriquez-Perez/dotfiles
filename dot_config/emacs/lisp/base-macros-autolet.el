@@ -224,7 +224,7 @@ variables or modify expressions.
                  (vcons (car cdr) (vconcat (cons car cdr)))
                  (loop-join (loop pred car cdr) `(catch 'break! (,loop ,pred (catch 'continue! ,@(cons car cdr)))))
                  (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred))
-                 (filter (x) (or (member (car x) noinit) (assoc (car x) init))))
+                 (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
         ;; Process initial settings in beginning of body.  Special keywords will be
         ;; :noinit and :init.
         (unless body (return! nil))
