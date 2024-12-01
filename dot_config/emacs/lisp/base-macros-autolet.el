@@ -212,7 +212,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
       ;; (log! "-------------------")
       ;; (print! stack)
       (while (not done-p)
-        (log! "iteration -> %d" (cl-incf i))
+        ;; (log! "iteration -> %d" (cl-incf i))
         (pcase stack
           (`((t nil ,form))
            ;; (log! "Done!")
