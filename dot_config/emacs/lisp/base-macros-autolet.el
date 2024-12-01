@@ -160,19 +160,18 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits")))
     `(let (,inits ,noinits)
-       (while (member (car ,sym) '(:noinit :init))
-         (pcase ,sym
-           (`(:init ,(pred symbolp) . ,(guard t))
-            (pop ,sym)
-            (push (list (pop ,sym) nil) ,inits))
-           (`(:init ,(pred listp) . ,(guard t))
-            (pop ,sym)
-            (push (list (pop ,sym) nil) ,inits))
-           (`(:init))
-           ((setq ,inits (append ,inits (pop ,sym))))
-           (:noinit
-            (pop ,sym)
-            (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
+       (while (pcase ,sym
+                (`(:init ,(pred symbolp) . ,(guard t))
+                 (pop ,sym)
+                 (push (list (pop ,sym) nil) ,inits))
+                (`(:init ,(pred listp) . ,(guard t))
+                 (pop ,sym)
+                 (push (list (pop ,sym) nil) ,inits))
+                (`(:init))
+                ((setq ,inits (append ,inits (pop ,sym))))
+                (:noinit
+                 (pop ,sym)
+                 (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
        (list ,inits ,noinits))))
 
 (alet '(:init a :noinits (a b c))
