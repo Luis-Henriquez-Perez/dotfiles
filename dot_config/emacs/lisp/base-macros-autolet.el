@@ -307,7 +307,7 @@ variables or modify expressions.
 (label!|labels! NAME ARGS . BODY) Same as `stub!' but use `cl-labels'.
 
 (LOOP CONDITION . BODY) Replace with `(catch 'return! (LOOP CONDITION (catch 'break! BODY)))'."
-  (pcase-let ((`(,letbinds body) (oo--autolet-daa body)))
+  (pcase-let ((`(,letbinds body) (oo--autolet-data body)))
     (if letbinds
         `(catch 'return! (let* ,letbinds ,@body))
       `(catch 'return! ,@body))))
