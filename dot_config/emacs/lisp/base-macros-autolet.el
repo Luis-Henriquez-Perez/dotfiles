@@ -158,13 +158,15 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 
 (defmacro getinits! (sym)
   (let ((inits (gensym "inits"))
-        (noinits (gensym "noinits")))
+        (noinits (gensym "noinits"))
+        (elt (gensym "letbind")))
     `(let (,inits ,noinits)
        (while (pcase ,sym
                 (`(:init ,(pred listp) . ,(guard t))
                  (pop ,sym)
-                 (dolist (_ (pop ,sym))
-                   (pcase )))
+                 (dolist (,letbind (pop ,sym))
+                   (pcase ,letbind
+                     ())))
                 ((setq ,inits (append ,inits (pop ,sym))))
                 (:noinit
                  (pop ,sym)
