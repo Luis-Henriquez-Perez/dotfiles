@@ -202,7 +202,7 @@ variables or modify expressions.
   ;; Process init bindings
   (cl-macrolet ((log! (msg &rest meta) `(lgr-info oo-autolet-logger ,msg ,@meta))
                 (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form)))
-    (pcase-let (`(,init ,noinit) (autolet-inits! body)
+    (pcase-let (`((,init ,noinit) (autolet-inits! body))
                 (stack (list (list nil nil body)))
                 (bindings nil)
                 (done-p nil)
