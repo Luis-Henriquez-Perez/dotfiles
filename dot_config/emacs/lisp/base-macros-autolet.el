@@ -267,7 +267,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (push (list nil join-fn rest) stack)
            (push (list nil (letbind-wrap-fn letsym args) nil) stack)
            (message "stack -> %s" stack))
-          (`((nil nil ,(pred listp)) . ,(guard t))
+          (`((nil ,_ ,(pred listp)) . ,(guard t))
            (message "pred %S -> t" '`((nil nil ,(pred listp)) . ,(guard t)))
            (push (list nil #'cons (pop (cl-third (car stack)))) stack)
            (message "stack -> %s" stack))
