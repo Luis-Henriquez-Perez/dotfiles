@@ -309,7 +309,9 @@ variables or modify expressions.
         (print! (list bindings (cl-third (car stack))))
         (setq bindings (append init (cl-remove-if #'should-remove-p bindings)))
         (setq body (cl-third (car stack)))
-        `(catch 'return! (let ,bindings ,@body))))))
+        (if bindings
+            `(catch 'return! (let ,bindings ,@body))
+          `(catch 'return! ,@body))))))
 ;;; provide
 (provide 'base-macros-autolet)
 ;;; base-macros-autolet.el ends here
