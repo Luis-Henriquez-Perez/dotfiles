@@ -223,7 +223,8 @@ variables or modify expressions.
                  (letbind-wrap-fn (letsym args) (apply-partially #'letbind-wrap letsym args))
                  (vcons (car cdr) (vconcat (cons car cdr)))
                  (loop-join (loop pred car cdr) `(catch 'break! (,loop ,pred (catch 'continue! ,@(cons car cdr)))))
-                 (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred)))
+                 (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred))
+                 (filter (x) (or (member (car x) noinit) (assoc (car x) init))))
         ;; Process initial settings in beginning of body.  Special keywords will be
         ;; :noinit and :init.
         (unless body (return! nil))
@@ -302,7 +303,8 @@ variables or modify expressions.
              (print! stack))))
         (print! (list bindings (cl-third (car stack))))
         (list bindings (cl-third (car stack)))))))
-(append init (cl-remove-if (or (member (car x) noinit) (assoc (car x) init)) bindings))
+(append init (cl-remove-if  bindings))
+
 
 (setq bindings (append init temp))
 ;;; provide
