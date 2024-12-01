@@ -172,7 +172,6 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                       (push))
                      (`(,_ ,_)
                       (push ,letbind ,inits)))))
-                ((setq ,inits (append ,inits (pop ,sym))))
                 (:noinit
                  (pop ,sym)
                  (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
