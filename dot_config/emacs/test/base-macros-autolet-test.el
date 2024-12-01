@@ -98,11 +98,8 @@
 (ert-deftest autolet!---handles-set-correctly ()
   (should (set-difference '((a nil) (b nil)) (car (oo--autolet-data '(autolet! (set! a 1) (set! b 2))))))
   (should (equal '((a nil)) (letbinds '(autolet! (set! a 1)))))
-  (let ((bindings (letbinds '(autolet! (set! (a [b] [[c]] d) '(1 [2] [[3]] d))))))
-    (should (and (member '(a nil) bindings)
-                 (member '(b nil) bindings)
-                 (member '(c nil) bindings)
-                 (member '(d nil) bindings)))))
+  (autolet? '((a nil) (b nil) (c nil) (d nil))
+             '((set! (a [b] [[c]] d) '(1 [2] [[3]] d)))))
 
 (ert-deftest autolet!---binds-symbol-specified-by-minning-to-most-positive-fixnum ()
   "Binds symbol specified by `minning!' to `most-positive-fixnum'"
