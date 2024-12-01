@@ -191,7 +191,7 @@ variables or modify expressions.
                               ((pred symbolp)
                                (push (list (pop ,bodyvar) nil) ,inits))
                               ((pred )
-                               ())
+                               (push (append (pop ,bodyvar) (list nil))))
                               (_
                                (push (pop ,bodyvar) ,inits)))
                             (setq ,inits (append ,inits (pop ,bodyvar))))
