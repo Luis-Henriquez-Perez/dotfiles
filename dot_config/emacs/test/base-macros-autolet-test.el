@@ -70,7 +70,7 @@
   (pcase-let ((data '(:init ((a 10)) (set! a 1) (set! b 1)))
               (`(,letbinds ,body) ))
     (oo--autolet-data )
-    (should (= (alist-get 'a letbinds) 10))
+    (should (member '(a 10) letbinds))
     )
   ;; (should (equal '((a 10) (b nil)) ))
   (should (equal '((a 10)) (oo--autolet-data '(:init ((a 10)) (set! a 1)))))
