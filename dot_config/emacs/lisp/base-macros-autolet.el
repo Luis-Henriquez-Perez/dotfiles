@@ -181,13 +181,13 @@ variables or modify expressions.
                 (print! (form) `(lgr-info oo-autolet-logger "%S -> %S" ',form ,form))
                 (getinits (bodyvar)
                   (let ((inits (gensym "inits"))
-                        (noinit (gensym "noinits")))
-                    `(progn
+                        (noinits (gensym "noinits")))
+                    `(let (,inits ,noinits)
                        (while (member (car ,bodyvar) '(:noinit :init :let))
                          (pcase (car ,bodyvar)
                            ((or :init :let)
                             (pop ,bodyvar)
-                            (setq init (append init (pop ,bodyvar))))
+                            (setq ,inits (append init (pop ,bodyvar))))
                            (:noinit
                             (pop ,bodyvar)
                             (setq noinit (append noinit (ensure-list (pop ,bodyvar)))))))
