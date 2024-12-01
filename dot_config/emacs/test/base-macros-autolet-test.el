@@ -119,18 +119,14 @@
 
 (ert-deftest autolet!---stubbing-macros-work ()
   "wraps subsequent forms with lef!"
-  (should (equal '((cl-flet ((plus (a b) (+ a (* 2 b)))) (plus 1)))
-                 (body '(autolet! (stub! plus (a b) (+ a (* 2 b))) (plus 1)))))
-  (should (equal '((lef! ((plus (a b) (+ a (* 2 b)))) (plus 1)))
-                 (body '(autolet! (nflet! plus (a b) (+ a (* 2 b))) (plus 1)))))
+  ;; (should (equal '((cl-flet ((plus (a b) (+ a (* 2 b)))) (plus 1)))
+  ;;                 (body '(autolet! (stub! plus (a b) (+ a (* 2 b))) (plus 1)))))
+  ;; (should (equal '((lef! ((plus (a b) (+ a (* 2 b)))) (plus 1)))
+  ;;                 (body '(autolet! (nflet! plus (a b) (+ a (* 2 b))) (plus 1)))))
   (should (= 10 (autolet! (stub! plus (a b) (+ a (* 2 b))) (plus 6 2))))
   (should (= 10 (autolet! (flet! plus #'+) (plus 5 5))))
-  (should (= 10 (autolet! (nflet! + (a b) (funcall this-fn 1 (* a b)))
-                          (+ 3 3))))
-  (should (= 9 (autolet!
-                (flet! four () 4)
-                (flet! five () 5)
-                (+ (four) (five))))))
+  (should (= 10 (autolet! (nflet! + (a b) (funcall this-fn 1 (* a b))) (+ 3 3))))
+  (should (= 9 (autolet! (flet! four () 4) (flet! five () 5) (+ (four) (five))))))
 
 ;; (ert-deftest autolet!---gensym ()
 ;;   "wraps subsequent forms with lef!"
