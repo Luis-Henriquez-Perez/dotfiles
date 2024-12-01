@@ -185,7 +185,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
               (stack (list (list nil nil body)))
               (bindings nil)
               (done-p nil)
-              (i 0)
+              ;; (i 0)
               (letbind-alist '((macrolet! . cl-macrolet)
                                (mlet! . cl-macrolet)
                                (nflet! . lef!)
