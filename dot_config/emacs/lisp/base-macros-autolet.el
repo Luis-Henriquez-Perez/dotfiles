@@ -179,6 +179,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 
 (alet '(:init (a) :noinits (a b c))
   (getinits! it))
+;; => (((a nil)) nil)
 ;; => (((a nil) . :noinits) nil)
 ;;;; main macro
 (defmacro autolet! (&rest body)
