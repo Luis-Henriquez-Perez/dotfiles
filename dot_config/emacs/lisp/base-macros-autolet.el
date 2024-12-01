@@ -167,18 +167,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
            (`(:init (,_) . ,(guard t))
             (pop ,sym))
            (`(:init))
-           ((or :init :let)
-            (pop ,sym)
-            (pcase (car ,sym)
-              ((pred symbolp)
-               (push (list (pop ,sym) nil) ,inits))
-              ;; List of 1 element.
-              (`(,_)
-               (push (append (pop ,sym) (list nil)) ,inits))
-              ;; List of element and value.
-              (`(,_ ,_)
-               (push (pop ,sym) ,inits)))
-            (setq ,inits (append ,inits (pop ,sym))))
+           ((setq ,inits (append ,inits (pop ,sym))))
            (:noinit
             (pop ,sym)
             (setq ,noinits (append ,noinits (ensure-list (pop ,sym)))))))
