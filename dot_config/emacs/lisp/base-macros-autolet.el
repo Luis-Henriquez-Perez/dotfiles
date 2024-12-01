@@ -169,7 +169,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                      ((pred symbolp)
                       (push (list ,letbind nil) ,inits))
                      (`(,_)
-                      (push))
+                      (push (append ,letbind (list nil)) ,inits))
                      (`(,_ ,_)
                       (push ,letbind ,inits)))))
                 (:noinit
