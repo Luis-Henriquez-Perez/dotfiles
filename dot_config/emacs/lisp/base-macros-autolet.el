@@ -306,8 +306,10 @@ variables or modify expressions.
 
 (LOOP CONDITION . BODY) Replace with `(catch 'return! (LOOP CONDITION (catch 'break! BODY)))'."
   ;; Process init bindings
-  (pcase-let (oo--autolet-process body))
-  )
+  (pcase-let ((`(,letbinds body) (oo--autolet-process body)))
+    (if letbinds
+        `(catch 'return! (let* ,letbinds ,@body))
+      `(catch 'return! ,@body))))
 ;;; provide
 (provide 'base-macros-autolet)
 ;;; base-macros-autolet.el ends here
