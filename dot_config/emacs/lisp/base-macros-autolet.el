@@ -210,8 +210,8 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
         (cl-incf i)
         (pcase stack
           (`((t nil ,form))
-           (ignore! (message "pred ((t nil form)) -> t"))
-           (ignore! (message "done"))
+           ;; (ignore! (message "pred ((t nil form)) -> t"))
+           ;; (ignore! (message "done"))
            (setq done-p t)
            (ignore! (message "stack -> %s" stack)))
           (`((t ,fn ,cdr) (t ,join-fn ,car) . ,(guard t))
