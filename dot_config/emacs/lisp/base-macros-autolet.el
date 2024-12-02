@@ -206,7 +206,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
                (loop-join (loop pred car cdr) `(catch 'break! (,loop ,pred (catch 'continue! ,@(cons car cdr)))))
                (loop-join-fn (loop pred) (apply-partially #'loop-join loop pred))
                (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
-      (while (or (not done-p) (> i 10000000))
+      (while (not done-p)
         (cl-incf i)
         (pcase stack
           (`((t nil ,form))
