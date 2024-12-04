@@ -131,15 +131,6 @@ SETTER is the same as in `appending!'.  KEY, TEST, TEST-NOT are the same as in
 SETTER is the same as in `appending!'."
   `(,setter ,place (cons ,item ,place)))
 
-;; To configure variables I don't use the standard =setq=--at least not
-;; directly.  Instead, I use =set!=.  Adjoining is one of the most common
-;; operations done to lisp symbols when configuring Emacs.
-
-;; Something I was always confused about was why adjoin instead of just using
-;; =push=.  The latter is more performant; however I don't think that's.  The
-;; best reason I could think of is that sometimes you want to re-evaluate parts
-;; of your configuration and in that case it is more convenient to have =adjoin=
-;; over =push=.
 (cl-defmacro unioning! (place list &key test test-not key (setter 'setf))
   "Set PLACE to the union of PLACE and LIST.
 SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
