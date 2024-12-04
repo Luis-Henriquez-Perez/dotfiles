@@ -48,8 +48,7 @@ returning VALUE from the surrounding context."
   `(throw 'return! ,value))
 
 (defmacro done! ()
-  "A shorthand for `(return! nil)'.
-This is meant to be used within an `autolet!' body."
+  "A shorthand for `(return! nil)'."
   `(return! nil))
 
 (defmacro break! (&optional value)
