@@ -81,10 +81,6 @@ definitions via `lef!'.")
 SETTER is the symbol of the macro or function used to do the setting."
   `(,setter ,place (append ,place ,list)))
 
-;; Important to note that this macro is not as efficient as pushing because it's
-;; adding to the end of the list.  So this macro should be used only in
-;; non-performance-intensive code.  In performance-intensive code we need the
-;; =push-nreverse= idiom.
 (cl-defmacro collecting! (place item &key (setter 'setf))
   "Affix ITEM to the end of PLACE.
 SETTER is the same as in `appending!'."
