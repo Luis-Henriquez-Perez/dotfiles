@@ -27,10 +27,6 @@
 ;; to provide an environment where I can automate let-binding symbols, reduce
 ;; nesting by wrapping, and to enhance the control flow of built-in loops.
 ;;
-;; - automatically let bind
-;; - automatically wrapping forms
-;; - enhance control flow
-;;
 ;; Sometimes you do not want symbol to be auto let-bound to nil, you actually
 ;; want to just modify the original symbol without let-binding it at all.  In
 ;; that case use `:noinit' which tells `autolet!' not to bind specified symbols
