@@ -48,7 +48,7 @@ returning VALUE from the surrounding context."
   `(throw 'return! ,value))
 
 (defmacro done! ()
-  "A shorthand for `(return! nil)'."
+  "This is a shorthand for `(return! nil)'."
   `(return! nil))
 
 (defmacro break! (&optional value)
