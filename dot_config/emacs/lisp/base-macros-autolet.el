@@ -162,7 +162,7 @@ BODYSYM is the symbol whose value is the body."
 
 (defun oo--autolet-data (body)
   "Return let-bindings and processed forms used in `autolet!'.
-Identify and collect symbols needed."
+Identify and collect symbols needed for let bindings as well as ."
   (pcase-let ((`(,init ,noinit) (oo--autolet-inits body))
               (bindings nil)
               (lets '((mlet! . cl-macrolet)
