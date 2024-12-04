@@ -89,9 +89,6 @@ SETTER is the same as in `appending!'."
 (defalias 'snocing! 'collecting!)
 (defalias 'affixing! 'collecting!)
 
-;; You might be wondering why I didn't create a macro with a setter for these.
-;; Well I haven't had a case yet when I've wanted to increment or decrement the
-;; value symbol used in customization.
 (defalias 'incrementing! 'cl-incf)
 (defalias 'counting! 'cl-incf)
 (defalias 'decrementing! 'cl-decf)
