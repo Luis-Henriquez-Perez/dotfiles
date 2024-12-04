@@ -26,7 +26,9 @@
 ;; certain indicators in its body (among other things).  This macro was created
 ;; for multiple reasons.
 ;;
-;; -
+;; - automate let bind
+;; - automate wrapping forms
+;; - enhance control flow
 ;;
 ;; Sometimes you do not want symbol to be auto let-bound to nil, you actually
 ;; want to just modify the original symbol without let-binding it at all.  In
