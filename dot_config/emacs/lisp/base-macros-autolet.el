@@ -54,13 +54,13 @@ This is meant to be used within an `autolet!' body."
 
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
-This is meant to be used inside of loop from within an `autolet!' body."
+Inside an `autolet!' form exit the current loop and return VALUE."
   `(throw 'break! ,value))
 
 (defmacro continue! ()
   "Skip the current iteration of a loop.
-Throw a `continue!' signal to end the current iteration and move to the next.
-Must be used within an `autolet!' body."
+Inside an `autolet' form, throw a `continue!' signal to end the current
+iteration and move to the next."
   `(throw 'continue! nil))
 
 (defalias 'skip! 'continue!)
