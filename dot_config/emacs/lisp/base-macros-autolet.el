@@ -73,7 +73,7 @@ iteration and move to the next."
 (defalias 'mlet! 'macrolet!)
 (defalias 'flet! 'stub! "Same as `stub!'.")
 (defalias 'noflet! 'stub! "Indicator for temporary overriding function
-definitions.")
+definitions via `lef!'.")
 (defalias 'nflet! 'stub! "Same as `noflet!'")
 ;;;; accumulation macros
 (cl-defmacro appending! (place list &key (setter 'setf))
