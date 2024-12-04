@@ -58,7 +58,7 @@ This is meant to be used inside of loop from within an `autolet!' body."
   `(throw 'break! ,value))
 
 (defmacro continue! ()
-  "Skip the current iteration of a loop.
+  "Skip the current iteration of a loop within an `autolet!' form.
 Throw a `continue!' signal to end the current iteration and move to the next.
 Must be used within an `autolet!' body."
   `(throw 'continue! nil))
