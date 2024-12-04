@@ -73,7 +73,8 @@ Must be used within an `autolet!' body."
 `cl-macrolet' in `autolet!' forms.")
 (defalias 'mlet! 'macrolet!)
 (defalias 'flet! 'stub! "Same as `stub!'.")
-(defalias 'noflet! 'stub! "Same as `stub!'.")
+(defalias 'noflet! 'stub! "Indicator for temporary overriding function
+definitions.")
 (defalias 'nflet! 'stub! "Same as `noflet!'")
 ;;;; accumulation macros
 (cl-defmacro appending! (place list &key (setter 'setf))
