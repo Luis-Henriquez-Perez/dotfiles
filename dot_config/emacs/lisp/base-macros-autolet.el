@@ -44,7 +44,8 @@
 (defmacro return! (&optional value)
   "Exit `autolet!' and return VALUE.
 Inside an `autolet!' form, throw a `return!' signal, immediately terminating the
-execution and returning VALUE from the surrounding context."
+evaluation of the `autolet!' form and returning VALUE from the surrounding
+context."
   `(throw 'return! ,value))
 
 (defmacro done! ()
