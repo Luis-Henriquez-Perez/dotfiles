@@ -137,7 +137,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 ;;;; helpers
 (defmacro oo--autolet-inits (bodysym)
   "Extract let-bindings and excluded let-binding symbols from BODYSYM.
-BODYSYM is the symbol whose value is the body."
+BODYSYM is the symbol whose value is the body.  "
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits"))
         (letbind (gensym "letbind")))
