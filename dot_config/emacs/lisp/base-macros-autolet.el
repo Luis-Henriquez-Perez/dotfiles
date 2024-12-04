@@ -27,14 +27,6 @@
 ;; to provide an environment where I can automate let-binding symbols, reduce
 ;; nesting by wrapping, and to enhance the control flow of built-in loops.
 ;;
-;; Sometimes you do not want symbol to be auto let-bound to nil, you actually
-;; want to just modify the original symbol without let-binding it at all.  In
-;; that case use `:noinit' which tells `autolet!' not to bind specified symbols
-;; at all.  Other times you want a symbol to be bound to something else than the
-;; default.  For example, counting! starts at 0 by default but maybe you want to
-;; start at 10, in that case you can do `:init' ((count 10)).  I suppose init
-;; can be used as a single-line alternative to `let*'.
-;;
 ;;; Code:
 ;;;; requirements
 (require 'cl-lib)
