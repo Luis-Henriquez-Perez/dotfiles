@@ -24,7 +24,7 @@
 ;;
 ;; This file provides a macro that automatically let bindings symbol based on
 ;; certain indicators in its body (among other things).  This macro was created
-;; for multiple reasons.
+;; to automate let-binding symbols, reduce nesting by automating.
 ;;
 ;; - automatically let bind
 ;; - automatically wrapping forms
