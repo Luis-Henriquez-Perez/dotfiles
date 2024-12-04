@@ -43,8 +43,8 @@
 ;;;; control flow macros
 (defmacro return! (&optional value)
   "Exit `autolet!' and return VALUE.
-Throw a `return!' signal, immediately terminating the `autolet!' execution and
-returning VALUE from the surrounding context."
+Inside an `autolet!' form, throw a `return!' signal, immediately terminating the
+execution and returning VALUE from the surrounding context."
   `(throw 'return! ,value))
 
 (defmacro done! ()
@@ -53,12 +53,12 @@ returning VALUE from the surrounding context."
 
 (defmacro break! (&optional value)
   "Exit the current loop and return VALUE.
-Inside an `autolet!' form exit the current loop and return VALUE."
+Inside an `autolet!' form, exit the current loop and return VALUE."
   `(throw 'break! ,value))
 
 (defmacro continue! ()
   "Skip the current iteration of a loop.
-Inside an `autolet' form, throw a `continue!' signal to end the current
+Inside an `autolet!' form, throw a `continue!' signal to end the current
 iteration and move to the next."
   `(throw 'continue! nil))
 
