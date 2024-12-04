@@ -160,12 +160,7 @@ SETTER, KEY, TEST, TEST-NOT are the same as in `adjoining!'."
 (defalias 'minusing! 'cl-decf)
 ;;;; helpers
 (defmacro oo--autolet-inits (bodysym)
-  "Produce a list of init and noinits from BODYSYM.
-Extract initialization and exclusion bindings from BODYSYM.
-
-This macro processes BODYSYM to identify `:init` and `:noinit` forms.
-- `:init BINDINGS`: A list of symbol bindings, formatted like `let*`.
-- `:noinit SYMS`: A list of symbols to exclude from let-bindings."
+  "Extract let-bindings and "
   (let ((inits (gensym "inits"))
         (noinits (gensym "noinits"))
         (letbind (gensym "letbind")))
