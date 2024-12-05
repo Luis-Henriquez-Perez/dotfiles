@@ -46,9 +46,10 @@
 This is like `setq' but it is meant for configuring variables."
   (let ((value-var (gensym "value")))
     `(if (not (boundp ',symbol))
+         ;; This quote on he lambda is needed to avoid infinite recursion.
          (push '(lambda () (opt! ,symbol ,value))
                (gethash ',symbol oo-after-load-hash-table))
-       (let ((,value-var (with-demoted-errors "Error: %S" ,value)))
+       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
          (aif (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
