@@ -268,6 +268,14 @@ If METADATA has no keymap return."
 ;; This contains the logic of which steps how the macro should deal with the
 ;; data specified by metadata.  Before I had this logic in the build functions
 ;; themselves which each of them longer and more confusing.
+(defun oo--bind-declare-function (metadata forms)
+  (with-map-keywords! metadata
+    (pcase !def-value
+      (`(function ,(and function (pred symbolp)))
+       `((declare-function ,function nil) ,@forms))
+      (_
+       forms))))
+
 (defun! oo--bind-steps (metadata)
   "Return the list of steps for building the `bind!' form.
 Each step is a function that accepts two arguments, metadata and forms, and
@@ -279,6 +287,7 @@ returns a list of forms."
            (pushing! steps 'oo--bind-evil-define-minor-mode-key))
           (t
            (pushing! steps 'oo--bind-evil-define-key)))
+    (pushing! steps 'oo--bind-declare-function)
     (pushing! steps 'oo--bind-check-errors)
     (pushing! steps 'oo--bind-kbd)
     (when !wk
