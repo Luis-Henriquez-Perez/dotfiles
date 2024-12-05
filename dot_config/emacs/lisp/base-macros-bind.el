@@ -78,14 +78,16 @@
 (defun oo--bind-evil-define-key (metadata forms)
   "Prepend `evil-define-key*' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!keymap ,!key ,!def)
+    `((declare-function evil-define-key* "evil")
+      (evil-define-key* ,!state ,!keymap ,!key ,!def)
       (info! "KEYBINDING: %s %s %s -> %s" ,!state ,!keymap-symbol ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-evil-define-minor-mode-key (metadata forms)
   "Prepend `evil-define-minor-key' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
+    `((declare-function evil-define-minor-mode-key nil)
+      (evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-kbd (_ forms)
