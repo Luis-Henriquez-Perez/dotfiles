@@ -27,6 +27,7 @@
 ;;; Code:
 (require 'base)
 
+(defun oo-copyright-license ()
   "Return the copyright license."
   (string-join (list ";;"
                      ";; Copyright (c) 2024 Free Software Foundation, Inc."
