@@ -150,13 +150,11 @@ If METADATA has no keymap return."
           ;; the time the keymap is bound and the time where dired is provided.
           ;; In general dired is extremely sensitive as to when the bindings
           ;; as even this does not work in `oo-after-load-dired'.
-          ((equal !keymap-value 'dired-mode-map)
-           `((oo-call-after-load 'dired (lambda () ,@forms))))
           (t
-           `((if (boundp ',!keymap-value)
-                 (progn ,@forms)
-               (defvar ,!keymap-value)
-               (oo-call-after-bound ',!keymap-value (lambda () ,@forms))))))))
+           `((progn (defvar ,!keymap-value)
+                    (if (bound-and-true-p ,!keymap-value)
+                        (progn ,@forms)
+                      (oo-call-after-bound ',!keymap-value (lambda () ,@forms)))))))))
 ;;;; standardize metadata
 (defun! oo--bind-metadata (args)
   "Standardize ARGS into proper metadata."
