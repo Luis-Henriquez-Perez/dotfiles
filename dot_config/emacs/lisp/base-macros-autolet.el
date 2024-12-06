@@ -33,6 +33,7 @@
 (require 'cl-lib)
 (require 'pcase)
 (require 'base-macros-lef)
+(require 'base-macros-setters)
 ;;;; control flow macros
 (defmacro return! (&optional value)
   "Exit `autolet!' and return VALUE.
