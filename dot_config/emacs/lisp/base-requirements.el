@@ -30,7 +30,6 @@
 (require 'on)
 (require 'anaphora)
 (require 'dash)
-(require 's)
 (require 'lgr)
 ;;; provide
 (provide 'base-requirements)
