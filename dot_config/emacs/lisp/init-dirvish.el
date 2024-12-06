@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (oo-call-after-load 'dired #'dirvish-override-dired-mode)
-(oo-call-after-load 'dired (-partial #'require 'all-the-icons))
+(oo-call-after-load 'dired (apply-partially #'require 'all-the-icons))
 ;; Do not touch the mode-line.
 (advice-add 'dirvish--setup-mode-line :override #'ignore)
 ;; (setq nerd-icons-scale-factor 1.0)

@@ -171,7 +171,7 @@ is already narrowed."
 (defun! oo-load-random-theme ()
   "Load a random theme."
   (interactive)
-  (set! not-loaded (-difference (custom-available-themes) oo-loaded-themes))
+  (set! not-loaded (cl-set-difference (custom-available-themes) oo-loaded-themes))
   (set! theme (seq-random-elt not-loaded))
   (condition-case err
       (progn (load-theme theme)

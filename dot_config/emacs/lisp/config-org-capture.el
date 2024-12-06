@@ -42,7 +42,7 @@
 (defun! +org-capture-choose-template ()
   "Choose capture template to open."
   (interactive)
-  (set! templates (--map (cons (-second-item it) (-first-item it)) org-capture-templates))
+  (set! templates (--map (cons (cl-second it) (cl-first it)) org-capture-templates))
   (set! choosen (completing-read "Choose a Templates: " templates))
   (set! key (cdr (assoc choosen templates)))
   (if key

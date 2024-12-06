@@ -42,7 +42,7 @@
 (setq initial-buffer-choice #'oo-dashboard-buffer)
 
 (setq dashboard-banner-logo-title "Welcome!")
-(setq dashboard-startupify-list (-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
+(setq dashboard-startupify-list (cl-set-difference dashboard-startupify-list '(dashboard-insert-items dashboard-insert-footer)))
 (setq dashboard-startup-banner (seq-random-elt (if (display-graphic-p) '(official logo) '(1 2 3))))
 (setq dashboard-center-content t)
 ;;; provide

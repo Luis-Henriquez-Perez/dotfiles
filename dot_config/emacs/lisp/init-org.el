@@ -46,8 +46,8 @@
                              (format "%s::" it)))
 (opt! org-archive-mark-done t)
 (opt! org-global-properties `(("Effort_ALL" .
-                               ,(string-join (-map (-partial #'format "0:%.2d")
-                                                   (number-sequence 5 55 5))
+                               ,(string-join (mapcar (apply-partially #'format "0:%.2d")
+                                                     (number-sequence 5 55 5))
                                              "\s"))))
 
 (require! config-org)

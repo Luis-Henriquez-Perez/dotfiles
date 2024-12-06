@@ -139,7 +139,7 @@
     ((or `(,(and feature (pred symbolp))) (and feature (pred symbolp)))
      (if (featurep feature)
          (funcall fn feature)
-       (eval-after-load feature (-partial #'oo--call-after-load feature fn))))
+       (eval-after-load feature (apply-partially #'oo--call-after-load feature fn))))
     (`(,expr . ,exprs)
      (oo--call-after-load expr `(lambda (_) (oo--call-after-load ',exprs #',fn))))
     (_

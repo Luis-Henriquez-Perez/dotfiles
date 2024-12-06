@@ -125,7 +125,7 @@ Evaluating resulting forms will."
   (with-map-keywords! metadata
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     `((lef! ((define-key (lambda (keymap key def)
-                           (oo-call-after-load 'which-key (-partial #',wk-fn keymap key ,!wk))
+                           (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,!wk))
                            (funcall this-fn keymap key def))))
         ,@forms))))
 
@@ -169,9 +169,9 @@ If METADATA has no keymap return."
          (not (keymap-symbol-p state))
          (not (letterp state))))
   (flet! letter-list-p (obj)
-    (and (listp obj) (-all-p #'letterp obj)))
+    (and (listp obj) (cl-every #'letterp obj)))
   (flet! symbol-list-p (obj)
-    (and (listp obj) (-all-p #'symbolp obj)))
+    (and (listp obj) (cl-every #'symbolp obj)))
   (flet! non-keyword-symbol-p (obj)
     (and (symbolp obj) (not (keywordp obj))))
   (flet! not-keyword-p (-not #'keywordp))
