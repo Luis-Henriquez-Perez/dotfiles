@@ -37,7 +37,7 @@
 
 (defun! oo--message-signature (&rest _)
   "Produce a signature for a message."
-  (insert (s-join "\n" '("-- Yours Truly," "Luis M Henriquez-Perez\n"))))
+  (insert (string-join '("-- Yours Truly," "Luis M Henriquez-Perez\n") "\n")))
 
 (opt! message-signature '(funcall #'oo--message-signature))
 
