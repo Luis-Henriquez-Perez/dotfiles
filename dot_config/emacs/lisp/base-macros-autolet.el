@@ -33,8 +33,7 @@
 (require 'cl-lib)
 (require 'pcase)
 (require 'base-macros-lef)
-(require 'base-macros-setters)
-;;;; helpers
+;;;; control flow macros
 (defmacro return! (&optional value)
   "Exit `autolet!' and return VALUE.
 Inside an `autolet!' form, throw a `return!' signal, immediately terminating the
