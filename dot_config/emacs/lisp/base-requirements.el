@@ -28,7 +28,6 @@
 (require 'base-packages)
 (require 'f)
 (require 'on)
-(require 'anaphora)
 (require 'dash)
 (require 'lgr)
 ;;; provide
