@@ -135,10 +135,10 @@
      (set! time (match-string 2 pomodoro-mode-line-string))
      (string-join (list
                    (pcase type
-                     ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
-                     ;; ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                     ("b" (nerd-icons-codicon "nf-cod-coffee"))
-                     ;; ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
+                     ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
+                     ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
+                     ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
+                     ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
                      )
                    time)
                   "\s"))))
