@@ -46,11 +46,6 @@
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
 (defalias 'oo-to-keyword 'oo-into-keyword)
-;;;; quoting
-(defun oo-ensure-quote (form)
-  "Return quoted form unquoted, otherwise return form."
-  (declare (pure t) (side-effect-free t))
-  (if (oo-quoted-p form) form (macroexp-quote form)))
 ;;;; miscellaneous
 (defun oo-true-list-p (object)
   "Return non-nil if OBJECT is a true list.
