@@ -117,8 +117,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;; With lexical binding you can actually store the values of let-bound variables
-;; in a function by creating a closure.  But it might be useful to.
 ;;;; oo-first-success
 ;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
 ;; These functions take a predicate and a list and they return the first element of
