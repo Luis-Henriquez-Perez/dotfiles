@@ -52,12 +52,6 @@
   (declare (pure t) (side-effect-free t))
   (if (oo-quoted-p form) form (macroexp-quote form)))
 ;;;; miscellaneous
-(defun oo-hook-symbol-p (obj)
-  "Return non-nil if SYMBOL is a hook symbol."
-  (declare (pure t) (side-effect-free t))
-  (and (symbolp obj)
-       (string-match-p "[^[:space:]]+-hook\\'" (symbol-name obj))))
-
 (defun oo-true-list-p (object)
   "Return non-nil if OBJECT is a true list.
 A \"true list\" is a list whose CDR is also a list."

@@ -51,19 +51,22 @@
 (defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  (set! name (pop args))
-  (cl-assert (oo-true-list-p (car args)))
-  (set! (hooks fargs) (-separate #'oo-hook-symbol-p (pop args)))
-  (when (stringp (car args))
-    (collecting! metadata (pop args)))
-  (when (equal 'declare (car-safe (car args)))
-    (collecting! metadata (pop args)))
-  (when (vectorp (car args))
-    (set! hook-args (append (pop args) nil)))
-  (set! body args)
-  `(progn
-     (defun! ,name ,fargs ,@metadata ,@body)
-     ,@(--map `(oo-add-hook ',it #',name ,@hook-args) hooks)))
+  (cl-flet ((hook-symbol-p (obj)
+              (and (symbolp obj)
+                   (string-match-p "[^[:space:]]+-hook\\'" (symbol-name obj)))))
+    (set! name (pop args))
+    (cl-assert (oo-true-list-p (car args)))
+    (set! (hooks fargs) (-separate #'hook-symbol-p (pop args)))
+    (when (stringp (car args))
+      (collecting! metadata (pop args)))
+    (when (equal 'declare (car-safe (car args)))
+      (collecting! metadata (pop args)))
+    (when (vectorp (car args))
+      (set! hook-args (append (pop args) nil)))
+    (set! body args)
+    `(progn
+       (defun! ,name ,fargs ,@metadata ,@body)
+       ,@(--map `(oo-add-hook ',it #',name ,@hook-args) hooks))))
 ;;;;; after!
 ;; I made the decision to add a hook function to a hook regardless of whether
 ;; the hook has already has been run.  But if the hook has been run the hook
