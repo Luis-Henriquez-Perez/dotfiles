@@ -48,6 +48,27 @@
     (set! name (symbol-name symbol))
     (string-match-p "[^[:space:]]+-hook\\'" name)))
 ;;;;; defhook!
+(defmacro! hook! (hook function &rest args)
+  (set! fname (intern (format "%s&%s" hook function)))
+  `(progn
+     (declare-function ,function nil)
+     (defun ,fname (&rest _)
+       ,(string-join (list (format "Call `%s' from `%s'." function hook)
+                           (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                     "\n")
+       (info! "HOOK: %s -> %s" ',hook ',function)
+       (condition-case err
+           (apply #',function args)
+         (error
+          (cond (oo-debug-p
+                 (signal (car err) (cdr err)))
+                (t
+                 (error! "Error calling %s in %s because of %s"
+                         ',function
+                         (car err)
+                         (cdr err)))))))
+     (add-hook ',hook #',fname ,args)))
+
 (defmacro! defhook! (&rest args)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
