@@ -28,8 +28,8 @@
 (require 'base)
 
 ;; Replace 'lisp-mode-hook with 'prog-mode-hook to enable everywhere
-(oo-add-hook 'lisp-mode-hook 'easy-escape-minor-mode)
-(oo-add-hook 'emacs-lisp-mode-hook 'easy-escape-minor-mode)
+(hook! lisp-mode-hook asy-escape-minor-mode)
+(hook! emacs-lisp-mode-hook asy-escape-minor-mode)
 ;;; provide
 (provide 'init-easy-escape)
 ;;; init-easy-escape.el ends here

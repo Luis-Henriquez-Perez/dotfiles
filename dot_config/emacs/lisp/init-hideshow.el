@@ -25,7 +25,7 @@
 ;; Initialize `hideshow'.
 ;;
 ;;; Code:
-(oo-add-hook 'prog-mode-hook #'hs-minor-mode)
+(hook! prog-mode-hook hs-minor-mode)
 ;;; provide
 (provide 'init-hideshow)
 ;;; init-hideshow.el ends here

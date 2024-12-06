@@ -25,7 +25,7 @@
 ;; Initialize stripes-buffer.
 ;;
 ;;; Code:
-(oo-add-hook 'dired-mode-hook #'stripe-buffer-mode)
+(hook! dired-mode-hook stripe-buffer-mode)
 ;;; provide
 (provide 'init-stripes-buffer)
 ;;; init-stripes-buffer.el ends here

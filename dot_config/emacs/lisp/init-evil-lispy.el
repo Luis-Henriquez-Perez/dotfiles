@@ -25,8 +25,8 @@
 ;; Initialize evil-lispy.
 ;;
 ;;; Code:
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
-(oo-add-hook 'clojure-mode-hook #'evil-lispy-mode)
+(hook! emacs-lisp-mode-hook evil-lispy-mode)
+(hook! clojure-mode-hook evil-lispy-mode)
 
 ;; (bind! emacs-lisp-mode-map)
 ;;; provide

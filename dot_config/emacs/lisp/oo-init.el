@@ -75,7 +75,7 @@
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
   (when (f-same-p (buffer-file-name) (f-full path))
     (info! "Setup auto-sorting for %s..." (f-base path))
-    (oo-add-hook 'before-save-hook #'oo-sort-elpaca-forms-h :local t)))
+    (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
 (defun! oo-align-abbrev-forms-h ()
   "Align all abbrev forms in current buffer."

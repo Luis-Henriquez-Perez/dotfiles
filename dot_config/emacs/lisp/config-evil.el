@@ -156,13 +156,13 @@
     (evil-insert-state 1)))
 ;;;; cross-configuration
 ;;;;; org-capture
-(oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)
+(hook! org-capture-mode-hook +evil-enter-insert-state-h)
 ;;;;; git-commit
 ;; Note that I cannot use `evil-set-initial-state' for this because
 ;; `git-commit-mode' is a minor-mode.
-(oo-add-hook 'git-commit-mode-hook #'+evil-enter-insert-state-h)
+(hook! git-commit-mode-hook +evil-enter-insert-state-h)
 ;;;;; denote
-(oo-add-hook 'denote-after-new-note-hook #'+evil-enter-insert-state-h)
+(hook! denote-after-new-note-hook +evil-enter-insert-state-h)
 ;;;;; corfu
 ;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
 ;; because the maps are overridden by evil.  In order for them to work, we need

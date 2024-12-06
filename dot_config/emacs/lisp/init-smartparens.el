@@ -27,10 +27,10 @@
 ;;; Code:
 (require 'base)
 
-(oo-add-hook 'text-mode-hook #'turn-on-show-smartparens-mode)
-(oo-add-hook 'text-mode-hook #'smartparens-mode)
-(oo-add-hook 'prog-mode-hook #'smartparens-mode)
-(oo-add-hook 'prog-mode-hook #'turn-on-show-smartparens-mode)
+(hook! text-mode-hook turn-on-show-smartparens-mode)
+(hook! text-mode-hook smartparens-mode)
+(hook! prog-mode-hook smartparens-mode)
+(hook! prog-mode-hook turn-on-show-smartparens-mode)
 
 ;; This allows me to have parens completion when I invoke the command `eval-expression'.
 (defhook! oo-enable-smartparens-if-in-minibuffer-h (minibuffer-setup-hook)

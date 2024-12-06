@@ -29,15 +29,15 @@
 
 ;; Whenever
 (opt! dired-deletion-confirmer #'always)
-(oo-add-hook 'dired-mode-hook #'hl-line-mode)
+(hook! dired-mode-hook hl-line-mode)
 ;; This omits:
 ;; 1. Backup files
 ;; 2. Previous and current directory.
 ;; 3. Dotfiles
 (setq dired-omit-files "\\`\\.?#\\|\\`\\.\\.?\\'\\|^\\..*$")
-(oo-add-hook 'dired-mode-hook #'dired-omit-mode)
+(hook! dired-mode-hook dired-omit-mode)
 ;; By default hide details.
-(oo-add-hook 'dired-mode-hook #'dired-hide-details-mode)
+(hook! dired-mode-hook dired-hide-details-mode)
 (opt! dired-clean-confirm-killing-deleted-buffers nil)
 (opt! dired-recursive-copies 'always)
 (opt! dired-recursive-deletes 'always)

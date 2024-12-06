@@ -30,7 +30,7 @@
 (defhook! oo-load-evil-h (after-init-hook)
   [:depth 10]
   (require 'evil nil t))
-(oo-add-hook 'emacs-startup-hook #'evil-mode)
+(hook! emacs-startup-hook evil-mode)
 
 ;; Must be set before evil is loaded.
 (setq evil-want-keybinding nil)
