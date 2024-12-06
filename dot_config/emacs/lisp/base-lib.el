@@ -33,7 +33,8 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-utils)
-(require 'base-requirements)
+(require 'lgr)
+(require 'anaphora)
 (eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
