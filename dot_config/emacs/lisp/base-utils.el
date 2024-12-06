@@ -47,16 +47,6 @@
   (apply #'oo-into-symbol ":" args))
 (defalias 'oo-to-keyword 'oo-into-keyword)
 ;;;; quoting
-(defun oo-quoted-p (form)
-  "Return non-nil if FORM is quoted."
-  (declare (pure t) (side-effect-free t))
-  (equal (car-safe form) 'quote))
-
-(defun oo-sharpquoted-p (form)
-  "Return non-nil if form is sharpquoted."
-  (declare (pure t) (side-effect-free t))
-  (equal (car-safe form) 'function))
-
 (defun oo-ensure-quote (form)
   "Return quoted form unquoted, otherwise return form."
   (declare (pure t) (side-effect-free t))
