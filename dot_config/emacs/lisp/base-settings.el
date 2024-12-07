@@ -156,6 +156,19 @@ end-of-buffer signals; pass the rest to the default handler."
 ;; When you disable the scroll-bar via early-init.el powerline does not realize
 ;; the scroll-bar is dabled because the value of `scroll-bar-mode' is right.
 (setq scroll-bar-mode nil)
+;;;;; Prevent devaralias from generating a warning
+;; The built-in package `woman' overwrites the existing variable
+;; `woman-topic-history' by aliasing it to `Man-topic-history' and emacs tells
+;; you this by popping up a *Warnings* buffer whenever woman.el is loaded.  This
+;; whole thing is probably some bug.  So I stop this whole thing from happening.
+(defun oo--suppress-woman-warning (orig-fn &rest args)
+  (pcase args
+    (`(woman-topic-history Man-topic-history . ,_)
+     (advice-remove 'defvaralias #'oo--suppress-woman-warning))
+    (_
+     (apply orig-fn args))))
+
+(advice-add 'defvaralias :around #'oo--suppress-woman-warning)
 ;;; provide
 (provide 'base-settings)
 ;;; base-settings.el ends here
