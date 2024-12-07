@@ -36,6 +36,7 @@
 (require 'base-packages)
 (require 'lgr)
 (require 'anaphora)
+(require 'shut-up)
 (eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
