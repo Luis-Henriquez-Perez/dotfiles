@@ -296,17 +296,17 @@ file is loaded."
 (defhook! oo-initialize-config-files-h (emacs-startup-hook :depth 91)
   "Setup config files to be loaded after their feature."
   (set! lisp-dir (f-full (f-expand "lisp/" user-emacs-directory)))
-  (set! rx (rx bos "config-" (group (1+ (not white))) ".el" eos))
+  (set! rx "\\`config-\\([^[:space:]]+\\)\\.el\\'")
   (dolist (path (directory-files lisp-dir t rx))
     (set! fname (f-filename path))
     (set! parent-feature (intern (f-base path)))
     (string-match rx fname)
     (set! feature (intern (match-string 1 fname)))
     (cond ((featurep parent-feature)
-           (info! "P -> %S" parent)
+           (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
            (require feature filename nil))
           (t
-           (info! "Defer %s until %s is loaded.")
+           (info! "Deferring %s until parent feature, %s, is loaded." feature parent-feature)
            (set! fn (lambda () (require feature filename nil)))
            (oo-call-after-load parent-feature fn)))))
 ;;; provide
