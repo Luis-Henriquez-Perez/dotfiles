@@ -81,11 +81,9 @@
     (collecting! metadata (pop body)))
   (when (equal 'declare (car-safe (car body)))
     (collecting! metadata (pop body)))
-  (when (vectorp (car args))
-    (set! hook-args (append (pop args) nil)))
   `(progn
      (defun! ,name nil ,@metadata ,@body)
-     (hook! ,hook ,name)))
+     (hook! ,hook ,name ,@args)))
 ;;;;; after!
 ;; I made the decision to add a hook function to a hook regardless of whether
 ;; the hook has already has been run.  But if the hook has been run the hook
