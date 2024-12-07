@@ -122,7 +122,6 @@
 (require 'init-macroexpand)
 (require 'init-magit)
 (require 'init-marginalia)
-(require 'init-modus-operandi)
 (require 'init-mu4e)
 (require 'init-notmuch)
 (require 'init-orderless)

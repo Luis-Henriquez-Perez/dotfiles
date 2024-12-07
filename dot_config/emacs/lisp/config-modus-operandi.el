@@ -1,4 +1,4 @@
-;;; init-modus-operandi.el --- initialize modus-operandi -*- lexical-binding: t; -*-
+;;; config-modus-operandi.el --- Configure modus-operandi -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,15 +22,9 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize modus-operandi.
+;; Configure modus-operandi.
 ;;
 ;;; Code:
-(require 'base)
-
-(defhook! oo-load-modus-operandi-theme-h (after-init-hook)
-  "Load `modus-operandi' theme."
-  (load-theme 'modus-operandi :no-confirm nil))
-;;;; Set custom faces
 (defun oo-apply-custom-faces-for-modus-themes-h (theme)
   "Add custom faces for `modus-themes'.
 This hook is meant to be added to `enabled-theme-functions'."
@@ -50,8 +44,8 @@ This hook is meant to be added to `enabled-theme-functions'."
     (unless (cl-set-difference modus-themes-items (mapcar #'car oo-custom-faces-alist))
       (info! "Done setting specific modus-themes faces.")
       (remove-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h))))
-
+;;; Set custom faces
 (add-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h)
 ;;; provide
-(provide 'init-modus-operandi)
-;;; init-modus-operandi.el ends here
+(provide 'config-modus-operandi)
+;;; config-modus-operandi.el ends here
