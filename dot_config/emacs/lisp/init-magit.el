@@ -29,13 +29,6 @@
 (require 'base)
 ;;;; popup
 (oo-popup-at-bottom "\\`magit")
-;;;; enter insert state on commit
-;; Note that I cannot use `evil-set-initial-state' for this because
-;; `git-commit-mode' is a minor-mode.
-(defhook! oo-enter-insert-state-h (git-commit-mode-hook)
-  "Enter `evil-insert-state' after `git-commit-mode'"
-  (when (bound-and-true-p evil-mode)
-	(evil-insert-state 1)))
 ;;;; bindings
 (oo-call-after-load '(magit evil) #'evil-magit-init)
 

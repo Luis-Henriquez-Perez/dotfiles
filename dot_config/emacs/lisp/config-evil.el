@@ -174,6 +174,10 @@
 (defafter! oo-make-tempel-map-an-overriding-map (tempel)
   (evil-make-overriding-map tempel-map))
 ;;;;; auto-insert
+;;;;; magit
+;; Note that I cannot use `evil-set-initial-state' for this because
+;; `git-commit-mode' is a minor-mode.
+(hook! git-commit-mode-hook +evil-enter-insert-state-hook)
 ;;;; bindings
 (defun oo-dwim-escape ()
   "Exits out of whatever is happening after escape."
