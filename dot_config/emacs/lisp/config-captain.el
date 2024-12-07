@@ -99,3 +99,6 @@
 
 (hook! text-mode-hook oo-set-captain-local-vars-h)
 (hook! emacs-lisp-mode-hook oo-set-captain-local-vars-h)
+;;; provide
+(provide 'config-captain)
+;;; config-captain.el ends here
