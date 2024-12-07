@@ -43,6 +43,8 @@
 ;;;;; defhook!
 (defmacro! hook! (hook function &rest args)
   (set! fname (intern (format "%s&%s" hook function)))
+  (set! depth (plist-get args :depth))
+  (set! local (plist-get args :depth))
   `(progn
      (declare-function ,function nil)
      (defun ,fname (&rest _)
@@ -60,7 +62,7 @@
                          ',function
                          (car err)
                          (cdr err)))))))
-     (add-hook ',hook #',fname ,args)))
+     (add-hook ',hook #',fname ,depth ,local)))
 
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
