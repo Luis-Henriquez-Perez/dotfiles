@@ -47,7 +47,7 @@ This hook is meant to be added to `enabled-theme-functions'."
           `(spaceline-evil-motion   ((t (:background ,yellow         :foreground ,bg-main))))
           `(spaceline-evil-operator ((t (:background ,yellow         :foreground ,bg-main))))
           `(spaceline-evil-emacs    ((t (:background ,blue           :foreground ,bg-main)))))))
-    (unless (-difference modus-themes-items (mapcar #'car oo-custom-faces-alist))
+    (unless (cl-set-difference modus-themes-items (mapcar #'car oo-custom-faces-alist))
       (info! "Done setting specific modus-themes faces.")
       (remove-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h))))
 
