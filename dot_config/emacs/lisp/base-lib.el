@@ -263,6 +263,11 @@ SYMBOL and FN in `oo-after-load-hash-table'."
 ;;     (setq ,def (list 'menu-item "" ,alt :filter #'oo-alternate-command-choose-fn))
 ;;     (push ,(oo--lambda-form alt '(&rest ) `(when ,condition ,alt)) (gethash ,orig oo-alternate-commands))
 ;;     ,@(oo--bind-generate-body metadata steps)))
+;;;; foo
+(defmacro alt! (old new feature)
+  `(progn (push (lambda (&rest _) (when (or (featurep ',feature) (require ',feature nil t)) ',new))
+                (gethash ',old oo-alternate-commands))
+          (define-key global-map [remap ,old] '(menu-item "" ,old :filter oo-alternate-command-choose-fn))))
 ;;; provide
 (provide 'base-lib)
 ;;; base-lib.el ends here
