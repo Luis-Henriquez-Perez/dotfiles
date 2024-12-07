@@ -65,7 +65,6 @@
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  ;; (cl-assert (oo-true-list-p (car args)))
   (set! hook (pop args))
   (when (stringp (car body))
     (collecting! metadata (pop body)))
