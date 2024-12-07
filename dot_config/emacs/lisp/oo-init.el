@@ -292,6 +292,21 @@ file is loaded."
 ;; This is so that if I need to use some sort of program to open a file, it will
 ;; use he running emacs daemon.
 ;; (unless (server-running-p) (server-start))
+;;;; setup loading config files
+;; Previously each init file was responsible for loading their ocnfig file but
+;; now I decided to go for a more centralized approach.
+(defun! oo-setup-config-files-h ()
+  "Setup config files to be loaded after their feature."
+  (set! lisp-dir (f-full (f-expand "lisp/" user-emacs-directory)))
+  (set! rx (rx bos "config-" (group (1+ (not white))) ".el" eos))
+  (dolist (path (directory-files lisp-dir t rx))
+    (message "load feature %s" file)
+    (set! fname (f-filename path))
+    (set! parent-feature (intern (f-base path)))
+    (string-match rx fname)
+    (set! feature (intern (match-string 1 fname)))
+    (set! fn (lambda () (require feature filename nil)))
+    (oo-call-after-load parent-feature fn)))
 ;;; provide
 (provide 'oo-init)
 ;;; oo-init.el ends here
