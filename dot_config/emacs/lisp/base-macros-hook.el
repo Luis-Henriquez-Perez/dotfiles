@@ -37,7 +37,6 @@
 ;;;; requirements
 (require 'base-vars)
 (require 'base-lib)
-(require 'base-requirements)
 (require 'base-macros-definers)
 ;;;; hooks
 ;;;;; defhook!
@@ -45,11 +44,21 @@
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :depth))
+  ;; This is taken directly from the `s' library.  Right now, it is the only
+  ;; function from there I use.  Not wanting to require s for just one short
+  ;; function, I copied it is body here.
+  (flet! word-wrap (len s)
+    (save-match-data
+      (with-temp-buffer
+        (insert s)
+        (let ((fill-column len))
+          (fill-region (point-min) (point-max)))
+        (buffer-substring (point-min) (point-max)))))
   `(progn
      (declare-function ,function nil)
      (defun ,fname (&rest _)
        ,(string-join (list (format "Call `%s' from `%s'." function hook)
-                           (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                           (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
                      "\n")
        (info! "HOOK: %s -> %s" ',hook ',function)
        (condition-case err
