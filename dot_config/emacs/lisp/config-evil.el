@@ -150,7 +150,7 @@
 (opt! evil-emacs-state-cursor    #'+evil-emacs-state-cursor)
 ;;;; make the visual selection face the same as the visual cursor color
 ;;;; insert state hook
-(defhook! +evil-enter-insert-state-h ()
+(defun +evil-enter-insert-state-h ()
   "Enter insert state if `evil-mode' is enabled."
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))
