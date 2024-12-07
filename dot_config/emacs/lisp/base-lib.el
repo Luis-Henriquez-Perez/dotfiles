@@ -86,24 +86,6 @@
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;;;; hook
-(cl-defun oo-add-hook (hook function &key depth append local)
-  "Add hook to function."
-  (alet (intern (format "%s&%s" hook function))
-    (fset it
-          `(lambda (&rest args)
-             (info! "HOOK: %s -> %s" ',hook ',function)
-             (condition-case err
-                 (apply #',function args)
-               (error
-                (cond (oo-debug-p
-                       (signal (car err) (cdr err)))
-                      (t
-                       (error! "Error calling %s in %s because of %s"
-                               ',it
-                               (car err)
-                               (cdr err))))))))
-    (add-hook hook it (or depth append) local)))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
