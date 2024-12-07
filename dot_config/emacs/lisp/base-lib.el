@@ -32,12 +32,19 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'base-utils)
 (require 'base-packages)
-(require 'lgr)
-(require 'anaphora)
+(eval-when-compile (require 'lgr))
+(eval-when-compile (require 'anaphora))
 (require 'shut-up)
-(eval-when-compile (require 'base-macros))
+(eval-when-compile (require 'base-macros-hook))
+(eval-when-compile (require 'base-macros-setters))
+(eval-when-compile (require 'base-macros-for))
+(eval-when-compile (require 'base-macros-let))
+(eval-when-compile (require 'base-macros-lef))
+(eval-when-compile (require 'base-macros-autolet))
+(eval-when-compile (require 'base-macros-with-map))
+(eval-when-compile (require 'base-macros-definers))
+(eval-when-compile (require 'base-macros-bind))
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
@@ -301,6 +308,22 @@ SYMBOL and FN in `oo-after-load-hash-table'."
   (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (gethash char oo-after-load-hash-table))))
+;;;; opt!
+;; The reason this needs to be a macro is because `value' might not be evaluated
+;; immediately.
+;; TODO: need better error handling for when value producess an error.
+(defmacro! opt! (symbol value)
+  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
+This is like `setq' but it is meant for configuring variables."
+  (let ((value-var (gensym "value")))
+    `(if (not (boundp ',symbol))
+         ;; This quote on he lambda is needed to avoid infinite recursion.
+         (push '(lambda () (opt! ,symbol ,value))
+               (gethash ',symbol oo-after-load-hash-table))
+       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
+         (aif (get ',symbol 'custom-set)
+             (funcall it ',symbol ,value-var)
+           (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;; alternate bindings
 ;; Inspired by [[https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
 ;; bindings for commands giving me a flexible and robust experience with key

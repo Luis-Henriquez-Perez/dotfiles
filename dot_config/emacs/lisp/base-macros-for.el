@@ -54,7 +54,7 @@ Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
      (cl-with-gensyms (elt)
        `(for! (,elt ,list)
-          (let! ((,match-form ,elt))
+          (pcase-let* ,(oo--to-pcase-let match-form elt)
             ,@body))))
     (`(,(and elt (pred symbolp)) ,list)
      (cl-once-only (list)
