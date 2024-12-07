@@ -27,9 +27,9 @@
 ;;; Code:
 (require 'base)
 
-(defhook! oo-load-evil-h (after-init-hook)
-  [:depth 10]
+(defhook! oo-load-evil-h (after-init-hook :depth 10)
   (require 'evil nil t))
+
 (hook! emacs-startup-hook evil-mode)
 
 ;; Must be set before evil is loaded.

@@ -74,17 +74,15 @@ file is loaded."
   (require 'base-macros))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook)
+(defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook :depth 10)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
-  [:depth 10]
   (set-register :gc-cons-threshold gc-cons-threshold)
   (set-register :gc-cons-percentage gc-cons-percentage)
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
-(defhook! oo-decrease-garbage-collection-h (minibuffer-exit-hook)
+(defhook! oo-decrease-garbage-collection-h (minibuffer-exit-hook :depth 90)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-  [:depth 90]
   (setq gc-cons-threshold (get-register :gc-cons-threshold))
   (setq gc-cons-percentage (get-register :gc-cons-percentage)))
 ;;;;; garbage collection
