@@ -126,14 +126,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
   (let (success)
     (--each-while list (not (setq success (funcall fn it))))
     success))
-;;;; numbers
-(defsubst oo-negative-p (number)
-  "Return non-nil if NUMBER is less than zero."
-  (< number 0))
-
-(defsubst oo-positive-p (number)
-  "Return non-nil if NUMBER is greater than zero."
-  (> number 0))
 ;;; provide
 (provide 'base-utils)
 ;;; base-utils.el ends here
