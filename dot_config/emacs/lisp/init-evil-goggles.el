@@ -74,8 +74,6 @@
 (advice-add '+evil-eval-operator						:around #'oo-require-evil-goggles-a)
 (advice-add '+evil-eval-replace-operator				:around #'oo-require-evil-goggles-a)
 (advice-add '+evil-eval-print-operator                  :around #'oo-require-evil-goggles-a)
-;;;; Load config-evil-goggles
-(require! config-evil-goggles)
 ;;; provide
 (provide 'init-evil-goggles)
 ;;; init-evil-goggles.el ends here

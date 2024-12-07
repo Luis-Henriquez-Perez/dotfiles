@@ -29,8 +29,6 @@
 
 (hook! prog-mode-hook outli-mode)
 (hook! conf-mode-hook outli-mode)
-
-(require! config-outli)
 ;;; provide
 (provide 'init-outli)
 ;;; init-outli.el ends here

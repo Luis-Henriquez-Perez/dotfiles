@@ -49,13 +49,10 @@
                                ,(string-join (mapcar (apply-partially #'format "0:%.2d")
                                                      (number-sequence 5 55 5))
                                              "\s"))))
-
-(require! config-org)
 ;;;; keybindings
 (bind! n org-mode-map "T" #'org-todo)
 (bind! n org-mode-map "t" #'+org-choose-tags)
 ;;;; org-agenda
-(require! config-org-agenda)
 (autoload #'+org-agenda-day-view "config-org-agenda" nil t nil)
 ;; (bind! oo-leader-map ";" #'+org-agenda-day-view)
 ;;;; org-capture
@@ -80,7 +77,6 @@
 (bind! oo-app-map "a q" #'+org-capture-question)
 
 (alt! org-capture +org-capture-choose-template org-capture)
-(require! config-org-capture)
 ;;;; org-refile
 (defun +org-directory-files ()
   "Return a list of org files."

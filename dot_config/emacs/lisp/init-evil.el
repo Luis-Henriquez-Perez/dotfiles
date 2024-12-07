@@ -57,8 +57,6 @@
 (opt! evil-motion-state-modes nil)
 
 (opt! savehist-additional-variables (cl-adjoin 'evil-markers-alist savehist-additional-variables))
-
-(require! config-evil)
 ;;; provide
 (provide 'init-evil)
 ;;; init-evil.el ends here

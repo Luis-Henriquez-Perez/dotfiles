@@ -300,7 +300,7 @@ file is loaded."
   (set! lisp-dir (f-full (f-expand "lisp/" user-emacs-directory)))
   (set! rx (rx bos "config-" (group (1+ (not white))) ".el" eos))
   (dolist (path (directory-files lisp-dir t rx))
-    (message "load feature %s" file)
+    (log! "load feature %s" file)
     (set! fname (f-filename path))
     (set! parent-feature (intern (f-base path)))
     (string-match rx fname)

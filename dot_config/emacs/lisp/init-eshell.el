@@ -60,9 +60,6 @@
 ;; well.
 (advice-add #'eshell-mode :around #'oo-funcall-silently)
 
-(require! config-eshell)
-(require! config-em-alias)
-
 (bind! oo-app-map "e" #'eshell)
 ;;; provide
 (provide 'init-eshell)

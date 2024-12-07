@@ -30,8 +30,6 @@
 (bind! i "C-c h" #'grugru)
 (bind! oo-toggle-map "g" #'grugru)
 (bind! oo-quick-map "j" #'grugru)
-
-(require! config-grugru)
 ;;; provide
 (provide 'init-grugru)
 ;;; init-grugru.el ends here

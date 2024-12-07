@@ -32,8 +32,6 @@
 
 (setq-hook! text-mode-hook captain-predicate #'always)
 (setq-hook! text-mode-hook captain-sentence-start-function #'captain--default-sentence-start)
-
-(require! config-captain)
 ;;; provide
 (provide 'init-captain)
 ;;; init-captain.el ends here

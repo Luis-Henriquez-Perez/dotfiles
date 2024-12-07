@@ -77,7 +77,6 @@ the modeline is updated."
   (opt! telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
   (when update (+telephone-line-update)))
 ;;;; segments
-(require! config-telephone-line)
 ;; Choose a random separator.  Probably I will remove this in favor of
 ;; consistency later.  For now though, it is pretty cool.
 (funcall (seq-random-elt '(+telephone-line-apply-cubed-separator

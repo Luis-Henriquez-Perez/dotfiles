@@ -44,8 +44,6 @@
 (opt! sp-highlight-wrap-overlay nil)
 (opt! sp-show-pair-delay 0.2)
 
-(require! config-smartparens)
-
 (bind! oo-toggle-map "s" #'smartparens-mode)
 ;;; provide
 (provide 'init-smartparens)
