@@ -37,7 +37,8 @@
 (opt! savehist-additional-variables (cl-adjoin 'register-alist savehist-additional-variables))
 
 (defun! oo--remove-kill-ring-properties (&rest _)
-  (setq kill-ring (-map-when #'stringp #'substring-no-properties kill-ring)))
+  (flet! when-fn (pred function) (lambda (x) (if (funcall pred x) (funcall function x) x)))
+  (setq kill-ring (mapcar (when-fn #'stringp #'substring-no-properties) kill-ring)))
 
 (advice-add 'savehist-save :before #'oo--remove-kill-ring-properties)
 ;;; provide
