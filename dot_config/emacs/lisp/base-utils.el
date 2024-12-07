@@ -59,31 +59,6 @@ ensure the result is syntactically valid."
   (dolist (wrapper wrappers)
     (setq forms (append wrapper (list forms))))
   forms)
-;;;; oo-condition-case-fn
-;; One thing is the fact that because it is a function it can be composed and
-;; chained.  Another is I can swap in and out the =condition-case= body and handlers
-;; without having to write out the whole =condition-case= form.  Even though the
-;; =condition-case= form is relatively simple I have admittedly had trouble
-;; remembering its components off the top of my head.
-
-;; I'd like to have the signature be something like ~(function &rest args &key ...)~;
-;; that way it would be truly analogous to =funcall=. However, then the signature
-;; would ambiguous if =function= has arguments that are the same as keys specified by
-;; =&key=.
-(defun oo-condition-case-fn (fn action &optional handlers)
-  "Return a function that calls ACTION when errors matching HANDLERS are raised.
-ACTION is a function with three arguments the error object, FN and the list of
-arguments FN will be called with."
-  ;; To be honest I'm not sure if I need to make a gensym for the variable
-  ;; `err'.  I do it just in case.
-  (cl-callf or handlers 'error)
-  (cl-callf or action #'ignore)
-  (cl-with-gensyms (err)
-    `(lambda (&rest args)
-       (condition-case ,err
-           (apply #',fn args)
-         (,handlers (funcall #',action ,err #',fn args))))))
-(defalias 'oo-cond-case-fn 'oo-condition-case-fn)
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
