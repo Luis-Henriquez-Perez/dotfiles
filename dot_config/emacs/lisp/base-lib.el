@@ -33,6 +33,7 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-utils)
+(require 'base-packages)
 (require 'lgr)
 (require 'anaphora)
 (eval-when-compile (require 'base-macros))
