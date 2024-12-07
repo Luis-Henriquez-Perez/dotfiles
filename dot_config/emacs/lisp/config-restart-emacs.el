@@ -1,9 +1,4 @@
-;;; init-restart-emacs.el --- Initialize restart-emacs -*- lexical-binding: t; -*-
-;;; Commentary:
-;;
-;; Initialize `restart-emacs'.
-;;
-;;; Code:
+;;; config-restart-emacs.el --- Configure restart-emacs -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -27,16 +22,20 @@
 ;;
 ;;; Commentary:
 ;;
-;; Initialize `restart-emacs'.
+;; Configure restart-emacs.
 ;;
 ;;; Code:
-(require 'base)
-;;;; bindings
-(bind! oo-app-map "E" #'restart-emacs-start-new-emacs)
-(bind! oo-quit-map "R" #'restart-emacs)
-(bind! oo-quit-map "E" #'restart-emacs-start-new-emacs)
-(bind! oo-quit-map "r" #'restart-emacs)
-(bind! oo-quit-map "q" #'save-buffers-kill-emacs)
+;;;; fix interactive call
+;; When using the function `restart-emacs-start-new-emacs' I find that restart
+;; Emacs does not properly work with prefix arguments because in its body it
+;; converts the prefix argument to shell arguments only if its called
+;; interactively but its not.
+(defun oo--work-interactively (&optional args)
+  "Call `restart-emacs' interactively."
+  (let ((restart-emacs--inhibit-kill-p t))
+    (funcall-interactively #'restart-emacs args)))
+
+(advice-add 'restart-emacs-start-new-emacs :override #'oo--work-interactively)
 ;;; provide
-(provide 'init-restart-emacs)
-;;; init-restart-emacs.el ends here
+(provide 'config-restart-emacs)
+;;; config-restart-emacs.el ends here
