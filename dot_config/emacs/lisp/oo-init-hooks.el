@@ -55,11 +55,10 @@
 ;;;;; emacs-startup-hook
 (oo-call-after-load 'evil #'oo-call-after-load-functions)
 
-(defhook! oo-init-after-load-functions-h (on-first-input-hook)
+(defhook! oo-init-after-load-functions-h (on-first-input-hook :depth 99)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
-  [:depth 99]
   (oo-call-after-load-functions)
   (hook! after-load-functions oo-call-after-load-functions))
 ;;;;; load macros for init file
