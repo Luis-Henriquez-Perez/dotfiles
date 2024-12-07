@@ -53,7 +53,7 @@
                      "\n")
        (info! "HOOK: %s -> %s" ',hook ',function)
        (condition-case err
-           (apply #',function args)
+           (funcall #',function)
          (error
           (cond (oo-debug-p
                  (signal (car err) (cdr err)))
