@@ -202,7 +202,7 @@
   (spaceline-compile
     'main
     '((my-evil-state :face (+spaceline-evil-face))
-      ((version-control-simple my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
+      ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
       (my-version-control :face 'powerline-active0))
     '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
