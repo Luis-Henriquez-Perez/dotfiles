@@ -35,7 +35,7 @@
 (advice-add #'recentf-cleanup   :around #'oo-funcall-silently)
 (advice-add #'recentf-mode      :around #'oo-funcall-silently)
 
-(adjoin! recentf-filename-handlers #'file-true-name)
+(adjoin! recentf-filename-handlers #'file-truename)
 (adjoin! recentf-filename-handlers #'abbreviate-file-name)
 (adjoin! recentf-filename-handlers #'substring-no-properties)
 
