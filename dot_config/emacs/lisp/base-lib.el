@@ -33,7 +33,9 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-utils)
-(require 'base-requirements)
+(require 'base-packages)
+(require 'lgr)
+(require 'anaphora)
 (eval-when-compile (require 'base-macros))
 
 (defvar evil-state-properties)
@@ -45,23 +47,23 @@
 (defvar oo-error-logger (lgr-get-logger "error")
   "Object used for logging errors.")
 
-(block!
-  ;; Define a formatter.
-  (set! ts "%Y-%m-%d %H:%M:%S")
-  (set! format "%t [%L] %m")
-  (set! formatter (lgr-layout-format :format format :timestamp-format ts))
-  (set! message-format "[%L] %m")
-  (set! message-formatter (lgr-layout-format :format message-format))
-  ;; Define the appenders.
-  (set! log-buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
-  (set! message-buffer-appender (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
-  ;; Add the formatter to the appenders.
-  (lgr-set-layout log-buffer-appender formatter)
-  (lgr-set-layout message-buffer-appender message-formatter)
-  ;; Add the appenders to the logger.
-  (lgr-add-appender oo-logger log-buffer-appender)
-  (lgr-add-appender oo-error-logger message-buffer-appender)
-  (lgr-add-appender oo-error-logger log-buffer-appender))
+(autolet!
+ ;; Define a formatter.
+ (set! ts "%Y-%m-%d %H:%M:%S")
+ (set! format "%t [%L] %m")
+ (set! formatter (lgr-layout-format :format format :timestamp-format ts))
+ (set! message-format "[%L] %m")
+ (set! message-formatter (lgr-layout-format :format message-format))
+ ;; Define the appenders.
+ (set! log-buffer-appender (lgr-appender-buffer :buffer (get-buffer-create "*log*")))
+ (set! message-buffer-appender (lgr-appender-buffer :buffer (get-buffer "*Messages*")))
+ ;; Add the formatter to the appenders.
+ (lgr-set-layout log-buffer-appender formatter)
+ (lgr-set-layout message-buffer-appender message-formatter)
+ ;; Add the appenders to the logger.
+ (lgr-add-appender oo-logger log-buffer-appender)
+ (lgr-add-appender oo-error-logger message-buffer-appender)
+ (lgr-add-appender oo-error-logger log-buffer-appender))
 
 ;; I do not want to have to pass in the logger every single time.
 (defmacro info! (msg &rest meta)
@@ -85,24 +87,6 @@
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;;;; hook
-(cl-defun oo-add-hook (hook function &key depth append local)
-  "Add hook to function."
-  (alet (intern (format "%s&%s" hook function))
-    (fset it
-          `(lambda (&rest args)
-             (info! "HOOK: %s -> %s" ',hook ',function)
-             (condition-case err
-                 (apply #',function args)
-               (error
-                (cond (oo-debug-p
-                       (signal (car err) (cdr err)))
-                      (t
-                       (error! "Error calling %s in %s because of %s"
-                               ',it
-                               (car err)
-                               (cdr err))))))))
-    (add-hook hook it (or depth append) local)))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
@@ -139,7 +123,7 @@
     ((or `(,(and feature (pred symbolp))) (and feature (pred symbolp)))
      (if (featurep feature)
          (funcall fn feature)
-       (eval-after-load feature (-partial #'oo--call-after-load feature fn))))
+       (eval-after-load feature (apply-partially #'oo--call-after-load feature fn))))
     (`(,expr . ,exprs)
      (oo--call-after-load expr `(lambda (_) (oo--call-after-load ',exprs #',fn))))
     (_

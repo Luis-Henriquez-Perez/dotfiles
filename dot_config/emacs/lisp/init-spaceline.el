@@ -46,7 +46,7 @@
 ;;       (t
 ;;        "REC"))
 ;;;; defsegment!
-;; This lets me use block! in the body of the macro and expresses the segments
+;; This lets me use autolet! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
 ;; change in real time.  This makes it much easier to debug segments or even to
 ;; determine if they work beforehand.
@@ -125,22 +125,22 @@
 
 (spaceline-define-segment my-pomodoro
   "Display left for pomodoro."
-  (block!
-    (when (and (bound-and-true-p pomodoro-mode-line-string)
-               (not (string-empty-p pomodoro-mode-line-string)))
-      (require 'all-the-icons-nerd-fonts)
-      (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
-      (set! type (match-string 1 pomodoro-mode-line-string))
-      (set! time (match-string 2 pomodoro-mode-line-string))
-      (string-join (list
-                    (pcase type
-                      ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
-                      ;; ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                      ("b" (nerd-icons-codicon "nf-cod-coffee"))
-                      ;; ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
-                      )
-                    time)
-                   "\s"))))
+  (autolet!
+   (when (and (bound-and-true-p pomodoro-mode-line-string)
+              (not (string-empty-p pomodoro-mode-line-string)))
+     (require 'all-the-icons-nerd-fonts)
+     (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
+     (set! type (match-string 1 pomodoro-mode-line-string))
+     (set! time (match-string 2 pomodoro-mode-line-string))
+     (string-join (list
+                   (pcase type
+                     ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
+                     ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
+                     ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
+                     ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
+                     )
+                   time)
+                  "\s"))))
 
 ;; The value of vc-mode is not always correct.
 (spaceline-define-segment my-version-control
@@ -202,7 +202,7 @@
   (spaceline-compile
     'main
     '((my-evil-state :face (+spaceline-evil-face))
-      ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
+      ((version-control-simple my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
       (my-version-control :face 'powerline-active0))
     '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))

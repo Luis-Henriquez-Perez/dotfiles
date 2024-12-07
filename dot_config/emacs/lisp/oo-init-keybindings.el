@@ -30,7 +30,7 @@
 (require 'bind-key)
 (eval-when-compile (require 'base-macros-bind))
 ;;;; declare override-mode
-(oo-add-hook 'after-init-hook #'override-global-mode :depth -100)
+(hook! after-init-hook override-global-mode :depth -100)
 ;;;; keybindings
 ;;;;; leader keymap
 ;;;;;; root map

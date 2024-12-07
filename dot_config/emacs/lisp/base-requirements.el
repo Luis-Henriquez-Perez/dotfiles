@@ -28,11 +28,8 @@
 (require 'base-packages)
 (require 'f)
 (require 'on)
-(require 'anaphora)
 (require 'dash)
-(require 's)
 (require 'lgr)
-(require 'treepy)
 ;;; provide
 (provide 'base-requirements)
 ;;; base-requirements.el ends here

@@ -154,8 +154,8 @@
 
 (defun! oo-mode-line-render (left right)
   "Return the rendered modeline."
-  (set! lt (string-join (-remove #'string-empty-p (mapcar #'format-mode-line left)) "\s"))
-  (set! rt (string-join (-remove #'string-empty-p (mapcar #'format-mode-line right)) "\s"))
+  (set! lt (string-join (cl-remove-if #'string-empty-p (mapcar #'format-mode-line left)) "\s"))
+  (set! rt (string-join (cl-remove-if #'string-empty-p (mapcar #'format-mode-line right)) "\s"))
   (set! width (- (window-total-width) (+ (length lt) (length rt)) 2) 0)
   (concat "\s" lt (make-string (max width 0) 32) rt "\s"))
 

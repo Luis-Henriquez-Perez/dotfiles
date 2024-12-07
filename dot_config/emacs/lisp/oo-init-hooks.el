@@ -34,7 +34,7 @@
 ;; focus is now on what is happening in my configuration as opposed to the many
 ;; individual configurations.
 ;;;;; on-first-input-hook
-(oo-add-hook 'on-first-input-hook #'minibuffer-depth-indicate-mode)
+(hook! on-first-input-hook minibuffer-depth-indicate-mode)
 ;;;;; emacs-lisp-mode-hook
 (defhook! oo-enable-elisp-font-lock-h (emacs-lisp-mode-hook)
   "Add font lock keywords for definer macros."
@@ -55,13 +55,12 @@
 ;;;;; emacs-startup-hook
 (oo-call-after-load 'evil #'oo-call-after-load-functions)
 
-(defhook! oo-init-after-load-functions-h (on-first-input-hook)
+(defhook! oo-init-after-load-functions-h (on-first-input-hook :depth 99)
   "Call `oo-call-after-load-functions' once.
 Also add it as a hook to `after-load-functions' so that it is invoked whenever a
 file is loaded."
-  [:depth 99]
   (oo-call-after-load-functions)
-  (oo-add-hook 'after-load-functions #'oo-call-after-load-functions))
+  (hook! after-load-functions oo-call-after-load-functions))
 ;;;;; load macros for init file
 ;; The macros in my configuration are expanded during compilation thereby saving
 ;; time because they do not need to be expanded during startup.  The one caviat
@@ -74,17 +73,15 @@ file is loaded."
   (require 'base-macros))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
-(defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook)
+(defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook :depth 10)
   "Boost garbage collection settings to `gcmh-high-cons-threshold'."
-  [:depth 10]
   (set-register :gc-cons-threshold gc-cons-threshold)
   (set-register :gc-cons-percentage gc-cons-percentage)
   (setq gc-cons-threshold (* 32 1024 1024))
   (setq gc-cons-percentage 0.8))
 
-(defhook! oo-decrease-garbage-collection-h (minibuffer-exit-hook)
+(defhook! oo-decrease-garbage-collection-h (minibuffer-exit-hook :depth 90)
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
-  [:depth 90]
   (setq gc-cons-threshold (get-register :gc-cons-threshold))
   (setq gc-cons-percentage (get-register :gc-cons-percentage)))
 ;;;;; garbage collection

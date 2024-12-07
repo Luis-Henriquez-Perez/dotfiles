@@ -36,9 +36,9 @@ tags that are not in the current headline are added to it.  The Resulting tags a
 in alphabetical order."
   (interactive)
   (set! all (save-restriction (widen) (org-get-buffer-tags)))
-  (set! current (-map #'substring-no-properties (org-get-tags (point) t)))
+  (set! current (mapcar #'substring-no-properties (org-get-tags (point) t)))
   (set! selected (completing-read-multiple "Choose tag: " all))
-  (set! new (append (-difference selected current) (-difference current selected)))
+  (set! new (append (cl-set-difference selected current) (cl-set-difference current selected)))
   (org-set-tags (-sort #'string< new)))
 
 (defun! +org-alphabetize-tags ()

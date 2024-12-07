@@ -30,7 +30,7 @@
 ;; `woman-topic-history' by aliasing it to `Man-topic-history' and emacs tells
 ;; you this by popping up a *Warnings* buffer whenever woman.el is loaded.  This
 ;; whole thing is probably some bug.  So I stop this whole thing from happening.
-(defun! oo--suppress-woman-warning (orig-fn &rest args)
+(defun oo--suppress-woman-warning (orig-fn &rest args)
   (pcase args
     (`(woman-topic-history Man-topic-history . ,_)
      (advice-remove 'defvaralias #'oo--suppress-woman-warning))

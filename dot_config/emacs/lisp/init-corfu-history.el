@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-add-hook 'corfu-mode-hook #'corfu-history-mode)
+(hook! corfu-mode-hook corfu-history-mode)
 ;;; provide
 (provide 'init-corfu-history)
 ;;; init-corfu-history.el ends here

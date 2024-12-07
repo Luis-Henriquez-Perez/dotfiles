@@ -25,7 +25,7 @@
 ;; Initialize beacon.
 ;;
 ;;; Code:
-(oo-add-hook 'on-first-input-hook #'beacon-mode)
+(hook! on-first-input-hook beacon-mode)
 ;;; provide
 (provide 'init-beacon)
 ;;; init-beacon.el ends here

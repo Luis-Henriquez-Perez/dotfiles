@@ -86,7 +86,7 @@ SETTER is the same as in `appending!'.  KEY, TEST, TEST-NOT are the same as in
 (defalias 'adjoin! 'adjoining!)
 
 ;; I know =push= already exists.  But I want a variant of push that can be used
-;; with the =block!= macro.
+;; with the =autolet!= macro.
 (cl-defmacro pushing! (place item &key (setter 'setf))
   "Cons ITEM to PLACE.
 SETTER is the same as in `appending!'."

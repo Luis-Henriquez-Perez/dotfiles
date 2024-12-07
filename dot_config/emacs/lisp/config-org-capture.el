@@ -33,16 +33,11 @@
 (require 'org-capture)
 ;;;; disable header-line
 (setq-hook! org-capture-mode-hook header-line-format nil)
-;;;; enable evil-insert-state
-(defhook! oo-enter-evil-state-h (org-capture-mode-hook)
-  "Do not show header line."
-  (when (bound-and-true-p evil-mode)
-    (evil-insert-state 1)))
 ;;;; use completing-read for org-capture
 (defun! +org-capture-choose-template ()
   "Choose capture template to open."
   (interactive)
-  (set! templates (--map (cons (-second-item it) (-first-item it)) org-capture-templates))
+  (set! templates (--map (cons (cl-second it) (cl-first it)) org-capture-templates))
   (set! choosen (completing-read "Choose a Templates: " templates))
   (set! key (cdr (assoc choosen templates)))
   (if key

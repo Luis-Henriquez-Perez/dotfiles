@@ -149,19 +149,19 @@
 (opt! evil-emacs-state-cursor    #'+evil-emacs-state-cursor)
 ;;;; make the visual selection face the same as the visual cursor color
 ;;;; insert state hook
-(defhook! +evil-enter-insert-state-h ()
+(defun +evil-enter-insert-state-h ()
   "Enter insert state if `evil-mode' is enabled."
   (when (bound-and-true-p evil-mode)
     (evil-insert-state 1)))
 ;;;; cross-configuration
 ;;;;; org-capture
-(oo-add-hook 'org-capture-mode-hook #'+evil-enter-insert-state-h)
+(hook! org-capture-mode-hook +evil-enter-insert-state-h)
 ;;;;; git-commit
 ;; Note that I cannot use `evil-set-initial-state' for this because
 ;; `git-commit-mode' is a minor-mode.
-(oo-add-hook 'git-commit-mode-hook #'+evil-enter-insert-state-h)
+(hook! git-commit-mode-hook +evil-enter-insert-state-h)
 ;;;;; denote
-(oo-add-hook 'denote-after-new-note-hook #'+evil-enter-insert-state-h)
+(hook! denote-after-new-note-hook +evil-enter-insert-state-h)
 ;;;;; corfu
 ;; When using evil, neither `corfu-map' nor `tempel-map' bindings will work
 ;; because the maps are overridden by evil.  In order for them to work, we need
@@ -173,6 +173,61 @@
 ;;;;; tempel
 (defafter! oo-make-tempel-map-an-overriding-map (tempel)
   (evil-make-overriding-map tempel-map))
+;;;;; auto-insert
+;;;; bindings
+(defun oo-dwim-escape ()
+  "Exits out of whatever is happening after escape."
+  (interactive)
+  (when (bound-and-true-p evil-mode)
+    (evil-normal-state 1))
+  (cond ((minibuffer-window-active-p (minibuffer-window))
+		 (if (or defining-kbd-macro executing-kbd-macro)
+			 (minibuffer-keyboard-quit)
+           (abort-recursive-edit)))
+		((or defining-kbd-macro executing-kbd-macro) nil)
+        (t
+		 (keyboard-quit))))
+
+(bind! (i e) [escape] #'oo-dwim-escape)
+
+(bind! i override-global-map oo-insert-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) override-global-map oo-normal-leader-key #'oo-leader-prefix-command)
+(bind! (n m v) override-global-map ";" #'execute-extended-command)
+
+;; One of the most common--if not the most common--command you use in Emacs is
+;; [[helpfn:execute-extended-command][execute-extended-command]].  This command let's you search any other command and
+;; upon pressing enter, then you execute the command.  The fact that this command is
+;; invoked so frequently suggests it should have one of the shortest, easiest to
+;; press bindings.  I chose to give it =SPC SPC= and =;=.  =SPC SPC= is short and
+;; quick to type as well as consistent with other =SPC= bindings.  While =;= is
+;; super fast to press as well and even faster than =SPC SPC=.
+(bind! oo-leader-map oo-normal-leader-key #'execute-extended-command)
+
+(bind! i "A-x" #'execute-extended-command)
+(bind! i "M-x" #'execute-extended-command)
+
+(bind! n "+" #'text-scale-increase)
+(bind! n "-" #'text-scale-decrease)
+
+(bind! n "H" #'evil-first-non-blank)
+(bind! n "L" #'evil-last-non-blank)
+(bind! n "J" #'evil-scroll-page-down)
+(bind! n "K" #'evil-scroll-page-up)
+
+(bind! (n v) "g u" #'evil-upcase)
+(bind! (n v) "g U" #'evil-downcase)
+
+;; Pressing lowercase "o" is one less keystroke than "W" and it aligns with cio.
+;; Though I will say I am not 100% sure it is the equivalent.
+(bind! evil-motion-state-map "o" #'evil-forward-WORD-begin)
+
+;; (bind! (n v) "g t" #'evil-goto-first-line)
+;; (bind! (n v) "g b" #'evil-goto-line)
+
+(bind! (n v) "g h" #'+evil-eval-operator)
+(bind! (n v) "g r" #'+evil-eval-replace-operator)
+(bind! (n v) "g l" #'+evil-eval-print-operator)
+(bind! (n v) "g p" #'+evil-eval-print-operator)
 ;;; provide
 (provide 'config-evil)
 ;;; config-evil.el ends here

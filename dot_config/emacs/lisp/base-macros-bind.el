@@ -78,14 +78,16 @@
 (defun oo--bind-evil-define-key (metadata forms)
   "Prepend `evil-define-key*' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((evil-define-key* ,!state ,!keymap ,!key ,!def)
+    `((declare-function evil-define-key* "evil")
+      (evil-define-key* ,!state ,!keymap ,!key ,!def)
       (info! "KEYBINDING: %s %s %s -> %s" ,!state ,!keymap-symbol ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-evil-define-minor-mode-key (metadata forms)
   "Prepend `evil-define-minor-key' form to FORMS as specified by METADATA."
   (with-map-keywords! metadata
-    `((evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
+    `((declare-function evil-define-minor-mode-key nil)
+      (evil-define-minor-mode-key ,!state ,!mode ,!key ,!def)
       ,@forms)))
 
 (defun oo--bind-kbd (_ forms)
@@ -123,7 +125,7 @@ Evaluating resulting forms will."
   (with-map-keywords! metadata
     (set! wk-fn #'which-key-add-keymap-based-replacements)
     `((lef! ((define-key (lambda (keymap key def)
-                           (oo-call-after-load 'which-key (-partial #',wk-fn keymap key ,!wk))
+                           (oo-call-after-load 'which-key (apply-partially #',wk-fn keymap key ,!wk))
                            (funcall this-fn keymap key def))))
         ,@forms))))
 
@@ -148,13 +150,11 @@ If METADATA has no keymap return."
           ;; the time the keymap is bound and the time where dired is provided.
           ;; In general dired is extremely sensitive as to when the bindings
           ;; as even this does not work in `oo-after-load-dired'.
-          ((equal !keymap-value 'dired-mode-map)
-           `((oo-call-after-load 'dired (lambda () ,@forms))))
           (t
-           `((if (boundp ',!keymap-value)
-                 (progn ,@forms)
-               (defvar ,!keymap-value)
-               (oo-call-after-bound ',!keymap-value (lambda () ,@forms))))))))
+           `((progn (defvar ,!keymap-value)
+                    (if (bound-and-true-p ,!keymap-value)
+                        (progn ,@forms)
+                      (oo-call-after-bound ',!keymap-value (lambda () ,@forms)))))))))
 ;;;; standardize metadata
 (defun! oo--bind-metadata (args)
   "Standardize ARGS into proper metadata."
@@ -169,9 +169,9 @@ If METADATA has no keymap return."
          (not (keymap-symbol-p state))
          (not (letterp state))))
   (flet! letter-list-p (obj)
-    (and (listp obj) (-all-p #'letterp obj)))
+    (and (listp obj) (cl-every #'letterp obj)))
   (flet! symbol-list-p (obj)
-    (and (listp obj) (-all-p #'symbolp obj)))
+    (and (listp obj) (cl-every #'symbolp obj)))
   (flet! non-keyword-symbol-p (obj)
     (and (symbolp obj) (not (keywordp obj))))
   (flet! not-keyword-p (-not #'keywordp))
@@ -266,6 +266,14 @@ If METADATA has no keymap return."
 ;; This contains the logic of which steps how the macro should deal with the
 ;; data specified by metadata.  Before I had this logic in the build functions
 ;; themselves which each of them longer and more confusing.
+(defun oo--bind-declare-function (metadata forms)
+  (with-map-keywords! metadata
+    (pcase !def-value
+      (`(function ,(and function (pred symbolp)))
+       `((declare-function ,function nil) ,@forms))
+      (_
+       forms))))
+
 (defun! oo--bind-steps (metadata)
   "Return the list of steps for building the `bind!' form.
 Each step is a function that accepts two arguments, metadata and forms, and
@@ -277,6 +285,7 @@ returns a list of forms."
            (pushing! steps 'oo--bind-evil-define-minor-mode-key))
           (t
            (pushing! steps 'oo--bind-evil-define-key)))
+    (pushing! steps 'oo--bind-declare-function)
     (pushing! steps 'oo--bind-check-errors)
     (pushing! steps 'oo--bind-kbd)
     (when !wk

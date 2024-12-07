@@ -46,28 +46,7 @@
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
 (defalias 'oo-to-keyword 'oo-into-keyword)
-;;;; quoting
-(defun oo-quoted-p (form)
-  "Return non-nil if FORM is quoted."
-  (declare (pure t) (side-effect-free t))
-  (equal (car-safe form) 'quote))
-
-(defun oo-sharpquoted-p (form)
-  "Return non-nil if form is sharpquoted."
-  (declare (pure t) (side-effect-free t))
-  (equal (car-safe form) 'function))
-
-(defun oo-ensure-quote (form)
-  "Return quoted form unquoted, otherwise return form."
-  (declare (pure t) (side-effect-free t))
-  (if (oo-quoted-p form) form (macroexp-quote form)))
 ;;;; miscellaneous
-(defun oo-hook-symbol-p (obj)
-  "Return non-nil if SYMBOL is a hook symbol."
-  (declare (pure t) (side-effect-free t))
-  (and (symbolp obj)
-       (string-match-p "[^[:space:]]+-hook\\'" (symbol-name obj))))
-
 (defun oo-true-list-p (object)
   "Return non-nil if OBJECT is a true list.
 A \"true list\" is a list whose CDR is also a list."
@@ -138,8 +117,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (shut-up (apply fn args)))
-;; With lexical binding you can actually store the values of let-bound variables
-;; in a function by creating a closure.  But it might be useful to.
 ;;;; oo-first-success
 ;; This function is very similar to dash's [[file:snapshots/_helpful_function__-first_.png][-first]] or cl-lib's [[file:snapshots/_helpful_function__cl-find-if_.png][cl-find-if]].
 ;; These functions take a predicate and a list and they return the first element of
@@ -163,14 +140,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
 (defsubst oo-positive-p (number)
   "Return non-nil if NUMBER is greater than zero."
   (> number 0))
-;;;; other
-(defun oo-alist (&rest args)
-  "Create an alist from ARGS.
-Odd elements of ARGS are the keys, even elements are the values."
-  (let (alist)
-    (while args
-      (push (cons (pop args) (pop args)) alist))
-    (setq alist (nreverse alist))))
 ;;; provide
 (provide 'base-utils)
 ;;; base-utils.el ends here

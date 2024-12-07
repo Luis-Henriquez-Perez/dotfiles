@@ -25,89 +25,48 @@
 ;; Define definer macros.
 ;;
 ;;; Code:
-(require 'base-macros-with-map)
-(require 'base-macros-block)
+(require 'base-macros-autolet)
 
-(defun oo--arglist (arglist)
-  "Return the list of argument symbols in ARGLIST."
-  (cl-remove-if #'oo-list-marker-p (flatten-tree arglist)))
-
-(defun oo--declaration-p (form)
-  "Return non-nil if FORM is a declaration form."
-  (equal 'declare (car-safe form)))
-
-(defun oo--interactive-p (form)
-  "Return non-nil if FORM is an interactive form."
-  (equal 'interactive (car-safe form)))
-
-(defun oo--definer-components-1 (body)
-  "Return (documentation decl interactive-form body) from ORIGINAL-BODY."
-  (pcase body
-    (`(,(and (pred stringp) doc)
-       ,(and (pred oo--declaration-p) decl)
-       ,(and (pred oo--interactive-p) int) . ,rest)
-     (list doc decl int rest))
-    (`(,(and (pred stringp) doc)
-       ,(and (pred oo--declaration-p) decl) . ,rest)
-     (list doc decl nil rest))
-    (`(,(and (pred stringp) doc)
-       ,(and (pred oo--interactive-p) int) . ,rest)
-     (list doc nil int rest))
-    (`(,(and (pred stringp) doc) . ,rest)
-     (list doc nil nil rest))
-    (`(,(and (pred oo--declaration-p) decl)
-       ,(and (pred oo--interactive-p) int) . ,rest)
-     (list nil decl int rest))
-    (`(,(and (pred oo--declaration-p) decl) . ,rest)
-     (list nil decl nil rest))
-    (`(,(and (pred oo--interactive-p) int) . ,rest)
-     (list nil nil int rest))
-    (_
-     (list nil nil nil body))))
+(defun oo--arglist-symbols (arglist)
+  "Return non-nil if symbol is an argument key."
+  (let (symbols)
+    (dolist (item (flatten-list arglist))
+      (when (and (symbolp item) (not (string-match "^&" (symbol-name item))))
+        (push item symbols)))
+    (nreverse symbols)))
 
 (defun oo--definer-components (args)
-  "Return a plist corresponding to the components of `defun'."
-  (let* ((name (pop args))
-         (arglist (pop args))
-         (body args)
-         (keys (list :docstring :declaration :interactive :body)))
-    (append (list :name name :arglist arglist)
-            (-interleave keys (oo--definer-components-1 body)))))
-
-(defun oo--prognify-components (components)
-  "Return the form for DEFINER.
-Meant to be used in `defmacro!' and `defun!'."
-  (let! ((body (map-elt components :body))
-         (arglist (map-elt components :arglist)))
-    (setf (map-elt components :body)
-          (list (oo--generate-block-body body nil (oo--arglist arglist))))
-    components))
-
-(defun oo--finalize-components (components)
-  "Return the values of."
-  (with-map-keywords! components
-    (let ((metadata (-non-nil (list !docstring !declaration !interactive))))
-      `(,!name ,!arglist ,@metadata ,@!body))))
+  ;; "Return (name arglist metadata body) from ORIGINAL-BODY."
+  (let ((name (pop args))
+        (arglist (pop args))
+        (doc (and (stringp (car args)) (pop args)))
+        (decl (and (equal 'declare (car-safe (car args))) (pop args)))
+        (inte (and (equal 'interactive (car-safe (car args))) (pop args))))
+    (list name arglist (cl-remove-if #'null (list doc decl inte)) args)))
 
 (defmacro defmacro! (&rest args)
-  "Same as `defmacro!' but wrap body with `block!'.
+  "Same as `defmacro!' but wrap body with `autolet!'.
 NAME, ARGLIST and BODY are the same as `defmacro!'.
 
 \(fn NAME ARGLIST [DOCSTRING] BODY...)"
   (declare (indent defun) (doc-string 3))
-  `(defmacro ,@(thread-last (oo--definer-components args)
-                            (oo--prognify-components)
-                            (oo--finalize-components))))
+  (cl-destructuring-bind (name arglist metadata body) (oo--definer-components args)
+    `(defmacro ,name ,arglist
+       ,@metadata
+       (autolet! :noinit ,(oo--arglist-symbols arglist)
+                 ,@body))))
 
 (defmacro defun! (&rest args)
-  "Same as `defun' but wrap body with `block!'.
+  "Same as `defun' but wrap body with `autolet!'.
 NAME, ARGS and BODY are the same as in `defun'.
 
 \(fn NAME ARGLIST [DOCSTRING] [DECL] [INTERACTIVE] BODY...)"
   (declare (indent defun) (doc-string 3))
-  `(defun ,@(thread-last (oo--definer-components args)
-                         (oo--prognify-components)
-                         (oo--finalize-components))))
+  (cl-destructuring-bind (name arglist metadata body) (oo--definer-components args)
+    `(defun ,name ,arglist
+       ,@metadata
+       (autolet! :noinit ,(oo--arglist-symbols arglist)
+                 ,@body))))
 ;;; provide
 (provide 'base-macros-definers)
 ;;; base-macros-definers.el ends here

@@ -33,31 +33,26 @@
 ;; This is very basic font setting based on available faces.  I have seen much
 ;; more complex font setups like in minemacs (which probably got its from doom)
 ;; but for now this will do.
-;; '("Cascadia Code" "Fira Code" "Jetbrains Mono"
-;;   "SF Mono" "Hack" "Source Code Pro" "Menlo"
-;;   "Monaco" "DejaVu Sans Mono" "Consolas")
-
-(defvar oo-default-fonts (list
-                          (font-spec :family "RecMonoDuotone Nerd Font"
-                                     :weight 'regular
-                                     :slant 'normal
-                                     :width 'normal
-                                     :size 18)
-                          (font-spec :family "CaskaydiaCove Nerd Font Mono"
-                                     :weight 'light
-                                     :slant 'normal
-                                     :width 'normal
-                                     :size 18)
-                          (font-spec :family "Mononoki Nerd Font"
-                                     :weight 'regular
-                                     :slant 'normal
-                                     :width 'normal
-                                     :size 18)
-                          (font-spec :family "JetBrainsMono Nerd Font"
-                                     :weight 'regular
-                                     :slant 'normal
-                                     :width 'normal
-                                     :size 18))
+(defvar oo-default-fonts (list (font-spec :family "RecMonoDuotone Nerd Font"
+                                          :weight 'regular
+                                          :slant 'normal
+                                          :width 'normal
+                                          :size 18)
+                               (font-spec :family "CaskaydiaCove Nerd Font Mono"
+                                          :weight 'light
+                                          :slant 'normal
+                                          :width 'normal
+                                          :size 18)
+                               (font-spec :family "Mononoki Nerd Font"
+                                          :weight 'regular
+                                          :slant 'normal
+                                          :width 'normal
+                                          :size 18)
+                               (font-spec :family "JetBrainsMono Nerd Font"
+                                          :weight 'regular
+                                          :slant 'normal
+                                          :width 'normal
+                                          :size 18))
   "List of fonts to check.")
 
 (defun! oo-set-default-font-h ()
@@ -88,7 +83,7 @@
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
   (when (f-same-p (buffer-file-name) (f-full path))
     (info! "Setup auto-sorting for %s..." (f-base path))
-    (oo-add-hook 'before-save-hook #'oo-sort-elpaca-forms-h :local t)))
+    (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
 (defun! oo-align-abbrev-forms-h ()
   "Align all abbrev forms in current buffer."

@@ -35,7 +35,7 @@
   (should (equal 'normal (oo--evil-char-to-state ?n))))
 
 ;; (ert-deftest oo-call-after-load-functions ()
-;;   (block!
+;;   (autolet!
 ;;     (set! foo 1)
 ;;     (set! load-order nil)
 ;;     (nflet! load-A (_) (push 'load-A load-order))
@@ -66,7 +66,7 @@
 ;;                    oo-after-load-functions-alist))))
 
 ;; (ert-deftest oo-call-after-bound ()
-;;   (block!
+;;   (autolet!
 ;;     (set! called nil)
 ;;     (nflet! fn-A () (push 'fn-A called))
 ;;     (nflet! boundp (symbol)
@@ -80,7 +80,7 @@
 ;;     (should (equal '((bar fn-B)) oo-after-load-functions-alist))))
 
 ;; (ert-deftest oo-call-after-evil-state-char ()
-;;   (block!
+;;   (autolet!
 ;;     (set! oo-after-load-functions-alist nil)
 ;;     (set! called nil)
 ;;     (set! evil-mode t)

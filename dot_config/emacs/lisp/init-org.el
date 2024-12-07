@@ -46,8 +46,8 @@
                              (format "%s::" it)))
 (opt! org-archive-mark-done t)
 (opt! org-global-properties `(("Effort_ALL" .
-                               ,(string-join (-map (-partial #'format "0:%.2d")
-                                                   (number-sequence 5 55 5))
+                               ,(string-join (mapcar (apply-partially #'format "0:%.2d")
+                                                     (number-sequence 5 55 5))
                                              "\s"))))
 
 (require! config-org)
@@ -111,11 +111,11 @@
 (opt! org-src-window-setup 'plain)
 ;;;; org-clock
 ;; TODO: do not load org-clock on `org-mode-hook'.
-(oo-add-hook 'org-mode-hook #'org-clock-persistence-insinuate)
+(hook! org-mode-hook org-clock-persistence-insinuate)
 (opt! org-clock-persist t)
 (opt! org-clock-sound (f-full "~/Downloads/ding-101492.wav"))
 ;;;; org-superstar
-(oo-add-hook 'org-mode-hook #'org-superstar-mode)
+(hook! org-mode-hook org-superstar-mode)
 
 (opt! org-superstar-leading-bullet ?\s)
 (opt! org-superstar-special-todo-items nil)

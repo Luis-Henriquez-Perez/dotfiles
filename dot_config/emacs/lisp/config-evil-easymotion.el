@@ -95,7 +95,7 @@
 ;; (defun oo--left-bouned-by-space-p ())
 ;; (defun oo--skip-ov-fn (motion-fn)
 ;;   "Return MOTION-FUNCTION."
-;;   (oo-before-fn motion-fn (-partial #'goto-char (end-of-overlay)))
+;;   (oo-before-fn motion-fn (apply-partially #'goto-char (end-of-overlay)))
 ;;   (oo-if-fn #'in-overlay-p it motion-function))
 ;;;; set the evilem-keys
 ;; The package `evil-easymotion' has its own style and keys separate from avy
@@ -116,9 +116,9 @@
   "Return points sorted by match occurance.
 This is as opposed to character length."
   (set! point (point))
-  (set! points (-remove (-compose (-partial #'= point) #'car) points))
-  (set! points (-sort (-on (-partial #'< point) #'car) points))
-  (set! (less-than greater-than) (-separate (-on (-partial #'< point) #'car) points))
+  (set! points (cl-remove-if (-compose (apply-partially #'= point) #'car) points))
+  (set! points (-sort (-on (apply-partially #'< point) #'car) points))
+  (set! (less-than greater-than) (-separate (-on (apply-partially #'< point) #'car) points))
   ;; Interleave the points.  I really wish that I could use dash's `-interleave'
   ;; but if the interleaved lists are not the same size the extra values are
   ;; thrown away.
@@ -145,7 +145,7 @@ This is a wrapper around `evilem-make-motion'."
     (set! docstring (pop body)))
   (while (keywordp (car body))
     (appending! map (list (pop body) (pop body))))
-  `(evilem-make-motion ,name (lambda ,args ,docstring (interactive) (block! ,@body)) ,@map))
+  `(evilem-make-motion ,name (lambda ,args ,docstring (interactive) (autolet! ,@body)) ,@map))
 ;;;; beginning of word
 (+evilem-defemotion! +evilem-motion-beginning-of-word ()
   "Jump to the beginning of a word in the current visible buffer."

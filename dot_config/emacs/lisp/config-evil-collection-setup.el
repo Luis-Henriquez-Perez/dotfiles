@@ -59,7 +59,7 @@
 (oo-call-after-load 'bm #'evil-collection-bm-setup)
 
 (autoload #'evil-collection-bookmark-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'bookmark-bmenu-mode-hook #'evil-collection-bookmark-setup)
+(hook! bookmark-bmenu-mode-hook evil-collection-bookmark-setup)
 
 (autoload #'evil-collection-buff-menu-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'buff-menu #'evil-collection-buff-menu-setup)
@@ -104,7 +104,7 @@
 (oo-call-after-load 'csv #'evil-collection-csv-setup)
 
 (autoload #'evil-collection-custom-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'custom-mode-hook #'evil-collection-custom-setup)
+(hook! custom-mode-hook evil-collection-custom-setup)
 
 (autoload #'evil-collection-cus-theme-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'cus-theme #'evil-collection-cus-theme-setup)
@@ -113,7 +113,7 @@
 (defhook! oo-setup-evil-collection-h (dashboard-mode-hook)
   (if after-init-time
       (evil-collection-dashboard-setup)
-    (oo-add-hook 'emacs-startup-hook #'evil-collection-dashboard-setup)))
+    (hook! emacs-startup-hook evil-collection-dashboard-setup)))
 
 (autoload #'evil-collection-daemons-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'daemons #'evil-collection-daemons-setup)
@@ -188,14 +188,14 @@
 (oo-call-after-load 'explain-pause-mode #'evil-collection-explain-pause-mode-setup)
 
 (autoload #'evil-collection-eldoc-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-collection-eldoc-setup)
-(oo-add-hook 'eldoc-mode-hook #'evil-collection-eldoc-setup)
+(hook! emacs-lisp-mode-hook evil-collection-eldoc-setup)
+(hook! eldoc-mode-hook evil-collection-eldoc-setup)
 
 (autoload #'evil-collection-elfeed-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'elfeed #'evil-collection-elfeed-setup)
 
 (autoload #'evil-collection-elisp-mode-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'emacs-lisp-mode-hook #'evil-collection-elisp-mode-setup)
+(hook! emacs-lisp-mode-hook evil-collection-elisp-mode-setup)
 
 (autoload #'evil-collection-elisp-refs-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'elisp-refs #'evil-collection-elisp-refs-setup)
@@ -279,7 +279,7 @@
 (oo-call-after-load 'helm #'evil-collection-helm-setup)
 
 (autoload #'evil-collection-help-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'help-mode-hook #'evil-collection-help-setup)
+(hook! help-mode-hook evil-collection-help-setup)
 
 (autoload #'evil-collection-helpful-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'helpful #'evil-collection-helpful-setup)
@@ -294,7 +294,7 @@
 (oo-call-after-load 'ibuffer #'evil-collection-ibuffer-setup)
 
 (autoload #'evil-collection-image-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'image-mode-hook #'evil-collection-image-setup)
+(hook! image-mode-hook evil-collection-image-setup)
 
 (autoload #'evil-collection-image-dired-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'image-dired #'evil-collection-image-dired-setup)
@@ -462,7 +462,7 @@
 (oo-call-after-load 'reftex #'evil-collection-reftex-setup)
 
 (autoload #'evil-collection-replace-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'occur-mode-hook #'evil-collection-replace-setup)
+(hook! occur-mode-hook evil-collection-replace-setup)
 
 (autoload #'evil-collection-restclient-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'restclient #'evil-collection-restclient-setup)
@@ -501,7 +501,7 @@
 (oo-call-after-load 'shortdoc #'evil-collection-shortdoc-setup)
 
 (autoload #'evil-collection-simple-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'special-mode-hook #'evil-collection-simple-setup)
+(hook! special-mode-hook evil-collection-simple-setup)
 
 (autoload #'evil-collection-simple-mpc-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'simple-mpc #'evil-collection-simple-mpc-setup)
@@ -522,13 +522,13 @@
 (oo-call-after-load 'speedbar #'evil-collection-speedbar-setup)
 
 (autoload #'evil-collection-tab-bar-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'tab-bar-mode-hook #'evil-collection-tab-bar-setup)
+(hook! tab-bar-mode-hook evil-collection-tab-bar-setup)
 
 (autoload #'evil-collection-tablist-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'tablist #'evil-collection-tablist-setup)
 
 (autoload #'evil-collection-tabulated-list-setup "evil-collection" nil nil 'function)
-(oo-add-hook 'tabulated-list-mode-hook #'evil-collection-tabulated-list-setup)
+(hook! tabulated-list-mode-hook evil-collection-tabulated-list-setup)
 
 (autoload #'evil-collection-tar-mode-setup "evil-collection" nil nil 'function)
 (oo-call-after-load 'tar-mode #'evil-collection-tar-mode-setup)

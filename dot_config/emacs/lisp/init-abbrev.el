@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'base)
 ;;;; hooks
-(oo-add-hook 'prog-mode-hook #'abbrev-mode)
-(oo-add-hook 'text-mode-hook #'abbrev-mode)
+(hook! prog-mode-hook abbrev-mode)
+(hook! text-mode-hook abbrev-mode)
 ;;;; mode hook
 ;; There is an idea of loading the abbrevs just before they are needed--as in
 ;; right as your typing--but doing that would actually cause a noticable delay

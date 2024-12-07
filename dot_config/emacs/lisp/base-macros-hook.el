@@ -37,33 +37,53 @@
 ;;;; requirements
 (require 'base-vars)
 (require 'base-lib)
-(require 'base-requirements)
 (require 'base-macros-definers)
 ;;;; hooks
-;;;;; oo-add-hook-symbol-p
-(defun! oo-add-hook-symbol-p (symbol)
-  "Return non-nil if SYMBOL is a hook symbol."
-  (declare (pure t) (side-effect-free t))
-  (when (symbolp symbol)
-    (set! name (symbol-name symbol))
-    (string-match-p "[^[:space:]]+-hook\\'" name)))
 ;;;;; defhook!
-(defmacro! defhook! (&rest args)
+(defmacro! hook! (hook function &rest args)
+  (set! fname (intern (format "%s&%s" hook function)))
+  (set! depth (plist-get args :depth))
+  (set! local (plist-get args :depth))
+  ;; This is taken directly from the `s' library.  Right now, it is the only
+  ;; function from there I use.  Not wanting to require s for just one short
+  ;; function, I copied it is body here.
+  (flet! word-wrap (len s)
+    (save-match-data
+      (with-temp-buffer
+        (insert s)
+        (let ((fill-column len))
+          (fill-region (point-min) (point-max)))
+        (buffer-substring (point-min) (point-max)))))
+  `(progn
+     (declare-function ,function nil)
+     (defun ,fname (&rest _)
+       ,(string-join (list (format "Call `%s' from `%s'." function hook)
+                           (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
+                     "\n")
+       (info! "HOOK: %s -> %s" ',hook ',function)
+       (condition-case err
+           (funcall #',function)
+         (error
+          (cond (oo-debug-p
+                 (signal (car err) (cdr err)))
+                (t
+                 (error! "Error calling %s in %s because of %s"
+                         ',function
+                         (car err)
+                         (cdr err)))))))
+     (add-hook ',hook #',fname ,depth ,local)))
+
+(defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  (set! name (pop args))
-  (cl-assert (oo-true-list-p (car args)))
-  (set! (hooks fargs) (-separate #'oo-hook-symbol-p (pop args)))
-  (when (stringp (car args))
-    (collecting! metadata (pop args)))
-  (when (equal 'declare (car-safe (car args)))
-    (collecting! metadata (pop args)))
-  (when (vectorp (car args))
-    (set! hook-args (append (pop args) nil)))
-  (set! body args)
+  (set! hook (pop args))
+  (when (stringp (car body))
+    (collecting! metadata (pop body)))
+  (when (equal 'declare (car-safe (car body)))
+    (collecting! metadata (pop body)))
   `(progn
-     (defun! ,name ,fargs ,@metadata ,@body)
-     ,@(--map `(oo-add-hook ',it #',name ,@hook-args) hooks)))
+     (defun! ,name nil ,@metadata ,@body)
+     (hook! ,hook ,name ,@args)))
 ;;;;; after!
 ;; I made the decision to add a hook function to a hook regardless of whether
 ;; the hook has already has been run.  But if the hook has been run the hook

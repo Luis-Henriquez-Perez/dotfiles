@@ -28,7 +28,7 @@
 (require 'base)
 (require 'recentf)
 
-(oo-add-hook 'emacs-startup-hook #'recentf-mode)
+(hook! emacs-startup-hook recentf-mode)
 
 (advice-add #'recentf-save-list :before #'recentf-cleanup)
 (advice-add #'recentf-save-list :around #'oo-funcall-silently)
