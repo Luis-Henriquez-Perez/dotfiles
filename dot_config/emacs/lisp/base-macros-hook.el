@@ -36,7 +36,7 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-vars)
-(require 'base-lib)
+(require 'base-macros-autolet)
 (require 'base-macros-definers)
 ;;;; hooks
 ;;;;; defhook!
