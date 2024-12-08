@@ -105,6 +105,7 @@
   (when (and (buffer-file-name) (buffer-modified-p))
     (all-the-icons-material "save" :face 'error)))
 
+(defvar pomodoro-mode-line-string)
 (+spaceline-define-segment! +pomodoro
   "Display left for pomodoro."
   (when (and (bound-and-true-p pomodoro-mode-line-string)
