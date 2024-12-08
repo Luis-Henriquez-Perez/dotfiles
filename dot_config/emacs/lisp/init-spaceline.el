@@ -86,7 +86,7 @@
                  (t
                   (nerd-icons-codicon "nf-cod-record"))
                  (t
-                  "REC")))
+                  "•REC")))
       (and executing-kbd-macro
            (all-the-icons-faicon "play" :face 'error)
            ;; (format "EXECUTING KBD MACRO...")
