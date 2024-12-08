@@ -98,6 +98,7 @@ file is loaded."
            (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
 ;;;; keybindings
 ;;;;; declare override-mode
+(require 'bind-key)
 (hook! after-init-hook override-global-mode :depth -100)
 ;;;;; keybindings
 ;;;;;; leader keymap
