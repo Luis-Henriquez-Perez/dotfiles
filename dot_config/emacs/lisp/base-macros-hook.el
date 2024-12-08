@@ -41,6 +41,13 @@
 ;;;; hooks
 ;;;;; defhook!
 (defmacro! hook! (hook function &rest args)
+  (flet! word-wrap (len s)
+    (save-match-data
+      (with-temp-buffer
+        (insert s)
+        (let ((fill-column len))
+          (fill-region (point-min) (point-max)))
+        (buffer-substring (point-min) (point-max)))))
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
@@ -51,13 +58,6 @@
   ;; This is taken directly from the `s' library.  Right now, it is the only
   ;; function from there I use.  Not wanting to require s for just one short
   ;; function, I copied it is body here.
-  (flet! word-wrap (len s)
-    (save-match-data
-      (with-temp-buffer
-        (insert s)
-        (let ((fill-column len))
-          (fill-region (point-min) (point-max)))
-        (buffer-substring (point-min) (point-max)))))
   `(prog1 ',fname
      (declare-function ,function nil)
      (defun ,fname (&rest args)
