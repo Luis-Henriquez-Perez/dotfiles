@@ -27,6 +27,7 @@
 ;;; Code:
 (require 'base-vars)
 (require 'base-settings)
+(require 'base-packages)
 (require 'base-lib)
 ;;; provide
 (provide 'base)
