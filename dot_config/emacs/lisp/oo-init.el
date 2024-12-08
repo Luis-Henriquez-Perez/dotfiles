@@ -239,7 +239,7 @@ file is loaded."
                                           :size 18))
   "List of fonts to check.")
 
-(defun! oo-set-default-font-h ()
+(defhook! oo-set-default-font-h (after-init-hook :depth 90)
   "Set the default font based on available fonts."
   (dolist (font oo-default-fonts)
     (trace! "Checking whether %s font is available..." font)
@@ -249,8 +249,6 @@ file is loaded."
       (done!)))
   (set! default-font (face-attribute 'default :family))
   (info! "Unable to set font to any in `oo-default-font-list', defaulting to `%s'." default-font))
-
-(add-hook 'after-init-hook #'oo-set-default-font-h 80)
 ;;;; sort lines
 (defun! oo-sort-elpaca-forms-h ()
   "Sort elpaca package forms in current buffer."
