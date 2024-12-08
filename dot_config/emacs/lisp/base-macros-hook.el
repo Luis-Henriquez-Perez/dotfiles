@@ -44,6 +44,7 @@
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
+  (set! local (plist-get args :ignore-args))
   ;; This is taken directly from the `s' library.  Right now, it is the only
   ;; function from there I use.  Not wanting to require s for just one short
   ;; function, I copied it is body here.
