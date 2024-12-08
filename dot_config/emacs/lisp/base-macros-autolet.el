@@ -109,7 +109,7 @@ Identify and collect symbols needed for let bindings and return forms modified."
                       (label! . cl-labels)
                       (labels! . cl-labels))))
     (cl-flet ((quote-symbol-p (x) (memq x '(quote function backquote cl-function)))
-              (loop-symbol-p (x) (memq x '(while dolist dotimes for! dolist!)))
+              (loop-symbol-p (x) (memq x '(while dolist dotimes for!)))
               (ing-symbol-p (x) (and (symbolp x) (string-match-p "ing!$" (symbol-name x))))
               (letbind-symbol-p (x) (assoc x lets))
               (should-remove-p (x) (or (member (car x) noinit) (assoc (car x) init))))
