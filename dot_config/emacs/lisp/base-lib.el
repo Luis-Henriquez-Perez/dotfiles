@@ -48,25 +48,6 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
-;;;; converting types
-;; These functions try to "do what I mean" when converting from one type to another.
-(defun oo-into-string (&rest args)
-  "Return ARGS as a string."
-  (declare (pure t) (side-effect-free t))
-  (with-output-to-string (mapc #'princ args)))
-(defalias 'oo-to-string 'oo-into-string)
-
-(defun oo-into-symbol (&rest args)
-  "Return an interned symbol from ARGS."
-  (declare (pure t) (side-effect-free t))
-  (intern (apply #'oo-into-string args)))
-(defalias 'oo-to-symbol 'oo-into-symbol)
-
-(defun oo-into-keyword (&rest args)
-  "Return ARGS as a keyword."
-  (declare (pure t) (side-effect-free t))
-  (apply #'oo-into-symbol ":" args))
-(defalias 'oo-to-keyword 'oo-into-keyword)
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.

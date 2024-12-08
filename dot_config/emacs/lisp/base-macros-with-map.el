@@ -32,8 +32,8 @@
   "Return a list of let-bindings for `with-map!'.
 Collect symbols matching REGEXP in BODY into an alist."
   (cl-flet* ((into-symbol (&rest args)
-               (intern (intern (with-output-to-string (mapc #'princ args)))))
-             (into-keyword (obj)
+               (intern (with-output-to-string (mapc #'princ args))))
+             (into-keyword (&rest args)
                (apply #'into-symbol ":" args)))
     (let* ((mapsym (gensym "map"))
            (let-binds `((,mapsym ,map)))
