@@ -29,28 +29,36 @@
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'all-the-icons)
+;;;; settings
+(opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
+(opt! powerline-height 33)
+(opt! powerline-default-separator 'curve)
+;; Although this saves time the longer you use the modeline, it means that the
+;; call to `spaceline-compile' is called takes significantly longer which is
+;; particularly undesirable during startup.  Despite what the README says the
+;; rendering/updating of the modeline does not make a noticeable difference to
+;; me.  I imagine it matters more for particularly expensive modeline segments.
+;; Still I will byte-compile it but not during startup, at some point during
+;; idle time.
+;; TODO: during idle time byte-compile the spaceline function.
+(setq spaceline-byte-compile nil)
 ;;;; reset powerline after theme change
-(defun oo-reset-modeline-h (_)
-  (powerline-reset))
-
-(add-hook 'enable-theme-functions #'oo-reset-modeline-h)
+(hook! enable-theme-functions powerline-reset)
 ;;;; defsegment!
 ;; This lets me use autolet! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
 ;; change in real time.  This makes it much easier to debug segments or even to
 ;; determine if they work beforehand.
-(defmacro! +spaceline-define-segment! (name value &rest props)
+(defmacro! +spaceline-define-segment! (name &rest body)
   (declare (indent 1) (doc-string 2))
   (string-match "\\`\\+\\(.+\\)\\'" (symbol-name name))
   (set! base (match-string 1 (symbol-name name)))
   (set! fn (intern (format "+spaceline-%s-segment" base)))
-  (set! meta (when (stringp (car-safe value)) (list (pop value))))
+  (set! docstring (when (stringp (car-safe body)) (list (pop body))))
   `(progn
-     (defun! ,fn () ,@(append meta value))
-     (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
-;;;; set powerline height
-(setq powerline-height 33)
-;;;; define custom segments
+     (defun! ,fn () ,@docstring ,@body)
+     (spaceline-define-segment ,name ,@docstring (,fn))))
+;;;; segments
 (+spaceline-define-segment! +kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
@@ -95,8 +103,7 @@
 (+spaceline-define-segment! +buffer-modified
   "Buffer modified"
   (when (and (buffer-file-name) (buffer-modified-p))
-    (cond (t (all-the-icons-material "save" :face 'error))
-          (t (all-the-icons-material "save" :face 'error)))))
+    (all-the-icons-material "save" :face 'error)))
 
 (+spaceline-define-segment! +pomodoro
   "Display left for pomodoro."
@@ -116,7 +123,6 @@
                   time)
                  "\s")))
 
-;; The value of vc-mode is not always correct.
 (+spaceline-define-segment! +version-control
   "Display current git branch."
   (let ((default-directory (or (and buffer-file-name
@@ -135,7 +141,6 @@
   (format-time-string "%m-%d %H:%M"))
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
-(setq powerline-default-separator 'curve)
 
 (defun! oo-choose-modeline-separator ()
   ""
@@ -156,24 +161,14 @@
   (setq powerline-default-separator (seq-random-elt separators))
   (spaceline-compile)
   (message "set separator to %s" powerline-default-separator))
-;;;; do not byte-compile the modeline at startup
-;; Although this saves time the longer you use the modeline, it means that the
-;; call to `spaceline-compile' is called takes significantly longer which is
-;; particularly undesirable during startup.  Despite what the README says the
-;; rendering/updating of the modeline does not make a noticeable difference to
-;; me.  I imagine it matters more for particularly expensive modeline segments.
-;; Still I will byte-compile it but not during startup, at some point during
-;; idle time.
-;; TODO: during idle time byte-compile the spaceline function.
-(setq spaceline-byte-compile nil)
 ;;;; initialize modeline at startup
-(defun oo-init-modeline-h ()
+(defun! oo-init-modeline-h ()
   (spaceline-compile
     'main
-    '((my-evil-state :face (alet (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
-      ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
-      (my-version-control :face 'powerline-active0))
-    '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
+    '((+evil-state)
+      ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
+      (+version-control :face 'powerline-active0))
+    '((+pomodoro :face 'powerline-active0) major-mode (+current-time)))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 
 (add-hook 'after-init-hook #'oo-init-modeline-h 90)
