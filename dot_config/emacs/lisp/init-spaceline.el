@@ -142,25 +142,25 @@
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
 
-(defun! oo-choose-modeline-separator ()
-  ""
-  (interactive)
-  (set! separators '(alternate arrow arrow-fade bar box brace
-                               butt chamfer contour curve rounded roundstub wave zigzag
-                               slant utf-8))
-  (awhen (completing-read "Choose separator: " separators)
-    (setq powerline-default-separator it)
-    (spaceline-compile)))
+;; (defun! oo-choose-modeline-separator ()
+;;   ""
+;;   (interactive)
+;;   (set! separators '(alternate arrow arrow-fade bar box brace
+;;                                butt chamfer contour curve rounded roundstub wave zigzag
+;;                                slant utf-8))
+;;   (awhen (completing-read "Choose separator: " separators)
+;;     (setq powerline-default-separator it)
+;;     (spaceline-compile)))
 
-(defun! oo-choose-random-separator ()
-  "Set a random separator."
-  (interactive)
-  (set! separators '(alternate arrow arrow-fade bar box brace
-                               butt chamfer contour curve rounded roundstub wave zigzag
-                               slant utf-8))
-  (setq powerline-default-separator (seq-random-elt separators))
-  (spaceline-compile)
-  (message "set separator to %s" powerline-default-separator))
+;; (defun! oo-choose-random-separator ()
+;;   "Set a random separator."
+;;   (interactive)
+;;   (set! separators '(alternate arrow arrow-fade bar box brace
+;;                                butt chamfer contour curve rounded roundstub wave zigzag
+;;                                slant utf-8))
+;;   (setq powerline-default-separator (seq-random-elt separators))
+;;   (spaceline-compile)
+;;   (message "set separator to %s" powerline-default-separator))
 ;;;; initialize modeline at startup
 ;; (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
