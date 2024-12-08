@@ -88,6 +88,7 @@
 (require 'init-chezmoi)
 (require 'init-consult)
 (require 'init-corfu)
+(require 'init-modus-themes)
 (require 'init-corfu-history)
 (require 'init-corfu-quick)
 (require 'init-dashboard)
