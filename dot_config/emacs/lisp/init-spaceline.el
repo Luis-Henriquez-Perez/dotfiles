@@ -163,6 +163,7 @@
 ;;   (message "set separator to %s" powerline-default-separator))
 ;;;; initialize modeline at startup
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
+
   (spaceline-compile
     'main
     '((+evil-state :face (spaceline-highlight-face-evil-state))
