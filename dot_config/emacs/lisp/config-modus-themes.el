@@ -1,4 +1,4 @@
-;;; config-modus-operandi.el --- Configure modus-operandi -*- lexical-binding: t; -*-
+;;; config-modus-themes.el --- Configure modus-themes -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (c) 2024 Free Software Foundation, Inc.
 ;;
@@ -22,7 +22,7 @@
 ;;
 ;;; Commentary:
 ;;
-;; Configure modus-operandi.
+;; Configure modus-themes.
 ;;
 ;;; Code:
 (defun oo-apply-custom-faces-for-modus-themes-h (theme)
@@ -47,5 +47,5 @@ This hook is meant to be added to `enabled-theme-functions'."
 ;;; Set custom faces
 (add-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h)
 ;;; provide
-(provide 'config-modus-operandi)
-;;; config-modus-operandi.el ends here
+(provide 'config-modus-themes)
+;;; config-modus-themes.el ends here
