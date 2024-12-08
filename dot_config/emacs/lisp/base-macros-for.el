@@ -31,9 +31,7 @@
 ;;;; for!
 ;; There is a huge question of whether to automatically wrap loops with
 ;; =autolet!=, but I decided to.
-(defalias 'dolist! 'for!)
-(defalias 'for! 'loop!)
-(defmacro loop! (loop-struct &rest body)
+(defmacro for! (loop-struct &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
 take the following forms:
