@@ -42,7 +42,7 @@
 ;;;;; defhook!
 (defmacro! hook! (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
-Generated function will call."
+Generated function call FUNCTION and logs any errors.."
   (flet! word-wrap (len s)
     (save-match-data
       (with-temp-buffer
