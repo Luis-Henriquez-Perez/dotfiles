@@ -39,10 +39,7 @@
 (setf (alist-get 'hy-mode     outli-heading-config)
       (alist-get 'emacs-lisp-mode outli-heading-config))
 
-(defun! oo-reset-outli-faces-h (_)
-  (outli-reset-all-faces))
-
-(add-hook 'enable-theme-functions #'oo-reset-outli-faces-h)
+(hook! enable-theme-functions outli-reset-all-faces :ignore-args t)
 ;;; provide
 (provide 'config-outli)
 ;;; config-outli.el ends here
