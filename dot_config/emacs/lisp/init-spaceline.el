@@ -154,11 +154,6 @@
   (setq powerline-default-separator (seq-random-elt separators))
   (spaceline-compile)
   (message "set separator to %s" powerline-default-separator))
-;;;; evil face
-(defun +spaceline-evil-face ()
-  "Return the evil-face."
-  (alet (intern (format "spaceline-evil-%s" evil-state))
-    (and (facep it) it)))
 ;;;; do not byte-compile the modeline at startup
 ;; Although this saves time the longer you use the modeline, it means that the
 ;; call to `spaceline-compile' is called takes significantly longer which is
@@ -173,7 +168,7 @@
 (defun oo-init-modeline-h ()
   (spaceline-compile
     'main
-    '((my-evil-state :face (+spaceline-evil-face))
+    '((my-evil-state :face (alet (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
       ((my-narrow my-kbd-macro my-buffer-read-only my-buffer-modified buffer-id remote-host) :priority 98)
       (my-version-control :face 'powerline-active0))
     '((my-pomodoro :face 'powerline-active0) major-mode (my-current-time :face (+spaceline-evil-face))))
