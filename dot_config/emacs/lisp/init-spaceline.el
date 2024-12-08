@@ -170,8 +170,6 @@
       (+version-control :face 'powerline-active0))
     '((+pomodoro :face 'powerline-active0) major-mode (+current-time)))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
-
-(add-hook 'after-init-hook #'oo-init-modeline-h 90)
 ;;; provide
 (provide 'init-spaceline)
 ;;; init-spaceline.el ends here
