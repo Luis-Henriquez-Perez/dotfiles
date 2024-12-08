@@ -241,6 +241,17 @@ is already narrowed."
   (interactive)
   (oo-ensure-file-header)
   (oo-ensure-provide))
+
+(defun! oo-move-chezmoi-unmanaged-to-trash (&optional dry-run-p)
+  "Move any unmanaged files in lisp directory to trash.
+With prefix argument, run as dry-run (do not actually move any files)."
+  (interactive "P")
+  (set! dir (f-full "~/.config/emacs/lisp/"))
+  (set! command (format "chezmoi unmanaged %s" dir))
+  (set! unmanaged-files (split-string (shell-command-to-string command) "\n" t))
+  (for! (file unmanaged-files)
+    (message "unmanaged-files -> %s" (expand-file-name file "~"))
+    (unless dry-run-p (move-file-to-trash file))))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here

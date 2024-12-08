@@ -73,7 +73,6 @@
 (require 'init-loaddefs)
 (require 'init-minibuffer)
 (require 'init-paren)
-(require 'init-rx)
 (require 'init-simple)
 (require 'init-startup)
 (require 'init-vc-hooks)
