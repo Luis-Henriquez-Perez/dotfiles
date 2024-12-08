@@ -59,6 +59,8 @@
 
 (opt! savehist-additional-variables (cl-adjoin 'evil-markers-alist savehist-additional-variables))
 ;;;; bindings
+(declare-function minibuffer-keyboard-quit "delsel")
+(declare-function evil-normal-state "evil")
 (defun oo-dwim-escape ()
   "Exits out of whatever is happening after escape."
   (interactive)
