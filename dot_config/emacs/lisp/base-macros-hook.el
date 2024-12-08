@@ -61,14 +61,14 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! docstring (string-join (list (format "Call `%s' from `%s'." function hook)
                                      (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
                                "\n"))
-  (set! funcall-form (if ignore-args `(,function) ))
+  (set! funcall-form (if ignore-args `(,function) (apply #',function args)))
   `(prog1 ',fname
      (declare-function ,function nil)
      (defun ,fname (&rest args)
        ,docstring
        (info! "HOOK: %s -> %s" ',hook ',function)
        (condition-case err
-           (apply #',function args)
+           ,funcall-form
          (error
           (cond (oo-debug-p
                  (signal (car err) (cdr err)))
