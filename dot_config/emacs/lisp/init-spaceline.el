@@ -43,7 +43,7 @@
 ;; TODO: during idle time byte-compile the spaceline function.
 (setq spaceline-byte-compile nil)
 ;;;; reset powerline after theme change
-(hook! enable-theme-functions powerline-reset)
+(hook! enable-theme-functions powerline-reset :ignore-args)
 ;;;; defsegment!
 ;; This lets me use autolet! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
