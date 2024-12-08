@@ -45,6 +45,7 @@
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
+
   ;; This is taken directly from the `s' library.  Right now, it is the only
   ;; function from there I use.  Not wanting to require s for just one short
   ;; function, I copied it is body here.
@@ -58,9 +59,7 @@
   `(prog1 ',fname
      (declare-function ,function nil)
      (defun ,fname (&rest args)
-       ,(string-join (list (format "Call `%s' from `%s'." function hook)
-                           (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
-                     "\n")
+
        (info! "HOOK: %s -> %s" ',hook ',function)
        (condition-case err
            (apply #',function args)
