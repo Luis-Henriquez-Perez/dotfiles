@@ -56,13 +56,13 @@
         (buffer-substring (point-min) (point-max)))))
   `(progn
      (declare-function ,function nil)
-     (defun ,fname (&rest _)
+     (defun ,fname (&rest args)
        ,(string-join (list (format "Call `%s' from `%s'." function hook)
                            (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
                      "\n")
        (info! "HOOK: %s -> %s" ',hook ',function)
        (condition-case err
-           (funcall #',function)
+           (apply #',function args)
          (error
           (cond (oo-debug-p
                  (signal (car err) (cdr err)))
