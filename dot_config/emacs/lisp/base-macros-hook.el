@@ -41,6 +41,7 @@
 ;;;; hooks
 ;;;;; defhook!
 (defmacro! hook! (hook function &rest args)
+  "Generate a function that calls FUNCTION and add it to HOOK."
   (flet! word-wrap (len s)
     (save-match-data
       (with-temp-buffer
