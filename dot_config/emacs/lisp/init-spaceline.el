@@ -162,7 +162,7 @@
   (spaceline-compile)
   (message "set separator to %s" powerline-default-separator))
 ;;;; initialize modeline at startup
-(defun! oo-init-modeline-h ()
+(defhook! oo-init-modeline-h ()
   (spaceline-compile
     'main
     '((+evil-state)
