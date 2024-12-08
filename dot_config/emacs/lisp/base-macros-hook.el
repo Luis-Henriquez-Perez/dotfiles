@@ -58,9 +58,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (string-join (list (format "Call `%s' from `%s'." function hook)
                      (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
                "\n")
-  ;; This is taken directly from the `s' library.  Right now, it is the only
-  ;; function from there I use.  Not wanting to require s for just one short
-  ;; function, I copied it is body here.
   `(prog1 ',fname
      (declare-function ,function nil)
      (defun ,fname (&rest args)
