@@ -34,56 +34,29 @@
   (powerline-reset))
 
 (add-hook 'enable-theme-functions #'oo-reset-modeline-h)
-;;;; representation
-;; Do not throw away information.
-;; (defun oo-icon (nerd-name all-the-icons-name text)
-;;   ""
-;;   )
-;; (cond (t
-;;        (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1))
-;;       (t
-;;        (nerd-icons-codicon "nf-cod-record"))
-;;       (t
-;;        "REC"))
 ;;;; defsegment!
 ;; This lets me use autolet! in the body of the macro and expresses the segments
 ;; as functions that I can freely modify and re-evaluate to make the segment
 ;; change in real time.  This makes it much easier to debug segments or even to
 ;; determine if they work beforehand.
-;; (defmacro! +spaceline-define-segment! (name value &rest props)
-;;   (declare (indent 1) (doc-string 2))
-;;   (set! fn (intern (format "+spaceline-%s-segment" name)))
-;;   (set! meta (when (stringp (car-safe value)) (list (pop value))))
-;;   `(progn
-;;      (defun! ,fn () ,@(append meta value))
-;;      (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
+(defmacro! +spaceline-define-segment! (name value &rest props)
+  (declare (indent 1) (doc-string 2))
+  (set! fn (intern (format "+spaceline-%s-segment" name)))
+  (set! meta (when (stringp (car-safe value)) (list (pop value))))
+  `(progn
+     (defun! ,fn () ,@(append meta value))
+     (spaceline-define-segment ,name ,@(append meta `((funcall #',fn))) ,@props)))
 ;;;; set powerline height
 (setq powerline-height 33)
 ;;;; define custom segments
-;; (+spaceline-define-segment! my-kbd-macro
-;;   "Display an icon to represent when."
-;;   (or (and defining-kbd-macro
-;;            (cond (t
-;;                   (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
-;;                   ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
-;;                   )
-;;                  (t
-;;                   (nerd-icons-codicon "nf-cod-record"))
-;;                  (t
-;;                   "REC")))
-;;       (and executing-kbd-macro
-;;            (all-the-icons-faicon "play" :face 'error)
-;;            ;; (format "EXECUTING KBD MACRO...")
-;;            )))
-
-(spaceline-define-segment my-kbd-macro
+(+spaceline-define-segment! +kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
-           (cond (t
+           (cond ((featurep 'all-the-icons)
                   (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
                   ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
                   )
-                 (t
+                 ((featurep 'nerd-icons)
                   (nerd-icons-codicon "nf-cod-record"))
                  (t
                   "•REC")))
@@ -92,7 +65,7 @@
            ;; (format "EXECUTING KBD MACRO...")
            )))
 
-(spaceline-define-segment my-narrow
+(+spaceline-define-segment! +narrow
   "Indicate when the current buffer is narrowed."
   (when (or (buffer-narrowed-p)
             (and (bound-and-true-p fancy-narrow-mode)
@@ -105,7 +78,7 @@
           (t
            "><"))))
 
-(spaceline-define-segment my-buffer-read-only
+(+spaceline-define-segment! +buffer-read-only
   "Display"
   (when buffer-read-only
     (if (not (and (display-graphic-p) (require 'all-the-icons)))
@@ -117,33 +90,32 @@
             (t
              "LOCK")))))
 
-(spaceline-define-segment my-buffer-modified
+(+spaceline-define-segment! +buffer-modified
   "Buffer modified"
   (when (and (buffer-file-name) (buffer-modified-p))
     (cond (t (all-the-icons-material "save" :face 'error))
           (t (all-the-icons-material "save" :face 'error)))))
 
-(spaceline-define-segment my-pomodoro
+(+spaceline-define-segment! +pomodoro
   "Display left for pomodoro."
-  (autolet!
-   (when (and (bound-and-true-p pomodoro-mode-line-string)
-              (not (string-empty-p pomodoro-mode-line-string)))
-     (require 'all-the-icons-nerd-fonts)
-     (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
-     (set! type (match-string 1 pomodoro-mode-line-string))
-     (set! time (match-string 2 pomodoro-mode-line-string))
-     (string-join (list
-                   (pcase type
-                     ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
-                     ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                     ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
-                     ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
-                     )
-                   time)
-                  "\s"))))
+  (when (and (bound-and-true-p pomodoro-mode-line-string)
+             (not (string-empty-p pomodoro-mode-line-string)))
+    (require 'all-the-icons-nerd-fonts)
+    (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
+    (set! type (match-string 1 pomodoro-mode-line-string))
+    (set! time (match-string 2 pomodoro-mode-line-string))
+    (string-join (list
+                  (pcase type
+                    ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
+                    ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
+                    ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
+                    ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
+                    )
+                  time)
+                 "\s")))
 
 ;; The value of vc-mode is not always correct.
-(spaceline-define-segment my-version-control
+(+spaceline-define-segment! +version-control
   "Display current git branch."
   (let ((default-directory (or (and buffer-file-name
                                     (locate-dominating-file buffer-file-name ".git"))
@@ -151,12 +123,12 @@
     (when (and default-directory (file-directory-p (concat default-directory ".git")))
       (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))))
 
-(spaceline-define-segment my-evil-state
+(+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
   (when (bound-and-true-p evil-mode)
     (symbol-name evil-state)))
 
-(spaceline-define-segment my-current-time
+(+spaceline-define-segment! +current-time
   "Display the current time."
   (format-time-string "%m-%d %H:%M"))
 ;;;; toggle default separator
