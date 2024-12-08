@@ -55,7 +55,6 @@
         (let ((fill-column len))
           (fill-region (point-min) (point-max)))
         (buffer-substring (point-min) (point-max)))))
-  ;; (oo-condition-case-fn fn action)
   `(progn
      (declare-function ,function nil)
      (defun ,fname (&rest args)
