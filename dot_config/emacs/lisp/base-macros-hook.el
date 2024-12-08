@@ -55,7 +55,8 @@
         (let ((fill-column len))
           (fill-region (point-min) (point-max)))
         (buffer-substring (point-min) (point-max)))))
-  `(progn
+  `(prog1
+       ',fname
      (declare-function ,function nil)
      (defun ,fname (&rest args)
        ,(string-join (list (format "Call `%s' from `%s'." function hook)
