@@ -45,7 +45,7 @@ This hook is meant to be added to `enabled-theme-functions'."
       (info! "Done setting specific modus-themes faces.")
       (remove-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h))))
 ;;; Set custom faces
-(add-hook 'enable-theme-functions #'oo-apply-custom-faces-for-modus-themes-h)
+(hook! enable-theme-functions oo-apply-custom-faces-for-modus-themes-h)
 ;;; provide
 (provide 'config-modus-themes)
 ;;; config-modus-themes.el ends here
