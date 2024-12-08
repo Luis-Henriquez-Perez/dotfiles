@@ -162,14 +162,14 @@
   (spaceline-compile)
   (message "set separator to %s" powerline-default-separator))
 ;;;; initialize modeline at startup
-(opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
+;; (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
   (spaceline-compile
     'main
     '((+evil-state :face (spaceline-highlight-face-evil-state))
       ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
       (+version-control :face 'powerline-active0))
-    '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face ())))
+    '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
 (provide 'init-spaceline)
