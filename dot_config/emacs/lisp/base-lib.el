@@ -131,10 +131,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
 
 (defmacro debug! (msg &rest meta)
   `(lgr-debug oo-logger ,msg ,@meta))
-;;;; silently
-(defun oo-funcall-silently (fn &rest args)
-  "Call FN with ARGS without producing any output."
-  (shut-up (apply fn args)))
 ;;;; popup
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
