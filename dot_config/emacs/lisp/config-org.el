@@ -39,14 +39,14 @@ in alphabetical order."
   (set! current (mapcar #'substring-no-properties (org-get-tags (point) t)))
   (set! selected (completing-read-multiple "Choose tag: " all))
   (set! new (append (cl-set-difference selected current) (cl-set-difference current selected)))
-  (org-set-tags (-sort #'string< new)))
+  (org-set-tags (sort new #'string<)))
 
 (defun! +org-alphabetize-tags ()
   "Alphabetize tags in current buffer."
   (interactive)
   (flet! fn (headline)
     (alet (org-ml-get-property :tags headline)
-      (org-ml-set-property :tags (-sort #'string< it) headline)))
+      (org-ml-set-property :tags (sort it #'string<) headline)))
   (org-ml-do-headlines #'fn))
 
 (defun! oo--suppress-window-deletion (orig-fn &rest args)
