@@ -41,7 +41,9 @@
 ;; determine if they work beforehand.
 (defmacro! +spaceline-define-segment! (name value &rest props)
   (declare (indent 1) (doc-string 2))
-  (set! fn (intern (format "+spaceline-%s-segment" name)))
+  (string-match "\\`\\+\\(.+\\)\\'" (symbol-name name))
+  (set! base (match-string 1 (symbol-name name)))
+  (set! fn (intern (format "+spaceline-%s-segment" base)))
   (set! meta (when (stringp (car-safe value)) (list (pop value))))
   `(progn
      (defun! ,fn () ,@(append meta value))
