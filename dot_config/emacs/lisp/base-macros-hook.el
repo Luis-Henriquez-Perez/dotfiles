@@ -49,7 +49,7 @@
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  (while (alet (car args) (and (symbolp it) (not (keywordp it))))
+  (while (alet (car args) (and it (symbolp it) (not (keywordp it))))
     (collecting! hooks (pop args)))
   (dolist (hook hooks)
     (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
