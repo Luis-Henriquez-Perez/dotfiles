@@ -53,16 +53,13 @@
     (info! "Running timer for lowering garbage collection...")
     (set! gc-default (* 8 1024 1024))
     (set! gcp-default 0.2)
-    (and (or (when (/= gc-cons-threshold gc-default)
-               (set! old gc-cons-threshold)
-               (set! new (max (* gc-cons-threshold 0.8) gc-default))
-               (info! "Lower `gc-cons-threshold' from %s to %s..." old new)
-               (setq gc-cons-threshold new))
-             (when (/= gc-cons-percentage gcp-default)
-               (set! old (max gc-cons-percentage gcp-default))
-               (set! new (max (- gc-cons-percentage 0.1) gcp-default))
-               (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
-               (setq gc-cons-percentage new)))
+
+    (and (or
+          (when (/= gc-cons-percentage gcp-default)
+            (set! old (max gc-cons-percentage gcp-default))
+            (set! new (max (- gc-cons-percentage 0.1) gcp-default))
+            (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
+            (setq gc-cons-percentage new)))
          (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))))
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
