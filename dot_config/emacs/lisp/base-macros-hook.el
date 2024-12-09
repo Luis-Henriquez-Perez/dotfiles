@@ -42,7 +42,7 @@
 ;;;;; defhook!
 (defmacro hook! (hook function &rest args)
   `(progn (declare-function ,function)
-          (oo-add-hook ',hook #',function)))
+          (oo-add-hook ',hook #',function ,@args)))
 
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
