@@ -52,7 +52,7 @@
                  (car err)
                  (cdr err)))))
 
-(defun oo--hook-docstring ()
+(defun oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
   (flet! word-wrap (len s)
     (save-match-data
