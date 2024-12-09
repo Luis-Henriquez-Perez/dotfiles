@@ -61,7 +61,7 @@
 
 ;; Influenced from smartparens.  This does it for emacs-lisp but I wonder if
 ;; there is a general way to determine.
-(defun! oo--in-docstring-p ()
+(defun! oo--in-elisp-docstring-p ()
   "Return the bounds of docstring."
   (alet (bounds-of-thing-at-point 'string)
     (and (derived-mode-p 'emacs-lisp-mode)
@@ -71,8 +71,8 @@
 	       (looking-at-p (regexp-opt oo--definer-list)))
          it)))
 
-(defun! oo--prog-mode-should-capitalize-p ()
-  "Return point where sentense should be capitalized."
+(defun! +captain--prog-mode-sentence-start ()
+  "Return point where sentence should be capitalized."
   (pcase (oo-in-string-or-comment-p)
     ('comment
      ;; For now use `lispy--bounds-comment' because I do not think there is a
@@ -88,17 +88,8 @@
                        (goto-char (match-end 0)))
                      (point)))
     ('string
-     (aand (car (oo--in-docstring-p))
-    	   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))
-    ))
-
-(defun! oo-set-captain-local-vars-h ()
-  "Initialize `captain' for text-mode."
-  (setq-local captain-predicate #'always)
-  (setq-local captain-sentence-start-function #'captain--default-sentence-start))
-
-(hook! text-mode-hook oo-set-captain-local-vars-h)
-(hook! emacs-lisp-mode-hook oo-set-captain-local-vars-h)
+     (aand (car (oo--in-elisp-docstring-p))
+    	   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))))
 ;;; provide
 (provide 'config-captain)
 ;;; config-captain.el ends here
