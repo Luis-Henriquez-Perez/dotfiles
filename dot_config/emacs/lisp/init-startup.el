@@ -58,10 +58,13 @@
       (set! new (max (* gc-cons-threshold 0.8) gc-default))
       (info! "Lower `gc-cons-threshold' from %s to %s..." old new)
       (setq gc-cons-threshold new))
-
-    (and (or
-          )
-         (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))))
+    (when (/= gc-cons-percentage gcp-default)
+      (set! old (max gc-cons-percentage gcp-default))
+      (set! new (max (- gc-cons-percentage 0.1) gcp-default))
+      (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
+      (setq gc-cons-percentage new))
+    (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
+    ))
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
   "Restore the values of `file-name-handler-alist' and `gc-cons-threshold'."
