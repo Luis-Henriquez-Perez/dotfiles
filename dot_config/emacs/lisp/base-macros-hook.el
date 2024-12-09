@@ -47,12 +47,14 @@
           (oo-add-hook ',hook #',function ,@args)))
 
 (defmacro aand! (&rest conditions)
-  `(alet (car conditions)
-     (and it (aand ))))
+  "Similar to `aand'"
+  `(alet ,(car conditions)
+     (and it ,@(cdr conditions))))
+
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  (while (alet (car args) (and it (symbolp it) (not (keywordp it))))
+  (while (aand! (car args) (symbolp it) (not (keywordp it)))
     (collecting! hooks (pop args)))
   (dolist (hook hooks)
     (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
