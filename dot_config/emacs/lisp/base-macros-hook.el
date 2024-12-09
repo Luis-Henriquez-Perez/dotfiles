@@ -51,14 +51,8 @@
                  ',function
                  (car err)
                  (cdr err)))))
-
-(defun! oo-add-hook (hook function &rest args)
-  "Generate a function that calls FUNCTION and add it to HOOK.
-Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
-generated function does not pass in any of its given arguments to FUNCTION."
-  ;; This is taken directly from the `s' library.  Right now, it is the only
-  ;; function from there I use.  Not wanting to require s for just one short
-  ;; function, I copied it is body here.
+(defun oo--hook-docstring ()
+  ""
   (flet! word-wrap (len s)
     (save-match-data
       (with-temp-buffer
@@ -72,16 +66,23 @@ generated function does not pass in any of its given arguments to FUNCTION."
           ((cdr lines)
            (concat (car lines) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
           ((word-wrap 80 (car lines)))))
+  (docstring (format "Call `%s' from `%s'." function hook)
+             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
+
+(defun! oo-add-hook (hook function &rest args)
+  "Generate a function that calls FUNCTION and add it to HOOK.
+Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
+generated function does not pass in any of its given arguments to FUNCTION."
+  ;; This is taken directly from the `s' library.  Right now, it is the only
+  ;; function from there I use.  Not wanting to require s for just one short
+  ;; function, I copied it is body here.
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
   (set! arglist (if ignore-args '_ (gensym "arglist")))
-  (docstring (format "Call `%s' from `%s'." function hook)
-             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
   (fset fname `(lambda (&rest ,arglist)
-                 ,(docstring (format "Call `%s' from `%s'." function hook)
-                             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                 ,(oo--hook-docstring hook function)
                  (info! "HOOK: %s -> %s" ',hook ',function)
                  (condition-case err
                      (apply #',function ,arglist)
