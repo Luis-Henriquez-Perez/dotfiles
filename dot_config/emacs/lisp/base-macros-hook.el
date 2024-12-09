@@ -52,7 +52,7 @@
                  (car err)
                  (cdr err)))))
 
-(defun oo--hook-docstring (hook function)
+(defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
   (flet! word-wrap (len s)
     (save-match-data
@@ -69,6 +69,8 @@
           ((word-wrap 80 (car lines)))))
   (docstring (format "Call `%s' from `%s'." function hook)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
+(oo--hook-docstring 'a-hook 'fn)
+;; => "Call `fn' from `a-hook'.\nIf `oo-debug-p' is non-nil suppress and log any error raised by `fn'."
 
 (defun! oo-add-hook (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
