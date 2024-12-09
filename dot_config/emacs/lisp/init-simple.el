@@ -43,7 +43,7 @@
 (defhook! oo-manage-trailing-whitespace-h (prog-mode-hook conf-mode-hook)
   "Show trailing whitespace and delete it before saving."
   (setq show-trailing-whitespace t)
-  (hook! before-save-hook delete-trailing-whitespace :local t))
+  (oo-add-hook 'before-save-hook #'delete-trailing-whitespace :local t))
 ;;;; less confusing kill buffer
 ;; https://christiantietze.de/posts/2023/09/kill-unsaved-buffer-ux-action-labels/
 (defun! oo--prompt-clearly (_ buffer &rest _)
