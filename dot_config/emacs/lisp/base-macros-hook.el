@@ -82,7 +82,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
     (cond ((null lines) nil)
           ((cdr lines)
            (concat (car line) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
-          ()))
+          ((word-wrap 80 (car lines)))))
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
