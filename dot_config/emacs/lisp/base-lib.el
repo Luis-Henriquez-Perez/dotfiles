@@ -92,6 +92,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! arglist (if ignore-args '_ (gensym "arglist")))
   (unless (fboundp fname)
     (fset fname `(lambda (&rest ,arglist)
+                   (ignore ,arglist)
                    ,(oo--hook-docstring hook function)
                    (info! "HOOK: %s -> %s" ',hook ',function)
                    (condition-case err
