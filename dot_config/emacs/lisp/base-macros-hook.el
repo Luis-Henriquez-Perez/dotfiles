@@ -82,22 +82,26 @@ generated function does not pass in any of its given arguments to FUNCTION."
     (cond ((null lines)
            "")
           ((cdr lines)
-           (concat (car line) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
+           (concat (car lines) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
           ((word-wrap 80 (car lines)))))
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
   (set! arglist (if ignore-args '_ (gensym "arglist")))
-  (fset fname `(lambda (&rest ,arglist)
-                 ,(docstring (format "Call `%s' from `%s'." function hook)
-                             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
-                 (info! "HOOK: %s -> %s" ',hook ',function)
-                 (condition-case err
-                     (apply #',function ,arglist)
-                   (error
-                    (oo-handle-hook-error error hook function)))))
-  (add-hook hook fname depth local))
+  (docstring (format "Call `%s' from `%s'." function hook)
+             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+  ;; (fset fname `(lambda (&rest ,arglist)
+  ;;                ,(docstring (format "Call `%s' from `%s'." function hook)
+  ;;                            (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+  ;;                (info! "HOOK: %s -> %s" ',hook ',function)
+  ;;                (condition-case err
+  ;;                    (apply #',function ,arglist)
+  ;;                  (error
+  ;;                   (oo-handle-hook-error error hook function)))))
+  ;; (add-hook hook fname depth local)
+  )
+(oo-add-hook 'emacs-startup-hook #'foo)
 
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
