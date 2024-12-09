@@ -72,10 +72,10 @@
   "Restore the values of `file-name-handler-alist' and `gc-cons-threshold'."
   (info! "Restore the value of `file-name-handler-alist'.")
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
-  (set! old (alet (/ gc-cons-threshold 1024 1024) (if (> it 200) "unlimited")))
+  (set! old (alet (/ gc-cons-threshold 1024 1024) (if (> it 200) "UNLIMITED")))
   (setq gc-cons-threshold (* 32 1024 1024))
   (set! new (/ gc-cons-threshold 1024 1024))
-  (info! "Restore the value of `gc-cons-threshold' from %s to %s MB." old new)
+  (info! "Reducee the value of `gc-cons-threshold' from %s to %s MB." old new)
   (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
