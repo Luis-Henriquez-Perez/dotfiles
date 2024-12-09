@@ -70,7 +70,6 @@
   (docstring (format "Call `%s' from `%s'." function hook)
              (format "Log call to `%s'." function)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
-(oo--hook-docstring 'a-hook 'fn)
 
 (defun! oo-add-hook (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
