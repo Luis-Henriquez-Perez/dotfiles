@@ -65,7 +65,8 @@
       (setq gc-cons-percentage new))
     (if (and (= gc-cons-threshold gc-default)
              (= gc-cons-percentage gcp-default))
-        (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
+        (message "Done with timer.")
+      (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
     ))
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
