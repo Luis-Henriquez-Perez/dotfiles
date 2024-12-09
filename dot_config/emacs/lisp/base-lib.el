@@ -50,13 +50,12 @@
 (declare-function evil-define-key* "evil")
 ;;;; hooks
 (defun oo--handle-hook-error (err hook function)
-  (cond (oo-debug-p
-         (signal (car err) (cdr err)))
-        (t
-         (error! "Error calling %s in %s because of %s"
-                 ',function
-                 (car err)
-                 (cdr err)))))
+  (if oo-debug-p
+      (signal (car err) (cdr err))
+    (error! "Error calling %s in %s because of %s"
+            ',function
+            (car err)
+            (cdr err))))
 
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
