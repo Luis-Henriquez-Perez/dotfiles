@@ -40,6 +40,7 @@
 (require 'base-macros-definers)
 ;;;; hooks
 ;;;;; defhook!
+;; This is a convenience macro for.
 (defmacro hook! (hook function &rest args)
   ""
   `(progn (declare-function ,function)
