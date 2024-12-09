@@ -40,7 +40,30 @@
 (require 'base-macros-definers)
 ;;;; hooks
 ;;;;; defhook!
-(defmacro! hook! (hook function &rest args)
+(defun oo-condition-case-fn (fn action &optional handlers)
+  "Return a function that calls ACTION when errors matching HANDLERS are raised.
+ACTION is a function with three arguments the error object, FN and the list of
+arguments FN will be called with."
+  ;; To be honest I'm not sure if I need to make a gensym for the variable
+  ;; `err'.  I do it just in case.
+  (cl-callf or handlers 'error)
+  (cl-callf or action #'ignore)
+  (cl-with-gensyms (err)
+    `(lambda (&rest args)
+       (condition-case ,err
+           (apply #',fn args)
+         (,handlers (funcall #',action ,err #',fn args))))))
+
+(defun oo-handle-hook-error ()
+  (cond (oo-debug-p
+         (signal (car err) (cdr err)))
+        (t
+         (error! "Error calling %s in %s because of %s"
+                 ',function
+                 (car err)
+                 (cdr err)))))
+
+(defun! oo-add-hook (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
 Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
 generated function does not pass in any of its given arguments to FUNCTION."
@@ -54,30 +77,22 @@ generated function does not pass in any of its given arguments to FUNCTION."
         (let ((fill-column len))
           (fill-region (point-min) (point-max)))
         (buffer-substring (point-min) (point-max)))))
+  (flet! docstring (&rest lines)
+    (concat (car line) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
-  (set! docstring (string-join (list (format "Call `%s' from `%s'." function hook)
-                                     (word-wrap 80 (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
-                               "\n"))
-  (set! funcall-form (if ignore-args `(,function) `(apply #',function args)))
-  `(prog1 ',fname
-     (declare-function ,function nil)
-     (defun ,fname (&rest args)
-       ,docstring
-       (info! "HOOK: %s -> %s" ',hook ',function)
-       (condition-case err
-           ,funcall-form
-         (error
-          (cond (oo-debug-p
-                 (signal (car err) (cdr err)))
-                (t
-                 (error! "Error calling %s in %s because of %s"
-                         ',function
-                         (car err)
-                         (cdr err)))))))
-     (add-hook ',hook #',fname ,depth ,local)))
+  (set! arglist (if ignore-args '_ (gensym "arglist")))
+  (fset fname (lambda (&rest ,arglist)
+                ,(docstring (format "Call `%s' from `%s'." function hook)
+                            (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                (info! "HOOK: %s -> %s" ',hook ',function)
+                (condition-case err
+                    (apply #',function ,arglist)
+                  (error
+                   (oo-handle-hook-error (car err) (cdr err))))))
+  (add-hook hook fname depth local))
 
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
