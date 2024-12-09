@@ -66,7 +66,7 @@
   (set! old (/ gc-cons-threshold 1024 1024))
   (setq gc-cons-threshold (* 32 1024 1024))
   (set! new (/ gc-cons-threshold 1024 1024))
-  (info! "Restore the value of `gc-cons-threshold' from %s to %s." old new)
+  (info! "Restore the value of `gc-cons-threshold' from %s maybe to %s." old new)
   (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
