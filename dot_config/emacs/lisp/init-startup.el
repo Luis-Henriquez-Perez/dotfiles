@@ -66,8 +66,7 @@
     (if (and (= gc-cons-threshold gc-default)
              (= gc-cons-percentage gcp-default))
         (message "Done with timer.")
-      (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
-    ))
+      (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))))
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
   "Restore the values of `file-name-handler-alist' and `gc-cons-threshold'."
