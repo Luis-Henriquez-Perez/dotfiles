@@ -52,7 +52,7 @@
 (defun oo--handle-hook-error (err hook function)
   (if oo-debug-p
       (signal (car err) (cdr err))
-    (error! "Error %s calling %s from %s because of %s"
+    (error! "%s error from calling %s from %s because of %s"
             (car err)
             function
             hook
