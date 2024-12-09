@@ -25,6 +25,7 @@
 ;; Initialize startup.
 ;;
 ;;; Code:
+
 ;;;; don't show the startup screen
 ;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
 ;; think these variables are all aliases for eachother.
@@ -48,16 +49,21 @@
 ;;;;; garbage collection
 (defun! oo--timer--lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
-  (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
-  (info!)
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
-    (cl-decf gc-cons-threshold (* 4 1024 1024))
-    (cl-decf gc-cons-percentage 0.1)
-    (cond ((= gc-cons-threshold (* 8 1024 1024))
-           (setq gc-cons-percentage 0.4))
-          (t
-           (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)))))
+    (set! gc-default (* 8 1024 1024))
+    (set! gcp-default 0.2)
+    (and (or (when (/= gc-cons-threshold gc-default)
+               (set! old gc-cons-threshold)
+               (set! new (max (* gc-cons-threshold 0.8) gc-default))
+               (info! "Lower `gc-cons-threshold' from %s to %s..." old new)
+               (setq gc-cons-threshold new))
+             (when (/= gc-cons-percentage gcp-default)
+               (set! old (max gc-cons-percentage gcp-dfault))
+               (set! new (max (- gc-cons-percentage 0.1) gcp-default))
+               (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
+               (setq gc-cons-percentage new)))
+         (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))))
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
   "Restore the values of `file-name-handler-alist' and `gc-cons-threshold'."
@@ -66,7 +72,7 @@
   (set! old (/ gc-cons-threshold 1024 1024))
   (setq gc-cons-threshold (* 32 1024 1024))
   (set! new (/ gc-cons-threshold 1024 1024))
-  (info! "Restore the value of `gc-cons-threshold' from %s to %s." old new)
+  (info! "Restore the value of `gc-cons-threshold' from %s to %s MB." old new)
   (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
