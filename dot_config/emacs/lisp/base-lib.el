@@ -91,7 +91,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! funcall-form (if ignore-args `(,function) `(apply #',function arglist)))
   (unless (fboundp fname)
     (fset fname `(lambda (&rest arglist)
-                   (ignore ,arglist)
+                   (ignore arglist)
                    ,(oo--hook-docstring hook function)
                    (info! "HOOK: %s -> %s" ',hook ',function)
                    (condition-case err
