@@ -48,9 +48,9 @@
 ;;;;; garbage collection
 (defun! oo--timer--lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
-  (info!)
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
+    (info! "Running ")
     (set! gc-default (* 8 1024 1024))
     (set! gcp-default 0.2)
     (and (or (when (/= gc-cons-threshold gc-default)
