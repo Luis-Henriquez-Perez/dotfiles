@@ -88,7 +88,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
-  (set! funcall-form (if ignore-args `(,function) `(apply #',function ,arglist)))
+  (set! funcall-form (if ignore-args `(,function) `(apply #',function arglist)))
   (unless (fboundp fname)
     (fset fname `(lambda (&rest arglist)
                    (ignore ,arglist)
