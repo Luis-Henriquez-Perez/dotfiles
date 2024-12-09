@@ -92,6 +92,10 @@ generated function does not pass in any of its given arguments to FUNCTION."
                     (oo--handle-hook-error error hook function)))))
   (add-hook hook fname depth local))
 
+(defmacro hook! (hook function &rest args)
+  `(progn (declare-function ,function)
+          ()))
+
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
