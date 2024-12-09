@@ -45,10 +45,6 @@
   `(progn (declare-function ,function nil)
           (oo-add-hook ',hook #',function ,@args)))
 
-(defmacro take-while! ()
-  (while ,pred
-    (pop list)))
-
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
