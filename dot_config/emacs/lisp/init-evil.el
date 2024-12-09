@@ -61,6 +61,7 @@
 ;;;; bindings
 (declare-function minibuffer-keyboard-quit "delsel")
 (declare-function evil-normal-state "evil")
+
 (defun oo-dwim-escape ()
   "Exits out of whatever is happening after escape."
   (interactive)
@@ -72,6 +73,10 @@
            (abort-recursive-edit)))
 		((or defining-kbd-macro executing-kbd-macro) nil)
         (t
+         (when (and (not buffer-read-only)
+                    (buffer-file-name)
+                    (buffer-modified-p))
+           (save-buffer))
 		 (keyboard-quit))))
 
 (bind! (i e) [escape] #'oo-dwim-escape)
