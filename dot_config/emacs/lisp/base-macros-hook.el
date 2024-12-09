@@ -41,6 +41,7 @@
 ;;;; hooks
 ;;;;; defhook!
 (defmacro hook! (hook function &rest args)
+  ""
   `(progn (declare-function ,function)
           (oo-add-hook ',hook #',function ,@args)))
 
