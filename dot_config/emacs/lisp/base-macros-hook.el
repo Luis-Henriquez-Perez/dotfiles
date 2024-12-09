@@ -87,7 +87,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
                  (condition-case err
                      (apply #',function ,arglist)
                    (error
-                    (oo-handle-hook-error error hook function)))))
+                    (oo--handle-hook-error error hook function)))))
   (add-hook hook fname depth local))
 
 (defmacro! defhook! (name args &rest body)
