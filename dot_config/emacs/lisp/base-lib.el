@@ -97,7 +97,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
                    (error
                     (oo--handle-hook-error error hook function)))))
   (add-hook hook fname depth local))
-
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
