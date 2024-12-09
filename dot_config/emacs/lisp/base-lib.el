@@ -90,6 +90,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
   (set! arglist (if ignore-args '_ (gensym "arglist")))
+  (set! )
   (unless (fboundp fname)
     (fset fname `(lambda (&rest ,arglist)
                    (ignore ,arglist)
