@@ -87,12 +87,23 @@
               (require ',file)))
           (oo-call-after-load ',feature #',name)))
 ;;;;; setq-hook
+
 (defmacro! setq-hook! (hooks symbol value)
   "Set the local value of hook."
-  (set! name (intern (format "oo--%s--set-local-var--%s-h" hook symbol)))
-  `(defhook! ,name ,(ensure-list hooks)
-     ,(format "Set local variable `%S' locally." symbol)
-     (setq-local ,symbol ,value)))
+  (dolist (hook (ensure-list hooks))
+    (set! name (intern (format "oo--%s--set-local-var--%s" hook symbol)))
+    (set! docstring (format "Set local variable `%S' to `%S'." ',symbol ',value))
+    (set! lambda `(lambda (&rest _)
+                    (info! "HOOK: %s -> %s" ',hook ',name)
+                    (condition-case err
+                        (setq-local ,symbol ,value)
+                      (error
+                       (error! "%s error in local hook %s because of %s"
+                               (car err)
+                               ',hook
+                               (cdr err))))))
+    (appending! forms `((fset ',name ,lambda) (add-hook ',hook #',name nil nil))))
+  (macroexp-progn forms))
 ;;; provide
 (provide 'base-macros-hook)
 ;;; base-macros-hook.el ends here
