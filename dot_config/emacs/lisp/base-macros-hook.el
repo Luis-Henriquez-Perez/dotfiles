@@ -55,7 +55,6 @@ arguments FN will be called with."
          (,handlers (funcall #',action ,err #',fn args))))))
 
 (defun oo-handle-hook-error (err hook function)
-  ""
   (cond (oo-debug-p
          (signal (car err) (cdr err)))
         (t
