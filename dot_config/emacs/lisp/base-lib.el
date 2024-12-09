@@ -60,6 +60,9 @@
 
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
+  ;; This is taken directly from the `s' library.  Right now, it is the only
+  ;; function from there I use.  Not wanting to require s for just one short
+  ;; function, I copied it is body here.
   (flet! word-wrap (len s)
     (save-match-data
       (with-temp-buffer
@@ -81,9 +84,6 @@
   "Generate a function that calls FUNCTION and add it to HOOK.
 Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
 generated function does not pass in any of its given arguments to FUNCTION."
-  ;; This is taken directly from the `s' library.  Right now, it is the only
-  ;; function from there I use.  Not wanting to require s for just one short
-  ;; function, I copied it is body here.
   (set! fname (intern (format "%s&%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
