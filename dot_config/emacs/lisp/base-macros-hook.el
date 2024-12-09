@@ -48,7 +48,7 @@
 
 (defmacro aand! (&rest conditions)
   `(alet (car conditions)
-     (and it )))
+     (and it (aand ))))
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
