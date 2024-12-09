@@ -96,7 +96,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
                    (condition-case err
                        (apply #',function ,arglist)
                      (error
-                      (oo--handle-hook-error err hook function))))))
+                      (oo--handle-hook-error err ',hook #',function))))))
   (add-hook hook fname depth local))
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
