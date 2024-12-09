@@ -50,9 +50,8 @@
   "Restore the values of."
   (info! "Restoring the value of `file-name-handler-alist'.")
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
-  (set! old)
-  (info! "Restore the value of `gc-cons-threshold' from %s")
-  (setq gc-cons-threshold (* 32 1024 1024))
+  (alet gc-cons-threshold (info! "Restore the value of `gc-cons-threshold' from %s")
+        (setq gc-cons-threshold (* 32 1024 1024)))
   (run-with-timer 5 nil #'oo-lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
