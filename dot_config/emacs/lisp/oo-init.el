@@ -84,18 +84,6 @@ file is loaded."
   "Reset garbage collection settings to `gcmh-low-cons-threshold'."
   (setq gc-cons-threshold (get-register :gc-cons-threshold))
   (setq gc-cons-percentage (get-register :gc-cons-percentage)))
-;;;;; garbage collection
-(defun! oo-lower-garbage-collection ()
-  "Lower garbage collection until it reaches default values."
-  (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
-  (if (minibuffer-window-active-p (minibuffer-window))
-      (run-with-timer 5 nil #'oo-lower-garbage-collection)
-    (cl-decf gc-cons-threshold (* 4 1024 1024))
-    (cl-decf gc-cons-percentage 0.1)
-    (cond ((= gc-cons-threshold (* 8 1024 1024))
-           (setq gc-cons-percentage 0.4))
-          (t
-           (run-with-timer 5 nil #'oo-lower-garbage-collection)))))
 ;;;; keybindings
 ;;;;; declare override-mode
 (require 'bind-key)
