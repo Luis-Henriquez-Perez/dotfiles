@@ -59,7 +59,7 @@
                (info! "Lower `gc-cons-threshold' from %s to %s..." old new)
                (setq gc-cons-threshold new))
              (when (/= gc-cons-percentage gcp-default)
-               (set! old (max gc-cons-percentage gcp-dfault))
+               (set! old (max gc-cons-percentage gcp-default))
                (set! new (max (- gc-cons-percentage 0.1) gcp-default))
                (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
                (setq gc-cons-percentage new)))
