@@ -52,7 +52,7 @@
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
   (alet gc-cons-threshold
     (setq gc-cons-threshold (* 32 1024 1024))
-    )
+    (info! "Restore the value of `gc-cons-threshold' from %s to %s."))
   (run-with-timer 5 nil #'oo-lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
