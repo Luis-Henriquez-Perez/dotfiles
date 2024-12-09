@@ -88,7 +88,7 @@
           (oo-call-after-load ',feature #',name)))
 ;;;;; setq-hook
 (defmacro! setq-hook! (hooks symbol value)
-  "Set the local value of hook."
+  "Add function to hook that sets the local value of SYMBOL to VALUE."
   (dolist (hook (ensure-list hooks))
     (set! name (intern (format "oo--%s--set-local-var--%s" hook symbol)))
     (set! docstring (format "Set local variable `%S' to `%S'." ',symbol ',value))
