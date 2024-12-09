@@ -49,6 +49,7 @@
   "Add function to hook as specified by NAME."
   (declare (indent defun))
   (set! hook (pop args))
+  ()
   (when (stringp (car body))
     (collecting! metadata (pop body)))
   (when (equal 'declare (car-safe (car body)))
