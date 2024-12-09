@@ -52,15 +52,16 @@
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
-  (set! hook (pop args))
-  (take-while ())
+  (while (alet (car args) (and (symbolp it) (not (keywordp it))))
+    (set! hook (pop args))
+    (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
   (when (stringp (car body))
     (collecting! metadata (pop body)))
   (when (equal 'declare (car-safe (car body)))
     (collecting! metadata (pop body)))
   `(progn
      (defun! ,name nil ,@metadata ,@body)
-     (hook! ,hook ,name ,@args)))
+     ,@hook-forms))
 ;;;;; after!
 ;; I made the decision to add a hook function to a hook regardless of whether
 ;; the hook has already has been run.  But if the hook has been run the hook
