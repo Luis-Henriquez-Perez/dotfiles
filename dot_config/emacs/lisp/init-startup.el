@@ -47,7 +47,7 @@
 (advice-add #'display-startup-echo-area-message :around #'ignore)
 ;;;; emacs-startup-hook
 (defhook! oo-restore-startup-values-h (emacs-startup-hook :depth 90)
-  "Restore the values of `file-name-handler-alist'."
+  "Restore the values of `file-name-handler-alist' and `gc-'."
   (info! "Restore the value of `file-name-handler-alist'.")
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
   (alet gc-cons-threshold
