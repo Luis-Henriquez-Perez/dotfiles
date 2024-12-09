@@ -80,7 +80,6 @@
              (format "Log call to `%s'." function)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
 
-(apply #'powerline-reset '_)
 (defun! oo-add-hook (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
 Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
@@ -89,15 +88,14 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
-  ;; (set! arglist (if ignore-args '_ (gensym "arglist")))
-  (set! funcall-form (if (funcall)))
+  (set! funcall-form (if ignore-args `(,function) (apply #',function ,arglist)))
   (unless (fboundp fname)
-    (fset fname `(lambda (&rest ,arglist)
+    (fset fname `(lambda (&rest arglist)
                    (ignore ,arglist)
                    ,(oo--hook-docstring hook function)
                    (info! "HOOK: %s -> %s" ',hook ',function)
                    (condition-case err
-                       (apply #',function ,arglist)
+                       ,funcall-form
                      (error
                       (oo--handle-hook-error err ',hook #',function))))))
   (add-hook hook fname depth local))
