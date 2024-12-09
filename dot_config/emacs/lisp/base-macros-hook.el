@@ -40,9 +40,6 @@
 (require 'base-macros-definers)
 ;;;; hooks
 ;;;;; defhook!
-(defmacro hook! (hook function &rest args)
-  `(oo-add-hook))
-
 (defun oo--handle-hook-error (err hook function)
   (cond (oo-debug-p
          (signal (car err) (cdr err)))
