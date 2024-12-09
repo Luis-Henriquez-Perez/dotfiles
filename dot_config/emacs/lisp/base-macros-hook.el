@@ -47,7 +47,7 @@
           (oo-add-hook ',hook #',function ,@args)))
 
 (defmacro aand! (&rest conditions)
-  "Similar to `aand' but only bindings frist"
+  "Similar to `aand' but only bindings first condition to `it'."
   `(alet ,(car conditions)
      (and it ,@(cdr conditions))))
 
