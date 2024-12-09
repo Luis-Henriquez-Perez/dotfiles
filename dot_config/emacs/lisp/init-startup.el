@@ -25,7 +25,6 @@
 ;; Initialize startup.
 ;;
 ;;; Code:
-
 ;;;; don't show the startup screen
 ;; By default Emacs displays [[][this startup screen]] at startup.  No thanks!  I
 ;; think these variables are all aliases for eachother.
