@@ -54,8 +54,8 @@
       (signal (car err) (cdr err))
     (error! "Error %s calling %s from %s because of %s"
             (car err)
-            ',function
-            ',hook
+            function
+            hook
             (cdr err))))
 
 (defun! oo--hook-docstring (hook function)
