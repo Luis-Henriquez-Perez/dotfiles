@@ -48,6 +48,56 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
+;;;; hooks
+(defun oo--handle-hook-error (err hook function)
+  (cond (oo-debug-p
+         (signal (car err) (cdr err)))
+        (t
+         (error! "Error calling %s in %s because of %s"
+                 ',function
+                 (car err)
+                 (cdr err)))))
+
+(defun! oo--hook-docstring (hook function)
+  "Generate a docstring for hook function."
+  (flet! word-wrap (len s)
+    (save-match-data
+      (with-temp-buffer
+        (insert s)
+        (let ((fill-column len))
+          (fill-region (point-min) (point-max)))
+        (buffer-substring (point-min) (point-max)))))
+  (flet! docstring (&rest lines)
+    (cond ((null lines)
+           "")
+          ((cdr lines)
+           (concat (car lines) "\n" (word-wrap 80 (string-join (cdr lines) "\s\s"))))
+          ((word-wrap 80 (car lines)))))
+  (docstring (format "Call `%s' from `%s'." function hook)
+             (format "Log call to `%s'." function)
+             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
+
+(defun! oo-add-hook (hook function &rest args)
+  "Generate a function that calls FUNCTION and add it to HOOK.
+Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
+generated function does not pass in any of its given arguments to FUNCTION."
+  ;; This is taken directly from the `s' library.  Right now, it is the only
+  ;; function from there I use.  Not wanting to require s for just one short
+  ;; function, I copied it is body here.
+  (set! fname (intern (format "%s&%s" hook function)))
+  (set! depth (plist-get args :depth))
+  (set! local (plist-get args :local))
+  (set! ignore-args (plist-get args :ignore-args))
+  (set! arglist (if ignore-args '_ (gensym "arglist")))
+  (fset fname `(lambda (&rest ,arglist)
+                 ,(oo--hook-docstring hook function)
+                 (info! "HOOK: %s -> %s" ',hook ',function)
+                 (condition-case err
+                     (apply #',function ,arglist)
+                   (error
+                    (oo--handle-hook-error error hook function)))))
+  (add-hook hook fname depth local))
+
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
@@ -142,7 +192,7 @@ Specifically, return the symbol `string' if point is in a string, the symbol
           (window-height 0.5)
           (window-parameters ((no-other-window t))))
     (push it display-buffer-alist)))
-;;;; stuff
+;;;; keybinding stuff
 (defun! oo-localleader-bind (keymap key def)
   "Convenience function for defining localleader bindings."
   (flet! leader (leader)
