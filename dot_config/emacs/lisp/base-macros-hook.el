@@ -42,6 +42,7 @@
 ;;;;; defhook!
 ;; This is a convenience macro for.
 (defmacro hook! (hook function &rest args)
+  "Configuration wrapper around `oo-add-hook'."
   `(progn (declare-function ,function nil)
           (oo-add-hook ',hook #',function ,@args)))
 
