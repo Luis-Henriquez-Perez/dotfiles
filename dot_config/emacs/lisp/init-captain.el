@@ -35,7 +35,6 @@
 
 (declare-function +captain--prog-mode-sentence-start "config-captain")
 (setq-hook! prog-mode-hook captain-predicate #'always)
-
 (setq-hook! prog-mode-hook captain-sentence-start-function #'+captain--prog-mode-sentence-start)
 ;;; provide
 (provide 'init-captain)
