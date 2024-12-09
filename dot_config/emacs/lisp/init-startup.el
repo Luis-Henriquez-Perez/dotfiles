@@ -74,7 +74,7 @@
   (setq file-name-handler-alist (get-register :file-name-handler-alist))
   (setq gc-cons-threshold (* 32 1024 1024))
   (set! new (/ gc-cons-threshold 1024 1024))
-  (info! "Reduce the value of `gc-cons-threshold' from UNLIMITED to %s MB." old new)
+  (info! "Reduce the value of `gc-cons-threshold' from UNLIMITED to %s MB." new)
   (run-with-timer 5 nil #'oo--timer--lower-garbage-collection))
 ;;; provide
 (provide 'init-startup)
