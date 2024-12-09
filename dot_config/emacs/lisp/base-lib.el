@@ -52,9 +52,10 @@
 (defun oo--handle-hook-error (err hook function)
   (if oo-debug-p
       (signal (car err) (cdr err))
-    (error! "Error calling %s in %s because of %s"
-            ',function
+    (error! "Error %s calling %s from %s because of %s"
             (car err)
+            ',function
+            ',hook
             (cdr err))))
 
 (defun! oo--hook-docstring (hook function)
@@ -95,7 +96,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
                    (condition-case err
                        (apply #',function ,arglist)
                      (error
-                      (oo--handle-hook-error error hook function))))))
+                      (oo--handle-hook-error err hook function))))))
   (add-hook hook fname depth local))
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
