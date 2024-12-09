@@ -87,7 +87,6 @@
               (require ',file)))
           (oo-call-after-load ',feature #',name)))
 ;;;;; setq-hook
-;;;; setq-hook!
 (defmacro! setq-hook! (hooks symbol value)
   "Set the local value of hook."
   (set! name (intern (format "set-local-var-%s" symbol)))
