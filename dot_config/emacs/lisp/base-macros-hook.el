@@ -68,9 +68,10 @@
            (concat (car lines) "\n" (word-wrap 80 (apply #'concat (cdr lines)))))
           ((word-wrap 80 (car lines)))))
   (docstring (format "Call `%s' from `%s'." function hook)
-             (format "Log call to %s.")
+             (format "Log call to `%s'." function)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
 (oo--hook-docstring 'a-hook 'fn)
+;; => "Call `fn' from `a-hook'.\nLog call to `fn'.If `oo-debug-p' is non-nil suppress and log any error raised by\n`fn'."
 ;; => "Call `fn' from `a-hook'.\nIf `oo-debug-p' is non-nil suppress and log any error raised by `fn'."
 
 (defun! oo-add-hook (hook function &rest args)
