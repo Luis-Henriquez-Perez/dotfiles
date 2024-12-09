@@ -50,7 +50,7 @@
   "Add function to hook as specified by NAME."
   (declare (indent defun))
   (while (alet (car args) (and (symbolp it) (not (keywordp it))))
-    (set! hook (pop args))
+    (collecting! hooks (pop args))
     (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
   (when (stringp (car body))
     (collecting! metadata (pop body)))
@@ -58,6 +58,7 @@
     (collecting! metadata (pop body)))
   `(progn
      (defun! ,name nil ,@metadata ,@body)
+     ,@(mapcar `(lambda ()))
      ,@hook-forms))
 ;;;;; after!
 ;; I made the decision to add a hook function to a hook regardless of whether
