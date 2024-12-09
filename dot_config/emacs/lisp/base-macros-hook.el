@@ -87,7 +87,6 @@
               (require ',file)))
           (oo-call-after-load ',feature #',name)))
 ;;;;; setq-hook
-
 (defmacro! setq-hook! (hooks symbol value)
   "Set the local value of hook."
   (dolist (hook (ensure-list hooks))
