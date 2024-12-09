@@ -342,12 +342,6 @@ This is like `setq' but it is meant for configuring variables."
 ;; particular command based on certain conditions.  For example, =SPC h f=  might
 ;; invoke [[file:snapshots/_helpful_command__helpful_callable_.png][helpful-callable]] if the package helpful is present (see [[][]]), otherwise it
 ;; would fallback to [[file:snapshots/_helpful_command__describe-function_.png][describe-function]] instead.
-
-;; As opposed to [[file:snapshots/_helpful_special_form__cond_.png][cond]], for example, which requires multiple conditions I designed
-;; this macro to add one condition at a time.  I do not want to be tied to naming
-;; all the conditions at once in general I write my configuration in such a way
-;; that I can augment it incrementally as opposed to building one big block of
-;; code.
 (defvar oo-alternate-commands (make-hash-table)
   "A hash-table mapping command symbols to a list of command symbols.")
 
