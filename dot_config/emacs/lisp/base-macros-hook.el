@@ -42,7 +42,7 @@
 ;;;;; defhook!
 ;; This is a convenience macro for.
 (defmacro hook! (hook function &rest args)
-  `(progn (declare-function ,function)
+  `(progn (declare-function ,function nil)
           (oo-add-hook ',hook #',function ,@args)))
 
 (defmacro! defhook! (name args &rest body)
