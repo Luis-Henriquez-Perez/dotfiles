@@ -91,17 +91,15 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! arglist (if ignore-args '_ (gensym "arglist")))
   (docstring (format "Call `%s' from `%s'." function hook)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
-  ;; (fset fname `(lambda (&rest ,arglist)
-  ;;                ,(docstring (format "Call `%s' from `%s'." function hook)
-  ;;                            (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
-  ;;                (info! "HOOK: %s -> %s" ',hook ',function)
-  ;;                (condition-case err
-  ;;                    (apply #',function ,arglist)
-  ;;                  (error
-  ;;                   (oo-handle-hook-error error hook function)))))
-  ;; (add-hook hook fname depth local)
-  )
-(oo-add-hook 'emacs-startup-hook #'foo)
+  (fset fname `(lambda (&rest ,arglist)
+                 ,(docstring (format "Call `%s' from `%s'." function hook)
+                             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                 (info! "HOOK: %s -> %s" ',hook ',function)
+                 (condition-case err
+                     (apply #',function ,arglist)
+                   (error
+                    (oo-handle-hook-error error hook function)))))
+  (add-hook hook fname depth local))
 
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
