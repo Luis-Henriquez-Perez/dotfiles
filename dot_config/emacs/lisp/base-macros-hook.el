@@ -54,7 +54,8 @@ arguments FN will be called with."
            (apply #',fn args)
          (,handlers (funcall #',action ,err #',fn args))))))
 
-(defun oo-handle-hook-error ()
+(defun oo-handle-hook-error (err hook function)
+  ""
   (cond (oo-debug-p
          (signal (car err) (cdr err)))
         (t
@@ -84,14 +85,14 @@ generated function does not pass in any of its given arguments to FUNCTION."
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
   (set! arglist (if ignore-args '_ (gensym "arglist")))
-  (fset fname (lambda (&rest ,arglist)
-                ,(docstring (format "Call `%s' from `%s'." function hook)
-                            (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
-                (info! "HOOK: %s -> %s" ',hook ',function)
-                (condition-case err
-                    (apply #',function ,arglist)
-                  (error
-                   (oo-handle-hook-error (car err) (cdr err))))))
+  (fset fname `(lambda (&rest ,arglist)
+                 ,(docstring (format "Call `%s' from `%s'." function hook)
+                             (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function))
+                 (info! "HOOK: %s -> %s" ',hook ',function)
+                 (condition-case err
+                     (apply #',function ,arglist)
+                   (error
+                    (oo-handle-hook-error error hook function)))))
   (add-hook hook fname depth local))
 
 (defmacro! defhook! (name args &rest body)
