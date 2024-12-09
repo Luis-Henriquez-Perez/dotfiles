@@ -63,6 +63,7 @@
       (set! new (max (- gc-cons-percentage 0.1) gcp-default))
       (info! "Lower `gc-cons-percentage' from %s to %s..." old new)
       (setq gc-cons-percentage new))
+
     (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
     ))
 ;;;; emacs-startup-hook
