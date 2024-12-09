@@ -84,7 +84,7 @@
   "Generate a function that calls FUNCTION and add it to HOOK.
 Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
 generated function does not pass in any of its given arguments to FUNCTION."
-  (set! fname (intern (format "oo--%s--%s-h" hook function)))
+  (set! fname (intern (format "oo--%s--%s" hook function)))
   (set! depth (plist-get args :depth))
   (set! local (plist-get args :local))
   (set! ignore-args (plist-get args :ignore-args))
