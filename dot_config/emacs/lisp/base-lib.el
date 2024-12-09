@@ -80,6 +80,7 @@
              (format "Log call to `%s'." function)
              (format "If `oo-debug-p' is non-nil suppress and log any error raised by `%s'." function)))
 
+(apply #'powerline-reset '_)
 (defun! oo-add-hook (hook function &rest args)
   "Generate a function that calls FUNCTION and add it to HOOK.
 Generated function call FUNCTION and logs any errors.  If IGNORE-ARGS, then do
