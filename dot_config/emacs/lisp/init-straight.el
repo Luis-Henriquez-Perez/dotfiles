@@ -47,14 +47,16 @@
 ;; This is a variable that has been renamed but straight still refers when
 ;; doing :sraight (:no-native-compile t)
 (setq comp-deferred-compilation-black-list nil)
-;;; Clone the packages and then set them to proper version
-;; (for! (package packages)
-;;   (straight-vc-clone-package)
-;;   (straight-vc-checkout :commit)
-;;   ;; Then we build the packages.
-;;   )
-;;; register the packages
+;;; Register the packages
 (straight-register-package)
+;;; Clone the packages and then set them to proper version
+(dolist (package packages)
+  ()
+  (straight-vc-clone-package)
+  (straight-vc-checkout :commit)
+  ;; Then we build the packages.
+  )
+;;; register the packages
 ;; Checkout the proper commit.
 ;;; Enable the packages
 (straight-use-package '(vertico :host github :branch "main" :repo "minad/vertico" :fetcher github :ref "956c81b"
