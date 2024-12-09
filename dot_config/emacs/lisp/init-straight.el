@@ -51,7 +51,7 @@
 (straight-register-package)
 ;;; Clone the packages and then set them to proper version
 (dolist (package packages)
-  ()
+  (message "cloning...")
   (straight-vc-clone-package)
   (straight-vc-checkout :commit)
   ;; Then we build the packages.
