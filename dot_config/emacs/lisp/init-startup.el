@@ -49,6 +49,7 @@
 (defun! oo--timer--lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
   (cl-assert (zerop (% gc-cons-threshold (* 4 1024 1024))))
+  (info!)
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
     (cl-decf gc-cons-threshold (* 4 1024 1024))
