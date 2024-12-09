@@ -14,6 +14,9 @@
 
 PS1='[\u@\h \W]\$ '
 
+### source xprofile
 # Make sure this is before the 'exec' command or it won't be sourced.
-# [ -f /etc/xprofile ] && . /etc/xprofile
-# [ -f ~/.xprofile ] && . ~/.xprofile
+if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
+  [ -f /etc/xprofile ] && . /etc/xprofile
+  [ -f ~/.xprofile ] && . ~/.xprofile
+fi
