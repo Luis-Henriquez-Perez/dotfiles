@@ -49,15 +49,6 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 ;;;; hooks
-(defun oo--handle-hook-error (err hook function)
-  (if oo-debug-p
-      (signal (car err) (cdr err))
-    (error! "%s error from calling %s from %s because of %s"
-            (car err)
-            function
-            hook
-            (cdr err))))
-
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
   ;; This is taken directly from the `s' library.  Right now, it is the only
@@ -97,7 +88,13 @@ generated function does not pass in any of its given arguments to FUNCTION."
                    (condition-case err
                        ,funcall-form
                      (error
-                      (oo--handle-hook-error err ',hook #',function))))))
+                      (if oo-debug-p
+                          (signal (car err) (cdr err))
+                        (error! "%s error from calling %s from %s because of %s"
+                                (car err)
+                                #',function
+                                ',hook
+                                (cdr err))))))))
   (add-hook hook fname depth local))
 ;;;; miscellaneous
 (defun oo-wrap-forms (wrappers forms)
