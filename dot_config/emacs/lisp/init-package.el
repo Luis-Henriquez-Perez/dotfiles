@@ -30,6 +30,7 @@
 (require 'package)
 (require 'package-vc)
 
+;; This was taken from prot's recommendation.
 (add-to-list 'display-buffer-alist
              '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                (display-buffer-no-window)
