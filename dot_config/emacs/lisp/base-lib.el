@@ -323,12 +323,7 @@ This is like `setq' but it is meant for configuring variables."
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;; alternate bindings
-;; Inspired by [[https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding][this]] stackoverflow question, this macro lets me create conditional
-;; bindings for commands giving me a flexible and robust experience with key
-;; bindings.  By "condition bindings" I mean key bindings that can invoke a
-;; particular command based on certain conditions.  For example, =SPC h f=  might
-;; invoke [[file:snapshots/_helpful_command__helpful_callable_.png][helpful-callable]] if the package helpful is present (see [[][]]), otherwise it
-;; would fallback to [[file:snapshots/_helpful_command__describe-function_.png][describe-function]] instead.
+;; https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding
 (defvar oo-alternate-commands (make-hash-table)
   "A hash-table mapping command symbols to a list of command symbols.")
 
