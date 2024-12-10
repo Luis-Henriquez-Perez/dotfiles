@@ -34,15 +34,13 @@
 BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
 take the following forms:
 
-(reverse)
-
-(repeat n) Evaluate BODY N times where (> n 0).
-
 (VAR NUMBER) Same as `dotimes'.
 
-(MATCH-FORM SEQUENCE)
-Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
-`let!'."
+(MATCH-FORM SEQUENCE) Evaluate BODY for every element in sequence.
+
+(reverse MATCH-FORM LIST) Evaluate body for each element of LIST in reversed order.
+
+(repeat n) Evaluate BODY N times where (> n 0)."
   (declare (indent 1))
   (pcase loop-struct
     ((or (and (pred integerp) n) `(repeat ,n))

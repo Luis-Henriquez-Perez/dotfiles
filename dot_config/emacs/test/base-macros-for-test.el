@@ -30,6 +30,9 @@
 (ert-deftest for!---properly-loops-with-predicate-being-repeat-N ()
   (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n))))
 
+(ert-deftest for!---properly-loops-with-predicate-being-repeat-N ()
+  (should (= 11 (let ((n 1)) (for! (repeat 10) (cl-incf n)) n))))
+
 (ert-deftest for!---destructures-if-predicate-is-MATCH-FORM-LIST ()
   (should (equal '(3 9)
                  (let ((list '((1 2) (4 5)))
