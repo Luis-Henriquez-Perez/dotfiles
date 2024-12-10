@@ -84,6 +84,7 @@
 ;;
 ;;; Code:
 (require 'rx)
+(require 'dash)
 (require 'evil-easymotion)
 ;;;; ignore overlay
 ;; TODO: abbrev that specifies only words isolated by spaces.
