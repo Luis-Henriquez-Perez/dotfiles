@@ -158,7 +158,7 @@ If METADATA has no keymap return."
 ;;;; standardize metadata
 (defun! oo--bind-metadata (args)
   "Standardize ARGS into proper metadata."
-  (flet! letter-to-char (-compose #'string-to-char #'symbol-name))
+  (flet! letter-to-char (lambda (obj) (string-to-char (symbol-name obj))))
   (flet! letterp (obj)
     (and (symbolp obj) (= 1 (length (symbol-name obj)))))
   (flet! keymap-symbol-p (obj)
