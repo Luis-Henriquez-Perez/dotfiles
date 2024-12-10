@@ -270,17 +270,16 @@ functions.")
 (defun! oo-call-after-load-functions (&rest _)
   "Call functions in `oo-after-load-hash-table' that need to be called.
 Also, update `oo-after-load-hash-table' to reflect functions called."
-  (--each-r (hash-table-keys oo-after-load-hash-table)
+  (for! (reverse it (hash-table-keys oo-after-load-hash-table))
     (cond ((and (symbolp it) (boundp it))
-           ;; (info! "Symbol `%s' is bound.  Evaluating corresponding forms..." item)
-           (-each-r (gethash it oo-after-load-hash-table) #'funcall)
+           (for! (reverse fn (gethash it oo-after-load-hash-table))
+             (funcall fn))
            (remhash it oo-after-load-hash-table))
           ((and (integerp it)
-                ;; TODO: prevent it from calling featurep evil multiple times.
                 (featurep 'evil)
                 (set! state (oo--evil-char-to-state it)))
-           ;; (info! "Evil %s state is defined.  Evaluating corresponding forms..." state)
-           (-each-r (gethash it oo-after-load-hash-table) (apply-partially #'funcall state))
+           (for! (reverse fn (gethash it oo-after-load-hash-table))
+             (funcall fn state))
            (remhash it oo-after-load-hash-table)))))
 
 (defun oo-call-after-bound (symbol fn)

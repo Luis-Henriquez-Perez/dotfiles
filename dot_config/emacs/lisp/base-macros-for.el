@@ -29,26 +29,33 @@
 (require 'cl-lib)
 (require 'seq)
 ;;;; for!
-;; There is a huge question of whether to automatically wrap loops with
-;; =autolet!=, but I decided to.
 (defmacro for! (loop-struct &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
 take the following forms:
 
-- (repeat n)
-Evaluate BODY N times where n is an integer equal to or greater than zero.
+(reverse)
 
-- (VAR NUMBER)
-Same as `dotimes'.
+(repeat n) Evaluate BODY N times where (> n 0).
 
-- (MATCH-FORM SEQUENCE)
+(VAR NUMBER) Same as `dotimes'.
+
+(MATCH-FORM SEQUENCE)
 Evaluate BODY for every element in sequence.  MATCH-FORM is the same as in
 `let!'."
   (declare (indent 1))
   (pcase loop-struct
     ((or (and (pred integerp) n) `(repeat ,n))
      `(dotimes (_ ,n) ,@body))
+    (`(reverse ,match-form ,list)
+     (let ((v (make-symbol "vector"))
+           (i (make-symbol "i")))
+       `(let* ((,v (vconcat ,list))
+               (,i (length ,v)))
+          (while (> ,i 0)
+            (setq ,i (1- ,i))
+            (pcase-let* ,(oo--to-pcase-let match-form `(aref ,v ,i))
+              ,@body)))))
     (`(,(and match-form (or (pred listp) (pred vectorp))) ,list)
      (cl-with-gensyms (elt)
        `(for! (,elt ,list)
