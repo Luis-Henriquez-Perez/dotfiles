@@ -69,8 +69,9 @@ file is loaded."
 ;; all.  And again this is great for reducing startup time but I still want the
 ;; macros to be defined when I am actually editing emacs-lisp.  Therefore, I
 ;; load the `oo-macros' file.
-(defhook! oo-require-macros-h (emacs-lisp-mode-hook)
-  (require 'base-macros))
+;; This only needs to happen when emacs is compiled.
+;; (defhook! oo-require-macros-h (emacs-lisp-mode-hook)
+;;   (require 'base-macros))
 ;;;;; minibuffer
 ;; https://www.reddit.com/r/emacs/comments/yzb77m/an_easy_trick_i_found_to_improve_emacs_startup/
 (defhook! oo-increase-garbage-collection-h (minibuffer-setup-hook :depth 10)
