@@ -46,7 +46,6 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'base-requirements)
 (require 'base-macros-with-map)
 (require 'base-macros-definers)
 ;;;; oo--let-bindings
