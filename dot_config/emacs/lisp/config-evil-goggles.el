@@ -45,7 +45,7 @@
  (for! ((new old) list)
    (set! elt (cons new (cdr (assoc old evil-goggles--commands))))
    (cl-pushnew elt evil-goggles--commands :key #'car))
- (cl-assert (--all-p (assoc it list) (mapcar #'car list))))
+ (cl-assert (cl-every (lambda (it) (assoc it list)) (mapcar #'car list))))
 ;;;; Use a different face
 ;; I want to make `evil-goggles-default-face' the same as that of
 ;; `spaceline-evil-operator'.  That is what makes the most sense to me because
