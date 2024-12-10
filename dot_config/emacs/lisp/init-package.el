@@ -23,6 +23,7 @@
 ;;; Commentary:
 ;;
 ;; Initialize package.
+;; Install all of my packages.
 ;;
 ;;; Code:
 (require 'cl-lib)
@@ -139,7 +140,6 @@
 (cl-pushnew 'lua-mode package-selected-packages)
 (cl-pushnew 'macrostep package-selected-packages)
 (cl-pushnew 'magit package-selected-packages)
-;; '(cl-pushnew (magit :depth nil :tag "v3.3.0") package-selected-packages)
 (cl-pushnew 'marginalia package-selected-packages)
 (cl-pushnew 'markdown-mode package-selected-packages)
 (cl-pushnew 'material-theme package-selected-packages)
