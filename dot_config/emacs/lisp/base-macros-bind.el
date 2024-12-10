@@ -174,7 +174,7 @@ If METADATA has no keymap return."
     (and (listp obj) (cl-every #'symbolp obj)))
   (flet! non-keyword-symbol-p (obj)
     (and (symbolp obj) (not (keywordp obj))))
-  (flet! not-keyword-p (-not #'keywordp))
+  (flet! not-keyword-p (lambda (obj) (not (keywordp obj))))
   (flet! plist-p (map)
     (or (null map)
         (and (listp map) (symbolp (car map)))))

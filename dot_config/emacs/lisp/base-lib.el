@@ -294,7 +294,7 @@ Also, update `oo-after-load-hash-table' to reflect functions called."
                 (featurep 'evil)
                 (set! state (oo--evil-char-to-state it)))
            ;; (info! "Evil %s state is defined.  Evaluating corresponding forms..." state)
-           (-each-r (gethash it oo-after-load-hash-table) (-rpartial #'funcall state))
+           (-each-r (gethash it oo-after-load-hash-table) (apply-partially #'funcall state))
            (remhash it oo-after-load-hash-table)))))
 
 (defun oo-call-after-bound (symbol fn)
