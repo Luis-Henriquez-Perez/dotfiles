@@ -35,8 +35,7 @@
              '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                (display-buffer-no-window)
                (allow-no-window . t)))
-;; I want a clearer name.  When I saw the name "elpa" I had no idea what was in
-;; that folder.
+
 (setq package-user-dir (locate-user-emacs-file "packages/"))
 
 (add-to-list 'package-archives '("gnu-elpa"       . "https://elpa.gnu.org/packages/"))
