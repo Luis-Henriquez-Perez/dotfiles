@@ -56,6 +56,7 @@
 (cl-pushnew 'burly package-selected-packages)
 (cl-pushnew 'cape package-selected-packages)
 (cl-pushnew 'caps-lock package-selected-packages)
+(cl-pushnew 'captain package-selected-packages)
 (cl-pushnew 'chezmoi package-selected-packages)
 (cl-pushnew 'cider package-selected-packages)
 (cl-pushnew 'consult package-selected-packages)
@@ -95,8 +96,6 @@
 (cl-pushnew 'evil-goggles package-selected-packages)
 (cl-pushnew 'evil-iedit-state package-selected-packages)
 (cl-pushnew 'evil-lisp-state package-selected-packages)
-;; '(cl-pushnew (evil-magit :fetcher github :repo "emacs-evil/evil-magit" :ref
-;; '"f4a8c8d") package-selected-packages)
 (cl-pushnew 'evil-nerd-commenter package-selected-packages)
 (cl-pushnew 'evil-surround package-selected-packages)
 (cl-pushnew 'evil-textobj-column package-selected-packages)
@@ -198,7 +197,6 @@
 (cl-pushnew 'ws-butler package-selected-packages)
 (cl-pushnew 'xr package-selected-packages)
 (cl-pushnew 'yeetube package-selected-packages)
-(cl-pushnew 'captain package-selected-packages)
 
 (cl-pushnew '(evil-easymotion :url "https://github.com/Luis-Henriquez-Perez/evil-easymotion" :branch "master") package-vc-selected-packages)
 (cl-pushnew '(spaceline :url "https://github.com/Luis-Henriquez-Perez/spaceline" :branch "add-evil-operator-state-face") package-vc-selected-packages)
