@@ -67,6 +67,41 @@
   "Like `when' but the result of COND is bound to `it'."
   (declare (debug when) (indent 1))
   `(aif! ,cond (progn ,@body) nil))
+;;;; quietly!
+(defmacro quietly! (&rest forms)
+  "Run FORMS without generating any output.
+Silence calls to `message', `load', `write-region' and anything that
+writes to `standard-output'."
+  `(if oo-debug-p
+       (progn ,@forms)
+     (let ((inhibit-message t)
+           (save-silently t))
+       (cl-letf ((standard-output #'ignore)
+                 ((symbol-function 'message) #'ignore)
+                 ((symbol-function 'load)
+                  (lambda (file &optional noerror nomessage nosuffix must-suffix)
+                    (funcall load file noerror t nosuffix must-suffix)))
+                 ((symbol-function 'write-region)
+                  (lambda (start end filename &optional append visit lockname mustbenew)
+                    (unless visit (setq visit 'no-message))
+                    (funcall write-region start end filename append visit lockname mustbenew))))
+         ,@forms))))
+;;;; opt!
+;; The reason this needs to be a macro is because `value' might not be evaluated
+;; immediately.
+;; TODO: need better error handling for when value producess an error.
+(defmacro! opt! (symbol value)
+  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
+This is like `setq' but it is meant for configuring variables."
+  (let ((value-var (gensym "value")))
+    `(if (not (boundp ',symbol))
+         ;; This quote on he lambda is needed to avoid infinite recursion.
+         (push '(lambda () (opt! ,symbol ,value))
+               (gethash ',symbol oo-after-load-hash-table))
+       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
+         (aif! (get ',symbol 'custom-set)
+             (funcall it ',symbol ,value-var)
+           (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;; hooks
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
@@ -139,25 +174,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
     (cond ((nth 3 ppss) 'string)
           ((nth 4 ppss) 'comment)
           (t nil))))
-;;;; quietly!
-(defmacro quietly! (&rest forms)
-  "Run FORMS without generating any output.
-Silence calls to `message', `load', `write-region' and anything that
-writes to `standard-output'."
-  `(if oo-debug-p
-       (progn ,@forms)
-     (let ((inhibit-message t)
-           (save-silently t))
-       (cl-letf ((standard-output #'ignore)
-                 ((symbol-function 'message) #'ignore)
-                 ((symbol-function 'load)
-                  (lambda (file &optional noerror nomessage nosuffix must-suffix)
-                    (funcall load file noerror t nosuffix must-suffix)))
-                 ((symbol-function 'write-region)
-                  (lambda (start end filename &optional append visit lockname mustbenew)
-                    (unless visit (setq visit 'no-message))
-                    (funcall write-region start end filename append visit lockname mustbenew))))
-         ,@forms))))
 ;;;; oo-funcall-quietly
 (defun oo-funcall-quietly (fn &rest args)
   "Call FN with ARGS without producing any output."
@@ -344,22 +360,6 @@ SYMBOL and FN in `oo-after-load-hash-table'."
   (aif! (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (gethash char oo-after-load-hash-table))))
-;;;; opt!
-;; The reason this needs to be a macro is because `value' might not be evaluated
-;; immediately.
-;; TODO: need better error handling for when value producess an error.
-(defmacro! opt! (symbol value)
-  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
-This is like `setq' but it is meant for configuring variables."
-  (let ((value-var (gensym "value")))
-    `(if (not (boundp ',symbol))
-         ;; This quote on he lambda is needed to avoid infinite recursion.
-         (push '(lambda () (opt! ,symbol ,value))
-               (gethash ',symbol oo-after-load-hash-table))
-       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
-         (aif! (get ',symbol 'custom-set)
-             (funcall it ',symbol ,value-var)
-           (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;; alternate bindings
 ;; https://stackoverflow.com/questions/1609oo17/elisp-conditionally-change-keybinding
 (defvar oo-alternate-commands (make-hash-table)
