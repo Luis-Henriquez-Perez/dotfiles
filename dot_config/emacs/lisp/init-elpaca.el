@@ -37,7 +37,6 @@
 (elpaca aggressive-indent)
 (elpaca all-the-icons)
 (elpaca all-the-icons-nerd-fonts)
-(elpaca anaphora)
 (elpaca annalist)
 (elpaca beacon)
 (elpaca burly)
