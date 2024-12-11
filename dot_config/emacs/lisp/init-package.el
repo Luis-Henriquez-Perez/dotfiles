@@ -50,7 +50,6 @@
 (cl-pushnew 'aggressive-indent package-selected-packages)
 (cl-pushnew 'all-the-icons package-selected-packages)
 (cl-pushnew 'all-the-icons-nerd-fonts package-selected-packages)
-(cl-pushnew 'anaphora package-selected-packages)
 (cl-pushnew 'annalist package-selected-packages)
 (cl-pushnew 'beacon package-selected-packages)
 (cl-pushnew 'burly package-selected-packages)
