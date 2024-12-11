@@ -169,7 +169,6 @@
 (cl-pushnew 'restart-emacs package-selected-packages)
 (cl-pushnew 's package-selected-packages)
 (cl-pushnew 'sdcv package-selected-packages)
-(cl-pushnew 'shut-up package-selected-packages)
 (cl-pushnew 'sly package-selected-packages)
 (cl-pushnew 'smartparens package-selected-packages)
 (cl-pushnew 'spacemacs-theme package-selected-packages)
