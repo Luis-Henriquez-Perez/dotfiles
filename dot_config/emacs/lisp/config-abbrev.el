@@ -54,7 +54,7 @@
 ;; like this can make a difference.
 (defun! oo--pulse-expansion (expand-fn)
   "Pulse around the expansion of an abbrev."
-  (aprog1 (funcall expand-fn)
+  (aprog1! (funcall expand-fn)
     (and it
          last-abbrev-location
          (require 'pulse nil t)
@@ -67,7 +67,7 @@
 ;; the hook myself at the proper places.
 (defun! oo--ensure-self-insert (expand-fn)
   "Run `post-insert-hook' after each word in a multi-word expansion."
-  (aprog1 (funcall expand-fn)
+  (aprog1! (funcall expand-fn)
     (when (and it last-abbrev-location)
       (set! end (point))
       (save-excursion (goto-char last-abbrev-location)

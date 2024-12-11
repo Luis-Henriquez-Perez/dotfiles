@@ -35,7 +35,7 @@
 (setq dashboard-init-info #'oo-dashboard-init-info)
 
 (defun oo-dashboard-buffer ()
-  (aprog1 (get-buffer-create dashboard-buffer-name)
+  (aprog1! (get-buffer-create dashboard-buffer-name)
     (with-current-buffer it
       (dashboard-insert-startupify-lists))))
 
