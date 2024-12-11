@@ -291,7 +291,7 @@ file is loaded."
   (set! lisp-dir (expand-file-name "lisp/" user-emacs-directory))
   (set! rx "\\`config-\\([^[:space:]]+\\)\\.el\\'")
   (dolist (path (directory-files lisp-dir t rx))
-    (set! filename (file-name-non-directory (directory-file-name path)))
+    (set! filename (file-name-nondirectory (directory-file-name path)))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
     (set! feature (intern (file-name-sans-extension filename)))
