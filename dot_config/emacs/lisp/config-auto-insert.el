@@ -175,7 +175,7 @@
 (defun! oo-auto-insert-python-file-header ()
   "Insert python file header."
   (require 'tempel)
-  (tempel-insert '("# Filename: " (f-filename (buffer-file-name)) > n
+  (tempel-insert '("# Filename: " (file-name-non-directory (directory-file-name (buffer-file-name))) > n
                    "# Author: " user-full-name " <" user-mail-address ">" > n
                    "# Created: " (format-time-string "%Y-%m-%d %H:%M:%S") > n
                    "# Description: " p > n)))
