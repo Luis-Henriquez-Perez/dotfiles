@@ -48,6 +48,17 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
+;;;; aand!
+(defmacro alet! (value &rest body)
+  "Bind value to `it' and evaluate body."
+  (declare (indent 1))
+  `(let ((it ,value))
+     ,@body))
+
+(defmacro aand! (&rest conditions)
+  "Similar to `aand' but only bindings first condition to `it'."
+  `(alet! ,(car conditions)
+     (and it ,@(cdr conditions))))
 ;;;; hooks
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
@@ -327,11 +338,10 @@ This is like `setq' but it is meant for configuring variables."
 (defvar oo-alternate-commands (make-hash-table)
   "A hash-table mapping command symbols to a list of command symbols.")
 
-(defun oo-alternate-command-choose-fn (command)
+(defun! oo-alternate-command-choose-fn (command)
   "Return an alternate command that should be called instead of COMMAND."
-  (or (let (success)
-        (--each-while (gethash command oo-alternate-commands) (not (setq success (funcall #'funcall it))))
-        success)
+  (or (dolist (it (gethash command oo-alternate-commands))
+        (aand! (funcall it) (break! it)))
       command))
 
 ;; (defun! oo-alt-bind (map orig alt &optional condition)

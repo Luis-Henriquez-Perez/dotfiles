@@ -46,11 +46,6 @@
   `(progn (declare-function ,function nil)
           (oo-add-hook ',hook #',function ,@args)))
 
-(defmacro aand! (&rest conditions)
-  "Similar to `aand' but only bindings first condition to `it'."
-  `(alet ,(car conditions)
-     (and it ,@(cdr conditions))))
-
 (defmacro! defhook! (name args &rest body)
   "Add function to hook as specified by NAME."
   (declare (indent defun))
