@@ -28,7 +28,7 @@
 ;;;; requirements
 (require 'base)
 ;;;; general
-(opt! org-directory (f-full "~/Documents/org/"))
+(opt! org-directory (expand-file-name "~/Documents/org/"))
 (opt! org-default-notes-file (f-expand "notes.org" org-directory))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h)"
@@ -109,7 +109,7 @@
 ;; TODO: do not load org-clock on `org-mode-hook'.
 (hook! org-mode-hook org-clock-persistence-insinuate)
 (opt! org-clock-persist t)
-(opt! org-clock-sound (f-full "~/Downloads/ding-101492.wav"))
+(opt! org-clock-sound (expand-file-name "~/Downloads/ding-101492.wav"))
 ;;;; org-superstar
 (hook! org-mode-hook org-superstar-mode)
 

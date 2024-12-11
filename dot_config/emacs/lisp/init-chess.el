@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'chess)
 (push 'chess-stockfish chess-default-engine)
-(opt! chess-images-directory (f-full "~/Downloads/chess-pieces"))
+(opt! chess-images-directory (expand-file-name "~/Downloads/chess-pieces"))
 (opt! chess-images-extension "xpm")
 (chess-images-sizes)
 ;;; provide

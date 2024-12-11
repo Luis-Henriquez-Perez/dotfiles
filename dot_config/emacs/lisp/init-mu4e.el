@@ -41,14 +41,14 @@
 
 (opt! message-signature '(funcall #'oo--message-signature))
 
-(opt! mu4e-maildir (f-full "~/.mail"))
+(opt! mu4e-maildir (expand-file-name "~/.mail"))
 (opt! mu4e-headers-skip-duplicates t)
 (opt! mu4e-view-show-images t)
 (opt! mu4e-view-show-addresses t)
 (opt! mu4e-compose-format-flowed nil)
 (opt! mu4e-headers-date-format "%Y/%m/%d")
 (opt! mu4e-change-filenames-when-moving t)
-(opt! mu4e-attachments-dir (f-full "~/Downloads"))
+(opt! mu4e-attachments-dir (expand-file-name "~/Downloads"))
 (opt! mu4e-compose-signature '(funcall #'oo--message-signature))
 
 (opt! mu4e-contexts
@@ -58,10 +58,10 @@
              :leave-func #'+mu4e--main-leave-message
              :vars `((user-mail-address      . "luis@luishp.xyz")
                      (user-full-name         . "Luis M Henriquez Perez")
-                     (mu4e-refile-folder     . ,(f-full "/luishp/archive"))
-                     (mu4e-drafts-folder     . ,(f-full "/luishp/drafts"))
-                     (mu4e-sent-folder       . ,(f-full "/luishp/sent"))
-                     (mu4e-trash-folder      . ,(f-full "/luishp/trash"))))
+                     (mu4e-refile-folder     . ,(expand-file-name "/luishp/archive"))
+                     (mu4e-drafts-folder     . ,(expand-file-name "/luishp/drafts"))
+                     (mu4e-sent-folder       . ,(expand-file-name "/luishp/sent"))
+                     (mu4e-trash-folder      . ,(expand-file-name "/luishp/trash"))))
             (make-mu4e-context
              :name "gmail"
              :enter-func #'+mu4e--legacy-enter-message
@@ -69,9 +69,9 @@
              :vars `((user-mail-address      . "luishenriquezperez@gmail.com")
                      (user-full-name         . "Luis M Henriquez Perez")
                      (mu4e-refile-folder     . "/luishenriquezperez/archive")
-                     (mu4e-drafts-folder     . ,(f-full "/luishenriquezperez/drafts"))
-                     (mu4e-sent-folder       . ,(f-full "/luishenriquezperez/sent"))
-                     (mu4e-trash-folder      . ,(f-full "/luishenriquezperez/trash"))))))
+                     (mu4e-drafts-folder     . ,(expand-file-name "/luishenriquezperez/drafts"))
+                     (mu4e-sent-folder       . ,(expand-file-name "/luishenriquezperez/sent"))
+                     (mu4e-trash-folder      . ,(expand-file-name "/luishenriquezperez/trash"))))))
 
 (opt! message-send-mail-function   'smtpmail-send-it)
 (opt! smtpmail-default-smtp-server "smtp.fastmail.com")
