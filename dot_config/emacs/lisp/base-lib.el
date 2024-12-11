@@ -34,7 +34,6 @@
 ;;;; requirements
 (require 'base-packages)
 (eval-when-compile (require 'lgr))
-(eval-when-compile (require 'anaphora))
 (require 'shut-up)
 (eval-when-compile (require 'base-macros-hook))
 (eval-when-compile (require 'base-macros-setters))
