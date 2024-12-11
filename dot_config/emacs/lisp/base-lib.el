@@ -154,19 +154,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
                                 ',hook
                                 (cdr err))))))))
   (add-hook hook fname depth local))
-;;;; miscellaneous
-(defun oo-wrap-forms (wrappers forms)
-  "Return FORMS wrapped by WRAPPERS.
-FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
-representing the wrappers to apply.  If WRAPPERS is empty, `progn' is added to
-ensure the result is syntactically valid."
-  (declare (pure t) (side-effect-free t))
-  (unless wrappers (push '(progn) wrappers))
-  (setq wrappers (reverse wrappers))
-  (setq forms (append (pop wrappers) forms))
-  (dolist (wrapper wrappers)
-    (setq forms (append wrapper (list forms))))
-  forms)
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
