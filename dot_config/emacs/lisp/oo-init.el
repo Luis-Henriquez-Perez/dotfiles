@@ -235,7 +235,7 @@ file is loaded."
   "Set the default font based on available fonts."
   (dolist (font oo-default-fonts)
     (trace! "Checking whether %s font is available..." font)
-    (awhen (find-font font)
+    (awhen! (find-font font)
       (info! "Setting font to...%s" it)
       (set-face-attribute 'default nil :font font)
       (done!)))
