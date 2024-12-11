@@ -255,7 +255,7 @@ file is loaded."
 (defhook! oo-setup-auto-line-sorting-maybe-h (find-file-hook)
   "Setup auto line sorting for `init-elpaca'."
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
-  (when (f-same-p (buffer-file-name) (f-full path))
+  (when (f-same-p (buffer-file-name) (expand-file-name path))
     (info! "Setup auto-sorting for %s..." (f-base path))
     (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
@@ -271,7 +271,7 @@ file is loaded."
 (defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
   "Set up auto alignment for certain buffers."
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
-  (when (f-same-p (buffer-file-name) (f-full path))
+  (when (f-same-p (buffer-file-name) (expand-file-name path))
     (info! "Setup auto-aligning for %S..." (f-base path))
     (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
 ;;;; enable initial theme
@@ -289,7 +289,7 @@ file is loaded."
   (set! lisp-dir (expand-file-name "lisp/" user-emacs-directory))
   (set! rx "\\`config-\\([^[:space:]]+\\)\\.el\\'")
   (dolist (path (directory-files lisp-dir t rx))
-    (set! filename (f-filename path))
+    (set! filename (file-name-non-directory path))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
     (set! feature (intern (f-base path)))
