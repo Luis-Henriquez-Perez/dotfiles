@@ -139,8 +139,25 @@ Specifically, return the symbol `string' if point is in a string, the symbol
     (cond ((nth 3 ppss) 'string)
           ((nth 4 ppss) 'comment)
           (t nil))))
-;;;; oo-funcall-silently
-(defun oo-funcall-silently (fn &rest args)
+;;;; quietly!
+(defmacro quietly! (&rest forms)
+  "Run FORMS without generating any output.
+Silence calls to `message', `load', `write-region' and anything that
+writes to `standard-output'."
+  `(if oo-debug-p
+       (progn ,@forms)
+     (let ((inhibit-message t)
+           (save-silently t))
+       (cl-letf ((standard-output #'ignore)
+                 ((symbol-function 'message) #'ignore)
+                 ((symbol-function 'load)
+                  (lambda (file &optional noerror nomessage nosuffix must-suffix)
+                    (funcall load file noerror t nosuffix must-suffix)))
+                 ((symbol-function 'write-region)
+                  (lambda (start end filename &optional append visit lockname mustbenew)
+                    (unless visit (setq visit 'no-message))
+                    (funcall write-region start end filename append visit lockname mustbenew))))
+         ,@forms))))
 ;;;; oo-funcall-quietly
 (defun oo-funcall-quietly (fn &rest args)
   "Call FN with ARGS without producing any output."
