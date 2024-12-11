@@ -33,7 +33,7 @@
 ;;; Code:
 ;;;; requirements
 (require 'base-packages)
-(eval-when-compile (require 'lgr))
+(require 'lgr)
 (eval-when-compile (require 'base-macros-hook))
 (eval-when-compile (require 'base-macros-setters))
 (eval-when-compile (require 'base-macros-for))
