@@ -46,11 +46,12 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
-;;;; anaphoric macros
-(defmacro alet! (FORM &rest body)
+;;;; macros
+;;;;; anaphoric macros
+(defmacro alet! (form &rest body)
   "Bind the result FORM to `it' for the duration of BODY."
   (declare (debug let) (indent 1))
-  `(let ((it ,value))
+  `(let ((it ,form))
      ,@body))
 
 (defmacro aand! (&rest conditions)
@@ -67,7 +68,7 @@
   "Like `when' but the result of COND is bound to `it'."
   (declare (debug when) (indent 1))
   `(aif! ,cond (progn ,@body) nil))
-;;;; quietly!
+;;;;; quietly!
 (defmacro quietly! (&rest forms)
   "Run FORMS without generating any output.
 Silence calls to `message', `load', `write-region' and anything that
@@ -86,7 +87,7 @@ writes to `standard-output'."
                     (unless visit (setq visit 'no-message))
                     (funcall write-region start end filename append visit lockname mustbenew))))
          ,@forms))))
-;;;; opt!
+;;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
 ;; TODO: need better error handling for when value producess an error.
