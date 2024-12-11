@@ -286,14 +286,14 @@ file is loaded."
 ;;;; setup loading config files
 (defhook! oo-initialize-config-files-h (emacs-startup-hook :depth 91)
   "Setup config files to be loaded after their feature."
-  (set! lisp-dir (f-full (f-expand "lisp/" user-emacs-directory)))
+  (set! lisp-dir (expand-file-name "lisp/" user-emacs-directory))
   (set! rx "\\`config-\\([^[:space:]]+\\)\\.el\\'")
   (dolist (path (directory-files lisp-dir t rx))
     (set! filename (f-filename path))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
     (set! feature (intern (f-base path)))
-    (info! "Parent feature -> %S")
+    (info! "Parent feature -> %S" parent-feature)
     (cond ((featurep parent-feature)
            (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
            (require feature filename nil))
