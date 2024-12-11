@@ -51,7 +51,7 @@
 ;;;; anaphoric macros
 (defmacro alet! (value &rest body)
   "Bind value to `it' and evaluate body."
-  (declare (indent 1))
+  (declare (debug let) (indent 1))
   `(let ((it ,value))
      ,@body))
 
@@ -62,10 +62,12 @@
 
 (defmacro aif! (cond then &rest else)
   "Similar to `aand' but only bindings first condition to `it'."
+  (declare (debug t) (indent 2))
   `(alet! ,cond (if ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
   "Similar to `aand' but only bindings first condition to `it'."
+  (declare (debug when) (indent 1))
   `(aif! ,cond (progn ,@body) nil))
 ;;;; hooks
 (defun! oo--hook-docstring (hook function)
