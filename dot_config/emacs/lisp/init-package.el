@@ -221,7 +221,7 @@
            (quietly! (package-install package 'dont-select))
            (unless (package-installed-p package)
              (message "Successfully installed package `%s'" package)
-             (message "Failed to install package `%s'")))
+             (message "Failed to install package `%s'" package)))
           (t
            (message "Package %s is not available." package)))))
 
