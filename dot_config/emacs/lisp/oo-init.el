@@ -44,6 +44,7 @@
    '(("(\\(\\(?:def\\(?:\\(?:advice\\|hook\\|macro\\|un\\)!\\)\\)\\)\\_>\\s-*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
       (1 font-lock-keyword-face nil t)
       (2 font-lock-function-name-face nil t))
+
      ("\\_<it\\_>"
       (0 font-lock-constant-face nil t)))))
 ;;;;; oo-override-map
