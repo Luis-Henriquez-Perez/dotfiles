@@ -34,7 +34,6 @@
 ;;;; requirements
 (require 'base-packages)
 (eval-when-compile (require 'lgr))
-(require 'shut-up)
 (eval-when-compile (require 'base-macros-hook))
 (eval-when-compile (require 'base-macros-setters))
 (eval-when-compile (require 'base-macros-for))
@@ -142,8 +141,10 @@ Specifically, return the symbol `string' if point is in a string, the symbol
           (t nil))))
 ;;;; oo-funcall-silently
 (defun oo-funcall-silently (fn &rest args)
+;;;; oo-funcall-quietly
+(defun oo-funcall-quietly (fn &rest args)
   "Call FN with ARGS without producing any output."
-  (shut-up (apply fn args)))
+  (quietly! (apply fn args)))
 ;;;; logging
 (defvar oo-logger (lgr-get-logger "main")
   "Object used for logging.")

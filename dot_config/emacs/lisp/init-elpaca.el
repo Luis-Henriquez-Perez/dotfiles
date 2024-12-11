@@ -161,7 +161,6 @@
 (elpaca restart-emacs)
 (elpaca s)
 (elpaca sdcv)
-(elpaca shut-up)
 (elpaca sly)
 (elpaca smartparens)
 (elpaca (spaceline :host github :branch "add-evil-operator-state-face" :repo "Luis-Henriquez-Perez/spaceline"))

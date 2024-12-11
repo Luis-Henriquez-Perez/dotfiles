@@ -240,7 +240,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 ;;;;;; Update agenda after certain actions
 (defun oo--update-agenda (orig-fn &rest args)
   (prog1 (apply orig-fn args)
-    (shut-up (call-interactively #'org-agenda-redo))))
+    (quietly! (call-interactively #'org-agenda-redo))))
 
 (advice-add 'org-agenda-todo :around #'oo--update-agenda)
 ;;;; miscellaneous

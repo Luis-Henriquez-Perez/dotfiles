@@ -71,7 +71,7 @@
 ;;;; confirm before quitting Emacs
 (setq confirm-kill-emacs #'y-or-n-p)
 ;;;; silence save-buffer
-(advice-add 'save-buffer :around #'oo-funcall-silently)
+(advice-add 'save-buffer :around #'oo-funcall-quietly)
 ;;;; keybindings
 (bind! oo-find-map ";" #'save-buffer)
 (bind! oo-find-map "o" #'find-file)
