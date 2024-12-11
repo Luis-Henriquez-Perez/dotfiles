@@ -47,24 +47,24 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 ;;;; anaphoric macros
-(defmacro alet! (value &rest body)
-  "Bind value to `it' and evaluate body."
+(defmacro alet! (FORM &rest body)
+  "Bind the result FORM to `it' for the duration of BODY."
   (declare (debug let) (indent 1))
   `(let ((it ,value))
      ,@body))
 
 (defmacro aand! (&rest conditions)
-  "Similar to `aand' but only bindings first condition to `it'."
+  "Like `and' but bind the result of first condition to `it'."
   `(alet! ,(car conditions)
      (and it ,@(cdr conditions))))
 
 (defmacro aif! (cond then &rest else)
-  "Similar to `aand' but only bindings first condition to `it'."
+  "Like `if' but bind the result of COND to `it' for duration of THEN and ELSE."
   (declare (debug t) (indent 2))
   `(alet! ,cond (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
-  "Similar to `aand' but only bindings first condition to `it'."
+  "Like `when' but the result of COND is bound to `it'."
   (declare (debug when) (indent 1))
   `(aif! ,cond (progn ,@body) nil))
 ;;;; hooks
