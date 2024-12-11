@@ -72,7 +72,7 @@
 (defmacro aprog1! (form &rest body)
   "Like `prog1' but bind first form to `it'."
   (declare (debug when) (indent 1))
-  `(alet! ,form (aprog1 it ,@body)))
+  `(alet! ,form (prog1 it ,@body)))
 ;;;;; quietly!
 (defmacro quietly! (&rest forms)
   "Run FORMS without generating any output.
