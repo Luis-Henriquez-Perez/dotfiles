@@ -285,7 +285,6 @@ file is loaded."
 ;; This is so that if I need to use some sort of program to open a file, it will
 ;; use he running emacs daemon.
 ;; (unless (server-running-p) (server-start))
-(featurep 'recentf)
 ;;;; setup loading config files
 (defhook! oo-initialize-config-files-h (emacs-startup-hook :depth 91)
   "Setup config files to be loaded after their feature."
