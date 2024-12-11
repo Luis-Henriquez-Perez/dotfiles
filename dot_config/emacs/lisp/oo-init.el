@@ -256,7 +256,7 @@ file is loaded."
   "Setup auto line sorting for `init-elpaca'."
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
   (when (f-same-p (buffer-file-name) (expand-file-name path))
-    (info! "Setup auto-sorting for %s..." (f-base path))
+    (info! "Setup auto-sorting for %s..." (oo-file-base path))
     (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
 (defun! oo-align-abbrev-forms-h ()
@@ -272,7 +272,7 @@ file is loaded."
   "Set up auto alignment for certain buffers."
   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
   (when (f-same-p (buffer-file-name) (expand-file-name path))
-    (info! "Setup auto-aligning for %S..." (f-base path))
+    (info! "Setup auto-aligning for %S..." (oo-file-base path))
     (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
 ;;;; enable initial theme
 (defhook! oo-load-initial-theme-h (after-init-hook)
@@ -292,7 +292,7 @@ file is loaded."
     (set! filename (file-name-non-directory (directory-file-name path)))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
-    (set! feature (intern (f-base path)))
+    (set! feature (intern (oo-file-base path)))
     (info! "Parent feature -> %S" parent-feature)
     (cond ((featurep parent-feature)
            (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
