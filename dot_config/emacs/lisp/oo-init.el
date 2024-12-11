@@ -299,7 +299,7 @@ file is loaded."
            (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
            (require feature filename nil))
           (t
-           (info! "Deferring `%s' until parent feature, %s, is loaded." feature parent-feature)
+           (info! "Deferring `%s' until parent feature, `%s', is loaded." feature parent-feature)
            (set! fn (lambda () (require feature path nil)))
            (oo-call-after-load parent-feature fn)))))
 ;;; provide
