@@ -63,7 +63,7 @@
 (defmacro aif! (cond then &rest else)
   "Similar to `aand' but only bindings first condition to `it'."
   (declare (debug t) (indent 2))
-  `(alet! ,cond (if ,then ,@else)))
+  `(alet! ,cond (if it ,then ,@else)))
 
 (defmacro awhen! (cond &rest body)
   "Similar to `aand' but only bindings first condition to `it'."
