@@ -45,7 +45,7 @@ in alphabetical order."
   "Alphabetize tags in current buffer."
   (interactive)
   (flet! fn (headline)
-    (alet (org-ml-get-property :tags headline)
+    (alet! (org-ml-get-property :tags headline)
       (org-ml-set-property :tags (sort it #'string<) headline)))
   (org-ml-do-headlines #'fn))
 

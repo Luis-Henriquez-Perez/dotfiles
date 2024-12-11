@@ -42,7 +42,7 @@
 (opt! org-default-priority ?D)
 (opt! org-enforce-todo-dependencies t)
 (opt! org-tags-column 0)
-(opt! org-archive-location (alet (f-expand "archive.org" org-directory)
+(opt! org-archive-location (alet! (f-expand "archive.org" org-directory)
                              (format "%s::" it)))
 (opt! org-archive-mark-done t)
 (opt! org-global-properties `(("Effort_ALL" .

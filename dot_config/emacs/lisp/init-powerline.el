@@ -98,7 +98,7 @@
                       (list (powerline-raw (symbol-name evil-state) evil-face 'l)
                             (powerline-raw " " evil-face)
                             (funcall separator-left evil-face face0)))
-                    (awhen (and buffer-file-name
+                    (awhen! (and buffer-file-name
                                 (require 'vc)
                                 (vc-backend buffer-file-name))
                       (list (powerline-raw (string-trim (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))) face0 'l)

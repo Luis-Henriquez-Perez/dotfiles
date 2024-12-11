@@ -89,7 +89,7 @@
   (let* ((text (buffer-substring-no-properties beg end))
          (result (format "\n=> %S" (eval (read text)))))
     (goto-char end)
-    (alet (point)
+    (alet! (point)
       (insert result)
       (comment-region it (point)))))
 ;;;; prevent cursor color from changing with eldoc

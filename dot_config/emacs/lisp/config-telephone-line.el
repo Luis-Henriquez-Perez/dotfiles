@@ -29,7 +29,7 @@
 ;;;;; major-mode information
 (telephone-line-defsegment* +telephone-line-major-mode-segment ()
   ;; Do not show the ugly "\l" that indicates lexical binding.
-  (alet (format-mode-line (funcall (telephone-line-major-mode-segment) face))
+  (alet! (format-mode-line (funcall (telephone-line-major-mode-segment) face))
     (if (string-match "\\`ELisp" it)
         (substring it (match-beginning 0) (match-end 0))
       it)))

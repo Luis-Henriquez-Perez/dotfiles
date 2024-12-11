@@ -182,7 +182,7 @@ Specifically, return the symbol `string' if point is in a string, the symbol
 ;; I don't yet know where to put this function.  So for now, here it goes.
 (defun oo-popup-at-bottom (regexp)
   "Open buffers at bottom that match regexp."
-  (alet `(,regexp
+  (alet! `(,regexp
           (display-buffer-at-bottom)
           (side bottom)
           (slot 1)
@@ -239,7 +239,7 @@ EXPRS, call FN with ARGS only after all CONDITIONS have been met.  If
 EXPR is a list whose CAR is `:and' behave the same way as (CDR CONDITION).
 If EXPR is a list whose CAR is `:or', call FN with ARGS after any of
 EXPRS in (CDR CONDITION) is met."
-  (alet (eval `(let ((first-call-p t))
+  (alet! (eval `(let ((first-call-p t))
                  (lambda (&optional feature)
                    (when first-call-p
                      (setq first-call-p nil)

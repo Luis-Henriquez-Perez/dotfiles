@@ -149,7 +149,7 @@
 ;;   (set! separators '(alternate arrow arrow-fade bar box brace
 ;;                                butt chamfer contour curve rounded roundstub wave zigzag
 ;;                                slant utf-8))
-;;   (awhen (completing-read "Choose separator: " separators)
+;;   (awhen! (completing-read "Choose separator: " separators)
 ;;     (setq powerline-default-separator it)
 ;;     (spaceline-compile)))
 
@@ -166,7 +166,7 @@
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
   (spaceline-compile
     'main
-    '((+evil-state :face (alet (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
+    '((+evil-state :face (alet! (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
       ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
       (+version-control :face 'powerline-active0))
     '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))

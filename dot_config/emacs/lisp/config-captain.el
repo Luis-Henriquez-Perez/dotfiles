@@ -63,7 +63,7 @@
 ;; there is a general way to determine.
 (defun! oo--in-elisp-docstring-p ()
   "Return the bounds of docstring."
-  (alet (bounds-of-thing-at-point 'string)
+  (alet! (bounds-of-thing-at-point 'string)
     (and (derived-mode-p 'emacs-lisp-mode)
          (save-excursion
 	       (goto-char (car it))
