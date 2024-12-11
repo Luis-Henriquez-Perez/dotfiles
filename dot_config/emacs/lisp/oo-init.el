@@ -293,7 +293,7 @@ file is loaded."
     (set! base (file-name-sans-extension filename))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
-    (set! feature (intern (oo-file-base path)))
+    (set! feature (intern base))
     (info! "Parent feature -> %S" parent-feature)
     (cond ((featurep parent-feature)
            (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
