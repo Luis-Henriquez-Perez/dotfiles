@@ -25,11 +25,10 @@
 ;; Here I define a let-binding macro that supports destructuring.
 ;;
 ;;; Code:
-;;;; requirements
 (require 'cl-lib)
 (require 'pcase)
 (require 'base-macros-setters)
-;;;; let!
+
 ;; I want `oo-tree-map-nodes' to be more flexible.  I want it to accept maybe an
 ;; alist of (PRED . FN) as opposed to a PRED, FN.
 (defun oo-tree-map-nodes (pred fn tree)
@@ -98,55 +97,6 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
   (mapcar (pcase-lambda (`(,mf ,val)) (list (oo--to-pcase mf) val))
           (oo--mf-replace match-form value)))
 
-(defun oo--let-bind (bind)
-  "Return a list of wrappers for binding BIND."
-  (pcase bind
-    ((pred symbolp)
-     `((let* (,bind))))
-    (`(,(pred symbolp) ,_)
-     `((let* (,bind))))
-    (`(,(or ':flet :stub) ,(and name (pred symbolp)) ,lambda)
-     `((cl-flet ((,name ,lambda)))))
-    (`(,(or ':flet :stub) ,(and name (pred symbolp)) ,args . ,body)
-     `((cl-flet ((,name ,args . ,body)))))
-    (`(#',(and fn (pred symbolp)) ,lambda)
-     `((lef! ((,fn ,lambda)))))
-    (`(,(or ':noflet :nflet) ,(and fn (pred symbolp)) ,lambda)
-     `((lef! ((,fn ,lambda)))))
-    (`(,(and mf (or (pred listp) (pred vectorp))) ,value)
-     `((pcase-let* ,(oo--to-pcase-let mf value))))
-    (_
-     (error "Unknown predicate %S" bind))))
-
-;; I do not think that sef extensions are crazy useful for `cl-letf' except for
-;; `(symbol-function)'.  In terms of implementation I want to create a macro
-;; that ties together all the "letters"--cl-letf, cl-flet, cl-labels,
-;; cl-macrolet, etc.
-(defmacro let! (bindings &rest body)
-  "Bind BINDINGS during BODY.
-This is like `let*' but it has two more kinds of possible bindings.
-
-- (let! ((MATCH-FORM VALUE)) . BODY)
-MATCH-FORM a nested form of vectors, list and non-nil symbols.
-- (let!)
-
-- (let! ((:lef foo FUNCTION)) . BODY)
-- (let! ((:noflet foo FUNCTION)) . BODY)
-- (let! ((#'foo FUNCTION)) . BODY)
-Bind function via.
-
-- (let! ((:lef foo FUNCTION)) . BODY)
-- (let! ((:noflet foo FUNCTION)) . BODY)
-- (let! ((#'foo FUNCTION)) . BODY)
-
-- (let! ((:stub SYMBOL FN)) . BODY)
-- (let! ((:flet SYMBOL FN)) . BODY)
-Let bind function."
-  (declare (indent 1))
-  (when (vectorp bindings)
-    (setq bindings `((,(aref bindings 0) ,(aref bindings 1)))))
-  (oo-wrap-forms (mapcan #'oo--let-bind bindings) body))
-;;;; set!
 (defun oo-list-marker-p (obj)
   "Return non-nil if OBJ is a list marker.
 List markers are symbols that begin with `&' such as are `&rest' and
