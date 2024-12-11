@@ -78,20 +78,18 @@
   "Run FORMS without generating any output.
 Silence calls to `message', `load', `write-region' and anything that
 writes to `standard-output'."
-  `(if oo-debug-p
-       (progn ,@forms)
-     (let ((inhibit-message t)
-           (save-silently t))
-       (cl-letf ((standard-output #'ignore)
-                 ((symbol-function 'message) #'ignore)
-                 ((symbol-function 'load)
-                  (lambda (file &optional noerror nomessage nosuffix must-suffix)
-                    (funcall load file noerror t nosuffix must-suffix)))
-                 ((symbol-function 'write-region)
-                  (lambda (start end filename &optional append visit lockname mustbenew)
-                    (unless visit (setq visit 'no-message))
-                    (funcall write-region start end filename append visit lockname mustbenew))))
-         ,@forms))))
+  `(let ((inhibit-message t)
+         (save-silently t))
+     (cl-letf ((standard-output #'ignore)
+               ((symbol-function 'message) #'ignore)
+               ((symbol-function 'load)
+                (lambda (file &optional noerror nomessage nosuffix must-suffix)
+                  (funcall #'load file noerror t nosuffix must-suffix)))
+               ((symbol-function 'write-region)
+                (lambda (start end filename &optional append visit lockname mustbenew)
+                  (unless visit (setq visit 'no-message))
+                  (funcall write-region start end filename append visit lockname mustbenew))))
+       ,@forms)))
 ;;;;; opt!
 ;; The reason this needs to be a macro is because `value' might not be evaluated
 ;; immediately.
