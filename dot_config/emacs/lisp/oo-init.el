@@ -290,7 +290,6 @@ file is loaded."
   (set! rx "\\`config-\\([^[:space:]]+\\)\\.el\\'")
   (dolist (path (directory-files lisp-dir t rx))
     (set! filename (file-name-non-directory (directory-file-name path)))
-    (set! base (file-name-sans-extension filename))
     (string-match rx filename)
     (set! parent-feature (intern (match-string 1 filename)))
     (set! feature (intern (file-name-sans-extension filename)))
