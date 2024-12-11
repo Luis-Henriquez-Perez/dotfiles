@@ -219,7 +219,8 @@
     (cond ((assq package package-archive-contents)
            (message "Installing package `%s'" package)
            (quietly! (package-install package 'dont-select))
-           (unless ))
+           (unless (package-installed-p package)
+             (message "Failed to install package")))
           (t
            (message "Package %s is not available." package)))))
 
