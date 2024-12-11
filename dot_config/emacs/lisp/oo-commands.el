@@ -252,7 +252,9 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (for! (file unmanaged-files)
     (message "unmanaged-files -> %s" (expand-file-name file "~"))
     (collecting! unmanaged (expand-file-name file "~"))
-    (unless dry-run-p (move-file-to-trash file)))
+    (unless dry-run-p
+      (let ((default-directory (expand-file-name "~")))
+        (move-file-to-trash file))))
   unmanaged)
 ;;; provide
 (provide 'oo-commands)
