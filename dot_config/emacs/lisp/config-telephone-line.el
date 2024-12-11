@@ -124,7 +124,7 @@
 (telephone-line-defsegment* +telephone-line-vc-segment ()
   (when buffer-file-name
     (require 'vc)
-    (aand (vc-backend buffer-file-name)
+    (aand! (vc-backend buffer-file-name)
           (substring vc-mode (+ (if (eq it 'Hg) 2 3) 2))
           (string-trim it))))
 ;;;;; read-only

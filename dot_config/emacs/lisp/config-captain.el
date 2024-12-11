@@ -88,7 +88,7 @@
                        (goto-char (match-end 0)))
                      (point)))
     ('string
-     (aand (car (oo--in-elisp-docstring-p))
+     (aand! (car (oo--in-elisp-docstring-p))
     	   (max it (or (car (bounds-of-thing-at-point 'sentence)) it))))))
 ;;; provide
 (provide 'config-captain)

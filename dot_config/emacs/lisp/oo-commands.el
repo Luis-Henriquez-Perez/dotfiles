@@ -95,7 +95,7 @@
   (interactive
    (cond ((region-active-p)
 	      (list (region-beginning) (region-end)))
-	     ((save-excursion (aand "(\\(\\(?:autoload\\|elpaca\\|require\\)\\)"
+	     ((save-excursion (aand! "(\\(\\(?:autoload\\|elpaca\\|require\\)\\)"
                                 (re-search-forward it end t nil)))
           (list (match-beginning 0) (point-max)))
          (t

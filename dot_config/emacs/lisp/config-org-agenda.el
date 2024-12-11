@@ -224,7 +224,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
   "Return non-nil if current headline has any subtasks that need to be done."
   (interactive)
   (flet! not-done-p ()
-    (aand (substring-no-properties (org-get-todo-state))
+    (aand! (substring-no-properties (org-get-todo-state))
           (not (member it '("DONE" "CANCELLED")))))
   (save-excursion
     (when (org-goto-first-child)
@@ -247,7 +247,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 ;; A task is overdue if the deadline of the task is past the current time.
 (defun +org-overdue-p ()
   "Return non-nil if entry is overdue."
-  (aand (org-get-deadline-time (point))
+  (aand! (org-get-deadline-time (point))
         (< (float-time (time-subtract it (current-time))) 0)
         (not (org-entry-is-done-p))))
 
