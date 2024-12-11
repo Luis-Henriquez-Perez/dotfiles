@@ -266,7 +266,7 @@ file is loaded."
   (save-excursion
     (goto-char (point-min))
     (when (re-search-forward rx nil t nil)
-      (shut-up (align (match-beginning 0) (point-max) nil rules)))))
+      (quietly! (align (match-beginning 0) (point-max) nil rules)))))
 
 (defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
   "Set up auto alignment for certain buffers."
