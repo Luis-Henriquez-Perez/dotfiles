@@ -296,7 +296,7 @@ file is loaded."
     (set! parent-feature (intern (match-string 1 filename)))
     (set! feature (intern (file-name-sans-extension filename)))
     (cond ((featurep parent-feature)
-           (info! "Parent feature %S is loaded, requiring %s" parent-feature feature)
+           (info! "Parent feature %S is loaded, requiring `%s'" parent-feature feature)
            (require feature filename nil))
           (t
            (info! "Deferring `%s' until parent feature, `%s', is loaded." feature parent-feature)
