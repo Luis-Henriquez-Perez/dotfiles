@@ -48,7 +48,7 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
-;;;; aand!
+;;;; anaphoric macros
 (defmacro alet! (value &rest body)
   "Bind value to `it' and evaluate body."
   (declare (indent 1))
@@ -59,6 +59,14 @@
   "Similar to `aand' but only bindings first condition to `it'."
   `(alet! ,(car conditions)
      (and it ,@(cdr conditions))))
+
+(defmacro aif! (cond then &rest else)
+  "Similar to `aand' but only bindings first condition to `it'."
+  `(alet! ,cond (if ,then ,@else)))
+
+(defmacro awhen! (cond &rest body)
+  "Similar to `aand' but only bindings first condition to `it'."
+  `(aif! ,cond (progn ,@body) nil))
 ;;;; hooks
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
@@ -314,7 +322,7 @@ SYMBOL and FN in `oo-after-load-hash-table'."
 ;; that I need this is for the state characters I use to abbrev evil states.
 (defun oo-call-after-evil-state-char (char fn)
   "Call FN with state after state starting with CHAR is defined."
-  (aif (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
+  (aif! (and (bound-and-true-p evil-mode) (oo--evil-char-to-state char))
       (funcall fn it)
     (push fn (gethash char oo-after-load-hash-table))))
 ;;;; opt!
@@ -330,7 +338,7 @@ This is like `setq' but it is meant for configuring variables."
          (push '(lambda () (opt! ,symbol ,value))
                (gethash ',symbol oo-after-load-hash-table))
        (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
-         (aif (get ',symbol 'custom-set)
+         (aif! (get ',symbol 'custom-set)
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;; alternate bindings

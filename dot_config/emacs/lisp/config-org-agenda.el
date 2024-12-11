@@ -313,7 +313,7 @@ This is a more flexible replacement for `org-agenda-sorting-strategy'.")
 
 (defun! +org-agenda-deadline-string ()
   "Return string indicating deadline status."
-  (aif (org-get-deadline-time (point))
+  (aif! (org-get-deadline-time (point))
       (+org-agenda--deadline-string it)
     ""))
 ;;;; views
