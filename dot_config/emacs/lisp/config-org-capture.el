@@ -44,7 +44,7 @@
       (org-capture nil key)
     (error "No capture template corresponding to %S" choosen)))
 ;;;; +org-todo-file
-(defvar +org-todo-file (f-full (f-expand "todo.org" org-directory))
+(defvar +org-todo-file (expand-file-name (expand-file-name "todo.org" org-directory))
   "Return the file to be used for capturing TODOs.")
 ;;;; main capture template
 (defun +org-planning ()

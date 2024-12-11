@@ -29,7 +29,7 @@
 (require 'base)
 ;;;; general
 (opt! org-directory (expand-file-name "~/Documents/org/"))
-(opt! org-default-notes-file (f-expand "notes.org" org-directory))
+(opt! org-default-notes-file (expand-file-name "notes.org" org-directory))
 (opt! org-agenda-files (directory-files org-directory t "\\.org\\'"))
 (opt! org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "ON-HOLD(h)"
                                     "BLOCKED(b)" "COOLDOWN(o)" "|" "DONE(d)"
@@ -42,7 +42,7 @@
 (opt! org-default-priority ?D)
 (opt! org-enforce-todo-dependencies t)
 (opt! org-tags-column 0)
-(opt! org-archive-location (alet! (f-expand "archive.org" org-directory)
+(opt! org-archive-location (alet! (expand-file-name "archive.org" org-directory)
                              (format "%s::" it)))
 (opt! org-archive-mark-done t)
 (opt! org-global-properties `(("Effort_ALL" .
