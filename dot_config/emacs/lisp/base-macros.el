@@ -26,7 +26,7 @@
 ;;
 ;;; Code:
 (require 'base-utils)
-(require 'base-macros-lef)
+(require 'base-macros-setters)
 (require 'base-macros-with-map)
 (require 'base-macros-autolet)
 (require 'base-macros-for)
@@ -86,9 +86,6 @@ writes to `standard-output'."
                   (funcall write-region start end filename append visit lockname mustbenew))))
        ,@forms)))
 ;;;;; opt!
-;; The reason this needs to be a macro is because `value' might not be evaluated
-;; immediately.
-;; TODO: need better error handling for when value producess an error.
 (defmacro! opt! (symbol value)
   "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
 This is like `setq' but it is meant for configuring variables."
@@ -102,7 +99,6 @@ This is like `setq' but it is meant for configuring variables."
              (funcall it ',symbol ,value-var)
            (with-no-warnings (setq ,symbol ,value-var)))))))
 ;;;;; defhook!
-;; This is a convenience macro for.
 (defmacro hook! (hook function &rest args)
   "Configuration wrapper around `oo-add-hook'."
   `(progn (declare-function ,function nil)
