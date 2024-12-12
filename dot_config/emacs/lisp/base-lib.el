@@ -60,7 +60,7 @@
 
 (defsubst oo-true-list-p (object)
   "Return non-nil if OBJECT is a non-nil proper-list.
-"
+This means it is non-nil."
   (declare (pure t) (side-effect-free error-free))
   (and (not (oo-cons-cell-p object)))
   (and object (listp object) (listp (cdr-safe object))))
