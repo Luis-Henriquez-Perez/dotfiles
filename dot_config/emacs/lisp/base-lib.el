@@ -49,11 +49,13 @@
 
 (defsubst oo-true-symbol-p (object)
   "Return non-nil if OBJECT."
+  (declare (pure t) (side-effect-free error-free))
   (and object (symbolp object) (not (keywordp object))))
 
-(defun oo-cons-cell-p (object)
+(defsubst oo-cons-cell-p (object)
   "Return non-nil if OBJECT."
-  )
+  (declare (pure t) (side-effect-free error-free))
+  (and (listp object) (listp (cdr-safe object))))
 
 (defun oo-true-list-p (object)
   "Return non-nil if OBJECT is a true list.
