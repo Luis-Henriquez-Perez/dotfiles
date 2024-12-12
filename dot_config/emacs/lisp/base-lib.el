@@ -50,6 +50,10 @@
 (defsubst oo-true-symbol-p (object)
   "Return non-nil if OBJECT."
   (and object (symbolp object) (not (keywordp object))))
+
+(defun oo-cons-cell-p (object)
+  ""
+  )
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
