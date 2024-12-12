@@ -77,6 +77,7 @@ A \"true list\" is a list whose CDR is also a list."
   "Return non-nil if "
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
+
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
