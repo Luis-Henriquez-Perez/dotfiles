@@ -28,11 +28,16 @@
 (require 'base-macros-let)
 (require 'cl-lib)
 (require 'seq)
+(require 'base-destructuring-utils)
 ;;;; for!
 (defmacro for! (loop-struct &rest body)
   "A generic looping macro and drop-in replacement for `dolist'.
 BODY is the body of the loop.  LOOP-STRUCT determines how `for!' loops and can
 take the following forms:
+
+(COLLECT|COlLECING MF LIST)
+
+(APPEND|APPENDING MF LIST)
 
 (VAR NUMBER) Same as `dotimes'.
 

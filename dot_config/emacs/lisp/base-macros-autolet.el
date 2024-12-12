@@ -34,6 +34,7 @@
 (require 'pcase)
 (require 'base-macros-lef)
 (require 'base-macros-setters)
+(require 'base-destructuring-utils)
 ;;;; control flow macros
 (defmacro return! (&optional value)
   "Exit `autolet!' and return VALUE.
