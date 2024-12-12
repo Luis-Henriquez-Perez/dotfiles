@@ -48,7 +48,7 @@
 (declare-function evil-define-key* "evil")
 ;;;; macros
 (defsubst oo-true-symbol-p (object)
-  "Return non-nil if"
+  "Return non-nil if OBJECT."
   (and object (symbolp object) (not (keywordp object))))
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
