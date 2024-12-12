@@ -71,11 +71,11 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
   (let (other-bindings match-form-value)
     (setq match-form-value (gensym "match-form-value"))
     (cl-flet ((match-p ()
-                (aprog1 (oo-destructure-match-form mf match-form-value)
-                  (nif! it
-                      (+ 1 1)
-                    (setq other-bindings (append other-bindings it))
-                    (setq match-form-value mf-value))))
+                (aprog1! (oo-destructure-match-form mf match-form-value)
+                         (nif! it
+                             (+ 1 1)
+                           (setq other-bindings (append other-bindings it))
+                           (setq match-form-value mf-value))))
               (replace (lambda (_) match-form-value)))
       `((,(oo-tree-map-nodes #'match-p #'replace match-form) ,value)
         ,@other-bindings))))
