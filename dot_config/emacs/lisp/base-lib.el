@@ -63,7 +63,7 @@
 "
   (declare (pure t) (side-effect-free error-free))
   (and (not (oo-cons-cell-p object)))
-  (and (listp object) (listp (cdr-safe object))))
+  (and object (listp object) (listp (cdr-safe object))))
 
 (defsubst oo-negative-p (number)
   "Return non-nil if NUMBER is less than zero."
