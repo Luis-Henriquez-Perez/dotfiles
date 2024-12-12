@@ -63,6 +63,13 @@ A \"true list\" is a list whose CDR is also a list."
   (declare (pure t) (side-effect-free error-free))
   (and (listp object) (listp (cdr-safe object))))
 
+(defsubst oo-negative-p (number)
+  "Return non-nil if NUMBER is less than zero."
+  (< number 0))
+
+(defsubst oo-positive-p (number)
+  "Return non-nil if NUMBER is greater than zero."
+  (> number 0))
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
