@@ -34,16 +34,6 @@
 ;;;; requirements
 (require 'base-packages)
 (require 'lgr)
-(eval-when-compile (require 'base-macros-hook))
-(eval-when-compile (require 'base-macros-setters))
-(eval-when-compile (require 'base-macros-for))
-(eval-when-compile (require 'base-macros-let))
-(eval-when-compile (require 'base-macros-lef))
-(eval-when-compile (require 'base-macros-autolet))
-(eval-when-compile (require 'base-macros-with-map))
-(eval-when-compile (require 'base-macros-definers))
-(eval-when-compile (require 'base-macros-bind))
-
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 
