@@ -47,7 +47,7 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 ;;;; macros
-(defun oo-true-symbol-p (object)
+(defsubst oo-true-symbol-p (object)
   "Return"
   (and object (symbolp object) (not (keywordp object))))
 ;;;;; nif!
