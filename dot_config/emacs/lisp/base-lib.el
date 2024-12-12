@@ -59,7 +59,7 @@
   (and (listp object) (not (listp (cdr-safe object)))))
 
 (defsubst oo-true-list-p (object)
-  "Return non-nil if OBJECT is a."
+  "Return non-nil if OBJECT is a proper-list."
   (declare (pure t) (side-effect-free error-free))
   (and (not (oo-cons-cell-p object)))
   (and (listp object) (listp (cdr-safe object))))
