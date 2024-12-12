@@ -55,6 +55,11 @@
   "Return non-nil if OBJECT."
   )
 
+(defun oo-true-list-p (object)
+  "Return non-nil if OBJECT is a true list.
+A \"true list\" is a list whose CDR is also a list."
+  (declare (pure t) (side-effect-free error-free))
+  (and (listp object) (listp (cdr-safe object))))
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
