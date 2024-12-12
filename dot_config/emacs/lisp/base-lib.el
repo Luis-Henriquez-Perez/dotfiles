@@ -65,10 +65,12 @@ A \"true list\" is a list whose CDR is also a list."
 
 (defsubst oo-negative-p (number)
   "Return non-nil if NUMBER is less than zero."
+  (declare (pure t) (side-effect-free error-free))
   (< number 0))
 
 (defsubst oo-positive-p (number)
   "Return non-nil if NUMBER is greater than zero."
+  (declare (pure t) (side-effect-free error-free))
   (> number 0))
 
 (defsubst oo-contains-all-p (object)
