@@ -47,6 +47,16 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 ;;;; macros
+;;;;; nif!
+;; More often than not when I am using `if', the default else clause is simpler than
+;; the then clause.  And in that case I end up having to wrap the then clause in
+;; a `progn'. I want to invert the else clause and the if clause so I do not
+;; need to include the extra `progn' in that case.  I also considered just
+;; writing a macro that expands to an `if' with the then and else reversed, but
+;; I think it might be confusing.
+(defmacro nif! (cond then &rest else)
+  (declare (indent 2))
+  `(if (not ,cond) ,then ,@else))
 ;;;;; anaphoric macros
 (defmacro alet! (form &rest body)
   "Bind the result FORM to `it' for the duration of BODY."
@@ -154,6 +164,7 @@ generated function does not pass in any of its given arguments to FUNCTION."
                                 ',hook
                                 (cdr err))))))))
   (add-hook hook fname depth local))
+
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
