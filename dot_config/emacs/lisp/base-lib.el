@@ -82,6 +82,17 @@ A \"true list\" is a list whose CDR is also a list."
   "Return non-nil if "
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
+
+;; This function is used by captain and abbrev.
+(defun oo-in-string-or-comment-p ()
+  "Return non-nil if point is in a string or comment.
+Specifically, return the symbol `string' if point is in a string, the symbol
+`comment' if in a comment and nil otherwise."
+  (declare (pure t) (side-effect-free t))
+  (let ((ppss (syntax-ppss)))
+    (cond ((nth 3 ppss) 'string)
+          ((nth 4 ppss) 'comment)
+          (t nil))))
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
@@ -200,17 +211,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
                                 ',hook
                                 (cdr err))))))))
   (add-hook hook fname depth local))
-;;;; oo-in-string-or-comment-p
-;; This function is used by captain and abbrev.
-(defun oo-in-string-or-comment-p ()
-  "Return non-nil if point is in a string or comment.
-Specifically, return the symbol `string' if point is in a string, the symbol
-`comment' if in a comment and nil otherwise."
-  (declare (pure t) (side-effect-free t))
-  (let ((ppss (syntax-ppss)))
-    (cond ((nth 3 ppss) 'string)
-          ((nth 4 ppss) 'comment)
-          (t nil))))
 ;;;; oo-funcall-quietly
 (defun oo-funcall-quietly (fn &rest args)
   "Call FN with ARGS without producing any output."
