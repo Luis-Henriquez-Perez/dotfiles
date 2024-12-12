@@ -74,7 +74,7 @@ This means it is non-nil."
   (> number 0))
 
 (defsubst oo-contains-all-p (list1 list2)
-  "Return non-nil if "
+  "Return non-nil if"
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
 
