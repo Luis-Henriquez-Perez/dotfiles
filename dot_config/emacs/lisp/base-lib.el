@@ -34,6 +34,7 @@
 ;;;; requirements
 (require 'base-packages)
 (require 'lgr)
+
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 

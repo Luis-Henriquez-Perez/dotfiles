@@ -80,7 +80,6 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
       `((,(oo-tree-map-nodes #'match-p #'replace match-form) ,value)
         ,@other-bindings))))
 
-;; The first thing I need to do is replace the matches with their equivalent.
 (defun oo-pcase-bindings (match-form value)
   "Return pcase-friendly list of bindings from BINDING."
   (mapcar (pcase-lambda (`(,mf ,val)) (list (oo-into-pcase-pattern mf) val))
