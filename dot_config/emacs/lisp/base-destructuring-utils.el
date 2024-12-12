@@ -28,6 +28,87 @@
 (require 'cl-lib)
 (require 'pcase)
 
+(defun oo-tree-map-nodes (pred fn tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+         (funcall fn tree))
+        ((consp tree)
+         (cons (oo-tree-map-nodes pred fn (car tree))
+               (oo-tree-map-nodes pred fn (cdr tree))))
+        ((vectorp tree)
+         `[,@(mapcar (apply-partially #'oo-tree-map-nodes pred fn)
+                     (append tree nil))])
+        (t
+         tree)))
+
+(defun oo-into-pcase-pattern (match-form)
+  "Return MATCH-FORM as a pcase pattern.
+MATCH form is a potentially nested structure of only list, vectors and symbols."
+  (if (symbolp match-form)
+      match-form
+    (cl-flet ((true-symbolp (o) (and o (symbolp o)))
+              (add-comma (o) (list '\, o)))
+      (list '\` (oo-tree-map-nodes #'true-symbolp #'add-comma match-form)))))
+
+(defun oo-destructure-match-form (match-form value)
+  (pcase match-form
+    (`(,(or '&as '&whole) ,(pred symbolp) ,as-match-form)
+     (alet! (cl-gensym "special-&as-match-form")
+       `((,it ,value)
+         (,whole ,it)
+         (,parts ,it))))
+    (`(&key ,(and symbol (pred symbolp)) . ,(and symbols (guard . t)))
+     (let ((it (cl-gensym "special-&key-match-form"))
+           (binds nil))
+       (dolist (s (cons symbol symbols))
+         (push `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol))) binds))
+       (push `(,it ,value) bindings)
+       (nreverse bindings)))
+    (_
+     nil)))
+
+(defun oo--mf-replace (match-form value)
+  (let (other-bindings match-form-value)
+    (setq match-form-value (gensym "match-form-value"))
+    (cl-flet ((match-p ()
+                (aprog1 (oo-destructure-match-form mf match-form-value)
+                  (nif! it
+                      (+ 1 1)
+                    (setq other-bindings (append other-bindings it))
+                    (setq match-form-value mf-value))))
+              (replace (lambda (_) match-form-value)))
+      `((,(oo-tree-map-nodes #'match-p #'replace match-form) ,value)
+        ,@other-bindings))))
+
+(defun oo-pcase-bindings (match-form value)
+  "Return pcase-friendly list of bindings from BINDING."
+  (mapcar (pcase-lambda (`(,mf ,val)) (list (oo-into-pcase-pattern mf) val))
+          (oo--mf-replace match-form value)))
+
+(defun oo-flatten-pcase-match-form (match-form)
+  "Flatten MATCH-FORM into components.
+This is similar to `flatten-list' but convert."
+  (cl-flet ((flatten-pattern (match-form)
+              (let ((stack (list (if (vectorp match-form) (append match-form nil) match-form)))
+                    (symbols nil)
+                    (node nil))
+                (while stack
+                  (cond ((null (car stack))
+                         (pop stack))
+                        ((listp (car stack))
+                         (setq node (pop (car stack)))
+                         (cond ((symbolp node)
+                                (cl-pushnew node symbols))
+                               ((nlistp (cdr-safe node))
+                                (push (list (car node) (cdr node)) stack))
+                               ((listp node)
+                                (push node stack))
+                               ((vectorp node)
+                                (push (append node nil) stack))))
+                        (t
+                         (cl-pushnew (pop stack) symbols))))
+                symbols))))
+  (cl-set-difference (flatten-pattern match-form) '(\, \`)))
 ;;; provide
 (provide 'base-destructuring-utils)
 ;;; base-destructuring-utils.el ends here
