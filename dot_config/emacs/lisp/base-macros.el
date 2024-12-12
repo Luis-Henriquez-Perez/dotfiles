@@ -26,9 +26,11 @@
 ;;
 ;;; Code:
 (require 'base-utils)
-;; Do not need dependencies.
 (require 'base-macros-lef)
 (require 'base-macros-with-map)
+(require 'base-macros-autolet)
+(require 'base-macros-for)
+(require 'base-macros-bind)
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
@@ -149,6 +151,34 @@ This is like `setq' but it is meant for configuring variables."
                                (cdr err))))))
     (appending! forms `((fset ',name ,lambda) (add-hook ',hook #',name nil nil))))
   (macroexp-progn forms))
+;;;;; lef!
+(defmacro lef! (bindings &rest body)
+  "Bind each symbol in BINDINGS to its corresponding function during BODY.
+BINDINGS is a list of either (SYMBOL FUNCTION), where symbol is the symbol to be
+bound and FUNCTION is the function to bind it to; or (SYMBOL ARGS BODY).  In
+each of BINDINGS if the symbol is an existing function symbol let-bind the
+original function to `this-fn', otherwise bind `this-fn' to nil."
+  (declare (indent 1))
+  (let (binds orig-fn)
+    (pcase-dolist (`(,sym . ,rest) bindings)
+      (setq orig-fn (gensym "orig-fn"))
+      (push `(,orig-fn (when (fboundp ',sym) (symbol-function ',sym))) binds)
+      (push (list `(symbol-function ',sym)
+                  (pcase rest
+                    (`(,fn . nil)
+                     `(lambda (&rest args)
+                        (let ((this-fn ,orig-fn)
+                              (this-function ,orig-fn))
+                          (ignore this-fn this-function)
+                          (apply ,fn args))))
+                    (`(,args . ,function-body)
+                     `(lambda ,args
+                        (let ((this-fn ,orig-fn)
+                              (this-function ,orig-fn))
+                          (ignore this-fn this-function)
+                          ,@function-body)))))
+            binds))
+    `(cl-letf* ,(nreverse binds) ,@body)))
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
