@@ -72,8 +72,7 @@ A \"true list\" is a list whose CDR is also a list."
   (> number 0))
 
 (defsubst oo-contains-all-p (object)
-  "Return non-nil if OBJECT is a true list.
-A \"true list\" is a list whose CDR is also a list."
+  "Return non-nil"
   (declare (pure t) (side-effect-free error-free))
   (and (listp object) (listp (cdr-safe object))))
 ;;;; macros
