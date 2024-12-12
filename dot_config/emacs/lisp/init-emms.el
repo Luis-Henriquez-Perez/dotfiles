@@ -35,7 +35,8 @@
 ;; empty" error and if I have mpv installed, add it and play the file.  I can do
 ;; this for `emms-play-file' but I need to check if to.
 (opt! emms-player-list '(emms-player-mpv))
-(require! emms-player-mpv emms)
+
+(oo-call-after-load 'emms (lambda () (require 'emms-player-mpv)))
 
 (bind! oo-emms-map "f" #'emms-play-file)
 (bind! oo-emms-map "p" #'emms-pause)
