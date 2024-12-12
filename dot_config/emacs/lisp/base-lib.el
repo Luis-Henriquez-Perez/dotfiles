@@ -54,6 +54,7 @@
 (defun oo-cons-cell-p (object)
   "Return non-nil if OBJECT."
   )
+
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
