@@ -48,9 +48,8 @@
 (declare-function evil-define-key* "evil")
 ;;;; macros
 (defun oo-true-symbol-p (object)
-  ""
-  (and object (symbolp object) (not (keywordp object)))
-  )
+  "Return"
+  (and object (symbolp object) (not (keywordp object))))
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
 ;; the then clause.  And in that case I end up having to wrap the then clause in
