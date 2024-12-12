@@ -38,43 +38,6 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 
-(defsubst oo-true-symbol-p (object)
-  "Return non-nil if OBJECT is a non-keyword symbol."
-  (declare (pure t) (side-effect-free error-free))
-  (and object (symbolp object) (not (keywordp object))))
-
-(defsubst oo-cons-cell-p (object)
-  "Return non-nil if OBJECT is a cons-cell but not a proper list."
-  (declare (pure t) (side-effect-free error-free))
-  (and (listp object) (not (listp (cdr-safe object)))))
-
-(defsubst oo-true-list-p (object)
-  "Return non-nil if OBJECT is a non-nil proper-list.
-This means it is non-nil."
-  (declare (pure t) (side-effect-free error-free))
-  (and object (listp object) (listp (cdr-safe object))))
-
-(defsubst oo-negative-p (number)
-  "Return non-nil if NUMBER is less than zero."
-  (declare (pure t) (side-effect-free error-free))
-  (< number 0))
-
-(defsubst oo-positive-p (number)
-  "Return non-nil if NUMBER is greater than zero."
-  (declare (pure t) (side-effect-free error-free))
-  (> number 0))
-
-(defsubst oo-contains-all-p (list1 list2)
-  "Return non-nil if"
-  (declare (pure t) (side-effect-free error-free))
-  (null (cl-set-difference list1 list2)))
-
-(defsubst oo-same-items-as-p (list1 list2)
-  "Return non-nil if LIST1 has the same items as LIST2"
-  (declare (pure t) (side-effect-free error-free))
-  (and (null (cl-set-difference list1 list2))
-       (null (cl-set-difference list2 list1))))
-
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
   "Return non-nil if point is in a string or comment.
