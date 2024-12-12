@@ -62,7 +62,7 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
            (bindings))
        (dolist (s (cons symbol symbols))
          (push `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol))) temp))
-       (push (list it value) bindings)
+       (push `(it value) bindings)
        (nreverse bindings)))
     (_
      nil)))
