@@ -78,7 +78,7 @@ A \"true list\" is a list whose CDR is also a list."
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
 
-(defsubst oo-contains-all-p (list1 list2)
+(defsubst oo-same-items-as-p (list1 list2)
   "Return non-nil if "
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
