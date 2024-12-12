@@ -50,10 +50,6 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
               (add-comma (o) (list '\, o)))
       (list '\` (oo-tree-map-nodes #'true-symbolp #'add-comma match-form)))))
 
-(defmacro colist! (spec &rest body)
-  (declare (indent 1) (debug ((symbolp form &optional form) body)))
-  (cl-with-gensyms (list)))
-
 (defun oo-destructure-match-form (match-form value)
   (pcase match-form
     (`(,(or '&as '&whole) ,(pred symbolp) ,as-match-form)
@@ -61,10 +57,14 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
        `((,it ,value)
          (,whole ,it)
          (,parts ,it))))
-    (`(&key ,(and symbol (pred symbolp)) . (guard . t))
-     (cl-gensym "special-&key-match-form")
-     (colist! (s (cons symbol symbols))
-       `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol)))))
+    (`(&key ,(and symbol (pred symbolp)) . ,(and symbols (guard . t)))
+     (let ((it (cl-gensym "special-&key-match-form"))
+           (other-bindings))
+       (dolist
+           (s (cons symbol symbols))
+         (push `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol))) temp))
+       (push (list it value) bindings)
+       (nreverse bindings)))
     (_
      nil)))
 
