@@ -60,6 +60,7 @@
 (defsubst oo-true-list-p (object)
   "Return non-nil if OBJECT is a."
   (declare (pure t) (side-effect-free error-free))
+  (and (not (oo-cons-cell-p object)))
   (and (listp object) (listp (cdr-safe object))))
 
 (defsubst oo-negative-p (number)
