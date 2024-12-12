@@ -54,7 +54,7 @@
   (and object (symbolp object) (not (keywordp object))))
 
 (defsubst oo-cons-cell-p (object)
-  "Return non-nil if OBJECT."
+  "Return non-nil if OBJECT is a cons-cell and not a proper list."
   (declare (pure t) (side-effect-free error-free))
   (and (listp object) (not (listp (cdr-safe object)))))
 
