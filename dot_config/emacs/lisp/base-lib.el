@@ -82,7 +82,7 @@ This means it is non-nil."
   "Return non-nil if LIST1 has the same items as LIST2"
   (declare (pure t) (side-effect-free error-free))
   (and (null (cl-set-difference list1 list2))
-       ))
+       (null (cl-set-difference list2 list1))))
 
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
