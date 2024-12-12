@@ -164,7 +164,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
                                 ',hook
                                 (cdr err))))))))
   (add-hook hook fname depth local))
-
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
