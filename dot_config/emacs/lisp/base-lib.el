@@ -48,7 +48,7 @@
 (declare-function evil-define-key* "evil")
 
 (defsubst oo-true-symbol-p (object)
-  "Return non-nil if OBJECT."
+  "Return non-nil if OBJECT is a non-keyword symbol."
   (declare (pure t) (side-effect-free error-free))
   (and object (symbolp object) (not (keywordp object))))
 
