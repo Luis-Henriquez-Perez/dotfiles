@@ -74,7 +74,7 @@ A \"true list\" is a list whose CDR is also a list."
   (> number 0))
 
 (defsubst oo-contains-all-p (list1 list2)
-  "Return non-nil"
+  "Return non-nil if "
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference)))
 ;;;; macros
