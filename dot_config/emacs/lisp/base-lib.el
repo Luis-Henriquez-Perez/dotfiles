@@ -52,7 +52,7 @@
   (and object (symbolp object) (not (keywordp object))))
 
 (defun oo-cons-cell-p (object)
-  ""
+  "Return non-nil if OBJECT."
   )
 ;;;; macros
 ;;;;; nif!
