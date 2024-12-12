@@ -28,6 +28,19 @@
 (require 'cl-lib)
 (require 'pcase)
 
+(defun oo-tree-map-nodes (pred fn tree)
+  "Same as `-tree-map-nodes', but works for improper lists."
+  (cond ((funcall pred tree)
+         (funcall fn tree))
+        ((consp tree)
+         (cons (oo-tree-map-nodes pred fn (car tree))
+               (oo-tree-map-nodes pred fn (cdr tree))))
+        ((vectorp tree)
+         `[,@(mapcar (apply-partially #'oo-tree-map-nodes pred fn)
+                     (append tree nil))])
+        (t
+         tree)))
+
 (defun oo-into-pcase-pattern (match-form)
   "Return MATCH-FORM as a pcase pattern.
 MATCH form is a potentially nested structure of only list, vectors and symbols."
