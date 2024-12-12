@@ -57,7 +57,7 @@
   (declare (pure t) (side-effect-free error-free))
   (and (listp object) (listp (cdr-safe object))))
 
-(defun oo-true-list-p (object)
+(defsubst oo-true-list-p (object)
   "Return non-nil if OBJECT is a true list.
 A \"true list\" is a list whose CDR is also a list."
   (declare (pure t) (side-effect-free error-free))
