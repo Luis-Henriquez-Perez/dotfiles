@@ -81,7 +81,8 @@ This means it is non-nil."
 (defsubst oo-same-items-as-p (list1 list2)
   "Return non-nil if LIST1 has the same items as LIST2"
   (declare (pure t) (side-effect-free error-free))
-  (and (null (cl-set-difference list1 list2))))
+  (and (null (cl-set-difference list1 list2))
+       ))
 
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
