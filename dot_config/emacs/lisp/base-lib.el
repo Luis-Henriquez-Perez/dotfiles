@@ -47,7 +47,7 @@
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
 ;;;; macros
-(defun oo-true-symbol-p ()
+(defun oo-true-symbol-p (object)
   ""
   (and (symbolp object) (and ))
   )
