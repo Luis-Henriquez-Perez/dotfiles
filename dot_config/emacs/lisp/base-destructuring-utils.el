@@ -61,7 +61,7 @@ MATCH form is a potentially nested structure of only list, vectors and symbols."
      (let ((it (cl-gensym "special-&key-match-form"))
            (binds nil))
        (dolist (s (cons symbol symbols))
-         (push `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol))) temp))
+         (push `(,symbol (plist-get ,it ,(oo-keyword-intern ,symbol))) binds))
        (push `(,it ,value) bindings)
        (nreverse bindings)))
     (_
