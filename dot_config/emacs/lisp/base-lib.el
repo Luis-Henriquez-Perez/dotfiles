@@ -49,7 +49,7 @@
 ;;;; macros
 (defun oo-true-symbol-p (object)
   ""
-  (and (symbolp object) (and ))
+  (and (symbolp object) (not (keywordp obj)))
   )
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
