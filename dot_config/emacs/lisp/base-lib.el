@@ -79,7 +79,7 @@ This means it is non-nil."
   (null (cl-set-difference list1 list2)))
 
 (defsubst oo-same-items-as-p (list1 list2)
-  "Return non-nil if "
+  "Return non-nil if LIST1 has the same items as LIST2"
   (declare (pure t) (side-effect-free error-free))
   (null (cl-set-difference list1 list2)))
 
