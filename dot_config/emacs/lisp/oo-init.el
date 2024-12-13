@@ -261,14 +261,14 @@ file is loaded."
 ;;     (info! "Setup auto-sorting for %s..." (oo-file-base path))
 ;;     (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
-(defun! oo-align-abbrev-forms-h ()
-  "Align all abbrev forms in current buffer."
-  (set! regexp "(define-abbrev\\(?1:\\s-+\\)\\S-+\\(?2:\\s-+\\)\".*?\"\\(?3:\\s-+\\)\".*?\"\\(?4:\\s-+\\)\\S-+\\(?5:\\s-+\\):enable-function\\(?6:\\s-+\\).+)")
-  (set! rules `((rule1 . ((regexp . ,regexp) (group . (1 2 3 4 5 6))))))
-  (save-excursion
-    (goto-char (point-min))
-    (when (re-search-forward rx nil t nil)
-      (quietly! (align (match-beginning 0) (point-max) nil rules)))))
+;; (defun! oo-align-abbrev-forms-h ()
+;;   "Align all abbrev forms in current buffer."
+;;   (set! regexp "(define-abbrev\\(?1:\\s-+\\)\\S-+\\(?2:\\s-+\\)\".*?\"\\(?3:\\s-+\\)\".*?\"\\(?4:\\s-+\\)\\S-+\\(?5:\\s-+\\):enable-function\\(?6:\\s-+\\).+)")
+;;   (set! rules `((rule1 . ((regexp . ,regexp) (group . (1 2 3 4 5 6))))))
+;;   (save-excursion
+;;     (goto-char (point-min))
+;;     (when (re-search-forward rx nil t nil)
+;;       (quietly! (align (match-beginning 0) (point-max) nil rules)))))
 
 ;; (defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
 ;;   "Set up auto alignment for certain buffers."
