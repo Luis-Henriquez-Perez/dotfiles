@@ -165,13 +165,13 @@ Return a flat list of unique components in MATCH-FORM."
                 symbols)))
     (cl-set-difference (flatten-pattern match-form) '(\, \`))))
 
-(defmacro set! (pattern value)
+(defmacro set! (match-form value)
   "Bind symbols in PATTERN to corresponding VALUE.
 If PATTE"
-  (if (symbolp pattern)
-      `(setq ,pattern ,value)
-    (let* ((binds (oo-pcase-bindings pattern value))
-           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form pattern)))
+  (if (symbolp match-form)
+      `(setq ,match-form ,value)
+    (let* ((binds (oo-pcase-bindings match-form value))
+           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form match-form)))
            (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
            (gensyms (cl-set-difference all non-gensyms)))
       `(let ,gensyms
