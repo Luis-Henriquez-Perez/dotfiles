@@ -301,6 +301,7 @@ file is loaded."
           (t
            (info! "Deferring `%s' until parent feature, `%s', is loaded." feature parent-feature)
            (set! fn `(lambda () (require ',feature ,path nil)))
+           (info! "Function to load-after -> %S")
            (oo-call-after-load parent-feature fn)))))
 ;;; provide
 (provide 'oo-init)
