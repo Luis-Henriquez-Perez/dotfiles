@@ -66,7 +66,6 @@ This means it is non-nil."
   (declare (pure t) (side-effect-free error-free))
   (and (null (cl-set-difference list1 list2))
        (null (cl-set-difference list2 list1))))
-
 ;;;; type conversion
 (defun oo-into-string (&rest args)
   "Return ARGS as a string."
