@@ -65,14 +65,14 @@
   (declare (debug when) (indent 1))
   `(alet! ,form (prog1 it ,@body)))
 ;;;;; quietly!
-(defmacro quietly! (&rest forms)
-  "Run FORMS without generating any output.
+(defmacro quietly! (&rest body)
+  "Run BODY without generating any output.
 Silence calls to `message', `load', `write-region' and anything that
 writes to `standard-output'."
   `(let ((inhibit-message t)
-         (save-silently t))
-     (cl-letf ((standard-output #'ignore)
-               ((symbol-function 'message) #'ignore)
+         (save-silently t)
+         (standard-output #'ignore))
+     (cl-letf (((symbol-function 'message) #'ignore)
                ((symbol-function 'load)
                 (lambda (file &optional noerror nomessage nosuffix must-suffix)
                   (funcall #'load file noerror t nosuffix must-suffix)))
@@ -80,7 +80,7 @@ writes to `standard-output'."
                 (lambda (start end filename &optional append visit lockname mustbenew)
                   (unless visit (setq visit 'no-message))
                   (funcall write-region start end filename append visit lockname mustbenew))))
-       ,@forms)))
+       ,@body)))
 ;;;;; lef!
 (defmacro lef! (bindings &rest body)
   "Bind each symbol in BINDINGS to its corresponding function during BODY.
