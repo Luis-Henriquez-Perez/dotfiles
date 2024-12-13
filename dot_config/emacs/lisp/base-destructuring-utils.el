@@ -166,7 +166,7 @@ Return a flat list of unique components in MATCH-FORM."
     (cl-set-difference (flatten-pattern match-form) '(\, \`))))
 
 (defmacro set! (pattern value)
-  "Like `pcase-setq' but use the syntax of `let!'."
+  "Bind symbols in PATTERN to corresponding VALUE."
   (if (symbolp pattern)
       `(setq ,pattern ,value)
     ;; Damn I did not realize I need to know the gensym values.  I need to make
