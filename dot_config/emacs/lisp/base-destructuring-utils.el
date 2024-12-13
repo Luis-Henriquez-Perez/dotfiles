@@ -167,7 +167,7 @@ Return a flat list of unique components in MATCH-FORM."
 
 (defmacro set! (match-form value)
   "Bind symbols in PATTERN to corresponding VALUE.
-If PATTE"
+If MATCH-FORM is a symbol act as `setq'"
   (if (symbolp match-form)
       `(setq ,match-form ,value)
     (let* ((binds (oo-pcase-bindings match-form value))
