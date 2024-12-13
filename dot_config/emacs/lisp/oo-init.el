@@ -244,15 +244,15 @@ file is loaded."
   (set! default-font (face-attribute 'default :family))
   (info! "Unable to set font to any in `oo-default-font-list', defaulting to `%s'." default-font))
 ;;;; sort lines
-(defun! oo-sort-elpaca-forms-h ()
-  "Sort elpaca package forms in current buffer."
-  (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
-  (set! beg (point-min))
-  (set! end (point-max))
-  (save-excursion
-    (goto-char beg)
-    (when (re-search-forward rx end t nil)
-      (sort-regexp-fields nil rx "\\1" (match-beginning 0) end))))
+;; (defun! oo-sort-elpaca-forms-h ()
+;;   "Sort elpaca package forms in current buffer."
+;;   (set! rx "^\\(?:;; \\)?(elpaca \\(?:(\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\|\\(?1:\\(?:[[:alnum:]]\\|-\\)+\\)\\)[^z-a]+?$")
+;;   (set! beg (point-min))
+;;   (set! end (point-max))
+;;   (save-excursion
+;;     (goto-char beg)
+;;     (when (re-search-forward rx end t nil)
+;;       (sort-regexp-fields nil rx "\\1" (match-beginning 0) end))))
 
 ;; (defhook! oo-setup-auto-line-sorting-maybe-h (find-file-hook)
 ;;   "Setup auto line sorting for `init-elpaca'."
