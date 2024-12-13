@@ -270,12 +270,12 @@ file is loaded."
     (when (re-search-forward rx nil t nil)
       (quietly! (align (match-beginning 0) (point-max) nil rules)))))
 
-(defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
-  "Set up auto alignment for certain buffers."
-  (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
-  (when (f-same-p (buffer-file-name) (expand-file-name path))
-    (info! "Setup auto-aligning for %S..." (oo-file-base path))
-    (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
+;; (defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
+;;   "Set up auto alignment for certain buffers."
+;;   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
+;;   (when (f-same-p (buffer-file-name) (expand-file-name path))
+;;     (info! "Setup auto-aligning for %S..." (oo-file-base path))
+;;     (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
 ;;;; enable initial theme
 (defhook! oo-load-initial-theme-h (after-init-hook)
   "Load `modus-operandi' theme."
