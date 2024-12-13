@@ -85,68 +85,6 @@ writes to `standard-output'."
                   (unless visit (setq visit 'no-message))
                   (funcall write-region start end filename append visit lockname mustbenew))))
        ,@forms)))
-;;;;; opt!
-(defmacro! opt! (symbol value)
-  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
-This is like `setq' but it is meant for configuring variables."
-  (let ((value-var (gensym "value")))
-    `(if (not (boundp ',symbol))
-         ;; This quote on he lambda is needed to avoid infinite recursion.
-         (push '(lambda () (opt! ,symbol ,value))
-               (gethash ',symbol oo-after-load-hash-table))
-       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
-         (aif! (get ',symbol 'custom-set)
-             (funcall it ',symbol ,value-var)
-           (with-no-warnings (setq ,symbol ,value-var)))))))
-;;;;; defhook!
-(defmacro hook! (hook function &rest args)
-  "Configuration wrapper around `oo-add-hook'."
-  `(progn (declare-function ,function nil)
-          (oo-add-hook ',hook #',function ,@args)))
-
-(defmacro! defhook! (name args &rest body)
-  "Add function to hook as specified by NAME."
-  (declare (indent defun))
-  (while (aand! (car args) (symbolp it) (not (keywordp it)))
-    (collecting! hooks (pop args)))
-  (dolist (hook hooks)
-    (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
-  (when (stringp (car body))
-    (collecting! metadata (pop body)))
-  (when (equal 'declare (car-safe (car body)))
-    (collecting! metadata (pop body)))
-  `(progn
-     (defun! ,name nil ,@metadata ,@body)
-     ,@hook-forms))
-;;;;; after!
-;; I made the decision to add a hook function to a hook regardless of whether
-;; the hook has already has been run.  But if the hook has been run the hook
-;; function is called individually.  The idea is that I do not want to just
-;; evaluate the body and have no record of it being evaluated other than it is
-;; side-effects.
-(defmacro defafter! (name expr &rest body)
-  "Evaluate BODY after EXPR is satisfied."
-  (declare (indent defun))
-  `(progn
-     (defun! ,name nil ,@body)
-     (oo-call-after-load ',expr #',name)))
-;;;;; setq-hook
-(defmacro! setq-hook! (hooks symbol value)
-  "Add function to hook that sets the local value of SYMBOL to VALUE."
-  (dolist (hook (ensure-list hooks))
-    (set! name (intern (format "oo--%s--set-local-var--%s" hook symbol)))
-    (set! docstring (format "Set local variable `%S' to `%S'." ',symbol ',value))
-    (set! lambda `(lambda (&rest _)
-                    (info! "HOOK: %s -> %s" ',hook ',name)
-                    (condition-case err
-                        (setq-local ,symbol ,value)
-                      (error
-                       (error! "%s error in local hook %s because of %s"
-                               (car err)
-                               ',hook
-                               (cdr err))))))
-    (appending! forms `((fset ',name ,lambda) (add-hook ',hook #',name nil nil))))
-  (macroexp-progn forms))
 ;;;;; lef!
 (defmacro lef! (bindings &rest body)
   "Bind each symbol in BINDINGS to its corresponding function during BODY.
@@ -175,6 +113,68 @@ original function to `this-fn', otherwise bind `this-fn' to nil."
                           ,@function-body)))))
             binds))
     `(cl-letf* ,(nreverse binds) ,@body)))
+;;;;; opt!
+(defmacro opt! (symbol value)
+  "Set SYMBOL to VALUE when parent feature of SYMBOL is loaded.
+This is like `setq' but it is meant for configuring variables."
+  (let ((value-var (gensym "value")))
+    `(if (not (boundp ',symbol))
+         ;; This quote on he lambda is needed to avoid infinite recursion.
+         (push '(lambda () (opt! ,symbol ,value))
+               (gethash ',symbol oo-after-load-hash-table))
+       (let ((,value-var (with-demoted-errors "Error: %S" (with-no-warnings ,value))))
+         (aif! (get ',symbol 'custom-set)
+             (funcall it ',symbol ,value-var)
+           (with-no-warnings (setq ,symbol ,value-var)))))))
+;;;;; after!
+;; I made the decision to add a hook function to a hook regardless of whether
+;; the hook has already has been run.  But if the hook has been run the hook
+;; function is called individually.  The idea is that I do not want to just
+;; evaluate the body and have no record of it being evaluated other than it is
+;; side-effects.
+(defmacro defafter! (name expr &rest body)
+  "Evaluate BODY after EXPR is satisfied."
+  (declare (indent defun))
+  `(progn
+     (defun! ,name nil ,@body)
+     (oo-call-after-load ',expr #',name)))
+;;;;; defhook!
+(defmacro hook! (hook function &rest args)
+  "Configuration wrapper around `oo-add-hook'."
+  `(progn (declare-function ,function nil)
+          (oo-add-hook ',hook #',function ,@args)))
+
+(defmacro! defhook! (name args &rest body)
+  "Add function to hook as specified by NAME."
+  (declare (indent defun))
+  (while (aand! (car args) (symbolp it) (not (keywordp it)))
+    (collecting! hooks (pop args)))
+  (dolist (hook hooks)
+    (collecting! hook-forms `(oo-add-hook ',hook ',name ,@args)))
+  (when (stringp (car body))
+    (collecting! metadata (pop body)))
+  (when (equal 'declare (car-safe (car body)))
+    (collecting! metadata (pop body)))
+  `(progn
+     (defun! ,name nil ,@metadata ,@body)
+     ,@hook-forms))
+;;;;; setq-hook
+(defmacro! setq-hook! (hooks symbol value)
+  "Add function to hook that sets the local value of SYMBOL to VALUE."
+  (dolist (hook (ensure-list hooks))
+    (set! name (intern (format "oo--%s--set-local-var--%s" hook symbol)))
+    (set! docstring (format "Set local variable `%S' to `%S'." ',symbol ',value))
+    (set! lambda `(lambda (&rest _)
+                    (info! "HOOK: %s -> %s" ',hook ',name)
+                    (condition-case err
+                        (setq-local ,symbol ,value)
+                      (error
+                       (error! "%s error in local hook %s because of %s"
+                               (car err)
+                               ',hook
+                               (cdr err))))))
+    (appending! forms `((fset ',name ,lambda) (add-hook ',hook #',name nil nil))))
+  (macroexp-progn forms))
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
