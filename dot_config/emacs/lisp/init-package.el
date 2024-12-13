@@ -29,6 +29,7 @@
 (require 'cl-lib)
 (require 'package)
 (require 'package-vc)
+(require 'base-macros)
 
 ;; This was taken from prot's recommendation.
 (add-to-list 'display-buffer-alist
