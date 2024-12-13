@@ -166,10 +166,10 @@ destructured."
   (let (bindings match-form-value)
     (setq match-form-value (gensym "match-form-value"))
     (cl-flet ((special-mf-p (mf)
-                (let (oo-destructure-special-match-form mf match-form-value)
-                  (when it
-                    (setq bindings (append bindings it))
-                    (setq match-form-value (gensym "match-form-value")))))
+                (let 0(oo-destructure-special-match-form mf match-form-value)0
+                     (when it
+                       (setq bindings (append bindings it))
+                       (setq match-form-value (gensym "match-form-value")))))
               (replace-with-value (lambda (_) match-form-value)))
       `((,(oo-tree-map-nodes #'special-mf-p #'replace-with-value match-form) ,value)
         ,@bindings))))
