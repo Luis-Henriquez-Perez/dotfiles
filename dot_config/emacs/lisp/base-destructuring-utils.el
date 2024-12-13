@@ -169,9 +169,6 @@ Return a flat list of unique components in MATCH-FORM."
   "Bind symbols in PATTERN to corresponding VALUE."
   (if (symbolp pattern)
       `(setq ,pattern ,value)
-    ;; Damn I did not realize I need to know the gensym values.  I need to make
-    ;; sure not to bind the gensym values.
-    ;; I need flatten to also work for vectors.
     (let* ((binds (oo-pcase-bindings pattern value))
            (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form pattern)))
            (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
