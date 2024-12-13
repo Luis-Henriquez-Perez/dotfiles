@@ -166,7 +166,7 @@ destructured."
   (let (bindings match-form-value)
     (setq match-form-value (gensym "match-form-value"))
     (cl-flet ((special-mf-p (mf)
-                (aprog1! (oo-destructure-special-match-form mf match-form-value)
+                (let (oo-destructure-special-match-form mf match-form-value)
                   (when it
                     (setq bindings (append bindings it))
                     (setq match-form-value (gensym "match-form-value")))))
