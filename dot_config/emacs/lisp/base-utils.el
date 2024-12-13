@@ -93,7 +93,7 @@ ensure the result is syntactically valid."
   (dolist (wrapper wrappers)
     (setq forms (append wrapper (list forms))))
   forms)
-;;;; quoting
+
 (defun oo-quoted-p (form)
   "Return non-nil if FORM is quoted."
   (declare (pure t) (side-effect-free t))
@@ -108,7 +108,7 @@ ensure the result is syntactically valid."
   "Return quoted form unquoted, otherwise return form."
   (declare (pure t) (side-effect-free t))
   (if (oo-quoted-p form) form (macroexp-quote form)))
-;;;; oo-in-string-or-comment-p
+
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
   "Return non-nil if point is in a string or comment.
@@ -119,12 +119,10 @@ Specifically, return the symbol `string' if point is in a string, the symbol
     (cond ((nth 3 ppss) 'string)
           ((nth 4 ppss) 'comment)
           (t nil))))
-;;;; oo-funcall-silently
+
 (defun oo-funcall-silently (fn &rest args)
   "Call FN with ARGS without producing any output."
   (quietly! (apply fn args)))
-;; With lexical binding you can actually store the values of let-bound variables
-;; in a function by creating a closure.  But it might be useful to.
 ;;; provide
 (provide 'base-utils)
 ;;; base-utils.el ends here
