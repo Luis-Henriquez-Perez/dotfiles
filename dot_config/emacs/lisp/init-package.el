@@ -177,7 +177,6 @@
 (cl-pushnew 'stripe-buffer package-selected-packages)
 (cl-pushnew 'sudo-edit package-selected-packages)
 (cl-pushnew 'super-save package-selected-packages)
-;; (cl-pushnew 'enlight package-selected-packages)
 (cl-pushnew 'tango-plus-theme package-selected-packages)
 (cl-pushnew 'telephone-line package-selected-packages)
 (cl-pushnew 'tempel package-selected-packages)
