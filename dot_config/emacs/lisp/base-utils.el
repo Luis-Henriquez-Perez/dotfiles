@@ -66,6 +66,7 @@ This means it is non-nil."
   (declare (pure t) (side-effect-free error-free))
   (and (null (cl-set-difference list1 list2))
        (null (cl-set-difference list2 list1))))
+
 ;;;; type conversion
 (defun oo-into-string (&rest args)
   "Return ARGS as a string."
@@ -81,7 +82,9 @@ This means it is non-nil."
   "Return ARGS as a keyword."
   (declare (pure t) (side-effect-free t))
   (apply #'oo-into-symbol ":" args))
-;;;; done
+;;;; destructuring
+;; This function of course is not only for destructuring but now its what I am
+;; using it for.
 (defun oo-tree-map-nodes (pred fn tree)
   "Recursively map FN over tree nodes satisfying PRED.
 
@@ -98,7 +101,7 @@ matching PRED."
                      (append tree nil))])
         (t
          tree)))
-;;;; destructuring
+
 (defun oo-into-pcase-pattern (match-form)
   "Convert MATCH-FORM into a `pcase` pattern.
 
@@ -211,7 +214,7 @@ Return a flat list of unique components in MATCH-FORM."
                          (cl-pushnew (pop stack) symbols))))
                 symbols)))
     (cl-set-difference (flatten-pattern match-form) '(\, \`))))
-;;;; foo
+;;;; uncategorized
 (defun oo-wrap-forms (wrappers forms)
   "Return FORMS wrapped by WRAPPERS.
 FORMS is a list of forms to be wrapped.  WRAPPERS are a list of forms
@@ -250,7 +253,6 @@ Specifically, return the symbol `string' if point is in a string, the symbol
     (cond ((nth 3 ppss) 'string)
           ((nth 4 ppss) 'comment)
           (t nil))))
-
 ;;; provide
 (provide 'base-utils)
 ;;; base-utils.el ends here
