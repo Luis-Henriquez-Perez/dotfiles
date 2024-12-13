@@ -254,12 +254,12 @@ file is loaded."
     (when (re-search-forward rx end t nil)
       (sort-regexp-fields nil rx "\\1" (match-beginning 0) end))))
 
-(defhook! oo-setup-auto-line-sorting-maybe-h (find-file-hook)
-  "Setup auto line sorting for `init-elpaca'."
-  (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
-  (when (f-same-p (buffer-file-name) (expand-file-name path))
-    (info! "Setup auto-sorting for %s..." (oo-file-base path))
-    (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
+;; (defhook! oo-setup-auto-line-sorting-maybe-h (find-file-hook)
+;;   "Setup auto line sorting for `init-elpaca'."
+;;   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
+;;   (when (f-same-p (buffer-file-name) (expand-file-name path))
+;;     (info! "Setup auto-sorting for %s..." (oo-file-base path))
+;;     (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
 
 (defun! oo-align-abbrev-forms-h ()
   "Align all abbrev forms in current buffer."
