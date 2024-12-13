@@ -32,6 +32,8 @@
 ;;
 ;;; Code:
 ;;;; requirements
+(eval-when-compile (require 'base-macros))
+(require 'base-package)
 (require 'lgr)
 
 (defvar evil-state-properties)
