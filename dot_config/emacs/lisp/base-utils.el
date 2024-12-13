@@ -27,7 +27,6 @@
 ;;; Code:
 ;;;; requirements
 (require 'cl-lib)
-(require 'subr)
 (require 'pcase)
 ;;;; predicates
 (defsubst oo-true-symbol-p (object)
