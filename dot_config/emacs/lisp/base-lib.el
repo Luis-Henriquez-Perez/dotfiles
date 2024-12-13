@@ -32,7 +32,6 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(require 'base-packages)
 (require 'lgr)
 
 (defvar evil-state-properties)
