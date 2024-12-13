@@ -36,7 +36,6 @@
 
 (defvar evil-state-properties)
 (declare-function evil-define-key* "evil")
-
 ;;;; oo-in-string-or-comment-p
 ;; This function is used by captain and abbrev.
 (defun oo-in-string-or-comment-p ()
