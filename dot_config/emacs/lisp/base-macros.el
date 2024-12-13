@@ -26,7 +26,6 @@
 ;;
 ;;; Code:
 (require 'base-utils)
-(require 'base-macros-bind)
 ;;;; macros
 ;;;;; nif!
 ;; More often than not when I am using `if', the default else clause is simpler than
@@ -541,6 +540,18 @@ take the following forms:
                                (cdr err))))))
     (appending! forms `((fset ',name ,lambda) (add-hook ',hook #',name nil nil))))
   (macroexp-progn forms))
+;;;;; set!
+(defmacro set! (match-form value)
+  "Bind symbols in PATTERN to corresponding VALUE.
+If MATCH-FORM is a symbol act as `setq'."
+  (if (symbolp match-form)
+      `(setq ,match-form ,value)
+    (let* ((binds (oo-pcase-bindings match-form value))
+           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form match-form)))
+           (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
+           (gensyms (cl-set-difference all non-gensyms)))
+      `(let ,gensyms
+         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
