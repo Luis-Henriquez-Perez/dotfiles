@@ -32,7 +32,7 @@
 ;;
 ;;; Code:
 ;;;; requirements
-(eval-when-compile (require 'oo-base-macros))
+(eval-when-compile (require 'base-macros))
 (require 'lgr)
 
 (defvar evil-state-properties)
