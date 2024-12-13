@@ -164,18 +164,6 @@ Return a flat list of unique components in MATCH-FORM."
                          (cl-pushnew (pop stack) symbols))))
                 symbols)))
     (cl-set-difference (flatten-pattern match-form) '(\, \`))))
-
-(defmacro set! (match-form value)
-  "Bind symbols in PATTERN to corresponding VALUE.
-If MATCH-FORM is a symbol act as `setq'."
-  (if (symbolp match-form)
-      `(setq ,match-form ,value)
-    (let* ((binds (oo-pcase-bindings match-form value))
-           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form match-form)))
-           (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
-           (gensyms (cl-set-difference all non-gensyms)))
-      `(let ,gensyms
-         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
 ;;; provide
 (provide 'base-destructuring-utils)
 ;;; base-destructuring-utils.el ends here
