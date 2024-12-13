@@ -166,7 +166,8 @@ Return a flat list of unique components in MATCH-FORM."
     (cl-set-difference (flatten-pattern match-form) '(\, \`))))
 
 (defmacro set! (pattern value)
-  "Bind symbols in PATTERN to corresponding VALUE."
+  "Bind symbols in PATTERN to corresponding VALUE.
+If PATTE"
   (if (symbolp pattern)
       `(setq ,pattern ,value)
     (let* ((binds (oo-pcase-bindings pattern value))
