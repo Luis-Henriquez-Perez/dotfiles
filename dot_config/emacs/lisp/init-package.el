@@ -125,6 +125,7 @@
 (cl-pushnew 'humanoid-themes package-selected-packages)
 (cl-pushnew 'hungry-delete package-selected-packages)
 (cl-pushnew 'hy-mode package-selected-packages)
+(cl-pushnew 'hydra package-selected-packages)
 (cl-pushnew 'immaterial-theme package-selected-packages)
 (cl-pushnew 'leuven-theme package-selected-packages)
 (cl-pushnew 'lgr package-selected-packages)
