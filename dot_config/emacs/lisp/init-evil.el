@@ -79,6 +79,7 @@
            (save-buffer))
 		 (keyboard-quit))))
 
+(require 'bind-key)
 (bind! (i e) [escape] #'oo-dwim-escape)
 
 (bind! i override-global-map oo-insert-leader-key #'oo-leader-prefix-command)
