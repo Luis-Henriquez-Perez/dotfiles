@@ -70,7 +70,6 @@
 (cl-pushnew 'easy-escape package-selected-packages)
 (cl-pushnew 'eat package-selected-packages)
 (cl-pushnew 'edit-indirect package-selected-packages)
-(cl-pushnew 'ef-themes package-selected-packages)
 (cl-pushnew 'elfeed package-selected-packages)
 (cl-pushnew 'elmacro package-selected-packages)
 (cl-pushnew 'embark package-selected-packages)
