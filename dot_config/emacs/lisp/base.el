@@ -124,8 +124,6 @@ generated function does not pass in any of its given arguments to FUNCTION."
                                 (cdr err))))))))
 
   (add-hook hook fname depth local))
-
-(eval-when-compile (require 'base-macros-bind))
 ;;;; oo-call-after-load
 (defun oo--call-after-load (expr fn)
   "Call FN after EXPR is met."
@@ -181,6 +179,8 @@ EXPRS in (CDR CONDITION) is met."
                                         (cdr err)))))))))
                t)
     (oo--call-after-load expr it)))
+;;;; bind macro
+(eval-when-compile (require 'base-macros-bind))
 ;;; provide
 (provide 'base)
 ;;; base.el ends here
