@@ -209,7 +209,6 @@
 ;; messages and stuff and it does not show which package is not available, which
 ;; I did not like.
 ;; Find the packages that are not installed.
-(switch-to-buffer "*Messages*")
 
 (package-refresh-contents)
 (dolist (package package-selected-packages)
