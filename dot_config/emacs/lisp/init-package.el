@@ -143,7 +143,6 @@
 (cl-pushnew 'marginalia package-selected-packages)
 (cl-pushnew 'markdown-mode package-selected-packages)
 (cl-pushnew 'material-theme package-selected-packages)
-(cl-pushnew 'meow package-selected-packages)
 (cl-pushnew 'minimal-theme package-selected-packages)
 (cl-pushnew 'modus-themes package-selected-packages)
 (cl-pushnew 'monkeytype package-selected-packages)
@@ -216,16 +215,17 @@
 ;; This is kind of what `package-install-selected-packages' does, but it
 ;; messages and stuff and it does not show which package is not available, which
 ;; I did not like.
+;; Find the packages that are not installed.
+(switch-to-buffer "*Messages*")
+
+(package-refresh-contents)
 (dolist (package package-selected-packages)
-  (unless (package-installed-p package)
-    (cond ((assq package package-archive-contents)
-           (message "Installing package `%s'" package)
-           (quietly! (package-install package 'dont-select))
-           (if (package-installed-p package)
-               (message "Successfully installed package `%s'" package)
-             (message "Failed to install package `%s'" package)))
-          (t
-           (message "Package %s is not available." package)))))
+  (cond ((assq package package-archive-contents)
+         (with-demoted-errors "%S" (package-install package 'dont-select))
+         (unless (package-installed-p package)
+           (message "Failed to install package `%s'" package)))
+        (t
+         (message "Package %s is not available." package))))
 
 (package-vc-install-selected-packages)
 ;;; provide
