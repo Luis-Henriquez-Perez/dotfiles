@@ -25,11 +25,12 @@
 ;; This contains the core settings and functionality of my configuration.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'base-vars)
 (require 'base-settings)
-(require 'base-packages)
 (require 'base-lib)
 (eval-when-compile (require 'base-macros))
+(require 'base-packages)
 ;;;; logger
 (defvar oo-logger (lgr-get-logger "main")
   "Object used for logging.")
