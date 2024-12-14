@@ -73,7 +73,6 @@
 
 (defmacro debug! (msg &rest meta)
   `(lgr-debug oo-logger ,msg ,@meta))
-
 ;;;; hooks
 (defun! oo--hook-docstring (hook function)
   "Generate a docstring for hook function."
