@@ -56,7 +56,11 @@
   (set! fn (intern (format "+spaceline-%s-segment" base)))
   (set! docstring (when (stringp (car-safe body)) (list (pop body))))
   `(progn
-     (defun! ,fn () ,@docstring ,@body)
+     (defun! ,fn ()
+       ,@docstring
+       (condition-case err
+           (progn ,@body)
+         (error "X")))
      (spaceline-define-segment ,name ,@docstring (,fn))))
 ;;;; segments
 (+spaceline-define-segment! +kbd-macro
