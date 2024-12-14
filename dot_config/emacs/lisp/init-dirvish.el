@@ -33,7 +33,7 @@
 (opt! dirvish-use-mode-line t)
 (opt! dirvish-mode-line-format nil)
 (opt! dirvish-use-header-line nil)
-(opt! dirvish-attributes '(all-the-icons file-time file-size collapse subtree-state vc-state git-msg))
+(opt! dirvish-attributes '(nerd-icons file-time file-size collapse subtree-state vc-state git-msg))
 (opt! dired-listing-switches "-l --almost-all --human-readable --group-directories-first --no-group")
 
 (opt! dirvish-layout-recipes (list '(0 0 0.8)

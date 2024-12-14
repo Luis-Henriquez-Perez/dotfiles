@@ -28,7 +28,7 @@
 ;;;; requirements
 (require 'spaceline)
 (require 'spaceline-segments)
-(require 'all-the-icons)
+(require 'nerd-icons)
 ;;;; settings
 (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (opt! powerline-height 33)
@@ -62,16 +62,13 @@
 (+spaceline-define-segment! +kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
-           (cond ((featurep 'all-the-icons)
-                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
-                  ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
-                  )
-                 ((featurep 'nerd-icons)
+           (cond ((featurep 'nerd-icons)
                   (nerd-icons-codicon "nf-cod-record"))
                  (t
                   "•REC")))
       (and executing-kbd-macro
-           (all-the-icons-faicon "play" :face 'error)
+           (nerd-icons-faicon "nf-fa-save" :face 'error)
+           ;; (all-the-icons-faicon "play" :face 'error)
            ;; (format "EXECUTING KBD MACRO...")
            )))
 
@@ -81,9 +78,7 @@
             (and (bound-and-true-p fancy-narrow-mode)
                  (fancy-narrow-active-p))
             (bound-and-true-p dired-narrow-mode))
-    (cond ((fboundp 'all-the-icons-material)
-           (all-the-icons-material "unfold_less" :face 'warning))
-          ((fboundp 'nerd-icons-octicon)
+    (cond ((fboundp 'nerd-icons-octicon)
            (nerd-icons-octicon "nf-oct-fold" :face 'warning))
           (t
            "><"))))
@@ -91,36 +86,29 @@
 (+spaceline-define-segment! +buffer-read-only
   "Display"
   (when buffer-read-only
-    (if (not (and (display-graphic-p) (require 'all-the-icons)))
-        "X"
-      (cond ((fboundp 'all-the-icons-material)
-             (all-the-icons-material "lock" :face 'error))
-            ((fboundp 'nerd-icons-octicon)
-             (nerd-icons-faicon "nf-fa-lock"))
-            (t
-             "LOCK")))))
+    (require 'nerd-icons)
+    (cond ((featurep 'nerd-icons)
+           (nerd-icons-faicon "nf-fa-lock"))
+          (t
+           "LOCK"))))
 
 (+spaceline-define-segment! +buffer-modified
   "Buffer modified"
   (when (and (buffer-file-name) (buffer-modified-p))
-    (all-the-icons-material "save" :face 'error)))
+    (nerd-icons-faicon "nf-fa-save" :face 'error)))
 
 (defvar pomodoro-mode-line-string)
 (+spaceline-define-segment! +pomodoro
   "Display left for pomodoro."
   (when (and (bound-and-true-p pomodoro-mode-line-string)
              (not (string-empty-p pomodoro-mode-line-string)))
-    (require 'all-the-icons-nerd-fonts)
     (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
     (set! type (match-string 1 pomodoro-mode-line-string))
     (set! time (match-string 2 pomodoro-mode-line-string))
     (string-join (list
                   (pcase type
-                    ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
-                    ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                    ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
-                    ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
-                    )
+                    ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
+                    ("b" (nerd-icons-codicon "nf-cod-coffee")))
                   time)
                  "\s")))
 
