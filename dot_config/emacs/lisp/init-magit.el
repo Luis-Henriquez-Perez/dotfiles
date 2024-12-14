@@ -30,8 +30,6 @@
 ;;;; popup
 (oo-popup-at-bottom "\\`magit")
 ;;;; bindings
-(oo-call-after-load '(magit evil) #'evil-magit-init)
-
 (bind! oo-git-map "s" #'magit-status)
 (bind! oo-git-map "g" #'magit-status)
 (bind! oo-git-map "p" #'magit-push)
