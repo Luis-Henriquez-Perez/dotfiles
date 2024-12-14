@@ -199,11 +199,10 @@
 
 (cl-pushnew '(evil-easymotion :url "https://github.com/Luis-Henriquez-Perez/evil-easymotion" :branch "master") package-vc-selected-packages)
 (cl-pushnew '(spaceline :url "https://github.com/Luis-Henriquez-Perez/spaceline" :branch "add-evil-operator-state-face") package-vc-selected-packages)
-(cl-pushnew '(evil-magit :url "https://github.com/emacs-evil/evil-magit") package-vc-selected-packages)
 (cl-pushnew '(outli :url "https://github.com/jdtsmith/outli") package-vc-selected-packages)
 (cl-pushnew '(on :url "https://github.com/ajgrf/on.el") package-vc-selected-packages)
 (cl-pushnew '(zone-matrix :url "https://github.com/ober/zone-matrix" :branch "master") package-vc-selected-packages)
-(cl-pushnew '(grid :url "https://github.com/ichernyshovvv/grid.el" :branch "master") package-vc-selected-packages)
+;; (cl-pushnew '(grid :url "https://github.com/ichernyshovvv/grid.el" :branch "master") package-vc-selected-packages)
 
 ;; The function `package-install-selected-packages' does not activate the
 ;; packages which causes a problem fo rme.
