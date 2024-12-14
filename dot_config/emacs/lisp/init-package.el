@@ -189,6 +189,7 @@
 (cl-pushnew 'ws-butler package-selected-packages)
 (cl-pushnew 'xr package-selected-packages)
 (cl-pushnew 'yeetube package-selected-packages)
+(cl-pushnew 'zoutline package-selected-packages)
 
 (cl-pushnew '(evil-easymotion :url "https://github.com/Luis-Henriquez-Perez/evil-easymotion" :branch "master") package-vc-selected-packages)
 (cl-pushnew '(spaceline :url "https://github.com/Luis-Henriquez-Perez/spaceline" :branch "add-evil-operator-state-face") package-vc-selected-packages)
