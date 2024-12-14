@@ -66,18 +66,11 @@
 (+spaceline-define-segment! +kbd-macro
   "Display an icon to represent when."
   (or (and defining-kbd-macro
-           (cond ((featurep 'all-the-icons)
-                  (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
-                  ;; (all-the-icons-nerd-cod "record" :face 'error :v-adjust -0.1)
-                  )
-                 ((featurep 'nerd-icons)
-                  (nerd-icons-codicon "nf-cod-record"))
-                 (t
-                  "•REC")))
+           (if (display-graphic-p)
+               (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
+             "•REC"))
       (and executing-kbd-macro
-           (all-the-icons-faicon "play" :face 'error)
-           ;; (format "EXECUTING KBD MACRO...")
-           )))
+           (all-the-icons-faicon "play" :face 'error))))
 
 (+spaceline-define-segment! +narrow
   "Indicate when the current buffer is narrowed."
@@ -85,24 +78,16 @@
             (and (bound-and-true-p fancy-narrow-mode)
                  (fancy-narrow-active-p))
             (bound-and-true-p dired-narrow-mode))
-    (cond ((fboundp 'all-the-icons-material)
-           (all-the-icons-material "unfold_less" :face 'warning))
-          ((fboundp 'nerd-icons-octicon)
-           (nerd-icons-octicon "nf-oct-fold" :face 'warning))
-          (t
-           "><"))))
+    (if (display-graphic-p)
+        (all-the-icons-material "unfold_less" :face 'warning)
+      "><")))
 
 (+spaceline-define-segment! +buffer-read-only
   "Display"
   (when buffer-read-only
-    (if (not (and (display-graphic-p) (require 'all-the-icons)))
-        "X"
-      (cond ((fboundp 'all-the-icons-material)
-             (all-the-icons-material "lock" :face 'error))
-            ((fboundp 'nerd-icons-octicon)
-             (nerd-icons-faicon "nf-fa-lock"))
-            (t
-             "LOCK")))))
+    (if (display-graphic-p)
+        (all-the-icons-material "lock" :face 'error)
+      "LOCKED")))
 
 (+spaceline-define-segment! +buffer-modified
   "Buffer modified"
@@ -120,11 +105,8 @@
     (set! time (match-string 2 pomodoro-mode-line-string))
     (string-join (list
                   (pcase type
-                    ;; ("w" (nerd-icons-pomicon "nf-pom-pomodoro_ticking"))
                     ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                    ;; ("b" (nerd-icons-codicon "nf-cod-coffee"))
-                    ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0))
-                    )
+                    ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0)))
                   time)
                  "\s")))
 
