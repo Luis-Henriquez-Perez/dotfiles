@@ -196,7 +196,6 @@
 (cl-pushnew '(outli :url "https://github.com/jdtsmith/outli") package-vc-selected-packages)
 (cl-pushnew '(on :url "https://github.com/ajgrf/on.el") package-vc-selected-packages)
 (cl-pushnew '(zone-matrix :url "https://github.com/ober/zone-matrix" :branch "master") package-vc-selected-packages)
-;; (cl-pushnew '(grid :url "https://github.com/ichernyshovvv/grid.el" :branch "master") package-vc-selected-packages)
 
 ;; The function `package-install-selected-packages' does not activate the
 ;; packages which causes a problem fo rme.
@@ -206,19 +205,19 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; This is kind of what `package-install-selected-packages' does, but it
-;; messages and stuff and it does not show which package is not available, which
-;; I did not like.
-;; Find the packages that are not installed.
-
-(package-refresh-contents)
-(dolist (package package-selected-packages)
-  (cond ((assq package package-archive-contents)
-         (with-demoted-errors "%S" (package-install package 'dont-select))
-         (unless (package-installed-p package)
-           (message "Failed to install package `%s'" package)))
-        (t
-         (message "Package %s is not available." package))))
+(let ((refreshed-contents-p nil))
+  (dolist (package package-selected-packages)
+    (cond ((assq package package-archive-contents)
+           (unless (package-installed-p package)
+             (unless refreshed-contents-p
+               (package-refresh-contents)
+               (setq refreshed-contents-p (not refreshed-contents-p)))
+             (message "package is not installed %s package" package)
+             (with-demoted-errors "%S" (package-install package 'dont-select)))
+           (unless (package-installed-p package)
+             (message "Failed to install package `%s'" package)))
+          (t
+           (message "Package %s is not available." package)))))
 
 (package-vc-install-selected-packages)
 ;;; provide
