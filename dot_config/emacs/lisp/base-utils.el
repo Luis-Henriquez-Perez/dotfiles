@@ -50,6 +50,12 @@ This means it is non-nil."
   (declare (pure t) (side-effect-free error-free))
   (< number 0))
 
+(defun oo-float-divide (&rest args)
+  "Perform division with ARGS, ensuring the first argument is a float.
+This behaves like `/`, but the result is always a floating-point number."
+  (declare (pure t) (side-effect-free error-free))
+  (apply #'/ (float (car args)) (cdr args)))
+
 (defsubst oo-positive-p (number)
   "Return non-nil if NUMBER is greater than zero."
   (declare (pure t) (side-effect-free error-free))
