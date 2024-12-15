@@ -3,9 +3,6 @@
 <h1 align="center">dotfiles</h1>
 #+end_html
 These are my dotfiles.  They are managed with [[chezmoi]].
-- *100% reproducible* I want to be able to get on a fresh install of archlinx or a
-  derivative and install all of my packages.  Eventually, I want to switch to
-  [[https://guix.gnu.org/][guix]] or [[https://nixos.org/][nix]] to achieve ultimate reproducability.
 - *easy to setup* I want to be able to run just one command or script to set up
   all of my dotfiles.  I have not achieved this yet but I am working on it.
 - *well-documented* Setting up these dotfiles was hard for me to do.  I want to
@@ -27,7 +24,4 @@ them.
   Particularly ones written in lisp.  In this sense.
 - [[https://www.gnu.org/software/emacs/][emacs]] Emacs is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]])
 ** designated operating system
-I am currently using [[https://archlinux.org/][archlinux]] as my operating system, however I am
-considering migrating to [[https://guix.gnu.org/][guix]], maybe with parabola as an intermediate
-step.
-
+I use [[https://archlinux.org/][archlinux]] as my operating system.
