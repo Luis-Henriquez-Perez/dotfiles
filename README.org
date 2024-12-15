@@ -16,7 +16,9 @@ them.
 - [[https://www.chezmoi.io/][chezmoi]] I have not tried many dotfile mangers extensively, but chezmoi
   looked pretty solid to me.  I have tried [[https://yadm.io/][yadm]] and [[https://www.gnu.org/software/stow/][gnu stow]] for dotfile
   management before.  By solid I mean that it covers several things I wanted in
-  dotfiles.
+  dotfiles.  To be completely honest, the reason that I am using chezmoi right
+  now is not because I know it to be the best option, but because it is not bad
+  enough for me to justify the work of migrating to another dotfile manager. 
 - [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
   crashed at least 5 times (I think the problem).  In any case, awesomewm is
