@@ -52,6 +52,7 @@
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
     (info! "Running timer for lowering garbage collection...")
+
     (set! reduction (/ (get-register :gc-cons-threshold) 5))
     (info! "reduction = %f MB" (mb reduction))
     (set! gc-floor (* 8 1024 1024))
