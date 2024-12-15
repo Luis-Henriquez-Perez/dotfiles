@@ -56,7 +56,6 @@
     (info! "reduction -> %d" reduction)
     (set! gc-floor (* 8 1024 1024))
     (set! gcp-default 0.2)
-    (info! "gc-cons-threshold -> %.2f MB" (mb gc-cons-threshold))
     (when (/= gc-cons-threshold gc-floor)
       (set! old gc-cons-threshold)
       (set! new (max (- old reduction) gc-floor))
