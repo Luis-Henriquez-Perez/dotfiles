@@ -53,7 +53,7 @@
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
     (info! "Running timer for lowering garbage collection...")
     (set! reduction (/ (get-register :gc-cons-threshold) 5))
-    (info! "reduction = %f MB of %f MB" (mb reduction) )
+    (info! "reduction = %f MB of %f MB" (mb reduction) (get-register :gc-cons-threshold))
     (set! gc-floor (* 8 1024 1024))
     (set! gcp-default 0.2)
     (when (/= gc-cons-threshold gc-floor)
