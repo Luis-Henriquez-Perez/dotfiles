@@ -48,12 +48,11 @@
 ;;;;; garbage collection
 (defun! oo--timer--lower-garbage-collection ()
   "Lower garbage collection until it reaches default values."
-  (flet! mb (x) (/ (float x) (* 1024 1024)))
+  (flet! mb (x) (/ (float x) 1024 1024))
   (if (minibuffer-window-active-p (minibuffer-window))
       (run-with-timer 5 nil #'oo--timer--lower-garbage-collection)
     (info! "Running timer for lowering garbage collection...")
     (set! reduction (/ (get-register :gc-cons-threshold) 5))
-    (/ (/ (* 40 1024 1024) 5) 1024 1024)
     (info! "reduction = %f MB" (mb reduction))
     (set! gc-floor (* 8 1024 1024))
     (set! gcp-default 0.2)
