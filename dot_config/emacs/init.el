@@ -109,7 +109,6 @@
 (require 'init-eww)
 (require 'init-expreg)
 (require 'init-fill-adapt)
-(require 'init-gcmh)
 (require 'init-grugru)
 (require 'init-helm)
 (require 'init-helpful)

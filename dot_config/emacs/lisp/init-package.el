@@ -105,7 +105,6 @@
 (cl-pushnew 'fennel-mode package-selected-packages)
 (cl-pushnew 'filladapt package-selected-packages)
 (cl-pushnew 'fit-text-scale package-selected-packages)
-(cl-pushnew 'gcmh package-selected-packages)
 (cl-pushnew 'git-auto-commit-mode package-selected-packages)
 (cl-pushnew 'git-gutter package-selected-packages)
 (cl-pushnew 'goto-chg package-selected-packages)
