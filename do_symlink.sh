@@ -1,12 +1,28 @@
 #!/bin/bash
 
-# This is a script to symlink my dotfiles.
+# This is a script to symlink my dotfiles.  I wrote is as part of an initiative
+# to move away from chezmoi.  The reason is I want freedom and flexibility and I
+# do not necessary want to be encumbered by the chezmoi abstractions.  95% of
+# the usage I use for chezmoi is just chezmoi apply.  I barely use its other
+# features and I find them unintuitive.
 
 # Directory containing your dotfiles
 DOTFILES_DIR=~/.local/share/chezmoi
 
 # Target home directory
 TARGET_DIR=~
+
+# Flags
+DRY_RUN=false
+FORCE=false
+
+# Function to display usage
+usage() {
+  echo "Usage: $0 [--dry-run] [--force]"
+  echo "  --dry-run   Simulate actions without creating symlinks"
+  echo "  --force     Force overwrite existing files or symlinks"
+  exit 1
+}
 
 # Function to create symlinks
 find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while IFS= read -r -d '' file; do
@@ -16,7 +32,7 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
     # echo "$relative_path"
     # echo "$transformed_path"
     target="$TARGET_DIR/$transformed_path"
-    echo "$target"
+    # echo "$target"
     # ln -sfn "$file" "$target"
     echo "Linked: $file -> $target"
     # echo "$file"
@@ -29,3 +45,9 @@ done
 # mkdir -p "$(dirname "$target")"
 
 # Create the symlink
+
+# Handling private files
+if [[ "$relative_path" == private_* ]]; then
+  chmod 600 "$target"
+  echo "Set permissions to 600 for: $target"
+fi
