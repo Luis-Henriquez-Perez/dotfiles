@@ -53,7 +53,6 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
     # echo "$relative_path"
     # echo "$transformed_path"
     target="$TARGET_DIR/$transformed_path"
-
     # Calculate the relative path
     # relative_path="${file#$DOTFILES_DIR/}"
     # target="$TARGET_DIR/$relative_path"
