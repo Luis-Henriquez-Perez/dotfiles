@@ -51,3 +51,5 @@ done
 #   chmod 600 "$target"
 #   echo "Set permissions to 600 for: $target"
 # fi
+
+# Handling executables
