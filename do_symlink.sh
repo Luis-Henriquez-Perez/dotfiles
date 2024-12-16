@@ -51,15 +51,15 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
     target="$TARGET_DIR/$transformed_path"
     # echo "$target"
     # ln -sfn "$file" "$target"
-    echo "Linked: $file -> $target"
-    # echo "$file"
-done
-
     # Check for dry-run
     if [ "$DRY_RUN" = true ]; then
       echo "[DRY-RUN] Would link: $file -> $target"
       continue
     fi
+    echo "Linked: $file -> $target"
+    # echo "$file"
+done
+
 # Calculate the relative path
 # relative_path="${file#$DOTFILES_DIR/}"
 # target="$TARGET_DIR/$relative_path"
