@@ -34,6 +34,8 @@ while [[ $# -gt 0 ]]; do
       FORCE=true
       shift
       ;;
+    --verbose)
+      VERBOSE=true
     *)
       echo "Unknown option: $1"
       usage
