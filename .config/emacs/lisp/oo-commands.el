@@ -256,6 +256,33 @@ With prefix argument, run as dry-run (do not actually move any files)."
       (let ((default-directory (expand-file-name "~")))
         (move-file-to-trash file))))
   unmanaged)
+
+(oo-auto-commit-file)
+(defun! oo-auto-commit-file ()
+  "Auto commit and push file if its part of."
+  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
+  (set! default-directory (file-name-directory fname))
+  (set! dots (expand-file-name "~/dotfiles/"))
+  (set! worktree (expand-file-name "~"))
+  (set! git (format "git --git-dir=%s --work-tree=%s" dots worktree))
+  ;; (set! command (format "%s status --porcelain %s" git fname))
+  ;; (string-trim (shell-command-to-string command))
+  (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
+  (set! msg (shell-quote-argument fname))
+  (when diff
+    (shell-command-to-string (format "%s add %s" git fname))
+    (shell-command-to-string (format "%s commit -m %S %s" git msg fname))
+    (shell-command-to-string (format "%s push" git))))
+
+(defun! oo-magit-status-dotfiles ()
+  "Open Magit status for the bare Git dotfiles repository."
+  (interactive)
+  :init ((magit-git-global-arguments magit-git-global-arguments))
+  (set! dotfile-dir (expand-file-name "~/dotfiles/"))
+  (set! home-dir (expand-file-name "~/"))
+  (pushing! magit-git-global-arguments (format "--work-tree=%s" home-dir))
+  (pushing! magit-git-global-arguments (format "--git-dir=%s" dotfile-dir))
+  (magit-status))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
