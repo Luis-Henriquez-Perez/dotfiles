@@ -1,18 +1,5 @@
 #!/bin/bash
 
-install_on_fedora() {
-    sudo dnf install -y ansible
-}
-
-install_on_ubuntu() {
-    sudo apt-get update
-    sudo apt-get install -y ansible
-}
-
-install_on_mac() {
-    brew install ansible
-}
-
 # Function to install packages via pacman
 install_pacman_packages() {
     for package in "${pacman_packages[@]}"; do
