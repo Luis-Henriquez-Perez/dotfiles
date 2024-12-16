@@ -56,7 +56,7 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
     # echo "$target"
     # ln -sfn "$file" "$target"
     # Check for dry-run
-    ;mkdir -p "$(dirname "$target")"
+    # mkdir -p "$(dirname "$target")"
     if [ "$DRY_RUN" = true ]; then
       echo "[DRY-RUN] Would link: $file -> $target"
       continue
