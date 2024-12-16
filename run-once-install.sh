@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script helps me install packages on my system.
+
 # Function to install packages via pacman
 install_pacman_packages() {
     for package in "${pacman_packages[@]}"; do
