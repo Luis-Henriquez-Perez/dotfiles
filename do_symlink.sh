@@ -36,6 +36,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --verbose)
       VERBOSE=true
+      shift
     *)
       echo "Unknown option: $1"
       usage
