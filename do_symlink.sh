@@ -24,6 +24,7 @@ usage() {
   exit 1
 }
 
+
 # Function to create symlinks
 find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while IFS= read -r -d '' file; do
     relative_path="${file#$DOTFILES_DIR/}"
