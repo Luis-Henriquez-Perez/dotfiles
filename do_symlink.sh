@@ -61,7 +61,7 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
       continue
     fi
     if [ "$VERBOSE" = true ]; then
-    echo "Linked: $file -> $target"
+        echo "Linked: $file -> $target"
       echo "[DRY-RUN] Would link: $file -> $target"
       continue
     fi
