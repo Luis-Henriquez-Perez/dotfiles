@@ -60,6 +60,7 @@ find "$DOTFILES_DIR" -type f -not -path "$DOTFILES_DIR/.git/*" -print0 | while I
       echo "[DRY-RUN] Would link: $file -> $target"
       continue
     fi
+
     echo "Linked: $file -> $target"
     # echo "$file"
 done
