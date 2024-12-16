@@ -47,7 +47,7 @@ done
 # Create the symlink
 
 # Handling private files
-if [[ "$relative_path" == private_* ]]; then
-  chmod 600 "$target"
-  echo "Set permissions to 600 for: $target"
-fi
+# if [[ "$relative_path" == private_* ]]; then
+#   chmod 600 "$target"
+#   echo "Set permissions to 600 for: $target"
+# fi
