@@ -22,6 +22,7 @@ if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
   [ -f /etc/xprofile ] && . /etc/xprofile
   [ -f ~/.xprofile ] && . ~/.xprofile
 fi
+### Wallpaper file
 ### function for dotfiles
 # I think these functions are more flexible than aliases
 # https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
