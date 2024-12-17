@@ -290,8 +290,7 @@ changes and push them."
   (set! dir (format "--git-dir=%s" dotfile-dir))
   (set! mgga `(,dir ,worktree ,@magit-git-global-arguments))
   (set! magit-git-global-arguments mgga)
-  (set! fn (lambda ()
-             (setq-local magit-git-global-arguments mgga)))
+  (set! fn (lambda () (setq-local magit-git-global-arguments mgga)))
   (add-hook 'magit-status-mode-hook fn nil t)
   (magit-status))
 ;;; provide
