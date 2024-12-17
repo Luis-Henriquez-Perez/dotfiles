@@ -65,7 +65,7 @@
 ;;;; emacs maintenance
 (eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
                             (executable-find "git")))
-(eshell/alias "dots" (format "%s --git-dir=$HOME/dotfiles/ --work-tree=$HOME $*"
+(eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
                              (executable-find "git")))
 (eshell/alias "dotfiles" "/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME $*")
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
