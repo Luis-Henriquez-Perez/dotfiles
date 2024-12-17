@@ -191,6 +191,7 @@ Return a list of bindings compatible with `pcase`."
   (mapcar (pcase-lambda (`(,mf ,val)) (list (oo-into-pcase-pattern mf) val))
           (oo-generate-special-match-form-bindings match-form value)))
 
+(defalias 'oo--set-flatten 'oo-flatten-pcase-match-form)
 (defun oo-flatten-pcase-match-form (match-form)
   "Flatten MATCH-FORM into a list of components.
 
