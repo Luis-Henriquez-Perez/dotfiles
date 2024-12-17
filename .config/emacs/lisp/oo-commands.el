@@ -271,9 +271,8 @@ With prefix argument, run as dry-run (do not actually move any files)."
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
     (set! proc (start-process "git" "*git-auto-push*" "git" "push"))
-    (set-process-sentinel proc 'gac-process-sentinel)
+    (set-process-sentinel proc (lambda ()))
     (defun gac-process-sentinel (proc status)
-      "Report PROC change to STATUS."
       (message "git %s" (substring status 0 -1)))
     ;; (set-process-filter proc 'gac-process-filter)
     ))
