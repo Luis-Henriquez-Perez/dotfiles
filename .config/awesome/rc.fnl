@@ -290,7 +290,7 @@
 ;; Function to take a screenshot using maim
 (fn [] )
 (fn rotate-clients-backward []
-
+  (awful.spawn "maim ~/Pictures/screenshot-$(date +%Y-%m-%d_%H-%M-%S).png")
   (awful.client.cycle false)
   (local master (awful.client.getmaster))
   (when master
