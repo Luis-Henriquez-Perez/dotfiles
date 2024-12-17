@@ -166,6 +166,7 @@
 (cl-pushnew 's package-selected-packages)
 (cl-pushnew 'sdcv package-selected-packages)
 (cl-pushnew 'sly package-selected-packages)
+(cl-pushnew 'solarized-theme package-selected-packages)
 (cl-pushnew 'smartparens package-selected-packages)
 (cl-pushnew 'spacemacs-theme package-selected-packages)
 (cl-pushnew 'ssh-agency package-selected-packages)
