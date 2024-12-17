@@ -291,7 +291,7 @@
 (fn take-screenshot []
   (awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
 
-(global-key [modkey]"p" take-screenshot
+(global-key [modkey]"x" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
 ;;;; Rules
 (set awful.rules.rules [{:rule []
