@@ -22,7 +22,7 @@ if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
   [ -f /etc/xprofile ] && . /etc/xprofile
   [ -f ~/.xprofile ] && . ~/.xprofile
 fi
-### Function for dotfiles
+### function for dotfiles
 dtf () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
