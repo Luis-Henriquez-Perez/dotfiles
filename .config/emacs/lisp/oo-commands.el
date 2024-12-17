@@ -275,7 +275,7 @@ changes and push them."
     (set! (program arg1 arg2) (split-string git))
     ;; (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
     (set! proc (start-process "git" "*git-auto-push*" git "push"))
-    (set-process-sentinel proc (lambda (_ status) (message "status: %S" status)))
+    (set-process-sentinel proc (lambda (_ status) (message "STATUS: %S" status)))
     (set-process-filter proc 'gac-process-filter)))
 
 ;; I need to add a local hook.
