@@ -288,6 +288,7 @@ changes and push them."
   (set! home-dir (expand-file-name "~/"))
   (pushing! magit-git-global-arguments (format "--work-tree=%s" home-dir))
   (pushing! magit-git-global-arguments (format "--git-dir=%s" dotfile-dir))
+  (set! dir )
   (set! fn (lambda ()
              (setq-local magit-git-global-arguments `())))
   (add-hook 'magit-status-mode-hook fn)
