@@ -259,7 +259,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
 
 (defhook! oo-auto-commit-and-push-file-h (after-save-hook)
   "Auto commit and push any dotfile I edit.
-Determine whether I am editing a dotfile.  "
+Determine whether I am editing a dotfile.  If I am"
   (unless (buffer-file-name) (return!))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
