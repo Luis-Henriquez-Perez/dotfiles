@@ -230,6 +230,13 @@
 (global-key [modkey] "s" hotkeys_popup.show_help {:description "show help" :group "awesome"})
 ;;;;; Run an application
 (global-key [modkey] "r" (fn [] (let [s (awful.screen.focused)] (s.mypromptbox:run))) {:description "run prompt" :group "launcher"})
+;;;;; screenshot
+;; Function to take a screenshot using maim.
+(fn take-screenshot []
+  (awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
+
+(global-key [modkey]"x" take-screenshot
+            {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Set Global Keys
 (root.keys globalkeys)
 ;;;;; Manipulate Tags
@@ -286,13 +293,6 @@
 (client-key [modkey] "f" (fn [c] (do (tset c :fullscreen (not c.fullscreen)) (c:raise))))
 (client-key [modkey] "w" (fn [c] (c:kill)) {:description "quit" :group "client"})
 (client-key [modkey] "q" (fn [c] (c:kill)) {:description "quit" :group "client"})
-;;;;; screenshot
-;; Function to take a screenshot using maim.
-(fn take-screenshot []
-  (awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
-
-(global-key [modkey]"x" take-screenshot
-            {:description "Take Screenshot" :group "screenshot"})
 ;;;; Rules
 (set awful.rules.rules [{:rule []
                          :properties {:border_width beautiful.border_width
