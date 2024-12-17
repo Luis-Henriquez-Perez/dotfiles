@@ -23,6 +23,7 @@ if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
   [ -f ~/.xprofile ] && . ~/.xprofile
 fi
 ### function for dotfiles
+# I think these functions are more flexible than aliases
 dtf () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
