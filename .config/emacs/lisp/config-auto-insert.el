@@ -183,7 +183,7 @@
 (defun oo-auto-insert-bash-file-header ()
   "Insert bash file header."
   (require 'tempel)
-  (tempel-insert '("# #!/bin/bash" > n
+  (tempel-insert '("#!/bin/bash" > n
                    "# Filename: " (file-name-nondirectory (directory-file-name (buffer-file-name))) > n
                    "# Author: " user-full-name " <" user-mail-address ">" > n
                    "# Created: " (format-time-string "%Y-%m-%d %H:%M:%S") > n
