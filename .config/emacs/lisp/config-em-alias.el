@@ -63,8 +63,8 @@
 ;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
 ;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;;; emacs maintenance
-(eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
-                            (executable-find "git")))
+;; (eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
+;;                             (executable-find "git")))
 (eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
                              (executable-find "git")))
 (eshell/alias "dotfiles" "/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME $*")
