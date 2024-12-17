@@ -283,7 +283,7 @@ changes and push them."
   "Open Magit status for the bare Git dotfiles repository."
   (interactive)
   :init ((magit-git-global-arguments magit-git-global-arguments)
-         (magit-status-mode-hook ))
+         (magit-status-mode-hook magit-status-mode-hook))
   (setq-hook! magit-status-mode-hook magit-git-global-arguments (append))
   (set! dotfile-dir (expand-file-name "~/dotfiles/"))
   (set! home-dir (expand-file-name "~/"))
