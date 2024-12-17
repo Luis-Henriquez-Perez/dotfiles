@@ -8,6 +8,5 @@
 export PATH="$PATH:/home/luis/.local/bin"
 
 #.bash_profile
+# https://github.com/White-Oak/arch-setup-for-dummies/blob/master/setting-up-ssh-agent.md
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-# ~/.config/fish/config.fish
-set -x SSH_AUTH_SOCK $XDG_RUNTIME_DIR/ssh-agent.socket
