@@ -268,7 +268,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (set! msg (shell-quote-argument fname))
   (when diff
-    (set! command )
+    (set! command (format "%s add %s" git fname))
     (call-process-shell-command )
     (shell-command-to-string )
     (shell-command-to-string (format "%s commit -m %S %s" git msg fname))
