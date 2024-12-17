@@ -288,7 +288,7 @@ changes and push them."
   (set! home-dir (expand-file-name "~/"))
   (pushing! magit-git-global-arguments (format "--work-tree=%s" home-dir))
   (pushing! magit-git-global-arguments (format "--git-dir=%s" dotfile-dir))
-  (add-hook 'magit-status-mode-hook )
+  (add-hook 'magit-status-mode-hook (lambda ()))
   (magit-status))
 ;;; provide
 (provide 'oo-commands)
