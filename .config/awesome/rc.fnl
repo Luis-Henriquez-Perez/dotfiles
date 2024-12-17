@@ -291,8 +291,7 @@
 (fn take-screenshot []
   (awful.spawn-with-shell ""))
 
-(global-key [modkey] "p" (fn []
-  ))
+(global-key [modkey] "p" ta)
 ;;;; Rules
 (set awful.rules.rules [{:rule []
                          :properties {:border_width beautiful.border_width
