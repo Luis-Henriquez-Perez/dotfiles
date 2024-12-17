@@ -274,7 +274,7 @@ changes and push them."
     (call-process-shell-command command)
     (set! (program arg1 arg2) (split-string git))
     (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
-    (set! proc (start-process "git" "*git-auto-push*" git "push"))
+    ;; (set! proc (start-process "git" "*git-auto-push*" git "push"))
     (set-process-sentinel proc (lambda (_ status) (message "status: %S" status)))
     (set-process-filter proc 'gac-process-filter)))
 
