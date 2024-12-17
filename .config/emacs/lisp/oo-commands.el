@@ -273,7 +273,7 @@ changes and push them."
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
     (alet! (split-string git)
-      (set! proc (start-process "git" "*git-auto-push*" (car it) ( "push"))))
+      (set! proc (start-process "git" "*git-auto-push*"  ( "push"))))
     (set-process-sentinel proc (lambda (_ status) (message "git %s" (substring status 0 -1))))))
 
 (defun! oo-magit-status-dotfiles ()
