@@ -3,7 +3,7 @@
 <h1 align="center">dotfiles</h1>
 #+end_html
 #+CAPTION: This is an image caption
-[[file:Pictures/]]
+[[file:Pictures/awesomewm-showcase_20241217_160959.png]]
 - *simple as possible*
   Although many go too far with it, there is truth to the
   KISS doctrine of keeping things as simple as possible.
