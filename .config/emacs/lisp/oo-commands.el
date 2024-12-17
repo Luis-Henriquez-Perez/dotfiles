@@ -257,23 +257,20 @@ With prefix argument, run as dry-run (do not actually move any files)."
         (move-file-to-trash file))))
   unmanaged)
 
-(oo-auto-commit-file)
-(defun! oo-auto-commit-file ()
-  "Auto commit and push file if its part of."
+(defhook! oo-auto-commit-and-push-file-h (after-save-hook)
+  "Auto commit and push ."
+  (unless (buffer-file-name) (return!))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! dots (expand-file-name "~/dotfiles/"))
   (set! worktree (expand-file-name "~"))
   (set! git (format "git --git-dir=%s --work-tree=%s" dots worktree))
-  ;; (set! command (format "%s status --porcelain %s" git fname))
-  ;; (string-trim (shell-command-to-string command))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (set! msg (shell-quote-argument fname))
   (when diff
     (shell-command-to-string (format "%s add %s" git fname))
     (shell-command-to-string (format "%s commit -m %S %s" git msg fname))
-    ;; (shell-command-to-string (format "%s push" git))
-    ))
+    (shell-command-to-string (format "%s push" git))))
 
 (defun! oo-magit-status-dotfiles ()
   "Open Magit status for the bare Git dotfiles repository."
