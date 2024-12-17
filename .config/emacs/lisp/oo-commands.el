@@ -276,7 +276,6 @@ changes and push them."
   (when diff
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
-    ;; TODO: fix keeps asking me for password
     (set! (program arg1 arg2) (split-string git))
     (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
     (set-process-sentinel proc #'status)
