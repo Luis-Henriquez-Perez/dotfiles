@@ -8,19 +8,9 @@
 
 # List of services to enable and start
 services=(
-    accounts-daemon.service
-    alsa-restore.service
-    dbus-broker.service
-    getty@tty2.service
-    kmod-static-nodes.service
-    ldconfig.service
     lightdm.service
     NetworkManager.service
     ntpd.service
-    polkit.service
-    systemd-backlight@backlight:acpi_video0.service
-    systemd-fsck@dev-disk-by\x2duuid-aee38b7c\x2dae2a\x2d4660
-    systemd-journal-catalog-update.service
 )
 
 echo "Starting systemd service setup..."
