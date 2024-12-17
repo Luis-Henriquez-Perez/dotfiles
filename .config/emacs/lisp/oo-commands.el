@@ -300,7 +300,7 @@ changes and push them."
   (add-hook 'magit-status-mode-hook fn)
   (magit-status))
 
-(let ((myconf-path (expand-file-name ".myconf")))
+(let ((myconf-path (expand-file-name ".dotfiles")))
   (when (and (file-exists-p myconf-path)
              (not (file-exists-p ".git")))
     ;; Insert git directory and working tree into magit's git
