@@ -336,7 +336,7 @@ Identify and collect symbols needed for let bindings and return forms modified."
                       (`(set! ,pattern ,_ . ,(guard t))
                        (if (symbolp pattern)
                            (cl-pushnew (list pattern nil) bindings :key #'car)
-                         (dolist (symbol (reverse (oo--set-flatten pattern)))
+                         (dolist (symbol (reverse (oo-flatten-pcase-match-form pattern)))
                            (cl-pushnew (list symbol nil) bindings :key #'car)))
                        form)
                       ;; Surround loops with a catch.
@@ -547,12 +547,13 @@ take the following forms:
 If MATCH-FORM is a symbol act as `setq'."
   (if (symbolp match-form)
       `(setq ,match-form ,value)
-    (let* ((binds (oo-pcase-bindings match-form value))
-           (non-gensyms (cl-remove-if #'oo-list-marker-p (oo-flatten-pcase-match-form match-form)))
-           (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
-           (gensyms (cl-set-difference all non-gensyms)))
-      `(let ,gensyms
-         ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds))))))
+    (cl-flet ((list-marker-p (it) (and (symbolp it) (equal ?& (aref (symbol-name it) 0)))))
+      (let* ((binds (oo-pcase-bindings match-form value))
+             (non-gensyms (cl-remove-if #'list-marker-p (oo-flatten-pcase-match-form match-form)))
+             (all (oo-flatten-pcase-match-form (mapcar #'car binds)))
+             (gensyms (cl-set-difference all non-gensyms)))
+        `(let ,gensyms
+           ,(macroexp-progn (mapcar (apply-partially #'cons 'pcase-setq) binds)))))))
 ;;; provide
 (provide 'base-macros)
 ;;; base-macros.el ends here
