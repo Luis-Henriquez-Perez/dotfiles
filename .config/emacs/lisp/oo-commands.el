@@ -277,6 +277,7 @@ changes and push them."
     (set-process-sentinel proc (lambda (_ status) (message "status: %S" status)))
     (set-process-filter proc 'gac-process-filter)))
 
+;; I need to add a local hook.
 (defun! oo-magit-status-dotfiles ()
   "Open Magit status for the bare Git dotfiles repository."
   (interactive)
