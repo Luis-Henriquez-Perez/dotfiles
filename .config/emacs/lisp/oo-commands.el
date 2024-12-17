@@ -299,6 +299,7 @@ changes and push them."
   (set! fn (lambda () (setq-local magit-git-global-arguments mgga)))
   (add-hook 'magit-status-mode-hook fn)
   (magit-status))
+
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
