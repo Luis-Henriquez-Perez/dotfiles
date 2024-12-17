@@ -279,7 +279,6 @@ changes and push them."
     ;; TODO: fix keeps asking me for password
     (set! (program arg1 arg2) (split-string git))
     (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
-    ;; (set! proc (start-process "git" "*git-auto-push*" git "push"))
     (set-process-sentinel proc #'status)
     ;; (set-process-filter proc 'gac-process-filter)
     ))
