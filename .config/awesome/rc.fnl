@@ -289,7 +289,7 @@
 ;;;;; screenshot
 ;; Function to take a screenshot using maim.
 (fn take-screenshot []
-  (awful.spawn_with_shell))
+  (awful.spawn-with-shell))
 
 (global-key [modkey] "p" (fn []
   ))
