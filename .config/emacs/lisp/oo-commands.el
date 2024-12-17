@@ -273,7 +273,7 @@ changes and push them."
     (if (string-match-p "finished" status)
         (trace! "pushed successfully -> %S" status)
       (message "failed push -> %S" status)))
-  (message "different->")
+  (message "diff->%S")
   (unless (string-empty-p diff)
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
