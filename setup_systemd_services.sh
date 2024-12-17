@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Filename: setup_systemd_services.sh
-# Author: Luis Henriquez <luis@luishp.xyz>
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2024-12-17 05:35:08
 # Description: Initialize systemd services.
 # For a new system, this is meant to setup all my system services.
