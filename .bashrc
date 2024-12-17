@@ -27,7 +27,7 @@ fi
 # https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
 
 DOTFILES="$HOME/.dotfiles"
-REPO="$HOME/"
+# REPO="$HOME/"
 
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
