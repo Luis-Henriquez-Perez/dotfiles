@@ -273,11 +273,11 @@ changes and push them."
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
     ;; TODO: fix keeps asking me for password
-    ;; (set! (program arg1 arg2) (split-string git))
-    ;; (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
-    ;; ;; (set! proc (start-process "git" "*git-auto-push*" git "push"))
-    ;; (set-process-sentinel proc (lambda (_ status) (message "STATUS: %S" status)))
-    ;; (set-process-filter proc 'gac-process-filter)
+    (set! (program arg1 arg2) (split-string git))
+    (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
+    ;; (set! proc (start-process "git" "*git-auto-push*" git "push"))
+    (set-process-sentinel proc (lambda (_ status) (message "STATUS: %S" status)))
+    (set-process-filter proc 'gac-process-filter)
     ))
 
 ;; I need to add a local hook.
