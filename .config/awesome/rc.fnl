@@ -287,6 +287,7 @@
 (client-key [modkey] "w" (fn [c] (c:kill)) {:description "quit" :group "client"})
 (client-key [modkey] "q" (fn [c] (c:kill)) {:description "quit" :group "client"})
 ;;;;; screenshot
+
 ;;;; Rules
 (set awful.rules.rules [{:rule []
                          :properties {:border_width beautiful.border_width
