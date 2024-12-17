@@ -270,7 +270,7 @@ changes and push them."
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (set! msg (shell-quote-argument fname))
   (flet! status (_ status)
-    (if))
+    (if (string-match-p)))
   (when diff
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
