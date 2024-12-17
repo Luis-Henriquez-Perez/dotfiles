@@ -289,7 +289,7 @@ changes and push them."
   (set! worktree (format "--work-tree=%s" home-dir))
   (set! dir (format "--git-dir=%s" dotfile-dir))
   (set! fn (lambda ()
-             (setq-local magit-git-global-arguments `(,dir ,worktree ))))
+             (setq-local magit-git-global-arguments `(,dir ,worktree ,W))))
   (add-hook 'magit-status-mode-hook fn)
   (magit-status))
 ;;; provide
