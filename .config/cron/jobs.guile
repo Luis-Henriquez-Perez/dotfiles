@@ -17,11 +17,6 @@
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
 ;;;;; Clean the cache
-;;;; chezmoi
-;; TODO: There are ways I can better dynamically choose when this script should
-;; be run.  One way is I could check to see if emacs is actually open because
-;; that is what I am likely going to be using to edit my files.
-;; (job '(next-minute (range 0 60 7)) "~/scripts/chezmoi_state_sync.sh")
 ;;;; wallpaper
 ;;;;; change my wallpaper every 15 minutes
 ;; Change my wallpaper every 15 minutes.
