@@ -270,11 +270,9 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (when diff
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
-    ;; (let ((default-directory (file-name-directory (buffer-file-name buffer))))
-    ;;   (let ((proc (start-process "git" "*git-auto-push*" "git" "push")))
-    ;;     (set-process-sentinel proc 'gac-process-sentinel)
-    ;;     (set-process-filter proc 'gac-process-filter)))
-    ;; (shell-command-to-string (format "%s push" git))
+    (set! proc (start-process "git" "*git-auto-push*" "git" "push"))
+    (set-process-sentinel proc 'gac-process-sentinel)
+    (set-process-filter proc 'gac-process-filter)
     ))
 
 (defun! oo-magit-status-dotfiles ()
