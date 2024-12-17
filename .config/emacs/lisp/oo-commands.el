@@ -295,7 +295,7 @@ changes and push them."
   (set! worktree (format "--work-tree=%s" home-dir))
   (set! dir (format "--git-dir=%s" dotfile-dir))
   (set! mgga `(,dir ,worktree ,@magit-git-global-arguments))
-  (set! magit-git-global-arguments mgga)
+  (setq magit-git-global-arguments mgga)
   (set! fn (lambda () (setq-local magit-git-global-arguments mgga)))
   (add-hook 'magit-status-mode-hook fn)
   (magit-status))
