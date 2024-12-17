@@ -258,7 +258,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
   unmanaged)
 
 (defhook! oo-auto-commit-and-push-file-h (after-save-hook)
-  "Auto commit and push ."
+  "Auto commit and push any dotfile I edit."
   (unless (buffer-file-name) (return!))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
