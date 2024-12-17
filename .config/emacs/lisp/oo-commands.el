@@ -270,8 +270,8 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (when diff
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
-    (set! proc (start-process "git" "*git-auto-push*" git "push"))
 
+    (set! proc (start-process "git" "*git-auto-push*" git "push"))
     (set-process-sentinel proc (lambda (_ status) (message "git %s" (substring status 0 -1))))))
 
 (defun! oo-magit-status-dotfiles ()
