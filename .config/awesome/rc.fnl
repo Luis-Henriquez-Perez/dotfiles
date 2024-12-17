@@ -291,9 +291,8 @@
 (fn take-screenshot []
   (awful.spawn_with_shell "maim ~/Pictures/foo.png"))
 
-
-(global-key [modkey] "p" take-screenshot
-            {:description "Take Screenshot" :group "screenshot"})
+(global-key [modkey] "Print" (fn []
+  (awful.spawn.with_shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")))
 ;;;; Rules
 (set awful.rules.rules [{:rule []
                          :properties {:border_width beautiful.border_width
