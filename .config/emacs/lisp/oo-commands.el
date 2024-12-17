@@ -288,7 +288,7 @@ changes and push them."
   (set! home-dir (expand-file-name "~/"))
   (set! worktree (format "--work-tree=%s" home-dir))
   (set! dir (format "--git-dir=%s" dotfile-dir))
-  (set! gargs )
+  (set! mgga )
   (set! magit-git-global-arguments `(,dir ,worktree ,@magit-git-global-arguments))
   (set! fn (lambda ()
              (setq-local magit-git-global-arguments `(,dir ,worktree ,@magit-git-global-arguments))))
