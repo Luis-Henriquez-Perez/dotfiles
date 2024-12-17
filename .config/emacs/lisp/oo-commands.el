@@ -270,7 +270,6 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (when diff
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
-    (shell-command-to-string (format "%s commit -m %S %s" git msg fname))
     (trace! "hello")
     ;; (shell-command-to-string (format "%s push" git))
     ))
