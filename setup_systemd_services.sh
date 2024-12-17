@@ -4,7 +4,7 @@
 # Author: Luis Henriquez <luis@luishp.xyz>
 # Created: 2024-12-17 05:35:08
 # Description: Initialize systemd services.
-# For a new system, this is to.
+# For a new system, this is meant to setup all my system services.
 
 # List of services to enable and start
 services=(
