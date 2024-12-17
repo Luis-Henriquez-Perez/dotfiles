@@ -288,15 +288,12 @@ changes and push them."
 (defun! oo-magit-status-dotfiles ()
   "Open Magit status for the bare Git dotfiles repository."
   (interactive)
-  :init ((magit-status-mode-hook magit-status-mode-hook))
   (set! dotfile-dir (expand-file-name "~/.dotfiles/"))
   (set! home-dir (expand-file-name "~/"))
   (set! worktree (format "--work-tree=%s" home-dir))
   (set! dir (format "--git-dir=%s" dotfile-dir))
   (set! mgga `(,dir ,worktree ,@magit-git-global-arguments))
   (setq magit-git-global-arguments mgga)
-  (set! fn (lambda () (setq-local magit-git-global-arguments mgga)))
-  (add-hook 'magit-status-mode-hook fn)
   (magit-status))
 ;;; provide
 (provide 'oo-commands)
