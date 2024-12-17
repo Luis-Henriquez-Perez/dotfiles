@@ -288,10 +288,11 @@
 (client-key [modkey] "q" (fn [c] (c:kill)) {:description "quit" :group "client"})
 ;;;;; screenshot
 ;; Function to take a screenshot using maim.
-(fn take-screenshot []
-  (awful.spawn-with-shell ""))
+;; (fn take-screenshot []
+;;   (awful.spawn_with_shell "maim ~/Pictures/foo.png"))
 
-(global-key [modkey] "p" ta)
+(global-key [modkey] "p" (fn []
+  (awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")))
 ;;;; Rules
 (set awful.rules.rules [{:rule []
                          :properties {:border_width beautiful.border_width
