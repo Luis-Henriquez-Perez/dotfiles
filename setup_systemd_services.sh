@@ -10,7 +10,6 @@
 services=(
     lightdm.service
     NetworkManager.service
-    ntpd.service
     ssh-agent.service
 )
 
