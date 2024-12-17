@@ -11,7 +11,7 @@ services=(
     lightdm.service
     NetworkManager.service
     ntpd.service
-
+    ssh-agent.service
 )
 
 echo "Starting systemd service setup..."
