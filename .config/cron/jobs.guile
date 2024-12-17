@@ -14,6 +14,8 @@
 ;;;; email
 ;; Download and index my email every 5 minutes.
 (job '(next-minute (range 0 60 5)) "mbsync -a && mu index && notmuch new")
+;;;; system
+;; I want to automate as much of system maintenance as I can.
 ;;;;; Clean the cache
 ;;;; wallpaper
 ;;;;; change my wallpaper every 15 minutes
