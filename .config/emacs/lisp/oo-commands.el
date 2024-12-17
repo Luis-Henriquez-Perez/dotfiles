@@ -291,7 +291,7 @@ changes and push them."
   (interactive)
   :init ((magit-git-global-arguments magit-git-global-arguments)
          (magit-status-mode-hook magit-status-mode-hook))
-  (set! dotfile-dir (expand-file-name "~/dotfiles/"))
+  (set! dotfile-dir (expand-file-name "~/.dotfiles/"))
   (set! home-dir (expand-file-name "~/"))
   (set! worktree (format "--work-tree=%s" home-dir))
   (set! dir (format "--git-dir=%s" dotfile-dir))
