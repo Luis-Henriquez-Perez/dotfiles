@@ -288,8 +288,7 @@
 (client-key [modkey] "q" (fn [c] (c:kill)) {:description "quit" :group "client"})
 ;;;;; screenshot
 ;; Function to take a screenshot using maim.
-(fn take-screenshot []
-(awful.spawn.with_shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
+(fn take-screenshot [])
 
 (global-key [modkey] "p" (fn []
   ))
