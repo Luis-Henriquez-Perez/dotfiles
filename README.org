@@ -3,7 +3,7 @@
 <h1 align="center">dotfiles</h1>
 #+end_html
 - *simple as possible*
-  Although many linux users go too far with it, there is
+  Although many go too far with it, there is
   truth to the KISS doctrine of keeping things as simple as possible.
 - *easy to setup*
   I want to be able to run just one command or script to set up
