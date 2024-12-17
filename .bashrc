@@ -25,6 +25,8 @@ fi
 ### function for dotfiles
 # I think these functions are more flexible than aliases
 # https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
+DOTFILES="$HOME/.dotfiles"
+
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
