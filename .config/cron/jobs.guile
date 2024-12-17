@@ -22,6 +22,6 @@
 ;; TODO: I plan a setup where I can start by downloading wallpapers and then if
 ;; a wallpaper I do not like is displayed, I can press a keybinding to replace
 ;; it, and mark that one as unliked.
-(job '(next-minute (range 0 60 15)) "should have ~/scripts/set_wallpaper.sh")
+(job '(next-minute (range 0 60 15)) "sh ~/scripts/set_wallpaper.sh")
 ;;;; commit and push dotfiles automatically
 ;; (job '(next-minute (range 0 60 10)) "~/scripts/auto-commit-and-push-dotfiles.sh")
