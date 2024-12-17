@@ -264,7 +264,7 @@ changes and push them."
   (unless (buffer-file-name) (return!))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
-  (set! dots (expand-file-name "~/dotfiles/"))
+  (set! dots (expand-file-name "~/.dotfiles/"))
   (set! worktree (expand-file-name "~"))
   (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
