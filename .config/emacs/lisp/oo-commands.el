@@ -281,7 +281,8 @@ changes and push them."
     (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
     ;; (set! proc (start-process "git" "*git-auto-push*" git "push"))
     (set-process-sentinel proc #'status)
-    (set-process-filter proc 'gac-process-filter)))
+    ;; (set-process-filter proc 'gac-process-filter)
+    ))
 
 ;; I need to add a local hook.
 ;; Does not completely work yet, magit status opens from bare git repo but the
