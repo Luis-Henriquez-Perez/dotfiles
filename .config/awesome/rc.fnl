@@ -288,8 +288,9 @@
 (client-key [modkey] "q" (fn [c] (c:kill)) {:description "quit" :group "client"})
 ;;;;; screenshot
 ;; Function to take a screenshot using maim
-
+(fn [] )
 (fn rotate-clients-backward []
+
   (awful.client.cycle false)
   (local master (awful.client.getmaster))
   (when master
