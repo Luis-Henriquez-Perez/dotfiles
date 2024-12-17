@@ -1,4 +1,4 @@
-# Luis Henriquez
+# Luis Henriquez-Perez
 # This script chooses a random wallpaper from the wallpapers I have and sets it.
 # It registers the used wallpapers in `used_wallpapers_file`.
 
