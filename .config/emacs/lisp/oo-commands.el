@@ -272,6 +272,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
     (call-process-shell-command command)
     (set! proc (start-process "git" "*git-auto-push*" "git" "push"))
     (set-process-sentinel proc 'gac-process-sentinel)
+
     (set-process-filter proc 'gac-process-filter)
     ))
 
