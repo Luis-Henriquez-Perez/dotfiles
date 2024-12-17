@@ -284,11 +284,11 @@ changes and push them."
   (interactive)
   :init ((magit-git-global-arguments magit-git-global-arguments)
          (magit-status-mode-hook magit-status-mode-hook))
-  (setq-hook! magit-status-mode-hook magit-git-global-arguments (append))
   (set! dotfile-dir (expand-file-name "~/dotfiles/"))
   (set! home-dir (expand-file-name "~/"))
   (pushing! magit-git-global-arguments (format "--work-tree=%s" home-dir))
   (pushing! magit-git-global-arguments (format "--git-dir=%s" dotfile-dir))
+  (add-hook 'magit-status-mode-hook )
   (magit-status))
 ;;; provide
 (provide 'oo-commands)
