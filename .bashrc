@@ -25,6 +25,7 @@ fi
 ### function for dotfiles
 # I think these functions are more flexible than aliases
 # https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
+# https://www.atlassian.com/git/tutorials/dotfiles
 
 DOTFILES="$HOME/.dotfiles"
 # REPO="$HOME/"
