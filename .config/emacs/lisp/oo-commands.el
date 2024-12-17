@@ -267,7 +267,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
   (set! git (format "git --git-dir=%s --work-tree=%s" dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (set! msg (shell-quote-argument fname))
-  ;; (trace!)
+  (trace!)
   (when diff
     (shell-command-to-string (format "%s add %s" git fname))
     (shell-command-to-string (format "%s commit -m %S %s" git msg fname))
