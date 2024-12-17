@@ -300,6 +300,25 @@ changes and push them."
   (add-hook 'magit-status-mode-hook fn)
   (magit-status))
 
+(unless (boundp 'myconf-magit-hook?)
+  ;; Only run this hook once, even if Emacs reloads configuration.
+  (eval-after-load 'magit
+    '(let ((myconf-path (expand-file-name ".myconf")))
+       (when (and (file-exists-p myconf-path)
+                  (not (file-exists-p ".git")))
+         ;; Insert git directory and working tree into magit's git
+         ;; global arguments, while preserving magit's existing
+         ;; command-line settings; `add-to-list' adds to the
+         ;; beginning of the list.
+         (add-to-list 'magit-git-global-arguments
+                      (format "--work-tree=%s"
+                              ;; Drop trailing slash.
+                              (directory-file-name
+                               ;; Get directory part (`dirname`).
+                               (file-name-directory myconf-path))))
+         (add-to-list 'magit-git-global-arguments
+                      (format "--git-dir=%s" myconf-path)))))
+  (setq myconf-magit-hook? t))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
