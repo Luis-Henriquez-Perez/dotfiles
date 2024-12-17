@@ -289,7 +289,7 @@
 ;;;;; screenshot
 ;; Function to take a screenshot using maim.
 (fn take-screenshot []
-(awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
+  (awful.spawn-with-shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"))
 
 (global-key [modkey "Shift"] "p" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
