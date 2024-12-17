@@ -271,6 +271,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
     (trace! "hello")
+
     ;; (shell-command-to-string (format "%s push" git))
     ))
 
