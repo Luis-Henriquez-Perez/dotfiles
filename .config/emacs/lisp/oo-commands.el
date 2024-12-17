@@ -268,7 +268,7 @@ changes and push them."
   (set! worktree (expand-file-name "~"))
   (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
-  (set! msg (format "%s %s" (shell-quote-argument fname)))
+  (set! msg (format "%s %s" (shell-quote-argument fname) (current-time-string)))
   (flet! status (_ status)
     (if (string-match-p "finished" status)
         (trace! "pushed successfully -> %S" status)
