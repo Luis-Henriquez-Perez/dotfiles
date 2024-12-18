@@ -11,6 +11,7 @@ dot () {
 }
 
 # Clone the repo
+
 echo "Cloning bare git repo from"
 git clone --bare https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo $HOME/.dotfiles
 
