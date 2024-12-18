@@ -16,7 +16,7 @@ echo "Cloning bare Git repository from $DOTFILES_URL"
 git clone --bare $DOTFILES_URL $DOTFILES_DIR
 
 if dot checkout; then
-  echo "Successfully Checked out dotfiles.";
+  echo "Successfully Checked out dotfiles."
 else
   echo "Conflicts detected! Backing up pre-existing dotfiles to $BACKUP_DIRECTORY..."
   mkdir -p "$BACKUP_DIRECTORY"
