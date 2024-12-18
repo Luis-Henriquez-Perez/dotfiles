@@ -22,7 +22,6 @@ def run_mu_index():
         # Handle command errors
         print("Error:", e.stderr)
         print("Return Code:", e.returncode)
-
 # mbsync -a
 # mu index
 # notmuch new
