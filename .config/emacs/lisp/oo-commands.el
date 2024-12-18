@@ -32,15 +32,6 @@
 ;;;; opening specific files
 ;; A complicating factor is the fact that I use the chezmoi directory as the
 ;; main way to edit these files.
-(defun! oo--chezmoi-source-path (target-dir)
-  "Get the source path for a given TARGET-DIR using chezmoi."
-  (cl-assert (executable-find "chezmoi"))
-  (set! command (format "chezmoi source-path %s" (shell-quote-argument target-dir)))
-  (set! source-path (string-trim (shell-command-to-string command)))
-  ;; Remove any trailing newlines from the output
-  (and (not (string-empty-p source-path))
-       source-path))
-
 (defun oo-open-emacs-config ()
   "Open Emacs configuration."
   (interactive)
@@ -54,7 +45,7 @@
 (defun oo-open-emacs-lisp-dir ()
   "Open lisp directory."
   (interactive)
-  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path oo-lisp-dir))))
+  (switch-to-buffer (find-file-noselect ())))
 ;;;; window splitting
 (defun oo-split-window-right-and-focus ()
   "Split window right and select the window created with the split."
