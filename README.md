@@ -18,8 +18,6 @@
     remember things that I myself did.
 
 
-<a id="org6551c31"></a>
-
 # featured programs
 
 -   **dotfile management**
@@ -35,15 +33,9 @@
 -   **editor**
     [emacs](https://www.gnu.org/software/emacs/) Emacs is my editor (see my [dedicated README](./dot_config/emacs/README.md))
 
-
-<a id="orgb1454d3"></a>
-
 # designated operating system
 
 I use [archlinux](https://archlinux.org/) as my operating system.
-
-
-<a id="orgd2e4dc9"></a>
 
 # how to initialize dotfiles
 Download the.
