@@ -17,7 +17,7 @@
   remember things that I myself did.
 ** featured programs
 - *dotfile management*
-  For dotfile management I am using a [[]].  Compared to existing
+  For dotfile management I am using a [[][bare git repo]].  Compared to existing
   solution I have tried--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--.
 - *window manager*
   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
