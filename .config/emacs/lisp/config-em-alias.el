@@ -50,6 +50,7 @@
 ;; actually delete the buffer contents.  I mean I guess its O.K. since the
 ;; contents should be saved in eshell-history, but its more secure to actuall
 ;; have the physical buffer contents.
+(eshell/alias "pacman" "eshell/clear t")
 (eshell/alias "clear" "eshell/clear t")
 ;; I decided that I almost always prefer opening the file in another window.  So
 ;; I am replacing ff with `find-file-other-window'
