@@ -13,7 +13,7 @@
 ;; file.  Maybe I would need to integrate this with stumpwm.
 ;;;; email
 ;; Download and index my email every 5 minutes.
-;; (job '(next-minute (range 0 60 5)) "python update_email.py")
+(job '(next-minute (range 0 60 5)) "python update_email.py")
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
 ;;;;; Clean the cache
