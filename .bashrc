@@ -23,9 +23,9 @@ if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
   [ -f ~/.xprofile ] && . ~/.xprofile
 fi
 ### Wallpaper file
-USED_WALLPAPER_FILE=$HOME/.cache/wallpapers
-
-CURRENT_WALLPAPER=''
+# USED_WALLPAPER_FILE=$HOME/.cache/wallpapers
+export CURRENT_WALLPAPER="$HOME/.cache/wallpapers/current_wallpaper.jpg"
+# CURRENT_WALLPAPER=''
 ### function for dotfiles
 # I think these functions are more flexible than aliases
 # https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
