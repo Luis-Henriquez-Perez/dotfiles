@@ -64,7 +64,7 @@ def update_email():
     run_command(["mbsync", "-a"], "pulling email")
 
     # Run mu index
-    run_command(["mu", "index"], "Indexing emails with mu")
+    run_command(["mu", "index"], "indexing email")
 
     # Run notmuch new
     run_command(["notmuch", "new"], "Updating notmuch database")
