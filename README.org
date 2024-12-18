@@ -16,20 +16,19 @@
   Setting up these dotfiles was hard for me to do.  I want to
   help others reading set up their own dotfiles and to do that.  Also I want to
   remember things that I myself did.
-** featured programs
-- *dotfile management*
+** Featured Programs
+- *Dotfile Management*
   For dotfile management I am using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to existing
   solution I have tried--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--I find it simpler.
-- *window manager*
+- *Window Manager*
   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
   crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
   it is written in a real programming language and it is extremely customizable.
   [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
   Particularly ones written in lisp.  In this sense.
-- *editor*
-
+- *Editor*
   [[https://www.gnu.org/software/emacs/][emacs]] Emacs is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]])
-** designated operating system
+** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
-** how to initialize dotfiles
+** How To Initialize Dotfiles
