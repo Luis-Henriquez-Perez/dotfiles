@@ -17,7 +17,7 @@
     help others reading set up their own dotfiles and to do that.  Also I want to
     remember things that I myself did.
 
-# featured programs
+# Featured Programs
 -   **dotfile management**
     For dotfile management I am using.  Compared to existing
     solutions I find the approach to be simple.
@@ -31,9 +31,9 @@
 -   **editor**
     [emacs](https://www.gnu.org/software/emacs/) Emacs is my editor (see my [dedicated README](./dot_config/emacs/README.md))
 
-# designated operating system
+# Designated Operating System
 
 I use [archlinux](https://archlinux.org/) as my operating system.
 
-# how to initialize dotfiles
+# How To Initialize Dotfiles
 Download the.
