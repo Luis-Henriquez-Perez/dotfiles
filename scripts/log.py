@@ -11,6 +11,7 @@ import os
 
 logfile = os.path.abspath(os.path.expanduser("~/.cache/systemlog.txt"))
 logformat = '%(asctime)s - %(levelname)s - %(message)s'
+logformat = ''
 # Configure the logging module
 logging.basicConfig(filename=logfile, level=logging.INFO, format=logformat)
 
