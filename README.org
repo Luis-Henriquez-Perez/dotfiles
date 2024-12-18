@@ -18,8 +18,7 @@
 ** featured programs
 Here I'll talk briefly about some of the programs I choose and why I choose
 them.
-- For dotfile management I am using git bare repo.  Prior to this I had been
-  using [[https://www.chezmoi.io/][chezmoi]] however, I found it a bit too overblown for my needs.  Now I use 
+- For dotfile management I am using git bare repo.
 - [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
   crashed at least 5 times.  In any case, awesomewm is
