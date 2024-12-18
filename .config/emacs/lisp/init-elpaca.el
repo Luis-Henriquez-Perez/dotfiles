@@ -43,7 +43,6 @@
 (elpaca cape)
 (elpaca caps-lock)
 (elpaca (captain :repo "git://git.sv.gnu.org/emacs/elpa" :branch "externals/captain" :ref "364ee98"))
-(elpaca chezmoi)
 (elpaca cider)
 (elpaca consult)
 (elpaca (corfu :host github :branch "main" :repo "minad/corfu" :fetcher github))
