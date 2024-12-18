@@ -27,9 +27,9 @@
 ;;; Code:
 (require 'base)
 
-;; (autoload #'chezmoi-find                       "chezmoi"                           nil t 'function)
-;; (autoload #'chezmoi-write                      "chezmoi"                           nil t 'function)
-;; (autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
+(autoload #'chezmoi-find                       "chezmoi"                           nil t 'function)
+(autoload #'chezmoi-write                      "chezmoi"                           nil t 'function)
+(autoload #'chezmoi-open-other                 "chezmoi"                           nil t 'function)
 
 ;; I need the command to write the source from the target.  The command
 ;; =chezmoi-apply= does this but I would like it to do it automatically if I am
@@ -56,22 +56,22 @@
 ;;             (function after-save-hook&chezmoi-write-maybe)
 ;;             nil nil))
 
-;; (bind! oo-dotfile-map "f" #'chezmoi-find)
+(bind! oo-dotfile-map "f" #'chezmoi-find)
 ;; I use the command =chezmoi-write= the most so far.  It syncs the current file
 ;; with its corresponding chezmoi file.  If called while in the target file, it
 ;; applies the changes in the target file to the source file and vice versa.
 ;; Only caveat is that if there is a more recent change in the "other" file,
 ;; then you have to use a prefix command to make sure you want to override those
 ;; changes.
-;; (bind! oo-dotfile-map "w" #'chezmoi-write)
+(bind! oo-dotfile-map "w" #'chezmoi-write)
 ;; Binding to the "w" key is the more BLANK choice but "d" is closer to the
 ;; homerow for QWERTY keyboards.
-;; (bind! oo-dotfile-map "d" #'chezmoi-write)
+(bind! oo-dotfile-map "d" #'chezmoi-write)
 ;; The command =chezmoi-open-other= is also useful.  Similar to =chezmoi-find=
 ;; it does something different depending on whether your in the source file or
 ;; the target file.  If you are in the source file, you open the target file and
 ;; vice versa.
-;; (bind! oo-dotfile-map "o" #'chezmoi-open-other)
+(bind! oo-dotfile-map "o" #'chezmoi-open-other)
 ;;; provide
 (provide 'init-chezmoi)
 ;;; init-chezmoi.el ends here
