@@ -19,6 +19,7 @@ git clone --bare $DOTFILES_URL $DOTFILES_DIR
 if dot checkout; then
   echo "Successfully Checked out dotfiles.";
 else
+
     mkdir -p "$BACKUP_DIRECTORY"
     printf "Backing up pre-existing dotfiles into %s\n" "$BACKUP_DIRECTORY"
     dot checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
