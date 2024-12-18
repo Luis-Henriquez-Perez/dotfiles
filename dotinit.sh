@@ -27,3 +27,5 @@ fi;
 dot checkout
 
 dot config --local status.showUntrackedFiles no
+
+echo "Dotfiles initialized successfully."
