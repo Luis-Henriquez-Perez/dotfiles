@@ -16,7 +16,7 @@
 (job '(next-minute (range 0 60 5)) "python update_email.py")
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
-;;;;; Clean the cache
+;;;;; clean the cache
 ;;;;; throw out the trash
 ;;;; wallpaper
 ;;;;; Clean my wallpapers
