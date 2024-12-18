@@ -18,7 +18,7 @@
 ** featured programs
 - *dotfile management*
   For dotfile management I am using.  Compared to existing
-  solution I have tried--namely [[][yadm]], [[][]]
+  solution I have tried--namely [[][yadm]], [[][gnu stow]]
 - *window manager*
   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
