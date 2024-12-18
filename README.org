@@ -20,7 +20,7 @@
 - *Dotfile Management*
   For dotfile management I am using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to existing
   solution I have tried--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--I find it is
-  simpler, requirements no dependencies besides git.
+  simpler, requires no dependencies besides git.
 - *Window Manager*
   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
