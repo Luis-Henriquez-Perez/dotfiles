@@ -189,6 +189,7 @@
                    "# Created: " (format-time-string "%Y-%m-%d %H:%M:%S") > n
                    "# Description: " p > n)))
 
+
 ;;; provide
 (provide 'config-auto-insert)
 ;;; config-auto-insert.el ends here
