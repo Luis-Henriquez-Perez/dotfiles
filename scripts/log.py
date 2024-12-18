@@ -22,5 +22,9 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 
 if __name__ == "__main__":
-
-    main()
+    print(logfile)
+    logger = get_logger(__name__)
+    # logging.basicConfig(filename='systemlog.txt', level=logging.INFO, format=logformat)
+    logging.info('Application started')
+    logging.warning('An error occurred')
+    logging.debug('This is a debug message')
