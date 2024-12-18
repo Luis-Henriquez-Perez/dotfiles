@@ -6,6 +6,7 @@ import glob
 import random
 from log import get_logger
 
+logger = get_logger(__name__)
 used_wallpapers_file = os.path.expanduser("~/.cache/used_wallpapers_file_1")
 
 wallpaper_dir = os.path.expanduser("~/Pictures/wallpapers/")
