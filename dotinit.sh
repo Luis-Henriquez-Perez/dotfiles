@@ -13,7 +13,7 @@ dot () {
 echo "$HOME/dotfiles" >> .gitignore
 
 # Clone the repo
-git clone --bare  $HOME/.dotfiles
+git clone --bare https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo $HOME/.dotfiles
 
 dot checkout
 
