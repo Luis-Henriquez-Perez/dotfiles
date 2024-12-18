@@ -1,9 +1,4 @@
 # Table of Contents
-
-1.  [featured programs](#org6551c31)
-2.  [designated operating system](#orgb1454d3)
-3.  [how to initialize dotfiles](#orgd2e4dc9)
-
 <div class="html" id="orgb17d1d2">
 <p>
 &lt;h1 align="center"&gt;dotfiles&lt;/h1&gt;
