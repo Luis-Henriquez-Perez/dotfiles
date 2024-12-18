@@ -4,7 +4,7 @@
 # Created: 2024-12-16 12:26:13
 # Description: Initialize dotfiles from bare git repo
 
-DOTFILES_URL=
+DOTFILES_URL="https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo"
 
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
@@ -12,7 +12,7 @@ dot () {
 
 # Clone the repo
 printf "Cloning bare git repo from %s\n" "$DOTFILES_URL"
-git clone --bare https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo $HOME/.dotfiles
+git clone --bare $DOTFILES_URL $HOME/.dotfiles
 
 dot checkout
 
