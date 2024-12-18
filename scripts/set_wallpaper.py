@@ -4,7 +4,7 @@
 import os
 import glob
 import random
-from log
+from log import get_logger
 
 used_wallpapers_file = os.path.expanduser("~/.cache/used_wallpapers_file_1")
 
