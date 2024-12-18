@@ -17,7 +17,6 @@
     help others reading set up their own dotfiles and to do that.  Also I want to
     remember things that I myself did.
 
-
 # featured programs
 
 -   **dotfile management**
