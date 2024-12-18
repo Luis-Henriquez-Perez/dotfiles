@@ -67,7 +67,7 @@
 ;;                             (executable-find "git")))
 ;; (eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
 ;;                              (executable-find "git")))
-(eshell/alias "dotadd" "/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $*")
+;; (eshell/alias "dotadd" "/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $*")
 ;; (eshell/alias "dotfiles" "/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME $*")
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
 (eshell/alias "etest" "(let ((default-directory user-emacs-directory)) ${eldev -d test $1})")
