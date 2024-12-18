@@ -27,7 +27,7 @@ logger = get_logger(__name__)
 # # notmuch new
 # logger.info("")
 # logger.info("")
-def run_command(command: list[str], description: str):
+def run_command(command, description
     """
     Run a shell command and log its result.
 
