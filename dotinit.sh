@@ -7,6 +7,7 @@
 DOTFILES_URL="https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo"
 BACKUP_DIRECTORY="~/.dotfiles_backup"
 
+
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
