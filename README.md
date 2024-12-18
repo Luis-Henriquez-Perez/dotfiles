@@ -20,7 +20,7 @@
 # Featured Programs
 -   **dotfile management**
     For dotfile management I am using.  Compared to existing
-    solution that I have tried, [[]] find the approach to be simple.
+    solution that I have tried, [] find the approach to be simple.
 -   **window manager**
     [awesomewm](https://awesomewm.org/) At first I was using stumpwm and I have got to say I do love lisp,
     but stumpwm was a bit slow and in fact the first two weeks I used it it
