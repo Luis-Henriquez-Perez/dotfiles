@@ -139,7 +139,7 @@
   "Insert emacs-lisp template in file."
   (set! filename (buffer-file-name))
   (set! base (file-name-sans-extension filename))
-  (set! lisp-dir "~/.local/share/chezmoi/dot_config/emacs/lisp/")
+  (set! lisp-dir "~/.config/emacs/lisp/")
   (when (and (f-child-of-p filename lisp-dir)
              (string-match "\\`\\(\\(?:config\\|init\\)\\)-\\(.+\\)" base))
     (set! feature (match-string 2 base))
