@@ -22,11 +22,11 @@ them.
   For dotfile management I am using [[git bare repo]].  Compared to existing
   solutions I find the approach to be simple.
 - *window manager*
-   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
+  [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
   crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
   it is written in a real programming language and it is extremely customizable.
-- [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
+  [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
   Particularly ones written in lisp.  In this sense.
 - *editor*
    [[https://www.gnu.org/software/emacs/][emacs]] Emacs is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]])
