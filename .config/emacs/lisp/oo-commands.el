@@ -49,7 +49,7 @@
 (defun oo-open-emacs-init-file ()
   "Open init file."
   (interactive)
-  (switch-to-buffer (find-file-noselect (oo--chezmoi-source-path user-init-file))))
+  (switch-to-buffer (find-file-noselect user-init-file)))
 
 (defun oo-open-emacs-lisp-dir ()
   "Open lisp directory."
