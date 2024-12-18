@@ -7,7 +7,7 @@
 
 ![img](Pictures/awesomewm-showcase_20241217_160959.png "My typical destop environment display")
 
-# ****Principles**
+# **Principles**
 -   **keep it simple**
     Although many go too far with it, there is truth to the
     KISS doctrine of keeping things as simple as possible.
