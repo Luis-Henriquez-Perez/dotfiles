@@ -19,7 +19,9 @@ git clone --bare $DOTFILES_URL $DOTFILES_DIR
 if dot checkout; then
   echo "Successfully Checked out dotfiles.";
 else
-
+  dot checkout 2>&1 | grep -E "\s+\." | awk '{print $1}' | while read -r file; do
+    mv "$HOME/$file" "$BACKUP_DIRECTORY/" || echo "Warning: Could not move $file"
+  done
     mkdir -p "$BACKUP_DIRECTORY"
     printf "Backing up pre-existing dotfiles into %s\n" "$BACKUP_DIRECTORY"
     dot checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
