@@ -17,6 +17,7 @@
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
 ;;;;; Clean the cache
+;;;;; throw out the trash
 ;;;; wallpaper
 ;;;;; Clean my wallpapers
 ;; TODO: I plan a setup where I can start by downloading wallpapers and then if
