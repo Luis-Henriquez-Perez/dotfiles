@@ -41,13 +41,10 @@
 
 (adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
 (adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
-;; Don't include non-existent files.
-(adjoin! recentf-exclude (lambda (file) (not (file-exists-p file))))
 
 (setq recentf-max-saved-items nil)
 ;;;; TODO always keep important files in recentf-list
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
-(recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
 (provide 'init-recentf)
 ;;; init-recentf.el ends here
