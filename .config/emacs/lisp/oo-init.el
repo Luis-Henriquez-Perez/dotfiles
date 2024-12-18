@@ -256,7 +256,7 @@ file is loaded."
 
 ;; (defhook! oo-setup-auto-line-sorting-maybe-h (find-file-hook)
 ;;   "Setup auto line sorting for `init-elpaca'."
-;;   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/init-elpaca.el")
+;;   (set! path "~/.config/emacs/lisp/init-elpaca.el")
 ;;   (when (f-same-p (buffer-file-name) (expand-file-name path))
 ;;     (info! "Setup auto-sorting for %s..." (oo-file-base path))
 ;;     (hook! before-save-hook oo-sort-elpaca-forms-h :local t)))
@@ -272,7 +272,7 @@ file is loaded."
 
 ;; (defhook! oo-setup-auto-alignment-maybe-h (find-file-hook)
 ;;   "Set up auto alignment for certain buffers."
-;;   (set! path "~/.local/share/chezmoi/dot_config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
+;;   (set! path "~/.config/emacs/lisp/+abbrev-plain-text-abbrevs.el")
 ;;   (when (f-same-p (buffer-file-name) (expand-file-name path))
 ;;     (info! "Setup auto-aligning for %S..." (oo-file-base path))
 ;;     (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
