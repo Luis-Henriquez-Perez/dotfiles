@@ -45,7 +45,7 @@
 (defun oo-open-emacs-lisp-dir ()
   "Open lisp directory."
   (interactive)
-  (switch-to-buffer (dired (expand-file-name user-emacs-directory))))
+  (switch-to-buffer (dired (expand-file-name "lisp" user-emacs-directory))))
 ;;;; window splitting
 (defun oo-split-window-right-and-focus ()
   "Split window right and select the window created with the split."
