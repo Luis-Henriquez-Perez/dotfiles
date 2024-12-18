@@ -8,8 +8,6 @@ dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
 
-echo "$HOME/dotfiles" >> .gitignore
-
 # Clone the repo
 git clone --bare https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo $HOME/.dotfiles
 
