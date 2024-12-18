@@ -18,7 +18,7 @@ git clone --bare $DOTFILES_URL $HOME/.dotfiles
 
 dot checkout
 
-if [ $? = 0 ]; then
+if dot checkout; then
   echo "Checked out dotfiles.";
 else
     mkdir -p "$BACKUP_DIRECTORY"
