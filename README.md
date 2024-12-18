@@ -1,4 +1,3 @@
-# Table of Contents
 <div class="html" id="orgb17d1d2">
 <p>
 &lt;h1 align="center"&gt;dotfiles&lt;/h1&gt;
