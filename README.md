@@ -33,7 +33,6 @@
     For dotfile management I am using.  Compared to existing
     solutions I find the approach to be simple.
 -   **window manager**
-    
     [awesomewm](https://awesomewm.org/) At first I was using stumpwm and I have got to say I do love lisp,
     but stumpwm was a bit slow and in fact the first two weeks I used it it
     crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
