@@ -1,6 +1,6 @@
 #+AUTHOR: Luis Henriquez-Perez
 #+begin_html
-<h1 align="center">dotfiles</h1>
+<h1 align="center">Dotfiles</h1>
 #+end_html
 #+CAPTION: My typical destop environment display
 [[file:Pictures/awesomewm-showcase_20241217_160959.png]]
