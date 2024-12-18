@@ -6,7 +6,7 @@
 [[file:Pictures/awesomewm-showcase_20241217_160959.png]]
 # although it looks cool with the tiling I am not convinced
 * Principles
-- *keep it simple*
+- *keep it simple stupid*
   Although many go too far with it, there is truth to the
   KISS doctrine of keeping things as simple as possible.
 - *ease of setup*
