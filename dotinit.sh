@@ -4,9 +4,9 @@
 # Created: 2024-12-16 12:26:13
 # Description: Initialize dotfiles from bare git repo
 
-DOTFILES_URL="https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo"
-BACKUP_DIRECTORY="~/.dotfiles_backup"
-
+DOTFILES_URL="https://github.com/Luis-Henriquez-Perez/dotfiles.git"
+DOTFILES_DIR="$HOME/.dotfiles"
+BACKUP_DIRECTORY="$HOME/.dotfiles_backup"
 
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
