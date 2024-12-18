@@ -32,7 +32,6 @@
     [emacs](https://www.gnu.org/software/emacs/) Emacs is my editor (see my [dedicated README](./dot_config/emacs/README.md))
 
 # Designated Operating System
-
 I use [archlinux](https://archlinux.org/) as my operating system.
 
 # How To Initialize Dotfiles
