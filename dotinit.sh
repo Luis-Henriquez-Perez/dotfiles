@@ -9,7 +9,7 @@ dot () {
 }
 
 # Clone the repo
-echo "Cloning bare git repo at"
+echo "Cloning bare git repo..."
 git clone --bare https://github.com/Luis-Henriquez-Perez/dotfiles/tree/master--bare-repo $HOME/.dotfiles
 
 dot checkout
