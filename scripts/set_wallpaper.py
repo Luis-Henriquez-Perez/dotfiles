@@ -37,5 +37,5 @@ with open(used_wallpapers_file, 'a') as f:
     f.write(chosen_wallpaper + '\n')
 
 print(f"Chosen wallpaper: {chosen_wallpaper!r}")
-logger.info(f"Chosen wallpaper: {chosen_wallpaper!r}")
+logger.info(f"set wallpaper to: {chosen_wallpaper!r}")
 os.system(f"feh --bg-scale '{chosen_wallpaper}'")
