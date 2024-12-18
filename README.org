@@ -29,7 +29,8 @@ them.
   extremely customizable.
 - [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
   Particularly ones written in lisp.  In this sense.
-- *editor* [[https://www.gnu.org/software/emacs/][emacs]] Emacs is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]])
+- *editor*
+   [[https://www.gnu.org/software/emacs/][emacs]] Emacs is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]])
 ** designated operating system
 I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** how to initialize dotfiles
