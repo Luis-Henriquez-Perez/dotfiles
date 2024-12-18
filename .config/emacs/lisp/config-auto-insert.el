@@ -190,7 +190,7 @@
                    "# Description: " p > n)))
 
 (defun oo-auto-insert-hy-file-header ()
-  "Insert bash file header."
+  "Insert hy file header."
   (require 'tempel)
   (tempel-insert '(";; Filename: " (file-name-nondirectory (directory-file-name (buffer-file-name))) > n
                    ";; Author: " user-full-name " <" user-mail-address ">" > n
