@@ -5,6 +5,7 @@
 # Description: Initialize dotfiles from bare git repo
 
 DOTFILES_URL=
+
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
