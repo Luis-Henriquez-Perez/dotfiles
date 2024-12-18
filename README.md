@@ -7,7 +7,7 @@
 
 ![img](Pictures/awesomewm-showcase_20241217_160959.png "My typical destop environment display")
 
-# **Principles**
+# Principles
 -   **keep it simple**
 -   **ease of setup**
     I want to be able to run just one command or script to set up
