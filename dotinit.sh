@@ -27,7 +27,6 @@ else
   done
 
   dot checkout
-
 fi;
 
 dot config --local status.showUntrackedFiles no
