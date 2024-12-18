@@ -12,7 +12,6 @@ dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
 
-# Clone the repo
 echo "Cloning bare Git repository from $DOTFILES_URL"
 git clone --bare $DOTFILES_URL $DOTFILES_DIR
 
