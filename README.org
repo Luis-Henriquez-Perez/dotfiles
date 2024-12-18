@@ -16,8 +16,6 @@
   help others reading set up their own dotfiles and to do that.  Also I want to
   remember things that I myself did.
 ** featured programs
-Here I'll talk briefly about some of the programs I choose and why I choose
-them.
 - *dotfile management*
   For dotfile management I am using [[git bare repo]].  Compared to existing
   solutions I find the approach to be simple.
