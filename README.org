@@ -8,7 +8,7 @@
 - *keep it simple*
   Although many go too far with it, there is truth to the
   KISS doctrine of keeping things as simple as possible.
-- *easy to setup*
+- *ease of setup*
   I want to be able to run just one command or script to set up
   all of my dotfiles.  I have not achieved this yet but I am working on it.
 - *well-documented*
