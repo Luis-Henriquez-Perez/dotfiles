@@ -44,7 +44,6 @@
 
 (setq recentf-max-saved-items nil)
 ;;;; TODO always keep important files in recentf-list
-(recentf-push (recentf-expand-file-name "~/.local/share/chezmoi/init.el"))
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
 (recentf-push (recentf-expand-file-name "~/Documents/todo.org"))
 ;;; provide
