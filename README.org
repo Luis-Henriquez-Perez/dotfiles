@@ -33,3 +33,4 @@
 ** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** How To Initialize Dotfiles
+Download
