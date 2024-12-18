@@ -44,7 +44,7 @@
 (defun oo-open-emacs-config ()
   "Open Emacs configuration."
   (interactive)
-  (switch-to-buffer (dired (oo--chezmoi-source-path user-emacs-directory))))
+  (switch-to-buffer (dired user-emacs-directory)))
 
 (defun oo-open-emacs-init-file ()
   "Open init file."
