@@ -17,7 +17,7 @@ git clone --bare $DOTFILES_URL $HOME/.dotfiles
 dot checkout
 
 if [ $? = 0 ]; then
-  echo "Checked out config.";
+  echo "Checked out dotfiles.";
 else
     mkdir -p .config-backup
     echo "Backing up pre-existing dot files.";
