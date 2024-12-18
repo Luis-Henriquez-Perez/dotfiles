@@ -20,7 +20,7 @@ dot checkout
 if [ $? = 0 ]; then
   echo "Checked out dotfiles.";
 else
-    mkdir -p .config-backup
+    mkdir -p
     printf "Backing up pre-existing dotfiles into %s\n" "$BACKUP_DIRECTORY"
     dot checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
 fi;
