@@ -4,8 +4,6 @@
 # Created: 2024-12-16 12:26:13
 # Description: Initialize dotfiles from bare git repo
 
-# Setup the aliases
-# alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dot () {
   git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
 }
