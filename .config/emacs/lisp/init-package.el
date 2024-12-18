@@ -59,7 +59,6 @@
 (cl-pushnew 'cape package-selected-packages)
 (cl-pushnew 'caps-lock package-selected-packages)
 (cl-pushnew 'captain package-selected-packages)
-(cl-pushnew 'chezmoi package-selected-packages)
 (cl-pushnew 'consult package-selected-packages)
 (cl-pushnew 'corfu package-selected-packages)
 (cl-pushnew 'cyberpunk-theme package-selected-packages)
