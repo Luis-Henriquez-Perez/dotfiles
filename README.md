@@ -14,15 +14,12 @@
 ![img](Pictures/awesomewm-showcase_20241217_160959.png "My typical destop environment display")
 
 -   **keep it simple**
-
     Although many go too far with it, there is truth to the
     KISS doctrine of keeping things as simple as possible.
 -   **ease of setup**
-
     I want to be able to run just one command or script to set up
     all of my dotfiles.  I have not achieved this yet but I am working on it.
 -   **thorough documentation**
-
     Setting up these dotfiles was hard for me to do.  I want to
     help others reading set up their own dotfiles and to do that.  Also I want to
     remember things that I myself did.
