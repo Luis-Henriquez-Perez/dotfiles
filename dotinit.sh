@@ -5,8 +5,10 @@
 # Description: initialize dotfiles from bare git repo
 
 # Setup the aliases
-alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
+# alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dot () {
+  git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
+}
 
 echo "$HOME/dotfiles" >> .gitignore
 
