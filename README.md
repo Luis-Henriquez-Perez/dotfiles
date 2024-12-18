@@ -18,7 +18,6 @@
     remember things that I myself did.
 
 # featured programs
-
 -   **dotfile management**
     For dotfile management I am using.  Compared to existing
     solutions I find the approach to be simple.
