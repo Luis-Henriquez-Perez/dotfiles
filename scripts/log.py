@@ -9,7 +9,8 @@
 import logging
 import os
 
-logfile = os.path.join(os.getcwd(), 'systemlog.txt')
+logfile = os.path.join(os.getcwd(), 'systemlog.text')
+
 logformat = '%(asctime)s - %(levelname)s - %(message)s'
 # Configure the logging module
 logging.basicConfig(filename=logfile, level=logging.INFO, format=logformat)
