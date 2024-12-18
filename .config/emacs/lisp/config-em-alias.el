@@ -51,6 +51,7 @@
 ;; contents should be saved in eshell-history, but its more secure to actuall
 ;; have the physical buffer contents.
 (eshell/alias "pacman" "sudo pacman $*")
+(eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "clear" "eshell/clear t")
 ;; I decided that I almost always prefer opening the file in another window.  So
 ;; I am replacing ff with `find-file-other-window'
