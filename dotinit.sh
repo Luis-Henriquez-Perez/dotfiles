@@ -25,9 +25,9 @@ else
   dot checkout 2>&1 | grep -E "\s+\." | awk '{print $1}' | while read -r file; do
     mv "$HOME/$file" "$BACKUP_DIRECTORY/" || echo "Warning: Could not move $file"
   done
-fi;
+  dot checkout
 
-dot checkout
+fi;
 
 dot config --local status.showUntrackedFiles no
 
