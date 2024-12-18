@@ -19,7 +19,7 @@
 ;;;;; clean the cache
 ;;;;; throw out the trash
 ;;;; wallpaper
-;;;;; Clean my wallpapers
+;;;;; set wallpaper
 ;; TODO: I plan a setup where I can start by downloading wallpapers and then if
 ;; a wallpaper I do not like is displayed, I can press a keybinding to replace
 ;; it, and mark that one as unliked.
