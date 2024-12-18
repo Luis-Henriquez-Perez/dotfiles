@@ -14,7 +14,6 @@ dot () {
 
 # Clone the repo
 echo "Cloning bare Git repository from $DOTFILES_URL"
-printf "Cloning bare git repo from %s\n" "$DOTFILES_URL"
 git clone --bare $DOTFILES_URL $HOME/.dotfiles
 
 dot checkout
