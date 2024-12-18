@@ -41,7 +41,7 @@
 
 (adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
 (adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
-(adjoin! recentf-exclude (lambda (file) (file-exists-p )))
+(adjoin! recentf-exclude (lambda (file) (file-exists-p file)))
 
 (setq recentf-max-saved-items nil)
 ;;;; TODO always keep important files in recentf-list
