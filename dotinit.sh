@@ -16,8 +16,6 @@ dot () {
 echo "Cloning bare Git repository from $DOTFILES_URL"
 git clone --bare $DOTFILES_URL $HOME/.dotfiles
 
-dot checkout
-
 if dot checkout; then
   echo "Checked out dotfiles.";
 else
