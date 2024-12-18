@@ -84,7 +84,6 @@
 (require 'init-burly)
 (require 'init-spaceline)
 (require 'init-captain)
-(require 'init-chezmoi)
 (require 'init-consult)
 (require 'init-corfu)
 (require 'init-modus-themes)
