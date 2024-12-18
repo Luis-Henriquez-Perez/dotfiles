@@ -20,6 +20,7 @@
 ;;;;; throw out the trash
 ;;;; wallpaper
 ;;;;; download new wallpapers
+;(job '(next-minute (range 0 60 5)) "python update_email.py")
 ;;;;; set wallpaper
 ;; TODO: I plan a setup where I can start by downloading wallpapers and then if
 ;; a wallpaper I do not like is displayed, I can press a keybinding to replace
