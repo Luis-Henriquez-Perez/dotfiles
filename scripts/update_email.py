@@ -8,6 +8,7 @@ from log import get_logger
 
 logger = get_logger(__name__)
 
+
 # mbsync -a
 # mu index
 # notmuch new
