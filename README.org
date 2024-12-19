@@ -33,7 +33,7 @@
 ** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** How To Initialize Dotfiles
-Download
+Download the appropriate dotfiles.
 #+begin_src bash
 curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
 #+end_src
