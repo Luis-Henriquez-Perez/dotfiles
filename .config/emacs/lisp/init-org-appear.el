@@ -27,6 +27,7 @@
 ;;; Code:
 (set! org-appear-autoemphasis t)
 (set! org-appear-autolink t)
+
 (hook! org-mode-hook org-appear-mode)
 
 (defhook! ensure-proper (org-appear-mode-hook)
@@ -36,7 +37,7 @@
     (setq org-hide-emphasis-markers t)
     (info! "Set %s to t" 'org-hide-emphasis-markers))
   (when (and org-appear-autolink (not org-link-descriptive))
-    (warn!)
+    (warn! "`%s' is non-nil when `%s'")
     (setq org-hide-emphasis-markers t)
     (info! "Set %s to t" 'org-hide-emphasis-markers)))
 ;;; provide
