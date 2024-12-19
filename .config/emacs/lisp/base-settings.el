@@ -35,7 +35,7 @@
 (setq user-full-name "Luis Henriquez")
 (setq user-mail-address "luis@luishp.xyz")
 ;;;;; qtile
-(setq frame-resize-pixelwise)
+(setq frame-resize-pixelwise t)
 ;;;;; load newer files
 (setq-default load-prefer-newer t)
 ;;;;; by default do not wrap lines
