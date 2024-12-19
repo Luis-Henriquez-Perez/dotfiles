@@ -28,7 +28,8 @@
 (hook! org-mode-hook org-appear-mode)
 (set! org-appear-autoemphasis t)
 (defhook! ensure-proper (org-appear-mode-hook)
-  (when ()))
+  (when (and org-appear-autoemphasis
+             (not ))))
 
 ;; (cl-assert (non-nil))
 ;; (set! org-hide-emphasis-markers t)
