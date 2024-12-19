@@ -25,8 +25,8 @@
 ;; Initialize org-appear.
 ;;
 ;;; Code:
-(hook! org-mode-hook org-appear-mode)
 (set! org-appear-autoemphasis t)
+(hook! org-mode-hook org-appear-mode)
 
 (defhook! ensure-proper (org-appear-mode-hook)
   "Ensure proper symbols are set."
@@ -38,8 +38,6 @@
     (warn! ))
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn! )))
-;; (cl-assert (non-nil))
-;; (set! org-hide-emphasis-markers t)
 ;;; provide
 (provide 'init-org-appear)
 ;;; init-org-appear.el ends here
