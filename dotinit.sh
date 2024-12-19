@@ -23,7 +23,7 @@ else
 
   for file in $(dot checkout 2>&1 | grep -E "^\s+.+" | awk '{print $1}'); do
     echo "$HOME/$file"
-    mv "$HOME/$file" "$BACKUP_DIRECTORY/" || echo "Warning: Could not move $file"
+    # mv "$HOME/$file" "$BACKUP_DIRECTORY/" || echo "Warning: Could not move $file"
   done
 
   dot checkout
