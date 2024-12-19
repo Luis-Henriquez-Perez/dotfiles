@@ -273,7 +273,7 @@ changes and push them."
     ;; (set-process-filter proc 'gac-process-filter)
     ))
 
-(defun oo-add-dotfile ()
+(defun! oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
   (interactive)
   (unless (string-empty-p diff)
