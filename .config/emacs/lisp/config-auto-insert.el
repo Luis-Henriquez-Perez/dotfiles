@@ -140,7 +140,7 @@
   (set! path (buffer-file-name))
   (set! base (file-name-sans-extension (file-name-nondirectory (directory-file-name path))))
   (set! lisp-dir "~/.config/emacs/lisp/")
-  (when (and (f-child-of-p filename lisp-dir)
+  (when (and (f-child-of-p path lisp-dir)
              (string-match "\\`\\(\\(?:config\\|init\\)\\)-\\(.+\\)" base))
     (set! feature (match-string 2 base))
     (set! verb (pcase (match-string 1 base)
