@@ -34,8 +34,9 @@
     (warn!)
     (setq org-hide-emphasis-markers t)
     (info!))
-  (when (and org-appear-autolink (not ))
-    (warn!))
+  (when (and org-appear-autolink (not org-link-descriptive))
+    (warn!)
+    )
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn!)))
 ;;; provide
