@@ -28,9 +28,9 @@
 (require 'base)
 
 (defhook! oo-refresh-buffer-h (buffer-list-update-hook)
+  ""
   (when (buffer-file-name)
-    (revert-buffer nil :noconfirm :preseve-modes))
-  )
+    (revert-buffer nil :noconfirm :preseve-modes)))
 
 ;; Whenever
 (opt! dired-deletion-confirmer #'always)
