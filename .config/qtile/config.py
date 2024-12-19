@@ -134,6 +134,7 @@ layouts = [
 ]
 
 #### Rotate windows
+
 #### uncategorized
 widget_defaults = dict(
     font="sans",
