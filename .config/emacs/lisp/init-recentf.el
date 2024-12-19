@@ -44,8 +44,15 @@
 (adjoin! recentf-exclude (lambda (file) (not (file-exists-p file))))
 
 (setq recentf-max-saved-items nil)
-;;;; TODO always keep important files in recentf-list
+;;;; always keep important files in recentf-list
+(recentf-push (recentf-expand-file-name "~/.xinitrc"))
+(alet! (directory-files (expand-file-name "lisp/" user-emacs-directory))
+  (dolist (file it)
+    (recentf-push (recentf-expand-file-name file))))
+(recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
+(recentf-push (recentf-expand-file-name "~/.config/qtile/config.py"))
+(recentf-push (recentf-expand-file-name "~/.local/share/qtile/qtile.log"))
 ;;; provide
 (provide 'init-recentf)
 ;;; init-recentf.el ends here
