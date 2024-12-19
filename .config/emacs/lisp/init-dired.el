@@ -29,7 +29,7 @@
 
 (defhook! oo-refresh-buffer-h (buffer-list-update-hook)
   (when (buffer-file-name)
-    (revert-buffer))
+    (revert-buffer nil :noconfirm :preseve-modes))
   )
 
 ;; Whenever
