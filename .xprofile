@@ -18,6 +18,7 @@ python ~/scripts/set_wallpaper.py
 setxkbmap -option caps:escape
 
 # I broke my super key on my laptop.
+
 setxkbmap -option altwin:swap_lalt_lwin
 ### start the picom daemon
 # The compositor.  See [[][the config]].
