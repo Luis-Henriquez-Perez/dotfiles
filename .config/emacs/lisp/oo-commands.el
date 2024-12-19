@@ -276,7 +276,7 @@ changes and push them."
 (defun! oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
   (interactive)
-
+  (unless (buffer-file-name) (return!))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
