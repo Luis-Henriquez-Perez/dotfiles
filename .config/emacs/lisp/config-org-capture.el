@@ -30,7 +30,6 @@
 (require 'doct)
 (require 'org-ml)
 (require 'ts)
-(require 'doc)
 (require 'org-capture)
 ;;;; disable header-line
 (setq-hook! org-capture-mode-hook header-line-format nil)
