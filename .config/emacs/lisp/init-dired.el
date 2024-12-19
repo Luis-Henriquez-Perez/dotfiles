@@ -27,7 +27,7 @@
 ;;; Code:
 (require 'base)
 
-(oo-add-hook (buffer-list-update-hook)
+(oo-add-hook 'buffer-list-update-hook
              )
 
 ;; Whenever
