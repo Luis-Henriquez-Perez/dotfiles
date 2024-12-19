@@ -273,7 +273,7 @@ changes and push them."
     ;; (set-process-filter proc 'gac-process-filter)
     ))
 
-(defun o-add-dotfile ()
+(defun oo-add-dotfile ()
   ""
   )
 
