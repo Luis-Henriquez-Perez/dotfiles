@@ -275,6 +275,7 @@ changes and push them."
 
 (defun oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
+  ()
   )
 
 ;; I need to add a local hook.
