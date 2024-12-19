@@ -144,29 +144,29 @@ def rotate_windows(qtile, forward=True):
     - forward (bool): Direction of rotation. True for forward, False for backward.
     """
     current_group = qtile.current_group
-    print(f"current grop -> {qtile.current_group}")
-    if not current_group:
-        return
-    # subprocess.run(["notify-send" "window" "swapping windows"])
-    windows = current_group.windows
-    if len(windows) < 2:
-        return
+    print(f"current grop -> {current_group}")
+    # if not current_group:
+    #     return
+    # # subprocess.run(["notify-send" "window" "swapping windows"])
+    # windows = current_group.windows
+    # if len(windows) < 2:
+    #     return
 
-    if forward:
-        # Move the first window to the end
-        window = windows.pop(0)
-        windows.append(window)
-    else:
-        # Move the last window to the beginning
-        window = windows.pop()
-        windows.insert(0, window)
+    # if forward:
+    #     # Move the first window to the end
+    #     window = windows.pop(0)
+    #     windows.append(window)
+    # else:
+    #     # Move the last window to the beginning
+    #     window = windows.pop()
+    #     windows.insert(0, window)
 
-    # Apply the new order
-    for i, win in enumerate(windows):
-        win.group.focus(win, stack=False)
-        win.index = i
+    # # Apply the new order
+    # for i, win in enumerate(windows):
+    #     win.group.focus(win, stack=False)
+    #     win.index = i
 
-    qtile.current_layout.group.layout_all()
+    # qtile.current_layout.group.layout_all()
 
 define_key([mod], "o", lazy.function(rotate_windows), desc="Rotate Windows Forward"),
 #### uncategorized
