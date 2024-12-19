@@ -134,7 +134,37 @@ layouts = [
 ]
 
 #### Rotate windows
+def rotate_windows(qtile, forward=True):
+    """
+    Rotate the windows in the current layout.
 
+    Parameters:
+    - qtile: The Qtile instance.
+    - forward (bool): Direction of rotation. True for forward, False for backward.
+    """
+    current_group = qtile.current_group
+    if not current_group:
+        return
+
+    windows = current_group.windows
+    if len(windows) < 2:
+        return
+
+    if forward:
+        # Move the first window to the end
+        window = windows.pop(0)
+        windows.append(window)
+    else:
+        # Move the last window to the beginning
+        window = windows.pop()
+        windows.insert(0, window)
+
+    # Apply the new order
+    for i, win in enumerate(windows):
+        win.group.focus(win, stack=False)
+        win.index = i
+
+    qtile.current_layout.group.layout_all()
 #### uncategorized
 widget_defaults = dict(
     font="sans",
