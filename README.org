@@ -34,6 +34,7 @@
 I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** How To Initialize Dotfiles
 Run the following command which will download the =dotinit.sh= script and run it.
+The script clones.
 #+begin_src bash
 curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
 #+end_src
