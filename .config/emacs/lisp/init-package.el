@@ -179,6 +179,7 @@
 (cl-pushnew 'tempel-collection package-selected-packages)
 (cl-pushnew 'textsize package-selected-packages)
 (cl-pushnew 'transpose-frame package-selected-packages)
+(cl-pushnew 'ts package-selected-packages)
 (cl-pushnew 'transwin package-selected-packages)
 (cl-pushnew 'vc-auto-commit package-selected-packages)
 (cl-pushnew 'vertico package-selected-packages)
