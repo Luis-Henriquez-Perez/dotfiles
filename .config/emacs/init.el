@@ -124,6 +124,7 @@
 (require 'init-notmuch)
 (require 'init-orderless)
 (require 'init-org)
+(require 'init-org-appear)
 (require 'init-outli)
 (require 'init-outline)
 (require 'init-rainbow-delimiters)
