@@ -65,6 +65,7 @@
 (defun +org-capture-plain-template ()
   "Return capture template as a string."
   (thread-last (org-ml-build-headline! :level 1 :title-text "%?")
+
        (org-ml-headline-set-node-property "ID" (org-id-new))
        (org-ml-to-string)))
 
