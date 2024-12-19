@@ -27,6 +27,8 @@
 ;;; Code:
 (require 'base)
 
+(defhook! oo-refresh-dired-h ())
+
 ;; Whenever
 (opt! dired-deletion-confirmer #'always)
 (hook! dired-mode-hook hl-line-mode)
