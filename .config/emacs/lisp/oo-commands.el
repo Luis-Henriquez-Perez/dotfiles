@@ -277,6 +277,8 @@ changes and push them."
   "Add the current file-buffer as a dotfile."
   (interactive)
 
+  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
+  (set! default-directory (file-name-directory fname))
   (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (set! msg (format "%s %s" (shell-quote-argument fname) (current-time-string)))
