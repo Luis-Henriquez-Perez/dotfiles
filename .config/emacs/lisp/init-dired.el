@@ -30,7 +30,7 @@
 ;; This was specifically inspired by dired buffers not updating new files when I
 ;; switch to them.
 (defhook! oo-refresh-buffer-h (buffer-list-update-hook)
-  (when (buffer-file-name)
+  (when (and (buffer-file-name))
     (revert-buffer nil :noconfirm :preseve-modes)))
 
 ;; Whenever
