@@ -30,7 +30,7 @@
 
 (hook! org-mode-hook org-appear-mode)
 
-(defhook! ensure-proper (org-appear-mode-hook)
+(defhook! oo-ensure-org-appear-symbols-h (org-appear-mode-hook)
   "Ensure proper symbols are set."
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn! "`%s' is non-nil when `%s' nil." 'org-appear-autoemphasis 'org-hide-emphasis-markers)
