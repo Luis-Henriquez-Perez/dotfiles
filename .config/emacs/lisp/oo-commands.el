@@ -273,6 +273,10 @@ changes and push them."
     ;; (set-process-filter proc 'gac-process-filter)
     ))
 
+(defun o-add-dotfile ()
+  ""
+  )
+
 ;; I need to add a local hook.
 ;; Does not completely work yet, magit status opens from bare git repo but the
 ;; commands in it fail because they clain were are not in a repo.
