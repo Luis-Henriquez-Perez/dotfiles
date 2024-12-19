@@ -135,6 +135,8 @@ layouts = [
 
 #### Rotate windows
 
+define_key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
+
 def rotate_windows(qtile, forward=True):
     """
     Rotate the windows in the current layout.
