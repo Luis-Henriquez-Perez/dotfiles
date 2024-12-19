@@ -431,10 +431,10 @@
  (handler . Info-bookmark-jump))
 ("org-capture-last-stored"
  (filename . "~/Documents/org/todo.org")
- (front-context-string . "* TODO add notif")
- (rear-context-string . "41.413572\n:END:\n")
- (position . 75613)
- (last-modified 26468 5934 648492 827000))
+ (front-context-string . "* TODO fix non-e")
+ (rear-context-string . "56.229504\n:END:\n")
+ (position . 75736)
+ (last-modified 26468 12905 810480 637000))
 ("rename denote buffers"
  (filename . "~/.config/emacs/elpaca-test/repos/denote/README.org")
  (front-context-string . "atically rename ")
