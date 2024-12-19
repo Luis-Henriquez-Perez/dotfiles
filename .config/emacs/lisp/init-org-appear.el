@@ -34,7 +34,7 @@
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn!)
     (setq org-hide-emphasis-markers t)
-    (info! "Set %s to t" ))
+    (info! "Set %s to t" '))
   (when (and org-appear-autolink (not org-link-descriptive))
     (warn!)
     (setq org-hide-emphasis-markers t)
