@@ -234,7 +234,7 @@
 ;; Function to take a screenshot using maim.
 (fn take-screenshot []
   (awful.spawn.with_shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")
-  (naughty.notify {:title "maim" :text "Took screenshot" :timeout 5}))
+  (naughty.notify {:title "maim" :text "take screenshot" :timeout 5}))
 
 (global-key [modkey] "p" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
