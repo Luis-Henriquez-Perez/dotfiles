@@ -134,6 +134,7 @@ layouts = [
 ]
 
 #### Rotate windows
+import subprocess
 def rotate_windows(qtile, forward=True):
     """
     Rotate the windows in the current layout.
