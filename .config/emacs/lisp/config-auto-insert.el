@@ -138,6 +138,7 @@
 (defun! oo-auto-insert-elisp-template ()
   "Insert emacs-lisp template in file."
   (set! filename (buffer-file-name))
+
   (set! base (file-name-sans-extension filename))
   (set! lisp-dir "~/.config/emacs/lisp/")
   (when (and (f-child-of-p filename lisp-dir)
