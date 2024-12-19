@@ -22,7 +22,7 @@ else
   mkdir -p "$BACKUP_DIR"
 
   for file in $(dot checkout 2>&1 | grep -E "^\s+.+" | awk '{print $1}'); do
-    echo "moving $HOME/$file to $BACKUP_DIR"
+    echo "moving $HOME/$file to $BACKUP_DIR...."
     mv "$HOME/$file" "$BACKUP_DIR/" || echo "Warning: Could not move $file"
   done
 
