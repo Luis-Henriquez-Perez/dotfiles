@@ -276,6 +276,7 @@ changes and push them."
 (defun! oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
   (interactive)
+
   (unless (string-empty-p diff)
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
