@@ -50,10 +50,6 @@ This means it is non-nil."
   (declare (pure t) (side-effect-free error-free))
   (< number 0))
 
-(defun oo-non-nil-p ()
-  ""
-  )
-
 (defun oo-float-divide (&rest args)
   "Perform division with ARGS, ensuring the first argument is a float.
 This behaves like `/`, but the result is always a floating-point number."
