@@ -38,7 +38,7 @@
     (info! "Set %s to t" 'org-hide-emphasis-markers))
   (when (and org-appear-autolink (not org-link-descriptive))
     (warn! "`%s' is non-nil when `%s'")
-    (setq org-hide-emphasis-markers t)
+    (setq org-link-descriptive t)
     (info! "Set %s to t" 'org-hide-emphasis-markers)))
 ;;; provide
 (provide 'init-org-appear)
