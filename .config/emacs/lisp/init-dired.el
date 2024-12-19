@@ -28,7 +28,8 @@
 (require 'base)
 
 (defhook! oo-refresh-buffer-h (buffer-list-update-hook)
-  (when (buffer-file-name))
+  (when (buffer-file-name)
+    (revert-buffer))
   )
 
 ;; Whenever
