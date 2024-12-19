@@ -32,15 +32,13 @@
 (defhook! ensure-proper (org-appear-mode-hook)
   "Ensure proper symbols are set."
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
-    (warn!)
+    (warn! "`%s'")
     (setq org-hide-emphasis-markers t)
     (info! "Set %s to t" 'org-hide-emphasis-markers))
   (when (and org-appear-autolink (not org-link-descriptive))
     (warn!)
     (setq org-hide-emphasis-markers t)
-    (info! "Set %s to t" 'org-hide-emphasis-markers))
-  (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
-    (warn!)))
+    (info! "Set %s to t" 'org-hide-emphasis-markers)))
 ;;; provide
 (provide 'init-org-appear)
 ;;; init-org-appear.el ends here
