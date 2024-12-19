@@ -22,7 +22,7 @@
   dependencies besides git, it does not use symlinks, and it is overall much
   simpler.
 - *Window Manager*: 
-  [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
+   At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
   crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
   it is written in a real programming language and it is extremely customizable.
