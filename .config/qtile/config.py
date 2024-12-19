@@ -134,8 +134,6 @@ layouts = [
 ]
 
 #### Rotate windows
-define_key([mod], "o", lazy.function(rotate_windows), desc="Rotate Windows Forward"),
-
 def rotate_windows(qtile, forward=True):
     """
     Rotate the windows in the current layout.
@@ -167,6 +165,9 @@ def rotate_windows(qtile, forward=True):
         win.index = i
 
     qtile.current_layout.group.layout_all()
+
+define_key([mod], "o", lazy.function(rotate_windows), desc="Rotate Windows Forward"),
+
 #### uncategorized
 widget_defaults = dict(
     font="sans",
