@@ -66,7 +66,7 @@
 ;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;;; emacs maintenance
 (eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
-(eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" && dot push $1")
+(eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push $1")
 (eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
                             (executable-find "git")))
 ;; (eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
