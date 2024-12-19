@@ -19,7 +19,7 @@
 ** Featured Programs
 - *Dotfile Management* I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
   existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
-  dependencies besides git, it does not use symlinks, and is overall much
+  dependencies besides git, it does not use symlinks, and it is overall much
   simpler.
 - *Window Manager*
   [[https://awesomewm.org/][awesomewm]] At first I was using stumpwm and I have got to say I do love lisp,
