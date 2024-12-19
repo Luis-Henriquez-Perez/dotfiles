@@ -16,6 +16,7 @@ python ~/scripts/set_wallpaper.py
 # the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
 # that escape is used often to get out of states.
 setxkbmap -option caps:escape
+setxkbmap -option altwin:swap_lalt_lwin
 ### start the picom daemon
 # The compositor.  See [[][the config]].
 picom &
