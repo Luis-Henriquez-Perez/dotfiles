@@ -13,7 +13,7 @@ dot () {
 }
 
 echo "Cloning bare Git repository from $DOTFILES_URL"
-git clone --branch master --bare $DOTFILES_URL $DOTFILES_DIR
+git clone --branch master--bare-repo --bare $DOTFILES_URL $DOTFILES_DIR
 
 if dot checkout; then
   echo "Successfully Checked out dotfiles."
