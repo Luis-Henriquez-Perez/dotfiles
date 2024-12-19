@@ -39,7 +39,7 @@
   (when (and org-appear-autolink (not org-link-descriptive))
     (warn! "`%s' is non-nil when `%s' is nil." 'org-appear-autolink 'org-link-descriptive)
     (setq org-link-descriptive t)
-    (info! "Set %s to t" 'org-hide-emphasis-markers)))
+    (info! "Set %s to t" 'org-link-descriptive)))
 ;;; provide
 (provide 'init-org-appear)
 ;;; init-org-appear.el ends here
