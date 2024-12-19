@@ -35,6 +35,7 @@
 (setq user-full-name "Luis Henriquez")
 (setq user-mail-address "luis@luishp.xyz")
 ;;;;; qtile
+;; https://old.reddit.com/r/emacs/comments/xk7k6x/emacs_wont_go_fullscreen_in_qtile/
 ;; In qtile this does not allow emacs to go completely fullscreen.
 (setq frame-resize-pixelwise t)
 ;;;;; load newer files
