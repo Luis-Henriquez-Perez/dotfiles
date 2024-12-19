@@ -275,8 +275,15 @@ changes and push them."
 
 (defun oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
-
-  ()
+  (interactive)
+  (unless (string-empty-p diff)
+    (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
+    (call-process-shell-command command)
+    (set! (program arg1 arg2) (split-string git))
+    (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
+    (set-process-sentinel proc #'status)
+    ;; (set-process-filter proc 'gac-process-filter)
+    )
   )
 
 ;; I need to add a local hook.
