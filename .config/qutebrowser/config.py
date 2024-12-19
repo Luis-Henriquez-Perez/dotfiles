@@ -68,7 +68,7 @@ c.auto_save.session = False
 # Type: Bool
 # c.search.wrap = False
 ### enable/disable javascript except on certain sites
-c.content.javascript.enabled = False
+c.content.javascript.enabled = True
 # Qutebrowser uses javascript to display directories.
 config.set('content.javascript.enabled', True, '*://melpa.org/*')
 config.set('content.javascript.enabled', True, '*://iproyal.com/*')
