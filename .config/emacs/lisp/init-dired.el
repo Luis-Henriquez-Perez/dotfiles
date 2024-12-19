@@ -27,6 +27,7 @@
 ;;; Code:
 (require 'base)
 
+;; This was specifically inspired by dired buffers not updating new files.
 (defhook! oo-refresh-buffer-h (buffer-list-update-hook)
   ""
   (when (buffer-file-name)
