@@ -18,7 +18,7 @@ python ~/scripts/set_wallpaper.py
 setxkbmap -option caps:escape
 
 # I broke my super key on my laptop.
-if [ "$(cat etc/hostname)" = "deathscythe" ]; then
+if [ "$(cat /etc/hostname)" = "deathscythe" ]; then
     setxkbmap -option altwin:swap_lalt_lwin
 fi
 ### start the picom daemon
