@@ -156,7 +156,7 @@
     (replace-match comment1)
     (search-forward "TODO: add commentary" nil t nil)
     (replace-match comment2)
-    (save-excursion (oo--ensure-provide filename))))
+    (save-excursion (oo--ensure-provide path))))
 
 (defun! oo-auto-insert-html-template ()
   "Insert html template in file."
