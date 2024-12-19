@@ -430,11 +430,11 @@
  (info-node . "Template expansion")
  (handler . Info-bookmark-jump))
 ("org-capture-last-stored"
- (filename . "~/Documents/org/todo.org")
- (front-context-string . "* TODO fix non-e")
- (rear-context-string . "56.229504\n:END:\n")
- (position . 75736)
- (last-modified 26468 12905 810480 637000))
+ (filename . "~/Documents/org/notes.org")
+ (front-context-string . "* files cut off ")
+ (rear-context-string . " a bit\nof work.\n")
+ (position . 30422)
+ (last-modified 26468 21547 752843 57000))
 ("rename denote buffers"
  (filename . "~/.config/emacs/elpaca-test/repos/denote/README.org")
  (front-context-string . "atically rename ")
