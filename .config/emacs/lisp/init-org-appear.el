@@ -35,9 +35,9 @@
     (setq org-hide-emphasis-markers t)
     (info!))
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
-    (warn! ))
+    (warn!))
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
-    (warn! )))
+    (warn!)))
 ;;; provide
 (provide 'init-org-appear)
 ;;; init-org-appear.el ends here
