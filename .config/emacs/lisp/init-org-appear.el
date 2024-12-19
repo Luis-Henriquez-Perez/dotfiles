@@ -27,6 +27,7 @@
 ;;; Code:
 (hook! org-mode-hook org-appear-mode)
 (set! org-appear-autoemphasis t)
+
 ;; (cl-assert (non-nil))
 ;; (set! org-hide-emphasis-markers t)
 ;;; provide
