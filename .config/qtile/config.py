@@ -144,7 +144,7 @@ def rotate_windows(qtile, forward=True):
     - forward (bool): Direction of rotation. True for forward, False for backward.
     """
     current_group = qtile.current_group
-    print(s"current")
+    print(f"current grop -> {qtile.current_group}")
     if not current_group:
         return
     # subprocess.run(["notify-send" "window" "swapping windows"])
