@@ -30,7 +30,7 @@
 
 (defhook! ensure-proper (org-appear-mode-hook)
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
-    (setq )
+    (setq org-hide-emphasis-markers t)
     (warn! ))
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn! ))
