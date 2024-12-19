@@ -27,6 +27,7 @@
 ;;; Code:
 (hook! org-mode-hook org-appear-mode)
 (set! org-appear-autoemphasis t)
+
 (defhook! ensure-proper (org-appear-mode-hook)
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn! ))
