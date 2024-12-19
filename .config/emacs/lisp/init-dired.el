@@ -27,7 +27,8 @@
 ;;; Code:
 (require 'base)
 
-(hook! buffer-list-update-hook revert-buffer)
+(defhook! oo-refresh-buffer-h (buffer-list-update-hook)
+  )
 
 ;; Whenever
 (opt! dired-deletion-confirmer #'always)
