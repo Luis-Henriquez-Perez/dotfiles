@@ -29,6 +29,7 @@
 (set! org-appear-autoemphasis t)
 
 (defhook! ensure-proper (org-appear-mode-hook)
+  "Ensure proper symbols are set."
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
     (warn!)
     (setq org-hide-emphasis-markers t)
