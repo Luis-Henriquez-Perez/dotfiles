@@ -27,7 +27,8 @@
 ;;; Code:
 (require 'base)
 
-(defhook! oo-refresh-dired-h (buffer-list-update-hook))
+(defhook! oo-refresh-dired-h (buffer-list-update-hook)
+  )
 
 ;; Whenever
 (opt! dired-deletion-confirmer #'always)
