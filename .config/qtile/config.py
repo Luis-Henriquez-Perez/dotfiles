@@ -133,6 +133,7 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+#### Rotate windows
 #### uncategorized
 widget_defaults = dict(
     font="sans",
