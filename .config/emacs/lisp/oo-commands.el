@@ -276,7 +276,9 @@ changes and push them."
 (defun! oo-add-dotfile ()
   "Add the current file-buffer as a dotfile."
   (interactive)
-
+  (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
+  (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
+  (set! msg (format "%s %s" (shell-quote-argument fname) (current-time-string)))
   (unless (string-empty-p diff)
     (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
     (call-process-shell-command command)
