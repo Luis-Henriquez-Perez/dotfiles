@@ -134,7 +134,7 @@ layouts = [
 ]
 
 #### Rotate windows
-import subprocess
+# import subprocess
 def rotate_windows(qtile, forward=True):
     """
     Rotate the windows in the current layout.
@@ -146,7 +146,7 @@ def rotate_windows(qtile, forward=True):
     current_group = qtile.current_group
     if not current_group:
         return
-    subprocess.run(["notify-send" "window" "swapping windows"])
+    # subprocess.run(["notify-send" "window" "swapping windows"])
     windows = current_group.windows
     if len(windows) < 2:
         return
