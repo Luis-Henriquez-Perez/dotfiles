@@ -47,8 +47,8 @@
 (eshell/alias "pac" "sudo pacman --noconfirm$*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
-(eshell/alias "remove" "sudo pacman -Rns $*")
-(eshell/alias "uninstall" "sudo pacman -Right nows --noconfirm $*")
+(eshell/alias "remove" "sudo pacman -Rns --noconfirm$*")
+(eshell/alias "uninstall" "sudo pacman -Rns --noconfirm $*")
 
 (eshell/alias "search" "pacman -Ss $*")
 (eshell/alias "search-quiet" "pacman -Ssq $*")
