@@ -113,6 +113,7 @@
 (defun oo--is-dotfile-p ()
   "Return non-nil if current-buffer is a dotfile."
   )
+
 (defun oo--dotfile-git-command ()
   "Return the git command for dotfile operations."
   )
