@@ -68,7 +68,7 @@ The way I choose to manage my files reflects.
 - init files - These are files that can be loaded immediately.  Their objective
   is to initialize a package to be used in my configuration.  Usually
   that means adding hooks, setting bindings and autoloading functions.
-- config files - These are files that by init files after some feature is loaded.
+- config files (config-FEATURE.el) - These are files that by init files after some feature is loaded.
   These files should not be loaded immediately because they contain funtionality
   or perform computations that are only needed when a particular package is
   loaded.
