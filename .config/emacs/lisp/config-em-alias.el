@@ -50,7 +50,6 @@
 ;; actually delete the buffer contents.  I mean I guess its O.K. since the
 ;; contents should be saved in eshell-history, but its more secure to actuall
 ;; have the physical buffer contents.
-(eshell/alias "pacman" "sudo pacman $*")
 (eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "clear" "eshell/clear t")
 ;; I decided that I almost always prefer opening the file in another window.  So
@@ -101,12 +100,13 @@
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; archlinux maintenance
-(eshell/alias "install" "sudo pacman -S --noconfirm $1")
-(eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $1")
+(eshell/alias "pacman" "sudo pacman -S --noc $*")
+(eshell/alias "install" "sudo pacman -S --noconfirm $*")
+(eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $*")
 
 ;; TODO: Do not show me descriptions when searching...
 (eshell/alias "search" "pacman -Ss $*")
-(eshell/alias "search-quiet" "pacman -Ssq $1")
+(eshell/alias "search-quiet" "pacman -Ssq $*")
 
 ;; TODO: maybe make a general update command for email, packages, etc.
 (eshell/alias "update" "sudo pacman -Syu")
