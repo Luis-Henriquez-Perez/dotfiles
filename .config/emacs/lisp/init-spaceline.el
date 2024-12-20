@@ -136,7 +136,6 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (set! default-directory (file-name-directory fname))
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
-    (message "branch-> %s" branch)
     (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
                               (shell-command-to-string)
                               (string-trim)))
