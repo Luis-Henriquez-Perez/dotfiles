@@ -249,6 +249,7 @@ With prefix argument, run as dry-run (do not actually move any files)."
   unmanaged)
 
 ;; TODO: do not commit if battery is discharging to avoid file corruption.
+()
 (defhook! oo-auto-commit-and-push-file-h (after-save-hook)
   "Auto commit and push any dotfile I edit.
 Determine whether I am editing a dotfile and if I am automatically commit the
