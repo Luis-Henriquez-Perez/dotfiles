@@ -179,6 +179,7 @@ EXPRS in (CDR CONDITION) is met."
                                         (cdr err)))))))))
                t)
     (oo--call-after-load expr it)))
+
 ;;;; bind macro
 (eval-when-compile (require 'base-macros-bind))
 ;;; provide
