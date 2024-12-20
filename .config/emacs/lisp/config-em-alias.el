@@ -27,6 +27,9 @@
 ;;; Code:
 (require 'em-alias)
 
+;;;; blogging
+(eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
+(eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; git
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 ;; TODO allow the specification of how many steps to undo
@@ -73,27 +76,9 @@
 (eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
 (eshell/alias "apply-emacs" "chezmoi apply ~/.config/emacs --force")
 (eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
-;; (eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
-;;                              (executable-find "git")))
-;; (eshell/alias "dotadd" "/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $*")
-;; (eshell/alias "dotfiles" "/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME $*")
-;; TODO: figure out a naming system for these commands
-;; TODO: write a command for publishing to blog.  This is preliminary.
-;; The publish command has to be called from the emacs directory.  I want to be
-;; able to type "publish" and have it publish my blog.  Now as I am writing this
-;; I feel like its cool if I had a command to publish and push to github.  Maybe
-;; something like "update-website"?
-
-;; [[info:eshell#Dollars Expansion][eshell#Dollars Expansion]]
-
-;; I am not 100% sure I need to switch to the html directory first.
-;; TODO: Determine why the exit-code fo this is non-zero.  Potentially give it
-;; an exit-code of 0.
-(eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
-(eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; archlinux
 ;;;; git
-;;;;; dotfiles
+;;;; dotfiles
 (eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
 ;; Define a commit-undo
 (eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push $1")
