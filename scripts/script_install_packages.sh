@@ -5,7 +5,7 @@
 # Description: Install my packages.
 
 # File containing the list of packages
-PACKAGE_FILE="packages.txt"
+PACKAGE_FILE="$HOME/system-packages.txt"
 
 # Check if the package file exists
 if [ ! -f "$PACKAGE_FILE" ]; then
