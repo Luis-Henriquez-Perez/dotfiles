@@ -180,7 +180,7 @@ EXPRS in (CDR CONDITION) is met."
                t)
     (oo--call-after-load expr it)))
 
-( +telephone-line-battery-segment ()
+(defun +telephone-line-battery-segment ()
   (require 'battery)
   (set! status (funcall battery-status-function))
   (set! percentage (thread-last (battery-format "%p" status)
