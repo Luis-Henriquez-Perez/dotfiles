@@ -44,7 +44,7 @@
 (eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
 ;;;; archlinux
 (eshell/alias "orphan" "pacman -Qtd $*")
-(eshell/alias "pac" "sudo pacman $*")
+(eshell/alias "pac" "sudo pacman -S $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $*")
@@ -57,7 +57,6 @@
 (eshell/alias "update-email" "mbsync -a")
 (eshell/alias "list-wifi" "nmcli dev wifi list")
 (eshell/alias "listwifi" "nmcli dev wifi list")
-;;;; git
 ;;;; dotfiles
 (eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
 ;; Define a commit-undo
