@@ -133,7 +133,6 @@ If file is a dotfile managed by my git bare repo, display that branch."
              (or (locate-dominating-file (buffer-file-name) ".git")
                  (and (oo-is-dotfile-p)
                       (set! git (oo-dotfile-git-command)))))
-    (set! default-directory (file-name-directory fname))
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
     (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
