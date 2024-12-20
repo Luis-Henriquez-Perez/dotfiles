@@ -112,6 +112,7 @@
 
 (+spaceline-define-segment! +version-control
   "Display current git branch."
+
   (locate-dominating-file buffer-file-name ".git")
   default-directory
   (cond ((not (buffer-file-name)))
