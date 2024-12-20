@@ -99,17 +99,15 @@
 ;; an exit-code of 0.
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
-;;;; archlinux maintenance
+;;;; archlinux
 ;;;;; package management
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $*")
 
-;; TODO: Do not show me descriptions when searching...
 (eshell/alias "search" "pacman -Ss $*")
 (eshell/alias "search-quiet" "pacman -Ssq $*")
 
-;; TODO: maybe make a general update command for email, packages, etc.
 (eshell/alias "update" "sudo pacman -Syu")
 (eshell/alias "update-system" "sudo pacman -Syu")
 (eshell/alias "update-email" "mbsync -a")
