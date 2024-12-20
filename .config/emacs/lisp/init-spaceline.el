@@ -124,7 +124,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
                  (shell-command-to-string (format "%s diff %s" git fname))))
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
-    (set! branch (string-trim (shell-command-to-string (format "git rev-parse --abbrev-ref HEAD"))))
+    (set! branch (string-trim (shell-command-to-string (format "t rev-parse --abbrev-ref HEAD"))))
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
