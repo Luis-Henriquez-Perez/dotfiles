@@ -165,10 +165,10 @@ def rotate_windows(qtile, forward=True):
         window = windows.pop()
         windows.insert(0, window)
 
-    # # Apply the new order
-    # for i, win in enumerate(windows):
-    #     win.group.focus(win, stack=False)
-    #     win.index = i
+    # Apply the new order
+    for i, win in enumerate(windows):
+        win.group.focus(win, stack=False)
+        win.index = i
 
     # qtile.current_layout.group.layout_all()
 
