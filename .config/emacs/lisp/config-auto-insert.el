@@ -126,7 +126,6 @@
         (insert (format ";;; %s.el --- TODO: add commentary -*- lexical-binding: t; -*-\n" filename)))
       ;; Ensure license.
       (unless (looking-at lisence-rx)
-        (message "NO LICENSE")
         (insert (oo-copyright-license)))
       ;; Ensure commentary.
       (if (looking-at ";;; Commentary:\n\\(?:\\(?:^;;$\\)\n\\|\\(?:^;;[^;].*$\\)\n\\)*")
