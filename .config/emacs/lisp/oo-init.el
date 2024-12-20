@@ -284,7 +284,8 @@ file is loaded."
 ;;;; start emacs server
 ;; This is so that if I need to use some sort of program to open a file, it will
 ;; use he running emacs daemon.
-(defhook! oo-initialize-server-h ())
+(defhook! oo-initialize-server-h ()
+  )
 ;; (unless (server-running-p) (server-start))
 ;;;; setup loading config files
 (defhook! oo-initialize-config-files-h (emacs-startup-hook :depth 91)
