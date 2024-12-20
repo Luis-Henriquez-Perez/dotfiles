@@ -125,6 +125,7 @@
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
+  :init (default-directory default-directory)
   (set! git (executable-find "git"))
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
