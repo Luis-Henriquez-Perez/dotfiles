@@ -12,6 +12,7 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from libqtile.log_utils import logger
 #### declare variables
 mod = "mod4"
 # mod1 = alt
@@ -144,6 +145,7 @@ def rotate_windows(qtile, forward=True):
     - forward (bool): Direction of rotation. True for forward, False for backward.
     """
     current_group = qtile.current_group
+    logger.info("hello")
     print(f"current group -> {current_group}")
     print(f"current group -> {current_group}")
     # if not current_group:
