@@ -61,6 +61,7 @@
        (condition-case err
            (progn ,@body)
          (error
+          (error! "Segment %s raised an %s error because of %s.")
           "X")))
      (spaceline-define-segment ,name ,@docstring (,fn))))
 ;;;; segments
