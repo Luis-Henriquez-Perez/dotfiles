@@ -113,6 +113,7 @@
 (eshell/alias "update-system" "sudo pacman -Syu")
 (eshell/alias "update-email" "mbsync -a")
 (eshell/alias "list-wifi" "nmcli dev wifi list")
+(eshell/alias "listwifi" "nmcli dev wifi list")
 ;;;; miscellaneous
 (eshell/alias "up" "eshell-up $1")
 (eshell/alias "pk" "eshell-up-peek $1")
