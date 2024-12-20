@@ -111,7 +111,7 @@
                  "\s")))
 
 (defun oo--is-dotfile-p ()
-  ""
+  "Return non-nil if current-buffer is a dotfile."
   )
 (+spaceline-define-segment! +version-control
   "Display current git branch.
