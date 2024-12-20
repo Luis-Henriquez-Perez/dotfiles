@@ -112,10 +112,10 @@
 
 (+spaceline-define-segment! +version-control
   "Display current git branch."
+
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
-
-                 ))
+                 (shell-command-to-string (format "%s diff %s" git fname))))
     ;; TODO: each segment should get passed in their face so I do not have to
     ;; hard-code it like this.  The face should have the background and
     ;; foreground for the segment.  This way I can dynamically set the proper
@@ -127,11 +127,6 @@
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
       branch))
-  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
-  (set! default-directory (file-name-directory fname))
-  (set! dots (expand-file-name "~/.dotfiles/"))
-  (set! worktree (expand-file-name "~"))
-  (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
   (locate-dominating-file buffer-file-name ".git"))
 
