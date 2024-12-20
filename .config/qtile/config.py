@@ -170,7 +170,7 @@ def rotate_windows(qtile, forward=True):
         win.group.focus(win, stack=False)
         win.index = i
 
-    # qtile.current_layout.group.layout_all()
+    qtile.current_layout.group.layout_all()
 
 define_key([mod], "o", lazy.function(rotate_windows), desc="Rotate Windows Forward"),
 #### uncategorized
