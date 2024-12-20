@@ -183,13 +183,7 @@ EXPRS in (CDR CONDITION) is met."
 (battery)
 (defun oo-battery-discharging-p ()
   (require 'battery)
-  (set! status (funcall battery-status-function))
-  (set! percentage (thread-last (battery-format "%p" status)
-                                (string-to-number)
-                                (round)))
-  (set! discharging-p (equal "discharging" (battery-format "%B" status)))
-  (when (and discharging-p (< percentage 60))
-    (format "%s%%%" percentage)))
+  )
 ;;;; bind macro
 (eval-when-compile (require 'base-macros-bind))
 ;;; provide
