@@ -125,24 +125,14 @@
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
-      branch)
-
-    )
+      branch))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! dots (expand-file-name "~/.dotfiles/"))
   (set! worktree (expand-file-name "~"))
   (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
   (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
-  (locate-dominating-file buffer-file-name ".git")
-  default-directory
-  (cond ((not (buffer-file-name)))
-        ((and default-directory (file-directory-p (concat default-directory ".git")))
-         (      branch))
-        ;; Check whether it is a dotfile.
-        ((not (string-empty-p diff))
-         ()
-         )))
+  (locate-dominating-file buffer-file-name ".git"))
 
 (+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
