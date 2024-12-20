@@ -65,7 +65,7 @@ The way I choose to manage my files reflects.
 - [[file:./init.el][init.el]] - Loads everything else.
 - base files - Define tools that will help me configure emacs and that will be
   used pervasively throughout init and after-load files.
-- init files - These are files that can be loaded immediately.  Their objective
+- init files (init-FEATURE.el) - These are files that can be loaded immediately.  Their objective
   is to initialize a package to be used in my configuration.  Usually
   that means adding hooks, setting bindings and autoloading functions.
 - config files (config-FEATURE.el) - These are files that by init files after some feature is loaded.
