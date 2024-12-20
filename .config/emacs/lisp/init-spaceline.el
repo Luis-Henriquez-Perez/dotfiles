@@ -135,7 +135,7 @@
            branch))
         ;; Check whether it is a dotfile.
         ((not (string-empty-p diff))
-
+         ()
          )))
 
 (+spaceline-define-segment! +evil-state
