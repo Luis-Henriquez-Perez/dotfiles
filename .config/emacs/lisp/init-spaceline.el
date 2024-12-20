@@ -123,6 +123,7 @@
   (set! home (expand-file-name "~"))
   (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home))
 
+(+spaceline)
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
