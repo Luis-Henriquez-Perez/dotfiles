@@ -92,6 +92,7 @@
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; archlinux
+;;;; dotfiles
 ;;;;; package management
 (eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
