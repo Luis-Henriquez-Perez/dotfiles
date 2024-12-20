@@ -137,7 +137,6 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (set! fg (face-attribute 'warning :background nil 'default))
     (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
                               (shell-command-to-string)
-                              (ignore-errors)
                               (string-trim)))
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
