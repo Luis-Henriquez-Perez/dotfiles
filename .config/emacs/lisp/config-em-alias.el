@@ -34,37 +34,6 @@
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 ;; TODO allow the specification of how many steps to undo
 (eshell/alias "git-undo" "git reset HEAD~")
-;;;; miscellaneous
-;; TODO: A command that will combine rm/rmdir in one so it will remove a file or
-;; directory.  It should default to moving the targets to trash.
-
-;; TODO: A command for moving everything in a directory to outer directory.
-
-;; TODO: Determine how to make the output optional and in that case just use the
-;; filename of the original file.  Obviously prompt for what to do if the
-;; filename already exists.
-(eshell/alias "html-to-org" "pandoc -f html -t org $1 -o $2")
-;; I am not sure whether to leave this here or create another configuration file
-;; that loads when `em-alias' is loaded.
-;; https://olddeuteronomy.github.io/post/eshell-aliases-and-prompt/
-;; https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
-;; (eshell/alias "e" "find-file $1")
-;; For now do this, but I just really want to scroll up.  I do not want to
-;; actually delete the buffer contents.  I mean I guess its O.K. since the
-;; contents should be saved in eshell-history, but its more secure to actuall
-;; have the physical buffer contents.
-(eshell/alias "clear" "eshell/clear t")
-;; I decided that I almost always prefer opening the file in another window.  So
-;; I am replacing ff with `find-file-other-window'
-;; (eshell/alias "ff" "find-file $1")
-(eshell/alias "ff" "fo $1")
-(eshell/alias "fo" "find-file-other-window $1")
-(eshell/alias "ffow" "find-file-other-window $1")
-(eshell/alias "open" "find-file $1")
-(eshell/alias "d" "dired $1")
-;; https://howardism.org/Technical/Emacs/eshell-why.html
-;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
-;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;;; emacs maintenance
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
 (eshell/alias "etest" "(let ((default-directory user-emacs-directory)) ${eldev -d test $1})")
@@ -120,6 +89,37 @@
 ;; ffmpeg -i your_video.mp4 -vf "select=eq(pict_type\,PICT_TYPE_I)" -vsync vfr thumbnail%04d.png
 ;; convert -delay 5 -loop 0 thumbnail*.png animation.gif
 ;; maim -i $(xdotool getactivewindow) screenshot.png
+;;;; miscellaneous
+;; TODO: A command that will combine rm/rmdir in one so it will remove a file or
+;; directory.  It should default to moving the targets to trash.
+
+;; TODO: A command for moving everything in a directory to outer directory.
+
+;; TODO: Determine how to make the output optional and in that case just use the
+;; filename of the original file.  Obviously prompt for what to do if the
+;; filename already exists.
+(eshell/alias "html-to-org" "pandoc -f html -t org $1 -o $2")
+;; I am not sure whether to leave this here or create another configuration file
+;; that loads when `em-alias' is loaded.
+;; https://olddeuteronomy.github.io/post/eshell-aliases-and-prompt/
+;; https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
+;; (eshell/alias "e" "find-file $1")
+;; For now do this, but I just really want to scroll up.  I do not want to
+;; actually delete the buffer contents.  I mean I guess its O.K. since the
+;; contents should be saved in eshell-history, but its more secure to actuall
+;; have the physical buffer contents.
+(eshell/alias "clear" "eshell/clear t")
+;; I decided that I almost always prefer opening the file in another window.  So
+;; I am replacing ff with `find-file-other-window'
+;; (eshell/alias "ff" "find-file $1")
+(eshell/alias "ff" "fo $1")
+(eshell/alias "fo" "find-file-other-window $1")
+(eshell/alias "ffow" "find-file-other-window $1")
+(eshell/alias "open" "find-file $1")
+(eshell/alias "d" "dired $1")
+;; https://howardism.org/Technical/Emacs/eshell-why.html
+;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
+;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;; provide
 (provide 'config-em-alias)
 ;;; config-em-alias.el ends here
