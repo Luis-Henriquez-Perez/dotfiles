@@ -146,7 +146,7 @@ def rotate_windows(qtile, forward=True):
     """
     current_group = qtile.current_group
     logger.info("hello")
-    logger.warning("hello")
+    logger.warning("warning")
     print(f"current group -> {current_group}")
     print(f"current group -> {current_group}")
     # if not current_group:
