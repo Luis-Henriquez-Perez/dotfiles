@@ -112,7 +112,7 @@
 
 (defun oo-is-dotfile-p ()
   "Return non-nil if current-buffer is a dotfile."
-  :init
+  :init ((default-directory default-directory))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (shell-command-to-string (oo-dotfile-git-command)))
