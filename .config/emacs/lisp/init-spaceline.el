@@ -134,7 +134,9 @@
              (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
            branch))
         ;; Check whether it is a dotfile.
-        ((not (string-empty-p diff)))))
+        ((not (string-empty-p diff))
+
+         )))
 
 (+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
