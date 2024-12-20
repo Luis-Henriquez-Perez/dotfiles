@@ -5,7 +5,7 @@ import os
 import glob
 import random
 from log import get_logger
-from system_vars import setvar
+# from system_vars import setvar
 
 logger = get_logger(__name__)
 
