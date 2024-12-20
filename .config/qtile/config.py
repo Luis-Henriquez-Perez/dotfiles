@@ -135,47 +135,60 @@ layouts = [
 ]
 
 #### Rotate windows
+@lazy.function
+def rotate_clients_forward(qtile):
+    # Cycle through windows
+    qtile.current_group.cmd_next_window()
+
+    # Get the master window (first in the layout)
+    master = qtile.current_layout.clients[0] if qtile.current_layout.clients else None
+
+    if master:
+        # Focus the master window
+        qtile.current_window = master
+        # Bring the master window to the front
+        master.cmd_bring_to_front()
 # import subprocess
-def rotate_windows(qtile, forward=True):
-    """
-    Rotate the windows in the current layout.
+# def rotate_windows(qtile, forward=True):
+#     """
+#     Rotate the windows in the current layout.
 
-    Parameters:
-    - qtile: The Qtile instance.
-    - forward (bool): Direction of rotation. True for forward, False for backward.
-    """
-    current_group = qtile.current_group
-    logger.info("hello")
-    logger.warning(f"warning {current_group}")
-    logger.warning(f"windows {(len(current_group.windows))}")
-    # if not current_group:
-    #     return
-    # # subprocess.run(["notify-send" "window" "swapping windows"])
-    windows = current_group.windows
+#     Parameters:
+#     - qtile: The Qtile instance.
+#     - forward (bool): Direction of rotation. True for forward, False for backward.
+#     """
+#     current_group = qtile.current_group
+#     logger.info("hello")
+#     logger.warning(f"warning {current_group}")
+#     logger.warning(f"windows {(len(current_group.windows))}")
+#     # if not current_group:
+#     #     return
+#     # # subprocess.run(["notify-send" "window" "swapping windows"])
+#     windows = current_group.windows
 
-    if len(windows) < 2:
-        return
+#     if len(windows) < 2:
+#         return
 
-    logger.warning("reordering windows")
-    if forward:
-        # Move the first window to the end
-        window = windows.pop(0)
-        windows.append(window)
-        windows[0].focus()
-    else:
-        # Move the last window to the beginning
-        window = windows.pop()
-        windows.insert(0, window)
-    logger.warning("done")
+#     logger.warning("reordering windows")
+#     if forward:
+#         # Move the first window to the end
+#         window = windows.pop(0)
+#         windows.append(window)
+#         windows[0].focus()
+#     else:
+#         # Move the last window to the beginning
+#         window = windows.pop()
+#         windows.insert(0, window)
+#     logger.warning("done")
 
-    # Apply the new order
-    # for i, win in enumerate(windows):
-    #     win.group.focus(win, stack=False)
-    #     win.index = i
+#     # Apply the new order
+#     # for i, win in enumerate(windows):
+#     #     win.group.focus(win, stack=False)
+#     #     win.index = i
 
-    # qtile.current_layout.group.layout_all()
+#     # qtile.current_layout.group.layout_all()
 
-define_key([mod], "o", lazy.function(rotate_windows), desc="Rotate Windows Forward"),
+define_key([mod], "o", rotate_clients_forward(), desc="Rotate Windows Forward"),
 #### uncategorized
 widget_defaults = dict(
     font="sans",
