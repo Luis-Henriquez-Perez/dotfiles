@@ -78,7 +78,7 @@
 (eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
 ;;;; archlinux
 pacman -Qtd
-(eshell/alias "orphan")
+(eshell/alias "orphan" "")
 (eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
