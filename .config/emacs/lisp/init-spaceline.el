@@ -118,8 +118,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
   (set! dots (expand-file-name "~/.dotfiles/"))
   (set! worktree (expand-file-name "~"))
   (set! git (or (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree)
-
-                ()))
+                (executable-find "git")))
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
                  (shell-command-to-string (format "%s diff %s" git fname))))
