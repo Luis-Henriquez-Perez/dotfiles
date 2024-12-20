@@ -63,12 +63,16 @@
 ;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
 ;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;;; emacs maintenance
-(eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
-;; Define a commit-undo
-(eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push $1")
-(eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
-                            (executable-find "git")))
-(eshell/alias "dots" "dot status --porcelain")
+(eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
+(eshell/alias "etest" "(let ((default-directory user-emacs-directory)) ${eldev -d test $1})")
+(eshell/alias "estatus" "(let ((default-directory user-emacs-directory)){eldev -d test $1})")
+(eshell/alias "emacs-compile" "{cd $user-emacs-directory; eldev -d compile $1}")
+(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile $1}")
+(eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
+(eshell/alias "eclean" "{cd $user-emacs-directory; eldev clean}")
+(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
+(eshell/alias "apply-emacs" "chezmoi apply ~/.config/emacs --force")
+(eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
 ;; (eshell/alias "dots" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
 ;;                              (executable-find "git")))
 ;; (eshell/alias "dotadd" "/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $*")
