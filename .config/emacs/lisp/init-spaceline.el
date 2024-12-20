@@ -120,10 +120,6 @@
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
                  (shell-command-to-string (format "%s diff %s" git fname))))
-    ;; TODO: each segment should get passed in their face so I do not have to
-    ;; hard-code it like this.  The face should have the background and
-    ;; foreground for the segment.  This way I can dynamically set the proper
-    ;; background for an icon.
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
     (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
