@@ -154,15 +154,15 @@ If file is a dotfile managed by my git bare repo, display that branch."
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
 
-;; (defun! oo-choose-modeline-separator ()
-;;   ""
-;;   (interactive)
-;;   (set! separators '(alternate arrow arrow-fade bar box brace
-;;                                butt chamfer contour curve rounded roundstub wave zigzag
-;;                                slant utf-8))
-;;   (awhen! (completing-read "Choose separator: " separators)
-;;     (setq powerline-default-separator it)
-;;     (spaceline-compile)))
+(defun! oo-choose-modeline-separator ()
+  ""
+  (interactive)
+  (set! separators '(alternate arrow arrow-fade bar box brace
+                               butt chamfer contour curve rounded roundstub wave zigzag
+                               slant utf-8))
+  (awhen! (completing-read "Choose separator: " separators)
+    (setq powerline-default-separator it)
+    (spaceline-compile)))
 
 ;; (defun! oo-choose-random-separator ()
 ;;   "Set a random separator."
