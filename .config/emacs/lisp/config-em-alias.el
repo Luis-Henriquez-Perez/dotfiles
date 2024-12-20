@@ -27,9 +27,6 @@
 ;;; Code:
 (require 'em-alias)
 
-;;;; blogging
-(eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
-(eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; git
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 ;; TODO allow the specification of how many steps to undo
@@ -68,6 +65,9 @@
 (eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
                             (executable-find "git")))
 (eshell/alias "dots" "dot status --porcelain")
+;;;; blogging
+(eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
+(eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; miscellaneous
 (eshell/alias "up" "eshell-up $1")
 (eshell/alias "pk" "eshell-up-peek $1")
