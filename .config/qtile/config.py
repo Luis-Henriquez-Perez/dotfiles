@@ -151,7 +151,7 @@ def rotate_windows(qtile, forward=True):
     # if not current_group:
     #     return
     # # subprocess.run(["notify-send" "window" "swapping windows"])
-    # windows = current_group.windows
+    windows = current_group.windows
     # if len(windows) < 2:
     #     return
 
