@@ -53,7 +53,7 @@
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
 (recentf-push (recentf-expand-file-name "~/.config/qtile/config.py"))
 (recentf-push (recentf-expand-file-name "~/.local/share/qtile/qtile.log"))
-(recentf-push )
+(recentf-push ())
 ;;; provide
 (provide 'init-recentf)
 ;;; init-recentf.el ends here
