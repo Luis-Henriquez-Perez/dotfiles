@@ -118,8 +118,9 @@
   (set! home (expand-file-name "~"))
   (shell-command-to-string (format "%s diff %s" git fname)))
 
-(defun oo--dotfile-git-command ()
-  "Return the git command for dotfile operations.")
+(defun oo-dotfile-git-command ()
+  "Return the git command for dotfile operations."
+  )
 
 (+spaceline-define-segment! +version-control
   "Display current git branch.
