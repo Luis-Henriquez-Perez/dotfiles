@@ -165,7 +165,7 @@ def rotate_windows(qtile, forward=True):
         window = windows.pop()
         windows.insert(0, window)
 
-    logger.warning(f"reordering windows
+    logger.warning(f"reordering windows")
     # Apply the new order
     for i, win in enumerate(windows):
         win.group.focus(win, stack=False)
