@@ -50,7 +50,6 @@
 ;; actually delete the buffer contents.  I mean I guess its O.K. since the
 ;; contents should be saved in eshell-history, but its more secure to actuall
 ;; have the physical buffer contents.
-(eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "clear" "eshell/clear t")
 ;; I decided that I almost always prefer opening the file in another window.  So
 ;; I am replacing ff with `find-file-other-window'
@@ -74,17 +73,6 @@
 ;;                              (executable-find "git")))
 ;; (eshell/alias "dotadd" "/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME $*")
 ;; (eshell/alias "dotfiles" "/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME $*")
-(eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
-(eshell/alias "etest" "(let ((default-directory user-emacs-directory)) ${eldev -d test $1})")
-(eshell/alias "estatus" "(let ((default-directory user-emacs-directory)){eldev -d test $1})")
-(eshell/alias "emacs-compile" "{cd $user-emacs-directory; eldev -d compile $1}")
-(eshell/alias "ecompile" "{cd $user-emacs-directory; eldev -d compile $1}")
-(eshell/alias "emacs-eval" "{cd $user-emacs-directory; eldev -d eval $1}")
-(eshell/alias "eclean" "{cd $user-emacs-directory; eldev clean}")
-(eshell/alias "eeval" "{cd $user-emacs-directory; eldev -d eval $1}")
-(eshell/alias "apply-emacs" "chezmoi apply ~/.config/emacs --force")
-(eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
-
 ;; TODO: figure out a naming system for these commands
 ;; TODO: write a command for publishing to blog.  This is preliminary.
 ;; The publish command has to be called from the emacs directory.  I want to be
@@ -101,6 +89,7 @@
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; archlinux
 ;;;;; package management
+(eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $*")
