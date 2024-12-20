@@ -152,8 +152,8 @@ def rotate_windows(qtile, forward=True):
     #     return
     # # subprocess.run(["notify-send" "window" "swapping windows"])
     windows = current_group.windows
-    # if len(windows) < 2:
-    #     return
+    if len(windows) < 2:
+        return
 
     # if forward:
     #     # Move the first window to the end
