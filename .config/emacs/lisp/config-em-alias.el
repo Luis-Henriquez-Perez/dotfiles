@@ -55,6 +55,7 @@
 (eshell/alias "update-system" "sudo pacman -Syu")
 
 (eshell/alias "update-email" "mbsync -a")
+
 (eshell/alias "list-wifi" "nmcli dev wifi list")
 (eshell/alias "listwifi" "nmcli dev wifi list")
 ;;;; dotfiles
