@@ -147,6 +147,7 @@ def rotate_windows(qtile, forward=True):
     current_group = qtile.current_group
     logger.info("hello")
     logger.warning("warning {current_group}")
+    logger.warning("windows {current_group}")
     # if not current_group:
     #     return
     # # subprocess.run(["notify-send" "window" "swapping windows"])
