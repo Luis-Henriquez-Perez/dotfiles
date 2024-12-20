@@ -124,8 +124,7 @@
     (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust
-                                               -0.01) branch)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
       branch)
 
     )
