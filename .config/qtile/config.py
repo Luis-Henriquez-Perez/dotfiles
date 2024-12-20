@@ -161,7 +161,7 @@ def rotate_windows(qtile, forward=True):
         # Move the first window to the end
         window = windows.pop(0)
         windows.append(window)
-        windows[0]
+        windows[0].focus()
     else:
         # Move the last window to the beginning
         window = windows.pop()
