@@ -31,7 +31,7 @@
 
 (hook! org-mode-hook org-appear-mode)
 
-(oo-dotfile)
+(oo-dotfile-git-command)
 (setq-local magit-git-global-arguments '())
 (defhook! oo-ensure-org-appear-symbols-h (org-appear-mode-hook)
   "Ensure proper symbols are set."
