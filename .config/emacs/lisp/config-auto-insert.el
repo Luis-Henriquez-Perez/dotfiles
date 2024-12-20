@@ -26,6 +26,7 @@
 ;;
 ;;; Code:
 (require 'base)
+(require 'f)
 
 (defun oo-copyright-license ()
   "Return the copyright license."
