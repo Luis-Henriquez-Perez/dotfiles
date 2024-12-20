@@ -114,19 +114,19 @@
   "Return non-nil if current-buffer is a dotfile."
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
-  (set! dots (expand-file-name "~/.dotfiles/"))
-  (set! home (expand-file-name "~"))
-  (shell-command-to-string (format "%s diff %s" git fname)))
+  (shell-command-to-string (oo-dotfile-git-command)))
 
 (defun oo-dotfile-git-command ()
   "Return the git command for dotfile operations."
-  )
+  (set! dots (expand-file-name "~/.dotfiles/"))
+  (set! home (expand-file-name "~"))
+  (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home))
 
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
-  (set! git (or (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home)
-                (executable-find "git")))
+  (set! git (or
+             (executable-find "git")))
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
                  (oo-is-dotfile-p)))
