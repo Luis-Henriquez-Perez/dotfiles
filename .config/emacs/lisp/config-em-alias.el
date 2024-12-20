@@ -47,7 +47,7 @@
 (eshell/alias "files" "pacman -Ql $1")
 (eshell/alias "pac" "sudo pacman --noconfirm $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
-()
+(pop eshell)
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "remove" "sudo pacman -Rns --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rns --noconfirm $*")
