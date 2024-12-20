@@ -114,6 +114,7 @@
   "Display current git branch."
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
+
                  ))
     ;; TODO: each segment should get passed in their face so I do not have to
     ;; hard-code it like this.  The face should have the background and
