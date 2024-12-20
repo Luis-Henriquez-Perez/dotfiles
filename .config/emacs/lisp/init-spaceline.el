@@ -110,6 +110,9 @@
                   time)
                  "\s")))
 
+(defun oo--is-dotfile-p ()
+  ""
+  )
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
