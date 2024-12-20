@@ -89,7 +89,6 @@
 ;; ffmpeg -i your_video.mp4 -vf "select=eq(pict_type\,PICT_TYPE_I)" -vsync vfr thumbnail%04d.png
 ;; convert -delay 5 -loop 0 thumbnail*.png animation.gif
 ;; maim -i $(xdotool getactivewindow) screenshot.png
-;;;; miscellaneous
 ;; TODO: A command that will combine rm/rmdir in one so it will remove a file or
 ;; directory.  It should default to moving the targets to trash.
 
