@@ -112,7 +112,7 @@
                   time)
                  "\s")))
 
-(defun oo-dotfile-git-command ()
+(defun! oo-dotfile-git-command ()
   "Return the git command for dotfile operations."
   (set! dots (expand-file-name "~/.dotfiles/"))
   (set! home (expand-file-name "~"))
