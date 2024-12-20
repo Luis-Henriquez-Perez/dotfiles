@@ -105,7 +105,7 @@
 (eshell/alias "uninstall" "sudo pacman -Rs --noconfirm $1")
 
 ;; TODO: Do not show me descriptions when searching...
-(eshell/alias "search" "pacman -Ss $1")
+(eshell/alias "search" "pacman -Ss $*")
 (eshell/alias "search-quiet" "pacman -Ssq $1")
 
 ;; TODO: maybe make a general update command for email, packages, etc.
