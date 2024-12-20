@@ -32,7 +32,9 @@
 (hook! org-mode-hook org-appear-mode)
 
 (cdr (string-split (oo-dotfile-git-command)))
-(setq-local magit-git-global-arguments (append ))
+(setq-local magit-git-global-arguments (append (cdr (string-split
+                                                     (oo-dotfile-git-command)))
+                                               ))
 (defhook! oo-ensure-org-appear-symbols-h (org-appear-mode-hook)
   "Ensure proper symbols are set."
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
