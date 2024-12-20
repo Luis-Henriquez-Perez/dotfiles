@@ -42,15 +42,15 @@
     (setq org-link-descriptive t)
     (info! "Set %s to t" 'org-link-descriptive)))
 
-(add-hook 'org-mode-hook (lambda ()
-                           (add-hook 'evil-insert-state-entry-hook
-                                     #'org-appear-manual-start
-                                     nil
-                                     t)
-                           (add-hook 'evil-insert-state-exit-hook
-                                     #'org-appear-manual-stop
-                                     nil
-                                     t)))
+;; (add-hook 'org-mode-hook (lambda ()
+;;                            (add-hook 'evil-insert-state-entry-hook
+;;                                      #'org-appear-manual-start
+;;                                      nil
+;;                                      t)
+;;                            (add-hook 'evil-insert-state-exit-hook
+;;                                      #'org-appear-manual-stop
+;;                                      nil
+;;                                      t)))
 ;;; provide
 (provide 'init-org-appear)
 ;;; init-org-appear.el ends here
