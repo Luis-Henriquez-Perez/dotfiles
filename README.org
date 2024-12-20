@@ -7,20 +7,18 @@
 # although it looks cool with the tiling I am not convinced
 * Principles
 - *keep it simple*
-  Although many go too far with it, there is truth to the
-  [[https://en.wikipedia.org/wiki/KISS_principle][KISS]] doctrine of keeping things as simple as possible.
 - *ease of setup*
-  I want to be able to run just one command or script to set up
-  all of my dotfiles.  I have not achieved this yet but I am working on it.
+  I should be able to setup my dotfiles with a single command.
 - *thorough documentation*
   Setting up these dotfiles was hard for me to do.  I want to
   help others reading set up their own dotfiles and to do that.  Also I want to
   remember things that I myself did.
 ** Featured Programs
-- *Dotfile Management* I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
+- *Dotfile Management*: git I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
   existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
   dependencies besides git, it does not use symlinks, and it is overall much
-  simpler.
+  simpler.  It is major drawback is it is more difficult to use tools that
+  integrate with.
 - *Window Manager*: [[https://awesomewm.org/][awesomewm]]
   At first I was using stumpwm and I have got to say I do love lisp,
   but stumpwm was a bit slow and in fact the first two weeks I used it it
