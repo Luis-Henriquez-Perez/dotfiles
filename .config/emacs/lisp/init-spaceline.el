@@ -115,6 +115,18 @@
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
                  ))
+    ;; TODO: each segment should get passed in their face so I do not have to
+    ;; hard-code it like this.  The face should have the background and
+    ;; foreground for the segment.  This way I can dynamically set the proper
+    ;; background for an icon.
+    (set! bg (face-attribute 'powerline-active0 :background nil 'default))
+    (set! fg (face-attribute 'warning :background nil 'default))
+    (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
+    (set! face `((t (:background ,bg :foreground ,fg))))
+    (if (display-graphic-p)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust
+                                               -0.01) branch)
+      branch)
 
     )
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
