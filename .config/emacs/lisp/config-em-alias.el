@@ -92,7 +92,14 @@
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; archlinux
+;;;; git
 ;;;; dotfiles
+(eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
+;; Define a commit-undo
+(eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push $1")
+(eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
+                            (executable-find "git")))
+(eshell/alias "dots" "dot status --porcelain")
 ;;;;; package management
 (eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
