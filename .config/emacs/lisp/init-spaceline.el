@@ -126,9 +126,7 @@
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
-      branch))
-  ;; (locate-dominating-file buffer-file-name ".git")
-  )
+      branch)))
 
 (+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
