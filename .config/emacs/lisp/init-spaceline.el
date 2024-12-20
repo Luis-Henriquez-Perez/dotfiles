@@ -144,7 +144,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
       branch)))
-(shell-command-to-string )
+(shell-command-to-string (format "%s rev-parse --abbrev-ref HEAD" (oo-dotfile-git-command)))
 (+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
   (when (bound-and-true-p evil-mode)
