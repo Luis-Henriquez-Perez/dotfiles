@@ -179,11 +179,6 @@ EXPRS in (CDR CONDITION) is met."
                                         (cdr err)))))))))
                t)
     (oo--call-after-load expr it)))
-
-(battery)
-(defun oo-battery-discharging-p ()
-  (require 'battery)
-  )
 ;;;; bind macro
 (eval-when-compile (require 'base-macros-bind))
 ;;; provide
