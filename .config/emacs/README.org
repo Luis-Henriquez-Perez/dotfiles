@@ -61,7 +61,6 @@ OO Emacs is my personal emacs configuration.  By design it is intended to be:
 :PROPERTIES:
 :ID:       20240408T164104.628646
 :END:
-The way I choose to manage my files reflects.
 - [[file:./init.el][init.el]] - Loads everything else.
 - base files - Define tools that will help me configure emacs and that will be
   used pervasively throughout init and after-load files.
