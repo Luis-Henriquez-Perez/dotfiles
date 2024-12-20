@@ -2,40 +2,49 @@
 #+begin_html
 <h1 align="center">Dotfiles</h1>
 #+end_html
-#+CAPTION: My typical destop environment display
+#+CAPTION: Example of my destop environment display with awesomewm.
 [[file:Pictures/awesomewm-showcase_20241217_160959.png]]
-# although it looks cool with the tiling I am not convinced
-* Principles
-- *keep it simple*
-  Although many go too far with it, there is truth to the
-  [[https://en.wikipedia.org/wiki/KISS_principle][KISS]] doctrine of keeping things as simple as possible.
-- *ease of setup*
-  I want to be able to run just one command or script to set up
-  all of my dotfiles.  I have not achieved this yet but I am working on it.
-- *thorough documentation*
-  Setting up these dotfiles was hard for me to do.  I want to
-  help others reading set up their own dotfiles and to do that.  Also I want to
-  remember things that I myself did.
-** Featured Programs
-- *Dotfile Management* I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
-  existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
-  dependencies besides git, it does not use symlinks, and it is overall much
-  simpler.
+* Goals
+- *Simplicity*
+  Keep configurations simple and intuitive and try to take the path of least resistance.
+- *Easy Bootstrapping*
+  Ensure my dotfiles can be bootstrapped easily with a single command.
+- *Comprehensive Documentation* Provide thorough documentation that help others
+  replicate and understand my setup while serving as a personal reference.
+* Notable Highlights
+- *Operating System*: [[https://archlinux.org/][archlinux]]
+
+  The simplicity and minimalism of Archlinux allows me to build an operating
+  system from scratch specifically tailored to my needs.
+- *Dotfile Management*: [[https://git-scm.com/][git]]
+
+  I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare Git repository]].  Unlike other tools like
+  [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][GNU Stow]], and [[https://www.chezmoi.io/][chezmoi]], this approach requires no additional dependencies
+  beyond Git, avoids symlinks, and is overall simpler to maintain.
 - *Window Manager*: [[https://awesomewm.org/][awesomewm]]
-  At first I was using stumpwm and I have got to say I do love lisp,
-  but stumpwm was a bit slow and in fact the first two weeks I used it it
-  crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
-  it is written in a real programming language and it is extremely customizable.
-  [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
-  Particularly ones written in lisp.  In this sense.
-- *Editor*:
-  [[Https://www.gnu.org/software/emacs/][Emacs]] is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]]).  Emacs is the "centerpice" of my
-  configuration.  It is my most configured package.
-** Designated Operating System
-I use [[https://archlinux.org/][archlinux]] as my operating system.
-** How To Initialize Dotfiles
-Run the following command which will download the =dotinit.sh= script and run it.
-The script clones.
+
+  AwesomeWM is lightweight, fast, and written a real programming language, [[https://www.lua.org/][LUA]],
+  as opposed to a limited [[https://en.wikipedia.org/wiki/Domain-specific_language][DSL]] allowing for maximum customizability--a priority
+  for me.
+- *Editor*: [[https://www.gnu.org/software/emacs/][emacs]]
+
+  Emacs is my primary editor as well as the the centerpiece of my configuration
+  with extensive customization detailed in a [[file:./dot_config/emacs/README.org][dedicated README]].
+* Bootstrapping (In Progress)
+The following command downloads my dotfile bootstrapping script, [[~/scripts/dotinit.sh][dotinit.sh]], and
+runs it.  In turn =dotinit.sh= clones my dotfiles as a bare git repo and attempts
+to propagate the files on my dotfiles to the home directory via /git checkout/.
+If git refuses to checkout the files because that would ovewrite existing files,
+then my script creates a backup directory, moves the conflicting files there,
+and tries again.
 #+begin_src bash
-curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
+curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/| sh
 #+end_src
+At the moment, the script has a few problems.
+1. it does not create a uniquely named backup directory
+2. it might not successfully move the files
+   The script relies figuring out which files would be overwritten by using the
+   git checkout failure message which lists those files.  But as I have learned
+   if there are enough files that would be overwritten the list might get cut
+   off and not all of the overwritten files would be moved, resulting in another
+   git checkout failure.
