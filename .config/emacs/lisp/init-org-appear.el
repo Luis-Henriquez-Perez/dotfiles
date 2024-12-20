@@ -31,6 +31,7 @@
 
 (hook! org-mode-hook org-appear-mode)
 
+(setq-local )
 (defhook! oo-ensure-org-appear-symbols-h (org-appear-mode-hook)
   "Ensure proper symbols are set."
   (when (and org-appear-autoemphasis (not org-hide-emphasis-markers))
