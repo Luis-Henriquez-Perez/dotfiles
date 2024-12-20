@@ -25,8 +25,8 @@
 ;; This file contains all of my eshell aliases.
 ;;
 ;;; Code:
+;;;; requirements
 (require 'em-alias)
-
 ;;;; git
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 ;; TODO allow the specification of how many steps to undo
