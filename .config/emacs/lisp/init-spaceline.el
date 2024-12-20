@@ -127,7 +127,7 @@
          (if (display-graphic-p)
              (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
            branch))
-        ()))
+        (())))
 
 (+spaceline-define-segment! +evil-state
   "Display the current evil state if evil-mode is enabled."
