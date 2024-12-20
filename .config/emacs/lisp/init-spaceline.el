@@ -118,12 +118,12 @@
   (set! home (expand-file-name "~"))
   (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home))
 
-(defun! oo-is-dotfile-p ()
-  "Return non-nil if current-buffer is a dotfile."
-  :init ((default-directory default-directory))
-  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
-  (set! default-directory (file-name-directory fname))
-  (shell-command-to-string (oo-dotfile-git-command)))
+(gdefun! oo-is-dotfile-p ()
+         "Return non-nil if current-buffer is a dotfile."
+         :init ((default-directory default-directory))
+         (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
+         (set! default-directory (file-name-directory fname))
+         (shell-command-to-string (oo-dotfile-git-command)))
 
 (+spaceline-define-segment! +version-control
   "Display current git branch.
