@@ -156,6 +156,7 @@ def rotate_windows(qtile, forward=True):
     if len(windows) < 2:
         return
 
+    logger.warning("reordering windows")
     if forward:
         # Move the first window to the end
         window = windows.pop(0)
@@ -164,8 +165,8 @@ def rotate_windows(qtile, forward=True):
         # Move the last window to the beginning
         window = windows.pop()
         windows.insert(0, window)
+    logger.warning("done")
 
-    logger.warning(f"reordering windows")
     # Apply the new order
     for i, win in enumerate(windows):
         win.group.focus(win, stack=False)
