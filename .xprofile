@@ -39,16 +39,6 @@ ntpd &
 # still worth doing it because I am going to startup emacs anyway.
 # emacs --daemon
 ### set emacsclient as my preferred editor
-# Indicate to the shell (or bash?) that I want to use emacsclient as my editor
-# of choice when opening a file to read with a terminal program.  This taken
-# as advice from [[https://www.emacswiki.org/emacs/EmacsClient][the emacs wiki]].
-
-# On a side note, I have got to say that I wished I were writing this headline
-# in org.  This is exactly what I am talking about with the power of org.  If it
-# had been in org I would have had this heading as a subtree of the "emacs"
-# heading, putting all the stuff that pertains to emacs in one place because
-# that is the easiest way for me to think about these things.  But since I am
-# not using org, I am more or less tied to having to follow the rules.
 export ALTERNATE_EDITOR=""
 # Using the argument =-c= would make emacs open in the terminal.  But obviously
 # I would rather open with the GUI.
