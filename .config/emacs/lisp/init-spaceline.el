@@ -127,6 +127,7 @@
          (if (display-graphic-p)
              (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
            branch))
+        ;; Check whether it is a dotfile.
         (())))
 
 (+spaceline-define-segment! +evil-state
