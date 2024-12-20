@@ -112,9 +112,9 @@
 
 (+spaceline-define-segment! +version-control
   "Display current git branch."
-  (when (aand! (buffer-file-name)
-               (or (locate-dominating-file it ".git")
-                   )))
+  (when (and (buffer-file-name)
+             (or (locate-dominating-file it ".git")
+                 )))
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! dots (expand-file-name "~/.dotfiles/"))
