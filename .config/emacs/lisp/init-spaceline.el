@@ -155,7 +155,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
 ;; I want the ability to quickly switch between different separators.
 
 (defun! oo-choose-modeline-separator ()
-  ""
+  "Choose a separator for the modeline."
   (interactive)
   (set! separators '(alternate arrow arrow-fade bar box brace
                                butt chamfer contour curve rounded roundstub wave zigzag
