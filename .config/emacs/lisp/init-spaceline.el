@@ -115,7 +115,7 @@
   (let ((default-directory (or (and buffer-file-name
                                     (locate-dominating-file buffer-file-name ".git"))
                                default-directory)))
-    (cond ((buffer-file-name))
+    (cond ((not (buffer-file-name)))
           ((and default-directory (file-directory-p (concat default-directory ".git")))
            ;; TODO: each segment should get passed in their face so I do not have to
            ;; hard-code it like this.  The face should have the background and
