@@ -111,7 +111,8 @@
                  "\s")))
 
 (+spaceline-define-segment! +version-control
-  "Display current git branch."
+  "Display current git branch.
+If file is a dotfile managed by my git bare repo, display that branch."
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! dots (expand-file-name "~/.dotfiles/"))
