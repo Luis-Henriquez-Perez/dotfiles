@@ -1,0 +1,95 @@
+# -*- mode: conf -*-
+
+## mbsync (isync)
+# https://brian-thompson.medium.com/setting-up-isync-mbsync-on-linux-e9fe10c692c0
+### luis@luishp.xyz
+# This is the name that will refer to the account.
+IMAPAccount luishp
+Host mail.privateemail.com
+User luis@luishp.xyz
+PassCMD "pass email/luis@luishp.xyz"
+
+# Looks like I do not need this for now.  I keep getting an error that the
+# =SSLType= is not a valid keyword. I do not know.
+#SSLType None
+# The following line should work. If you get certificate errors, uncomment the two following lines and read the "Troubleshooting" section.
+#CertificateFile /etc/ssl/certs/ca-certificates.crt
+#CertificateFile ~/.cert/imap.gmail.com.pem
+#CertificateFile ~/.cert/Equifax_Secure_CA.pem
+
+IMAPStore luishp-remote
+Account luishp
+
+MaildirStore luishp-local
+SubFolders Verbatim
+# The trailing "/" is important
+# Also note that these directories have to be created before running ~mbsync
+# -a~, otherwise this wont work.
+Path ~/.mail/luishp/
+Inbox ~/.mail/luishp/Inbox
+
+Channel luishp
+Far :luishp-remote:
+Near :luishp-local:
+# Exclude everything under the internal [Gmail] folder, except the interesting folders
+#Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+# Or include everything
+#Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Sync the movement of messages between folders and deletions, add after making sure the sync works
+Expunge Both
+# Save the synchronization state files in the relevant directory
+SyncState *
+
+### luishenriquezperez@gmail.com
+IMAPAccount gmail
+Host imap.gmail.com
+User luishenriquezperez@gmail.com
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+PassCMD "pass show email/luishenriquezperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+SubFolders Verbatim
+Path ~/.mail/luishenriquezperez/
+Inbox ~/.mail/luishenriquezperez/Inbox
+
+Channel gmail
+Far :gmail-remote:
+Near :gmail-local:
+Create Both
+Expunge Both
+SyncState *
+### mom account
+# IMAPAccount mom
+# # Address to connect to
+# Host mail.privateemail.com
+# User .xyz
+# PassCMD "pass email/luis@mom.xyz"
+
+# IMAPStore mom-remote
+# Account mom
+
+# MaildirStore mom-local
+# SubFolders Verbatim
+# # The trailing "/" is important
+# Path ~/.mail/mom/
+# Inbox ~/.mail/mom/Inbox
+
+# Channel mom
+# Far :mom-remote:
+# Near :mom-local:
+# # Exclude everything under the internal [Gmail] folder, except the interesting folders
+# #Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+# # Or include everything
+# #Patterns *
+# # Automatically create missing mailboxes, both locally and on the server
+# Create Both
+# # Sync the movement of messages between folders and deletions, add after making sure the sync works
+# Expunge Both
+# # Save the synchronization state files in the relevant directory
+# SyncState *

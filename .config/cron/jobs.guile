@@ -1,0 +1,28 @@
+; -*- mode: Lisp;-*-
+;;; mcron
+;; Why use mcron over cron.
+;; https://wiki.gentoo.org/wiki/Cron
+;; https://github.com/ciel-lang/cl-cron
+;; https://wiki.archlinux.org/title/Cron
+;; https://www.gnu.org/software/mcron/manual/mcron.html#Introduction
+;; This article has a list of why to use guile.
+;;;; note
+;; Is there an expand path thing here?
+;; I wonder how/if I can interactively change this if I want a longer wait time.
+;; I would like to be able to change this without having to go to a different
+;; file.  Maybe I would need to integrate this with stumpwm.
+;;;; email
+;; Download and index my email every 5 minutes.
+(job '(next-minute (range 0 60 5)) "python ~/scripts/update_email.py")
+;;;; system
+;; I want to automate as much of system maintenance as I can.
+;;;;; clean the cache
+;;;;; throw out the trash
+;;;; wallpaper
+;;;;; download new wallpapers
+;; (job '(next-minute (range 0 60 5)) "python download_new_wallpapers.py")
+;;;;; set wallpaper
+;; TODO: I plan a setup where I can start by downloading wallpapers and then if
+;; a wallpaper I do not like is displayed, I can press a keybinding to replace
+;; it, and mark that one as unliked.
+(job '(next-minute (range 0 60 15)) "python ~/scripts/set_wallpaper.py")

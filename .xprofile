@@ -1,0 +1,70 @@
+#!/bin/sh
+
+## xprofile
+# The =xprofile= is that is conventially used to execute commands at the start of
+# the xsession before the window manager is loaded.  I should mention this is not
+# a crazy hardset rule.  I could execute these commands in [[][]] or [[][]].
+# The system's xprofile [[/etc/xprofile]]
+### set the wallpaper for the first time
+# I am not sure whether to do this here or not.  It is possible to do this in
+# awesome or stumpwm itself but I do not want to do it ever time for ever window
+# manager.  This script sets the current wallpaper.
+
+python ~/scripts/set_wallpaper.py
+### remap caps-lock with escape
+# I have a QWERTY keyboard.  The =CapsLk= key is right where the homekeys are, but
+# the =Esc= key is so far way.  If you've ever used [[][vim]] or [[][evil]] before you know
+# that escape is used often to get out of states.
+setxkbmap -option caps:escape
+
+# I broke my super key on my laptop.  This is temporary code to remap it to the
+# left alt key.
+if [ "$(cat /etc/hostname)" = "deathscythe" ]; then
+    setxkbmap -option altwin:swap_lalt_lwin
+fi
+### start the picom daemon
+# The compositor.  See [[][the config]].
+picom &
+### start dunst
+# For notifications...
+# dunst &
+### start mcron
+# See ~/.config/jobs.guile
+mcron &
+
+ntpd &
+### start emacsclient
+# TODO: fix that this took a long time.  It is definitely noticeable, the
+# difference taken to startup with emacs starting as a daemon beforehand.  It is
+# still worth doing it because I am going to startup emacs anyway.
+# emacs --daemon
+### set emacsclient as my preferred editor
+export ALTERNATE_EDITOR=""
+# Using the argument =-c= would make emacs open in the terminal.  But obviously
+# I would rather open with the GUI.
+export EDITOR="emacsclient -c"                  # $EDITOR opens in GUI mode
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
+### add roswell to path
+# This was recommended by [[https://lem-project.github.io/installation/ncurses/linux/][lem github.io website]]. To be honest I am not sure how
+# good of an idea it was to install things via roswell.  To some extent I feel
+# that it makes things more complicated because now it seems like I have two
+# different package managers (I am not counting emacs's).  Not that I think ros
+# is bad or anything, it is just that I think its overkill for my purposes at
+# the current moment.  The additional complexity does not benefit me.  It seems
+# more geared to testing different versions of sbcl, which I am not doing right
+# now.
+export PATH=$PATH:~/.roswell/bin
+
+# Provided by the package [[][eat]].  I am not sure if I want to keep this.
+# Honestly, I just want to see the support the package spoke about.
+[ -n "$EAT_SHELL_INTEGRATION_DIR" ] && \
+  source "$EAT_SHELL_INTEGRATION_DIR/bash"
+
+export PATH=$PATH:/home/luis/scripts
+### variables
+# Set qutebrowser as default browser.
+export BROWSER=qutebrowser
+
+export LIBGL_ALWAYS_SOFTWARE=1
+
+source ~/myenv/bin/activate

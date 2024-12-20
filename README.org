@@ -1,0 +1,41 @@
+#+AUTHOR: Luis Henriquez-Perez
+#+begin_html
+<h1 align="center">Dotfiles</h1>
+#+end_html
+#+CAPTION: My typical destop environment display
+[[file:Pictures/awesomewm-showcase_20241217_160959.png]]
+# although it looks cool with the tiling I am not convinced
+* Principles
+- *keep it simple*
+  Although many go too far with it, there is truth to the
+  [[https://en.wikipedia.org/wiki/KISS_principle][KISS]] doctrine of keeping things as simple as possible.
+- *ease of setup*
+  I want to be able to run just one command or script to set up
+  all of my dotfiles.  I have not achieved this yet but I am working on it.
+- *thorough documentation*
+  Setting up these dotfiles was hard for me to do.  I want to
+  help others reading set up their own dotfiles and to do that.  Also I want to
+  remember things that I myself did.
+** Featured Programs
+- *Dotfile Management* I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
+  existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
+  dependencies besides git, it does not use symlinks, and it is overall much
+  simpler.
+- *Window Manager*: [[https://awesomewm.org/][awesomewm]]
+  At first I was using stumpwm and I have got to say I do love lisp,
+  but stumpwm was a bit slow and in fact the first two weeks I used it it
+  crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
+  it is written in a real programming language and it is extremely customizable.
+  [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
+  Particularly ones written in lisp.  In this sense.
+- *Editor*:
+  [[Https://www.gnu.org/software/emacs/][Emacs]] is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]]).  Emacs is the "centerpice" of my
+  configuration.  It is my most configured package.
+** Designated Operating System
+I use [[https://archlinux.org/][archlinux]] as my operating system.
+** How To Initialize Dotfiles
+Run the following command which will download the =dotinit.sh= script and run it.
+The script clones.
+#+begin_src bash
+curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
+#+end_src
