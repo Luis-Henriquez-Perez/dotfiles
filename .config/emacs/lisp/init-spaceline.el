@@ -116,20 +116,20 @@
 
 (defun oo--dotfile-git-command ()
   "Return the git command for dotfile operations."
-  )
-
-(+spaceline-define-segment! +version-control
-  "Display current git branch.
-If file is a dotfile managed by my git bare repo, display that branch."
   (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
   (set! default-directory (file-name-directory fname))
   (set! dots (expand-file-name "~/.dotfiles/"))
   (set! home (expand-file-name "~"))
+  (shell-command-to-string (format "%s diff %s" git fname)))
+
+(+spaceline-define-segment! +version-control
+  "Display current git branch.
+If file is a dotfile managed by my git bare repo, display that branch."
   (set! git (or (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home)
                 (executable-find "git")))
   (when (and (buffer-file-name)
              (or (locate-dominating-file (buffer-file-name) ".git")
-                 (shell-command-to-string (format "%s diff %s" git fname))))
+                 (oo--is-dotfile-p)))
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
     (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
