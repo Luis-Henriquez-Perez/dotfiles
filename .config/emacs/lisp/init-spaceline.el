@@ -60,7 +60,8 @@
        ,@docstring
        (condition-case err
            (progn ,@body)
-         (error "X")))
+         (error
+          "X")))
      (spaceline-define-segment ,name ,@docstring (,fn))))
 ;;;; segments
 (+spaceline-define-segment! +kbd-macro
