@@ -77,8 +77,7 @@
 (eshell/alias "apply-emacs" "chezmoi apply ~/.config/emacs --force")
 (eshell/alias "update-emacs" "apply-emacs && eclean && ecompile")
 ;;;; archlinux
-pacman -Qtd
-(eshell/alias "orphan" "")
+(eshell/alias "orphan" "pacman -Qtd "$*)
 (eshell/alias "pac" "sudo pacman $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
