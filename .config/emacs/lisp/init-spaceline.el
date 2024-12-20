@@ -116,6 +116,7 @@
 (defun oo--dotfile-git-command ()
   "Return the git command for dotfile operations."
   )
+
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
