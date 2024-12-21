@@ -239,6 +239,9 @@
 (global-key [modkey] "p" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Make computer sleep
+(fn take-screenshot []
+  (awful.spawn.with_shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")
+  (naughty.notify {:title "maim" :text "take screenshot" :timeout 5}))
 
 ;;;;; Set Global Keys
 (root.keys globalkeys)
