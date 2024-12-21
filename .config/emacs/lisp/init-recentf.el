@@ -49,7 +49,7 @@
 ;; of these files for a while I will eventually want to go back to them and when
 ;; I do I want them to be there.
 (autolet!
- (shell-command-to-string "git --work-tree=/home/Luis --git-dir=/home/luis/.dotfiles -C")
+ (shell-command-to-string "git --work-tree=/home/luis --git-dir=/home/luis/.dotfiles -C /home/Luis ")
  )
 (shell-command-to-string "" "")
 
