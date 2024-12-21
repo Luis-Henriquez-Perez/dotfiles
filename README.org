@@ -36,7 +36,7 @@ Run the following command which will download the [[~/scripts/dotinit.sh][dotini
 script clones my dotfiles as a bare git repo and attempts to propagate the files
 on my dotfiles to the home directory via ~git checkout~.  If ~git checkout~ fails
 due because of files that would be overwritten by doing this checkout, then my
-script creates a backup directory and moves the files there and tries again.
+script creates a backup directory, moves the files there and tries again.
 #+begin_src bash
 curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/| sh
 #+end_src
