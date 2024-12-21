@@ -51,7 +51,7 @@
 (autolet!
  ()
  )
-(shell-command-to-string "git --work-tree=/home/luis" "--git-dir=/home/luis/.dotfiles")
+(shell-command-to-string "git --work-tree=/home/Luis " "")
 
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
