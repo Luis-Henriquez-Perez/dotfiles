@@ -239,6 +239,7 @@
 (global-key [modkey] "p" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Make computer sleep
+
 ;;;;; Set Global Keys
 (root.keys globalkeys)
 ;;;;; Manipulate Tags
