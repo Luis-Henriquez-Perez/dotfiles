@@ -65,6 +65,8 @@
 (recentf-push (recentf-expand-file-name "~/.config/qtile/config.py"))
 (recentf-push (recentf-expand-file-name "~/.local/share/qtile/qtile.log"))
 (recentf-push (recentf-expand-file-name "/etc/xdg/awesome/rc.lua"))
+(recentf-push (recentf-expand-file-name "/.cache/systemlog.text"))
+
 ;;; provide
 (provide 'init-recentf)
 ;;; init-recentf.el ends here
