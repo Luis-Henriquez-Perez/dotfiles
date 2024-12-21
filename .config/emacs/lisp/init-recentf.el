@@ -46,9 +46,9 @@
 (setq recentf-max-saved-items nil)
 ;;;; always keep important files in recentf-list
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
-(alet! (directory-files (expand-file-name "lisp/" user-emacs-directory))
-  (dolist (file it)
-    (recentf-push (recentf-expand-file-name file))))
+(each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
+  (recentf-push it))
+(recentf-push (recentf-expand-file-name "~/.bashrc"))
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
 (recentf-push (recentf-expand-file-name "~/.config/qtile/config.py"))
