@@ -44,7 +44,8 @@
 (adjoin! recentf-exclude (lambda (file) (not (file-exists-p file))))
 
 (setq recentf-max-saved-items nil)
-;;;; Add all of my dotfiles
+;;;; add all of my dotfiles
+;; I realized I want access to all of my
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
   (recentf-push it))
