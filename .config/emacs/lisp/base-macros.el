@@ -64,6 +64,11 @@
   "Like `prog1' but bind first form to `it'."
   (declare (debug when) (indent 1))
   `(alet! ,form (prog1 it ,@body)))
+
+(defmacro each! (list &rest body)
+  "Like `prog1' but bind first form to `it'."
+  (declare (debug (form body)) (indent 1))
+  `(dolist (it ,list) ,@body))
 ;;;;; lef!
 (defmacro lef! (bindings &rest body)
   "Bind each symbol in BINDINGS to its corresponding function during BODY.
