@@ -241,7 +241,7 @@
 ;;;;; Make computer sleep
 (fn oo-sleep []
   (awful.spawn.with_shell "systemctl suspend -i")
-(global-key [modkey] "p" take-screenshot
+(global-key [modkey] "p" oo-sleep
             {:description "sleep" :group "system"})
 ;;;;; Set Global Keys
 (root.keys globalkeys)
