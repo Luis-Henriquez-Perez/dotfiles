@@ -44,7 +44,7 @@
 (adjoin! recentf-exclude (lambda (file) (not (file-exists-p file))))
 
 (setq recentf-max-saved-items nil)
-;;;; always keep important files in recentf-list
+;;;; Add all of my dotfiles
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
   (recentf-push it))
