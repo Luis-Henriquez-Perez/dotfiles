@@ -38,7 +38,7 @@ on my dotfiles to the home directory via ~git checkout~.  If ~git checkout~ fail
 due because of files that would be overwritten by doing this checkout, then my
 script creates a backup directory and moves the files there and tries again.
 #+begin_src bash
-curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
+curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/master/dotinit.sh | bash
 #+end_src
 At the moment, the script has a few problems:
 1. it does not create a uniquely named backup directory
