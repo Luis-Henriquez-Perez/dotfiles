@@ -40,7 +40,7 @@ script creates a backup directory, moves the files there and tries again.
 #+begin_src bash
 curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/| sh
 #+end_src
-At the moment, the script has a few problems:
+At the moment, the script has a few problems.
 1. it does not create a uniquely named backup directory
 2. it might not successfully move the files
    The script relies figuring out which files would be overwritten by using the
