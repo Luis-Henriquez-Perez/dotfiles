@@ -58,6 +58,7 @@
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
   (recentf-push it))
+(recentf-push (recentf-expand-file-name "~/README.org"))
 (recentf-push (recentf-expand-file-name "~/.bashrc"))
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (recentf-push (recentf-expand-file-name "~/.config/init.el"))
