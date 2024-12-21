@@ -44,3 +44,8 @@ curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo
 At the moment, the script has a few problems:
 1. it does not create a uniquely named backup directory
 2. it might not
+   The script relies figuring out which files would be overwritten by using the
+   git checkout failure message which lists those files.  But as I have learned
+   if there are enough files that would be overwritten the list might get cut
+   off and not all of the overwritten files would be moved, resulting in another
+   git checkout failure.
