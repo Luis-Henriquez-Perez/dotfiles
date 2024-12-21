@@ -42,6 +42,6 @@ And then try again.
 curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo/dotinit.sh | bash
 #+end_src
 At the moment, the script has a few problems:
-1. One is it does not create a unique directory to backup the file that would., so on the off-chance there is an existing
+1. it does not create a uniquely named backup directory
 directory of the same name, it will add the files to that directory.  The other problem is that it
 reads from the error message.
