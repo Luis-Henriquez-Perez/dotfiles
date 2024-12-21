@@ -2,16 +2,21 @@
 #+begin_html
 <h1 align="center">Dotfiles</h1>
 #+end_html
-#+CAPTION: My typical destop environment display
+#+CAPTION: My typical destop environment display with awesomewm
 [[file:Pictures/awesomewm-showcase_20241217_160959.png]]
-# although it looks cool with the tiling I am not convinced
 * Principles
 - *keep it simple*
+
 - *ease of setup*
   I should be able to setup my dotfiles with a single command.
 - *thorough documentation* I want to help others reading set up their own dotfiles
   and to do that.  Also I want to remember things that I myself did.
 * Notable Highlights
+- *Operating System*: [[https://archlinux.org/][archlinux]]
+  Arch is a simple and minimal linux distro.  I have the most experience with it
+  than any other distro.  I may switch to Debian or Devuan in the short term
+  future because of wanting more stability for my system.  I am also drawn to
+  [[https://guix.gnu.org/][Guix]] and [[https://nixos.org/][Nix]] for their promise of complete reproduceability.
 - *Dotfile Management*: I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
   existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
   dependencies besides git, it does not use symlinks, and it is overall much
@@ -23,12 +28,13 @@
   crashed at least 5 times.  In any case, awesomewm is lightweight it is fast,
   it is written in a real programming language and it is extremely customizable.
   [[https://stumpwm.github.io/][stumpwm]] As I have mentioned I am attracted to customizable applications and
-  Particularly ones written in lisp.  In this sense.
+  Particularly ones written in lisp.  I am considering moving towards
+  [[https://nixos.org/][qtile]] because I am more familiar with python than lua.  And I would
+  rather use.
 - *Editor*:
   [[Https://www.gnu.org/software/emacs/][Emacs]] is my editor (see my [[file:./dot_config/emacs/README.org][dedicated README]]).  Emacs is the "centerpice" of my
-  configuration.  It is my most configured package.
-** Designated Operating System
-I use [[https://archlinux.org/][archlinux]] as my operating system.
+  configuration.  It is my most configured package and where do most of my work.
+  Check out its [[][dedicated README]].
 * Initializing My Dotfiles (NOT YET WORKING)
 Run the following command which will download the [[~/scripts/dotinit.sh][dotinit.sh]] and run it.  The
 script clones my dotfiles as a bare git repo and attempts to propagate the files
