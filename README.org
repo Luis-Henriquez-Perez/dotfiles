@@ -31,7 +31,7 @@
   configuration.  It is my most configured package.
 ** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
-* How To Initialize My Dotfiles (NOT YET WORKING)
+* Initializing My Dotfiles (NOT YET WORKING)
 Run the following command which will download the [[~/scripts/dotinit.sh][dotinit.sh]] and run it.  The
 script clones my dotfiles as a bare git repo and attempts to propagate the files
 on my dotfiles to the home directory via ~git checkout~.  If ~git checkout~ fails
