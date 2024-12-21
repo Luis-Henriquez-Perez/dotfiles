@@ -13,7 +13,7 @@
   Setting up these dotfiles was hard for me to do.  I want to
   help others reading set up their own dotfiles and to do that.  Also I want to
   remember things that I myself did.
-** Notable Highlights
+* Notable Highlights
 - *Dotfile Management*: I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare git repo]].  Compared to
   existing solutions--namely [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][gnu stow]] and [[https://www.chezmoi.io/][chezmoi]]--it requires no
   dependencies besides git, it does not use symlinks, and it is overall much
@@ -31,7 +31,7 @@
   configuration.  It is my most configured package.
 ** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
-** How To Initialize My Dotfiles (NOT YET WORKING)
+* How To Initialize My Dotfiles (NOT YET WORKING)
 Run the following command which will download the [[~/scripts/dotinit.sh][dotinit.sh]] and run it.  The
 script clones my dotfiles as a bare git repo and attempts to propagate the files
 on my dotfiles to the home directory via ~git checkout~.  If ~git checkout~ fails
