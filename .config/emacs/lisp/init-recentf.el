@@ -50,6 +50,7 @@
 ;; I do I want them to be there.
 (autolet!
  ;; Get access to all of my dotfiles except my pictures.
+ (dolist)
  (shell-command-to-string "git --work-tree=/home/luis --git-dir=/home/luis/.dotfiles -C /home/luis ls-files")
  )
 (shell-command-to-string "" "")
