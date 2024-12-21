@@ -48,7 +48,7 @@
 ;; I realized I want access to all of my dotfiles.  Even if I do not visit one
 ;; of these files for a while I will eventually want to go back to them and when
 ;; I do I want them to be there.
-(oo-dot-gi)
+(shell-command-to-string )
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
   (recentf-push it))
