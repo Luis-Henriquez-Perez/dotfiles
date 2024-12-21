@@ -77,6 +77,7 @@ define_key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"
 define_key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
 define_key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
 define_key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget")
+define_key([mod], "u", lazy.spawncmd(), desc="suspend")
 
 #### add keybindings for groups
 groups = [Group(i) for i in "123456789"]
