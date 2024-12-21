@@ -243,6 +243,8 @@
   (awful.spawn.with_shell "maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")
   (naughty.notify {:title "maim" :text "take screenshot" :timeout 5}))
 
+(global-key [modkey] "p" take-screenshot
+            {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Set Global Keys
 (root.keys globalkeys)
 ;;;;; Manipulate Tags
