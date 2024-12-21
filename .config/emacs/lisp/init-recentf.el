@@ -45,7 +45,7 @@
 
 (setq recentf-max-saved-items nil)
 ;;;; add all of my dotfiles
-;; I realized I want access to all of my
+;; I realized I want access to all of my dotfiles
 (recentf-push (recentf-expand-file-name "~/.xinitrc"))
 (each! (directory-files (expand-file-name "lisp/" user-emacs-directory) :full)
   (recentf-push it))
