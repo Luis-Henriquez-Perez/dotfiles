@@ -32,7 +32,7 @@
 ** Designated Operating System
 I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** How To Initialize Dotfiles (NOT YET WORKING)
-Run the following command which will download the [[~/scripts/dotinit.sh][dotinit.sh]] and run it.
+Run the following command which will download the [[~/scripts/dotinit.sh][dotinit.sh]] and runs it.
 The script then clones my dotfiles as a bare git repo and attempts to propagate
 the files on my dotfiles to the home directory via ~git checkout~.  If ~git
 checkout~ fails due because of files that would be overwritten by doing this
