@@ -240,9 +240,8 @@
             {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Make computer sleep
 (fn take-screenshot []
-  (awful.spawn.with_shell "systemctl suspend -I")
-  (naughty.notify {:title "maim" :text "take screenshot" :timeout 5}))
-
+  (awful.spawn.with_shell "systemctl suspend -i")
+  (naughty.notify {:title "maim" :text "sleep" :timeout 5}))
 (global-key [modkey] "p" take-screenshot
             {:description "Take Screenshot" :group "screenshot"})
 ;;;;; Set Global Keys
