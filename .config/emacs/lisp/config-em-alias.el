@@ -31,6 +31,8 @@
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 ;; TODO allow the specification of how many steps to undo
 (eshell/alias "git-undo" "git reset HEAD~")
+(eshell/alias "copyto" "dot cherry-pick $1")
+(eshell/alias "untrack" "dot rm --cached $1 && dot commit -m \"Stop tracking $1.\" $1")
 ;;;; emacs maintenance
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
 (eshell/alias "etest" "(let ((default-directory user-emacs-directory)) ${eldev -d test $1})")
