@@ -34,7 +34,9 @@ I use [[https://archlinux.org/][archlinux]] as my operating system.
 ** How To Initialize Dotfiles (NOT YET WORKING)
 +Run the following command which will download the =dotinit.sh= script and run it.+
 The =dotinit.sh= clones my dotfiles as a bare git repo and attempts to propagate
-the files on my dotfiles to the home directory via ~git checkout~
+the files on my dotfiles to the home directory via ~git checkout~.  If ~git
+checkout~ fails due because of files that would be overwritten by doing this
+checkout, then.
 Currently, the script has a few problems:
 1. One is it does not create a unique directory to backup the file that would., so on the off-chance there is an existing
 directory of the same name, it will add the files to that directory.  The other problem is that it
