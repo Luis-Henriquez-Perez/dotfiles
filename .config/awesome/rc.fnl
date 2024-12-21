@@ -242,7 +242,7 @@
 (fn oo-sleep []
   (awful.spawn.with_shell "systemctl suspend -i")
 
-(global-key [modkey] "u" oo-suspend {:description "sleep" :group "system"})
+(global-key [modkey] "u" oo-suspend {:description "suspend" :group "system"})
 ;;;;; Set Global Keys
 (root.keys globalkeys)
 ;;;;; Manipulate Tags
