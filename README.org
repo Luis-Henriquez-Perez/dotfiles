@@ -43,6 +43,4 @@ curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/raw/master--bare-repo
 #+end_src
 At the moment, the script has a few problems:
 1. it does not create a uniquely named backup directory
-2. 
-directory of the same name, it will add the files to that directory.  The other problem is that it
-reads from the error message.
+2. it might not
