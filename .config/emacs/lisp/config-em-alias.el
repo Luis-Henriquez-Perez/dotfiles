@@ -28,8 +28,11 @@
 ;;;; requirements
 (require 'em-alias)
 ;;;; git
+(eshell/alias "gad" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push")
+(eshell/alias "gadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push")
+(eshell/alias "gs" "git status --porcelain")
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
-;; TODO allow the specification of how many steps to undo
+(eshell/alias "gundo" "git reset HEAD~")
 (eshell/alias "git-undo" "git reset HEAD~")
 ;;;; emacs maintenance
 (eshell/alias "emacs-test" "{cd $user-emacs-directory; eldev -d test $1}")
@@ -60,13 +63,7 @@
 
 (eshell/alias "list-wifi" "nmcli dev wifi list")
 (eshell/alias "listwifi" "nmcli dev wifi list")
-;;;; dotfiles
-(eshell/alias "dotadd" "dot add $1 && dot commit -m \"Add $1.\" $1 && git push")
-;; Define a commit-undo
-(eshell/alias "add" "dot add $1 && dot commit -m \"Add $1.\" $1 && dot push $1")
-(eshell/alias "dot" (format "%s --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $*"
-                            (executable-find "git")))
-(eshell/alias "dots" "dot status --porcelain")
+(eshell/alias "foo" "echo $1")
 ;;;; blogging
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")

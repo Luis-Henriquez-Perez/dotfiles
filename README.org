@@ -18,9 +18,10 @@
   system from scratch specifically tailored to my needs.
 - *Dotfile Management*: [[https://git-scm.com/][git]]
 
-  I manage my dotfiles using a [[https://www.atlassian.com/git/tutorials/dotfiles][bare Git repository]].  Unlike other tools like
-  [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][GNU Stow]], and [[https://www.chezmoi.io/][chezmoi]], this approach requires no additional dependencies
-  beyond Git, avoids symlinks, and is overall simpler to maintain.
+  I manage my dotfiles in my home directory [[https://www.bowmanjd.com/dotfiles/dotfiles-1-simple-no-bare-repo/][without using a bare git repo]].
+  Unlike other methods advocated by other tools like [[https://yadm.io/][yadm]], [[https://www.gnu.org/software/stow/][GNU Stow]], and
+  [[https://www.chezmoi.io/][chezmoi]], this approach requires no additional dependencies beyond Git, avoids
+  symlinks, and is simpler to maintain.
 - *Window Manager*: [[https://awesomewm.org/][awesomewm]]
 
   AwesomeWM is lightweight, fast, and written a real programming language, [[https://www.lua.org/][LUA]],

@@ -203,20 +203,18 @@ is already narrowed."
 (defun! oo-create-new-init-file (feature)
   "Create a new init file for feature."
   (interactive "sFeature: ")
-  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
   (set! filename (format "init-%s.el" feature))
   (set! comment1 (format "Initialize %s" feature))
   (set! comment2 (format "Initialize %s." feature))
-  (oo--create-lisp-dir-file filename lisp-dir comment1 comment2))
+  (oo--create-lisp-dir-file filename oo-lisp-dir comment1 comment2))
 
 (defun! oo-create-new-config-file (feature)
   "Create a new config file for feature."
   (interactive "sFeature: ")
-  (set! lisp-dir (oo--chezmoi-source-path oo-lisp-dir))
   (set! filename (format "config-%s.el" feature))
   (set! comment1 (format "Configure %s" feature))
   (set! comment2 (format "Configure %s." feature))
-  (oo--create-lisp-dir-file filename lisp-dir comment1 comment2))
+  (oo--create-lisp-dir-file filename oo-lisp-dir comment1 comment2))
 
 (defun! oo-create-new-test-file (file)
   "Create a new config file for feature."
@@ -233,79 +231,38 @@ is already narrowed."
   (oo-ensure-file-header)
   (oo-ensure-provide))
 
-(defun! oo-move-chezmoi-unmanaged-to-trash (&optional dry-run-p)
-  "Move any unmanaged files in lisp directory to trash.
-With prefix argument, run as dry-run (do not actually move any files)."
-  (interactive "P")
-  (set! dir (expand-file-name "~/.config/emacs/lisp/"))
-  (set! command (format "chezmoi unmanaged %s" dir))
-  (set! unmanaged-files (split-string (shell-command-to-string command) "\n" t))
-  (for! (file unmanaged-files)
-    (message "unmanaged-files -> %s" (expand-file-name file "~"))
-    (collecting! unmanaged (expand-file-name file "~"))
-    (unless dry-run-p
-      (let ((default-directory (expand-file-name "~")))
-        (move-file-to-trash file))))
-  unmanaged)
-
 ;; TODO: do not commit if battery is discharging to avoid file corruption.
-(defhook! oo-auto-commit-and-push-file-h (after-save-hook)
-  "Auto commit and push any dotfile I edit.
+(defhook! oo-auto-commit-and-push-dotfile-h (after-save-hook)
+  "If current buffer is a dotfile buffer commit and push.
 Determine whether I am editing a dotfile and if I am automatically commit the
 changes and push them."
-  (unless (buffer-file-name) (return!))
-  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
+  (aand! (buffer-file-name)
+         (shell-command-to-string (format "git ls-files %s" (shell-quote-argument it)))
+         (oo-add-dotfile it)))
+
+(defalias 'eshell/dotadd 'oo-add-dotfile)
+(defun! oo-add-dotfile (file &rest files)
+  "Register dotfile.
+Stage, commit and push dotfile.  If dotfile is newly."
+  (interactive)
+  (set! fname (expand-file-name (convert-standard-filename file)))
   (set! default-directory (file-name-directory fname))
-  (set! dots (expand-file-name "~/.dotfiles/"))
-  (set! worktree (expand-file-name "~"))
-  (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
-  (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
-  (set! msg (format "%s %s" (shell-quote-argument fname) (current-time-string)))
+  (set! tracked-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))
+  (if tracked-p
+      (set! msg (format "%s %s" fname (current-time-string)))
+    (set! msg (format "Add %s." fname)))
   (flet! status (_ status)
     (if (string-match-p "finished" status)
         (trace! "pushed successfully -> %S" status)
       (message "failed push -> %S" status)))
-  (unless (string-empty-p diff)
-    (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
-    (call-process-shell-command command)
-    (set! (program arg1 arg2) (split-string git))
-    (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
-    (set-process-sentinel proc #'status)
-    ;; (set-process-filter proc 'gac-process-filter)
-    ))
-
-(defun! oo-add-dotfile ()
-  "Add the current file-buffer as a dotfile."
-  (interactive)
-  (unless (buffer-file-name) (return!))
-  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
-  (set! default-directory (file-name-directory fname))
-  (set! git (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots worktree))
-  (set! diff (shell-command-to-string (format "%s diff %s" git fname)))
-  (set! msg (format "%s %s" (shell-quote-argument fname) (current-time-string)))
-  (unless (string-empty-p diff)
-    (set! command (format "%s add %s && %s commit -m %S %s" git fname git msg fname))
-    (call-process-shell-command command)
-    (set! (program arg1 arg2) (split-string git))
-    (set! proc (start-process "git" "*git-auto-push*" program arg1 arg2 "push"))
-    (set-process-sentinel proc #'status)
-    ;; (set-process-filter proc 'gac-process-filter)
-    )
+  (set! command (format "git add %s && git commit -m %S %s" fname msg fname))
+  (call-process-shell-command command)
+  (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
+  (set-process-sentinel proc #'status)
+  (when files
+    (oo-add-dotfile (car files) (cdr files)))
+  ;; (set-process-filter proc 'gac-process-filter)
   )
-
-;; I need to add a local hook.
-;; Does not completely work yet, magit status opens from bare git repo but the
-;; commands in it fail because they clain were are not in a repo.
-(defun! oo-magit-status-dotfiles ()
-  "Open Magit status for the bare Git dotfiles repository."
-  (interactive)
-  (set! dotfile-dir (expand-file-name "~/.dotfiles/"))
-  (set! home-dir (expand-file-name "~/"))
-  (set! worktree (format "--work-tree=%s" home-dir))
-  (set! dir (format "--git-dir=%s" dotfile-dir))
-  (set! mgga `(,dir ,worktree ,@magit-git-global-arguments))
-  (setq magit-git-global-arguments mgga)
-  (magit-status))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
