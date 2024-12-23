@@ -27,26 +27,6 @@
 ;;; Code:
 (require 'eshell-z)
 (require 'eshell-up)
-;;;; open eshell at bottom
-(oo-popup-at-bottom "\\*eshell")
-;;;; hooks
-(hook! eshell-mode-hook eat-eshell-mode)
-(hook! eshell-mode-hook abbrev-mode)
-(hook! eshell-mode-hook smartparens-mode)
-;;;; prevent eshell from printing out messages on load
-;; Eshell prints various messages about loading modules.  These messages
-;; originate from the function [[][eshell-unload-all-modules]].  I would rather
-;; not see these messages.
-(advice-add #'eshell-unload-all-modules :around #'oo-funcall-quietly)
-;; At first I thought the culprit was this function, but I was wrong.  The
-;; printing comes from =eshell-mode=.  In any case, however, I silence it as
-;; well.
-(advice-add #'eshell-mode :around #'oo-funcall-quietly)
-;;;; TODO: configure eshell prompt
-(autoload 'epe-theme-lambda "eshell-prompt-extras")
-(opt! eshell-banner-message "")
-(opt! eshell-highlight-prompt nil)
-(opt! eshell-prompt-function 'epe-theme-lambda)
 ;;;; Make eshell prompt read-only
 ;; Using evil and pressing backspace deletes.
 (defun! oo--make-read-only (fn &rest args)
@@ -57,6 +37,7 @@
                                rear-nonsticky (font-lock-face read-only)))
   (add-text-properties 0 (length prompt) properties prompt)
   prompt)
+
 (advice-add 'epe-theme-lambda :around #'oo--make-read-only)
 ;;;; eshell history
 (opt! eshell-hist-ignoredups t)
