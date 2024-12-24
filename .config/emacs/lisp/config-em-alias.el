@@ -34,9 +34,9 @@
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 (eshell/alias "gundo" "git reset HEAD~")
 (eshell/alias "git-undo" "git reset HEAD~")
-(eshell/alias "delete-branch" "git branch -D $1 && git push origin delete $1")
+(eshell/alias "delete-branch" "git branch -D $1 && git push origin --delete $1")
 (eshell/alias "branch" "git checkout -b $1 && git push -u origin $1")
-(eshell/alias "branch" "git fetch -a && git checkout")
+;; (eshell/alias "branch" "git fetch -a && git checkout")
 ;; "git checkout --track origin/<branch-name>"
 (eshell/alias "remote-branch" "git fetch -a && git checkout -b $1 && git branch --set-upstream-to=origin/$1")
 ;; https://stackoverflow.com/questions/1441010/the-shortest-possible-output-from-git-log-containing-author-and-date
@@ -44,6 +44,11 @@
 (eshell/alias "grn" "rename-file $1 $2 && git add $1 $2 && git commit -m \"Rename $1 -> $2\" && git push")
 (eshell/alias "gls" "git ls-files $1")
 (eshell/alias "cherry" "git cherry-pick $* && git push --force")
+(eshell/alias "delete-remote" "git push origin --delete $1")
+(eshell/alias "delrem" "git push origin --delete $1")
+(eshell/alias "remotes" "git --no-pager branch -r")
+(eshell/alias "checkout" "git checkout $*")
+(eshell/alias "check" "git checkout $*")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
@@ -64,7 +69,6 @@
 (eshell/alias "files" "pacman -Ql $1")
 (eshell/alias "pac" "sudo pacman --noconfirm $*")
 (eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
-(pop eshell-command-aliases-list)
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "remove" "sudo pacman -Rns --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rns --noconfirm $*")
@@ -72,9 +76,7 @@
 (eshell/alias "search-quiet" "pacman -Ssq $*")
 (eshell/alias "update" "sudo pacman -Syu")
 (eshell/alias "update-system" "sudo pacman -Syu")
-
 (eshell/alias "update-email" "mbsync -a")
-
 (eshell/alias "list-wifi" "nmcli dev wifi list")
 (eshell/alias "listwifi" "nmcli dev wifi list")
 (eshell/alias "foo" "echo $1")
@@ -82,56 +84,17 @@
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 ;;;; miscellaneous
+(eshell/alias "iso" "sudo dd if=$1 of=$2 bs=4M status=progress")
 (eshell/alias "up" "eshell-up $1")
 (eshell/alias "pk" "eshell-up-peek $1")
 (eshell/alias "unpack" "mv $1/* . && rmdir $1")
-;; rsync -e "ssh -p 65002" -uvr html/ u150683034@195.35.38.189:/home/u150683034/domains/luishp.blog/public_html
-;; rsync -e 'ssh -p PORT_NUMBER' -uvr html/ username@IP_ADDRESS:/path/to/destination/
-;; chezmoi apply ~/.config/emacs/lisp
-;; chezmoi apply ~/.configuration/
-;; (defun! oo-download-audio ()
-;;   (interactive)
-;;   (set! default-directory (expand-file-name "~/Music"))
-;;   (set! url (shell-quote-argument (yeetube-get-url)))
-;;   (set! command (format "/usr/bin/yt-dlp -x --audio-format wav --embed-thumbnail %s" url))
-;;   (call-process-shell-command command))
-;; (eshell/alias "update-wallpaper" "")
-;; (call-process-shell-command "/usr/bin/yt-dlp -x --audio-format wav --embed-thumbnail https\\://youtube.com/watch\\?v\\=DT61L8hbbJ4")
-;; https://youtube.com/watch?v=soJLOqC7_FU
-;; (call-process-shell-command "/usr/bin/yt-dlp -x --audio-format wav --embed-thumbnail")
-;; ffmpeg -i your_video.mp4 -vf "select=eq(pict_type\,PICT_TYPE_I)" -vsync vfr thumbnail%04d.png
-;; convert -delay 5 -loop 0 thumbnail*.png animation.gif
-;; maim -i $(xdotool getactivewindow) screenshot.png
-;; TODO: A command that will combine rm/rmdir in one so it will remove a file or
-;; directory.  It should default to moving the targets to trash.
-
-;; TODO: A command for moving everything in a directory to outer directory.
-
-;; TODO: Determine how to make the output optional and in that case just use the
-;; filename of the original file.  Obviously prompt for what to do if the
-;; filename already exists.
 (eshell/alias "html-to-org" "pandoc -f html -t org $1 -o $2")
-;; I am not sure whether to leave this here or create another configuration file
-;; that loads when `em-alias' is loaded.
-;; https://olddeuteronomy.github.io/post/eshell-aliases-and-prompt/
-;; https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
-;; (eshell/alias "e" "find-file $1")
-;; For now do this, but I just really want to scroll up.  I do not want to
-;; actually delete the buffer contents.  I mean I guess its O.K. since the
-;; contents should be saved in eshell-history, but its more secure to actuall
-;; have the physical buffer contents.
 (eshell/alias "clear" "eshell/clear t")
-;; I decided that I almost always prefer opening the file in another window.  So
-;; I am replacing ff with `find-file-other-window'
-;; (eshell/alias "ff" "find-file $1")
 (eshell/alias "ff" "fo $1")
 (eshell/alias "fo" "find-file-other-window $1")
 (eshell/alias "ffow" "find-file-other-window $1")
 (eshell/alias "open" "find-file $1")
 (eshell/alias "d" "dired $1")
-;; https://howardism.org/Technical/Emacs/eshell-why.html
-;; https://stackoverflow.com/questions/10566532/how-can-bash-execute-a-command-in-a-different-directory-context
-;; TODO: Allow arguments to commands.  I ommited them for the sake of.
 ;;; provide
 (provide 'config-em-alias)
 ;;; config-em-alias.el ends here
