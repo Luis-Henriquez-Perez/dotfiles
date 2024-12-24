@@ -43,6 +43,7 @@
 (eshell/alias "glog" "git --no-pager log -n 5 --pretty=format:'%h %ad %s' --date=format:'%Y-%m-%d %H:%M:%S'")
 (eshell/alias "grn" "rename-file $1 $2 && git add $1 $2 && git commit -m \"Rename $1 -> $2\" && git push")
 (eshell/alias "gls" "git ls-files $1")
+(eshell/alias "cherry" "git cherry-pick $* && git push --force")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
