@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## xinitrc
-
+# https://wiki.archlinux.org/title/Xorg
 # The program [[https://wiki.archlinux.org/title/Xinit#xinitrc][xinit]] lets me manually start the [[Xorg]] display server.
 # The .xinitrc is the shell script use to start up the client programs for an
 # invocation of xinit if a custom script is not provided.  When I use it I invoke
