@@ -32,7 +32,7 @@
 ;;; built-in settings
 ;;;; c source code
 ;;;;; user information
-(setq user-full-name "Luis Henriquez")
+(setq user-full-name "Luis Henriquez-Perez")
 (setq user-mail-address "luis@luishp.xyz")
 ;;;;; qtile
 ;; https://old.reddit.com/r/emacs/comments/xk7k6x/emacs_wont_go_fullscreen_in_qtile/

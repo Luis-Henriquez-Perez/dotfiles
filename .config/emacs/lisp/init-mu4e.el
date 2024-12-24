@@ -57,7 +57,7 @@
              :enter-func #'+mu4e--main-enter-message
              :leave-func #'+mu4e--main-leave-message
              :vars `((user-mail-address      . "luis@luishp.xyz")
-                     (user-full-name         . "Luis M Henriquez Perez")
+                     (user-full-name         . "Luis M Henriquez-Perez")
                      (mu4e-refile-folder     . ,(expand-file-name "/luishp/archive"))
                      (mu4e-drafts-folder     . ,(expand-file-name "/luishp/drafts"))
                      (mu4e-sent-folder       . ,(expand-file-name "/luishp/sent"))
@@ -67,7 +67,7 @@
              :enter-func #'+mu4e--legacy-enter-message
              :leave-func #'+mu4e--legacy-leave-message
              :vars `((user-mail-address      . "luishenriquezperez@gmail.com")
-                     (user-full-name         . "Luis M Henriquez Perez")
+                     (user-full-name         . "Luis M Henriquez-Perez")
                      (mu4e-refile-folder     . "/luishenriquezperez/archive")
                      (mu4e-drafts-folder     . ,(expand-file-name "/luishenriquezperez/drafts"))
                      (mu4e-sent-folder       . ,(expand-file-name "/luishenriquezperez/sent"))
