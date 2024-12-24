@@ -10,7 +10,7 @@
 ### variables
 # Set qutebrowser as default browser.
 export BROWSER=qutebrowser
-export LIBGL_ALWAYS_SOFTWARE=1
+export LIBGL_ALWAYS_SOFTWARE=1 # This is for kitty.
 ### set emacsclient as my preferred editor
 export ALTERNATE_EDITOR=""
 # Using the argument "-c" would make emacs open in the terminal.  But obviously
