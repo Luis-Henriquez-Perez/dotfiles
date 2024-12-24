@@ -250,13 +250,13 @@ the file.  Additionally, push the file but only if the battery is charging or
 the battery percentage is greater than 60%."
   (interactive)
   (set! default-directory (expand-file-name "~/"))
-  (traace! "Adding dotfile %s" file)
   (set! fname (expand-file-name (convert-standard-filename file)))
   (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
   (set! modified-p (not (string-empty-p (shell-command-to-string (format "git diff %s" (shell-quote-argument fname))))))
   ;; Do not do anything if the file is already tracked and has no changes.
   (when (and (not modified-p) tracked-p)
     (return!))
+  (traace! "Adding dotfile %s" file)
   (if tracked-p
       (set! msg (abbreviate-file-name fname))
     (set! msg (format "Add %s." (abbreviate-file-name fname))))
