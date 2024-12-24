@@ -46,7 +46,7 @@
 (eshell/alias "cherry" "git cherry-pick $* && git push --force")
 (eshell/alias "delete-remote" "git push origin --delete $1")
 (eshell/alias "delrem" "git push origin --delete $1")
-(eshell/alias "remotes" "git branch -r")
+(eshell/alias "remotes" "git --no-pager branch -r")
 (eshell/alias "checkout" "git checkout $*")
 (eshell/alias "check" "git checkout $*")
 ;; (eshell/alias "iso" "sudo dd if=/path/to/iso of=/dev/sdX bs=4M status=progress")
