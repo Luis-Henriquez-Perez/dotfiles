@@ -256,7 +256,7 @@ the battery percentage is greater than 60%."
   ;; Do not do anything if the file is already tracked and has no changes.
   (when (and (not modified-p) tracked-p)
     (return!))
-  (traace! "Adding dotfile %s" file)
+  (trace! "Adding dotfile %s" file)
   (if tracked-p
       (set! msg (abbreviate-file-name fname))
     (set! msg (format "Add %s." (abbreviate-file-name fname))))
