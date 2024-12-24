@@ -247,10 +247,14 @@ Stage, commit and push dotfile.  If dotfile is newly."
   (interactive)
   (set! fname (expand-file-name (convert-standard-filename file)))
   (set! default-directory (file-name-directory fname))
-  (set! tracked-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))
+  (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
+  (set! modified-p (not (string-empty-p (shell-command-to-string (format "git diff %s" (shell-quote-argument fname))))))
+  ;; Do not do anything if the file is already tracked and has no changes.
+  (when (and (not modified-p) tracked-p)
+    (return!))
   (if tracked-p
-      (set! msg (format "%s %s" fname (current-time-string)))
-    (set! msg (format "Add %s." fname)))
+      (set! msg (abbreviate-file-name fname))
+    (set! msg (format "Add %s." (abbreviate-file-name fname))))
   (flet! status (_ status)
     (if (string-match-p "finished" status)
         (trace! "pushed successfully -> %S" status)
