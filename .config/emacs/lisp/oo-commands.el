@@ -247,7 +247,6 @@ repository and if it is, commit and push all changes.  Otherwise, do nothing."
   "Register, stage, commit and push FILE to dotfiles repository.
 If FILE is not in registered in dotfile repo, register it.  In any case commit
 the file.  Additionally, push the file but only if the battery is charging or
-
 the battery percentage is greater than 60%."
   (interactive)
   (set! default-directory (expand-file-name "~/"))
