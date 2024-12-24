@@ -1,10 +1,11 @@
 #!/bin/sh
 
 ## xinitrc
-# The program [[https://wiki.archlinux.org/title/Xinit#xinitrc][xinit]] lets me manually start the [[https://wiki.archlinux.org/title/Xorg][Xorg]] display server.
-# The =.xinitrc= is the shell script use to start up the client programs for an
-# invocation of =xinit= if a custom script is not provided.  When I use it I invoke
-# =startx=.
+
+# The program [[https://wiki.archlinux.org/title/Xinit#xinitrc][xinit]] lets me manually start the [[Xorg]] display server.
+# The .xinitrc is the shell script use to start up the client programs for an
+# invocation of xinit if a custom script is not provided.  When I use it I invoke
+# startx.
 ### set the cursor
 xsetroot -cursor_name left_ptr
 ### load xprofile
@@ -23,7 +24,7 @@ fi
 # This is adapted from the archwiki's xinit article on switching
 # between window environments. https://wiki.archlinux.org/title/Xinit#Switching_between_desktop_environments/window_managers.
 # Here Xfce is kept as default
-session=${1:-awesome}
+session=${1:-qtile}
 
 case $session in
     qtile             ) exec qtile start;;
