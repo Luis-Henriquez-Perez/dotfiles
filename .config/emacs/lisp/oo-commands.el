@@ -232,9 +232,14 @@ is already narrowed."
   (oo-ensure-provide))
 
 (defhook! oo-auto-commit-and-push-dotfile-h (after-save-hook)
-  "If current buffer is a dotfile buffer commit and push.
-Determine whether I am editing a dotfile and if I am automatically commit the
-changes and push them."
+  "Automatically commit and push dotfile changes on save.
+This function is designed to be used as an `after-save-hook`. When a buffer is saved,
+it checks whether the saved file is part of the dotfiles repository. If the file is
+a tracked dotfile, the changes are committed and pushed automatically"
+  ;;   "If current buffer is a dotfile buffer commit and push.
+  ;; Determine whether I am editing a dotfile and if I am automatically commit the
+  ;; changes and push them."
+  (set! default-directory (expand-file-name "~/"))
   (aand! (buffer-file-name)
          (set! command (format "git ls-files %s" (shell-quote-argument (expand-file-name it))))
          (set! output (shell-command-to-string command))
@@ -243,12 +248,11 @@ changes and push them."
 
 (defalias 'eshell/dotadd 'oo-add-dotfile)
 (defun! oo-add-dotfile (file)
-  "Register FILE as a dotfile.
-Stage, commit and push dotfile.  If dotfile is newly."
+  "Stage, commit and push FILE."
   (interactive)
+  (set! default-directory (expand-file-name "~/"))
   (trace! "Adding dotfile %s" file)
-  (set! fname (expand-file-name (convert-standard-filename file)))
-  (set! default-directory (file-name-directory fname))
+  (set! fname (expand-file-name (convert-standard-filename file) oo-dotfile-dir))
   (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
   (set! modified-p (not (string-empty-p (shell-command-to-string (format "git diff %s" (shell-quote-argument fname))))))
   ;; Do not do anything if the file is already tracked and has no changes.
@@ -271,6 +275,10 @@ Stage, commit and push dotfile.  If dotfile is newly."
   (when (or (equal battery-status "N/a") (> battery-percent 60))
     (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
     (set-process-sentinel proc #'status)))
+
+(defun oo-arch-wiki-docs ()
+  ""
+  )
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
