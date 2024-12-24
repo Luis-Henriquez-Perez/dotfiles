@@ -7,6 +7,10 @@
 ## xprofile
 # The xprofile is that is conventially used to execute commands at the start of
 # the xsession before the window manager is loaded
+### variables
+# Set qutebrowser as default browser.
+export BROWSER=qutebrowser
+export LIBGL_ALWAYS_SOFTWARE=1
 ### set emacsclient as my preferred editor
 export ALTERNATE_EDITOR=""
 # Using the argument "-c" would make emacs open in the terminal.  But obviously
@@ -30,12 +34,6 @@ export PATH=$PATH:~/.roswell/bin
   source "$EAT_SHELL_INTEGRATION_DIR/bash"
 
 export PATH=$PATH:/home/luis/scripts
-### variables
-# Set qutebrowser as default browser.
-export BROWSER=qutebrowser
-
-export LIBGL_ALWAYS_SOFTWARE=1
-
 ### set the wallpaper for the first time
 python ~/scripts/set_wallpaper.py
 
