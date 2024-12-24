@@ -68,7 +68,6 @@
 (eshell/alias "orphan" "pacman -Qtd $*")
 (eshell/alias "files" "pacman -Ql $1")
 (eshell/alias "pac" "sudo pacman --noconfirm $*")
-(eshell/alias "pacman" "sudo pacman -S --noconfirm $*")
 (eshell/alias "install" "sudo pacman -S --noconfirm $*")
 (eshell/alias "remove" "sudo pacman -Rns --noconfirm $*")
 (eshell/alias "uninstall" "sudo pacman -Rns --noconfirm $*")
@@ -79,7 +78,6 @@
 (eshell/alias "update-email" "mbsync -a")
 (eshell/alias "list-wifi" "nmcli dev wifi list")
 (eshell/alias "listwifi" "nmcli dev wifi list")
-(eshell/alias "foo" "echo $1")
 ;;;; blogging
 (eshell/alias "publish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
 (eshell/alias "epublish" "{cd $(expand-file-name \"html\" \"~/Documents/blog\") ; (shut-up (org-publish \"blog\" t))}")
