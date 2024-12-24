@@ -231,20 +231,22 @@ is already narrowed."
   (oo-ensure-file-header)
   (oo-ensure-provide))
 
-;; TODO: do not commit if battery is discharging to avoid file corruption.
 (defhook! oo-auto-commit-and-push-dotfile-h (after-save-hook)
   "If current buffer is a dotfile buffer commit and push.
 Determine whether I am editing a dotfile and if I am automatically commit the
 changes and push them."
   (aand! (buffer-file-name)
-         (shell-command-to-string (format "git ls-files %s" (shell-quote-argument it)))
+         (set! command (format "git ls-files %s" (shell-quote-argument (expand-file-name it))))
+         (set! output (shell-command-to-string command))
+         (not (string-empty-p output))
          (oo-add-dotfile it)))
 
 (defalias 'eshell/dotadd 'oo-add-dotfile)
-(defun! oo-add-dotfile (file &rest files)
-  "Register dotfile.
+(defun! oo-add-dotfile (file)
+  "Register FILE as a dotfile.
 Stage, commit and push dotfile.  If dotfile is newly."
   (interactive)
+  (trace! "Adding dotfile %s" file)
   (set! fname (expand-file-name (convert-standard-filename file)))
   (set! default-directory (file-name-directory fname))
   (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
@@ -261,12 +263,14 @@ Stage, commit and push dotfile.  If dotfile is newly."
       (message "failed push -> %S" status)))
   (set! command (format "git add %s && git commit -m %S %s" fname msg fname))
   (call-process-shell-command command)
-  (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
-  (set-process-sentinel proc #'status)
-  (when files
-    (oo-add-dotfile (car files) (cdr files)))
-  ;; (set-process-filter proc 'gac-process-filter)
-  )
+  ;; Do not push if there is a risk of suddenly shutting down and losing
+  ;; information.
+  (require 'battery)
+  (set! battery-percent (battery-format "%p" (funcall battery-status-function)))
+  (set! battery-status (battery-format "%r" (funcall battery-status-function)))
+  (when (or (equal battery-status "N/a") (> battery-percent 60))
+    (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
+    (set-process-sentinel proc #'status)))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
