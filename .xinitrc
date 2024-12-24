@@ -23,7 +23,7 @@ fi
 # This is adapted from the archwiki's xinit article on switching
 # between window environments. https://wiki.archlinux.org/title/Xinit#Switching_between_desktop_environments/window_managers.
 # Here Xfce is kept as default
-session=${1:-awesome}
+session=${1:-i3}
 
 case $session in
     qtile             ) exec qtile start;;
