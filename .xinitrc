@@ -10,8 +10,9 @@
 ### set the cursor
 xsetroot -cursor_name left_ptr
 ### load xprofile
+#
 # Make sure this is before the 'exec' command or it won't be sourced.
-# I have taken this from the [[https://wiki.archlinux.org/title/Xprofile][archwiki article]] on =xprofile=.  It recommends
+# I have taken this from the [[][archwiki article]] on =xprofile=.  It recommends
 # loading the =xprofile= from the =xinitrc=.  I am still a bit confused.
 if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
   [ -f /etc/xprofile ] && . /etc/xprofile
