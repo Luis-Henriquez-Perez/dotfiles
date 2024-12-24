@@ -49,7 +49,7 @@
 (eshell/alias "remotes" "git --no-pager branch -r")
 (eshell/alias "checkout" "git checkout $*")
 (eshell/alias "check" "git checkout $*")
-(eshell/alias "iso" "sudo dd if=$1 of=/dev/sdX bs=4M status=progress")
+(eshell/alias "iso" "sudo dd if=$1 of=$2 bs=4M status=progress")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
