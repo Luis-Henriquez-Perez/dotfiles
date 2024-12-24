@@ -25,7 +25,7 @@
 ;; This is my configuration for .
 ;;
 ;;; Code:
-(require 'init-package)
+(require 'init-elpaca)
 ;;; provide
 (provide 'base-packages)
 ;;; base-packages.el ends here
