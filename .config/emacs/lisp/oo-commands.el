@@ -232,13 +232,9 @@ is already narrowed."
   (oo-ensure-provide))
 
 (defhook! oo-auto-commit-and-push-dotfile-h (after-save-hook)
-  "Automatically commit and push dotfile changes on save.
-This function is designed to be used as an `after-save-hook`. When a buffer is saved,
-it checks whether the saved file is part of the dotfiles repository. If the file is
-a tracked dotfile, the changes are committed and pushed automatically"
-  ;;   "If current buffer is a dotfile buffer commit and push.
-  ;; Determine whether I am editing a dotfile and if I am automatically commit the
-  ;; changes and push them."
+  "Commit and push changes to dotfile on save.
+When a buffer is saved, check whether the saved file is part of the dotfiles
+repository and if it is, commit and push all changes.  Otherwise, do nothing."
   (set! default-directory (expand-file-name "~/"))
   (aand! (buffer-file-name)
          (set! command (format "git ls-files %s" (shell-quote-argument (expand-file-name it))))
@@ -248,7 +244,10 @@ a tracked dotfile, the changes are committed and pushed automatically"
 
 (defalias 'eshell/dotadd 'oo-add-dotfile)
 (defun! oo-add-dotfile (file)
-  "Stage, commit and push FILE."
+  "Register, stage, commit and push FILE to dotfiles repository.
+If FILE is not in registered in dotfile repo, register it.  In any case commit
+the file.  Additionally, push the file but only if the battery is charging or
+the battery percentage is greater than 60%."
   (interactive)
   (set! default-directory (expand-file-name "~/"))
   (trace! "Adding dotfile %s" file)
@@ -264,7 +263,7 @@ a tracked dotfile, the changes are committed and pushed automatically"
   (flet! status (_ status)
     (if (string-match-p "finished" status)
         (trace! "pushed successfully -> %S" status)
-      (message "failed push -> %S" status)))
+      (trace! "failed push -> %S" status)))
   (set! command (format "git add %s && git commit -m %S %s" fname msg fname))
   (call-process-shell-command command)
   ;; Do not push if there is a risk of suddenly shutting down and losing
@@ -275,10 +274,6 @@ a tracked dotfile, the changes are committed and pushed automatically"
   (when (or (equal battery-status "N/a") (> battery-percent 60))
     (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
     (set-process-sentinel proc #'status)))
-
-(defun oo-arch-wiki-docs ()
-  ""
-  )
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
