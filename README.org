@@ -31,7 +31,7 @@
 
   Emacs is my primary editor as well as the the centerpiece of my configuration
   with extensive customization detailed in a [[file:./dot_config/emacs/README.org][dedicated README]].
-* Bootstrapping (In Progress)
+* Bootstrapping
 The following command downloads my dotfile bootstrapping script, [[~/scripts/dotinit.sh][dotinit.sh]], and
 runs it.  In turn =dotinit.sh= clones my dotfiles as a bare git repo and attempts
 to propagate the files on my dotfiles to the home directory via /git checkout/.
@@ -39,13 +39,5 @@ If git refuses to checkout the files because that would ovewrite existing files,
 then my script creates a backup directory, moves the conflicting files there,
 and tries again.
 #+begin_src bash
-curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/| sh
+curl -sSL https://raw.githubusercontent.com/Luis-Henriquez-Perez/dotfiles/refs/heads/master/scripts/dotinit.sh | sh
 #+end_src
-At the moment, the script has a few problems.
-1. it does not create a uniquely named backup directory
-2. it might not successfully move the files
-   The script relies figuring out which files would be overwritten by using the
-   git checkout failure message which lists those files.  But as I have learned
-   if there are enough files that would be overwritten the list might get cut
-   off and not all of the overwritten files would be moved, resulting in another
-   git checkout failure.
