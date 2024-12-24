@@ -34,9 +34,9 @@
 ;; https://stackoverflow.com/questions/927358/how-do-i-undo-the-most-recent-local-commits-in-git#927386
 (eshell/alias "gundo" "git reset HEAD~")
 (eshell/alias "git-undo" "git reset HEAD~")
-(eshell/alias "delete-branch" "git branch -D $1 && git push origin delete $1")
+(eshell/alias "delete-branch" "git branch -D $1 && git push origin --delete $1")
 (eshell/alias "branch" "git checkout -b $1 && git push -u origin $1")
-(eshell/alias "branch" "git fetch -a && git checkout")
+;; (eshell/alias "branch" "git fetch -a && git checkout")
 ;; "git checkout --track origin/<branch-name>"
 (eshell/alias "remote-branch" "git fetch -a && git checkout -b $1 && git branch --set-upstream-to=origin/$1")
 ;; https://stackoverflow.com/questions/1441010/the-shortest-possible-output-from-git-log-containing-author-and-date
@@ -44,6 +44,12 @@
 (eshell/alias "grn" "rename-file $1 $2 && git add $1 $2 && git commit -m \"Rename $1 -> $2\" && git push")
 (eshell/alias "gls" "git ls-files $1")
 (eshell/alias "cherry" "git cherry-pick $* && git push --force")
+(eshell/alias "delete-remote" "git push origin --delete $1")
+(eshell/alias "delrem" "git push origin --delete $1")
+(eshell/alias "remotes" "git branch -r")
+(eshell/alias "checkout" "git checkout $*")
+(eshell/alias "check" "git checkout $*")
+;; (eshell/alias "iso" "sudo dd if=/path/to/iso of=/dev/sdX bs=4M status=progress")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
