@@ -235,7 +235,7 @@ globalkeys = {}
 function oo_set_previous_layout () awful.layout.inc(-1) end
 function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
 function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
-function fn19 () awful.client.swap.byidx( 1) end
+function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
 function fn18 () awful.tag.incnmaster( 1, nil, true) end
 function fn17 () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
 function fn16 () awful.tag.incncol(-1, nil, true) end
@@ -277,7 +277,7 @@ globalkey({ modkey, "Control" }, "l", fn16, description = "decrease the number o
 globalkey({ modkey, "Control" }, "n", fn17, description = "restore minimized", group = "client")
 globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
 globalkey({ modkey, "Shift  " }, "h", fn18, description = "increase the number of master clients", group = "layout")
-globalkey({ modkey, "Shift  " }, "j", fn19, description = "swap with next client by index", group = "client")
+globalkey({ modkey, "Shift  " }, "j", oo_swap_with_next_client, description = "swap with next client by index", group = "client")
 globalkey({ modkey, "Shift  " }, "k", oo_swap_with_previous_client, description = "swap with previous client by index", group = "client")
 globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description = "decrease the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
