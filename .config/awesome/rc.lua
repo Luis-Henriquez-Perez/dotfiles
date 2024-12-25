@@ -308,13 +308,6 @@ function fn7 () awful.layout.inc( 1) end
     globalkey({ modkey }, "x", function () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end, {description = "lua execute prompt", group = "awesome"})
     globalkey({ modkey }, "p", function() menubar.show() end, {description = "show the menubar", group = "launcher"})
 
-clientkeys = gears.table.join(
-    awful.key({ modkey }, "f",
-        function (c)
-            c.fullscreen = not c.fullscreen
-            c:raise()
-        end,
-        {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
@@ -325,6 +318,14 @@ clientkeys = gears.table.join(
               {description = "move to screen", group = "client"}),
     awful.key({ modkey }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
+
+clientkeys = gears.table.join(
+    awful.key({ modkey }, "f",
+        function (c)
+            c.fullscreen = not c.fullscreen
+            c:raise()
+        end,
+        {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
