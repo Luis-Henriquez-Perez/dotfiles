@@ -286,7 +286,7 @@ function fn3 () awful.tag.incnmaster( 1, nil, true) end
 
 function fn4 () awful.tag.incnmaster(-1, nil, true) end
 
-function () awful.tag.incncol( 1, nil, true) end
+function fn () awful.tag.incncol( 1, nil, true) end
 globalkeys = gears.table.join(
     -- Standard program
     globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
