@@ -253,6 +253,7 @@ globalkeys = gears.table.join(
         description="show help",
         group="awesome"
     },
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
         {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
