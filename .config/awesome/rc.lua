@@ -233,7 +233,7 @@ root.buttons(gears.table.join(
 globalkeys = {}
 
 function oo_set_previous_layout () awful.layout.inc(-1) end
-function  () awful.tag.incnmaster(-1, nil, true) end
+function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
 function fn20 () awful.client.swap.byidx( -1) end
 function fn19 () awful.client.swap.byidx( 1) end
 function fn18 () awful.tag.incnmaster( 1, nil, true) end
@@ -279,7 +279,7 @@ globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awe
 globalkey({ modkey, "Shift  " }, "h", fn18, description = "increase the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "j", fn19, description = "swap with next client by index", group = "client")
 globalkey({ modkey, "Shift  " }, "k", fn20, description = "swap with previous client by index", group = "client")
-globalkey({ modkey, "Shift  " }, "l", , description = "decrease the number of master clients", group = "layout")
+globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description = "decrease the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
 globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
