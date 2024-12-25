@@ -261,9 +261,10 @@ the battery percentage is greater than 60%."
       (set! msg (abbreviate-file-name fname))
     (set! msg (format "Add %s." (abbreviate-file-name fname))))
   (flet! status (_ status)
-    (if (string-match-p "finished" status)
-        (trace! "pushed successfully -> %S" status)
-      (trace! "failed push -> %S" status)))
+    ;; (if (string-match-p "finished" status)
+    ;;     (trace! "pushed successfully -> %S" status)
+    ;;   (trace! "failed push -> %S" status))
+    )
   (set! command (format "git add %s && git commit -m %S %s" fname msg fname))
   (call-process-shell-command command)
   ;; Do not push if there is a risk of suddenly shutting down and losing
