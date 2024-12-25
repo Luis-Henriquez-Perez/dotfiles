@@ -236,7 +236,6 @@ is already narrowed."
 When a buffer is saved, check whether the saved file is part of the dotfiles
 repository and if it is, commit and push all changes.  Otherwise, do nothing."
   (set! default-directory (expand-file-name "~/"))
-
   (aand! (buffer-file-name)
          (set! command (format "git ls-files %s" (shell-quote-argument (expand-file-name it))))
          (set! output (shell-command-to-string command))
