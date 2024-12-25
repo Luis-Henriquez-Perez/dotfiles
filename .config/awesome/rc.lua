@@ -295,28 +295,13 @@ globalkeys = gears.table.join(
     globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
     globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
     globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
-    globalkey({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-              {description = "increase the number of columns", group = "layout"}),
-    globalkey({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-              {description = "decrease the number of columns", group = "layout"}),
-    globalkey({ modkey }, "space", function () awful.layout.inc( 1)                end,
-              {description = "select next", group = "layout"}),
-    globalkey({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
+    globalkey({ modkey, "Control" }, "h", function () awful.tag.incncol( 1, nil, true) end, {description = "increase the number of columns", group = "layout"}),
+    globalkey({ modkey, "Control" }, "l", function () awful.tag.incncol(-1, nil, true) end, {description = "decrease the number of columns", group = "layout"}),
+    globalkey({ modkey }, "space", function () awful.layout.inc( 1) end, {description = "select next", group = "layout"}),
+    globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
+    globalkey({ modkey, "Control" }, "n", function () local c = awful.client.restore() -- Focus restored client if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end, {description = "restore minimized", group = "client"}),
 
-    globalkey({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
-                    )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-
-    -- Prompt
+ -- Prompt
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
 
