@@ -298,7 +298,7 @@ globalkeys = gears.table.join(
     globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
     globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
     globalkey({ modkey, "Control" }, "h", fn5, {description = "increase the number of columns", group = "layout"}),
-    globalkey({ modkey, "Control" }, "l", function () awful.tag.incncol(-1, nil, true) end, {description = "decrease the number of columns", group = "layout"}),
+    globalkey({ modkey, "Control" }, "l", fn6, {description = "decrease the number of columns", group = "layout"}),
     globalkey({ modkey }, "space", function () awful.layout.inc( 1) end, {description = "select next", group = "layout"}),
     globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
     globalkey({ modkey, "Control" }, "n", function () local c = awful.client.restore() -- Focus restored client if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end, {description = "restore minimized", group = "client"}),
