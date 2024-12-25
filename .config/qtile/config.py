@@ -15,11 +15,11 @@ def define_key (modifier, key, fn, desc):
 # A list of available commands that can be bound to keys can be found
 # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 # Switch between windows
-# define_key([mod], "space", lazy.layout.next(), desc="Move window focus to other window")
+define_key([mod], "space", lazy.layout.next(), desc="Move window focus to other window")
 define_key([mod], "h", lazy.layout.left(), desc="Move focus to left")
-define_key([mod], "l", lazy.layout.right(), desc="Move focus to next window")
+define_key([mod], "l", lazy.layout.right(), desc="Move focus to right")
 define_key([mod], "j", lazy.layout.next(), desc="Move focus to next window")
-define_key([mod], "k", lazy.layout.previous(), desc="Move focus to previous")
+define_key([mod], "k", lazy.layout.previous(), desc="Move focus up")
 # Move windows between left/right columns or move up/down in current stack.
 # Moving out of range in Columns layout will create new column.
 define_key([mod, "control"], "h", lazy.layout.shuffle_left(), desc="Move window to the left")
