@@ -295,7 +295,7 @@ function fn7 () awful.layout.inc( 1) end
 function f8 () menubar.show() end
 
 function f9 () awful.screen.focused().mypromptbox:run() end
-function f10 () awful.prompt.run  prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget
+
     globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
     globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
     globalkey({ modkey, "Shift" }, "q", awesome.quit, description = "quit awesome", group = "awesome")
@@ -307,7 +307,7 @@ function f10 () awful.prompt.run  prompt = "Run Lua code: ", textbox = awful.scr
     globalkey({ modkey, "Control" }, "l", fn6, {description = "decrease the number of columns", group = "layout"})
     globalkey({ modkey }, "space", fn7, {description = "select next", group = "layout"})
     globalkey({ modkey }, "r", f9 , {description = "run prompt", group = "launcher"})
-    globalkey({ modkey }, "x", f10{, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end, {description = "lua execute prompt", group = "awesome"})
+    globalkey({ modkey }, "x", , {description = "lua execute prompt", group = "awesome"})
     globalkey({ modkey }, "p", f8, {description = "show the menubar", group = "launcher"})
 
     globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
