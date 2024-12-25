@@ -257,9 +257,9 @@ globalkeys = gears.table.join(
         modifiers = {modkey},
         key = 's',
         on_press = hotkeys_popup.show_help,
-        on_press = function ()
-            print("The Mod4 + Shift + a combo is pressed")
-        end,
+        -- on_press = function ()
+        --     print("The Mod4 + Shift + a combo is pressed")
+        -- end,
         on_release = function ()
             print("The Mod4 + Shift + a combo is released")
         end
