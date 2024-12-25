@@ -292,7 +292,7 @@ function fn6 () awful.tag.incncol(-1, nil, true) end
 
 function fn7 () awful.layout.inc( 1) end
 
-function() menubar.show() end
+function f8 () menubar.show() end
 
     globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
     globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
