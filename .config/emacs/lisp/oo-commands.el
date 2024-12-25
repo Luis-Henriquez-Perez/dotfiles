@@ -251,7 +251,7 @@ the battery percentage is greater than 60%."
   (interactive)
   (set! default-directory (expand-file-name "~/"))
   (trace! "Adding dotfile %s" file)
-  (set! fname (expand-file-name (convert-standard-filename file) oo-dotfile-dir))
+  (set! fname (expand-file-name (convert-standard-filename file) "~/"))
   (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
   (set! modified-p (not (string-empty-p (shell-command-to-string (format "git diff %s" (shell-quote-argument fname))))))
   ;; Do not do anything if the file is already tracked and has no changes.
