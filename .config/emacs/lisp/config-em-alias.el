@@ -50,6 +50,7 @@
 (eshell/alias "checkout" "git checkout $*")
 (eshell/alias "check" "git checkout $*")
 (eshell/alias "rename" "git branch -m $1 $2")
+(eshell/alias "rename" "git branch -m $1 $2 &&")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
