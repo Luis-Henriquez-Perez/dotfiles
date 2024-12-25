@@ -289,6 +289,7 @@ function fn4 () awful.tag.incnmaster(-1, nil, true) end
 function fn5 () awful.tag.incncol( 1, nil, true) end
 
 function fn6 () awful.tag.incncol(-1, nil, true) end
+function () awful.layout.inc( 1) end
 
 globalkeys = gears.table.join(
     -- Standard program
