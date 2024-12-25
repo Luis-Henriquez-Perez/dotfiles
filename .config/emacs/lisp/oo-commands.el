@@ -283,8 +283,8 @@ Additionally, make any duplicate spaces into one."
   ;; (flet! replace (string) (if (equal "\n" string) "" "\n"))
   ;; (setf (substring beg end)
   ;;       (replace-regexp-in-string regexp #'replace (substring beg end)))
-  (replace-regexp-in-region (rx "\n") "" beg end)
-  (replace-regexp-in-region (rx (>= 2 "\s")) "\s" beg end))
+  (save-excursion (replace-regexp-in-region (rx "\n") "" beg end)
+                  (replace-regexp-in-region (rx (>= 2 "\s")) "\s" beg end)))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here

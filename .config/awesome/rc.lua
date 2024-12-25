@@ -227,8 +227,7 @@ root.buttons(gears.table.join(
 ))
 -- }}}
 
--- {{
--- Function to add a new keybinding
+-- {-- Function to add a new keybinding
 function globalkey(modifiers, key, action, description, group)
     -- Create a new keybinding using awful.key
     local newkey = awful.key(modifiers, key, action, {description=description, group=group})
@@ -240,12 +239,16 @@ globalkeys = {}
 globalkey({ modkey } , "s", hotkeys_popup.show_help, "show help", "awesome")
 globalkey({ modkey } , "Left", awful.tag.viewprev, "view previous", "tag")
 globalkey({ modkey } , "Right",  awful.tag.viewnext, "view next", "tag")
-global_key({ modkey }, "Escape", awful.tag.history.restore, "go back", "tag")
-global_key({ modkey }, "j", oo_focus_next_client, "focus next by index", "client")
-global_key({ modkey }, "k", oo_focus_previous_client, "focus previous by index", "client" )
-global_key({ modkey }, "w", oo_show_main_menu, "show main menu", "awesome")
-global_key({ modkey, "Shift" }, "j", oo_swap_with_next_client, "swap with next client by index", group = "client")
-global_key({ modkey, "Shift" }, "k", oo_swap_with_previous_client, "swap with previous client by index", group = "client")
+globalkey({ modkey }, "Escape", awful.tag.history.restore, "go back", "tag")
+globalkey({ modkey }, "j", oo_focus_next_client, "focus next by index", "client")
+globalkey({ modkey }, "k", oo_focus_previous_client, "focus previous by index", "client" )
+globalkey({ modkey }, "w", oo_show_main_menu, "show main menu", "awesome")
+globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
+globalkey({ modkey }, "Tab", oo_last_focused_client, description = "go back", group = "client")
+globalkey({ modkey, "Shift" }, "j", oo_swap_with_next_client, "swap with next client by index", group = "client")
+globalkey({ modkey, "Shift" }, "k", oo_swap_with_previous_client, "swap with previous client by index", group = "client")
+globalkey({ modkey, "Control" }, "j", oo_focus_next_client, description = "focus the next screen", group = "screen")
+globalkey({ modkey, "Control" }, "k", oo_focus_previous_client, description = "focus the previous screen", group = "screen")
 
 function oo_focus_next_client ()
    awful.client.focus.byidx( 1)
@@ -271,42 +274,37 @@ function oo_focus_next_client () awful.screen.focus_relative( 1) end
 
 function oo_focus_previous_client () awful.screen.focus_relative(-1) end
 
-function fn1 () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end
+function oo_last_focused_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end
 
 function oo_open_terminal () awful.spawn(terminal) end
 
-function () awful.tag.incmwfact( 0.05) end
+function oo_increase_master_width_factor () awful.tag.incmwfact( 0.05) end
 
-function () awful.tag.incmwfact(-0.05) end
+function oo_decrease_master_width_factor () awful.tag.incmwfact(-0.05) end
+
+function fn3 () awful.tag.incnmaster( 1, nil, true) end
+
+function fn4 () awful.tag.incnmaster(-1, nil, true) end
 
 globalkeys = gears.table.join(
-    -- Layout manipulation
-    awful.key({ modkey, "Control" }, "j", oo_focus_next_client, {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", oo_focus_previous_client, {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey }, "u", awful.client.urgent.jumpto, {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey }, "Tab", fn1, {description = "go back", group = "client"}),
-
     -- Standard program
-    awful.key({ modkey }, "Return", oo_open_terminal, {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart, {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift" }, "q", awesome.quit, {description = "quit awesome", group = "awesome"}),
-    awful.key({ modkey }, "l", fn2, {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey }, "h", fn3,
-              {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+    globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
+    globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
+    globalkey({ modkey, "Shift" }, "q", awesome.quit, description = "quit awesome", group = "awesome")
+    globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
+    globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
+    globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
+    globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
+    globalkey({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
+    globalkey({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey }, "space", function () awful.layout.inc( 1)                end,
+    globalkey({ modkey }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+    globalkey({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    awful.key({ modkey, "Control" }, "n",
+    globalkey({ modkey, "Control" }, "n",
               function ()
                   local c = awful.client.restore()
                   -- Focus restored client
@@ -447,7 +445,7 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
---}}
+--}
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
