@@ -1,126 +1,102 @@
-### qtile
-# This blog post gives a very good explanation.
-# https://blog.neerajadhav.in/customizing-your-workspace-with-qtile-a-look-at-my-configuration-file
-
-# Huge tip my brothers, checkout the ~/.local/share/qtile.log file if something
-# you did does not seem to work or if restarting does not successfully reset the
-# config.  If that happens it is probably because of an error.  Any error that
-# you get will be logged to =qtile.log=.
-
-#### import libraries
-from libqtile import bar, layout, widget
+from libqtile import bar, layout, qtile, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from libqtile.log_utils import logger
-#### declare variables
+
 mod = "mod4"
-# mod1 = alt
-# mod2 = "control"
-# home = os.path.expanduser('~')
-# browser = "firefox"
-
 terminal = guess_terminal()
-#### create a =define-key= function
-# As I have mentioned in my ~/.config/awesome/rc.lua file I do not like lots of
-# elements one by one to a list like this.  I would rather call a function that
-# binds the key for me.
-keys = []
 
-def define_key(mod, key, command, desc=""):
-    """
-    Define a keybinding and add it to the 'keys' list.
+keys = [
+    # A list of available commands that can be bound to keys can be found
+    # at https://docs.qtile.org/en/latest/manual/config/lazy.html
+    # Switch between windows
+    Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
+    Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
+    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
+    Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
+    # Move windows between left/right columns or move up/down in current stack.
+    # Moving out of range in Columns layout will create new column.
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
+    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
+    Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+    # Grow windows. If current window is on the edge of screen and direction
+    # will be to screen edge - window would shrink.
+    Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
+    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    # Toggle between split and unsplit sides of stack.
+    # Split = all windows displayed
+    # Unsplit = 1 window displayed, like Max layout, but still with
+    # multiple stack panes
+    Key(
+        [mod, "shift"],
+        "Return",
+        lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack",
+    ),
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    # Toggle between different layouts as defined below
+    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key(
+        [mod],
+        "f",
+        lazy.window.toggle_fullscreen(),
+        desc="Toggle fullscreen on the focused window",
+    ),
+    Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
+    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
+    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+]
 
-    :param mod: Modifier key (e.g., ["mod4"] for the Super key)
-    :param key: The key to bind
-    :param command: The command to execute
-    :param desc: A description for the keybinding (optional)
-    """
-    keys.append(Key(mod, key, command, desc=desc))
-#### set keybindings
-# A list of available commands that can be bound to keys can be found
-# at https://docs.qtile.org/en/latest/manual/config/lazy.html
-# Switch between windows
-define_key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-define_key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
-define_key([mod], "j", lazy.layout.down(), desc="Move focus down"),
-define_key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-define_key([mod], "e", lazy.spawn("emacs"), desc="Open emacs"),
-define_key([mod], "i", lazy.spawn("qutebrowser"), desc="Open qutebrowser"),
-define_key([mod], "space", lazy.layout.next(), desc="Move window focus to other window"),
-# Move windows between left/right columns or move up/down in current stack.
-# Moving out of range in Columns layout will create new column.
-define_key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-define_key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
-define_key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
-define_key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-# Grow windows. If current window is on the edge of screen and direction
-# will be to screen edge - window would shrink.
-define_key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-define_key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
-define_key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
-define_key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
-define_key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
-# Toggle between split and unsplit sides of stack.
-# Split = all windows displayed
-# Unsplit = 1 window displayed, like Max layout, but still with
-# multiple stack panes
-define_key([mod, "shift"], "Return",lazy.layout.toggle_split(),desc="Toggle between split and unsplit sides of stack"),
-define_key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-# Toggle between different layouts as defined below
-define_key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-define_key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
-define_key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
-define_key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
-define_key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
-define_key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-define_key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-define_key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-define_key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget")
+# Add key bindings to switch VTs in Wayland.
+# We can't check qtile.core.name in default config as it is loaded before qtile is started
+# We therefore defer the check until the key binding is run by using .when(func=...)
+for vt in range(1, 8):
+    keys.append(
+        Key(
+            ["control", "mod1"],
+            f"f{vt}",
+            lazy.core.change_vt(vt).when(func=lambda: qtile.core.name == "wayland"),
+            desc=f"Switch to VT{vt}",
+        )
+    )
 
-#### add keybindings for groups
+
 groups = [Group(i) for i in "123456789"]
 
 for i in groups:
     keys.extend(
         [
-            # mod1 + letter of group = switch to group
+            # mod + group number = switch to group
             Key(
                 [mod],
                 i.name,
                 lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
+                desc=f"Switch to group {i.name}",
             ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
+            # mod + shift + group number = switch to & move focused window to group
             Key(
                 [mod, "shift"],
                 i.name,
                 lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
+                desc=f"Switch to & move focused window to group {i.name}",
             ),
             # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
+            # # mod + shift + group number = move focused window to group
             # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
             #     desc="move focused window to group {}".format(i.name)),
         ]
     )
 
-#### specify layouts
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"],
-                   # Damn, **** these commas bro.  I come from lisp and I do not
-                   # have to deal with commas.
-                   border_width=4,
-                   # https://docs.qtile.org/en/latest/manual/ref/layouts.html
-                   # https://www.reddit.com/r/linux4noobs/comments/gc6y0g/how_do_i_add_gaps_to_qtile/
-                   # According to [[][DT]] himself this is how you add gaps.
-                   # Only thing that struck me about this is that you seem to
-                   # need to do this to every layout individually.  Though I am
-                   # sure there is an easy way to do it programmatically (once I
-                   # re-familiarize myself with python syntax.)
-                   margin = 10
-                   ),
-    # layout.Max(),
+    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -134,62 +110,6 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-#### Rotate windows
-@lazy.function
-def rotate_clients_forward(qtile):
-    # Cycle through windows
-    qtile.current_group.cmd_next_window()
-
-    # Get the master window (first in the layout)
-    master = qtile.current_layout.clients[0] if qtile.current_layout.clients else None
-
-    if master:
-        # Focus the master window
-        qtile.current_window = master
-        # Bring the master window to the front
-        master.cmd_bring_to_front()
-# import subprocess
-# def rotate_windows(qtile, forward=True):
-#     """
-#     Rotate the windows in the current layout.
-
-#     Parameters:
-#     - qtile: The Qtile instance.
-#     - forward (bool): Direction of rotation. True for forward, False for backward.
-#     """
-#     current_group = qtile.current_group
-#     logger.info("hello")
-#     logger.warning(f"warning {current_group}")
-#     logger.warning(f"windows {(len(current_group.windows))}")
-#     # if not current_group:
-#     #     return
-#     # # subprocess.run(["notify-send" "window" "swapping windows"])
-#     windows = current_group.windows
-
-#     if len(windows) < 2:
-#         return
-
-#     logger.warning("reordering windows")
-#     if forward:
-#         # Move the first window to the end
-#         window = windows.pop(0)
-#         windows.append(window)
-#         windows[0].focus()
-#     else:
-#         # Move the last window to the beginning
-#         window = windows.pop()
-#         windows.insert(0, window)
-#     logger.warning("done")
-
-#     # Apply the new order
-#     # for i, win in enumerate(windows):
-#     #     win.group.focus(win, stack=False)
-#     #     win.index = i
-
-#     # qtile.current_layout.group.layout_all()
-
-define_key([mod], "o", rotate_clients_forward(), desc="Rotate Windows Forward"),
-#### uncategorized
 widget_defaults = dict(
     font="sans",
     fontsize=12,
@@ -265,6 +185,10 @@ auto_minimize = True
 
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
+
+# xcursor theme (string or None) and size (integer) for Wayland backend
+wl_xcursor_theme = None
+wl_xcursor_size = 24
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
