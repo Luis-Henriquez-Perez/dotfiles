@@ -227,7 +227,7 @@ root.buttons(gears.table.join(
 ))
 -- }}}
 
--- {{{ Key bindings
+-- {{
 -- Function to add a new keybinding
 function globalkey(modifiers, key, action, description, group)
     -- Create a new keybinding using awful.key
@@ -240,49 +240,53 @@ globalkeys = {}
 globalkey({ modkey } , "s", hotkeys_popup.show_help, "show help", "awesome")
 globalkey({ modkey } , "Left", awful.tag.viewprev, "view previous", "tag")
 globalkey({ modkey } , "Right",  awful.tag.viewnext, "view next", "tag")
+global_key({ modkey }, "Escape", awful.tag.history.restore, "go back", "tag")
+global_key({ modkey }, "j", oo_focus_next_client, "focus next by index", "client")
+global_key({ modkey }, "k", oo_focus_previous_client, "focus previous by index", "client" )
+global_key({ modkey }, "w", oo_show_main_menu, "show main menu", "awesome")
+global_key({ modkey, "Shift" }, "j", oo_swap_with_next_client, "swap with next client by index", group = "client")
+global_key({ modkey, "Shift" }, "k", oo_swap_with_previous_client, "swap with previous client by index", group = "client")
 
-function fn1 ()
-            awful.client.focus.byidx( 1)
+function oo_focus_next_client ()
+   awful.client.focus.byidx( 1)
 end
 
+function oo_focus_previous_client ()
+    awful.client.focus.byidx(-1)
+end
+
+function oo_show_main_menu ()
+   mymainmenu:show()
+end
+
+function oo_swap_with_next_client ()
+   awful.client.swap.byidx(  1)
+end
+
+function oo_swap_with_previous_client ()
+   awful.client.swap.byidx( -1)
+end
+
+function oo_focus_next_client () awful.screen.focus_relative( 1) end
+
+function oo_focus_previous_client () awful.screen.focus_relative(-1) end
+
+function fn1 () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end
+
+   function oo_open_terminal () awful.spawn(terminal) end
+
 globalkeys = gears.table.join(
-    awful.key({ modkey }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
-
-    awful.key({ modkey }, "j",
-        fn1,
-        {description = "focus next by index", group = "client"}),
-    awful.key({ modkey }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "focus previous by index", group = "client"}
-    ),
-    awful.key({ modkey }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
-              {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
-              {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, "Control" }, "j", oo_focus_next_client,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, "Control" }, "k", oo_focus_previous_client,
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
+    awful.key({ modkey }, "Tab", fn1, {description = "go back", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
+    awful.key({ modkey }, "Return", oo_open_terminal,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
@@ -447,7 +451,7 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
--- }}}
+--}}
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
