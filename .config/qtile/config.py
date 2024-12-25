@@ -38,7 +38,7 @@ define_key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes")
 # Unsplit = 1 window displayed, like Max layout, but still with
 # multiple stack panes
 define_key([mod, "shift"], "Return", lazy.layout.toggle_split(), desc="Toggle between split and unsplit sides of stack")
-define_key([mod], "Return", lazy.spawn("alacritty"), desc="Launch terminal")
+define_key([mod], "t", lazy.spawn("alacritty"), desc="Launch terminal")
 # Toggle between different layouts as defined below
 define_key([mod], "space", lazy.next_layout(), desc="Toggle between layouts")
 define_key([mod], "w", lazy.window.kill(), desc="Kill focused window")
