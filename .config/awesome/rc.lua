@@ -246,15 +246,15 @@ globalkeys = gears.table.join(
     --     -- group       = 'awesome',
     --     on_press    = hotkeys_popup.show_help,
     -- },
+    -- awful.key {
+    --     modifiers = { modkey },
+    --     key = 's',
+    --     on_press = hotkeys_popup.show_help,
+    --     description="show help",
+    --     group="awesome"
+    -- },
     awful.key {
-        modifiers = { modkey },
-        key = 's',
-        on_press = hotkeys_popup.show_help,
-        description="show help",
-        group="awesome"
-    },
-    awful.key {
-        modifiers = { "Mod4", "Shift" },
+        modifiers = {modkey},
         key = 'a',
         on_press = function ()
             print("The Mod4 + Shift + a combo is pressed")
