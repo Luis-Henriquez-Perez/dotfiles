@@ -229,6 +229,7 @@ root.buttons(gears.table.join(
 
 
 -- {{{ Key bindings
+
 globalkeys = gears.table.join(
     awful.key({ modkey,           },
         "s",
