@@ -269,7 +269,7 @@ the battery percentage is greater than 60%."
   ;; Do not push if there is a risk of suddenly shutting down and losing
   ;; information.
   (require 'battery)
-  (set! battery-percent (battery-format "%p" (funcall battery-status-function)))
+  (set! battery-percent (string-to-number (battery-format "%p" (funcall battery-status-function))))
   (set! battery-status (battery-format "%r" (funcall battery-status-function)))
   (when (or (equal battery-status "N/a") (> battery-percent 60))
     (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
