@@ -295,7 +295,7 @@ globalkeys = gears.table.join(
     globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
     globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
     globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
-    globalkey({ modkey, "Control" }, "h", function () awful.tag.incncol( 1, nil, true) end, {description = "increase the number of columns", group = "layout"}),
+    globalkey({ modkey, "Control" }, "h", fn5, {description = "increase the number of columns", group = "layout"}),
     globalkey({ modkey, "Control" }, "l", function () awful.tag.incncol(-1, nil, true) end, {description = "decrease the number of columns", group = "layout"}),
     globalkey({ modkey }, "space", function () awful.layout.inc( 1) end, {description = "select next", group = "layout"}),
     globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
