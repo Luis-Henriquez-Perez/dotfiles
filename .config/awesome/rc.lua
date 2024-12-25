@@ -273,31 +273,27 @@ function oo_focus_previous_client () awful.screen.focus_relative(-1) end
 
 function fn1 () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end
 
-   function oo_open_terminal () awful.spawn(terminal) end
+function oo_open_terminal () awful.spawn(terminal) end
+
+function () awful.tag.incmwfact( 0.05) end
+
+function () awful.tag.incmwfact(-0.05) end
 
 globalkeys = gears.table.join(
     -- Layout manipulation
-    awful.key({ modkey, "Control" }, "j", oo_focus_next_client,
-              {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", oo_focus_previous_client,
-              {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey }, "u", awful.client.urgent.jumpto,
-              {description = "jump to urgent client", group = "client"}),
+    awful.key({ modkey, "Control" }, "j", oo_focus_next_client, {description = "focus the next screen", group = "screen"}),
+    awful.key({ modkey, "Control" }, "k", oo_focus_previous_client, {description = "focus the previous screen", group = "screen"}),
+    awful.key({ modkey }, "u", awful.client.urgent.jumpto, {description = "jump to urgent client", group = "client"}),
     awful.key({ modkey }, "Tab", fn1, {description = "go back", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey }, "Return", oo_open_terminal,
-              {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-
-    awful.key({ modkey }, "l",     function () awful.tag.incmwfact( 0.05)          end,
-              {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey }, "h",     function () awful.tag.incmwfact(-0.05)          end,
+    awful.key({ modkey }, "Return", oo_open_terminal, {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey, "Control" }, "r", awesome.restart, {description = "reload awesome", group = "awesome"}),
+    awful.key({ modkey, "Shift" }, "q", awesome.quit, {description = "quit awesome", group = "awesome"}),
+    awful.key({ modkey }, "l", fn2, {description = "increase master width factor", group = "layout"}),
+    awful.key({ modkey }, "h", fn3,
               {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
+    awful.key({ modkey, "Shift"   }, "h",function () awful.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
