@@ -239,7 +239,7 @@ function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
 function oo_increase_number_of_msters () awful.tag.incnmaster( 1, nil, true) end
 function fn17 () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
 function fn16 () awful.tag.incncol(-1, nil, true) end
-function fn15 () awful.screen.focus_relative(-1) end
+function  () awful.screen.focus_relative(-1) end
 function fn14 () awful.screen.focus_relative( 1) end
 function fn13 () awful.tag.incncol( 1, nil, true) end
 function fn12 () menubar.show() end
@@ -272,7 +272,7 @@ globalkey({ modkey }, "x", fn10, description = "lua execute prompt", group = "aw
 globalkey({ modkey }, "p", fn12, description = "show the menubar", group = "launcher")
 globalkey({ modkey, "Control" }, "h", fn13, description = "increase the number of columns", group = "layout")
 globalkey({ modkey, "Control" }, "j", fn14, description = "focus the next screen", group = "screen")
-globalkey({ modkey, "Control" }, "k", fn15, description = "focus the previous screen", group = "screen")
+globalkey({ modkey, "Control" }, "k", , description = "focus the previous screen", group = "screen")
 globalkey({ modkey, "Control" }, "l", fn16, description = "decrease the number of columns", group = "layout")
 globalkey({ modkey, "Control" }, "n", fn17, description = "restore minimized", group = "client")
 globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
