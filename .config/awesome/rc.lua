@@ -229,15 +229,15 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key {
-        modifiers = { modkey },
-        key = 's',
-        on_press = hotkeys_popup.show_help,
-        description="show help",
-        group="awesome"
-    },
-    -- awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-    --     {description="show help", group="awesome"}),
+    -- awful.key {
+    --     modifiers = { modkey },
+    --     key = 's',
+    --     on_press = hotkeys_popup.show_help,
+    --     description="show help",
+    --     group="awesome"
+    -- },
+    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
+        {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
         {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
