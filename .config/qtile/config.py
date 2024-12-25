@@ -109,7 +109,7 @@ layouts = [
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
-    layout.floating.Floating(),
+    layout.floating.Floating()
 ]
 
 widget_defaults = dict(
