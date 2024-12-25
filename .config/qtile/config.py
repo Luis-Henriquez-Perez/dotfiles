@@ -22,10 +22,10 @@ define_key([mod], "k", lazy.layout.up(), desc="Move focus up")
 define_key([mod], "space", lazy.layout.next(), desc="Move window focus to other window")
 # Move windows between left/right columns or move up/down in current stack.
 # Moving out of range in Columns layout will create new column.
-define_key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left")
-define_key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right")
-define_key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down")
-define_key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up")
+define_key([mod, "control"], "h", lazy.layout.shuffle_left(), desc="Move window to the left")
+define_key([mod, "control"], "l", lazy.layout.shuffle_right(), desc="Move window to the right")
+define_key([mod, "control"], "j", lazy.layout.shuffle_down(), desc="Move window down")
+define_key([mod, "control"], "k", lazy.layout.shuffle_up(), desc="Move window up")
 # Grow windows. If current window is on the edge of screen and direction
 # will be to screen edge - window would shrink.
 define_key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left")
