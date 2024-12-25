@@ -276,13 +276,13 @@ the battery percentage is greater than 60%."
     (set-process-sentinel proc #'status)))
 
 ;; I wrote this function to deal with unruly lua code.
-(defun! oo/make-one-line (beg end)
+(defun oo/make-one-line (beg end)
   "Join lines in the region between BEG and END into a single line.
 Additionally, make any duplicate spaces into one."
   (interactive "r")
-  (flet! replace (string) (if (equal "\n" string) "" "\n"))
-  (setf (substring beg end)
-        (replace-regexp-in-string regexp #'replace (substring beg end)))
+  ;; (flet! replace (string) (if (equal "\n" string) "" "\n"))
+  ;; (setf (substring beg end)
+  ;;       (replace-regexp-in-string regexp #'replace (substring beg end)))
   (replace-regexp-in-region (rx "\n") "" beg end)
   (replace-regexp-in-region (rx (>= 2 "\s")) "\s" beg end))
 ;;; provide
