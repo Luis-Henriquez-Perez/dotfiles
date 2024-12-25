@@ -232,7 +232,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = {}
 
-function fn22 () awful.layout.inc(-1) end
+function oo_previous_layout () awful.layout.inc(-1) end
 function fn21 () awful.tag.incnmaster(-1, nil, true) end
 function fn20 () awful.client.swap.byidx( -1) end
 function fn19 () awful.client.swap.byidx( 1) end
@@ -269,7 +269,7 @@ globalkey({ modkey }, "h", fn7, description = "decrease master width factor", gr
 globalkey({ modkey }, "space", fn8, description = "select next", group = "layout")
 globalkey({ modkey }, "r", fn9, description = "run prompt", group = "launcher")
 globalkey({ modkey }, "x", fn10, description = "lua execute prompt", group = "awesome")
-globalkey({ modkey }, "p", fn12, {description = "show the menubar", group = "launcher"})
+globalkey({ modkey }, "p", fn12, description = "show the menubar", group = "launcher")
 globalkey({ modkey, "Control" }, "h", fn13, description = "increase the number of columns", group = "layout")
 globalkey({ modkey, "Control" }, "j", fn14, description = "focus the next screen", group = "screen")
 globalkey({ modkey, "Control" }, "k", fn15, description = "focus the previous screen", group = "screen")
@@ -281,7 +281,7 @@ globalkey({ modkey, "Shift  " }, "j", fn19, description = "swap with next client
 globalkey({ modkey, "Shift  " }, "k", fn20, description = "swap with previous client by index", group = "client")
 globalkey({ modkey, "Shift  " }, "l", fn21, description = "decrease the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
-globalkey({ modkey, "Shift  " }, "space", fn22, description = "select previous", group = "layout")
+globalkey({ modkey, "Shift  " }, "space", oo_previous_layout, description = "select previous", group = "layout")
 
 
 clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
