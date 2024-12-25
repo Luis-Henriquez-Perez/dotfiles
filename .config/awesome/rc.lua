@@ -229,7 +229,8 @@ root.buttons(gears.table.join(
 
 
 -- {{{ Key bindings
-
+table.insert(global_keys, awful.key({ modkey }, "s", hotkeys_popup.show_help,
+                 { description = "show help", group = "awesome" }))
 globalkeys = gears.table.join(
     awful.key({ modkey,           },
         "s",
