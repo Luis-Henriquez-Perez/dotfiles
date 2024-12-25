@@ -307,7 +307,7 @@ function f9 () awful.screen.focused().mypromptbox:run() end
     globalkey({ modkey, "Control" }, "l", fn6, {description = "decrease the number of columns", group = "layout"})
     globalkey({ modkey }, "space", fn7, {description = "select next", group = "layout"})
     globalkey({ modkey }, "r", f9 , {description = "run prompt", group = "launcher"})
-    globalkey({ modkey }, "x", , {description = "lua execute prompt", group = "awesome"})
+    globalkey({ modkey }, "x", f10, {description = "lua execute prompt", group = "awesome"})
     globalkey({ modkey }, "p", f8, {description = "show the menubar", group = "launcher"})
 
     globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
