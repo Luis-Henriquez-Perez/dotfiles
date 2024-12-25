@@ -264,6 +264,7 @@ globalkeys = gears.table.join(
             print("The Mod4 + Shift + a combo is released")
         end
     },
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
         {description = "view previous", group = "tag"}),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
