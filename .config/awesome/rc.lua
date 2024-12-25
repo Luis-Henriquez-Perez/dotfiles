@@ -229,16 +229,16 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key {
-        modifiers = { "Mod4", "Shift" },
-        key = 'a',
-        on_press = function ()
-            print("The Mod4 + Shift + a combo is pressed")
-        end,
-        on_release = function ()
-            print("The Mod4 + Shift + a combo is released")
-        end
-    },
+    -- awful.key {
+    --     modifiers = { "Mod4", "Shift" },
+    --     key = 'a',
+    --     on_press = function ()
+    --         print("The Mod4 + Shift + a combo is pressed")
+    --     end,
+    --     on_release = function ()
+    --         print("The Mod4 + Shift + a combo is released")
+    --     end
+    -- },
     awful.key({ modkey,},
         "s",
         hotkeys_popup.show_help,
