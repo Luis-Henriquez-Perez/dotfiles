@@ -242,8 +242,8 @@ globalkeys = gears.table.join(
     awful.key{
         modifiers   = {modkey},
         key         = 's',
-        description = 'show help',
-        group       = 'awesome',
+        -- description = 'show help',
+        -- group       = 'awesome',
         on_press    = hotkeys_popup.show_help,
     },
     -- awful.key {
