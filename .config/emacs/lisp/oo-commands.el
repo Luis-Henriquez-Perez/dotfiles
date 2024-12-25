@@ -250,8 +250,8 @@ the file.  Additionally, push the file but only if the battery is charging or
 the battery percentage is greater than 60%."
   (interactive)
   (set! default-directory (expand-file-name "~/"))
-  (trace! "Adding dotfile %s" file)
-  (set! fname (expand-file-name (convert-standard-filename file) oo-dotfile-dir))
+  (message "Adding dotfile %s" file)
+  (set! fname (expand-file-name (convert-standard-filename file) "~/"))
   (set! tracked-p (not (string-empty-p (shell-command-to-string (format "git ls-files %s" (shell-quote-argument fname))))))
   (set! modified-p (not (string-empty-p (shell-command-to-string (format "git diff %s" (shell-quote-argument fname))))))
   ;; Do not do anything if the file is already tracked and has no changes.
@@ -262,14 +262,14 @@ the battery percentage is greater than 60%."
     (set! msg (format "Add %s." (abbreviate-file-name fname))))
   (flet! status (_ status)
     (if (string-match-p "finished" status)
-        (trace! "pushed successfully -> %S" status)
-      (trace! "failed push -> %S" status)))
+        (message "pushed successfully -> %S" status)
+      (message "failed push -> %S" status)))
   (set! command (format "git add %s && git commit -m %S %s" fname msg fname))
   (call-process-shell-command command)
   ;; Do not push if there is a risk of suddenly shutting down and losing
   ;; information.
   (require 'battery)
-  (set! battery-percent (battery-format "%p" (funcall battery-status-function)))
+  (set! battery-percent (string-to-number (battery-format "%p" (funcall battery-status-function))))
   (set! battery-status (battery-format "%r" (funcall battery-status-function)))
   (when (or (equal battery-status "N/a") (> battery-percent 60))
     (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
