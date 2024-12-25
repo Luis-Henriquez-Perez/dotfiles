@@ -48,6 +48,8 @@ define_key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"
 define_key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile")
 define_key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget")
 
+define_key([mod], "i", lazy.spawn("qutebrowser"), desc="Launch qutebrowser")
+define_key([mod], "e", lazy.spawn("emacsclient -nc"), desc="Launch Emacs")
 
 # Add key bindings to switch VTs in Wayland.
 # We can't check qtile.core.name in default config as it is loaded before qtile is started
