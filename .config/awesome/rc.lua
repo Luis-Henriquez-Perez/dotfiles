@@ -232,7 +232,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = {}
 
-function oo_previous_layout () awful.layout.inc(-1) end
+function oo_set_previous_layout () awful.layout.inc(-1) end
 function fn21 () awful.tag.incnmaster(-1, nil, true) end
 function fn20 () awful.client.swap.byidx( -1) end
 function fn19 () awful.client.swap.byidx( 1) end
@@ -281,7 +281,7 @@ globalkey({ modkey, "Shift  " }, "j", fn19, description = "swap with next client
 globalkey({ modkey, "Shift  " }, "k", fn20, description = "swap with previous client by index", group = "client")
 globalkey({ modkey, "Shift  " }, "l", fn21, description = "decrease the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
-globalkey({ modkey, "Shift  " }, "space", oo_previous_layout, description = "select previous", group = "layout")
+globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
 
 clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
