@@ -294,7 +294,7 @@ function fn7 () awful.layout.inc( 1) end
 
 function f8 () menubar.show() end
 
-function () awful.screen.focused().mypromptbox:run() end
+function f9 () awful.screen.focused().mypromptbox:run() end
 
     globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
     globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
