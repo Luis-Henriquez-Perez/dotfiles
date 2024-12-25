@@ -28,10 +28,10 @@ define_key([mod, "control"], "j", lazy.layout.shuffle_down(), desc="Move window 
 define_key([mod, "control"], "k", lazy.layout.shuffle_up(), desc="Move window up")
 # Grow windows. If current window is on the edge of screen and direction
 # will be to screen edge - window would shrink.
-define_key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left")
-define_key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right")
-define_key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down")
-define_key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up")
+define_key([mod, "shift"], "h", lazy.layout.grow_left(), desc="Grow window to the left")
+define_key([mod, "shift"], "l", lazy.layout.grow_right(), desc="Grow window to the right")
+define_key([mod, "shift"], "j", lazy.layout.grow_down(), desc="Grow window down")
+define_key([mod, "shift"], "k", lazy.layout.grow_up(), desc="Grow window up")
 define_key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes")
 # Toggle between split and unsplit sides of stack.
 # Split = all windows displayed
