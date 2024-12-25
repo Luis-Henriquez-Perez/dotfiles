@@ -300,11 +300,8 @@ globalkeys = gears.table.join(
     globalkey({ modkey }, "space", function () awful.layout.inc( 1) end, {description = "select next", group = "layout"}),
     globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
     globalkey({ modkey, "Control" }, "n", function () local c = awful.client.restore() -- Focus restored client if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end, {description = "restore minimized", group = "client"}),
-
- -- Prompt
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end, {description = "run prompt", group = "launcher"}),
     awful.key({ modkey }, "x", function () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end, {description = "lua execute prompt", group = "awesome"}),
- -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end, {description = "show the menubar", group = "launcher"})
 )
 
