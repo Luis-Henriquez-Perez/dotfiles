@@ -248,7 +248,7 @@ function fn9 () awful.screen.focused().mypromptbox:run() end
 function fn8 () awful.layout.inc( 1) end
 function fn7 () awful.tag.incmwfact(-0.05) end
 function fn6 () awful.tag.incmwfact( 0.05) end
-function fn5 () awful.spawn(terminal) end
+function oo_launch_terminal () awful.spawn(terminal) end
 function oo_focus_last_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end
 function oo_show_mainmenu () mymainmenu:show() end
 function fn1 () awful.client.focus.byidx(-1) end
@@ -263,7 +263,7 @@ globalkey({ modkey }, "k", fn1, description = "focus previous by index", group =
 globalkey({ modkey }, "w", oo_show_mainmenu, description = "show main menu", group = "awesome")
 globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
 globalkey({ modkey }, "Tab", oo_focus_last_client, description = "go back", group = "client")
-globalkey({ modkey }, "Return", fn5, description = "open a terminal", group = "launcher")
+globalkey({ modkey }, "Return", oo_launch_terminal, description = "open a terminal", group = "launcher")
 globalkey({ modkey }, "l", fn6, description = "increase master width factor", group = "layout")
 globalkey({ modkey }, "h", fn7, description = "decrease master width factor", group = "layout")
 globalkey({ modkey }, "space", fn8, description = "select next", group = "layout")
