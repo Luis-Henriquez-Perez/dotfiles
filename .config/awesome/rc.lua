@@ -292,39 +292,29 @@ function fn6 () awful.tag.incncol(-1, nil, true) end
 
 function fn7 () awful.layout.inc( 1) end
 
-globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
-globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
-globalkey({ modkey, "Shift" }, "q", awesome.quit, description = "quit awesome", group = "awesome")
-globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
-globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
-globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
-globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
-globalkey({ modkey, "Control" }, "h", fn5, {description = "increase the number of columns", group = "layout"})
-globalkey({ modkey, "Control" }, "l", fn6, {description = "decrease the number of columns", group = "layout"})
-globalkey({ modkey }, "space", fn7, {description = "select next", group = "layout"})
-globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
-(globalkey({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end, {description = "run prompt", group = "launcher"})
-globalkey({ modkey }, "x", function () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end, {description = "lua execute prompt", group = "awesome"})
-globalkey({ modkey }, "p", function() menubar.show() end, {description = "show the menubar", group = "launcher"})
+    globalkey({ modkey }, "Return", oo_open_terminal, description = "open a terminal", group = "launcher")
+    globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
+    globalkey({ modkey, "Shift" }, "q", awesome.quit, description = "quit awesome", group = "awesome")
+    globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
+    globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
+    globalkey({ modkey, "Shift" }, "h", fn3, description = "increase the number of master clients", group = "layout")
+    globalkey({ modkey, "Shift" }, "l", fn4, description = "decrease the number of master clients", group = "layout")
+    globalkey({ modkey, "Control" }, "h", fn5, {description = "increase the number of columns", group = "layout"})
+    globalkey({ modkey, "Control" }, "l", fn6, {description = "decrease the number of columns", group = "layout"})
+    globalkey({ modkey }, "space", fn7, {description = "select next", group = "layout"})
+    globalkey({ modkey, "Shift" }, "space", function () awful.layout.inc(-1) end, {description = "select previous", group = "layout"}),
+    globalkey({ modkey, "Control" }, "n", function () local c = awful.client.restore() -- Focus restored client if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end, {description = "restore minimized", group = "client"})
+    globalkey({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end, {description = "run prompt", group = "launcher"})
+    globalkey({ modkey }, "x", function () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end, {description = "lua execute prompt", group = "awesome"})
+    globalkey({ modkey }, "p", function() menubar.show() end, {description = "show the menubar", group = "launcher"})
 
 clientkeys = gears.table.join(
-globalkey{ modkey, "Control" }, "n", function () local c = awful.client.restore() -- Focus restored client if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end, {description = "restore minimized", group = "client"})
     awful.key({ modkey }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
-              {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
-              {description = "toggle floating", group = "client"}),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
-              {description = "move to master", group = "client"}),
-    awful.key({ modkey }, "o",      function (c) c:move_to_screen()               end,
-              {description = "move to screen", group = "client"}),
-    awful.key({ modkey }, "t",      function (c) c.ontop = not c.ontop            end,
-              {description = "toggle keep on top", group = "client"}),
     awful.key({ modkey }, "n",
         function (c)
             -- The client currently has the input focus, so it cannot be
