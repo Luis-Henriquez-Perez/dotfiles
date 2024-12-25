@@ -49,7 +49,7 @@
 (eshell/alias "remotes" "git --no-pager branch -r")
 (eshell/alias "checkout" "git checkout $*")
 (eshell/alias "check" "git checkout $*")
-(eshell/alias "rename" "git branch -m $1 && git branch -you")
+(eshell/alias "rename" "git branch -m $1 && git branch -u")
 (eshell/alias "rename" "git branch -m $1 $2 &&")
 ;;;; rsync
 ;; Communicate with my desktop.
