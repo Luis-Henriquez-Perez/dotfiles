@@ -240,7 +240,7 @@ globalkeys = gears.table.join(
     --     end
     -- },
     awful.key {
-        modifiers = { modkey,},
+        modifiers = { modkey },
         key = "s",
         on_press = hotkeys_popup.show_help,
         description="show help",
