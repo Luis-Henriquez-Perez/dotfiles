@@ -38,16 +38,15 @@ define_key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes")
 # Unsplit = 1 window displayed, like Max layout, but still with
 # multiple stack panes
 define_key([mod, "shift"], "Return", lazy.layout.toggle_split(), desc="Toggle between split and unsplit sides of stack")
-define_key([mod], "t", lazy.spawn("alacritty"), desc="Launch terminal")
 # Toggle between different layouts as defined below
 define_key([mod], "space", lazy.next_layout(), desc="Toggle between layouts")
 define_key([mod], "w", lazy.window.kill(), desc="Kill focused window")
 define_key([mod], "f", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window")
-# define_key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window")
 define_key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config")
 define_key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile")
 define_key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget")
 
+define_key([mod], "t", lazy.spawn("alacritty"), desc="Launch terminal")
 define_key([mod], "i", lazy.spawn("qutebrowser"), desc="Launch qutebrowser")
 define_key([mod], "e", lazy.spawn("emacsclient -nc"), desc="Launch Emacs")
 
