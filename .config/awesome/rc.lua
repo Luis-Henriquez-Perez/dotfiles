@@ -247,7 +247,7 @@ function oo_prompt_lua_code () awful.prompt.run { prompt = "Run Lua code: ", tex
 function fn9 () awful.screen.focused().mypromptbox:run() end
 function fn8 () awful.layout.inc( 1) end
 function fn7 () awful.tag.incmwfact(-0.05) end
-function fn6 () awful.tag.incmwfact( 0.05) end
+function oo_increase_master_width_factor () awful.tag.incmwfact( 0.05) end
 function oo_launch_terminal () awful.spawn(terminal) end
 function oo_focus_last_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end
 function oo_show_mainmenu () mymainmenu:show() end
@@ -264,7 +264,7 @@ globalkey({ modkey }, "w", oo_show_mainmenu, description = "show main menu", gro
 globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
 globalkey({ modkey }, "Tab", oo_focus_last_client, description = "go back", group = "client")
 globalkey({ modkey }, "Return", oo_launch_terminal, description = "open a terminal", group = "launcher")
-globalkey({ modkey }, "l", fn6, description = "increase master width factor", group = "layout")
+globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
 globalkey({ modkey }, "h", fn7, description = "decrease master width factor", group = "layout")
 globalkey({ modkey }, "space", fn8, description = "select next", group = "layout")
 globalkey({ modkey }, "r", fn9, description = "run prompt", group = "launcher")
