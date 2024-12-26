@@ -274,6 +274,16 @@ the battery percentage is greater than 60%."
   (when (or (equal battery-status "N/a") (> battery-percent 60))
     (set! proc (start-process "git" "*git-auto-push*" "git" "push" "--force"))
     (set-process-sentinel proc #'status)))
+
+(defun! oo-one-line (beg end)
+  "Join lines in the region between BEG and END into a single line.
+Additionally, make any duplicate spaces in line become a single space."
+  (interactive "r")
+  (flet! replace (s) (if (equal "\n" s) "" "\s"))
+  (set! rx " \\{2,\\}")
+  (replace-string-in-region "\n" "" beg end)
+  (setf (buffer-substring beg end)
+        (replace-regexp-in-string rx "\s" (buffer-substring beg end))))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
