@@ -291,6 +291,13 @@ globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome"
 globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
 
+local function globalkey(modifiers, key, action, description, group)
+    -- Create a new keybinding using awful.key
+    local newkey = awful.key(modifiers, key, action, {description=description, group=group})
+    -- Append the new keybinding to global_keys
+    globalkeys = gears.table.join(globalkeys, newkey)
+end
+
 clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
 clientkey({ modkey, "Shift" }, "c", function (c) c:kill() end, description = "close", group = "client")
 clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , description = "toggle floating", group = "client")
