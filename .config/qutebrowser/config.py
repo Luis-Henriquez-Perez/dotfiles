@@ -116,4 +116,4 @@ def rewrite(request: qutebrowser.api.interceptor.Request):
 qutebrowser.api.interceptor.register(rewrite)
 
 ### do not start on any page
-c.url.start_pages = ['urlhere']
+c.url.start_pages = []
