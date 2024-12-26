@@ -290,8 +290,8 @@ globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
 globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
-
 clientkeys = {}
+
 local function globalkey(modifiers, key, action, description, group)
     -- Create a new keybinding using awful.key
     local newkey = awful.key(modifiers, key, action, {description=description, group=group})
