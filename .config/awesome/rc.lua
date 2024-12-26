@@ -232,6 +232,13 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = {}
 
+function globalkey(modifiers, key, action, description, group)
+    -- Create a new keybinding using awful.key
+    local newkey = awful.key(modifiers, key, action, {description=description, group=group})
+    -- Append the new keybinding to global_keys
+    globalkeys = gears.table.join(globalkeys, newkey)
+end
+
 function oo_set_previous_layout () awful.layout.inc(-1) end
 function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
 function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
