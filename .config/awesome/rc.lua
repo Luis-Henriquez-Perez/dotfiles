@@ -237,7 +237,7 @@ function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) en
 function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
 function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
 function oo_increase_number_of_masters () awful.tag.incnmaster( 1, nil, true) end
-function fn17 () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
+function oo_restore_minimized () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
 function oo_decrease_number_of_columns () awful.tag.incncol(-1, nil, true) end
 function oo_focus_previous_screen () awful.screen.focus_relative(-1) end
 function oo_focus_next_screen () awful.screen.focus_relative( 1) end
@@ -274,7 +274,7 @@ globalkey({ modkey, "Control" }, "h", oo_increase_number_of_columns, description
 globalkey({ modkey, "Control" }, "j", oo_focus_next_screen, description = "focus the next screen", group = "screen")
 globalkey({ modkey, "Control" }, "k", oo_focus_previous_screen, description = "focus the previous screen", group = "screen")
 globalkey({ modkey, "Control" }, "l", oo_decrease_number_of_columns, description = "decrease the number of columns", group = "layout")
-globalkey({ modkey, "Control" }, "n", fn17, description = "restore minimized", group = "client")
+globalkey({ modkey, "Control" }, "n", oo_restore_minimized, description = "restore minimized", group = "client")
 globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
 globalkey({ modkey, "Shift  " }, "h", oo_increase_number_of_masters, description = "increase the number of master clients", group = "layout")
 globalkey({ modkey, "Shift  " }, "j", oo_swap_with_next_client, description = "swap with next client by index", group = "client")
