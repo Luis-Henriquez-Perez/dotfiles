@@ -239,56 +239,56 @@ local function globalkey(modifiers, key, action, description, group)
     globalkeys = gears.table.join(globalkeys, newkey)
 end
 
--- local function oo_set_previous_layout () awful.layout.inc(-1) end
--- local function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
--- local function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
--- local function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
--- local function oo_increase_number_of_masters () awful.tag.incnmaster( 1, nil, true) end
--- -- local function oo_restore_minimized () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
--- local function oo_decrease_number_of_columns () awful.tag.incncol(-1, nil, true) end
--- local function oo_focus_previous_screen () awful.screen.focus_relative(-1) end
--- local function oo_focus_next_screen () awful.screen.focus_relative( 1) end
--- local function oo_increase_number_of_columns () awful.tag.incncol( 1, nil, true) end
--- local function oo_show_menubar () menubar.show() end
--- local function oo_prompt_lua_code () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end
--- local function oo_run_prompt () awful.screen.focused().mypromptbox:run() end
--- local function oo_select_next_layout () awful.layout.inc( 1) end
--- local function oo_decrease_master_width_factor () awful.tag.incmwfact(-0.05) end
--- local function oo_increase_master_width_factor () awful.tag.incmwfact( 0.05) end
--- local function oo_launch_terminal () awful.spawn(terminal) end
--- local function oo_focus_last_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end
--- local function oo_show_mainmenu () mymainmenu:show() end
--- local function oo_focus_previous_client () awful.client.focus.byidx(-1) end
--- local function oo_focus_next_client () awful.client.focus.byidx( 1) end
+local function oo_set_previous_layout () awful.layout.inc(-1) end
+local function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
+local function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
+local function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
+local function oo_increase_number_of_masters () awful.tag.incnmaster( 1, nil, true) end
+-- local function oo_restore_minimized () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
+local function oo_decrease_number_of_columns () awful.tag.incncol(-1, nil, true) end
+local function oo_focus_previous_screen () awful.screen.focus_relative(-1) end
+local function oo_focus_next_screen () awful.screen.focus_relative( 1) end
+local function oo_increase_number_of_columns () awful.tag.incncol( 1, nil, true) end
+local function oo_show_menubar () menubar.show() end
+local function oo_prompt_lua_code () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end
+local function oo_run_prompt () awful.screen.focused().mypromptbox:run() end
+local function oo_select_next_layout () awful.layout.inc( 1) end
+local function oo_decrease_master_width_factor () awful.tag.incmwfact(-0.05) end
+local function oo_increase_master_width_factor () awful.tag.incmwfact( 0.05) end
+local function oo_launch_terminal () awful.spawn(terminal) end
+local function oo_focus_last_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end
+local function oo_show_mainmenu () mymainmenu:show() end
+local function oo_focus_previous_client () awful.client.focus.byidx(-1) end
+local function oo_focus_next_client () awful.client.focus.byidx( 1) end
 
--- globalkey({ modkey }, "s", hotkeys_popup.show_help, description="show help", group="awesome")
--- globalkey({ modkey }, "Left", awful.tag.viewprev, description = "view previous", group = "tag")
--- globalkey({ modkey }, "Right", awful.tag.viewnext, description = "view next", group = "tag")
--- globalkey({ modkey }, "Escape", awful.tag.history.restore, description = "go back", group = "tag")
--- globalkey({ modkey }, "j", oo_focus_next_client, description = "focus next by index", group = "client" )
--- globalkey({ modkey }, "k", oo_focus_previous_client, description = "focus previous by index", group = "client" )
--- globalkey({ modkey }, "w", oo_show_mainmenu, description = "show main menu", group = "awesome")
--- globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
--- globalkey({ modkey }, "Tab", oo_focus_last_client, description = "go back", group = "client")
--- globalkey({ modkey }, "Return", oo_launch_terminal, description = "open a terminal", group = "launcher")
--- globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
--- globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
--- globalkey({ modkey }, "space", oo_select_next_layout, description = "select next", group = "layout")
--- globalkey({ modkey }, "r", oo_run_prompt, description = "run prompt", group = "launcher")
--- globalkey({ modkey }, "x", oo_prompt_lua_code, description = "lua execute prompt", group = "awesome")
--- globalkey({ modkey }, "p", oo_show_menubar, description = "show the menubar", group = "launcher")
--- globalkey({ modkey, "Control" }, "h", oo_increase_number_of_columns, description = "increase the number of columns", group = "layout")
--- globalkey({ modkey, "Control" }, "j", oo_focus_next_screen, description = "focus the next screen", group = "screen")
--- globalkey({ modkey, "Control" }, "k", oo_focus_previous_screen, description = "focus the previous screen", group = "screen")
--- globalkey({ modkey, "Control" }, "l", oo_decrease_number_of_columns, description = "decrease the number of columns", group = "layout")
--- globalkey({ modkey, "Control" }, "n", oo_restore_minimized, description = "restore minimized", group = "client")
--- globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
--- globalkey({ modkey, "Shift  " }, "h", oo_increase_number_of_masters, description = "increase the number of master clients", group = "layout")
--- globalkey({ modkey, "Shift  " }, "j", oo_swap_with_next_client, description = "swap with next client by index", group = "client")
--- globalkey({ modkey, "Shift  " }, "k", oo_swap_with_previous_client, description = "swap with previous client by index", group = "client")
--- globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description = "decrease the number of master clients", group = "layout")
--- globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
--- globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
+globalkey({ modkey }, "s", hotkeys_popup.show_help, description="show help", group="awesome")
+globalkey({ modkey }, "Left", awful.tag.viewprev, description = "view previous", group = "tag")
+globalkey({ modkey }, "Right", awful.tag.viewnext, description = "view next", group = "tag")
+globalkey({ modkey }, "Escape", awful.tag.history.restore, description = "go back", group = "tag")
+globalkey({ modkey }, "j", oo_focus_next_client, description = "focus next by index", group = "client" )
+globalkey({ modkey }, "k", oo_focus_previous_client, description = "focus previous by index", group = "client" )
+globalkey({ modkey }, "w", oo_show_mainmenu, description = "show main menu", group = "awesome")
+globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
+globalkey({ modkey }, "Tab", oo_focus_last_client, description = "go back", group = "client")
+globalkey({ modkey }, "Return", oo_launch_terminal, description = "open a terminal", group = "launcher")
+globalkey({ modkey }, "l", oo_increase_master_width_factor, description = "increase master width factor", group = "layout")
+globalkey({ modkey }, "h", oo_decrease_master_width_factor, description = "decrease master width factor", group = "layout")
+globalkey({ modkey }, "space", oo_select_next_layout, description = "select next", group = "layout")
+globalkey({ modkey }, "r", oo_run_prompt, description = "run prompt", group = "launcher")
+globalkey({ modkey }, "x", oo_prompt_lua_code, description = "lua execute prompt", group = "awesome")
+globalkey({ modkey }, "p", oo_show_menubar, description = "show the menubar", group = "launcher")
+globalkey({ modkey, "Control" }, "h", oo_increase_number_of_columns, description = "increase the number of columns", group = "layout")
+globalkey({ modkey, "Control" }, "j", oo_focus_next_screen, description = "focus the next screen", group = "screen")
+globalkey({ modkey, "Control" }, "k", oo_focus_previous_screen, description = "focus the previous screen", group = "screen")
+globalkey({ modkey, "Control" }, "l", oo_decrease_number_of_columns, description = "decrease the number of columns", group = "layout")
+globalkey({ modkey, "Control" }, "n", oo_restore_minimized, description = "restore minimized", group = "client")
+globalkey({ modkey, "Control" }, "r", awesome.restart, description = "reload awesome", group = "awesome")
+globalkey({ modkey, "Shift  " }, "h", oo_increase_number_of_masters, description = "increase the number of master clients", group = "layout")
+globalkey({ modkey, "Shift  " }, "j", oo_swap_with_next_client, description = "swap with next client by index", group = "client")
+globalkey({ modkey, "Shift  " }, "k", oo_swap_with_previous_client, description = "swap with previous client by index", group = "client")
+globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description = "decrease the number of master clients", group = "layout")
+globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
+globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
 clientkeys = {}
 
