@@ -242,7 +242,7 @@ function oo_decrease_number_of_columns () awful.tag.incncol(-1, nil, true) end
 function oo_focus_previous_screen () awful.screen.focus_relative(-1) end
 function oo_focus_next_screen () awful.screen.focus_relative( 1) end
 function oo_increase_number_of_columns () awful.tag.incncol( 1, nil, true) end
-function fn12 () menubar.show() end
+function oo_show_menubar () menubar.show() end
 function oo_prompt_lua_code () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end
 function fn9 () awful.screen.focused().mypromptbox:run() end
 function fn8 () awful.layout.inc( 1) end
@@ -269,7 +269,7 @@ globalkey({ modkey }, "h", fn7, description = "decrease master width factor", gr
 globalkey({ modkey }, "space", fn8, description = "select next", group = "layout")
 globalkey({ modkey }, "r", fn9, description = "run prompt", group = "launcher")
 globalkey({ modkey }, "x", oo_prompt_lua_code, description = "lua execute prompt", group = "awesome")
-globalkey({ modkey }, "p", fn12, description = "show the menubar", group = "launcher")
+globalkey({ modkey }, "p", oo_show_menubar, description = "show the menubar", group = "launcher")
 globalkey({ modkey, "Control" }, "h", oo_increase_number_of_columns, description = "increase the number of columns", group = "layout")
 globalkey({ modkey, "Control" }, "j", oo_focus_next_screen, description = "focus the next screen", group = "screen")
 globalkey({ modkey, "Control" }, "k", oo_focus_previous_screen, description = "focus the previous screen", group = "screen")
