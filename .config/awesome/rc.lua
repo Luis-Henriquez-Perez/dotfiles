@@ -230,107 +230,65 @@ root.buttons(gears.table.join(
 -- }}}
 
 -- {{{ Key bindings
+globalkeys = {}
 
-globalkeys = gears.table.join(
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description="show help", group="awesome"}),
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
-              {description = "view previous", group = "tag"}),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext,
-              {description = "view next", group = "tag"}),
-    awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
-              {description = "go back", group = "tag"}),
+local function globalkey(modifiers, key, action, description, group)
+    -- Create a new keybinding using awful.key
+    local newkey = awful.key(modifiers, key, action, {description=description, group=group})
+    -- Append the new keybinding to global_keys
+    globalkeys = gears.table.join(globalkeys, newkey)
+end
 
-    awful.key({ modkey,           }, "j",
-        function ()
-            awful.client.focus.byidx( 1)
-        end,
-        {description = "focus next by index", group = "client"}
-    ),
-    awful.key({ modkey,           }, "k",
-        function ()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "focus previous by index", group = "client"}
-    ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
+local function f0 () awful.client.focus.byidx( 1) end
+local function f1 () awful.client.focus.byidx(-1) end
+local function f2 () mymainmenu:show() end
+local function f3 () awful.client.swap.byidx( 1) end
+local function f4 () awful.client.swap.byidx( -1) end
+local function f5 () awful.screen.focus_relative( 1) end
+local function f6 () awful.screen.focus_relative(-1) end
+local function f7 () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end
+local function f8 () awful.spawn(terminal) end
+local function f9 () awful.tag.incmwfact( 0.05) end
+local function f10 () awful.tag.incmwfact(-0.05) end
+local function f11 () awful.tag.incnmaster( 1, nil, true) end
+local function f12 () awful.tag.incnmaster(-1, nil, true) end
+local function f13 () awful.tag.incncol( 1, nil, true) end
+local function f14 () awful.tag.incncol(-1, nil, true) end
+local function f15 () awful.layout.inc( 1) end
+local function f16 () awful.layout.inc(-1) end
+local function f17 () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end
+local function f18 () awful.screen.focused().mypromptbox:run() end
+local function f19 () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end
+local function f21 () menubar.show() end
 
-    -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
-              {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
-              {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
-              {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
-              {description = "focus the previous screen", group = "screen"}),
-    awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
-              {description = "jump to urgent client", group = "client"}),
-    awful.key({ modkey,           }, "Tab",
-        function ()
-            awful.client.focus.history.previous()
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "go back", group = "client"}),
-
-    -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
-              {description = "increase master width factor", group = "layout"}),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
-              {description = "decrease master width factor", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1, nil, true) end,
-              {description = "increase the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
-              {description = "increase the number of columns", group = "layout"}),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
-              {description = "decrease the number of columns", group = "layout"}),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
-              {description = "select next", group = "layout"}),
-    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
-
-    awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
-                    )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-
-    -- Prompt
-    awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
-
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"}),
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
-)
+globalkey({ modkey, }, "s", hotkeys_popup.show_help, "show help", "awesome")
+globalkey({ modkey, }, "Left", awful.tag.viewprev, "view previous", "tag")
+globalkey({ modkey, }, "Right", awful.tag.viewnext, "view next", "tag")
+globalkey({ modkey, }, "Escape", awful.tag.history.restore, "go back", "tag")
+globalkey({ modkey, }, "j", f0, "focus next by index", "client" )
+globalkey({ modkey, }, "k", f1, "focus previous by index", "client" )
+globalkey({ modkey, }, "w", f2, "show main menu", "awesome")
+globalkey({ modkey, "Shift" }, "j", f3, "swap with next client by index", "client")
+globalkey({ modkey, "Shift" }, "k", f4, "swap with previous client by index", "client")
+globalkey({ modkey, "Control" }, "j", f5, "focus the next screen", "screen")
+globalkey({ modkey, "Control" }, "k", f6, "focus the previous screen", "screen")
+globalkey({ modkey, }, "u", awful.client.urgent.jumpto, "jump to urgent client", "client")
+globalkey({ modkey, }, "Tab", f7, "go back", "client")
+globalkey({ modkey, }, "Return", f8, "open a terminal", "launcher")
+globalkey({ modkey, "Control" }, "r", awesome.restart, "reload awesome", "awesome")
+globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
+globalkey({ modkey, }, "l", f9, "increase master width factor", "layout")
+globalkey({ modkey, }, "h", f10, "decrease master width factor", "layout")
+globalkey({ modkey, "Shift" }, "h", f11, "increase the number of master clients", "layout")
+globalkey({ modkey, "Shift" }, "l", f12, "decrease the number of master clients", "layout")
+globalkey({ modkey, "Control" }, "h", f13, "increase the number of columns", "layout")
+globalkey({ modkey, "Control" }, "l", f14, "decrease the number of columns", "layout")
+globalkey({ modkey, }, "space", f15, "select next", "layout")
+globalkey({ modkey, "Shift" }, "space", f16, "select previous", "layout")
+globalkey({ modkey, "Control" }, "n", f17, "restore minimized", "client")
+globalkey({ modkey }, "r", f18, "run prompt", "launcher")
+globalkey({ modkey }, "x", f19, "lua execute prompt", "awesome")
+globalkey({ modkey }, "p", f21, "show the menubar", "launcher")
 
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
