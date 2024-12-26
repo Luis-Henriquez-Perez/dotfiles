@@ -232,7 +232,7 @@ root.buttons(gears.table.join(
 -- {{{ Key bindings
 globalkeys = {}
 
-function globalkey(modifiers, key, action, description, group)
+local function globalkey(modifiers, key, action, description, group)
     -- Create a new keybinding using awful.key
     local newkey = awful.key(modifiers, key, action, {description=description, group=group})
     -- Append the new keybinding to global_keys
