@@ -239,7 +239,8 @@ local function globalkey(modifiers, key, action, description, group)
     globalkeys = gears.table.join(globalkeys, newkey)
 end
 
-local function oo_set_previous_layout () awful.layout.inc(-1) end
+local function oo_set_previous_layout ()
+   awful.layout.inc(-1) end
 local function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
 local function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
 local function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
