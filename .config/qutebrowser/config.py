@@ -114,3 +114,5 @@ def rewrite(request: qutebrowser.api.interceptor.Request):
             pass
 
 qutebrowser.api.interceptor.register(rewrite)
+
+### Do not
