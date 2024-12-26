@@ -115,4 +115,4 @@ def rewrite(request: qutebrowser.api.interceptor.Request):
 
 qutebrowser.api.interceptor.register(rewrite)
 
-### Do not
+### do not start on any page
