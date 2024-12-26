@@ -283,7 +283,6 @@ globalkey({ modkey, "Shift  " }, "l", oo_decrease_number_of_masters, description
 globalkey({ modkey, "Shift  " }, "q", awesome.quit, description = "quit awesome", group = "awesome")
 globalkey({ modkey, "Shift  " }, "space", oo_set_previous_layout, description = "select previous", group = "layout")
 
-
 clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
 clientkey({ modkey, "Shift" }, "c", function (c) c:kill() end, description = "close", group = "client")
 clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , description = "toggle floating", group = "client")
