@@ -1,0 +1,3 @@
+[submodule "/home/luis/.config/awesome/revelation"]
+	path = /home/luis/.config/awesome/revelation
+	url = https://github.com/guotsuan/awesome-revelation
