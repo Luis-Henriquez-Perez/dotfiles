@@ -251,7 +251,7 @@ function oo_increase_master_width_factor () awful.tag.incmwfact( 0.05) end
 function oo_launch_terminal () awful.spawn(terminal) end
 function oo_focus_last_client () awful.client.focus.history.previous() if client.focus then client.focus:raise() end
 function oo_show_mainmenu () mymainmenu:show() end
-function fn1 () awful.client.focus.byidx(-1) end
+function oo_focus_previous_client () awful.client.focus.byidx(-1) end
 function oo_focus_next_client () awful.client.focus.byidx( 1) end
 
 globalkey({ modkey }, "s", hotkeys_popup.show_help, description="show help", group="awesome")
@@ -259,7 +259,7 @@ globalkey({ modkey }, "Left", awful.tag.viewprev, description = "view previous",
 globalkey({ modkey }, "Right", awful.tag.viewnext, description = "view next", group = "tag")
 globalkey({ modkey }, "Escape", awful.tag.history.restore, description = "go back", group = "tag")
 globalkey({ modkey }, "j", oo_focus_next_client, description = "focus next by index", group = "client" )
-globalkey({ modkey }, "k", fn1, description = "focus previous by index", group = "client" )
+globalkey({ modkey }, "k", oo_focus_previous_client, description = "focus previous by index", group = "client" )
 globalkey({ modkey }, "w", oo_show_mainmenu, description = "show main menu", group = "awesome")
 globalkey({ modkey }, "u", awful.client.urgent.jumpto, description = "jump to urgent client", group = "client")
 globalkey({ modkey }, "Tab", oo_focus_last_client, description = "go back", group = "client")
