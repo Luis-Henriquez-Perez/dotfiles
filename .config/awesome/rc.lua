@@ -299,16 +299,16 @@ local function clientkeys(modifiers, key, action, description, group)
     clientkeys = gears.table.join(clientkeys, newkey)
 end
 
-clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
-clientkey({ modkey, "Shift" }, "c", function (c) c:kill() end, description = "close", group = "client")
-clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , description = "toggle floating", group = "client")
-clientkey({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end, description = "move to master", group = "client")
-clientkey({ modkey, }, "o", function (c) c:move_to_screen() end, description = "move to screen", group = "client")
-clientkey({ modkey, }, "t", function (c) c.ontop = not c.ontop end, description = "toggle keep on top", group = "client")
-clientkey({ modkey, }, "n", function (c) c.minimized = true end , description = "minimize", group = "client")
-clientkey({ modkey, }, "m", function (c) c.maximized = not c.maximized c:raise() end , description = "(un)maximize", group = "client")
-clientkey({ modkey, "Control" }, "m", function (c) c.maximized_vertical = not c.maximized_vertical c:raise() end , description = "(un)maximize vertically", group = "client")
-clientkey({ modkey, "Shift" }, "m", function (c) c.maximized_horizontal = not c.maximized_horizontal c:raise() end , {description = "(un)maximize horizontally", group = "client"})
+-- clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
+-- clientkey({ modkey, "Shift" }, "c", function (c) c:kill() end, description = "close", group = "client")
+-- clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , description = "toggle floating", group = "client")
+-- clientkey({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end, description = "move to master", group = "client")
+-- clientkey({ modkey, }, "o", function (c) c:move_to_screen() end, description = "move to screen", group = "client")
+-- clientkey({ modkey, }, "t", function (c) c.ontop = not c.ontop end, description = "toggle keep on top", group = "client")
+-- clientkey({ modkey, }, "n", function (c) c.minimized = true end , description = "minimize", group = "client")
+-- clientkey({ modkey, }, "m", function (c) c.maximized = not c.maximized c:raise() end , description = "(un)maximize", group = "client")
+-- clientkey({ modkey, "Control" }, "m", function (c) c.maximized_vertical = not c.maximized_vertical c:raise() end , description = "(un)maximize vertically", group = "client")
+-- clientkey({ modkey, "Shift" }, "m", function (c) c.maximized_horizontal = not c.maximized_horizontal c:raise() end , {description = "(un)maximize horizontally", group = "client"})
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
