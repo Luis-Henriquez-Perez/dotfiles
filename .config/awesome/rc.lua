@@ -242,11 +242,22 @@ end
 local function oo_set_previous_layout ()
    awful.layout.inc(-1)
 end
-local function oo_decrease_number_of_masters () awful.tag.incnmaster(-1, nil, true) end
-local function oo_swap_with_previous_client () awful.client.swap.byidx( -1) end
-local function oo_swap_with_next_client () awful.client.swap.byidx( 1) end
-local function oo_increase_number_of_masters () awful.tag.incnmaster( 1, nil, true) end
-local function oo_restore_minimized () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end
+local function oo_decrease_number_of_masters ()
+   awful.tag.incnmaster(-1, nil, true)
+end
+local function oo_swap_with_previous_client ()
+   awful.client.swap.byidx( -1)
+end
+local function oo_swap_with_next_client ()
+   awful.client.swap.byidx( 1)
+end
+local function oo_increase_number_of_masters ()
+   awful.tag.incnmaster( 1, nil, true)
+end
+local function oo_restore_minimized ()
+   local c = awful.client.restore() if c then c:emit_signal(
+         "request::activate", "key.unminimize", {raise = true} )
+   end
 local function oo_decrease_number_of_columns () awful.tag.incncol(-1, nil, true) end
 local function oo_focus_previous_screen () awful.screen.focus_relative(-1) end
 local function oo_focus_next_screen () awful.screen.focus_relative( 1) end
