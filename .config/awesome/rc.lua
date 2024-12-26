@@ -296,7 +296,7 @@ local function clientkeys(modifiers, key, action, description, group)
     -- Create a new keybinding using awful.key
     local newkey = awful.key(modifiers, key, action, {description=description, group=group})
     -- Append the new keybinding to global_keys
-    clientkeys = gears.table.join(globalkeys, newkey)
+    clientkeys = gears.table.join(clientkeys, newkey)
 end
 
 clientkey({ modkey, }, "f", function (c) c.fullscreen = not c.fullscreen c:raise() end, description = "toggle fullscreen", group = "client")
