@@ -49,6 +49,14 @@
 (eshell/alias "remotes" "git --no-pager branch -r")
 (eshell/alias "checkout" "git checkout $*")
 (eshell/alias "check" "git checkout $*")
+(eshell/alias "grename" "git branch -m $1 && git push origin -u $1 && git push origin --delete <old-branch-name>")
+(eshell/alias "rename" "move $*")
+(eshell/alias "home" "cd ~")
+(eshell/alias "exec" "chmod +x $*")
+(eshell/alias "symlink" "ln -s $1 $2")
+(eshell/alias "sym" "ln -s $1 $2")
+(eshell/alias "mmv" "mkdir -p \"$(dirname $2)\" && mv $1 $2")
+(eshell/alias "unpack" "mv $1/* . && rmdir $1")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
