@@ -384,8 +384,8 @@ globalkey({ modkey }, "j", client_rotate_forward, "rotate forward", "client")
 globalkey({ modkey }, "k", client_rotate_backward, "rotate backward", "client")
 globalkey({ modkey }, "Tab", client_focus_last_visited, "go back", "client")
 globalkey({ modkey }, "o", revelation, "expose of windows", "client")
-globalkey({ modkey, "Shift"   }, "j"     , client_swap_next, "swap with next client by index", "client")
-globalkey({ modkey, "Shift"   }, "k"     , client_swap_previous, "swap with previous client by index", "client")
+globalkey({ modkey, "Shift" }, "j", client_swap_next, "swap with next client by index", "client")
+globalkey({ modkey, "Shift" }, "k", client_swap_previous, "swap with previous client by index", "client")
 
 -- layout
 globalkey({ modkey, "Control" }, "h", layout_increase_num_columns, "increase the number of columns", "layout")
