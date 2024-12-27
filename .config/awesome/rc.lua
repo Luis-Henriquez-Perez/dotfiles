@@ -360,6 +360,38 @@ local function system_suspend ()
     awful.spawn("systemctl suspend")
 end
 
+-- For now I am assume that either all clients have a titlebar or none of them
+-- do.  Honestly I do not think I would ever want a case where some clients have
+-- Titlebars and some do not.
+-- local function client_hide_all_titlebars ()
+--     naughty.notify({title = "hiding", text = "hiding all titlebars"})
+--     for _, c in ipairs(client.get()) do
+--         awful.titlebar.hide(c)
+--     end
+-- end
+local function client_toggle_all_titlebars()
+    local clients = client.get()
+    if #clients == 0 then return end -- Exit if no clients exist
+
+    -- Check if the first client has a titlebar
+    local has_titlebar = clients[1].titlebars_enabled
+
+    if has_titlebar then
+        naughty.notify({title = "Hiding", text = "Hiding all titlebars"})
+        for _, c in ipairs(clients) do
+            c.titlebars_enabled = false
+            awful.titlebar.hide(c)
+        end
+    else
+        naughty.notify({title = "Showing", text = "Showing all titlebars"})
+        for _, c in ipairs(clients) do
+            c.titlebars_enabled = true
+            awful.titlebar.show(c)
+        end
+    end
+end
+
+globalkey({ modkey,}, "b", client_toggle_all_titlebars, "hide titlebars", "client")
 -- awesome
 globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
 globalkey({ modkey, "Control" }, "r", awesome.restart, "reload awesome", "awesome")
