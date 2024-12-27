@@ -243,7 +243,7 @@ end
 
 local function f0 () awful.client.focus.byidx( 1) end
 local function f1 () awful.client.focus.byidx(-1) end
-local function f2 () mymainmenu:show() end
+local function oo_show_main_menu () mymainmenu:show() end
 local function f3 () awful.client.swap.byidx( 1) end
 local function f4 () awful.client.swap.byidx( -1) end
 local function f5 () awful.screen.focus_relative( 1) end
@@ -256,12 +256,24 @@ local function f11 () awful.tag.incnmaster( 1, nil, true) end
 local function f12 () awful.tag.incnmaster(-1, nil, true) end
 local function f13 () awful.tag.incncol( 1, nil, true) end
 local function f14 () awful.tag.incncol(-1, nil, true) end
-local function f15 () awful.layout.inc( 1) end
-local function f16 () awful.layout.inc(-1) end
+local function oo_previous_layout () awful.layout.inc( 1) end
+local function oo_next_layout () awful.layout.inc(-1) end
 local function f17 () local c = awful.client.restore() if c then c:emit_signal( "request::activate", "key.unminimize", {raise = true} ) end end
 local function f18 () awful.screen.focused().mypromptbox:run() end
 local function f19 () awful.prompt.run { prompt = "Run Lua code: ", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. "/history_eval" } end
 local function f21 () menubar.show() end
+-- local function oo_spawn_emacs () menubar.show() end
+
+local function oo_rotate_clients_forward()
+   awful.client.cycle(true)
+   local master = awful.client.getmaster()
+   if master then
+      client.focus = master
+      return master:raise()
+   else
+      return nil
+   end
+end
 
 globalkey({ modkey, }, "s", hotkeys_popup.show_help, "show help", "awesome")
 globalkey({ modkey, }, "Left", awful.tag.viewprev, "view previous", "tag")
