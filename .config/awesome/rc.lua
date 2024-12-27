@@ -360,6 +360,10 @@ local function system_suspend ()
     awful.spawn("systemctl suspend")
 end
 
+local function system_suspend ()
+    awful.spawn("systemctl suspend")
+end
+
 -- For now I am assume that either all clients have a titlebar or none of them
 -- do.  Honestly I do not think I would ever want a case where some clients have
 -- Titlebars and some do not.
