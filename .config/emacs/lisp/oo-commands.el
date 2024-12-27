@@ -279,11 +279,7 @@ the battery percentage is greater than 60%."
   "Join lines in the region between BEG and END into a single line.
 Additionally, make any duplicate spaces in line become a single space."
   (interactive "r")
-  (flet! replace (s) (if (equal "\n" s) "" "\s"))
-  (set! rx " \\{2,\\}")
-  (replace-string-in-region "\n" "" beg end)
-  (setf (buffer-substring beg end)
-        (replace-regexp-in-string rx "\s" (buffer-substring beg end))))
+  (replace-string-in-region "\n" "\s" beg end))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
