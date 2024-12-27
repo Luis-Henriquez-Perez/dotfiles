@@ -11,9 +11,10 @@ xsetroot -cursor_name left_ptr
 # Make sure this is before the 'exec' command or it won't be sourced.
 # I have taken this from the [[https://wiki.archlinux.org/title/Xprofile][archwiki article]] on =xprofile=.  It recommends
 # loading the =xprofile= from the =xinitrc=.  I am still a bit confused.
-if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
-  [ -f /etc/xprofile ] && . /etc/xprofile
-  [ -f ~/.xprofile ] && . ~/.xprofile
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
+	. "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
+else
+	. "$HOME/.xprofile"
 fi
 ### set the window manager dynamically
 # https://bbs.archlinux.org/viewtopic.php?id=139353
