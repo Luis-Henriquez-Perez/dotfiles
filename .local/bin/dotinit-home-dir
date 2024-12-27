@@ -1,0 +1,26 @@
+#!/bin/bash
+# Filename: dotinit-home-dir.sh
+# Author: Luis Henriquez <luis@luishp.xyz>
+# Created: 2024-12-22 14:02:58
+# Description: Bootstrap my dotfiles by making home directory a git repo.
+
+# https://www.bowmanjd.com/dotfiles/dotfiles-1-simple-no-bare-repo/
+
+THROWAWAY_DIR=$(mktemp -d ~/throwaway_dir_XXXXXX)
+REPO="git@github.com:Luis-Henriquez-Perez/dotfiles.git"
+echo "Unique directory: $BACKUP_DIR"
+
+cd $HOME
+git clone -n --separate-git-dir .git $REPO $THROWAWAY_DIR
+rm -r $THROWAWAY_DIR
+
+# Execute/uncomment one of the following 3 lines unless a .gitignore with '/**' already exists in the repo
+git config --local status.showUntrackedFiles no
+# echo '/**' >> .git/info/exclude
+# echo '/**' >> .gitignore; git add -f .gitignore
+
+# If first-time push to empty repo, add and commit some files, then:
+git push -u origin HEAD
+
+# Otherwise, if this is first-time pull from non-empty repo
+git checkout

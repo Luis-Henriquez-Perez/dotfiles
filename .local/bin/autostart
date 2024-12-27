@@ -1,0 +1,16 @@
+#!/bin/bash
+# Filename: autostart.sh
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2024-12-26 22:06:19
+# Description: Autostart needed programs.
+
+function run {
+  if ! pgrep $1 ;
+  then
+    $@&
+  fi
+}
+
+run "picom"
+run "mcron"
+run "mpd"

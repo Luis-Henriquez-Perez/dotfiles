@@ -1,0 +1,9 @@
+#!/bin/bash
+# Filename: script_screenshot.sh
+# Author: Luis Henriquez <luis@luishp.xyz>
+# Created: 2024-12-19 08:27:49
+# Description: This is a script designed to take a picture of my full screen.
+
+maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png
+
+notify-send "screenshot" "Screenshot taken"

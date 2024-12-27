@@ -1,0 +1,62 @@
+#!/bin/bash
+# Filename: delete_untracked.sh
+# Author: Luis Henriquez <luis@luishp.xyz>
+# Created: 2024-12-21 07:41:44
+# Description: This script is to backup untracked files.
+
+dot () {
+    git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
+}
+
+BRANCH="finish-README"
+
+# if dot checkout "$BRANCH"; then
+#     echo "Successfully Checked out dotfiles."
+# else
+#     # BACKUP_DIR=$(mktemp -d ~/Trash/dot_checkout_backup_XXXXXX)
+#     # echo "Unique directory: $BACKUP_DIR"
+#     # mkdir "$BACKUP_DIR" -p
+#     for file in $(dot checkout "$BRANCH" 2>&1 | grep -E "^\s+.+" | awk '{print $1}'); do
+#         if [ -f "$HOME/$file" ]; then
+#             echo "file -> $HOME/$file"
+#             rm "$HOME/$file"
+#         else
+#             echo "It's not a file."
+#         fi
+#         # if mv "$file" "$BACKUP_DIR"; then
+#         #     echo "move $file into $BACKUP_DIR"
+#         # else
+#         #     echo "cannot move $file"
+#         # fi
+#     done
+# fi
+
+BACKUP_DIR=$(mktemp -d ~/checkout_backup_XXXXXX)
+echo "Unique directory: $BACKUP_DIR"
+mkdir "$BACKUP_DIR" -p
+if dot checkout "$BRANCH" >/dev/null 2>&1; then
+    echo "Successfully checked out branch $BRANCH."
+else
+    echo "Conflicts detected! Backing up and removing files that would be overwritten."
+
+    # Parse conflicting files from the `dot checkout` error message
+    CONFLICTING_FILES=$(dot checkout "$BRANCH" 2>&1 | grep -E "^\s+" | awk '{print $1}')
+
+    for file in $CONFLICTING_FILES; do
+        FILE_PATH="$HOME/$file"
+
+        if [ -f "$FILE_PATH" ] || [ -d "$FILE_PATH" ]; then
+            echo "Backing up $file to $BACKUP_DIR."
+            mv "$FILE_PATH" "$BACKUP_DIR/" || echo "Warning: Could not move $file"
+        else
+            echo "Skipping unknown type: $file"
+        fi
+    done
+
+    # Retry the checkout after cleanup
+    if dot checkout "$BRANCH"; then
+        echo "Successfully checked out branch $BRANCH after resolving conflicts."
+    else
+        echo "Failed to checkout branch $BRANCH even after resolving conflicts."
+    fi
+fi
