@@ -339,8 +339,8 @@ local function client_rotate_backward()
 end
 
 local function system_take_screenshot()
-   awful.spawn.with_shell("maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")
-   naughty.notify({title = "maim", text = "take screenshot"})
+    awful.spawn.with_shell("maim ~/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png")
+    naughty.notify({title = "maim", text = "take screenshot"})
 end
 
 local function system_launch_emacs ()
