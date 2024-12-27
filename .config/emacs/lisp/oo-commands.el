@@ -280,6 +280,11 @@ the battery percentage is greater than 60%."
 Additionally, make any duplicate spaces in line become a single space."
   (interactive "r")
   (replace-string-in-region "\n" "\s" beg end))
+
+(defun! oo-remove-consequtive-spaces (beg end)
+  "Remove consequtive spaces in region."
+  (interactive "r")
+  (replace-regexp-in-region "[[:space:]]\\{2,\\}" "\s" beg end))
 ;;; provide
 (provide 'oo-commands)
 ;;; oo-commands.el ends here
