@@ -378,35 +378,19 @@ local function system_suspend ()
     awful.spawn("systemctl suspend")
 end
 
+-- This assumes that either all clients have titlebars or none of them do.  It
 local function client_toggle_all_titlebars()
     local clients = client.get()
     if #clients == 0 then return end -- Exit if no clients exist
 
-    -- Check if the first client has a titlebar
-    local has_titlebar = awful.titlebar(clients[1])
+    for _, rule in ipairs(awful.rules.rules) do
+        if rule.rule_any and rule.properties then
+            rule.properties.titlebars_enabled = not rule.properties.titlebars_enabled
+        end
+    end
 
-    if has_titlebar then
-        naughty.notify({title = "Hiding", text = "Hiding all titlebars"})
-        -- Update the table.
-        for _, rule in ipairs(awful.rules.rules) do
-            if rule.rule_any and rule.properties then
-                rule.properties.titlebars_enabled = false
-            end
-        end
-        -- Update the clients.
-        for _, c in ipairs(clients) do
-            awful.titlebar.hide(c)
-        end
-    else
-        naughty.notify({title = "Showing", text = "Showing all titlebars"})
-        for _, rule in ipairs(awful.rules.rules) do
-            if rule.rule_any and rule.properties then
-                rule.properties.titlebars_enabled = true
-            end
-        end
-        for _, c in ipairs(clients) do
-            awful.titlebar.show(c)
-        end
+    for _, c in ipairs(clients) do
+        awful.titlebar.toggle(c)
     end
 end
 
