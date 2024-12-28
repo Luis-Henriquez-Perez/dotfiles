@@ -386,13 +386,23 @@ local function client_toggle_all_titlebars()
     end
 end
 
-globalkey({ modkey,}, "b", client_toggle_all_titlebars, "hide titlebars", "client")
+local function awesome_toggle_wibox ()
+    for s in screen do
+        s.mywibox.visible = not s.mywibox.visible
+        if s.mybottomwibox then
+            s.mybottomwibox.visible = not s.mybottomwibox.visible
+        end
+    end
+end
+
 -- awesome
+globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
 globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
 globalkey({ modkey, "Control" }, "r", awesome.restart, "reload awesome", "awesome")
 globalkey({ modkey }, "s", hotkeys_popup.show_help, "show help", "awesome")
 globalkey({ modkey }, "w", awesome_main_menu, "show main menu", "awesome")
 globalkey({ modkey }, "x", awesome_run_lua_code, "lua execute prompt", "awesome")
+globalkey({ modkey }, "g", awesome_toggle_wibox, "toggle wibox", "awesome")
 
 -- system
 globalkey({ modkey }, "u", system_launch_qutebrowser, "Launch qutebrowser", "system")
