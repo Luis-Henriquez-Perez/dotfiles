@@ -24,6 +24,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch/config"
+export MBSYNCRC="$XDG_CONFIG_HOME/isync/config"
 export EDITOR="emacsclient -c"
 export VISUAL="emacsclient -c -a emacs"
 export TERMINAL="alacritty"
@@ -32,7 +33,6 @@ export BROWSER="qutebrowser"
 # the additional configuration and complexity.  I think it is superficial and
 # opinionated that he home directory is messy because of these files.
 # export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
-# export MBSYNCRC="$XDG_CONFIG_HOME/mbsync/config"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/.password-store"
 export LIBGL_ALWAYS_SOFTWARE=1
 
