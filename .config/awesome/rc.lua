@@ -560,6 +560,11 @@ awful.rules.rules = {
                      focus = awful.client.focus.filter,
                      raise = true,
                      keys = clientkeys,
+                     -- https://awesomewm.org/apidoc/documentation/90-FAQ.md.html
+                     -- Prevent any application from starting off maximized.  I
+                     -- experienced this with firefox.
+                     maximized_vertical   = false,
+                     maximized_horizontal = false,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
