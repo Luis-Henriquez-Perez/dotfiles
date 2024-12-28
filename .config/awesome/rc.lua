@@ -336,6 +336,10 @@ local function oo_show_menubar ()
 end
 
 local function client_rotate_forward()
+   local c = client.focus
+   if c and c.fullscreen then
+       c.fullscreen = false
+   end
    awful.client.cycle(true)
    local master = awful.client.getmaster()
    if master then
@@ -347,6 +351,10 @@ local function client_rotate_forward()
 end
 
 local function client_rotate_backward()
+    local c = client.focus
+    if c and c.fullscreen then
+        c.fullscreen = false
+    end
     awful.client.cycle(false)
     local master = awful.client.getmaster()
     if master then
