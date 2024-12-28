@@ -14,14 +14,6 @@
 
 PS1='[\u@\h \W]\$ '
 
-### aliases
-alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME'
-### source xprofile
-# Make sure this is before the 'exec' command or it won't be sourced.
-if [ -z "$DISPLAY" ] || [ -z "$XDG_SESSION_TYPE" ]; then
-  [ -f /etc/xprofile ] && . /etc/xprofile
-  [ -f ~/.xprofile ] && . ~/.xprofile
-fi
 ### Wallpaper file
 # USED_WALLPAPER_FILE=$HOME/.cache/wallpapers
 export CURRENT_WALLPAPER="$HOME/.cache/wallpapers/current_wallpaper.jpg"
