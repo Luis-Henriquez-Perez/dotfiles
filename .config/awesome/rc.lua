@@ -1,3 +1,8 @@
+-- Filename: rc.lua
+-- Author: Luis Henriquez-Perez <luis@luishp.xyz>
+-- Created: 2024-12-27 23:21:00
+-- Description: Configure the awesome window manager.
+
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
