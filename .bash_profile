@@ -15,7 +15,7 @@ export PATH=$PATH:~/.roswell/bin
 # Add all directories in `~/.local/bin` to $PATH
 export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
 
-unsetopt PROMPT_SP 2>/dev/null
+# unsetopt PROMPT_SP 2>/dev/null
 
 # https://github.com/White-Oak/arch-setup-for-dummies/blob/master/setting-up-ssh-agent.md
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
