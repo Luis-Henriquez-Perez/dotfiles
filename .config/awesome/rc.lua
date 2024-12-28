@@ -247,75 +247,89 @@ end
 local function client_focus_next ()
     awful.client.focus.byidx( 1)
 end
+
 local function client_focus_previous ()
     awful.client.focus.byidx(-1)
 end
+
 local function awesome_main_menu ()
     mymainmenu:show()
 end
+
 local function client_swap_next ()
     awful.client.swap.byidx( 1)
 end
+
 local function client_swap_previous ()
     awful.client.swap.byidx( -1)
 end
+
 local function screen_focus_next ()
     awful.screen.focus_relative( 1)
 end
+
 local function screen_focus_previous ()
     awful.screen.focus_relative(-1)
 end
+
 local function client_focus_last_visited ()
     awful.client.focus.history.previous()
     if client.focus then
         client.focus:raise()
     end
 end
+
 local function system_launch_terminal ()
     awful.spawn(terminal)
 end
+
 local function client_increment_width ()
     awful.tag.incmwfact( 0.05)
 end
+
 local function client_decrement_width ()
     awful.tag.incmwfact(-0.05)
 end
+
 local function layout_increase_num_master ()
     awful.tag.incnmaster( 1, nil, true)
 end
+
 local function layout_decrease_num_master ()
     awful.tag.incnmaster(-1, nil, true)
 end
+
 local function layout_increase_num_columns ()
     awful.tag.incncol( 1, nil, true)
 end
+
 local function layout_decrease_num_columns ()
     awful.tag.incncol(-1, nil, true)
 end
+
 local function layout_next ()
     awful.layout.inc( 1)
 end
+
 local function oo_next_layout ()
     awful.layout.inc(-1)
 end
--- local function f17 ()
---     local c = awful.client.restore()
---     if c then
---         c:emit_signal("request::activate", "key.unminimize", {raise = true})
---     end
--- end
-local function awesome_run_shell-command ()
+
+local function awesome_run_shell_command ()
     awful.screen.focused().mypromptbox:run()
 end
+
 local function awesome_run_lua_code ()
     awful.prompt.run { prompt = "Run Lua code: ",
                        textbox = awful.screen.focused().mypromptbox.widget,
                        exe_callback = awful.util.eval,
                        history_path = awful.util.get_cache_dir() .. "/history_evaluate"}
 end
+
 local function oo_show_menubar ()
     menubar.show()
 end
+
 local function client_rotate_forward()
    awful.client.cycle(true)
    local master = awful.client.getmaster()
