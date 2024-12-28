@@ -411,7 +411,6 @@ globalkey({ modkey }, "i", system_launch_firefox, "Launch firefox", "system")
 globalkey({ modkey }, "e", system_launch_emacs, "Launch emacs", "system")
 globalkey({ modkey }, "p", system_take_screenshot, "Take Screenshot", "system")
 globalkey({ modkey, "Shift" }, "s" , system_suspend, "suspend", "system")
-globalkey({ modkey }, "r" , awesome_run_shell-command, "run shell command", "system")
 
 -- client
 globalkey({ modkey }, "l", client_increment_width, "increase master width factor", "client")
@@ -432,19 +431,13 @@ globalkey({ modkey, "Shift" }, "l", layout_decrease_num_master, "decrease the nu
 globalkey({ modkey }, "space" , layout_next, "select next", "layout")
 
 -- tag
-globalkey({ modkey }, "Left" , awful.tag.viewprev , "view previous", "tag")
-globalkey({ modkey }, "Right" , awful.tag.viewnext , "view next", "tag")
+globalkey({ modkey }, "Left", awful.tag.viewprev , "view previous", "tag")
+globalkey({ modkey }, "Right", awful.tag.viewnext , "view next", "tag")
 globalkey({ modkey }, "Escape", awful.tag.history.restore, "go back", "tag")
 
 -- screen
-globalkey({ modkey, "Control" }, "j" , screen_focus_next, "focus the next screen", "screen")
-globalkey({ modkey, "Control" }, "k" , screen_focus_previous, "focus the previous screen", "screen")
-
--- This is the popup menu that appears at the cursor position.
--- globalkey({ modkey }, "u"     , awful.client.urgent.jumpto, "jump to urgent client", "client")
--- globalkey({ modkey            }, "p"     , oo_show_menubar, "show the menubar", "system")
--- globalkey({ modkey }, "y" , awful.titlebar.toggle, "toggle titlebar", "client")
--- globalkey({ modkey, "Control" }, "n"     , f17, "restore minimized", "client")
+globalkey({ modkey, "Control" }, "j", screen_focus_next, "focus the next screen", "screen")
+globalkey({ modkey, "Control" }, "k", screen_focus_previous, "focus the previous screen", "screen")
 
 clientkeys = {}
 
@@ -471,7 +464,6 @@ clientkey({ modkey, }, "t", client_toggle_put_on_top, "toggle keep on top")
 clientkey({ modkey, }, "n", client_minimize, "minimize")
 clientkey({ modkey, }, "m", client_maximize, "(un)maximize")
 clientkey({ modkey, }, "q", client_quit, "close")
--- clientkey({ modkey, }, "w", oo_toggle_titlebars, "close")
 clientkey({ modkey, "Shift" }, "c", client_quit, "close")
 clientkey({ modkey, "Shift" }, "m", client_unmaximize_horizontally, "(un)maximize horizontally")
 clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , "toggle floating")
