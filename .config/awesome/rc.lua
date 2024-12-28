@@ -363,7 +363,6 @@ local function system_take_screenshot()
 end
 
 local function system_launch_emacs ()
-    naughty.notify({title = "emacs", text = "spawn emacs"})
     awful.spawn("emacsclient -r -a \"\"")
 end
 
