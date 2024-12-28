@@ -3,7 +3,7 @@
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2024-12-28 14:30:00
 
-# [[ -f ~/.bashrc ]] && . ~/.bashrc
+[[ -f ~/.bashrc ]] && . ~/.bashrc
 
 export PATH="$PATH:/home/luis/.local/bin"
 
