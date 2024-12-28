@@ -383,6 +383,21 @@ local function system_suspend ()
     awful.spawn("systemctl suspend")
 end
 
+-- Annoyingly the focus after killing a client is moved to a slave instead of
+-- the master window.
+local function client_quit_and_focus_master (c)
+    -- naughty.notify({ preset = naughty.config.presets.critical,
+    --                  title = "quitting client",
+    --                  text = "quiting" })
+    client_quit(c)
+    local master = awful.client.getmaster()
+    -- Check if the master client exists and focus it
+    if master then
+       client.focus = master
+       master:raise()
+    end
+end
+
 -- This assumes that either all clients have titlebars or none of them do.  It
 local function client_toggle_all_titlebars()
     local clients = client.get()
@@ -474,7 +489,7 @@ clientkey({ modkey, }, "o", client_move_to_screen, "move to screen")
 clientkey({ modkey, }, "t", client_toggle_put_on_top, "toggle keep on top")
 clientkey({ modkey, }, "n", client_minimize, "minimize")
 clientkey({ modkey, }, "m", client_maximize, "(un)maximize")
-clientkey({ modkey, }, "q", client_quit, "close")
+clientkey({ modkey, }, "q", client_quit_and_focus_master, "close")
 clientkey({ modkey, "Shift" }, "c", client_quit, "close")
 clientkey({ modkey, "Shift" }, "m", client_unmaximize_horizontally, "(un)maximize horizontally")
 clientkey({ modkey, "Control" }, "space", awful.client.floating.toggle , "toggle floating")
