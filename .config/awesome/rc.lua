@@ -339,8 +339,8 @@ local function client_rotate_forward()
    awful.client.cycle(true)
    local master = awful.client.getmaster()
    if master then
-      client.focus = master
-      return master:raise()
+       client.focus = master
+       return master:raise()
    else
       return nil
    end
@@ -350,11 +350,11 @@ local function client_rotate_backward()
     awful.client.cycle(false)
     local master = awful.client.getmaster()
     if master then
-      client.focus = master
-      return master:raise()
-   else
-      return nil
-   end
+        client.focus = master
+        return master:raise()
+    else
+       return nil
+    end
 end
 
 local function system_take_screenshot()
