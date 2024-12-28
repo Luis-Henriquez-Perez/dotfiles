@@ -400,12 +400,10 @@ local function client_toggle_all_titlebars()
     end
 end
 
+-- https://www.reddit.com/r/awesomewm/comments/am1weq/how_do_i_bind_a_key_to_toggle_the_wibar/
 local function awesome_toggle_wibox ()
     for s in screen do
         s.mywibox.visible = not s.mywibox.visible
-        if s.mybottomwibox then
-            s.mybottomwibox.visible = not s.mybottomwibox.visible
-        end
     end
 end
 
