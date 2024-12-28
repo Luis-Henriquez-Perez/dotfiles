@@ -387,14 +387,24 @@ local function client_toggle_all_titlebars()
 
     if has_titlebar then
         naughty.notify({title = "Hiding", text = "Hiding all titlebars"})
+        -- Update the table.
+        for _, rule in ipairs(awful.rules.rules) do
+            if rule.rule_any and rule.properties then
+                rule.properties.titlebars_enabled = false
+            end
+        end
+        -- Update the clients.
         for _, c in ipairs(clients) do
-            -- c.titlebars_enabled = false
             awful.titlebar.hide(c)
         end
     else
         naughty.notify({title = "Showing", text = "Showing all titlebars"})
+        for _, rule in ipairs(awful.rules.rules) do
+            if rule.rule_any and rule.properties then
+                rule.properties.titlebars_enabled = true
+            end
+        end
         for _, c in ipairs(clients) do
-            -- c.titlebars_enabled = true
             awful.titlebar.show(c)
         end
     end
