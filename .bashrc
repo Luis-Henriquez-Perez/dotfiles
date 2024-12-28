@@ -17,4 +17,3 @@ PS1='[\u@\h \W]\$ '
 ### Wallpaper file
 # USED_WALLPAPER_FILE=$HOME/.cache/wallpapers
 export CURRENT_WALLPAPER="$HOME/.cache/wallpapers/current_wallpaper.jpg"
-# CURRENT_WALLPAPER=''
