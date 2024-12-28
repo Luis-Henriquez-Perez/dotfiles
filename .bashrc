@@ -26,14 +26,3 @@ fi
 # USED_WALLPAPER_FILE=$HOME/.cache/wallpapers
 export CURRENT_WALLPAPER="$HOME/.cache/wallpapers/current_wallpaper.jpg"
 # CURRENT_WALLPAPER=''
-### function for dotfiles
-# I think these functions are more flexible than aliases
-# https://www.bowmanjd.com/dotfiles/dotfiles-2-bare-repo/
-# https://www.atlassian.com/git/tutorials/dotfiles
-
-DOTFILES="$HOME/.dotfiles"
-# REPO="$HOME/"
-
-dot () {
-  git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" "$@"
-}
