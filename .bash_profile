@@ -20,10 +20,12 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
+export HISTFILE="$XDG_CACHE_HOME/bash_history"
 # export LESSHISTFILE="$XDG_CACHE_HOME/"
 # export FEH="$XDG_CACHE_HOME/"
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch/config"
 export MBSYNCRC="$XDG_CONFIG_HOME/isync/config"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
 
 export EDITOR="emacsclient -c"
 export VISUAL="emacsclient -c -a emacs"
