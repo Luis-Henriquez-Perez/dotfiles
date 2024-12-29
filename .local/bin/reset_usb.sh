@@ -3,6 +3,7 @@
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2024-12-29 18:29:56
 # Description: Take a drive with an ISO make it into a normal usb again.
+# While distro hopping I have accumulated several drives.
 
 # Exit on error
 set -e
