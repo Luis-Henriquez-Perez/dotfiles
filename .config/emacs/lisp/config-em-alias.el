@@ -57,6 +57,10 @@
 (eshell/alias "sym" "ln -s $1 $2")
 (eshell/alias "mmv" "mkdir -p \"$(dirname $2)\" && mv $1 $2")
 (eshell/alias "unpack" "mv $1/* . && rmdir $1")
+(eshell/alias "lockfiles" "find . -name '*~'")
+(eshell/alias "delete-lockfiles" "find . -name '*~'")
+;;
+;; (eshell/alias "" "find . -name '*~'")
 ;;;; rsync
 ;; Communicate with my desktop.
 ;; (eshell/alias "rpush" "rsync -a $1 luis@yadira:$2")
