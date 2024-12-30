@@ -39,8 +39,8 @@
 (adjoin! recentf-filename-handlers #'abbreviate-file-name)
 (adjoin! recentf-filename-handlers #'substring-no-properties)
 
-(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-config-dir)))
-(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-data-dir)))
+(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-etc-dir)))
+(adjoin! recentf-exclude (regexp-quote (recentf-expand-file-name oo-var-dir)))
 (adjoin! recentf-exclude (lambda (file) (not (file-exists-p file))))
 
 (setq recentf-max-saved-items nil)
