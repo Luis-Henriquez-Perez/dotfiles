@@ -1,0 +1,11 @@
+(defun o-bind (&rest plist)
+  "Bind."
+  (cond ((symbolp keymap)
+         (info! "Deferring binding until.")
+         (oo-call-after-load #'oo-bind plist))
+        (()
+         (info! "Deferring binding until.")
+         (oo-call-after-load 'evil #'oo-bind plist))
+        (()
+         (define-key keymap key def)))
+  )
