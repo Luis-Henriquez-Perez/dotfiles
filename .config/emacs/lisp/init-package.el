@@ -58,6 +58,7 @@
 (cl-pushnew 'all-the-icons-nerd-fonts package-selected-packages)
 (cl-pushnew 'annalist package-selected-packages)
 (cl-pushnew 'beacon package-selected-packages)
+(cl-pushnew 'buffer-terminator package-selected-packages)
 (cl-pushnew 'burly package-selected-packages)
 (cl-pushnew 'cape package-selected-packages)
 (cl-pushnew 'caps-lock package-selected-packages)
