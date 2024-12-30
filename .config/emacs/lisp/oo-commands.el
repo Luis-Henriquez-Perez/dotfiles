@@ -248,7 +248,8 @@ repository and if it is, commit and push all changes.  Otherwise, do nothing."
 If FILE is not in registered in dotfile repo, register it.  In any case commit
 the file.  Additionally, push the file but only if the battery is charging or
 the battery percentage is greater than 60%."
-  (interactive)
+  (interactive (list (or (buffer-file-name)
+                         (read-file-name "Select file to add to dofiles:"))))
   (set! default-directory (expand-file-name "~/"))
   (message "Adding dotfile %s" file)
   (set! fname (expand-file-name (convert-standard-filename file) "~/"))
