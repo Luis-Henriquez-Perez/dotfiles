@@ -211,13 +211,13 @@ file is loaded."
 ;; This is very basic font setting based on available faces.  I have seen much
 ;; more complex font setups like in minemacs (which probably got its from doom)
 ;; but for now this will do.
-(defvar oo-default-fonts (list (font-spec :family "RecMonoDuotone Nerd Font"
+(defvar oo-default-fonts (list (font-spec :family "CaskaydiaCove Nerd Font Mono"
                                           :weight 'regular
                                           :slant 'normal
                                           :width 'normal
                                           :size 18)
-                               (font-spec :family "CaskaydiaCove Nerd Font Mono"
-                                          :weight 'light
+                               (font-spec :family "RecMonoDuotone Nerd Font"
+                                          :weight 'regular
                                           :slant 'normal
                                           :width 'normal
                                           :size 18)
@@ -242,6 +242,11 @@ file is loaded."
       (set-face-attribute 'default nil :font font)
       (done!)))
   (set! default-font (face-attribute 'default :family))
+  ;; So font will take effect with emacs daemon.
+  ;; (add-hook 'after-make-frame-functions
+  ;;           `(lambda (frame)
+  ;;              (with-selected-frame frame
+  ;;                (set-face-attribute 'default nil :font ,default-font))))
   (info! "Unable to set font to any in `oo-default-font-list', defaulting to `%s'." default-font))
 ;;;; sort lines
 ;; (defun! oo-sort-elpaca-forms-h ()
