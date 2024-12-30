@@ -2,19 +2,17 @@
 # Filename: xprofle
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2024-12-28 17:04:00
+# Description: Run programs & scripts I need for graphical environment.
 
-## xprofile
-# https://wiki.archlinux.org/title/Xprofile
-### set the wallpaper for the first time
+## Set the wallpaper for the first time
 set_wallpaper &
-### autostart
-# Ensure that I do not start multiple instances of the same process if I log out
-# and log back in.
+## Autostart needed programs
 pidof -sx mpd || mpd &
 pidof -sx picom || picom &
 pidof -sx dunst || dunst &
 pidof -sx emacs || emacs --daemon &
-### remap caps-lock with escape
+pidof -sx mcron || mcron &
+## Remap caps-lock with escape
 setxkbmap -option caps:escape
 
 # I broke my super key on my laptop.  This is temporary code to remap it to the
