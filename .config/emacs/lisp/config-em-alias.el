@@ -59,6 +59,7 @@
 (eshell/alias "unpack" "mv $1/* . && rmdir $1")
 (eshell/alias "lockfiles" "find . -name '*~'")
 (eshell/alias "delete-lockfiles" "find . -name '*~'")
+(eshell/alias "html-to-pdf" "wkhtmltopdf $1")
 ;;
 ;; (eshell/alias "" "find . -name '*~'")
 ;;;; rsync
