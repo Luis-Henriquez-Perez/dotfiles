@@ -60,6 +60,7 @@
 ;;;; set load-path
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 ;;;; load requirements
+(setq debu)
 (require 'init-no-littering)
 ;; Built-in packages
 (require 'init-abbrev)
