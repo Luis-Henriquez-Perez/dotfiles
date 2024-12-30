@@ -118,12 +118,12 @@ If file is a dotfile managed by my git bare repo, display that branch."
   (set! git (executable-find "git"))
   (when (and (buffer-file-name)
              (locate-dominating-file (buffer-file-name) ".git"))
-    (set! bg (face-attribute 'powerline-active0 :background nil 'default))
-    (set! fg (face-attribute 'warning :background nil 'default))
+    ;; (set! bg (face-attribute 'powerline-active0 :background nil 'default))
+    ;; (set! fg (face-attribute 'warning :background nil 'default))
     (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
-    (set! face `((t (:background ,bg :foreground ,fg))))
+    ;; (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :v-adjust -0.01) branch)
       branch)))
 
 (+spaceline-define-segment! +evil-state
