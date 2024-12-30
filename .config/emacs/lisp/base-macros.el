@@ -112,8 +112,9 @@ writes to `standard-output'."
             (write-region
              (lambda (start end filename &optional append visit lockname mustbenew)
                (unless visit (setq visit 'no-message))
-               (funcall this-fn start end filename append visit lockname mustbenew)))))
-     ,@body))
+               (funcall this-fn start end filename append visit lockname
+                        mustbenew))))
+       ,@body)))
 ;;;;; with-map!
 (defun oo--generate-with-map-body (map body &optional use-keywords-p)
   "Return a list of let-bindings for `with-map!'.
