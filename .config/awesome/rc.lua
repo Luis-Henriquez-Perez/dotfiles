@@ -70,10 +70,10 @@ beautiful.useless_gap = 10
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
+    awful.layout.suit.tile.top,
     awful.layout.suit.corner.nw,
     -- awful.layout.suit.tile.left,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.bottom,
     -- The following layouts do not allow you to resize the client width.
     -- awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
@@ -85,8 +85,8 @@ awful.layout.layouts = {
     awful.layout.suit.corner.ne,
     -- I prefer windows on the top rather than the bottom, but trying it its not
     -- too bad.
-    awful.layout.suit.corner.sw,
-    awful.layout.suit.corner.se,
+    -- awful.layout.suit.corner.sw,
+    -- awful.layout.suit.corner.se,
     -- Make floating last, as it is the one I am least likely to use.
     awful.layout.suit.floating,
 }
