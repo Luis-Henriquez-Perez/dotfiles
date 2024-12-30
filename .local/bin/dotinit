@@ -47,8 +47,7 @@ while :; do
         OUTPUT=$(git checkout 2>&1)
     else
         echo "Checkout succeeded."
+        # Make all the scripts executable.
         break
     fi
 done
-
-# Make all the scripts executable.
