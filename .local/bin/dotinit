@@ -48,7 +48,6 @@ while :; do
     else
         echo "Checkout succeeded."
         # Make all the scripts executable.
-
         break
     fi
 done
