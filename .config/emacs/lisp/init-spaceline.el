@@ -138,9 +138,9 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
                               (shell-command-to-string)
                               (string-trim)))
-    (set! face `((t (:background ,bg :foreground ,fg))))
+    ;; (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :v-adjust -0.01) branch)
       branch)))
 
 (+spaceline-define-segment! +evil-state
