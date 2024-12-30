@@ -112,32 +112,15 @@
                   time)
                  "\s")))
 
-(defun! oo-dotfile-git-command ()
-  "Return the git command for dotfile operations."
-  (set! dots (expand-file-name "~/.dotfiles/"))
-  (set! home (expand-file-name "~"))
-  (format "%s --git-dir=%s --work-tree=%s" (executable-find "git") dots home))
-
-(defun! oo-is-dotfile-p ()
-  "Return non-nil if current-buffer is a dotfile."
-  :init ((default-directory default-directory))
-  (set! fname (shell-quote-argument (convert-standard-filename (buffer-file-name))))
-  (set! default-directory (file-name-directory fname))
-  (shell-command-to-string (oo-dotfile-git-command)))
-
 (+spaceline-define-segment! +version-control
   "Display current git branch.
 If file is a dotfile managed by my git bare repo, display that branch."
   (set! git (executable-find "git"))
   (when (and (buffer-file-name)
-             (or (locate-dominating-file (buffer-file-name) ".git")
-                 (and (oo-is-dotfile-p)
-                      (set! git (oo-dotfile-git-command)))))
+             (locate-dominating-file (buffer-file-name) ".git"))
     (set! bg (face-attribute 'powerline-active0 :background nil 'default))
     (set! fg (face-attribute 'warning :background nil 'default))
-    (set! branch (thread-last (format "%s rev-parse --abbrev-ref HEAD" git)
-                              (shell-command-to-string)
-                              (string-trim)))
+    (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
     (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
         (format "%s %s" (all-the-icons-octicon "git-branch" :face face :v-adjust -0.01) branch)
