@@ -26,6 +26,11 @@
 ;; Install all of my packages.
 ;;
 ;;; Code:
+;; If this variable is not set beforehand, `package-gnupghome-dir' will not be
+;; set to the right place.
+(defvar package-user-dir)
+(setq package-user-dir (locate-user-emacs-file "packages/"))
+
 (require 'cl-lib)
 (require 'package)
 (require 'package-vc)
@@ -37,8 +42,6 @@
              '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                (display-buffer-no-window)
                (allow-no-window . t)))
-
-(setq package-user-dir (locate-user-emacs-file "packages/"))
 
 (add-to-list 'package-archives '("gnu-elpa"       . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("gnu-elpa-devel" . "https://elpa.gnu.org/devel/"))
