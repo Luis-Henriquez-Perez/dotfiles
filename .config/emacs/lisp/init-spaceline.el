@@ -125,7 +125,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
     ;; (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :v-adjust -0.01) branch)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face default-face :v-adjust -0.01) branch)
       branch)))
 
 (+spaceline-define-segment! +evil-state
@@ -164,7 +164,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
     'main
     '((+evil-state :face (alet! (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
       ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
-      (+version-control))
+      (+version-control :face 'powerline-active0))
     '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
