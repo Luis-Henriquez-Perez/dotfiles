@@ -83,7 +83,6 @@
 (require 'init-aggressive-indent)
 (require 'init-avy)
 (require 'init-burly)
-(require 'init-spaceline)
 (require 'init-captain)
 (require 'init-consult)
 (require 'init-corfu)
