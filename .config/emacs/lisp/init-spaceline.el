@@ -32,7 +32,9 @@
 ;;;; settings
 (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (opt! powerline-height 33)
-(opt! powerline-default-separator 'curve)
+(opt! powerline-default-separator 'arrow)
+(setq spaceline-separator-dir-left '(left . left))
+(setq spaceline-separator-dir-right '(right . right))
 ;; Although this saves time the longer you use the modeline, it means that the
 ;; call to `spaceline-compile' is called takes significantly longer which is
 ;; particularly undesirable during startup.  Despite what the README says the
@@ -123,7 +125,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
     (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
     ;; (set! face `((t (:background ,bg :foreground ,fg))))
     (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :v-adjust -0.01) branch)
+        (format "%s %s" (all-the-icons-octicon "git-branch" :face other-face :v-adjust -0.01) branch)
       branch)))
 
 (+spaceline-define-segment! +evil-state
