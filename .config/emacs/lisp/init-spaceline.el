@@ -33,6 +33,8 @@
 (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (opt! powerline-height 33)
 (opt! powerline-default-separator 'curve)
+(setq spaceline-separator-dir-left '(left . left))
+(setq spaceline-separator-dir-right '(right . right))
 ;; Although this saves time the longer you use the modeline, it means that the
 ;; call to `spaceline-compile' is called takes significantly longer which is
 ;; particularly undesirable during startup.  Despite what the README says the
