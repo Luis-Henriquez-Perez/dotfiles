@@ -164,7 +164,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
     'main
     '((+evil-state :face (alet! (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
       ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
-      (+version-control :face 'de))
+      (+version-control :face 'powerline-active0))
     '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
