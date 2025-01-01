@@ -54,7 +54,7 @@ string or comment."
 ;; modliens -> modelines
 ;; narrowd -> narrowed
 ;; narowd -> narowed
-(define-abbrev global-abbrev-table "narowd" "customizability"               nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "narowd" "narrowed"               nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "customizeability" "customizability"               nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "reproducability"  "reproducibility"               nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "reproduceability" "reproducibility"               nil :enable-function #'oo--use-plain-text-abbrev-p)
