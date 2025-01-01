@@ -52,7 +52,7 @@ string or comment."
          (>= word-beg comment-beg)))))
 ;;;; define abbrevs
 ;; modliens -> modelines
-(define-abbrev global-abbrev-table "modliens" "narrowed" nil :enable-function #'oo--use-plain-text-abbrev-p)
+(define-abbrev global-abbrev-table "modliens" "modelines" nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "narrowd" "narrowed" nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "narowd" "narrowed" nil :enable-function #'oo--use-plain-text-abbrev-p)
 (define-abbrev global-abbrev-table "customizeability" "customizability"               nil :enable-function #'oo--use-plain-text-abbrev-p)
