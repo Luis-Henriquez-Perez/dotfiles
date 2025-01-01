@@ -83,7 +83,6 @@
 (require 'init-aggressive-indent)
 (require 'init-avy)
 (require 'init-burly)
-(require 'init-spaceline)
 (require 'init-captain)
 (require 'init-consult)
 (require 'init-corfu)
@@ -144,6 +143,7 @@
 (require 'init-wdired)
 (require 'init-which-key)
 (require 'init-window)
+(require 'init-powerline)
 (require 'oo-autoloads)
 (require 'oo-init)
 ;;; provide init
