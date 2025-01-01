@@ -57,6 +57,7 @@
 (cl-pushnew 'all-the-icons package-selected-packages)
 (cl-pushnew 'all-the-icons-nerd-fonts package-selected-packages)
 (cl-pushnew 'annalist package-selected-packages)
+(cl-pushnew 'auto-read-only package-selected-packages)
 (cl-pushnew 'beacon package-selected-packages)
 (cl-pushnew 'buffer-terminator package-selected-packages)
 (cl-pushnew 'burly package-selected-packages)
