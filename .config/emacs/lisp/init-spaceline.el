@@ -29,7 +29,7 @@
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'all-the-icons)
-(require 'base-modeline)
+(require 'base-modeline-utils)
 ;;;; settings
 (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
 (opt! powerline-height 33)
@@ -45,73 +45,45 @@
 (setq spaceline-byte-compile nil)
 ;;;; reset powerline after theme change
 (hook! enable-theme-functions powerline-reset :ignore-args t)
-;;;; defsegment!
-;; This lets me use autolet! in the body of the macro and expresses the segments
-;; as functions that I can freely modify and re-evaluate to make the segment
-;; change in real time.  This makes it much easier to debug segments or even to
-;; determine if they work beforehand.
-(defmacro! +spaceline-define-segment! (name &rest body)
-  (declare (indent 1) (doc-string 2))
-  (string-match "\\`\\+\\(.+\\)\\'" (symbol-name name))
-  (set! base (match-string 1 (symbol-name name)))
-  (set! fn (intern (format "+spaceline-%s-segment" base)))
-  (set! docstring (when (stringp (car-safe body)) (list (pop body))))
-  `(progn
-     (defun! ,fn ()
-       ,@docstring
-       (condition-case err
-           (progn ,@body)
-         (error
-          (error! "Segment %s raised an %s error because of %s." ',base (car err) (cdr err))
-          "X")))
-     (spaceline-define-segment ,name ,@docstring (,fn))))
 ;;;; segments
-(+spaceline-define-segment! +kbd-macro
-  "Display an icon to represent when."
-  ())
+(spaceline-define-segment +kbd-macro
+  (oo-modeline-segment--kbd-macro))
 
-(+spaceline-define-segment! +narrow
-  "Indicate when the current buffer is narrowed."
-  ())
+(spaceline-define-segment +narrow
+  (oo-modeline-segment--narrow))
 
-(+spaceline-define-segment! +buffer-read-only
-  "Display"
-  )
+(spaceline-define-segment +buffer-read-only
+  (oo-modeline-segment--read-only))
 
-(+spaceline-define-segment! +buffer-modified
-  "Buffer modified"
-  )
+(spaceline-define-segment +buffer-modified
+  (oo-modeline-segment--buffer-modified))
 
-(defvar pomodoro-mode-line-string)
-(+spaceline-define-segment! +pomodoro
-  "Display left for pomodoro."
-  )
+(spaceline-define-segment +pomodoro
+  (oo-modeline-segment--pomodoro))
 
-(+spaceline-define-segment! +version-control
-  "Display current git branch.
-If file is a dotfile managed by my git bare repo, display that branch."
-  )
+(spaceline-define-segment +version-control
+  (oo-modeline-segment--version-control))
 
-(+spaceline-define-segment! +evil-state
-  "Display the current evil state if evil-mode is enabled."
-  (when (bound-and-true-p evil-mode)
-    (symbol-name evil-state)))
+(spaceline-define-segment +evil-state
+  (oo-modeline-segment--evil-state))
 
-(+spaceline-define-segment! +current-time
-  "Display the current time."
-  (format-time-string "%m-%d %H:%M"))
+(spaceline-define-segment +current-time
+  (oo-modeline-segment--current-time))
+
+(spaceline-define-segment +buffer-name
+  (oo-modeline-segment--buffer-name))
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
 
-(defun! oo-choose-modeline-separator ()
-  "Choose a separator for the modeline."
-  (interactive)
-  (set! separators '(alternate arrow arrow-fade bar box brace
-                               butt chamfer contour curve rounded roundstub wave zigzag
-                               slant utf-8))
-  (awhen! (completing-read "Choose separator: " separators)
-    (setq powerline-default-separator it)
-    (spaceline-compile)))
+;; (defun! oo-choose-modeline-separator ()
+;;   ;; "Choose a separator for the modeline."
+;;   (interactive)
+;;   (set! separators '(alternate arrow arrow-fade bar box brace
+;;                                butt chamfer contour curve rounded roundstub wave zigzag
+;;                                slant utf-8))
+;;   (awhen! (completing-read "Choose separator: " separators)
+;;     (setq powerline-default-separator it)
+;;     (spaceline-compile)))
 
 ;; (defun! oo-choose-random-separator ()
 ;;   "Set a random separator."
@@ -127,7 +99,7 @@ If file is a dotfile managed by my git bare repo, display that branch."
   (spaceline-compile
     'main
     '((+evil-state :face (alet! (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
-      ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
+      ((+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name remote-host) :priority 98)
       (+version-control :face 'powerline-active0))
     '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
