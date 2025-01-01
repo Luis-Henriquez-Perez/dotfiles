@@ -29,9 +29,10 @@
 (require 'spaceline)
 (require 'spaceline-segments)
 (require 'all-the-icons)
+(require 'base-modeline-utils)
 ;;;; settings
 (opt! spaceline-highlight-face-func #'spaceline-highlight-face-evil-state)
-(opt! powerline-height 33)
+(opt! powerline-height 40)
 (opt! powerline-default-separator 'arrow)
 (setq spaceline-separator-dir-left '(left . left))
 (setq spaceline-separator-dir-right '(right . right))
@@ -46,108 +47,58 @@
 (setq spaceline-byte-compile nil)
 ;;;; reset powerline after theme change
 (hook! enable-theme-functions powerline-reset :ignore-args t)
-;;;; defsegment!
-;; This lets me use autolet! in the body of the macro and expresses the segments
-;; as functions that I can freely modify and re-evaluate to make the segment
-;; change in real time.  This makes it much easier to debug segments or even to
-;; determine if they work beforehand.
-(defmacro! +spaceline-define-segment! (name &rest body)
-  (declare (indent 1) (doc-string 2))
-  (string-match "\\`\\+\\(.+\\)\\'" (symbol-name name))
-  (set! base (match-string 1 (symbol-name name)))
-  (set! fn (intern (format "+spaceline-%s-segment" base)))
-  (set! docstring (when (stringp (car-safe body)) (list (pop body))))
-  `(progn
-     (defun! ,fn ()
-       ,@docstring
-       (condition-case err
-           (progn ,@body)
-         (error
-          (error! "Segment %s raised an %s error because of %s." ',base (car err) (cdr err))
-          "X")))
-     (spaceline-define-segment ,name ,@docstring (,fn))))
 ;;;; segments
-(+spaceline-define-segment! +kbd-macro
-  "Display an icon to represent when."
-  (or (and defining-kbd-macro
-           (if (display-graphic-p)
-               (all-the-icons-material "fiber_manual_record" :face 'error :v-adjust -0.2)
-             "•REC"))
-      (and executing-kbd-macro
-           (all-the-icons-faicon "play" :face 'error))))
+(spaceline-define-segment +kbd-macro
+  (oo-modeline-component--kbd-macro))
 
-(+spaceline-define-segment! +narrow
-  "Indicate when the current buffer is narrowed."
-  (when (or (buffer-narrowed-p)
-            (and (bound-and-true-p fancy-narrow-mode)
-                 (fancy-narrow-active-p))
-            (bound-and-true-p dired-narrow-mode))
-    (if (display-graphic-p)
-        (all-the-icons-material "unfold_less" :face 'warning)
-      "><")))
+(spaceline-define-segment +narrow
+  (oo-modeline-component--narrow))
 
-(+spaceline-define-segment! +buffer-read-only
-  "Display"
-  (when buffer-read-only
-    (if (display-graphic-p)
-        (all-the-icons-material "lock" :face 'error)
-      "LOCKED")))
+(spaceline-define-segment +buffer-read-only
+  (oo-modeline-component--read-only))
 
-(+spaceline-define-segment! +buffer-modified
-  "Buffer modified"
-  (when (and (buffer-file-name) (buffer-modified-p))
-    (all-the-icons-material "save" :face 'error)))
+(spaceline-define-segment +buffer-modified
+  (oo-modeline-component--buffer-modified))
 
-(defvar pomodoro-mode-line-string)
-(+spaceline-define-segment! +pomodoro
-  "Display left for pomodoro."
-  (when (and (bound-and-true-p pomodoro-mode-line-string)
-             (not (string-empty-p pomodoro-mode-line-string)))
-    (require 'all-the-icons-nerd-fonts)
-    (string-match (rx (group letter) (group digit digit ":" digit digit)) pomodoro-mode-line-string)
-    (set! type (match-string 1 pomodoro-mode-line-string))
-    (set! time (match-string 2 pomodoro-mode-line-string))
-    (string-join (list
-                  (pcase type
-                    ("w" (all-the-icons-nerd-pom "pomodoro-ticking" :face 'powerline-active0 :v-adjust 0))
-                    ("b" (all-the-icons-nerd-cod "coffee" :face 'powerline-active0 :v-adjust 0)))
-                  time)
-                 "\s")))
+(spaceline-define-segment +pomodoro
+  (oo-modeline-component--pomodoro))
 
-(+spaceline-define-segment! +version-control
-  "Display current git branch.
-If file is a dotfile managed by my git bare repo, display that branch."
-  (set! git (executable-find "git"))
-  (when (and (buffer-file-name)
-             (locate-dominating-file (buffer-file-name) ".git"))
-    ;; (set! bg (face-attribute 'powerline-active0 :background nil 'default))
-    ;; (set! fg (face-attribute 'warning :background nil 'default))
-    (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
-    ;; (set! face `((t (:background ,bg :foreground ,fg))))
-    (if (display-graphic-p)
-        (format "%s %s" (all-the-icons-octicon "git-branch" :face other-face :v-adjust -0.01) branch)
-      branch)))
+(spaceline-define-segment +version-control
+  (oo-modeline-component--version-control))
 
-(+spaceline-define-segment! +evil-state
-  "Display the current evil state if evil-mode is enabled."
-  (when (bound-and-true-p evil-mode)
-    (symbol-name evil-state)))
+(spaceline-define-segment +evil-state
+  (oo-modeline-component--evil-state))
 
-(+spaceline-define-segment! +current-time
-  "Display the current time."
-  (format-time-string "%m-%d %H:%M"))
+(spaceline-define-segment +current-time
+  (oo-modeline-component--current-time))
+
+(spaceline-define-segment +buffer-name
+  (oo-modeline-component--buffer-name))
+
+(spaceline-define-segment +emms
+  (oo-modeline-component--emms))
+;;;; define main modeline
+(spaceline-compile
+  'main
+  '((+evil-state :face (spaceline-highlight-face-evil-state))
+    (+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name :face 'powerline-active0)
+    (+version-control :face 'powerline-active1))
+  '((+pomodoro :face 'powerline-active1)
+    +emms
+    major-mode
+    (+current-time :face (spaceline-highlight-face-evil-state))))
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
 
-(defun! oo-choose-modeline-separator ()
-  "Choose a separator for the modeline."
-  (interactive)
-  (set! separators '(alternate arrow arrow-fade bar box brace
-                               butt chamfer contour curve rounded roundstub wave zigzag
-                               slant utf-8))
-  (awhen! (completing-read "Choose separator: " separators)
-    (setq powerline-default-separator it)
-    (spaceline-compile)))
+;; (defun! oo-choose-modeline-separator ()
+;;   ;; "Choose a separator for the modeline."
+;;   (interactive)
+;;   (set! separators '(alternate arrow arrow-fade bar box brace
+;;                                butt chamfer contour curve rounded roundstub wave zigzag
+;;                                slant utf-8))
+;;   (awhen! (completing-read "Choose separator: " separators)
+;;     (setq powerline-default-separator it)
+;;     (spaceline-compile)))
 
 ;; (defun! oo-choose-random-separator ()
 ;;   "Set a random separator."
@@ -160,12 +111,6 @@ If file is a dotfile managed by my git bare repo, display that branch."
 ;;   (message "set separator to %s" powerline-default-separator))
 ;;;; initialize modeline at startup
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
-  (spaceline-compile
-    'main
-    '((+evil-state :face (alet! (intern (format "spaceline-evil-%s" evil-state)) (if (facep it) it 'default-face)))
-      ((+narrow +kbd-macro +buffer-read-only +buffer-modified buffer-id remote-host) :priority 98)
-      (+version-control :face 'powerline-active0))
-    '((+pomodoro :face 'powerline-active0) major-mode (+current-time :face (spaceline-highlight-face-evil-state))))
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
 ;;; provide
 (provide 'init-spaceline)
