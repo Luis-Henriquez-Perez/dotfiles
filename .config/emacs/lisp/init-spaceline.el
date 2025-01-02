@@ -78,15 +78,15 @@
 (spaceline-define-segment +emms
   (oo-modeline-component--emms))
 ;;;; define main modeline
-(spaceline-compilae
- 'main
- '((+evil-state :face (spaceline-highlight-face-evil-state))
-   (+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name :face 'powerline-active1)
-   (+version-control :face 'powerline-active0))
- '((+pomodoro :face 'powerline-active1)
-   +emms
-   (major-mode :face 'powerline-active-0)
-   (+current-time :face (spaceline-highlight-face-evil-state))))
+(spaceline-compile
+  'main
+  '((+evil-state :face (spaceline-highlight-face-evil-state))
+    (+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name :face 'powerline-active1)
+    (+version-control :face 'powerline-active0))
+  '((+pomodoro :face 'powerline-active1)
+    +emms
+    (major-mode :face 'powerline-active0)
+    (+current-time :face (spaceline-highlight-face-evil-state))))
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
 
