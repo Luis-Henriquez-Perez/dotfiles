@@ -85,7 +85,7 @@
     (+version-control :face 'powerline-active0))
   '((+pomodoro :face 'powerline-active1)
     +emms
-    major-mode
+    (major-mode :face 'powerline-active-0)
     (+current-time :face (spaceline-highlight-face-evil-state))))
 ;;;; toggle default separator
 ;; I want the ability to quickly switch between different separators.
