@@ -81,7 +81,7 @@
 (spaceline-compile
   'main
   '((+evil-state :face (spaceline-highlight-face-evil-state))
-    ;; (+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name :face 'powerline-active1)
+    (+narrow +kbd-macro +buffer-read-only +buffer-modified +buffer-name :face 'powerline-active1)
     (+version-control :face 'powerline-active0))
   '((+pomodoro :face 'powerline-active1)
     +emms
