@@ -24,7 +24,7 @@ export HISTFILE="$XDG_CACHE_HOME/bash_history"
 # export LESSHISTFILE="$XDG_CACHE_HOME/"
 # export FEH="$XDG_CACHE_HOME/"
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch/config"
-export MBSYNCRC="$XDG_CONFIG_HOME/isync/config"
+export MBSYNCRC="$XDG_CONFIG_HOME/isync/mbsyncrc"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 
 export EDITOR="emacsclient -c"
