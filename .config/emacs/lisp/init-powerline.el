@@ -43,7 +43,7 @@ modeline are disabled.")
   "Cycle the available icon modeline options in `oo-modeline-icons'.
 With prefix argument, SELECT-P, prompt for specific icon type to display."
   (interactive "P")
-  (if selectp
+  (if select-p
       (alet! (list 'all-the-icons 'nerd-icons 'none)
         (completing-read "Choose type of icons: " choices))
     (pcase oo-modeline-icons
