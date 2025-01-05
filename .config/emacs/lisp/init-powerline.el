@@ -34,7 +34,7 @@
 
 (hook! enable-theme-functions powerline-reset :ignore-args t)
 ;;;; variables
-(defvar oo-modeline-icons 'all-the-icons
+(defvar oo-modeline-icons 'nerd-icons
   "Type of icons to use in the modeline.
 Values can be `nerd-icons', `all-the-icons' and nil.  If nil, icons in the
 modeline are disabled.")
