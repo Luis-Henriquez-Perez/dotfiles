@@ -71,6 +71,14 @@ This behaves like `/`, but the result is always a floating-point number."
   (declare (pure t) (side-effect-free error-free))
   (and (null (cl-set-difference list1 list2))
        (null (cl-set-difference list2 list1))))
+(defun oo-cycle (list)
+  "Return an infinite circular copy of LIST.
+The returned list cycles through the elements of LIST and repeats
+from the beginning."
+  (declare (pure t) (side-effect-free t))
+  ;; Also works with sequences that aren't lists.
+  (let ((newlist (append list ())))
+    (nconc newlist newlist)))
 ;;;; type conversion
 (defun oo-into-string (&rest args)
   "Return ARGS as a string."
