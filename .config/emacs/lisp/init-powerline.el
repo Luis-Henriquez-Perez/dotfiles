@@ -391,8 +391,8 @@ If the current buffer is modified."
              (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
              (format "%s %d%%%%" battery percentage))))
     ('all-the-icons
-      (cond ((> percentage 90)
-             (all-the-icons-faicon "battery-full" :v-adjust 0.01))
+      (cond () ((> percentage 90)
+                (all-the-icons-faicon "battery-full" :v-adjust 0.01))
             ((> percentage 80)
              (format "%s %s" (all-the-icons-faicon "battery-three-quarters") percentage))
             ((> percentage 70)
