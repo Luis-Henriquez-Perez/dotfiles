@@ -24,20 +24,16 @@
 ;;
 ;; Initialize powerline.
 ;;
-;; Powerline is not actively maintained and--at least based on what I have
-;; read--I do not see it being the most popular modeline.  What I liked about it
-;; was that it does not try to be a modeline but rather a library for creating
-;; your own custom modeline.  It is more low level.  For someone like me who
-;; wants to heavily customize the modeline.
-;;
 ;;; Code:
 (require 'dash)
 (require 'powerline)
 (require 'spaceline)
-;;;; variables
+;;;; powerline settings
 (setq powerline-default-separator 'arrow)
 (setq powerline-height 33)
 
+(hook! enable-theme-functions powerline-reset :ignore-args t)
+;;;; variables
 (defvar oo-modeline-icons 'all-the-icons
   "Type of icons to use in the modeline.
 Values can be `nerd-icons', `all-the-icons' and nil.  If nil, icons in the
@@ -65,14 +61,17 @@ With prefix argument, SELECT-P, prompt for specific icon type to display."
 With prefix argument, SELECT-P, select one explicitly."
   (interactive "P")
   (set! separators '(alternate arrow arrow-fade bar box brace
-                     butt chamfer contour curve rounded roundstub wave
-                     zigzag slant utf-8))
+                               butt chamfer contour curve rounded roundstub wave
+                               zigzag slant utf-8))
   (if select-p
       (awhen! (completing-read "Choose separator: " separators)
         (setq powerline-default-separator (seq-random-elt it))
         (powerline-reset))
     (setq powerline-default-separator (seq-random-elt separators))
     (powerline-reset)))
+;;;; segment faces
+(defface oo-modeline-segment-1 '((t (:background "white" :foreground "black")))
+  "Face for the first modeline segment.")
 ;;;; utility functions
 ;; When you modify the modeline variable the modeline is not automatically
 ;; updated.  You only see the updated version when you open a new buffer.  To
@@ -115,48 +114,68 @@ If an error is raised from component function."
       (concat "\s" (string-join (nreverse strings) "\s") "\s")
     ""))
 
-(defun! oo-modeline-ml (&rest alist)
-  "Generate modeline based on ALIST."
-  (set! left-sep (intern (format "powerline-%s-%s"
-                                 (powerline-current-separator)
-                                 (car powerline-default-separator-dir))))
-  (set! right-sep (intern (format "powerline-%s-%s"
-                                  (powerline-current-separator)
-                                  (cdr powerline-default-separator-dir))))
-  (flet! add-face (segment face)
-    (add-face-text-property 0 (length segment) face t segment)
-    segment)
-  (flet! is-center-p (elt) (equal '_ (car elt)))
-  (set! (left ((_ . fill-face)) right) (-partition-by #'is-center-p alist))
-  (set! prev-face fill-face)
-  (for! (reverse (name . face) left)
+(defun! oo--modeline-render-lhs (segment-names faces &optional sep)
+  "Render the left-hand side of the modeline."
+  (set! sep (or sep (oo-modeline-left-separator)))
+  (set! prev-face (pop faces))
+  (alet2! (length segment-names) (length faces)
+    (when (> it other)
+      (cons (car faces) (-take (1- it) (-cycle (cdr faces))))))
+  (for! (reverse (name . face) (-zip segment-names faces))
     (set! segment (funcall (intern (format "oo-modeline-segment--%s" name))))
     (when (and (stringp segment) (not (string-empty-p segment)))
-      (pushing! lhs (funcall left-sep face prev-face))
-      (pushing! lhs (add-face segment face))
+      (pushing! lhs (funcall sep prev-face face))
+      (add-face-text-property 0 (length segment) face t segment)
+      (pushing! lhs segment)
       (set! prev-face face)))
-  (set! prev-face fill-face)
-  (set! rhs nil)
-  (for! ((name . face) right)
-    (set! segment (funcall (intern (format "oo-modeline-segment--%s" name))))
-    (when (and (stringp segment) (not (string-empty-p segment)))
-      (collecting! rhs (funcall right-sep prev-face face))
-      (collecting! rhs (add-face segment face))
-      (set! prev-face face)))
-  (concat (powerline-render lhs)
-          (powerline-fill fill-face (+ 2 (powerline-width rhs)))
-          (powerline-render rhs)))
+  lhs)
+
+(defun! oo--modeline-render-rhs (segment-names faces)
+  "Render the right-hand side of the modeline."
+  (set! faces (cons (car faces) (reverse (cdr faces))))
+  (oo--modeline-render-lhs segment-names faces (oo-modeline-right-separator)))
+
+(defun oo-modeline-left-separator (&optional right-p)
+  (intern (format "powerline-%s-%s"
+                  (powerline-current-separator)
+                  (funcall (if right-p #'cdr #'car) powerline-default-separator-dir))))
+
+(defun oo-modeline-right-separator ()
+  (oo-modeline-left-separator 'right))
+
+(defun! oo-modeline-render (left right faces)
+  "Render modeline."
+  (alet! (oo--modeline-render-rhs right faces)
+    (concat (powerline-render (oo--modeline-render-lhs left faces))
+            (powerline-fill (car faces) (+ 3 (powerline-width it)))
+            (powerline-render it))))
 ;;;; components
+(defun oo-modeline-component--untracked ()
+  "Indicate if a file is apart of a project directory but is not tracked."
+  (and (buffer-file-name)
+       (locate-dominating-file (buffer-file-name) ".git")
+       (string-empty-p (shell-command-to-string (format "git ls-files %s" buffer-file-name)))
+       (pcase oo-modeline-icons
+         ('nerd-icons
+           (require 'nerd-icons)
+           ;; (format "%s %s" (nerd-icons-powerline "nf-pl-line_number") ln)
+           (all-the-icons-faicon "times" :v-adjust +0.02))
+         ('all-the-icons
+           (require 'all-the-icons)
+           (all-the-icons-faicon "times" :v-adjust +0.02))
+         (_
+          "untracked"))))
+
 (defun oo-modeline-component--line-number ()
   "Return the line-number component for the mode line."
   (set! ln (powerline-raw "%l"))
   (pcase oo-modeline-icons
     ('nerd-icons
-      (require 'nerd-icons)
-      (format "%s %s" (nerd-icons-powerline "nf-pl-line_number") ln))
+     (require 'nerd-icons)
+     (format "%s %s" (nerd-icons-powerline "nf-pl-line_number") ln))
     ('all-the-icons
-      ;; (require 'all-the-icons)
-      ln)
+     ;; (require 'all-the-icons)
+     ln)
     (_
      ln)))
 
@@ -205,38 +224,35 @@ If an error is raised from component function."
 
 (defun! oo-modeline-component--branch ()
   "Return the branch name as a modeline segment."
-  (when (and (buffer-file-name)
-             (locate-dominating-file (buffer-file-name) ".git"))
-    (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
-    (pcase oo-modeline-icons
-      ('nerd-icons
-       (require 'nerd-icons)
-       (set! icon (nerd-icons-devicon "nf-dev-git_branch" :v-adjust -0.01))
-       (format "%s %s" icon branch))
-      ('all-the-icons
-       (require 'all-the-icons)
-       (set! icon (all-the-icons-octicon "git-branch"  :face 'all-the-icons-yellow :v-adjust -0.01))
-       ;; (set! remote (shell-command-to-string "git rev-parse --abbrev-ref --symbolic-full-name @{u}"))
-       ;; (set! unmerged-commits (shell-command-to-string "git rev-list --count HEAD..%s" remote))
-       (format "%s %s" icon branch))
-      (_
-       branch))))
+  (set! branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD")))
+  (pcase oo-modeline-icons
+    ('nerd-icons
+      (require 'nerd-icons)
+      (set! icon (nerd-icons-devicon "nf-dev-git_branch" :v-adjust -0.01))
+      (format "%s %s" icon branch))
+    ('all-the-icons
+      (require 'all-the-icons)
+      (set! icon (all-the-icons-octicon "git-branch"  :v-adjust -0.01))
+      ;; (set! remote (shell-command-to-string "git rev-parse --abbrev-ref --symbolic-full-name @{u}"))
+      ;; (set! unmerged-commits (shell-command-to-string "git rev-list --count HEAD..%s" remote))
+      (format "%s %s" icon branch))
+    (_
+     branch)))
 
 (defun! oo-modeline-component--git-ahead ()
-  "The number of commits ahead of origin.
+  "Display the number of commits ahead of origin.
 If 0, do not display anything."
-  (when (and buffer-file-name vc-mode (string-match "Git" vc-mode))
-    (set! count (string-to-number (shell-command-to-string "git rev-list --count @{upstream}..HEAD")))
-    (when (> count 0)
-      (pcase oo-modeline-icons
-        ('all-the-icons
-         (set! long-arrow (all-the-icons-faicon "long-arrow-up" :v-adjust 0.01))
-         (propertize (format "%s%s" count long-arrow) 'face 'success))
-        ('nerd-icons
-         (set! long-arrow (nerd-icons-faicon "nf-fa-arrow_up_long" :v-adjust 0.01))
-         (propertize (format "%s%s" count long-arrow) 'face 'success))
-        (_
-         (propertize (format "%s@" count) 'face 'success))))))
+  (set! count (string-to-number (shell-command-to-string "git rev-list --count @{upstream}..HEAD")))
+  (when (> count 0)
+    (pcase oo-modeline-icons
+      ('all-the-icons
+        (set! long-arrow (all-the-icons-faicon "long-arrow-up" :v-adjust 0.01))
+        (propertize (format "%s%s" count long-arrow) 'face 'success))
+      ('nerd-icons
+        (set! long-arrow (nerd-icons-faicon "nf-fa-arrow_up_long" :v-adjust 0.01))
+        (propertize (format "%s%s" count long-arrow) 'face 'success))
+      (_
+       (propertize (format "%s@" count) 'face 'success)))))
 
 (defun! oo-modeline-component--log-error ()
   "Notify of error appearing in my log."
@@ -244,13 +260,15 @@ If 0, do not display anything."
     (save-excursion
       (goto-char (point-min))
       (when (re-search-forward (rx "[ERROR]") nil t)
+        ;; Find the error type.
+        (re-search )
         (pcase oo-modeline-icons
           ('all-the-icons
-           (set! icon (all-the-icons-material "warning" :face 'error))
-           (format "%s %s" icon 'void-function))
+            (set! icon (all-the-icons-material "warning" :face 'error))
+            (format "%s %s" icon 'void-function))
           ('nerd-icons
-           ;; (set! error (all-the-icons-material "warning" :face 'error))
-           )
+            ;; (set! error (all-the-icons-material "warning" :face 'error))
+            )
           (_))))))
 
 (defun! oo-modeline-component--narrow ()
@@ -277,15 +295,15 @@ If 0, do not display anything."
     (set! time (match-string 2 pomodoro-mode-line-string))
     (pcase oo-modeline-icons
       ('all-the-icons
-        (pcase type
-          ("w" (set! icon (all-the-icons-material "work" :face 'error)))
-          ("b" (set! icon (all-the-icons-faicon "coffee" :v-adjust 0))))
-        (format "%s %s" icon time))
+       (pcase type
+         ("w" (set! icon (all-the-icons-material "work")))
+         ("b" (set! icon (all-the-icons-faicon "coffee" :v-adjust 0))))
+       (format "%s %s" icon time))
       ('nerd-icons
-        (pcase type
-          ("w" (set! icon (nerd-icons-pomicon "nf-pom-pomodoro_ticking" :face 'error :v-adjust 0)))
-          ("b" (set! icon (nerd-icons-codicon "nf-cod-coffee" :v-adjust 0))))
-        (format "%s %s" icon time))
+       (pcase type
+         ("w" (set! icon (nerd-icons-pomicon "nf-pom-pomodoro_ticking" :face 'error :v-adjust 0)))
+         ("b" (set! icon (nerd-icons-codicon "nf-cod-coffee" :v-adjust 0))))
+       (format "%s %s" icon time))
       (_
        (format "%s %s" type time)))))
 
@@ -296,13 +314,13 @@ If 0, do not display anything."
   (pcase oo-modeline-icons
     ('nerd-icons
      (require 'nerd-icons)
-     (set! dicon (nerd-icons-faicon "nf-fa-calendar" :face 'warning))
-     (set! ticon (nerd-icons-wicon (format-time-string "nf-weather-time_%-I") :face 'warning))
+     (set! dicon (nerd-icons-faicon "nf-fa-calendar"))
+     (set! ticon (nerd-icons-wicon (format-time-string "nf-weather-time_%-I")))
      (format "%s %s %s %s" dicon date ticon time))
     ('all-the-icons
      (require 'all-the-icons)
-     (set! dicon (all-the-icons-faicon "calendar" :face 'all-the-icons-red :v-adjust 0.01))
-     (set! ticon (all-the-icons-wicon (format-time-string "time-%-I") :face 'all-the-icons-red :v-adjust 0.01))
+     (set! dicon (all-the-icons-faicon "calendar" :v-adjust 0.01))
+     (set! ticon (all-the-icons-wicon (format-time-string "time-%-I") :v-adjust 0.01))
      (format "%s %s %s %s" dicon date ticon time))
     (_
      (format "%s %s" date time))))
@@ -371,20 +389,21 @@ If the current buffer is modified."
             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
             (format "%s %d%%%%" battery percentage))))
     ('all-the-icons
-     (cond ((and (> percentage 90) charging-p)
-            (set! battery (all-the-icons-alltheicon "battery-charging" :v-adjust +0.02 :face 'success))
-            battery)
-           ((> percentage 90)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_4" :face 'success))
-            (format "%s %d%%%%" battery percentage))
-           ((> percentage 80)
-            (nerd-icons-faicon "nf-fa-battery_3" :face 'warning))
-           ((> percentage 70)
-            (nerd-icons-faicon "nf-fa-battery_2" :face 'warning))
-           ((> percentage 60)
-            (nerd-icons-faicon "nf-fa-battery_1" :face 'error))
-           ((> percentage 50)
-            (nerd-icons-faicon "nf-fa-battery_0" :face 'error))))))
+     (cond ;; ((and (> percentage 90) charging-p)
+      ;;  (set! battery (all-the-icons-alltheicon "battery-charging" :v-adjust +0.02 :face 'success))
+      ;;  battery)
+      ((> percentage 90)
+       (set! battery (all-the-icons-material "battery_charging_full" :face 'success))
+       ;; (propertize (format "%s %d%%%%" battery percentage) 'face 'success)
+       )
+      ((> percentage 80)
+       (nerd-icons-faicon "nf-fa-battery_3" :face 'warning))
+      ((> percentage 70)
+       (nerd-icons-faicon "nf-fa-battery_2" :face 'warning))
+      ((> percentage 60)
+       (nerd-icons-faicon "nf-fa-battery_1" :face 'error))
+      ((> percentage 50)
+       (nerd-icons-faicon "nf-fa-battery_0" :face 'error))))))
 
 (defun! oo-modeline-component--emms ()
   "Return indicator for emms.
@@ -427,7 +446,8 @@ Returns whether current track is playing."
 
 (defun oo-modeline-segment--version-control ()
   "Display version control information."
-  (oo-modeline-join-components '(version-control git-ahead)))
+  (when (and (buffer-file-name) vc-mode (string-match "Git" vc-mode))
+    (oo-modeline-join-components '(branch git-ahead))))
 
 (defun oo-modeline-segment--current-time ()
   "Display the current date and time."
@@ -452,25 +472,23 @@ This means the line number and percentage."
 (defun! oo-modeline-main ()
   "Return my main modeline."
   (set! active (powerline-selected-window-active))
-  (set! face0 (if active 'isearch 'powerline-inactive0))
-  (set! face1 (if active 'powerline-active1 'powerline-inactive1))
-  (set! face2 (if active 'powerline-active2 'powerline-inactive2))
+  (set! face1 (if active 'oo-modeline-segment-1 'powerline-inactive1))
+  (set! face2 (if active 'powerline-active0 'powerline-inactive0))
+  (set! face3 (if active 'powerline-active2 'powerline-inactive2))
   (set! fill-face (if active 'mode-line 'mode-line-inactive))
   (set! evil-face (spaceline-highlight-face-evil-state))
-  (oo-modeline-ml `(evil-state . ,evil-face)
-                  `(buffer-info . ,face1)
-                  `(version-control . ,face0)
-                  `(_ . ,fill-face)
-                  ;; `(log-error . ,face0)
-                  `(pomodoro . ,face0)
-                  `(battery . ,face1)
-                  `(buffer-location . ,face0)
-                  `(current-time . ,evil-face)))
+  ;; List of faces.
+  (oo-modeline-render '(evil-state buffer-info version-control)
+                      '(pomodoro battery buffer-location current-time)
+                      `(,fill-face ,evil-face ,face1 ,face2 ,face3)))
 ;;;; initialization
 (defhook! oo-initialize-modeline-h (after-init-hook :depth 90)
   "Initialize modeline."
   (setq-default mode-line-format '("%e" (:eval (oo-modeline-main))))
   (oo-modeline-update))
+(setq-local mode-line-format nil)
+(setq-local mode-line-format '("%e" (:eval (oo-modeline-main))))
+(oo-modeline-main)
 ;;; provide
 (provide 'init-powerline)
 ;;; init-powerline.el ends here
