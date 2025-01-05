@@ -10,7 +10,7 @@ set_wallpaper &
 pidof -sx mpd || mpd &
 pidof -sx picom || picom &
 pidof -sx dunst || dunst &
-pidof -sx emacs || emacs --daemon &
+# pidof -sx emacs || emacs --daemon &
 pidof -sx mcron || mcron &
 ## Remap caps-lock with escape
 setxkbmap -option caps:escape
