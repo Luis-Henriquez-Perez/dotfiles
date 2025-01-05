@@ -283,9 +283,9 @@ file is loaded."
 ;;     (add-hook 'before-save-hook #'oo-align-abbrev-forms-h nil t)))
 ;;;; enable initial theme
 (defhook! oo-load-initial-theme-h (after-init-hook)
-  "Load `modus-vivendi' theme."
+  "Load `modus-operandi' theme."
   (require 'modus-themes)
-  (load-theme 'modus-vivendi :no-confirm nil))
+  (load-theme 'modus-operandi :no-confirm nil))
 ;;;; start emacs server
 ;; This is so that if I need to use some sort of program to open a file, it will
 ;; use he running emacs daemon.
