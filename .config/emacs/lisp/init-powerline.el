@@ -136,11 +136,13 @@ If an error is raised from component function."
   (oo--modeline-render-lhs segment-names faces (oo-modeline-right-separator)))
 
 (defun oo-modeline-left-separator (&optional right-p)
+  "Return the left separator."
   (intern (format "powerline-%s-%s"
                   (powerline-current-separator)
                   (funcall (if right-p #'cdr #'car) powerline-default-separator-dir))))
 
 (defun oo-modeline-right-separator ()
+  "Return the right separator."
   (oo-modeline-left-separator 'right))
 
 (defun! oo-modeline-render (left right faces)
@@ -180,7 +182,7 @@ If an error is raised from component function."
      ln)))
 
 (defun! oo-modeline-component--percentage-of-buffer ()
-  "Return the percentage of the buffer.."
+  "Return the percentage of the buffer."
   ;; I know about the mode line `%p' option, but it fails with folding.  Simply
   ;; dividing point by point-max is more accurate.
   ;; (powerline-raw "%p")
@@ -364,46 +366,41 @@ If the current buffer is modified."
   (set! charging-p (not (equal "Discharging" (battery-format "%B" status))))
   (pcase oo-modeline-icons
     ('nerd-icons
-     (cond ((and (> percentage 90) charging-p)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_4" :face 'success))
-            (set! bolt (nerd-icons-mdicon "nf-md-lightning_bolt" :face 'success))
-            (format "%s %s" battery bolt))
-           ((> percentage 90)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_4" :face 'warning))
-            (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
-            (format "%s %s %d%%%%" arrow battery percentage))
-           ((> percentage 80)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_3" :face 'warning))
-            (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
-            (format "%s %s %d%%%%" arrow battery percentage))
-           ((> percentage 70)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_2" :face 'warning))
-            (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
-            (format "%s %d%%%%" battery percentage))
-           ((> percentage 60)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_1" :face 'error))
-            (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
-            (format "%s %d%%%%" battery percentage))
-           ((> percentage 50)
-            (set! battery (nerd-icons-faicon "nf-fa-battery_0" :face 'error))
-            (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
-            (format "%s %d%%%%" battery percentage))))
+      (cond ((and (> percentage 90) charging-p)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_4" :face 'success))
+             (set! bolt (nerd-icons-mdicon "nf-md-lightning_bolt" :face 'success))
+             (format "%s %s" battery bolt))
+            ((> percentage 90)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_4" :face 'warning))
+             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
+             (format "%s %s %d%%%%" arrow battery percentage))
+            ((> percentage 80)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_3" :face 'warning))
+             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
+             (format "%s %s %d%%%%" arrow battery percentage))
+            ((> percentage 70)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_2" :face 'warning))
+             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
+             (format "%s %d%%%%" battery percentage))
+            ((> percentage 60)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_1" :face 'error))
+             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
+             (format "%s %d%%%%" battery percentage))
+            ((> percentage 50)
+             (set! battery (nerd-icons-faicon "nf-fa-battery_0" :face 'error))
+             (set! arrow (nerd-icons-faicon "nf-fa-arrow_down" :face 'warning))
+             (format "%s %d%%%%" battery percentage))))
     ('all-the-icons
-     (cond ;; ((and (> percentage 90) charging-p)
-      ;;  (set! battery (all-the-icons-alltheicon "battery-charging" :v-adjust +0.02 :face 'success))
-      ;;  battery)
-      ((> percentage 90)
-       (set! battery (all-the-icons-material "battery_charging_full" :face 'success))
-       ;; (propertize (format "%s %d%%%%" battery percentage) 'face 'success)
-       )
-      ((> percentage 80)
-       (nerd-icons-faicon "nf-fa-battery_3" :face 'warning))
-      ((> percentage 70)
-       (nerd-icons-faicon "nf-fa-battery_2" :face 'warning))
-      ((> percentage 60)
-       (nerd-icons-faicon "nf-fa-battery_1" :face 'error))
-      ((> percentage 50)
-       (nerd-icons-faicon "nf-fa-battery_0" :face 'error))))))
+      (cond ((> percentage 90)
+             (all-the-icons-faicon "battery-full" :v-adjust 0.01))
+            ((> percentage 80)
+             (format "%s %s" (all-the-icons-faicon "battery-three-quarters") percentage))
+            ((> percentage 70)
+             (format "%s %s" (all-the-icons-faicon "battery-three-quarters") percentage))
+            ((> percentage 60)
+             (format "%s %s" (all-the-icons-faicon "battery-three-quarters") percentage))
+            ((> percentage 50)
+             ())))))
 
 (defun! oo-modeline-component--emms ()
   "Return indicator for emms.
@@ -477,7 +474,6 @@ This means the line number and percentage."
   (set! face3 (if active 'powerline-active2 'powerline-inactive2))
   (set! fill-face (if active 'mode-line 'mode-line-inactive))
   (set! evil-face (spaceline-highlight-face-evil-state))
-  ;; List of faces.
   (oo-modeline-render '(evil-state buffer-info version-control)
                       '(pomodoro battery buffer-location current-time)
                       `(,fill-face ,evil-face ,face1 ,face2 ,face3)))
@@ -486,9 +482,6 @@ This means the line number and percentage."
   "Initialize modeline."
   (setq-default mode-line-format '("%e" (:eval (oo-modeline-main))))
   (oo-modeline-update))
-(setq-local mode-line-format nil)
-(setq-local mode-line-format '("%e" (:eval (oo-modeline-main))))
-(oo-modeline-main)
 ;;; provide
 (provide 'init-powerline)
 ;;; init-powerline.el ends here
