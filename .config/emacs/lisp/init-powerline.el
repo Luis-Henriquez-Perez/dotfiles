@@ -149,7 +149,7 @@ If an error is raised from component function."
   "Render modeline."
   (alet! (oo--modeline-render-rhs right faces)
     (concat (powerline-render (oo--modeline-render-lhs left faces))
-            (powerline-fill (car faces) (+ 3 (powerline-width it)))
+            (powerline-fill (car faces) (+ 1 (powerline-width it)))
             (powerline-render it))))
 ;;;; components
 (defun oo-modeline-component--untracked ()
