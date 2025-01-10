@@ -1,3 +1,6 @@
 [submodule ".config/awesome/revelation"]
 	path = .config/awesome/revelation
 	url = https://github.com/guotsuan/awesome-revelation
+[submodule "/home/luis/.config/emacs"]
+	path = /home/luis/.config/emacs
+	url = git@github.com:Luis-Henriquez-Perez/.emacs.d.git
