@@ -7,7 +7,7 @@
 # a local computer.
 
 SOURCE="/mnt/external_drive"
-TARGET=
+TARGET="$HOME"
 # Choose the external drive.
 # Choose the folder.
 # Copy my passwords
