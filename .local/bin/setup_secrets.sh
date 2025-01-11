@@ -6,7 +6,7 @@
 # This script takes the secrets I have in my external drive and applies them to
 # a local computer.
 
-SOURCE=
+SOURCE="/mnt/external_drivee"
 TARGET=
 # Choose the external drive.
 # Choose the folder.
