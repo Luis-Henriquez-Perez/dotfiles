@@ -12,6 +12,7 @@ TARGET="$HOME"
 echo "Set up passwords..."
 rsync -av .password-store "$HOME"
 
+
 echo "Set up gpg key..."
 rsync -av .gpg "$HOME"
 
