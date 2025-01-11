@@ -1,4 +1,4 @@
-#!/bin/should have
+#!/bin/sh
 # Filename: setup_secrets.sh
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2024-12-29 18:23:01
