@@ -10,8 +10,11 @@ SOURCE="/mnt/external_drive"
 TARGET="$HOME"
 
 echo "Set up passwords..."
-rsync -av .password-store "$HOME"
-
+if [ -d "$SOURCE/.password-store" ]; then
+  rsync -av "$SOURCE/.password-store" "$TARGET"
+else
+  echo "Warning: .password-store not found on source."
+fi
 
 echo "Set up gpg key..."
 rsync -av .gpg "$HOME"
