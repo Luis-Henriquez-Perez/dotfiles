@@ -22,7 +22,7 @@ case $session in
     qtile             ) exec qtile start;;
     stumpwm           ) exec ~/stumpwm.ros;;
     # https://awesomewm.org/apidoc/documentation/90-FAQ.md.html
-    awesome|awesomewm ) exec awesome;;
+    awesome|awesomewm ) exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr;;
     i3|i3wm           ) exec i3;;
     kde               ) exec startplasma-x11;;
     xfce|xfce4        ) exec startxfce4;;
