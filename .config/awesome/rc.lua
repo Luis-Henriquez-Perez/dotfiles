@@ -397,7 +397,6 @@ local function client_quit_and_focus_master (c)
     --                  title = "quitting client",
     --                  text = "quiting" })
     client_quit(c)
-    p
     local master = awful.client.getmaster()
     -- Check if the master client exists and focus it
     if master then
