@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Qutebrowser
+GenericName=Web Browser
+Comment=Minimalist web browser with vim-like keybindings
+Exec=qutebrowser %u
+Terminal=false
+Type=Application
+Icon=qutebrowser
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/about;x-scheme-handler/ftp;
+StartupNotify=true
