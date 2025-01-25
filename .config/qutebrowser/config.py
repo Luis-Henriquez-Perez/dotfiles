@@ -13,7 +13,7 @@
 config = config  # type: ConfigAPI
 c = c  # type: ConfigContainer
 
-c.url.searchengines = {'DEFAULT' : 'https://www.qwant.com/?l=en'
+c.url.searchengines = {'DEFAULT' : 'https://www.qwant.com/?l=e={}n'
                        # '!a'      : 'https://www.amazon.com/s?k={}',
 
                        'dg'      : 'https://duckduckgo.com/?ia=web&q={}',
