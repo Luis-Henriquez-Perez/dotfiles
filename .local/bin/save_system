@@ -13,6 +13,8 @@
 # TODO: prompt to mount the drive.  Since I do not know how to do that right now
 # just hard-code the information.
 
+# TODO: ensure that the drive is mounted
+
 DRIVE="/mnt/harddrive"
 BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
 
