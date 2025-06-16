@@ -23,11 +23,11 @@ BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 # excluding all version-controlled files.
 
 TOBACKUP="
-$HOME/Documents
-$HOME/Pictures
-$HOME/Downloads
-$HOME/Music
-$HOME/Videos
+$USER_HOME/Documents
+$USER_HOME/Pictures
+$USER_HOME/Downloads
+$USER_HOME/Music
+$USER_HOME/Videos
 "
 
 echo "Starting backup to $BACKUP_DIR"
