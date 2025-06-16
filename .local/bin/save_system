@@ -31,7 +31,7 @@ $HOME/Videos
 
 echo "Starting backup to $BACKUP_DIR"
 
-# Build the list of excludes by not counting.
+# Build the list of excludes to exclude any git repos.
 
 for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
