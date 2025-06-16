@@ -16,6 +16,7 @@
 # TODO: ensure that the drive is mounted
 
 USER_HOME="/home/luis"
+PASS_HOME="/home/luis"
 DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 
