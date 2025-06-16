@@ -38,6 +38,7 @@ for DIR in $TOBACKUP; do
     NAME=$(basename "$DIR")
     echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
     GIT_REPOS=$(find "$DIR" -type d -name .git -prune | sed 's|/\.git$||')
+    echo "$GIT_REPOS"
     rsync -aAxv --delete "$DIR/" "$BACKUP_DIR/$NAME/"
   else
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
