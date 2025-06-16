@@ -34,6 +34,8 @@ echo "Starting backup to $BACKUP_DIR"
 # Build the list of excludes by not counting.
 
 for DIR in $TOBACKUP; do
+
+for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
     NAME=$(basename "$DIR")
     echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
