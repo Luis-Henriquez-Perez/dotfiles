@@ -40,7 +40,12 @@ for DIR in $TOBACKUP; do
     GIT_REPOS=$(find "$DIR" -type d -name .git -prune | sed 's|/\.git$||')
     echo "$GIT_REPOS"
     # rsync -aAxv --delete "$DIR/" "$BACKUP_DIR/$NAME/"
-
+    # Build --exclude options for rsync
+    EXCLUDES=""
+    for repo in $GIT_REPOS; do
+      REL_PATH="${repo#$DIR/}"
+      EXCLUDES="$EXCLUDES --exclude=$REL_PATH"
+    done
   else
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
   fi
