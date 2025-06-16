@@ -23,7 +23,6 @@ BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 # Directories to back up.  Essentially make a copy of my home directory
 # excluding all version-controlled files.
 
-# TODO: Add password store as list of directories to save.
 TOBACKUP="
 $USER_HOME/Documents
 $USER_HOME/Pictures
