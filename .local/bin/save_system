@@ -19,7 +19,7 @@ DRIVE="/mnt/harddrive"
 BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
 
 # Directories to back up.  Essentially make a copy of my home directory
-# excluding all version-controlled files. 
+# excluding all version-controlled files.
 TOBACKUP="
 $HOME/Documents
 $HOME/Pictures
