@@ -41,3 +41,4 @@ for DIR in $TOBACKUP; do
   fi
 done
 
+# find "Documents" -type d -name .git -prune | sed 's|/\.git||'
