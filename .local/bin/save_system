@@ -32,7 +32,7 @@ $USER_HOME/Music
 $USER_HOME/Videos
 $USER_HOME/Trash
 $USER_HOME/Sounds
-$USER_HOME/$PASSWORD_DIRECTORY
+$USER_HOME/$PASSWORD_DIR
 "
 
 echo "Starting backup to $BACKUP_DIR"
