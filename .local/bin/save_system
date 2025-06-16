@@ -10,7 +10,8 @@
 # 1. loose files
 # 2. dotfiles
 
-# TODO: prompt to mount the drive.  Since I do not know how to do that right now.
+# TODO: prompt to mount the drive.  Since I do not know how to do that right now
+# just hardcode the information.
 
 DRIVE="/mnt/harddrive"
 BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
