@@ -40,3 +40,4 @@ for DIR in $TOBACKUP; do
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
   fi
 done
+
