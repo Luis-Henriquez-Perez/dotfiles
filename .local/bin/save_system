@@ -10,10 +10,10 @@
 # 1. loose files
 # 2. dotfiles
 
+# TODO: prompt to mount the drive.  Since I do not know how to do that right now.
+
 DRIVE="/mnt/harddrive"
 BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
-
-# TODO: prompt to mount the drive
 
 # Create the backup directory if it doesn't exist
 # mkdir -p "$BACKUP_DIR"
