@@ -45,7 +45,7 @@ for DIR in $TOBACKUP; do
       EXCLUDES="$EXCLUDES --exclude=$REL_PATH"
     done
     # echo "$EXCLUDES"
-    mkdir "$BACKUP_DIR/$NAME/"
+    mkdir -p "$BACKUP_DIR/$NAME/"
     echo "created $BACKUP_DIR/$NAME/"
     # eval rsync -aAxv --delete $EXCLUDES "$DIR/" "$BACKUP_DIR/$NAME/"
   else
