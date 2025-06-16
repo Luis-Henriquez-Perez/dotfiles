@@ -59,4 +59,4 @@ done
 
 # find "Documents" -type d -name .git -prune | sed 's|/\.git||'
 
-# NOTE: for restoring syst
+# NOTE: for restoring system 
