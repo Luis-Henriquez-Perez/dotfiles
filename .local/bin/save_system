@@ -15,7 +15,7 @@
 
 # TODO: ensure that the drive is mounted
 
-DRIVE="/mnt/harddrive"
+DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
 
 # Directories to back up.  Essentially make a copy of my home directory
