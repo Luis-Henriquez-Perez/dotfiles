@@ -35,7 +35,7 @@ echo "Starting backup to $BACKUP_DIR"
 
 for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
-    mkdir
+    mkdir 
     NAME=$(basename "$DIR")
     echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
     GIT_REPOS=$(find "$DIR" -type d -name .git -prune | sed 's|/\.git$||')
