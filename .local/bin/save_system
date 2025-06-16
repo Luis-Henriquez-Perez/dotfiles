@@ -1,0 +1,41 @@
+#!/bin/sh
+# Filename: save_system
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-12 11:36:08
+# Description: Save my system to external hard drive.
+# This script is for automating the backing up of all my stuff so I can easily
+# setup the things I want on another machine.
+
+# checklist
+# 1. loose files
+# 2. dotfiles
+
+DRIVE="/mnt/harddrive"
+BACKUP_DIR="$DRIVE/archlinux-home-2024-12-29"
+
+# TODO: prompt to mount the drive
+
+# Create the backup directory if it doesn't exist
+# mkdir -p "$BACKUP_DIR"
+
+# Directories to back up
+TOBACKUP="
+$HOME/Documents
+$HOME/Pictures
+$HOME/Downloads
+$HOME/Music
+$HOME/Videos
+"
+
+echo "Starting backup to $BACKUP_DIR"
+
+for DIR in $TOBACKUP; do
+  if [ -d "$DIR" ]; then
+    NAME=$(basename "$DIR")
+    echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
+    # Td
+    # rsync -aAxv --delete "$DIR/" "$BACKUP_DIR/$NAME/"
+  else
+    echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
+  fi
+done
