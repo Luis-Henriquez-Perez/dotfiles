@@ -34,7 +34,7 @@ echo "Starting backup to $BACKUP_DIR"
 # Build the list of excludes by not counting.
 
 for DIR in $TOBACKUP; do
-
+    find
 
 for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
