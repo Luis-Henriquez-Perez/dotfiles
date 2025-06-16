@@ -45,7 +45,7 @@ for DIR in $TOBACKUP; do
       EXCLUDES="$EXCLUDES --exclude=$REL_PATH"
     done
     # echo "$EXCLUDES"
-    eval rsync -aAxv --dry-run --delete $EXCLUDES "$DIR/" "$BACKUP_DIR/$NAME/"
+    eval rsync -aAxvn --delete $EXCLUDES "$DIR/" "$BACKUP_DIR/$NAME/"
   else
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
   fi
