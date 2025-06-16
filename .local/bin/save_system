@@ -59,4 +59,5 @@ done
 
 # find "Documents" -type d -name .git -prune | sed 's|/\.git||'
 
-# NOTE: for restoring system exclude the secret dir
+# NOTE: for restoring system exclude the secret directory which is only for
+# private files.
