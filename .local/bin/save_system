@@ -37,6 +37,7 @@ for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
     NAME=$(basename "$DIR")
     echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
+
     rsync -aAxv --delete "$DIR/" "$BACKUP_DIR/$NAME/"
   else
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
