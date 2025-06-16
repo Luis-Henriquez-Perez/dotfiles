@@ -16,7 +16,7 @@
 # TODO: ensure that the drive is mounted
 
 USER_HOME="/home/luis"
-PASSWORD_DIR="$HOME/.local/share/.password-store"
+PASSWORD_DIR=".local/share/.password-store"
 DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 
@@ -32,6 +32,7 @@ $USER_HOME/Music
 $USER_HOME/Videos
 $USER_HOME/Trash
 $USER_HOME/Sounds
+$USER_HOME/$PASSWORD_DIRECTORY
 "
 
 echo "Starting backup to $BACKUP_DIR"
