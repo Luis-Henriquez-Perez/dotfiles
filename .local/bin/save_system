@@ -35,6 +35,7 @@ echo "Starting backup to $BACKUP_DIR"
 
 for DIR in $TOBACKUP; do
 
+
 for DIR in $TOBACKUP; do
   if [ -d "$DIR" ]; then
     NAME=$(basename "$DIR")
