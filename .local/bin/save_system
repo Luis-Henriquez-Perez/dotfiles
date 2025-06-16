@@ -28,6 +28,7 @@ $USER_HOME/Pictures
 $USER_HOME/Downloads
 $USER_HOME/Music
 $USER_HOME/Videos
+$USER_HOME/Trash
 "
 
 echo "Starting backup to $BACKUP_DIR"
