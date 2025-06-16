@@ -22,6 +22,7 @@ BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 # Directories to back up.  Essentially make a copy of my home directory
 # excluding all version-controlled files.
 
+# TODO: add pasw
 TOBACKUP="
 $USER_HOME/Documents
 $USER_HOME/Pictures
@@ -29,6 +30,7 @@ $USER_HOME/Downloads
 $USER_HOME/Music
 $USER_HOME/Videos
 $USER_HOME/Trash
+$USER_HOME/Sounds
 "
 
 echo "Starting backup to $BACKUP_DIR"
