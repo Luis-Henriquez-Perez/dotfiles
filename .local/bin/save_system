@@ -6,10 +6,6 @@
 # This script is for automating the backing up of all my stuff so I can easily
 # setup the things I want on another machine.
 
-# checklist
-# 1. loose files
-# 2. dotfiles
-
 # TODO: prompt to mount the drive.  Since I do not know how to do that right now
 # just hard-code the information.
 
@@ -17,6 +13,7 @@
 
 USER_HOME="/home/luis"
 PASSWORD_DIR=".local/share/.password-store"
+PRIVATE_KEY_DIR=".gnupg/private-keys-v1.d"
 DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 
@@ -32,6 +29,7 @@ $USER_HOME/Videos
 $USER_HOME/Trash
 $USER_HOME/Sounds
 $USER_HOME/$PASSWORD_DIR
+$USER_HOME/$PRIVATE_KEY_DIR
 "
 
 echo "Starting backup to $BACKUP_DIR"
@@ -56,6 +54,8 @@ for DIR in $TOBACKUP; do
     echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
   fi
 done
+
+echo "Done backing up!"
 
 # find "Documents" -type d -name .git -prune | sed 's|/\.git||'
 
