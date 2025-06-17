@@ -8,7 +8,7 @@
 ;; This article has a list of why to use guile.
 ;;;; email
 ;; Download and index my email every 5 minutes.
-(job '(next-minute (range 0 60 5)) "update-email")
+;; (job '(next-minute (range 0 60 5)) "update-email")
 ;;;; system
 ;; I want to automate as much of system maintenance as I can.
 ;;;;; clean the cache
