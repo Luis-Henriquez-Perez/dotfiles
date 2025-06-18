@@ -48,17 +48,26 @@ backup() {
 
 restore() {
     echo "Restoring home directories from backup..."
-    # Loop through each source copy the contents of destination into source.
     for SOURCE in $SOURCES; do
         TARGET="$BACKUP_DIR/${SOURCE#"$USER_HOME"/}"
         echo "$TARGET → $SOURCE"
         if [ -d "$SOURCE" ]; then
             mkdir -p "$SOURCE"
-        # rsync -aAxv "$TARGET" "$SOURCE" >/dev/null
+        rsync -aAxv "$TARGET" "$SOURCE" >/dev/null
         fi
     done
     echo "Restored!"
 }
 
-# backup
-restore
+case "$1" in
+    "" | backup)
+        backup
+        ;;
+    restore)
+        restore
+        ;;
+    *)
+        echo "Usage: $0 {backup|restore}"
+        exit 1
+        ;;
+esac
