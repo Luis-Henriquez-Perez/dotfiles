@@ -1,0 +1,22 @@
+#!/bin/sh
+# Filename: push_all_branchess
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-18 17:00:02
+# Description: This is a simple script to push all my branches to github.
+# The purpose is simply to save as much as possible of a branch.  I have not yet
+# found a solution for stashes but I think it is probably better not to make
+# stashes anyway (prefer making a separate branch instead I mean) because they
+# are not version-controlled.
+
+# Push all local branches to origin
+for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/); do
+    # TODO: notify me if there is a new remote branch that had to be created and
+    # silence output so I do not have to see everything.
+    if ! git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+        echo "Creating new remote branch: $branch"
+        git push -u origin "$branch" >/dev/null 2>&1
+    else
+        git push origin "$branch" >/dev/null 2>&1
+    fi
+    echo "Pushing branch: $branch"
+done
