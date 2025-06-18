@@ -6,21 +6,13 @@
 # This script is for automating the backing up of all my stuff so I can easily
 # setup the things I want on another machine.
 
-# TODO: prompt to mount the drive.  Since I do not know how to do that right now
-# just hard-code the information.
-
-# TODO: ensure that the drive is mounted
-
 USER_HOME="/home/luis"
 PASSWORD_DIR=".local/share/.password-store"
 PRIVATE_KEY_DIR=".gnupg/private-keys-v1.d"
 DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 
-# Directories to back up.  Essentially make a copy of my home directory
-# excluding all version-controlled files.
-
-TOBACKUP="
+SOURCES="
 $USER_HOME/Documents
 $USER_HOME/Pictures
 $USER_HOME/Downloads
@@ -32,32 +24,40 @@ $USER_HOME/$PASSWORD_DIR
 $USER_HOME/$PRIVATE_KEY_DIR
 "
 
-echo "Starting backup to $BACKUP_DIR"
-
-# Build the list of excludes to exclude any git repos.
-
-for DIR in $TOBACKUP; do
-  if [ -d "$DIR" ]; then
-    NAME=$(basename "$DIR")
-    echo "→ Backing up $DIR to $BACKUP_DIR/$NAME"
-    GIT_REPOS=$(find "$DIR" -type d -name .git -prune | sed 's|/\.git$||')
-    # Build --exclude options for rsync
-    EXCLUDES=""
-    for repo in $GIT_REPOS; do
-      REL_PATH="${repo#$DIR/}"
-      EXCLUDES="$EXCLUDES --exclude=$REL_PATH"
+backup() {
+    echo "Backing up home directories to harddrive"
+    # Build the list of excludes to exclude any git repos.
+    for SOURCE in $SOURCES; do
+        if [ -d "$SOURCE" ]; then
+            # TARGET="$BACKUP_DIR/$(basename "$SOURCE")"
+            TARGET="$BACKUP_DIR/${SOURCE#"$USER_HOME"/}"
+            echo "→ Backing up $SOURCE to $TARGET"
+            GIT_REPOS=$(find "$SOURCE" -type d -name .git -prune | sed 's|/\.git$||')
+            EXCLUDES=""
+            for repo in $GIT_REPOS; do
+                REL_PATH="${repo#$SOURCE/}"
+                EXCLUDES="$EXCLUDES --exclude=$REL_PATH"
+            done
+            mkdir -p "$TARGET"
+            eval rsync -aAxv $EXCLUDES "$SOURCE/" "$TARGET/" >/dev/null
+        else
+            echo "⚠️  Skipping $SOURCE — not a directory or doesn't exist."
+        fi
     done
-    # echo "$EXCLUDES"
-    mkdir -p "$BACKUP_DIR/$NAME/"
-    eval rsync -aAxv $EXCLUDES "$DIR/" "$BACKUP_DIR/$NAME/" >/dev/null
-  else
-    echo "⚠️  Skipping $DIR — not a directory or doesn't exist."
-  fi
-done
+    echo "Done backing up!"
+}
 
-echo "Done backing up!"
+# restore() {
+#     echo "Restoring home directories from backup..."
+#     # Loop through each source copy the contents of destination into source.
+#     for SOURCE in $SOURCES; do
+#         TARGET="$BACKUP_DIR/$(basename "$SOURCE")"
+#         echo "Restoring $SOURCE from $TARGET"
+#         if [ -d "$SOURCE"]; then
+#             mkdir -p "$SOURCE"
+#         rsync -aAxv "$TARGET" "$SOURCE" >/dev/null
+#     done
+#     echo "Restored!"
+# }
 
-# find "Documents" -type d -name .git -prune | sed 's|/\.git||'
-
-# NOTE: for restoring system exclude the secret directory which is only for
-# private files.
+backup
