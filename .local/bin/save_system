@@ -29,9 +29,8 @@ backup() {
     # Build the list of excludes to exclude any git repos.
     for SOURCE in $SOURCES; do
         if [ -d "$SOURCE" ]; then
-            # TARGET="$BACKUP_DIR/$(basename "$SOURCE")"
             TARGET="$BACKUP_DIR/${SOURCE#"$USER_HOME"/}"
-            echo "→ Backing up $SOURCE to $TARGET"
+            echo "$SOURCE → $TARGET"
             GIT_REPOS=$(find "$SOURCE" -type d -name .git -prune | sed 's|/\.git$||')
             EXCLUDES=""
             for repo in $GIT_REPOS; do
@@ -47,17 +46,19 @@ backup() {
     echo "Done backing up!"
 }
 
-# restore() {
-#     echo "Restoring home directories from backup..."
-#     # Loop through each source copy the contents of destination into source.
-#     for SOURCE in $SOURCES; do
-#         TARGET="$BACKUP_DIR/$(basename "$SOURCE")"
-#         echo "Restoring $SOURCE from $TARGET"
-#         if [ -d "$SOURCE"]; then
-#             mkdir -p "$SOURCE"
-#         rsync -aAxv "$TARGET" "$SOURCE" >/dev/null
-#     done
-#     echo "Restored!"
-# }
+restore() {
+    echo "Restoring home directories from backup..."
+    # Loop through each source copy the contents of destination into source.
+    for SOURCE in $SOURCES; do
+        TARGET="$BACKUP_DIR/${SOURCE#"$USER_HOME"/}"
+        echo "$TARGET → $SOURCE"
+        if [ -d "$SOURCE" ]; then
+            mkdir -p "$SOURCE"
+        # rsync -aAxv "$TARGET" "$SOURCE" >/dev/null
+        fi
+    done
+    echo "Restored!"
+}
 
-backup
+# backup
+restore
