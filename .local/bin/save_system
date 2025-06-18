@@ -9,6 +9,7 @@
 USER_HOME="/home/luis"
 PASSWORD_DIR=".local/share/.password-store"
 PRIVATE_KEY_DIR=".gnupg/private-keys-v1.d"
+# Right now this assumes that I have mounted my external drive to "/mnt/hardrive/".
 DRIVE="/mnt/hardrive"
 BACKUP_DIR="$DRIVE/archlinux-home-12-29-2024"
 
@@ -25,7 +26,7 @@ $USER_HOME/$PRIVATE_KEY_DIR
 "
 
 backup() {
-    echo "Backing up home directories to harddrive"
+    echo "Backing up home directories to hardrive"
     # Build the list of excludes to exclude any git repos.
     for SOURCE in $SOURCES; do
         if [ -d "$SOURCE" ]; then
