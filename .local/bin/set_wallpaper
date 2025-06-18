@@ -6,30 +6,70 @@ used_wallpapers_file="$HOME/.cache/used_wallpapers_file"
 
 # Ensure the used wallpapers file exists
 [ -f "$used_wallpapers_file" ] || touch "$used_wallpapers_file"
-# Use temp files for correct handling
-all_file=$(mktemp)
-used_file=$(mktemp)
 
-# Store all wallpapers (sorted)
-find "$wallpaper_dir" -type f \( -iname "*.jpg" -o -iname "*.png" \) | sort > "$all_file"
-sort "$used_wallpapers_file" > "$used_file"
+delete_wallpaper() {
+    # Get the last used wallpaper
+    last_wallpaper=$(tail -n 1 "$used_wallpapers_file")
 
-# Get a random unused wallpaper
-chosen=$(comm -23 "$all_file" "$used_file" | shuf -n 1)
+    # If there's nothing to delete
+    if [ -z "$last_wallpaper" ]; then
+        echo "No wallpaper to delete."
+        return 1
+    fi
 
-# If none found, reset
-if [ -z "$chosen" ]; then
-    echo "No new wallpapers found. Resetting used wallpapers."
-    : > "$used_wallpapers_file"
-    chosen=$(cat "$all_file" | shuf -n 1)
-fi
+    mv $FILE "$HOME/$TRASH"
 
-# Clean up temp files
-rm -f "$all_file" "$used_file"
+    # Remove the last line from used wallpapers file
+    # Safely handles cases with only one line
+    tmpfile=$(mktemp)
+    head -n -1 "$used_wallpapers_file" > "$tmpfile" && mv "$tmpfile" "$used_wallpapers_file"
+}
 
-# Append and set
-echo "$chosen" >> "$used_wallpapers_file"
-feh --bg-scale "$chosen"
+switch_wallpaper() {
+    # Use temp files for correct handling
+    all_file=$(mktemp)
+    used_file=$(mktemp)
+
+    # Store all wallpapers (sorted)
+    find "$wallpaper_dir" -type f \( -iname "*.jpg" -o -iname "*.png" \) | sort > "$all_file"
+    sort "$used_wallpapers_file" > "$used_file"
+
+    # Get a random unused wallpaper
+    chosen=$(comm -23 "$all_file" "$used_file" | shuf -n 1)
+
+    # If none found, reset
+    if [ -z "$chosen" ]; then
+        echo "No new wallpapers found. Resetting used wallpapers."
+        : > "$used_wallpapers_file"
+        chosen=$(cat "$all_file" | shuf -n 1)
+    fi
+    # Set wallpaper to chosen.
+
+    # Clean up temp files
+    rm -f "$all_file" "$used_file"
+
+    # Append and set
+    echo "$chosen" >> "$used_wallpapers_file"
+    feh --bg-scale "$chosen"
+}
+
+
+case "$1" in
+    "")
+        switch_wallpaper
+        ;;
+    delete)
+        delete_wallpaper
+        switch_wallpaper
+        ;;
+    *)
+        echo "Usage: $0 {delete}"
+        exit 1
+        ;;
+esac
+
+# Add to wallpaper script so that it can delete the current wallpaper with an argument.
+# Current wallpaper.
 
 ## alternative script
 # I found this from [[reddit][this reddit post]].  The interesting about it is
