@@ -44,8 +44,8 @@ EOF
 
 # Removing service directory and script
 remove_user_service(){
-    # Unlink the service.
-    # Remove the service directory from the system.
+    echo "Disable the service."
     rm -rf service-dir
+    echo "Delete the service from the system."
 }
 
