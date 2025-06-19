@@ -17,23 +17,35 @@ SERVICE_NAME="runit-user-$USER"
 SERVICE_DIR="/etc/sv/$SERVICE_NAME"
 RUN_SCRIPT="$SERVICE_DIR/run"
 
-# 1. Create the service directory and script
-echo "Creating $SERVICE_NAME..."
-mkdir -p "$SERVICE_DIR"
+create_user_service(){
+    # 1. Create the service directory and script
+    echo "Creating $SERVICE_NAME..."
+    mkdir -p "$SERVICE_DIR"
 
-tee "$RUN_SCRIPT" >/dev/null <<EOF
+    tee "$RUN_SCRIPT" >/dev/null <<EOF
 #!/bin/sh
 exec 2>&1
 exec chpst -u $USER:$USER runsvdir $USER_HOME/runit/service
 EOF
 
-chmod +x "$RUN_SCRIPT"
+    chmod +x "$RUN_SCRIPT"
 
-# Optional: Add logging (e.g., /etc/sv/$SERVICE_NAME/log/run)
-# You could write log output to ~/.local/state/runit-logs or just stdout
+    # Optional: Add logging (e.g., /etc/sv/$SERVICE_NAME/log/run)
+    # You could write log output to ~/.local/state/runit-logs or just stdout
 
-# 2. Enable the service
-echo "Linking $SERVICE_NAME into /var/service..."
-ln -sf "$SERVICE_DIR" /var/service/
+    # 2. Enable the service
+    echo "Linking $SERVICE_NAME into /var/service..."
+    ln -sf "$SERVICE_DIR" /var/service/
 
-echo "$SERVICE_NAME is set up and enabled."
+    echo "$SERVICE_NAME is set up and enabled."
+}
+
+# Also add a way to undo this because who knows I might have to.
+
+# Removing service directory and script
+remove_user_service(){
+    # Unlink the service.
+    # Remove the service directory from the system.
+    rm -rf service-dir
+}
+
