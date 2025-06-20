@@ -1,0 +1,25 @@
+#!/bin/sh
+# Filename: enable_services
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-19 11:41:31
+# Description: Enable the services I use with void.  Note that this must be run
+# with sudo privileges.
+
+enable_void_services() {
+    # Setup network manager.
+    echo "setting up network manager service..."
+    ln -s /etc/sv/NetworkManager /var/service/
+    sv up NetworkManager
+
+    echo "setup mcron..."
+    # Setup ssh-agent.
+    # Check whether the service files are there
+    sv down dhcpd wpa_supplicant
+    rm /var/service/dhcpd /var/service/wpa_supplicant
+    ln -s /etc/sv/NetworkManager /var/service
+    # ln -s /etc/sv/dbus /var/service
+}
+
+disable_void_services() {
+    echo "disabling services..."
+}
