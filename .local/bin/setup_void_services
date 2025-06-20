@@ -9,6 +9,17 @@
 
 set -eu
 
+# Load OS info
+. /etc/os-release 2>/dev/null
+
+# Abort if not Void Linux
+if [ "$ID" != "void" ]; then
+    echo "This script is specific to void linux."
+    exit 1
+fi
+
+# If I am using void linux do not run this.
+
 # User for which to set up the service
 USER="${1:-$USER}"
 USER_HOME="$(eval echo ~$USER)"
