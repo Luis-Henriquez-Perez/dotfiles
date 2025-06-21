@@ -55,7 +55,8 @@ EOF
 # Removing service directory and script
 remove_user_service(){
     echo "Disable the service."
-    rm -rf service-dir
+    echo "Creating $SERVICE_NAME..."
+    rm -rf "$SERVICE_DIR"
     echo "Delete the service from the system."
 }
 
