@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename: setup_void_services
+# Filename: setup_services
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-19 14:15:36
 # Description: Set up a runit service to manage user-specific services for <USER>.
