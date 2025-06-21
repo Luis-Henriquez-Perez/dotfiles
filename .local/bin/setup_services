@@ -59,3 +59,4 @@ remove_user_service(){
     echo "Delete the service from the system."
 }
 
+create_user_service
