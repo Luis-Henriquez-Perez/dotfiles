@@ -11,7 +11,7 @@ enable_void_services() {
     ln -s /etc/sv/NetworkManager /var/service/
     sv up NetworkManager
 
-    echo "setup mcron..."
+    echo "setup ssh-agent..."
     # Setup ssh-agent.
     # Check whether the service files are there
     sv down dhcpd wpa_supplicant
