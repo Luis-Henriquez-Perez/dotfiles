@@ -4,15 +4,8 @@
 # Created: 2024-12-28 17:04:00
 # Description: Run programs & scripts I need for graphical environment.
 
-## Set the wallpaper for the first time
 set_wallpaper &
-## Autostart needed programs
-pidof -sx mpd || mpd &
-pidof -sx picom || picom &
-pidof -sx dunst || dunst &
-# pidof -sx emacs || emacs --daemon &
-pidof -sx mcron || mcron &
-## Remap caps-lock with escape
+
 setxkbmap -option caps:escape
 
 # I broke my super key on my laptop.  This is temporary code to remap it to the
