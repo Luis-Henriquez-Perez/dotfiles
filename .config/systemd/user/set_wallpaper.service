@@ -1,0 +1,5 @@
+[Unit]
+Description=Set wallpaper
+
+[Service]
+ExecStart=%h/.local/bin/set_wallpaper
