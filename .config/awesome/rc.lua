@@ -386,8 +386,8 @@ local function system_suspend ()
     awful.spawn("systemctl suspend")
 end
 
-local function system_suspend ()
-    awful.spawn("systemctl suspend")
+local function system_reboot ()
+    awful.spawn("reboot")
 end
 
 -- Annoyingly the focus after killing a client is moved to a slave instead of
@@ -438,6 +438,7 @@ globalkey({ modkey }, "x", awesome_run_lua_code, "lua execute prompt", "awesome"
 globalkey({ modkey }, "g", awesome_toggle_wibox, "toggle wibox", "awesome")
 
 -- system
+globalkey({ modkey }, "u", system_reboot, "Reboot", "reboot")
 globalkey({ modkey }, "u", system_launch_qutebrowser, "Launch qutebrowser", "system")
 globalkey({ modkey }, "Return", system_launch_terminal, "Launch terminal", "system")
 globalkey({ modkey }, "i", system_launch_firefox, "Launch firefox", "system")
