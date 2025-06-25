@@ -430,7 +430,6 @@ end
 
 -- awesome
 globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
-globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
 globalkey({ modkey, "Control" }, "r", awesome.restart, "reload awesome", "awesome")
 globalkey({ modkey }, "s", hotkeys_popup.show_help, "show help", "awesome")
 globalkey({ modkey }, "w", awesome_main_menu, "show main menu", "awesome")
