@@ -1,0 +1,5 @@
+[Unit]
+Description=Download email
+
+[Service]
+ExecStart=%h/.local/bin/download_email

@@ -1,0 +1,7 @@
+#!/bin/sh
+# Filename: download_email
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-25 08:41:40
+# Description: Download new email.
+
+mbsync -a

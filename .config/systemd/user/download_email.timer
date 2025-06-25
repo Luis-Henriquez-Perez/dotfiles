@@ -1,0 +1,10 @@
+[Unit]
+Description=Run download_email every 5 minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=default.target
