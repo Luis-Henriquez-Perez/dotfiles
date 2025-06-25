@@ -4,7 +4,6 @@ Description=Run set_wallpaper every 5 minutes
 [Timer]
 OnBootSec=1min
 OnUnitActiveSec=5min
-# OnActiveSec=1min
 Persistent=true
 
 [Install]

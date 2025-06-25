@@ -2,7 +2,5 @@
 Description=Set wallpaper
 
 [Service]
-Type=oneshot
 ExecStart=%h/.local/bin/set_wallpaper
 Environment=DISPLAY=:0
-RemainAfterExit=true
