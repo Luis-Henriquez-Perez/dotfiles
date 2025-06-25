@@ -5,3 +5,5 @@
 # Description: Download new email.
 
 mbsync -a
+notmuch new
+mu index
