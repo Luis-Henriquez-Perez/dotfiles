@@ -1,0 +1,35 @@
+#!/bin/sh
+# Filename: webpage_snapshot
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-25 15:34:50
+# Description: Take a snapshot of the current websti.
+
+# Save current page as single HTML file using monolith
+# Usage: qutebrowser will call this with the page URL as $1
+
+URL="$1"
+
+# Set output directory
+SAVE_DIR="$HOME/Documents/web-snapshots"
+mkdir -p "$SAVE_DIR"
+
+# Fetch the page title
+TITLE=$(curl -s "$URL" | sed -n 's:.*<title>\(.*\)</title>.*:\1:p' | tr -d '\n' | tr ' ' '_')
+
+# Fallback if no title found
+if [ -z "$TITLE" ]; then
+    TITLE="snapshot_$(date +%Y-%m-%d_%H-%M-%S)"
+fi
+
+# Output file path
+OUT_FILE="$SAVE_DIR/${TITLE}.html"
+
+# Run monolith
+monolith "$URL" -o "$OUT_FILE"
+
+monolith --no-js --no-fonts --no-css --no-audio $QUTE_URL --output .html
+
+# Optional: Desktop notification (requires notify-send)
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send "Monolith" "Saved: $(basename "$OUT_FILE")"
+fi
