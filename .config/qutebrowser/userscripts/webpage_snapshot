@@ -2,10 +2,7 @@
 # Filename: webpage_snapshot
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-25 15:34:50
-# Description: Take a snapshot of the current websti.
-
-# Save current page as single HTML file using monolith
-# Usage: qutebrowser will call this with the page URL as $1
+# Description: Take a snapshot of the current website.
 
 URL="$QUTE_URL"
 
