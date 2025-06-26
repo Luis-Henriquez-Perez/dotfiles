@@ -1,5 +1,11 @@
 [global]
+background = "#68B351"
+monitor = 0
+follow = keyboard
+height = (0, 750)
+width = (250, 500)
 font = Monospace 18
 padding = 20
 horizontal_padding = 20
+gap_size = 3
 frame_width = 2
