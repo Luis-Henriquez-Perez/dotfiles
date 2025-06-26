@@ -99,7 +99,7 @@ config.bind('<Ctrl+j>', 'set content.javascript.enabled true')
 ### hide titlebars from qutebrowser
 c.window.hide_decoration = True
 ### save with monolith
-config.bind('<Ctrl-S>', 'spawn --userscript webpage-snapshot.hy')
+config.bind('xx', 'spawn --userscript webpage_snapshot')
 ### use old.reddit.com instead of www.reddit.com
 # Reddit is a really bloated site causing it to be super slow despite only
 # needing static output for the most part.
