@@ -7,29 +7,16 @@
 # Save current page as single HTML file using monolith
 # Usage: qutebrowser will call this with the page URL as $1
 
-URL="$1"
+URL="$QUTE_URL"
 
-# Set output directory
-SAVE_DIR="$HOME/Documents/web-snapshots"
+SAVE_DIR="$HOME/Documents/webpage-snapshots"
+
 mkdir -p "$SAVE_DIR"
 
-# Fetch the page title
-TITLE=$(curl -s "$URL" | sed -n 's:.*<title>\(.*\)</title>.*:\1:p' | tr -d '\n' | tr ' ' '_')
+TITLE="$(echo "$URL" | sed 's#[/:*?"<>|.]#_#g')"
 
-# Fallback if no title found
-if [ -z "$TITLE" ]; then
-    TITLE="snapshot_$(date +%Y-%m-%d_%H-%M-%S)"
-fi
+FILENAME="$SAVE_DIR/$TITLE.html"
 
-# Output file path
-OUT_FILE="$SAVE_DIR/${TITLE}.html"
+monolith --no-js --no-fonts --no-css --no-audio "$URL" -o "$FILENAME"
 
-# Run monolith
-monolith "$URL" -o "$OUT_FILE"
-
-monolith --no-js --no-fonts --no-css --no-audio $QUTE_URL --output .html
-
-# Optional: Desktop notification (requires notify-send)
-if command -v notify-send >/dev/null 2>&1; then
-    notify-send "Monolith" "Saved: $(basename "$OUT_FILE")"
-fi
+notify-send "qutebrowser" "snapshoted $URL"

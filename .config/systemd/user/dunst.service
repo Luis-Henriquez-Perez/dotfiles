@@ -1,0 +1,11 @@
+[Unit]
+Description=write this later
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/dunst
+Restart=on-failure
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=default.target
