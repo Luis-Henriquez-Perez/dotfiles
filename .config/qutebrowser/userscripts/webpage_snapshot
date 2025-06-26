@@ -14,6 +14,8 @@ TITLE="$(echo "$URL" | sed 's#[/:*?"<>|.]#_#g')"
 
 FILENAME="$SAVE_DIR/$TITLE.html"
 
-monolith --no-js --no-fonts --no-css --no-audio "$URL" -o "$FILENAME"
+# The notification will be immediate (before the snapshot even finish) and the
+# snapshot will finish silently.
+monolith --no-js --no-fonts --no-css --no-audio "$URL" -o "$FILENAME" &
 
 notify-send "qutebrowser" "snapshoted $URL"
