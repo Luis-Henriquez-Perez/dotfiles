@@ -371,7 +371,7 @@ local function system_take_screenshot()
 end
 
 local function system_launch_emacs ()
-    awful.spawn("emacs")
+    awful.spawn("emacsclient -c -a \"\"")
 end
 
 local function system_launch_firefox ()
