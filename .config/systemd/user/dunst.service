@@ -1,5 +1,5 @@
 [Unit]
-Description=write this later
+Description=Customizable and lightweight notification-daemon
 After=graphical-session.target
 
 [Service]
