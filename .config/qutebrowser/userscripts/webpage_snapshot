@@ -14,6 +14,13 @@ TITLE="$(echo "$URL" | sed 's#[/:*?"<>|.]#_#g')"
 
 FILENAME="$SAVE_DIR/$TITLE.html"
 
+# If a file of the same name exists in the directory, tell me that and abort the
+# web snapshot.
+if [ -f "$FILENAME" ]; then
+    notify-send "qutebrowser" "Snapshot already exists for $URL"
+    exit 1
+fi
+
 # The notification will be immediate (before the snapshot even finish) and the
 # snapshot will finish silently.
 monolith --no-js --no-fonts --no-css --no-audio "$URL" -o "$FILENAME" &
