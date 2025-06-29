@@ -649,6 +649,16 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Focus the master window whenever a client is removed.
+client.connect_signal("unmanage", function(c)
+    local s = c.screen
+    local master = awful.client.getmaster(s)
+    if master and client.focus ~= master then
+        client.focus = master
+        master:raise()
+    end
+end)
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
