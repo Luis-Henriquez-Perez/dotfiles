@@ -3,10 +3,12 @@
 test_wallpaper_dir="$HOME/Pictures/test-wallpapers/"
 nsfw_wallpaper_dir="$HOME/Pictures/nsfw-wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
+# TODO: dynamically get the screen resolution
+# screen_resolution=$(xrandr | awk '/\*/ {print $1}')
 
 # Should be in multiples of 24 (the script downloads wallpapers by page and each
 # page has 24 wallpapers).
-wallpapers_to_download=72
+wallpapers_to_download=24
 
 # Download SFW wallpapers.
 echo "Downloading $wallpapers_to_download SFW wallpapers to $test_wallpaper_dir..."
