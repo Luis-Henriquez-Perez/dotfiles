@@ -17,12 +17,13 @@ delete_wallpaper() {
         return 1
     fi
 
-    mv $FILE "$HOME/$TRASH"
+    mv "$last_wallpaper" "$HOME/Trash"
 
     # Remove the last line from used wallpapers file
     # Safely handles cases with only one line
     tmpfile=$(mktemp)
     head -n -1 "$used_wallpapers_file" > "$tmpfile" && mv "$tmpfile" "$used_wallpapers_file"
+    echo "Moved $last_wallpaper to $HOME/Trash/"
 }
 
 switch_wallpaper() {
@@ -53,14 +54,24 @@ switch_wallpaper() {
     feh --bg-scale "$chosen"
 }
 
+# Save wallpaper under version-control because I like it.
+save_wallpaper() {
+    # Do this from the home directory.
+    git add "$last_wallpaper"
+    git commit -m "Add just this file." "$last_wallpaper"
+    git push
+}
 
 case "$1" in
     "")
         switch_wallpaper
         ;;
-    delete)
+    --delete)
         delete_wallpaper
         switch_wallpaper
+        ;;
+    --save)
+        save_wallpaper
         ;;
     *)
         echo "Usage: $0 {delete}"
