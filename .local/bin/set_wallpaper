@@ -63,9 +63,12 @@ save_wallpaper() {
     # Do this from the home directory.
     git add "$last_wallpaper"
     git commit -m "Add wallpaper: $last_wallpaper." "$last_wallpaper"
-    notify-send "Wallpaper" "Saved $last_wallpaper"
+    notify-send "Wallpaper" "Saved $last_wallpaper!"
     # git push
 }
+
+# When I mark a wallpaper as a favorite wallpaper increase the chances of getting
+# said wallpaper.
 
 case "$1" in
     "")
@@ -77,6 +80,10 @@ case "$1" in
         ;;
     --save)
         save_wallpaper
+        ;;
+    --saveswitch)
+        save_wallpaper
+        switch_wallpaper
         ;;
     *)
         echo "Usage: $0 {delete}"
