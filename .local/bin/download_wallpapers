@@ -19,6 +19,7 @@ echo "Downloading $wallpapers_to_download SFW wallpapers to $test_wallpaper_dir.
     --resolution 1440x900 \
     --parallel 1 \
     --mode random
+> /dev/null 2>&1
 
 # Download NSFW wallpapers into special directory.
 echo "Downloading $wallpapers_to_download NSFW wallpapers to $nsfw_wallpaper_dir..."
@@ -31,6 +32,7 @@ echo "Downloading $wallpapers_to_download NSFW wallpapers to $nsfw_wallpaper_dir
     --resolution 1440x900 \
     --parallel 1 \
     --mode random
+> /dev/null 2>&1
 
 # Ensure NSFW wallpapers are prefixed with "nsfw_" for easier handling.
 for file in "$nsfw_wallpaper_dir"/*; do
