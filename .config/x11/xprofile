@@ -8,6 +8,13 @@ set_wallpaper &
 
 setxkbmap -option caps:escape
 
+# For now enable picom service here.  Using the default systemd targets does not
+# work because picom is started before the graphical xorg session is started.
+# I think I need to create my own.  But anyw fon I just start picom here.
+# Relevant links:
+# https://superuser.com/questions/759759/writing-a-service-that-depends-on-xorg
+picom &
+
 # I broke my super key on my laptop.  This is temporary code to remap it to the
 # left alt key.
 if [ "$(cat /etc/hostname)" = "deathscythe" ]; then
