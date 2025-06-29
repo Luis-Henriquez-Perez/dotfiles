@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# This script is meant to automate the downloading of wallpapers.  When I run
-# low on wallpapers, it will download wallpapers for me.
-
 wallpaper_dir="$HOME/Pictures/test-wallpapers/"
+nsfw_wallpaper_dir="$HOME/Pictures/nsfw-wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
 
@@ -34,15 +32,22 @@ echo "Downloading $wallpapers_to_download wallpapers..."
     --mode random
 
 # Download NSFW wallpapers into special directory.
-echo "Downloading NSFW $wallpapers_to_download wallpapers..."
+echo "Downloading NSFW $nsfw_wallpapers_to_download wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
-    --filter 110 \
+    --filter 111 \
     --location "$wallpaper_dir" \
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
     --parallel 1 \
     --mode random
+
+# Ensure NSFW wallpapers are prefixed with "NSFW" for easier handling.
+# Rename wallpapers...
+
+for f in *; do
+  [ -f "$f" ] && mv -- "$f" "NSFW-$f"
+done
 
 wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
