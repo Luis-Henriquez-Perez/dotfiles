@@ -3,23 +3,10 @@
 wallpaper_dir="$HOME/Pictures/test-wallpapers/"
 nsfw_wallpaper_dir="$HOME/Pictures/nsfw-wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
-wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
 
-# The script can only download wallpapers in multiples of 24.  So I only
-# download more wallpapers if the wallpaper count goes below a certain
-# threshold.  By the way I am not sure why it needs the multiples of 24.  I do
-# not know what would happen if I changed =THUMBS= to 1 and tried specifying the
-# count to something else.
-BASE=24
-wallpaper_max=$(( "$BASE" * 6 )) # 144 wallpapers
-wallpaper_diff=$(( wallpaper_max - wallpaper_count))
-wallpapers_to_download=$(( "$wallpaper_diff" / "$BASE" * "$BASE" ))
+wallpapers_to_download=72
 
-echo "There are currently $wallpaper_count wallpapers in $wallpaper_dir"
-echo "This is $wallpaper_diff less than the $wallpaper_max."
-echo "Therefore I am installing $wallpapers_to_download (* (/ $wallpaper_diff $BASE ) $BASE) wallpapers."
-
-# Download sfw walpapers.
+# Download SFW walpapers.
 echo "Downloading $wallpapers_to_download wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
@@ -44,8 +31,6 @@ echo "Downloading NSFW $nsfw_wallpapers_to_download wallpapers..."
     --mode random
 
 # Ensure NSFW wallpapers are prefixed with "NSFW" for easier handling.
-# Rename wallpapers...
-
 for f in *; do
   [ -f "$f" ] && mv -- "$f" "NSFW-$f"
 done
