@@ -9,13 +9,11 @@ wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 wallpapers_to_download=72
 
 # Download SFW wallpapers.
-echo "Downloading $wallpapers_to_download SFW wallpapers..."
+echo "Downloading $wallpapers_to_download SFW wallpapers to $test_wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
-    # no NSFW posts.
     --filter 110 \
     --location "$test_wallpaper_dir" \
-    # No anime
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
@@ -23,20 +21,18 @@ echo "Downloading $wallpapers_to_download SFW wallpapers..."
     --mode random
 
 # Download NSFW wallpapers into special directory.
-echo "Downloading $wallpapers_to_download NSFW wallpapers..."
+echo "Downloading $wallpapers_to_download NSFW wallpapers to $nsfw_wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
-    # Include NSFW posts.
     --filter 111 \
     --location "$nsfw_wallpaper_dir" \
-    # No anime.
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
     --parallel 1 \
     --mode random
 
-# Ensure NSFW wallpapers are prefixed with "NSFW" for easier handling.
+# Ensure NSFW wallpapers are prefixed with "nsfw_" for easier handling.
 for file in "$nsfw_wallpaper_dir"/*; do
 
     [ -f "$file" ] || continue
