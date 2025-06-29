@@ -23,12 +23,13 @@ echo "Downloading $wallpapers_to_download SFW wallpapers..."
     --mode random
 
 # Download NSFW wallpapers into special directory.
-echo "Downloading $nsfw_wallpapers_to_download NSFW wallpapers..."
+echo "Downloading $wallpapers_to_download NSFW wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
     # Include NSFW posts.
     --filter 111 \
     --location "$nsfw_wallpaper_dir" \
+    # No anime.
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
@@ -37,6 +38,9 @@ echo "Downloading $nsfw_wallpapers_to_download NSFW wallpapers..."
 
 # Ensure NSFW wallpapers are prefixed with "NSFW" for easier handling.
 for file in "$nsfw_wallpaper_dir"/*; do
+
+    [ -f "$file" ] || continue
+
     # Get the filename without the path
     filename=$(basename "$file")
 
