@@ -17,6 +17,7 @@ delete_wallpaper() {
         return 1
     fi
 
+    notify-send "Wallpaper" "Deleted $last_wallpaper..."
     mv "$last_wallpaper" "$HOME/Trash"
 
     # Remove the last line from used wallpapers file
@@ -49,6 +50,9 @@ switch_wallpaper() {
     # Clean up temp files
     rm -f "$all_file" "$used_file"
 
+    # If I am version controlling the pckture, remove it from version-control.
+    # notify-send "Switched wallpaper to $chosen!"
+
     # Append and set
     echo "$chosen" >> "$used_wallpapers_file"
     feh --bg-scale "$chosen"
@@ -58,8 +62,9 @@ switch_wallpaper() {
 save_wallpaper() {
     # Do this from the home directory.
     git add "$last_wallpaper"
-    git commit -m "Add just this file." "$last_wallpaper"
-    git push
+    git commit -m "Add wallpaper: $last_wallpaper." "$last_wallpaper"
+    notify-send "Wallpaper" "Saved $last_wallpaper"
+    # git push
 }
 
 case "$1" in
