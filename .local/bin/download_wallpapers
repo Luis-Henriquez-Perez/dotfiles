@@ -25,7 +25,7 @@ echo "Downloading NSFW $nsfw_wallpapers_to_download wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
     --filter 111 \
-    --location "$wallpaper_dir" \
+    --location "$nsfw_wallpaper_dir" \
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
