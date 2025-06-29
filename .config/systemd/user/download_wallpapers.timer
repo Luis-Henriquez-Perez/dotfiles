@@ -1,0 +1,9 @@
+[Unit]
+Description=Download new wallpaers every week
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
