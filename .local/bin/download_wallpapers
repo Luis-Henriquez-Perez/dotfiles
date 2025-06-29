@@ -12,8 +12,10 @@ wallpapers_to_download=72
 echo "Downloading $wallpapers_to_download SFW wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
+    # no NSFW posts.
     --filter 110 \
     --location "$test_wallpaper_dir" \
+    # No anime
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
@@ -24,6 +26,7 @@ echo "Downloading $wallpapers_to_download SFW wallpapers..."
 echo "Downloading $nsfw_wallpapers_to_download NSFW wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
+    # Include NSFW posts.
     --filter 111 \
     --location "$nsfw_wallpaper_dir" \
     --categories 101 \
