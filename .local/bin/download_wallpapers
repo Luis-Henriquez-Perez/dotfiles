@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 wallpaper_dir="$HOME/Pictures/test-wallpapers/"
 nsfw_wallpaper_dir="$HOME/Pictures/nsfw-wallpapers/"
