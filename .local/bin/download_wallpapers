@@ -39,11 +39,11 @@ for file in "$nsfw_wallpaper_dir"/*; do
 
     # Skip if it's already prefixed with "NSFW_"
     case "$filename" in
-        NSFW_*) continue ;;
+        nsfw_*) continue ;;
     esac
 
     # Get the full path of the new filename
-    newname="$nsfw_wallpaper_dir/NSFW_$filename"
+    newname="$nsfw_wallpaper_dir/nsfw_$filename"
 
     # Rename the file
     mv -- "$file" "$newname"
