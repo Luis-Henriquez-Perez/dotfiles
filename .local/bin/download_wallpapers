@@ -7,7 +7,7 @@ wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 # Should be in multiples of 24.
 wallpapers_to_download=72
 
-# Download SFW walpapers.
+# Download SFW wallpapers.
 echo "Downloading $wallpapers_to_download wallpapers..."
 "$wallpaper_download_script" \
     --number "$wallpapers_to_download" \
@@ -32,8 +32,18 @@ echo "Downloading NSFW $nsfw_wallpapers_to_download wallpapers..."
     --mode random
 
 # Ensure NSFW wallpapers are prefixed with "NSFW" for easier handling.
-for f in *; do
-  [ -f "$f" ] && mv -- "$f" "NSFW-$f"
-done
+for file in "$nsfw_wallpaper_dir"/*; do
+    # Get the filename without the path
+    filename=$(basename "$file")
 
-wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
+    # Skip if it's already prefixed with "NSFW_"
+    case "$filename" in
+        NSFW_*) continue ;;
+    esac
+
+    # Get the full path of the new filename
+    newname="$nsfw_wallpaper_dir/NSFW_$filename"
+
+    # Rename the file
+    mv -- "$file" "$newname"
+done
