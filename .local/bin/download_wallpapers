@@ -4,6 +4,7 @@ wallpaper_dir="$HOME/Pictures/test-wallpapers/"
 nsfw_wallpaper_dir="$HOME/Pictures/nsfw-wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 
+# Should be in multiples of 24.
 wallpapers_to_download=72
 
 # Download SFW walpapers.
