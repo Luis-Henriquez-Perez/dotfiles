@@ -3,5 +3,3 @@ Description=Download wallpapers
 
 [Service]
 ExecStart=%h/.local/bin/download_wallpapers
-
-[]
