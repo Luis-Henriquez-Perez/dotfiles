@@ -3,7 +3,7 @@
 # This script is meant to automate the downloading of wallpapers.  When I run
 # low on wallpapers, it will download wallpapers for me.
 
-wallpaper_dir="$HOME/Pictures/wallpapers/"
+wallpaper_dir="$HOME/Pictures/test-wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
 
@@ -21,19 +21,28 @@ echo "There are currently $wallpaper_count wallpapers in $wallpaper_dir"
 echo "This is $wallpaper_diff less than the $wallpaper_max."
 echo "Therefore I am installing $wallpapers_to_download (* (/ $wallpaper_diff $BASE ) $BASE) wallpapers."
 
-if [ "$wallpapers_to_download" -gt 0 ]; then
-    echo "Downloading $wallpapers_to_download wallpapers..."
-    "$wallpaper_download_script" \
-        --number "$wallpapers_to_download" \
-        --filter 110 \
-        --location "$wallpaper_dir" \
-        --categories 101 \
-        --type standard \
-        --resolution 1440x900 \
-        --parallel 1 \
-        --mode random
-    wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
-    echo "There are now $wallpaper_count wallpapers."
-else
-    echo "There are wallpapers. Current count: $wallpaper_count"
-fi
+# Download sfw walpapers.
+echo "Downloading $wallpapers_to_download wallpapers..."
+"$wallpaper_download_script" \
+    --number "$wallpapers_to_download" \
+    --filter 110 \
+    --location "$wallpaper_dir" \
+    --categories 101 \
+    --type standard \
+    --resolution 1440x900 \
+    --parallel 1 \
+    --mode random
+
+# Download NSFW wallpapers into special directory.
+echo "Downloading NSFW $wallpapers_to_download wallpapers..."
+"$wallpaper_download_script" \
+    --number "$wallpapers_to_download" \
+    --filter 110 \
+    --location "$wallpaper_dir" \
+    --categories 101 \
+    --type standard \
+    --resolution 1440x900 \
+    --parallel 1 \
+    --mode random
+
+wallpaper_count=$(find "$wallpaper_dir" -type f \( -name "*.jpg" -o -name "*.png" \) | wc -l)
