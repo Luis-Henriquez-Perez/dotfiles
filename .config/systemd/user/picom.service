@@ -1,11 +1,12 @@
 [Unit]
 Description=Picom compositor
-After=graphical-session.target
+Requires=graphical.target
+After=graphical.target
 
 [Service]
-ExecStart=/usr/bin/picom --config=%h/.config/picom/picom.conf
+ExecStart=/usr/bin/picom
 Restart=on-failure
 Environment=DISPLAY=:0
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
