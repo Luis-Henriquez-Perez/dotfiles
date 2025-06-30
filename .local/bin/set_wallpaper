@@ -70,6 +70,13 @@ save_wallpaper() {
     # git push
 }
 
+# There are some wallpapers that although not having explicit nudity I would
+# consider inappropriate for a work setting and most public settings.  This is a
+# way I can mark said wallpapers.
+# mark_as_nsfw() {
+#     mv wpp nsfw_wpp
+# }
+
 # When I mark a wallpaper as a favorite wallpaper increase the chances of getting
 # said wallpaper.
 
