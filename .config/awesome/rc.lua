@@ -428,11 +428,21 @@ local function awesome_toggle_wibox ()
     end
 end
 
+-- I remember way back when I had a mac that it had this functionality to swipe
+-- The windows to the sides of the screen and thus showing the desktop.  This is
+-- what i wanna do because sometimes I want to see the desktop.
+local function system_switch_wallpaper ()
+    awful.spawn("set_wallpaper", false)
+end
+
+local function system_delete_wallpaper ()
+    awful.spawn("set_wallpaper --delete", false)
+end
+
 -- awesome
 globalkey({ modkey, "Shift" }, "q", awesome.quit, "quit awesome", "awesome")
 globalkey({ modkey, "Control" }, "r", awesome.restart, "reload awesome", "awesome")
 globalkey({ modkey }, "s", hotkeys_popup.show_help, "show help", "awesome")
-globalkey({ modkey }, "w", awesome_main_menu, "show main menu", "awesome")
 globalkey({ modkey }, "x", awesome_run_lua_code, "lua execute prompt", "awesome")
 globalkey({ modkey }, "g", awesome_toggle_wibox, "toggle wibox", "awesome")
 
@@ -443,6 +453,9 @@ globalkey({ modkey }, "Return", system_launch_terminal, "Launch terminal", "syst
 globalkey({ modkey }, "i", system_launch_firefox, "Launch firefox", "system")
 globalkey({ modkey }, "e", system_launch_emacs, "Launch emacs", "system")
 globalkey({ modkey }, "p", system_take_screenshot, "Take Screenshot", "system")
+globalkey({ modkey }, "a", system_switch_wallpaper, "Switch wallpaper", "system")
+globalkey({ modkey }, "w", system_switch_wallpaper, "Switch wallpaper", "system")
+globalkey({ modkey }, "d", system_delete_wallpaper, "Delete current wallpaper", "system")
 globalkey({ modkey, "Shift" }, "s" , system_suspend, "suspend", "system")
 
 -- client
