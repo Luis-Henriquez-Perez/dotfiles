@@ -16,7 +16,10 @@ delete_wallpaper() {
         echo "No wallpaper to delete."
         return 1
     fi
-
+    # # Make a deleted wallpaper directory just so things are neater.  I can go to
+    # # just one dedicated directory to find all the wallpapers I deleted instead of
+    # # scowering my trash directory.
+    # mkdir -p ""
     notify-send "Wallpaper" "Deleted $last_wallpaper..."
     mv "$last_wallpaper" "$HOME/Trash"
 
