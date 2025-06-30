@@ -19,6 +19,7 @@ tmp_sketchy=$(mktemp -d)
 tmp_nsfw=$(mktemp -d)
 
 cleanup() {
+    echo "Cleaning up temp directories..."
     rm -rf "$tmp_sfw" "$tmp_sketchy" "$tmp_nsfw"
 }
 
@@ -28,22 +29,22 @@ move_and_rename() {
 
     for file in "$temp_dir"/*; do
 
-        [ -f "$file" ] || continue
-
         # Get the filename without the path
         base=$(basename "$file")
 
         # Get the full path of the new filename
-        newname="$wallpaper_dir/$prefix_$base"
+        newname="$wallpaper_dir${prefix}_$base"
 
         # Rename the file
+        echo "Renaming file with $prefix from $file to $newname..."
         mv -- "$file" "$newname"
     done
 }
 
 # Download SFW wallpapers.
 echo "Downloading $wallpaper_number SFW wallpapers to $wallpaper_dir..."
-"$wallpaper_download_script" \
+{
+    "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 100 \
     --location "$tmp_sfw" \
@@ -52,11 +53,12 @@ echo "Downloading $wallpaper_number SFW wallpapers to $wallpaper_dir..."
     --resolution "$resolution" \
     --parallel 1 \
     --mode random
-> /dev/null 2>&1
+} > /dev/null 2>&1
 
 # Put them in a temp directory and then rename all the files to have the prefix sketchy-.
 echo "Downloading $wallpaper_number sketchy wallpapers to $wallpaper_dir..."
-"$wallpaper_download_script" \
+{
+    "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 010 \
     --location "$tmp_sketchy" \
@@ -65,11 +67,12 @@ echo "Downloading $wallpaper_number sketchy wallpapers to $wallpaper_dir..."
     --resolution "$resolution" \
     --parallel 1 \
     --mode random
-> /dev/null 2>&1
+} > /dev/null 2>&1
 
 # Download NSFW wallpapers into special directory.
 echo "Downloading $wallpaper_number NSFW wallpapers to $wallpaper_dir..."
-"$wallpaper_download_script" \
+{
+    "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 001 \
     --location "$tmp_nsfw" \
@@ -78,7 +81,7 @@ echo "Downloading $wallpaper_number NSFW wallpapers to $wallpaper_dir..."
     --resolution "$resolution" \
     --parallel 1 \
     --mode random
-> /dev/null 2>&1
+} > /dev/null 2>&1
 
 move_and_rename "$tmp_sfw" "sfw"
 move_and_rename "$tmp_sketchy" "sketchy"
