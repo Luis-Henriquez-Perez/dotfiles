@@ -18,25 +18,23 @@ tmp_sfw=$(mktemp -d)
 tmp_sketchy=$(mktemp -d)
 tmp_nsfw=$(mktemp -d)
 
+cleanup() {
+    rm -rf "$tmp_sfw" "$tmp_sketchy" "$tmp_nsfw"
+}
+
 move_and_rename() {
     temp_dir=$1
     prefix=$2
 
-    # Ensure NSFW wallpapers are prefixed with "nsfw_" for easier handling.
     for file in "$temp_dir"/*; do
 
         [ -f "$file" ] || continue
 
         # Get the filename without the path
-        filename=$(basename "$file")
-
-        # Skip if it's already prefixed with "NSFW_"
-        case "$filename" in
-            nsfw_*) continue ;;
-        esac
+        base=$(basename "$file")
 
         # Get the full path of the new filename
-        newname="$nsfw_wallpaper_dir/nsfw_$filename"
+        newname="$wallpaper_dir/$prefix_$base"
 
         # Rename the file
         mv -- "$file" "$newname"
@@ -44,7 +42,7 @@ move_and_rename() {
 }
 
 # Download SFW wallpapers.
-echo "Downloading $wallpaper_number SFW wallpapers to $test_wallpaper_dir..."
+echo "Downloading $wallpaper_number SFW wallpapers to $wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 100 \
@@ -57,7 +55,7 @@ echo "Downloading $wallpaper_number SFW wallpapers to $test_wallpaper_dir..."
 > /dev/null 2>&1
 
 # Put them in a temp directory and then rename all the files to have the prefix sketchy-.
-echo "Downloading $wallpaper_number sketchy wallpapers to $nsfw_wallpaper_dir..."
+echo "Downloading $wallpaper_number sketchy wallpapers to $wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 010 \
@@ -70,7 +68,7 @@ echo "Downloading $wallpaper_number sketchy wallpapers to $nsfw_wallpaper_dir...
 > /dev/null 2>&1
 
 # Download NSFW wallpapers into special directory.
-echo "Downloading $wallpaper_number NSFW wallpapers to $nsfw_wallpaper_dir..."
+echo "Downloading $wallpaper_number NSFW wallpapers to $wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 001 \
@@ -82,6 +80,9 @@ echo "Downloading $wallpaper_number NSFW wallpapers to $nsfw_wallpaper_dir..."
     --mode random
 > /dev/null 2>&1
 
-move_and_rename "$tmp_sfw" "sfw_"
-move_and_rename "$tmp_sketchy" "sketchy_"
-move_and_rename "$tmp_nsfw" "nsfw_"
+move_and_rename "$tmp_sfw" "sfw"
+move_and_rename "$tmp_sketchy" "sketchy"
+move_and_rename "$tmp_nsfw" "nsfw"
+
+trap cleanup EXIT
+
