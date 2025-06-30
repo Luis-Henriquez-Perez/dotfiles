@@ -2,6 +2,7 @@
 
 # Directory containing wallpapers
 wallpaper_dir="$HOME/Pictures/wallpapers"
+trash="$HOME/Trash"
 used_wallpapers_file="$HOME/.cache/used_wallpapers_file"
 
 # Ensure the used wallpapers file exists
@@ -20,14 +21,13 @@ delete_wallpaper() {
     # # just one dedicated directory to find all the wallpapers I deleted instead of
     # # scowering my trash directory.
     # mkdir -p ""
-    notify-send "Wallpaper" "Deleted $last_wallpaper..."
-    mv "$last_wallpaper" "$HOME/Trash"
-
     # Remove the last line from used wallpapers file
-    # Safely handles cases with only one line
     tmpfile=$(mktemp)
-    head -n -1 "$used_wallpapers_file" > "$tmpfile" && mv "$tmpfile" "$used_wallpapers_file"
-    echo "Moved $last_wallpaper to $HOME/Trash/"
+    sed '$d' "$used_wallpapers_file" > "$tmpfile" && mv "$tmpfile" "$used_wallpapers_file"
+
+    mv "$last_wallpaper" "$trash"
+    echo "Moved $last_wallpaper to $trash"
+    notify-send "Wallpaper" "Deleted $last_wallpaper..."
 }
 
 switch_wallpaper() {
