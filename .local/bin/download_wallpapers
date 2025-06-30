@@ -6,8 +6,9 @@
 # isolated or mixed up I will know what kind of wallpaper it is.
 wallpaper_dir="$HOME/Pictures/wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
+resolution=$(xrandr | awk '/\*/ {print $1}')
 # TODO: dynamically get the screen resolution
-# screen_resolution=$(xrandr | awk '/\*/ {print $1}')
+# screen_resolution=
 
 # Should be in multiples of 24 (the script downloads wallpapers by page and each
 # page has 24 wallpapers).
@@ -18,6 +19,28 @@ tmp_sketchy=$(mktemp -d)
 tmp_nsfw=$(mktemp -d)
 
 move_and_rename() {
+    temp_dir=$1
+    prefix=$2
+
+    # Ensure NSFW wallpapers are prefixed with "nsfw_" for easier handling.
+    for file in "$temp_dir"/*; do
+
+        [ -f "$file" ] || continue
+
+        # Get the filename without the path
+        filename=$(basename "$file")
+
+        # Skip if it's already prefixed with "NSFW_"
+        case "$filename" in
+            nsfw_*) continue ;;
+        esac
+
+        # Get the full path of the new filename
+        newname="$nsfw_wallpaper_dir/nsfw_$filename"
+
+        # Rename the file
+        mv -- "$file" "$newname"
+    done
 }
 
 # Download SFW wallpapers.
@@ -28,7 +51,7 @@ echo "Downloading $wallpaper_number SFW wallpapers to $test_wallpaper_dir..."
     --location "$tmp_sfw" \
     --categories 101 \
     --type standard \
-    --resolution 1440x900 \
+    --resolution "$resolution" \
     --parallel 1 \
     --mode random
 > /dev/null 2>&1
@@ -41,7 +64,7 @@ echo "Downloading $wallpaper_number sketchy wallpapers to $nsfw_wallpaper_dir...
     --location "$tmp_sketchy" \
     --categories 101 \
     --type standard \
-    --resolution 1440x900 \
+    --resolution "$resolution" \
     --parallel 1 \
     --mode random
 > /dev/null 2>&1
@@ -54,27 +77,11 @@ echo "Downloading $wallpaper_number NSFW wallpapers to $nsfw_wallpaper_dir..."
     --location "$tmp_nsfw" \
     --categories 101 \
     --type standard \
-    --resolution 1440x900 \
+    --resolution "$resolution" \
     --parallel 1 \
     --mode random
 > /dev/null 2>&1
 
-# Ensure NSFW wallpapers are prefixed with "nsfw_" for easier handling.
-for file in "$nsfw_wallpaper_dir"/*; do
-
-    [ -f "$file" ] || continue
-
-    # Get the filename without the path
-    filename=$(basename "$file")
-
-    # Skip if it's already prefixed with "NSFW_"
-    case "$filename" in
-        nsfw_*) continue ;;
-    esac
-
-    # Get the full path of the new filename
-    newname="$nsfw_wallpaper_dir/nsfw_$filename"
-
-    # Rename the file
-    mv -- "$file" "$newname"
-done
+move_and_rename "$tmp_sfw" "sfw_"
+move_and_rename "$tmp_sketchy" "sketchy_"
+move_and_rename "$tmp_nsfw" "nsfw_"
