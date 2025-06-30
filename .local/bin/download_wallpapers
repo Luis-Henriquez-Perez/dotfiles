@@ -79,5 +79,9 @@ move_and_rename "$tmp_sfw" "sfw"
 move_and_rename "$tmp_sketchy" "sketchy"
 move_and_rename "$tmp_nsfw" "nsfw"
 
+# Delete duplicate images in the wallpaper directory even if they have different
+# names.
+fdupes -dN "$wallpaper_dir"
+
 trap cleanup EXIT
 

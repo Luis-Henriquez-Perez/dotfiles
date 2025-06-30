@@ -1,19 +1,33 @@
 #!/bin/sh
-# Filename: clean_trash.sh
+# Filename: clean_system
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-30 09:22:54
 # Description: Clean up my trash.
 
-echo "Removing some old wallpapers."
+echo "Deleting some old wallpapers."
 find "$HOME/Trash" -type f \( -name 'wallhaven-*.jpg' -o -name 'wallhaven-*.png' \) -exec rm -- {} +
 
-echo "🐍 Removing __pycache__ directories..."
+echo "Deleting __pycache__ directories..."
 find "$trash_dir" -type d -name '__pycache__' -exec rm -rf {} +
 
-echo "📦 Removing Python compiled files (.pyc, .pyo)..."
+echo "Deleting Python compiled files (.pyc, .pyo)..."
 find "$trash_dir" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
 find "$trash_dir" -type f \( -name '*.elc' \) -exec rm -- {} +
 
-echo "🕰  Removing very old files (>90 days)..."
+echo "Deleting empty directories..."
+find "$trash_dir" -type d -empty -exec rmdir -- {} +
+
+# Delete one third of very old files until there eare fewer than 20 awp, delete
+# them all.
+echo "Deleting very old files (>90 days)..."
 find "$trash_dir" -type f -mtime +90 -exec rm -- {} +
 find "$trash_dir" -type d -empty -mtime +90 -exec rmdir {} +
+
+# Clean up old logs.
+journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+
+# Delete old files in cache.
+# sudo rm -rf ~/.cache/*                 # clean user cache
+# sudo rm -rf /var/cache/*               # clean system cache (with care)
+
+# Delete broken symlinks
