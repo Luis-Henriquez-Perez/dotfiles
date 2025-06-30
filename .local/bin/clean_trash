@@ -1,0 +1,19 @@
+#!/bin/sh
+# Filename: clean_trash.sh
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-30 09:22:54
+# Description: Clean up my trash.
+
+echo "Removing some old wallpapers."
+find "$HOME/Trash" -type f \( -name 'wallhaven-*.jpg' -o -name 'wallhaven-*.png' \) -exec rm -- {} +
+
+echo "🐍 Removing __pycache__ directories..."
+find "$trash_dir" -type d -name '__pycache__' -exec rm -rf {} +
+
+echo "📦 Removing Python compiled files (.pyc, .pyo)..."
+find "$trash_dir" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
+find "$trash_dir" -type f \( -name '*.elc' \) -exec rm -- {} +
+
+echo "🕰  Removing very old files (>90 days)..."
+find "$trash_dir" -type f -mtime +90 -exec rm -- {} +
+find "$trash_dir" -type d -empty -mtime +90 -exec rmdir {} +
