@@ -1,8 +1,8 @@
 [Unit]
-Description=Download new wallpaers every week
+Description=Download new wallpapers once a day
 
 [Timer]
-OnCalendar=weekly
+OnCalendar=daily
 Persistent=true
 
 [Install]
