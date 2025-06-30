@@ -1,14 +1,8 @@
 #!/bin/sh
 
-# I struggled with the choise of whether to make 3 separate directories for SFW,
-# sketch, and NSFW wallpapers or whether to just prefix their names.  In the end
-# I decided to just prefix their names, this way even if I accidentally get them
-# isolated or mixed up I will know what kind of wallpaper it is.
 wallpaper_dir="$HOME/Pictures/wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 resolution=$(xrandr | awk '/\*/ {print $1}')
-# TODO: dynamically get the screen resolution
-# screen_resolution=
 
 # Should be in multiples of 24 (the script downloads wallpapers by page and each
 # page has 24 wallpapers).
@@ -36,7 +30,7 @@ move_and_rename() {
         newname="$wallpaper_dir${prefix}_$base"
 
         # Rename the file
-        echo "Renaming file with $prefix from $file to $newname..."
+        # echo "Renaming file with $prefix from $file to $newname..."
         mv -- "$file" "$newname"
     done
 }
@@ -55,7 +49,6 @@ echo "Downloading $wallpaper_number SFW wallpapers to $wallpaper_dir..."
     --mode random
 } > /dev/null 2>&1
 
-# Put them in a temp directory and then rename all the files to have the prefix sketchy-.
 echo "Downloading $wallpaper_number sketchy wallpapers to $wallpaper_dir..."
 {
     "$wallpaper_download_script" \
@@ -69,7 +62,6 @@ echo "Downloading $wallpaper_number sketchy wallpapers to $wallpaper_dir..."
     --mode random
 } > /dev/null 2>&1
 
-# Download NSFW wallpapers into special directory.
 echo "Downloading $wallpaper_number NSFW wallpapers to $wallpaper_dir..."
 {
     "$wallpaper_download_script" \
