@@ -13,12 +13,19 @@ wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 # page has 24 wallpapers).
 wallpaper_number=24
 
+tmp_sfw=$(mktemp -d)
+tmp_sketchy=$(mktemp -d)
+tmp_nsfw=$(mktemp -d)
+
+move_and_rename() {
+}
+
 # Download SFW wallpapers.
 echo "Downloading $wallpaper_number SFW wallpapers to $test_wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 100 \
-    --location "$wallpaper_dir" \
+    --location "$tmp_sfw" \
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
@@ -31,7 +38,7 @@ echo "Downloading $wallpaper_number sketchy wallpapers to $nsfw_wallpaper_dir...
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 010 \
-    --location "$wallpaper_dir" \
+    --location "$tmp_sketchy" \
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
@@ -44,7 +51,7 @@ echo "Downloading $wallpaper_number NSFW wallpapers to $nsfw_wallpaper_dir..."
 "$wallpaper_download_script" \
     --number "$wallpaper_number" \
     --filter 001 \
-    --location "$wallpaper_dir" \
+    --location "$tmp_nsfw" \
     --categories 101 \
     --type standard \
     --resolution 1440x900 \
