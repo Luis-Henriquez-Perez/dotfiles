@@ -70,8 +70,8 @@ save_wallpaper() {
     # git push
 }
 
-switch_to_previous_wallpaper() {
-}
+# switch_to_previous_wallpaper() {
+# }
 
 # There are some wallpapers that although not having explicit nudity I would
 # consider inappropriate for a work setting and most public settings.  This is a
