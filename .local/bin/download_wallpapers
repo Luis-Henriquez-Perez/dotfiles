@@ -3,6 +3,8 @@
 wallpaper_dir="$HOME/Pictures/wallpapers/"
 wallpaper_download_script="$HOME/Downloads/wallhaven-downloader/wallhaven.sh"
 resolution=$(xrandr | awk '/\*/ {print $1}')
+download_file="$wallpaper_dir/downloaded.txt"
+cookie_file="$wallpaper_dir/cookies.txt"
 
 # Should be in multiples of 24 (the script downloads wallpapers by page and each
 # page has 24 wallpapers).
@@ -22,7 +24,8 @@ move_and_rename() {
     prefix=$2
 
     for file in "$temp_dir"/*; do
-
+        #download_file="$wallpaper_dir/downloaded.txt"
+        #cookie_file="$wallpaper_dir/cookies.txt"
         # Get the filename without the path
         base=$(basename "$file")
 
@@ -81,12 +84,10 @@ move_and_rename "$tmp_nsfw" "nsfw"
 
 # Remove the text files the wallpaper script creates.
 echo "Clean up residue files."
-rm downloaded.txt
-rm cookies.txt
 
 # Delete duplicate images in the wallpaper directory even if they have different
 # names.
-fdupes -dN "$wallpaper_dir"
+fdupes -dN "$wallpaper_dir" > /dev/null 2>&1
 
 trap cleanup EXIT
 
