@@ -1,0 +1,9 @@
+[Unit]
+Description=Clean system once a week
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
