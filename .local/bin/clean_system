@@ -4,27 +4,32 @@
 # Created: 2025-06-30 09:22:54
 # Description: Clean up my trash.
 
-echo "Deleting some old wallpapers."
+trash="$HOME/Trash/"
+
+# Delete the oldest fifth of wallpapers.
+echo "Deleting old wallpapers."
 find "$HOME/Trash" -type f \( -name 'wallhaven-*.jpg' -o -name 'wallhaven-*.png' \) -exec rm -- {} +
 
 echo "Deleting __pycache__ directories..."
-find "$trash_dir" -type d -name '__pycache__' -exec rm -rf {} +
+find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
 
 echo "Deleting Python compiled files (.pyc, .pyo)..."
-find "$trash_dir" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
-find "$trash_dir" -type f \( -name '*.elc' \) -exec rm -- {} +
+find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
+
+echo "deleting any elisp comiled files..."
+find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
 
 echo "Deleting empty directories..."
-find "$trash_dir" -type d -empty -exec rmdir -- {} +
+find "$trash" -type d -empty -exec rmdir -- {} +
 
-# Delete one third of very old files until there eare fewer than 20 awp, delete
+# Delete one third of very old files until there are fewer than 20 awp, delete
 # them all.
 echo "Deleting very old files (>90 days)..."
-find "$trash_dir" -type f -mtime +90 -exec rm -- {} +
-find "$trash_dir" -type d -empty -mtime +90 -exec rmdir {} +
+find "$trash" -type f -mtime +90 -exec rm -- {} +
+find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 
 # Clean up old logs.
-journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+# journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
 
 # Delete old files in cache.
 # sudo rm -rf ~/.cache/*                 # clean user cache
