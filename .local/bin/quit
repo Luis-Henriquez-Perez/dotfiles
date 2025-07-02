@@ -1,19 +1,19 @@
-#!/bin/bash
+#!/bin/sh
 
-chosen=$(echo -e "[Cancel]\nShutdown\nLogout\nReboot\nSuspend\nHibernate\nHybrid-sleep\nSuspend-then-hibernate" | rofi -dmenu -i -no-fixed-num-lines -p "What do you want to do?")
+chosen=$(printf "%s\n" "[Cancel]" "Shutdown" "Logout" "Reboot" "Suspend" "Hibernate" "Hybrid-sleep" "Suspend-then-hibernate" | rofi -dmenu -i -no-fixed-num-lines -p "What do you want to do?")
 
-if [[ $chosen = "Shutdown" ]]; then
+if [ "$chosen" = "Shutdown" ]; then
     systemctl poweroff
-elif [[ $chosen = "Logout" ]]; then
+elif [ "$chosen" = "Logout" ]; then
     jwm -exit
-elif [[ $chosen = "Reboot" ]]; then
+elif [ "$chosen" = "Reboot" ]; then
     systemctl reboot
-elif [[ $chosen = "Suspend" ]]; then
+elif [ "$chosen" = "Suspend" ]; then
     systemctl suspend
-elif [[ $chosen = "Hibernate" ]]; then
+elif [ "$chosen" = "Hibernate" ]; then
     systemctl hibernate
-elif [[ $chosen = "Hybrid-sleep" ]]; then
+elif [ "$chosen" = "Hybrid-sleep" ]; then
     systemctl hibernate
-elif [[ $chosen = "Suspend-then-hibernate" ]]; then
+elif [ "$chosen" = "Suspend-then-hibernate" ]; then
     systemctl suspend-then-hibernate
 fi
