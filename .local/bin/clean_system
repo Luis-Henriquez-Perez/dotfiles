@@ -6,7 +6,10 @@
 
 trash="$HOME/Trash/"
 
-# Delete the oldest fifth of wallpapers.
+# Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
+# the likelihood of deleting something I do not want to delete.  Or rather
+# giving me as long a chance as is within reason to review the wallpapers before
+# deleting them.
 echo "Deleting old wallpapers."
 find "$HOME/Trash" -type f \( -name 'wallhaven-*.jpg' -o -name 'wallhaven-*.png' \) -exec rm -- {} +
 
