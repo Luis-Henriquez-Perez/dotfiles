@@ -32,7 +32,8 @@ find "$trash" -type f -mtime +90 -exec rm -f -- {} +
 find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 
 # Clean up old logs.
-# journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+echo "Deleting old systemd logs.."
+journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
 
 # Delete old files in cache.
 # sudo rm -rf ~/.cache/*                 # clean user cache
