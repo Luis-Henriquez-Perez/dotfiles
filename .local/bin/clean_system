@@ -28,7 +28,7 @@ find "$trash" -type d -empty -exec rmdir -- {} +
 # Delete one third of very old files until there are fewer than 20 awp, delete
 # them all.
 echo "Deleting very old files (>90 days)..."
-find "$trash" -type f -mtime +90 -exec rm -- {} +
+find "$trash" -type f -mtime +90 -exec rm -f -- {} +
 find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 
 # Clean up old logs.
@@ -39,3 +39,5 @@ find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 # sudo rm -rf /var/cache/*               # clean system cache (with care)
 
 # Delete broken symlinks
+echo "Deleting broken symlinks..."
+find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
