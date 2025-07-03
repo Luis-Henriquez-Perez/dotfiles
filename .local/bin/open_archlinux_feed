@@ -1,0 +1,7 @@
+#!/bin/sh
+# Filename: open_archlinux_feed
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-30 17:56:19
+# Description: Open the archlinux feed with Emacs.
+
+emacsclient --create-frame --eval "(load-file \"~/.local/bin/open-archlinux-feed.el\")"
