@@ -7,15 +7,9 @@
 # do it mself.
 
 # Keep last N versions of each package in pacman cache (without using paccache)
-
-# How many versions to keep
 KEEP=3
 
-# Cache directory
 CACHE_DIR="/var/cache/pacman/pkg"
-
-# Temp file
-# TMPFILE="$(mktemp)"
 
 cd "$CACHE_DIR" || exit 1
 
