@@ -35,6 +35,10 @@ find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 echo "Deleting old systemd logs.."
 journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
 
+# TODO: move lockfiles to trash search in my main directories.
+
+# TODO: get rid of backup files (ending in .bak)
+
 # echo "Deleting old files in pacman cache..."
 # clean_pacman_cache
 
