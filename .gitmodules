@@ -1,6 +1,6 @@
-[submodule ".config/awesome/revelation"]
-	path = .config/awesome/revelation
-	url = https://github.com/guotsuan/awesome-revelation
 [submodule ".config/emacs"]
 	path = .config/emacs
 	url = git@github.com:Luis-Henriquez-Perez/.emacs.d.git
+[submodule ".config/awesome"]
+	path = .config/awesome
+	url = https://github.com/Luis-Henriquez-Perez/awesome
