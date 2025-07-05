@@ -39,5 +39,5 @@ If git refuses to checkout the files because that would ovewrite existing files,
 then my script creates a backup directory, moves the conflicting files there,
 and tries again.
 #+begin_src bash
-curl -sSL https://raw.githubusercontent.com/Luis-Henriquez-Perez/dotfiles/refs/heads/master/.local/bin/dotinit | sh
+curl -sSL https://github.com/Luis-Henriquez-Perez/dotfiles/blob/develop/.local/bin/dotinit | sh
 #+end_src
