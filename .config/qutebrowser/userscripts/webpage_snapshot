@@ -18,7 +18,7 @@ FILENAME="$SAVE_DIR/$TITLE.html"
 # web snapshot.
 if [ -f "$FILENAME" ]; then
     notify-send "qutebrowser" "Snapshot already exists for $URL"
-    exit 1
+    exit 0
 fi
 
 # The notification will be immediate (before the snapshot even finish) and the
