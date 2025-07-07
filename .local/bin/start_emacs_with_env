@@ -1,0 +1,8 @@
+#!/bin/sh
+# Filename: start_emacs_with_env
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-07 05:33:09
+# Description: Start Emacs with .profile variables loaded.
+
+[ -f ~/.profile ] && . ~/.profile
+exec /usr/bin/emacs --fg-daemon
