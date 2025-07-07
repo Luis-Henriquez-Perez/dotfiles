@@ -4,6 +4,8 @@
 # Created: 2024-12-28 17:04:00
 # Description: Run programs & scripts I need for graphical environment.
 
+[ -f ~/.profile ] && . ~/.profile
+
 set_wallpaper &
 
 setxkbmap -option caps:escape
