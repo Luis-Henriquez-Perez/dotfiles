@@ -8,7 +8,7 @@
 
 wallpaper &
 
-setxkbmap -option caps:escape
+setxkbmap -option caps:swapescape
 
 # For now enable picom service here.  Using the default systemd targets does not
 # work because picom is started before the graphical xorg session is started.
