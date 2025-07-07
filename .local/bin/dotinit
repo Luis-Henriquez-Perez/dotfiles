@@ -6,47 +6,76 @@
 
 REPO="https://github.com/Luis-Henriquez-Perez/dotfiles.git"
 
-# Clone the repository with a separate git directory
-cd "$HOME" || { echo "Error: Unable to change to HOME directory."; exit 1; }
-echo "Cloning $REPO..."
-if ! git clone -n --separate-git-dir="$HOME/.git" "$REPO" throwaway; then
-    echo "Error: Failed to clone $REPO."
-    exit 1
-fi
-rm -rf throwaway
+# Remove all dotfiles.  This is done by switchingn to an empty branch.
+undotinit() {
+    git checkout -b empty-branch
+    rm -rf .git
+}
 
-# Configure Git to hide untracked files
-if ! git config --local status.showUntrackedFiles no; then
-    echo "Error: Failed to configure Git to hide untracked files."
-    exit 1
-fi
+setup_services() {
+    # System services
+    systemctl enable --now NetworkManager
+    systemctl enable --now gpg-agent
+    systemctl enable --now systemd-timesyncd
 
-echo "Attempting to checkout files..."
-OUTPUT=$(git checkout 2>&1)
+    # User services
+    systemctl --user enable --now emacs
+    systemctl --user enable --now picom
+    systemctl --user enable --now dunst
 
-while :; do
-    if echo "$OUTPUT" | grep -q "error: The following untracked"; then
-        # Create a backup directory for conflicting files
-        BACKUP_DIR=$(mktemp -d "$HOME/backup_dir_XXXXXX") || { echo "Error: Failed to create backup directory."; exit 1; }
-        CONFLICTING_FILES=$(echo "$OUTPUT" | grep -E "^\s+[^ ]+" | sed 's/^ *//')
+    # timers
+    systemctl --user enable --now wallpaper.timer
+    systemctl --user enable --now download_email.timer
+    systemctl --user enable --now download_wallpapers.timer
+    systemctl --user enable --now push_dotfiles.timer
+    systemctl --user enable --now clean_system.timer
+}
 
-        # Move conflicting files to the backup directory
-        for file in $CONFLICTING_FILES; do
-            FILE_PATH="$HOME/$file"
-            if [ -f "$FILE_PATH" ]; then
-                if mv "$FILE_PATH" "$BACKUP_DIR"; then
-                    echo "Moved $FILE_PATH -> $BACKUP_DIR"
-                else
-                    echo "Error: Unable to move $FILE_PATH to $BACKUP_DIR"
-                    exit 1
-                fi
-            else
-                echo "Warning: $FILE_PATH does not exist or is not a regular file."
-            fi
-        done
-        OUTPUT=$(git checkout 2>&1)
-    else
-        echo "Checkout succeeded."
-        break
+initialize_dotfiles() {
+    # Clone the repository with a separate git directory
+    cd "$HOME" || { echo "Error: Unable to change to HOME directory."; exit 1; }
+    echo "Cloning $REPO..."
+    if ! git clone -n --separate-git-dir="$HOME/.git" "$REPO" throwaway; then
+        echo "Error: Failed to clone $REPO."
+        exit 1
     fi
-done
+    rm -rf throwaway
+
+    # Configure Git to hide untracked files
+    if ! git config --local status.showUntrackedFiles no; then
+        echo "Error: Failed to configure Git to hide untracked files."
+        exit 1
+    fi
+
+    echo "Attempting to checkout files..."
+    OUTPUT=$(git checkout 2>&1)
+
+    while :; do
+        if echo "$OUTPUT" | grep -q "error: The following untracked"; then
+            # Create a backup directory for conflicting files
+            BACKUP_DIR=$(mktemp -d "$HOME/backup_dir_XXXXXX") || { echo "Error: Failed to create backup directory."; exit 1; }
+            CONFLICTING_FILES=$(echo "$OUTPUT" | grep -E "^\s+[^ ]+" | sed 's/^ *//')
+
+            # Move conflicting files to the backup directory
+            for file in $CONFLICTING_FILES; do
+                FILE_PATH="$HOME/$file"
+                if [ -f "$FILE_PATH" ]; then
+                    if mv "$FILE_PATH" "$BACKUP_DIR"; then
+                        echo "Moved $FILE_PATH -> $BACKUP_DIR"
+                    else
+                        echo "Error: Unable to move $FILE_PATH to $BACKUP_DIR"
+                        exit 1
+                    fi
+                else
+                    echo "Warning: $FILE_PATH does not exist or is not a regular file."
+                fi
+            done
+            OUTPUT=$(git checkout 2>&1)
+        else
+            echo "Checkout succeeded."
+            break
+        fi
+    done
+}
+
+initialize_dotfiles
