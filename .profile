@@ -9,11 +9,9 @@ case ":$PATH:" in
   *":$HOME/.roswell/bin:"*) ;;
   *) PATH="$PATH:$HOME/.roswell/bin" ;;
 esac
-# Maybe I need this for plank?
-XDG_SESSION_DESKTOP=x11
 
-# Add all directories in `~/.local/bin` to $PATH
-export PATH="$PATH:$(find ~/.local/bin -type d | paste -sd ':' -)"
+# Maybe I need this for plank?
+export XDG_SESSION_DESKTOP=x11
 
 # export ALTERNATE_EDITOR=""
 export XDG_CONFIG_HOME="$HOME/.config"
