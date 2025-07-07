@@ -1,0 +1,17 @@
+#!/bin/sh
+# Filename: manage_wallpapers
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-03 07:32:24
+# Description: Manage wallpapers with nsxiv.
+# Specifically this means let me easily look at each wallpaper and choose
+# whether to either move it to the trash or add it to my git repo.
+
+wallpaper_dir="$HOME/Pictures/wallpapers"
+trash_dir="$HOME/Trash"
+
+# Choose from wallpapers that are not yet tracked so I do not waste time.
+# Maybe send a message indicating wallpaper has been added.
+feh --fullscreen \
+    --action1 "git -C $HOME add '%F' && echo Added %F" \
+    --action2 "mv '%F' $trash_dir" \
+    ~/Pictures/wallpapers/*.jpg
