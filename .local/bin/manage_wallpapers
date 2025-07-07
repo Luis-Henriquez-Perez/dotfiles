@@ -9,9 +9,20 @@
 wallpaper_dir="$HOME/Pictures/wallpapers"
 trash_dir="$HOME/Trash"
 
-# Choose from wallpapers that are not yet tracked so I do not waste time.
-# Maybe send a message indicating wallpaper has been added.
-feh --fullscreen \
-    --action1 "git -C $HOME add '%F' && echo Added %F" \
-    --action2 "mv '%F' $trash_dir" \
-    ~/Pictures/wallpapers/*.jpg
+untracked_files=$(git -C "$wallpaper_dir" ls-files --others --exclude-standard \
+                      | grep -E '\.(jpg|jpeg|png|webp)$' \
+                      | sed "s|^|$wallpaper_dir/|")
+
+
+[ -z "$untracked_files" ] && echo "No untracked wallpapers found." && exit 0
+
+echo "$untracked_files" | xargs feh \
+                                --fullscreen \
+                                --action1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
+                                --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
+
+# If restoring wallpapers.
+# feh --fullscreen \
+#     --action1 "git -C $HOME add '%F' && echo Added %F" \
+#     --action2 "mv '%F' $trash_dir" \
+#     ~/Trash/wallpapers/*.jpg
