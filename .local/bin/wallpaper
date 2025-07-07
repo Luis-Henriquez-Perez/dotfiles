@@ -11,10 +11,10 @@ wallpaper_dir="$HOME/Pictures/wallpapers"
 trash="$HOME/Trash"
 used_wallpapers_file="$HOME/.cache/used_wallpapers_file"
 
-# Ensure the used wallpapers file exists
-[ -f "$used_wallpapers_file" ] || touch "$used_wallpapers_file"
-
 delete_wallpaper() {
+    # Ensure the used wallpapers file exists
+    [ -f "$used_wallpapers_file" ] || touch "$used_wallpapers_file"
+
     # Get the last used wallpaper
     last_wallpaper=$(tail -n 1 "$used_wallpapers_file")
 
@@ -37,6 +37,9 @@ delete_wallpaper() {
 }
 
 switch_wallpaper() {
+    # Ensure the used wallpapers file exists
+    [ -f "$used_wallpapers_file" ] || touch "$used_wallpapers_file"
+
     # Use temp files for correct handling
     all_file=$(mktemp)
     used_file=$(mktemp)
