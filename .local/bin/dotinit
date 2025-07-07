@@ -12,7 +12,7 @@ undotinit() {
     rm -rf .git
 }
 
-setup_services() {
+enable_systemd_services() {
     # System services
     systemctl enable --now NetworkManager
     systemctl enable --now gpg-agent
@@ -83,4 +83,19 @@ initialize_dotfiles() {
     done
 }
 
-initialize_dotfiles
+
+case "$1" in
+    "")
+        initialize_dotfiles
+        ;;
+    -s|--services)
+        enable_systemd_services
+        ;;
+    -i|--install)
+        install_packages
+        ;;
+    *)
+        echo "Usage: $0 {delete}"
+        exit 1
+        ;;
+esac
