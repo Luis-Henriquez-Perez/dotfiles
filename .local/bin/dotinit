@@ -31,6 +31,11 @@ setup_services() {
     systemctl --user enable --now clean_system.timer
 }
 
+# Install packages from the package list.
+install_packages() {
+    pacman
+}
+
 initialize_dotfiles() {
     # Clone the repository with a separate git directory
     cd "$HOME" || { echo "Error: Unable to change to HOME directory."; exit 1; }
