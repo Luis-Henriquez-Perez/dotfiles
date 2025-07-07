@@ -1,3 +1,5 @@
+# Profile file, runs on login. Environmental variables are set here.
+# This file should be written in such a way that it is safe to run repeatedly.
 case ":$PATH:" in
   *":$HOME/.local/bin:"*) ;;
   *) PATH="$PATH:$HOME/.local/bin" ;;
@@ -7,8 +9,6 @@ case ":$PATH:" in
   *":$HOME/.roswell/bin:"*) ;;
   *) PATH="$PATH:$HOME/.roswell/bin" ;;
 esac
-# Profile file, runs on login. Environmental variables are set here.
-
 # Maybe I need this for plank?
 XDG_SESSION_DESKTOP=x11
 
