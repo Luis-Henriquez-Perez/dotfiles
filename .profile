@@ -38,3 +38,8 @@ export PASSWORD_STORE_DIR="$XDG_DATA_HOME/.password-store"
 export LIBGL_ALWAYS_SOFTWARE=1
 # https://github.com/White-Oak/arch-setup-for-dummies/blob/master/setting-up-ssh-agent.md
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# Stop creating a .w3m file in my home directory.
+export W3M_DIR="$XDG_CONFIG_HOME/.config/w3m"
+# Do not create .python_history file in my home directory.
+export PYTHON_HISTORY="$HOME/.cache/python_history"
