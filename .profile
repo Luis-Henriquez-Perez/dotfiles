@@ -19,7 +19,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
 export HISTFILE="$XDG_CACHE_HOME/bash_history"
-# export LESSHISTFILE="$XDG_CACHE_HOME/"
+export LESSHISTFILE="$XDG_CACHE_HOME/less_history"
 # export FEH="$XDG_CACHE_HOME/"
 export NOTMUCH_CONFIG="$XDG_CONFIG_HOME/notmuch/config"
 export MBSYNCRC="$XDG_CONFIG_HOME/isync/mbsyncrc"
