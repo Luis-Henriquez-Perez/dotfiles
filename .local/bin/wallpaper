@@ -1,4 +1,10 @@
 #!/bin/sh
+# Filename: wallpaper
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-03 07:32:24
+# Description: Manage wallpapers with nsxiv.
+# Specifically this means let me easily look at each wallpaper and choose
+# whether to either move it to the trash or add it to my git repo.
 
 # Directory containing wallpapers
 wallpaper_dir="$HOME/Pictures/wallpapers"
@@ -70,6 +76,23 @@ save_wallpaper() {
     # git push
 }
 
+manage_wallpapers() {
+    trash_dir="$HOME/Trash"
+
+    untracked_files=$(git -C "$wallpaper_dir" ls-files --others --exclude-standard \
+                          | grep -E '\.(jpg|jpeg|png|webp)$' \
+                          | sed "s|^|$wallpaper_dir/|")
+
+    [ -z "$untracked_files" ] && echo "No untracked wallpapers found." && exit 0
+
+    echo "$untracked_files" | xargs feh \
+                                    --fullscreen \
+                                    --action1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
+                                    --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
+}
+
+# restore_wallpapers() {
+# }
 # switch_to_previous_wallpaper() {
 # }
 
@@ -87,30 +110,28 @@ case "$1" in
     "")
         switch_wallpaper
         ;;
-    --delete)
+    -d|--delete)
         delete_wallpaper
         switch_wallpaper
         ;;
-    --save)
+    -s|--save)
         save_wallpaper
         ;;
-    --saveswitch)
+    -S|--saveswitch)
         save_wallpaper
         switch_wallpaper
+        ;;
+    -m|--manage)
+        manage_wallpapers
+        ;;
+    -r|--restore)
+        restore_wallpapers
+        ;;
+    -l|--download)
+        download_wallpapers
         ;;
     *)
         echo "Usage: $0 {delete}"
         exit 1
         ;;
 esac
-
-# Add to wallpaper script so that it can delete the current wallpaper with an argument.
-# Current wallpaper.
-
-## alternative script
-# I found this from [[reddit][this reddit post]].  The interesting about it is
-# that it handles spaces and unusual characters in wallpapers, which can
-# definitely happen when you download them online.
-# find /mnt/Gog/Papers -type f ( -name '.jpg' -o -name '.png' ) -print0 | shuf -n1 -z | xargs -0 feh --bg-fill --no-xinerama
-## more references
-# https://www.roboleary.net/2021/09/02/linux-change-wallpaper.html

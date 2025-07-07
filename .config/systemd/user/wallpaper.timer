@@ -1,5 +1,5 @@
 [Unit]
-Description=Run set_wallpaper every 5 minutes
+Description=Switch wallpaper every 5 minutes
 
 [Timer]
 OnBootSec=5min

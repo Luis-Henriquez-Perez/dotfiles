@@ -2,5 +2,5 @@
 Description=Set wallpaper
 
 [Service]
-ExecStart=%h/.local/bin/set_wallpaper
+ExecStart=%h/.local/bin/wallpaper
 Environment=DISPLAY=:0

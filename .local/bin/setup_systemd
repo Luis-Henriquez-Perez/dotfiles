@@ -18,7 +18,7 @@ systemctl --user enable --now picom
 systemctl --user enable --now dunst
 
 # timers
-systemctl --user enable --now set_wallpaper.timer
+systemctl --user enable --now wallpaper.timer
 systemctl --user enable --now download_email.timer
 systemctl --user enable --now download_wallpapers.timer
 systemctl --user enable --now push_dotfiles.timer

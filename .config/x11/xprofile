@@ -6,7 +6,7 @@
 
 [ -f ~/.profile ] && . ~/.profile
 
-set_wallpaper &
+wallpaper &
 
 setxkbmap -option caps:escape
 
