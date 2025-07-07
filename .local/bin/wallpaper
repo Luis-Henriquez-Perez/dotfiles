@@ -67,7 +67,7 @@ switch_wallpaper() {
 
     # Append and set
     echo "$chosen" >> "$used_wallpapers_file"
-    feh --bg-scale "$chosen"
+    feh --no-fehbg --bg-scale "$chosen"
 }
 
 # Save wallpaper under version-control because I like it.
@@ -89,6 +89,7 @@ manage_wallpapers() {
     [ -z "$untracked_files" ] && echo "No untracked wallpapers found." && exit 0
 
     echo "$untracked_files" | xargs feh \
+                                    --no-fehbg \
                                     --fullscreen \
                                     --action1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
                                     --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
