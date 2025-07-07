@@ -15,8 +15,9 @@ setxkbmap -option caps:escape
 # I think I need to create my own.  But anyw fon I just start picom here.
 # Relevant links:
 # https://superuser.com/questions/759759/writing-a-service-that-depends-on-xorg
-picom &
 
+# Do not start another instance of picom if one is already running.
+pgrep -x picom >/dev/null || picom &
 # I broke my super key on my laptop.  This is temporary code to remap it to the
 # left alt key.
 if [ "$(cat /etc/hostname)" = "deathscythe" ]; then
