@@ -43,3 +43,4 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 export W3M_DIR="$XDG_CONFIG_HOME/.config/w3m"
 # Do not create .python_history file in my home directory.
 export PYTHON_HISTORY="$HOME/.cache/python_history"
+export PARALLEL_HOME="$HOME/.cache/parallel"
