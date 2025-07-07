@@ -72,11 +72,11 @@ switch_wallpaper() {
 
 # Save wallpaper under version-control because I like it.
 save_wallpaper() {
+    # Check whether wallpaper is already tracked.
     # Do this from the home directory.
     git add "$last_wallpaper"
     git commit -m "Add wallpaper: $last_wallpaper." "$last_wallpaper"
     notify-send "Wallpaper" "Saved $last_wallpaper!"
-    # git push
 }
 
 manage_wallpapers() {
