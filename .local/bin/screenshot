@@ -5,21 +5,16 @@
 # Description: This is a script designed to take a picture of my full screen.
 
 screenshot_dir="$HOME/Pictures/screenshots/"
+screenshot="$screenshot_dir/screenshot_$(date +%Y%m%d_%H%M%S).png"
 
 fullscreen_screenshot() {
-    maim $screenshot_dir/screenshot_$(date +%Y%m%d_%H%M%S).png
-
+    maim "$screenshot"
     notify-send "screenshot" "Fullscreen Screenshot taken"
 }
 
 window_screenshot() {
-    # Get the currently focused window ID
     win_id=$(xdotool getactivewindow)
-
-    # Screenshot the focused window only
-    maim -i "$win_id" $screenshot_dir/screenshot_$(date +%Y%m%d_%H%M%S).png
-
-    # Notify user
+    maim -i "$win_id" "$screenshot"
     notify-send "Screenshot" "Window screenshot taken"
 
 }
@@ -28,8 +23,8 @@ case "$1" in
     "")
         fullscreen_screenshot
         ;;
-    -l|--download)
-        download_wallpapers
+    -w|--window)
+        window_screenshot
         ;;
     *)
         echo "Usage: $0 {delete}"
