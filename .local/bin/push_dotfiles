@@ -5,6 +5,7 @@
 # Description: Push changes to certain repos to the cloud.
 
 emacs_dir="$HOME/.config/emacs/"
+awesome_dir="$HOME/.config/awesome/"
 
 # From the home directory.
 cd "$HOME" || {
