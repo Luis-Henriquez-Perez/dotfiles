@@ -21,7 +21,6 @@ enable_systemd_services() {
     # User services
     systemctl --user enable --now emacs
     systemctl --user enable --now picom
-    systemctl --user enable --now dunst
 
     # timers
     systemctl --user enable --now wallpaper.timer
