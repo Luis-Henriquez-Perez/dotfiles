@@ -32,10 +32,12 @@ enable_systemd_services() {
 
 # Install packages from the package list.
 install_packages() {
+    echo "Installing packages..."
     pacman
 }
 
 initialize_dotfiles() {
+    echo "Initializing dotfiles..."
     # Clone the repository with a separate git directory
     cd "$HOME" || { echo "Error: Unable to change to HOME directory."; exit 1; }
     echo "Cloning $REPO..."
