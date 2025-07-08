@@ -1,6 +1,6 @@
-[submodule "emacs"]
+[submodule ".config/emacs"]
 	path = .config/emacs
 	url = git@github.com:Luis-Henriquez-Perez/.emacs.d.git
-[submodule "awesome"]
+[submodule ".config/awesome"]
 	path = .config/awesome
 	url = git@github.com:Luis-Henriquez-Perez/awesome.git
