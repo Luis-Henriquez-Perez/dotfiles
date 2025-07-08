@@ -109,18 +109,18 @@ manage_wallpapers() {
 # }
 
 # Peruse my wallpapers and allow me to remove any I do not want from version-control.
-manage_tracked_wallpapers() {
-    # The tracked files.
-    files=$(git -C "$wallpaper_dir" ls-files \
-                | grep -E '\.(jpg|jpeg|png|webp)$' \
-                | sed "s|^|$wallpaper_dir/|")
+# manage_tracked_wallpapers() {
+#     # The tracked files.
+#     files=$(git -C "$wallpaper_dir" ls-files \
+#                 | grep -E '\.(jpg|jpeg|png|webp)$' \
+#                 | sed "s|^|$wallpaper_dir/|")
 
 
-    echo "$files" | xargs feh \
-                          --no-fehbg \
-                          --fullscreen \
-                          --action1 "git -C '$wallpaper_dir' rm --cached '%F' && mv '%F' $trash_dir && echo Moved %F to trash." \
-}
+#     echo "$files" | xargs feh \
+#                           --no-fehbg \
+#                           --fullscreen \
+#                           --action1 "git -C '$wallpaper_dir' rm --cached '%F' && mv '%F' $trash_dir && echo Moved %F to trash." \
+# }
 
 case "$1" in
     "")
