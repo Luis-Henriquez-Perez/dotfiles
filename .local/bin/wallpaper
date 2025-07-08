@@ -101,6 +101,12 @@ manage_wallpapers() {
     #                                 --action1 "mv '%F' '$wallpaper_dir' && echo Moved %F back to wallpaper directory" \
     #                                 # --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
 }
+
+# Choose a specific wallpaper to set.
+choose_wallpaper() {
+    nsxiv -t "$wallpaper_dir"
+    feh --no-fehbg --bg-scale "$chosen"
+}
 # View wallpapers that are already committed and potentialy uncommit them.
 
 # Sometimes I want to check the wallpapers that I just downloaded before they
@@ -133,7 +139,7 @@ case "$1" in
     -s|--save)
         save_wallpaper
         ;;
-    -S|--saveswitch)
+    -S|--switch)
         save_wallpaper
         switch_wallpaper
         ;;
@@ -145,6 +151,9 @@ case "$1" in
         ;;
     -l|--download)
         download_wallpapers
+        ;;
+    -c|--choose)
+        choose_wallpaper
         ;;
     *)
         echo "Usage: $0 {delete}"
