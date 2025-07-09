@@ -90,12 +90,7 @@ manage_wallpapers() {
 
     [ "${#files[@]}" -eq 0 ] && echo "No untracked wallpapers found." && return
 
-    pqiv --auto-montage-mode \
-         --thumbnail-size=200x200 \
-         --hide-info-box \
-         -1 "git -C '$wallpaper_dir' add \$1 && echo Added \$1" \
-         -2 "mv '\$1' '$trash_dir' && echo Moved \$1 to trash" \
-         "${files[@]}"
+    nsxiv -t "${files[@]}"
 }
 
 # Choose a specific wallpaper to set.
