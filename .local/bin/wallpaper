@@ -82,16 +82,18 @@ save_wallpaper() {
 manage_wallpapers() {
     trash_dir="$HOME/Trash"
 
+    mapfile -t files < <(
+        git -C "$wallpaper_dir" ls-files --others --exclude-standard \
+            | grep -E '\.(jpg|jpeg|png|webp)$' \
+            | sed "s|^|$wallpaper_dir/|"
+    )
 
-    files=$(git -C "$wallpaper_dir" ls-files --others --exclude-standard \
-                | grep -E '\.(jpg|jpeg|png|webp)$' \
-                | sed "s|^|$wallpaper_dir/|")
+    [ "${#files[@]}" -eq 0 ] && echo "No untracked wallpapers found." && return
 
-    [ -z "$files" ] && echo "No untracked wallpapers found." && exit 0
-
-    echo "$files" | xargs pqiv \
-                          -1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
-                          -2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
+    pqiv --auto-montage-mode --thumbnail-size=200x200 \
+         -1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
+         -2 "mv '%F' '$trash_dir' && echo Moved %F to trash" \
+         "${files[@]}"
 }
 
 # Choose a specific wallpaper to set.
