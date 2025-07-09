@@ -89,23 +89,21 @@ manage_wallpapers() {
 
     [ -z "$files" ] && echo "No untracked wallpapers found." && exit 0
 
-    echo "$files" | xargs feh \
-                                    --no-fehbg \
-                                    --fullscreen \
-                                    --action1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
-                                    --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
-
-    # echo "$trashed_wallpapers" | xargs feh \
-    #                                 --no-fehbg \
-    #                                 --fullscreen \
-    #                                 --action1 "mv '%F' '$wallpaper_dir' && echo Moved %F back to wallpaper directory" \
-    #                                 # --action2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
+    echo "$files" | xargs pqiv \
+                          -1 "git -C '$wallpaper_dir' add '%F' && echo Added %F" \
+                          -2 "mv '%F' '$trash_dir' && echo Moved %F to trash"
 }
 
 # Choose a specific wallpaper to set.
 choose_wallpaper() {
-    nsxiv -t "$wallpaper_dir"
-    feh --no-fehbg --bg-scale "$chosen"
+    local chosen
+    # Open nsxiv in thumbnail mode, pick one file, and capture its output
+    chosen=$(nsxiv -ot "$wallpaper_dir")
+    if [ -n "$chosen" ]; then
+        feh --no-fehbg --bg-scale "$chosen"
+    else
+        echo "No wallpaper selected."
+    fi
 }
 # View wallpapers that are already committed and potentialy uncommit them.
 
