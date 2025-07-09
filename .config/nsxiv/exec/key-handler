@@ -20,25 +20,8 @@
 
 # [ "$NSXIV_USING_NULL" = 1 ] && DELIM='\0' || DELIM='\n'
 
-# rotate() {
-# 	tr "$DELIM" '\0' | xargs -0 realpath -z | sort -z -u | xargs -0 -I {} sh -c '
-# 		degree="$1"
-# 		case "$(file -b -i "{}")" in
-# 		image/jpeg*) jpegtran -rotate "$degree" -copy all -outfile "{}" "{}" ;;
-# 		*)           mogrify  -rotate "$degree" "{}" ;;
-# 		esac
-# 	' -- "$1"
-# }
-
 case "$1" in
-    "a")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
-    # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
-    # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
-    # "C-e")      while read file; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 -q -pa pr '$file' | less" & done ;;
-    # "C-g")      tr '\n' '\0' | xargs -0 gimp & ;;
-    # "C-r")      while read file; do rawtherapee "$file" & done ;;
-    # "C-comma")  rotate 270 ;;
-    # "C-period") rotate  90 ;;
-    # "C-slash")  rotate 180 ;;
+    a) git -C "$HOME" add "$2" && echo "Added $2..." ;;
+    s) mv "$2" "$HOME/Trash" && echo "Trashed $2..." ;;
 esac
 
