@@ -1,46 +1,44 @@
 #!/bin/sh
-# https://saucenao.com/user.php?page=search-api
+
+# Example for $XDG_CONFIG_HOME/nsxiv/exec/key-handler
+# Called by nsxiv(1) after the external prefix key (C-x by default) is pressed.
+# The next key combo is passed as its first argument. Passed via stdin are the
+# images to act upon: all marked images, if in thumbnail mode and at least one
+# image has been marked, otherwise the current image. nsxiv(1) will block until
+# the handler terminates. It then checks which images have been modified and
+# reloads them.
+
+# The key combo argument has the following form: "[C-][M-][S-]KEY",
+# where C/M/S indicate Ctrl/Meta(Alt)/Shift modifier states and KEY is the X
+# keysym as listed in /usr/include/X11/keysymdef.h without the "XK_" prefix.
+# If KEY has an uppercase equivalent, S-KEY is resolved into it. For instance,
+# K replaces S-k and Scedilla replaces S-scedilla, but S-Delete is sent as-is.
+
+# By default nsxiv(1) will send one image per-line to stdin, however when using
+# -0 the image list will be NULL separated and the environment variable
+# "$NSXIV_USING_NULL" will be set to 1.
+
+[ "$NSXIV_USING_NULL" = 1 ] && DELIM='\0' || DELIM='\n'
+
+rotate() {
+	tr "$DELIM" '\0' | xargs -0 realpath -z | sort -z -u | xargs -0 -I {} sh -c '
+		degree="$1"
+		case "$(file -b -i "{}")" in
+		image/jpeg*) jpegtran -rotate "$degree" -copy all -outfile "{}" "{}" ;;
+		*)           mogrify  -rotate "$degree" "{}" ;;
+		esac
+	' -- "$1"
+}
+
 case "$1" in
-    # comma)  rotate 270 ;;
-    # period) rotate  90 ;;
-    # slash)  rotate 180 ;;
-    # i) while read -r i;do mogrify -flip "$i" ;done ;;
-    # o) while read -r i;do mogrify -flop "$i" ;done ;;
-    d) while read -r i;do mv "$i" "$HOME/Trash" && echo "Deleted $i" ;done ;;
-    # n) read -r f; rm -rfv "${f%/*}" ;; # dangerous!
-    # n) read -r f; alacritty -e nnn "${f%/*}" & ;;
-    # g) read -r f; setsid -f -- gimp "$f" >/dev/null 2>&1 & ;;
-    # w) head -1 | xargs -I{} wall.sh '{}' ;;
-    # p) head -1 | tr \\n \\0 | xargs -0 realpath -- | tr -d \\n | xclip -sel clip ;;
-    # b) head -1 | tr \\n \\0 | xargs -0 basename -- | tr -d \\n | xclip -sel clip ;;
-    # v) grep -oP '[^/]*\.(mkv|webm|mp4|avi|m4v)(?=\.\w+)' | mpv --playlist=- >/dev/null 2>&1 ;;
-    # # v) head -1 | tr \\n \\0 | xargs -0 dirname -z | xargs -0 nsxiv -s w -bqr & ;;
-    # # v) head -1 | tr \\n \\0 | xargs -0 vbg.sh ;;
-    # s) while read -r i;do sauce "$i" ;done ;;
-    # T) tr \\n \\0 | xargs -0I{} trash.sh '{}' ;;
-    # x)
-    #     read -r file
-    #     notify-send "$file copied to clipboard"
-    #     if [ "${file##*.}" != "png" ];then
-    #         magick "$file" PNG:- | xclip -sel clip -target image/png
-    #     else
-    #         xclip -sel clip -target image/png "$file"
-    #     fi
-    #     ;;
-    # m|y)
-    #     cat > "$tmpfile"
-    #     target=$(find ~/Pictures -xdev -type d | rofi -dmenu -l 15 -i)
-    #     [ -z "$target" ] && exit 0
-    #     while read -r i;do
-    #         if [ "$1" = m ];then
-    #             mv -vn "$i" "$target"
-    #         else
-    #             cp -vn "$i" "$target"
-    #         fi
-    #     done < "$tmpfile"
-    #     ;;
-    # u)
-    #     head -1 | tr \\n \\0 | xargs -r0I{} curl -F'file=@{}' https://0x0.st | xclip -sel c
-    #     notify-send "Clipboard" "$(xclip -sel c -o)"
-    #     ;;
+    a) notify-send "this is working?" "hi" ;;
+    # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
+    # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
+    # "C-e")      while read file; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 -q -pa pr '$file' | less" & done ;;
+    # "C-g")      tr '\n' '\0' | xargs -0 gimp & ;;
+    # "C-r")      while read file; do rawtherapee "$file" & done ;;
+    # "C-comma")  rotate 270 ;;
+    # "C-period") rotate  90 ;;
+    # "C-slash")  rotate 180 ;;
 esac
+
