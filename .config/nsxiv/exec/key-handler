@@ -30,8 +30,25 @@ rotate() {
 	' -- "$1"
 }
 
+move_to_trash() {
+    count=0
+    first=""
+    while IFS= read -r -d "$DELIM" file; do
+        mv "$file" "$HOME/Trash"
+        count=$((count + 1))
+        [ -z "$first" ] && first="$file"
+    done
+
+    if [ "$count" -eq 1 ]; then
+        notify-send "Moved to Trash" "$first"
+    else
+        notify-send "Moved to Trash" "Moved $count files to Trash."
+    fi
+}
+
 case "$1" in
     a) notify-send "this is working?" "hi" ;;
+    d) move_to_trash ;;
     # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
     # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
     # "C-e")      while read file; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 -q -pa pr '$file' | less" & done ;;
