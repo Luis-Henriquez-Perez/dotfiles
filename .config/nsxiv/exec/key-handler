@@ -48,6 +48,7 @@ move_to_trash() {
 }
 
 set_wallpaper() {
+    # Check whether multiple files
     read -r file; xwallpaper --stretch "$file" && notify-send "wallpaper" "Set $(basename "$file") as new current wallpaper"
 }
 
@@ -55,7 +56,6 @@ case "$1" in
     a) notify-send "this is working?" "hi" ;;
     d) move_to_trash ;;
     # Set the image as the current wallpaper.
-    # w) xwallpaper --stretch "$file" ;;
     w) set_wallpaper ;;
     # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
     # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
