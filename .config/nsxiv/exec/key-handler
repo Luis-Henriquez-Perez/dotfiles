@@ -30,6 +30,7 @@ rotate() {
 	' -- "$1"
 }
 
+# Maybe change this so that if the image is in the trash directory, restore it.
 move_to_trash() {
     count=0
     first=""
@@ -46,9 +47,16 @@ move_to_trash() {
     fi
 }
 
+set_wallpaper() {
+    read -r file; xwallpaper --stretch "$file" && notify-send "wallpaper" "Set $(basename "$file") as new current wallpaper"
+}
+
 case "$1" in
     a) notify-send "this is working?" "hi" ;;
     d) move_to_trash ;;
+    # Set the image as the current wallpaper.
+    # w) xwallpaper --stretch "$file" ;;
+    w) set_wallpaper ;;
     # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
     # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
     # "C-e")      while read file; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 -q -pa pr '$file' | less" & done ;;
