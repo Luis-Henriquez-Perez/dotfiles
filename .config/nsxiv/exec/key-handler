@@ -42,7 +42,7 @@ move_to_trash() {
     if [ "$count" -eq 1 ]; then
         notify-send "Moved to Trash" "$first"
     else
-        notify-send "Moved to Trash" "Moved $count files to Trash."
+        notify-send "Moved to Trash" "Moved $count pictures to Trash."
     fi
 }
 
