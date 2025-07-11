@@ -52,18 +52,27 @@ set_wallpaper() {
     read -r file; xwallpaper --stretch "$file" && notify-send "wallpaper" "Set $(basename "$file") as new current wallpaper"
 }
 
+save_images() {
+    count=0
+    first=""
+    while read file; do
+        git -C "$HOME" add "$file"
+        count=$((count + 1))
+        [ -z "$first" ] && first="$file"
+    done
+
+    if [ "$count" -eq 1 ]; then
+        notify-send "" "Added $file to version-control."
+    else
+        notify-send "" "Added $count images to version-control."
+    fi
+}
+
 case "$1" in
     a) notify-send "this is working?" "hi" ;;
     d) move_to_trash ;;
+    s) save_images ;;
     # Set the image as the current wallpaper.
     w) set_wallpaper ;;
-    # "C-x")      xclip -in -filter | tr '\n' ' ' | xclip -in -selection clipboard ;;
-    # "C-c")      while read file; do xclip -selection clipboard -target image/png "$file"; done ;;
-    # "C-e")      while read file; do urxvt -bg "#444" -fg "#eee" -sl 0 -title "$file" -e sh -c "exiv2 -q -pa pr '$file' | less" & done ;;
-    # "C-g")      tr '\n' '\0' | xargs -0 gimp & ;;
-    # "C-r")      while read file; do rawtherapee "$file" & done ;;
-    # "C-comma")  rotate 270 ;;
-    # "C-period") rotate  90 ;;
-    # "C-slash")  rotate 180 ;;
 esac
 
