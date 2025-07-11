@@ -67,10 +67,9 @@ switch_wallpaper() {
 
     # Append and set
     echo "$chosen" >> "$used_wallpapers_file"
-    feh --no-fehbg --bg-scale "$chosen"
+    xwallpaper --stretch "$chosen"
 }
 
-# Save wallpaper under version-control because I like it.
 save_wallpaper() {
     # Check whether wallpaper is already tracked.
     # Do this from the home directory.
@@ -93,13 +92,12 @@ manage_wallpapers() {
     nsxiv -t "${files[@]}"
 }
 
-# Choose a specific wallpaper to set.
 choose_wallpaper() {
     local chosen
     # Open nsxiv in thumbnail mode, pick one file, and capture its output
     chosen=$(nsxiv -ot "$wallpaper_dir")
     if [ -n "$chosen" ]; then
-        feh --no-fehbg --bg-scale "$chosen"
+        xwallpaper --stretch "$chosen"
     else
         echo "No wallpaper selected."
     fi
