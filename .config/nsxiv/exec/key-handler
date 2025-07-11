@@ -33,7 +33,7 @@ rotate() {
 move_to_trash() {
     count=0
     first=""
-    while IFS= read -r -d "$DELIM" file; do
+    while read file; do
         mv "$file" "$HOME/Trash"
         count=$((count + 1))
         [ -z "$first" ] && first="$file"
