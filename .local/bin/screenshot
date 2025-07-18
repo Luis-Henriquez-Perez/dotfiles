@@ -19,12 +19,19 @@ window_screenshot() {
 
 }
 
+manage_screenshots() {
+    nsxiv -t "$screenshot_dir"
+}
+
 case "$1" in
     "")
         fullscreen_screenshot
         ;;
     -w|--window)
         window_screenshot
+        ;;
+    -m|--manage)
+        manage_screenshots
         ;;
     *)
         echo "Usage: $0 {delete}"
