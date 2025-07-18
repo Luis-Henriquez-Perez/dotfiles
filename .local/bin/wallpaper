@@ -131,7 +131,6 @@ case "$1" in
         choose_wallpaper
         ;;
     *)
-        echo "Usage: $0 {delete}"
-        exit 1
+        set_wallpaper
         ;;
 esac
