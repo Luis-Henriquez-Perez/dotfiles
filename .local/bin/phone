@@ -1,0 +1,44 @@
+#!/bin/sh
+# Filename: phone
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-20 09:29:50
+# Description: Do operations reled to my phone.
+
+set -eu
+
+phone_dir="/home/luis/mount/Internal shared storage/"
+phone_music_dir="/home/luis/mount/Internal shared storage/Music"
+home_music_dir="/home/luis/Audio/Music"
+
+if [ ! -d "$phone_music_dir" ]; then
+    echo "Error: Phone music directory not found: $phone_music_dir"
+    exit 1
+fi
+
+# 1. Remove all the files (not directories) in the music directory.
+# echo "Removing old music from phone..."
+# find "$phone_music_dir" -maxdepth 1 -type f -delete
+
+copy_music() {
+    echo "Copying music files to phone..."
+    rsync -av \
+          --partial \
+          --progress \
+          --ignore-existing \
+          --include='*.wav' \
+          --include='*.opus' \
+          --include='*.mp3' \
+          --exclude='*' \
+          "$home_music_dir/" \
+          "$phone_music_dir/"
+}
+
+copy_pictures() {
+    # Copy the pics from my phone
+    rsync -av \
+          --ignore-existing \
+          -- \
+          "$phone_camera_dir" \
+          "$home_picture_dir" \
+          ""
+}
