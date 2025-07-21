@@ -84,69 +84,69 @@ clean_trash() {
     echo "Deleted $deleted_symlinks broken symlinks..."
 }
 
-clean_trash() {
-    # Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
-    # the likelihood of deleting something I do not want to delete.  Or rather
-    # giving me as long a chance as is within reason to review the wallpapers before
-    # deleting them.
-    echo "Pruning the trash directory..."
+# clean_trash() {
+#     # Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
+#     # the likelihood of deleting something I do not want to delete.  Or rather
+#     # giving me as long a chance as is within reason to review the wallpapers before
+#     # deleting them.
+#     echo "Pruning the trash directory..."
 
-    #     find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
-        #         | sort -n \
-        #         | awk '
-    # { files[NR] = $2 }
-    # END {
-    #     total = NR
-    #     to_delete = int(total / 4)
-    #     print "Total wallpapers:", total > "/dev/stderr"
-    #     print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
-    #     for (i = 1; i <= to_delete; i++) print files[i]
-    # }
-    # ' \
-        #         | xargs -r rm --
-    #     echo "Deleted the oldest fourth ({count}) of wallpapers..."
+#     #     find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
+    #         #         | sort -n \
+    #         #         | awk '
+#     # { files[NR] = $2 }
+#     # END {
+#     #     total = NR
+#     #     to_delete = int(total / 4)
+#     #     print "Total wallpapers:", total > "/dev/stderr"
+#     #     print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
+#     #     for (i = 1; i <= to_delete; i++) print files[i]
+#     # }
+#     # ' \
+    #         #         | xargs -r rm --
+#     #     echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -mtime +90 | wc -l)
-    # find "$trash" -type f -mtime +90 -delete
-    echo "Deleted $count very old files (over 90 days)..."
+#     count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -mtime +90 | wc -l)
+#     # find "$trash" -type f -mtime +90 -delete
+#     echo "Deleted $count very old files (over 90 days)..."
 
-    # # # TODO: get rid of backup files (ending in .bak)
-    # count=$(find "$dir" -type f -name '*~' | wc -l)
-    # find "$dir" -type f -name '*~' -exec rm -v {} +
-    # echo "Deleting $count backup files..."
+#     # # # TODO: get rid of backup files (ending in .bak)
+#     # count=$(find "$dir" -type f -name '*~' | wc -l)
+#     # find "$dir" -type f -name '*~' -exec rm -v {} +
+#     # echo "Deleting $count backup files..."
 
-    # count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
-    # find "$dir" -type f -name '*.rej' -exec rm -v {} +
-    # echo "Deleting .rej files..."
+#     # count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
+#     # find "$dir" -type f -name '*.rej' -exec rm -v {} +
+#     # echo "Deleting .rej files..."
 
-    # count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
-    # find "$dir" -type f -name '*.zip' -exec rm -v {} +
-    # echo "Deleting zip files."
+#     # count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
+#     # find "$dir" -type f -name '*.zip' -exec rm -v {} +
+#     # echo "Deleting zip files."
 
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -name '*.iso' | wc -l)
-    # find "$dir" -mindepth 1 -maxdepth 1 -type f -name '*.iso' -exec rm -v {} +
-    echo "Deleting $count ISOs..."
+#     count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -name '*.iso' | wc -l)
+#     # find "$dir" -mindepth 1 -maxdepth 1 -type f -name '*.iso' -exec rm -v {} +
+#     echo "Deleting $count ISOs..."
 
-    # find "$dir" -type f -name '*.lock' -exec rm -v {} +
-    # find "$dir" -type f -name '*.lock' -exec rm -v {} +
-    # echo "Deleting lock files..."
+#     # find "$dir" -type f -name '*.lock' -exec rm -v {} +
+#     # find "$dir" -type f -name '*.lock' -exec rm -v {} +
+#     # echo "Deleting lock files..."
 
-    # # # Clean up old logs.
-    # # journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
-    # # echo "Deleted old systemd logs.."
+#     # # # Clean up old logs.
+#     # # journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+#     # # echo "Deleted old systemd logs.."
 
-    # # # echo "Deleting old files in pacman cache..."
-    # # # clean_pacman_cache
-    # echo "Deleted $count extra packages from pacman cache..."
+#     # # # echo "Deleting old files in pacman cache..."
+#     # # # clean_pacman_cache
+#     # echo "Deleted $count extra packages from pacman cache..."
 
-    # # # Delete old files in cache.
-    # # # sudo rm -rf ~/.cache/*                 # clean user cache
-    # # # sudo rm -rf /var/cache/*               # clean system cache (with care)
+#     # # # Delete old files in cache.
+#     # # # sudo rm -rf ~/.cache/*                 # clean user cache
+#     # # # sudo rm -rf /var/cache/*               # clean system cache (with care)
 
-    # # Delete broken symlinks
-    # find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
-    # echo "Deleted broken symlinks..."
-}
+#     # # Delete broken symlinks
+#     # find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
+#     # echo "Deleted broken symlinks..."
+# }
 
 case "$1" in
     "")
