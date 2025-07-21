@@ -105,7 +105,7 @@ clean_trash
 
 case "$1" in
     "")
-        switch_wallpaper
+        clean_pacman_cache
         ;;
     -p|--packages)
         clean_pacman_cache
