@@ -47,13 +47,13 @@ END {
 }
 ' \
         | xargs -r rm --
-    echo "Deleted the oldest fourth of wallpapers..."
+    echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
     echo "Deleted __pycache__ directories..."
 
-    echo "Deleting Python compiled files (.pyc, .pyo)..."
     find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
+    echo "Deleting Python compiled files (.pyc, .pyo)..."
 
     count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
