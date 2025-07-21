@@ -60,7 +60,7 @@ find "$dir" -type f -name '*.zip' -exec rm -v {} +
 find "$dir" -type f -name '*.iso' -exec rm -v {} +
 echo "Deleting old ISOs..."
 
-find "$dir" -type f -name '*.iso' -exec rm -v {} +
+find "$dir" -type f -name '*.lock' -exec rm -v {} +
 echo "Deleting lock files..."
 # # Clean up old logs.
 # echo "Deleting old systemd logs.."
