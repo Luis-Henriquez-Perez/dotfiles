@@ -99,3 +99,5 @@ END {
     find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
     echo "Deleted broken symlinks..."
 }
+
+clean_pacman_cache
