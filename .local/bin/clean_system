@@ -10,6 +10,8 @@ trash="$HOME/Trash/"
 # the likelihood of deleting something I do not want to delete.  Or rather
 # giving me as long a chance as is within reason to review the wallpapers before
 # deleting them.
+echo "Pruning the trash directory..."
+
 echo "Deleting the oldest fourth of wallpapers..."
 find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
         | sort -n \
@@ -41,11 +43,9 @@ count=$(find "$trash" -type f -empty | tee /dev/stderr | wc -l)
 find "$trash" -type f -empty -delete
 echo "Deleted $count empty files..."
 
-# # Delete one third of very old files until there are fewer than 20 awp, delete
-# # them all.
-# echo "Deleting very old files (>90 days)..."
-# find "$trash" -type f -mtime +90 -exec rm -f -- {} +
-# find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
+count=$(find "$trash" -type f -mtime +90 | tee /dev/stderr | wc -l)
+find "$trash" -type f -mtime +90 -delete
+echo "Deleted $count very old files (over 90 days)..."
 
 # # Clean up old logs.
 # echo "Deleting old systemd logs.."
