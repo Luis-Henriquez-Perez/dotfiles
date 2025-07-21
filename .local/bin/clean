@@ -67,8 +67,8 @@ clean_trash() {
                     rm -f "$item" && ((deleted_empty_files++))
                 elif [ -d "$item" ] && [ -z "$(ls -A "$item")" ]; then
                     rmdir "$item" && ((deleted_empty_dirs++))
-                elif [ -f "$item" ] && [ "$(find "$item" -mtime +90)" ]; then
-                    rm -f "$item" && ((deleted_old++))
+                    # elif [ -f "$item" ] && [ "$(find "$item" -mtime +90)" ]; then
+                    #     rm -f "$item" && ((deleted_old++))
                 fi
                 ;;
         esac
