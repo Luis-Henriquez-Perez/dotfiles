@@ -43,7 +43,7 @@ clean_trash() {
     }
     ' \
         | xargs -r rm --
-    echo "Deleted the oldest fourth ({count}) of wallpapers..."
+    echo "Delete {count} wallpapers..."
 
     local deleted_pycache=0
     local deleted_pyc=0
