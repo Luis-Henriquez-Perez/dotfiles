@@ -45,7 +45,8 @@ END {
     print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
     for (i = 1; i <= to_delete; i++) print files[i]
 }
-' | xargs -r rm --
+' \
+        | xargs -r rm --
     echo "Deleted the oldest fourth of wallpapers..."
 
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
