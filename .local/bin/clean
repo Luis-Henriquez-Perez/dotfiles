@@ -28,6 +28,63 @@ clean_pacman_cache() {
 }
 
 clean_trash() {
+    echo "Cleaning the trash directory..."
+
+    local deleted_pycache=0
+    local deleted_pyc=0
+    local deleted_elc=0
+    local deleted_empty_dirs=0
+    local deleted_empty_files=0
+    local deleted_old=0
+    local deleted_iso=0
+    local deleted_symlinks=0
+
+    for item in "$trash"/*; do
+        # Skip if the glob doesn't match anything
+        [ -e "$item" ] || continue
+
+        case "$item" in
+            */__pycache__)
+                rm -rf "$item" && ((deleted_pycache++))
+                ;;
+
+            *.pyc|*.pyo)
+                rm -f "$item" && ((deleted_pyc++))
+                ;;
+
+            *.elc)
+                rm -f "$item" && ((deleted_elc++))
+                ;;
+
+            *.iso)
+                rm -f "$item" && ((deleted_iso++))
+                ;;
+
+            *)
+                if [ -L "$item" ] && [ ! -e "$item" ]; then
+                    rm -f "$item" && ((deleted_symlinks++))
+                elif [ -f "$item" ] && [ ! -s "$item" ]; then
+                    rm -f "$item" && ((deleted_empty_files++))
+                elif [ -d "$item" ] && [ -z "$(ls -A "$item")" ]; then
+                    rmdir "$item" && ((deleted_empty_dirs++))
+                elif [ -f "$item" ] && [ "$(find "$item" -mtime +90)" ]; then
+                    rm -f "$item" && ((deleted_old++))
+                fi
+                ;;
+        esac
+    done
+
+    echo "Deleted $deleted_pycache __pycache__ directories..."
+    echo "Deleted $deleted_pyc Python compiled files (.pyc, .pyo)..."
+    echo "Deleted $deleted_elc elisp compiled files..."
+    echo "Deleted $deleted_empty_dirs empty directories..."
+    echo "Deleted $deleted_empty_files empty files..."
+    echo "Deleted $deleted_old very old files (over 90 days)..."
+    echo "Deleted $deleted_iso ISOs..."
+    echo "Deleted $deleted_symlinks broken symlinks..."
+}
+
+clean_trash() {
     # Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
     # the likelihood of deleting something I do not want to delete.  Or rather
     # giving me as long a chance as is within reason to review the wallpapers before
@@ -49,26 +106,6 @@ clean_trash() {
         #         | xargs -r rm --
     #     echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type d -name '__pycache__' |  wc -l)
-    find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
-    echo "Deleting $count __pycache__ directories..."
-
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) | wc -l)
-    find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
-    echo "Deleted $count Python compiled files (.pyc, .pyo)..."
-
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.elc' \) | wc -l)
-    find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.elc' \) -exec rm -- {} +
-    echo "Deleted $count elisp compiled files..."
-
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type d -empty | wc -l)
-    find "$trash" -mindepth 1 -maxdepth 1 -type d -empty -delete
-    echo "Deleted $count empty directories..."
-
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -empty | wc -l)
-    find "$trash" -mindepth 1 -maxdepth 1 -type f -empty -delete
-    echo "Deleted $count empty files..."
-
     count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -mtime +90 | wc -l)
     # find "$trash" -type f -mtime +90 -delete
     echo "Deleted $count very old files (over 90 days)..."
@@ -86,18 +123,21 @@ clean_trash() {
     # find "$dir" -type f -name '*.zip' -exec rm -v {} +
     # echo "Deleting zip files."
 
-    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -name '*.iso')
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -name '*.iso' | wc -l)
     # find "$dir" -mindepth 1 -maxdepth 1 -type f -name '*.iso' -exec rm -v {} +
     echo "Deleting $count ISOs..."
 
     # find "$dir" -type f -name '*.lock' -exec rm -v {} +
+    # find "$dir" -type f -name '*.lock' -exec rm -v {} +
     # echo "Deleting lock files..."
+
     # # # Clean up old logs.
     # # journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
     # # echo "Deleted old systemd logs.."
 
     # # # echo "Deleting old files in pacman cache..."
     # # # clean_pacman_cache
+    # echo "Deleted $count extra packages from pacman cache..."
 
     # # # Delete old files in cache.
     # # # sudo rm -rf ~/.cache/*                 # clean user cache
