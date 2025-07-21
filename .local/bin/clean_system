@@ -32,8 +32,9 @@ find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
 echo "Deleting Python compiled files (.pyc, .pyo)..."
 find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
 
-echo "Deleting any elisp comiled files..."
+count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
 find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
+echo "Deleting any elisp compiled files..."
 
 count=$(find "$trash" -type d -empty | tee /dev/stderr | wc -l)
 find "$trash" -type d -empty -delete
@@ -54,8 +55,8 @@ echo "Deleted $count very old files (over 90 days)..."
 # # TODO: move lockfiles to trash search in my main directories.
 
 # # TODO: get rid of backup files (ending in .bak)
-# echo "Deleting backup files..."
-# find "$dir" -type f -name '*~' -exec rm -v {} +
+find "$dir" -type f -name '*~' -exec rm -v {} +
+echo "Deleting backup files..."
 
 # # echo "Deleting old files in pacman cache..."
 # # clean_pacman_cache
