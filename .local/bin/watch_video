@@ -1,0 +1,15 @@
+#!/bin/sh
+# Filename: watch_video
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-05 01:06:25
+# Description: Prompt for a video to watch and play it with MPV.
+
+video_dir="$HOME/Videos"
+
+# Prompt for a video to watch with rofi it should be a file in the video
+# directory.
+
+# Play the resulting video with MPV.
+video_name=$(find "$video_dir" -maxdepth 1 -type f -printf "%f\n" | sort | rofi -dmenu -i -p "Select a video to play:")
+
+mpv -- "$video_dir/$video_name" >/dev/null 2>&1 &
