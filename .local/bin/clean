@@ -7,7 +7,24 @@
 trash="$HOME/Trash/"
 
 clean_pacman_cache() {
+    # Keep last N versions of each package in pacman cache (without using paccache)
+    KEEP=3
 
+    CACHE_DIR="/var/cache/pacman/pkg"
+
+    cd "$CACHE_DIR" || exit 1
+
+    # List all cached packages
+    # Format: name-ver-rel.pkg.tar.zst
+    for pkg in *.pkg.tar.*; do
+        # Get package base name (e.g., "vim" from "vim-9.0.123-1-x86_64.pkg.tar.zst")
+        base="$(echo "$pkg" | sed -E 's/-[^-]+-[^-]+-[^-]+\.pkg\.tar\..+//' )"
+        echo "$base -> $pkg"
+        # Get the version of the package and count the number of versions.  If there
+        # are more than three versions the oldests so there are only three left.
+        # echo "$pkg:$base" >> "$TMPFILE"
+        # how to compare versions in shell?
+    done
 }
 
 # Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
