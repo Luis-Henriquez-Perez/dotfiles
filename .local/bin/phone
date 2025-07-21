@@ -2,7 +2,7 @@
 # Filename: phone
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-07-20 09:29:50
-# Description: Do operations reled to my phone.
+# Description: Sync information on my phone.
 
 set -eu
 
