@@ -1,0 +1,82 @@
+#!/bin/sh
+# Filename: clean_system
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-30 09:22:54
+# Description: Clean up my trash.
+
+trash="$HOME/Trash/"
+
+clean_pacman_cache() {
+
+}
+
+# Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
+# the likelihood of deleting something I do not want to delete.  Or rather
+# giving me as long a chance as is within reason to review the wallpapers before
+# deleting them.
+echo "Pruning the trash directory..."
+
+find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
+    | sort -n \
+    | awk '
+{ files[NR] = $2 }
+END {
+    total = NR
+    to_delete = int(total / 4)
+    print "Total wallpapers:", total > "/dev/stderr"
+    print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
+    for (i = 1; i <= to_delete; i++) print files[i]
+}
+' | xargs -r rm --
+echo "Deleted the oldest fourth of wallpapers..."
+
+find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
+echo "Deleted __pycache__ directories..."
+
+echo "Deleting Python compiled files (.pyc, .pyo)..."
+find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
+
+count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
+find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
+echo "Deleted $count elisp compiled files..."
+
+count=$(find "$trash" -type d -empty | tee /dev/stderr | wc -l)
+find "$trash" -type d -empty -delete
+echo "Deleted $count empty directories..."
+
+count=$(find "$trash" -type f -empty | tee /dev/stderr | wc -l)
+find "$trash" -type f -empty -delete
+echo "Deleted $count empty files..."
+
+count=$(find "$trash" -type f -mtime +90 | tee /dev/stderr | wc -l)
+find "$trash" -type f -mtime +90 -delete
+echo "Deleted $count very old files (over 90 days)..."
+
+# # TODO: get rid of backup files (ending in .bak)
+find "$dir" -type f -name '*~' -exec rm -v {} +
+echo "Deleting backup files..."
+
+find "$dir" -type f -name '*.rej' -exec rm -v {} +
+echo "Deleting .rej files..."
+
+find "$dir" -type f -name '*.zip' -exec rm -v {} +
+
+find "$dir" -type f -name '*.iso' -exec rm -v {} +
+echo "Deleting old ISOs..."
+
+find "$dir" -type f -name '*.lock' -exec rm -v {} +
+echo "Deleting lock files..."
+# # Clean up old logs.
+# journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+echo "Deleted old systemd logs.."
+
+# # echo "Deleting old files in pacman cache..."
+# # clean_pacman_cache
+
+# # Delete old files in cache.
+# # sudo rm -rf ~/.cache/*                 # clean user cache
+# # sudo rm -rf /var/cache/*               # clean system cache (with care)
+
+# Delete broken symlinks
+find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
+echo "Deleted broken symlinks..."
