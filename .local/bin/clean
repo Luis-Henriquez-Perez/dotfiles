@@ -86,9 +86,9 @@ clean_trash() {
     # find "$dir" -type f -name '*.zip' -exec rm -v {} +
     # echo "Deleting zip files."
 
-    count=$(find "$dir" -mindepth 1 -maxdepth 1 -type f -name '*.iso')
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -name '*.iso')
     # find "$dir" -mindepth 1 -maxdepth 1 -type f -name '*.iso' -exec rm -v {} +
-    echo "Deleting old ISOs..."
+    echo "Deleting $count ISOs..."
 
     # find "$dir" -type f -name '*.lock' -exec rm -v {} +
     # echo "Deleting lock files..."
