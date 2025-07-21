@@ -19,7 +19,7 @@ fi
 # echo "Removing old music from phone..."
 # find "$phone_music_dir" -maxdepth 1 -type f -delete
 
-copy_music() {
+copy_computer_music_to_phone() {
     echo "Copying music files to phone..."
     rsync -av \
           --partial \
@@ -33,7 +33,7 @@ copy_music() {
           "$phone_music_dir/"
 }
 
-copy_pictures() {
+copy_camera_pictures_to_computer() {
     # Copy the pics from my phone
     rsync -av \
           --ignore-existing \
@@ -42,3 +42,5 @@ copy_pictures() {
           "$home_picture_dir" \
           ""
 }
+
+copy_computer_music_to_phone
