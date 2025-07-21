@@ -110,7 +110,7 @@ case "$1" in
     -p|--packages)
         clean_pacman_cache
         ;;
-    -s|--save)
+    -t|--trash)
         save_wallpaper
         ;;
     -S|--switch)
