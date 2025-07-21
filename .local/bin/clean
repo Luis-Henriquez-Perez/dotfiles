@@ -43,7 +43,7 @@ clean_trash() {
     }
     ' \
         | xargs -r rm --
-    echo "Delete {count} wallpapers..."
+    echo "Deleted {count} wallpapers..."
 
     local deleted_pycache=0
     local deleted_pyc=0
@@ -56,6 +56,8 @@ clean_trash() {
 
     for item in "$trash"/*; do
         # Skip if the glob doesn't match anything
+        [ -e "$item" ] || continue
+        # TODO: skip wallpapers, I handle that above.
         [ -e "$item" ] || continue
 
         case "$item" in
