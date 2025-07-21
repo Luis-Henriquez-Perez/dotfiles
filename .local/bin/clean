@@ -102,3 +102,35 @@ END {
 
 clean_pacman_cache
 clean_trash_dir
+
+case "$1" in
+    "")
+        switch_wallpaper
+        ;;
+    -p|--packages)
+        delete_wallpaper
+        switch_wallpaper
+        ;;
+    -s|--save)
+        save_wallpaper
+        ;;
+    -S|--switch)
+        save_wallpaper
+        switch_wallpaper
+        ;;
+    -m|--manage)
+        manage_wallpapers
+        ;;
+    -r|--restore)
+        restore_wallpapers
+        ;;
+    -l|--download)
+        download_wallpapers
+        ;;
+    -c|--choose)
+        choose_wallpaper
+        ;;
+    *)
+        set_wallpaper
+        ;;
+esac
