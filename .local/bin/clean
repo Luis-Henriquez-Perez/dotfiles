@@ -114,22 +114,6 @@ case "$1" in
     -t|--trash)
         clean_trash
         ;;
-    -S|--switch)
-        save_wallpaper
-        switch_wallpaper
-        ;;
-    -m|--manage)
-        manage_wallpapers
-        ;;
-    -r|--restore)
-        restore_wallpapers
-        ;;
-    -l|--download)
-        download_wallpapers
-        ;;
-    -c|--choose)
-        choose_wallpaper
-        ;;
     *)
         set_wallpaper
         ;;
