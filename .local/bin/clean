@@ -49,7 +49,7 @@ END {
         | xargs -r rm --
     echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
-    count=$(find "$trash" -type d -name '__pycache__')
+    count=$(find "$trash" -type d -name '__pycache__' | tee /dev/stderr | wc -l)
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
     echo "Deleting $count __pycache__ directories..."
 
