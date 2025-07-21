@@ -108,8 +108,7 @@ case "$1" in
         switch_wallpaper
         ;;
     -p|--packages)
-        delete_wallpaper
-        switch_wallpaper
+        clean_pacman_cache
         ;;
     -s|--save)
         save_wallpaper
