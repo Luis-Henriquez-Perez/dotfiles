@@ -1,0 +1,57 @@
+#!/bin/sh
+# Filename: install_system_files.sh
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-18 15:03:54
+# Description: install system files.
+# I keep all my edited system in my dotfiles and when initializing I backup the
+# existing corresponding system files and replace them with my custom system
+# files.  This script can also restore them.
+
+SRC_DIR="$HOME/.local/share/system-files"
+BACKUP_DIR="/etc/dotfiles-backup-$(date +%F-%H%M%S)"
+
+echo "Backing up original system files to $BACKUP_DIR"
+echo
+
+# Function to copy and back up a file
+copy_and_backup() {
+    src_path="$1"
+    rel_path="${src_path#$SRC_DIR/}"
+    dst_path="/$rel_path"
+
+    echo "Processing $dst_path"
+
+    # Make backup dir if needed
+    backup_path="$BACKUP_DIR/$rel_path"
+    backup_dir_path=$(dirname "$backup_path")
+
+    if [ ! -d "$backup_dir_path" ]; then
+        sudo mkdir -p "$backup_dir_path"
+    fi
+
+    # Backup original file if it exists
+    if [ -f "$dst_path" ] || [ -d "$dst_path" ]; then
+        sudo cp -a "$dst_path" "$backup_path"
+        echo "  → Backed up to $backup_path"
+    else
+        echo "  → No original file to back up"
+    fi
+
+    # Ensure destination directory exists
+    dst_dir_path=$(dirname "$dst_path")
+    if [ ! -d "$dst_dir_path" ]; then
+        sudo mkdir -p "$dst_dir_path"
+    fi
+
+    # Copy file
+    sudo cp "$src_path" "$dst_path"
+    echo "  → Installed $src_path to $dst_path"
+    echo
+}
+
+# Find all files in the source directory and process them
+find "$SRC_DIR" -type f | while IFS= read -r file; do
+    copy_and_backup "$file"
+done
+
+echo "✅ System files installed successfully."
