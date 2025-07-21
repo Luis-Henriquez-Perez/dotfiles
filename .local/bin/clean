@@ -101,3 +101,4 @@ END {
 }
 
 clean_pacman_cache
+clean_trash_dir
