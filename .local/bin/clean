@@ -111,7 +111,7 @@ case "$1" in
         clean_pacman_cache
         ;;
     -t|--trash)
-        save_wallpaper
+        clean_trash
         ;;
     -S|--switch)
         save_wallpaper
