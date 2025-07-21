@@ -69,9 +69,9 @@ clean_trash() {
     find "$trash" -mindepth 1 -maxdepth 1 -type f -empty -delete
     echo "Deleted $count empty files..."
 
-    # count=$(find "$trash" -type f -mtime +90 | tee /dev/stderr | wc -l)
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -mtime +90 | wc -l)
     # find "$trash" -type f -mtime +90 -delete
-    # echo "Deleted $count very old files (over 90 days)..."
+    echo "Deleted $count very old files (over 90 days)..."
 
     # # # TODO: get rid of backup files (ending in .bak)
     # count=$(find "$dir" -type f -name '*~' | tee /dev/stderr | wc -l)
