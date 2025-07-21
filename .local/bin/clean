@@ -100,9 +100,6 @@ END {
     echo "Deleted broken symlinks..."
 }
 
-clean_pacman_cache
-clean_trash
-
 case "$1" in
     "")
         clean_pacman_cache
