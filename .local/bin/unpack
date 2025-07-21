@@ -1,0 +1,18 @@
+#!/bin/sh
+# Filename: unpack
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-07-06 02:13:03
+# Description: Unpack files in the specified directory.
+
+dir=$1
+
+if [ -d "$1" ]; then
+    echo "This is directory $dir"
+    mv "$1"/* . 2>/dev/null
+    # Move all dotfiles except ".." and ".".
+    mv "$dir"/.[!.]* "$dir"/..?* . 2>/dev/null
+    # Remove the target.
+    rmdir "$1"
+else
+    echo "unpack: '$1' is not a directory"
+fi
