@@ -9,6 +9,7 @@
 # Directory containing wallpapers
 wallpaper_dir="$HOME/Pictures/wallpapers"
 trash="$HOME/Trash"
+deleted_wallpaper_dir="$trash/wallpapers"
 used_wallpapers_file="$HOME/.cache/used_wallpapers_file"
 
 delete_wallpaper() {
@@ -31,8 +32,8 @@ delete_wallpaper() {
     tmpfile=$(mktemp)
     sed '$d' "$used_wallpapers_file" > "$tmpfile" && mv "$tmpfile" "$used_wallpapers_file"
 
-    mv "$last_wallpaper" "$trash"
-    echo "Moved $last_wallpaper to $trash"
+    mv "$last_wallpaper" "$deleted_wallpaper_dir"
+    echo "Moved $last_wallpaper to $deleted_wallpaper_dir"
     notify-send "Wallpaper" "Deleted $last_wallpaper..."
 }
 
@@ -101,6 +102,28 @@ choose_wallpaper() {
     else
         echo "No wallpaper selected."
     fi
+}
+
+set_wallpaper() {
+    # Smart check for full path vs relative path vs bare filename
+    case "$1" in
+        /*|.|../*) file="$1" ;;  # already a path
+        *)         file="./$1" ;; # treat bare name as current dir
+    esac
+
+    if [ -f "$file" ]; then
+        xwallpaper --stretch "$file"
+    else
+        echo "File not found: $file"
+        echo "Usage: $0 [-d|--delete|-s|--save|-S|--switch|-m|--manage|-r|--restore|-l|--download|-c|--choose] [file]"
+        exit 1
+    fi
+    # if [ -f "$1" ]; then
+    #     xwallpaper --stretch "$1"
+    # else
+    #     echo "Usage: $0 [-d|--delete|-s|--save|-S|--switch|-m|--manage|-r|--restore|-l|--download|-c|--choose] [file]"
+    #     exit 1
+    # fi
 }
 
 case "$1" in
