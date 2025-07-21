@@ -34,7 +34,7 @@ find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
 
 count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
 find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
-echo "Deleting any elisp compiled files..."
+echo "Deleted $count elisp compiled files..."
 
 count=$(find "$trash" -type d -empty | tee /dev/stderr | wc -l)
 find "$trash" -type d -empty -delete
