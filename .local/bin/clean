@@ -54,11 +54,11 @@ clean_trash() {
     echo "Deleting $count __pycache__ directories..."
 
     count=$(find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) | wc -l)
-    find "$trash" -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
+    find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
     echo "Deleted $count Python compiled files (.pyc, .pyo)..."
 
     count=$(find "$trash" -type f \( -name '*.elc' \) | wc -l)
-    find "$trash" -maxdepth 1 -type f \( -name '*.elc' \) -exec rm -- {} +
+    find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.elc' \) -exec rm -- {} +
     echo "Deleted $count elisp compiled files..."
 
     count=$(find "$trash" -mindepth 1 -maxdepth 1 -type d -empty | wc -l)
