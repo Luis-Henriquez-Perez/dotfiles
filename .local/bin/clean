@@ -49,11 +49,13 @@ END {
         | xargs -r rm --
     echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
+    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
-    echo "Deleted __pycache__ directories..."
+    echo "Deleting $count __pycache__ directories..."
 
+    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
-    echo "Deleting Python compiled files (.pyc, .pyo)..."
+    echo "Deleted $count Python compiled files (.pyc, .pyo)..."
 
     count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
@@ -72,13 +74,17 @@ END {
     echo "Deleted $count very old files (over 90 days)..."
 
     # # TODO: get rid of backup files (ending in .bak)
+    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$dir" -type f -name '*~' -exec rm -v {} +
     echo "Deleting backup files..."
 
+    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$dir" -type f -name '*.rej' -exec rm -v {} +
     echo "Deleting .rej files..."
 
+    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
     find "$dir" -type f -name '*.zip' -exec rm -v {} +
+    echo "Deleting zip files."
 
     find "$dir" -type f -name '*.iso' -exec rm -v {} +
     echo "Deleting old ISOs..."
