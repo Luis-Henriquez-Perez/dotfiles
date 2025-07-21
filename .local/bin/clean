@@ -86,7 +86,7 @@ END {
     echo "Deleting lock files..."
     # # Clean up old logs.
     # journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
-    echo "Deleted old systemd logs.."
+    # echo "Deleted old systemd logs.."
 
     # # echo "Deleting old files in pacman cache..."
     # # clean_pacman_cache
