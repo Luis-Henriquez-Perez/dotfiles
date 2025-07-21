@@ -49,15 +49,15 @@ clean_trash() {
         #         | xargs -r rm --
     #     echo "Deleted the oldest fourth ({count}) of wallpapers..."
 
-    count=$(find "$trash" -type d -name '__pycache__' |  wc -l)
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type d -name '__pycache__' |  wc -l)
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
     echo "Deleting $count __pycache__ directories..."
 
-    count=$(find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) | wc -l)
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) | wc -l)
     find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
     echo "Deleted $count Python compiled files (.pyc, .pyo)..."
 
-    count=$(find "$trash" -type f \( -name '*.elc' \) | wc -l)
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.elc' \) | wc -l)
     find "$trash" -mindepth 1 -maxdepth 1 -type f \( -name '*.elc' \) -exec rm -- {} +
     echo "Deleted $count elisp compiled files..."
 
@@ -65,9 +65,9 @@ clean_trash() {
     find "$trash" -mindepth 1 -maxdepth 1 -type d -empty -delete
     echo "Deleted $count empty directories..."
 
-    # count=$(find "$trash" -type f -empty | tee /dev/stderr | wc -l)
-    # find "$trash" -type f -empty -delete
-    # echo "Deleted $count empty files..."
+    count=$(find "$trash" -mindepth 1 -maxdepth 1 -type f -empty | wc -l)
+    find "$trash" -mindepth 1 -maxdepth 1 -type f -empty -delete
+    echo "Deleted $count empty files..."
 
     # count=$(find "$trash" -type f -mtime +90 | tee /dev/stderr | wc -l)
     # find "$trash" -type f -mtime +90 -delete
