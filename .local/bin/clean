@@ -25,8 +25,7 @@ clean_pacman_cache() {
         # echo "$pkg:$base" >> "$TMPFILE"
         # how to compare versions in shell?
     done
-
-    # rm -f "$TMPFILE"
+"
 }
 
 # Delete the oldest fifth of wallpapers.  Trwi do the oldest fifth is to reduce
