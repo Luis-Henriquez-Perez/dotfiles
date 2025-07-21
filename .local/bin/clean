@@ -112,6 +112,5 @@ case "$1" in
         clean_trash
         ;;
     *)
-        set_wallpaper
         ;;
 esac
