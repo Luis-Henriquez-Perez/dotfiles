@@ -2,7 +2,7 @@
 # Filename: clean_system
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-30 09:22:54
-# Description: THEhis is a script for cleaning my system.
+# Description: This is a script for cleaning my system.
 
 trash="$HOME/Trash/"
 
