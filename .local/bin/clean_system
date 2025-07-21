@@ -10,8 +10,19 @@ trash="$HOME/Trash/"
 # the likelihood of deleting something I do not want to delete.  Or rather
 # giving me as long a chance as is within reason to review the wallpapers before
 # deleting them.
-echo "Deleting old wallpapers."
-find "$HOME/Trash" -type f \( -name 'wallhaven-*.jpg' -o -name 'wallhaven-*.png' \) -exec rm -- {} +
+echo "Deleting the oldest fourth of wallpapers..."
+find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
+        | sort -n \
+        | awk '
+{ files[NR] = $2 }
+END {
+    total = NR
+    to_delete = int(total / 4)
+    print "Total wallpapers:", total > "/dev/stderr"
+    print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
+    for (i = 1; i <= to_delete; i++) print files[i]
+}
+' | xargs -r rm --
 
 echo "Deleting __pycache__ directories..."
 find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
@@ -25,29 +36,29 @@ find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
 echo "Deleting empty directories..."
 find "$trash" -type d -empty -exec rmdir -- {} +
 
-# Delete one third of very old files until there are fewer than 20 awp, delete
-# them all.
-echo "Deleting very old files (>90 days)..."
-find "$trash" -type f -mtime +90 -exec rm -f -- {} +
-find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
+# # Delete one third of very old files until there are fewer than 20 awp, delete
+# # them all.
+# echo "Deleting very old files (>90 days)..."
+# find "$trash" -type f -mtime +90 -exec rm -f -- {} +
+# find "$trash" -type d -empty -mtime +90 -exec rmdir {} +
 
-# Clean up old logs.
-echo "Deleting old systemd logs.."
-journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
+# # Clean up old logs.
+# echo "Deleting old systemd logs.."
+# journalctl --vacuum-time=2weeks        # clear journal logs older than 2 weeks
 
-# TODO: move lockfiles to trash search in my main directories.
+# # TODO: move lockfiles to trash search in my main directories.
 
-# TODO: get rid of backup files (ending in .bak)
-echo "Deleting backup files..."
-find "$dir" -type f -name '*~' -exec rm -v {} +
+# # TODO: get rid of backup files (ending in .bak)
+# echo "Deleting backup files..."
+# find "$dir" -type f -name '*~' -exec rm -v {} +
 
-# echo "Deleting old files in pacman cache..."
-# clean_pacman_cache
+# # echo "Deleting old files in pacman cache..."
+# # clean_pacman_cache
 
-# Delete old files in cache.
-# sudo rm -rf ~/.cache/*                 # clean user cache
-# sudo rm -rf /var/cache/*               # clean system cache (with care)
+# # Delete old files in cache.
+# # sudo rm -rf ~/.cache/*                 # clean user cache
+# # sudo rm -rf /var/cache/*               # clean system cache (with care)
 
-# Delete broken symlinks
-echo "Deleting broken symlinks..."
-find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
+# # Delete broken symlinks
+# echo "Deleting broken symlinks..."
+# find "$trash" -type l ! -exec test -e {} \; -exec rm -- {} +
