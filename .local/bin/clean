@@ -53,7 +53,7 @@ END {
     find "$trash" -type d -name '__pycache__' -exec rm -rf {} +
     echo "Deleting $count __pycache__ directories..."
 
-    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
+    count=$("$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) | tee /dev/stderr | wc -l)
     find "$trash" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec rm -- {} +
     echo "Deleted $count Python compiled files (.pyc, .pyo)..."
 
@@ -74,7 +74,7 @@ END {
     echo "Deleted $count very old files (over 90 days)..."
 
     # # TODO: get rid of backup files (ending in .bak)
-    count=$(find "$trash" -type f \( -name '*.elc' \) | tee /dev/stderr | wc -l)
+    count=$(find "$dir" -type f -name '*~' | tee /dev/stderr | wc -l)
     find "$dir" -type f -name '*~' -exec rm -v {} +
     echo "Deleting backup files..."
 
