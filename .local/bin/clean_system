@@ -36,6 +36,11 @@ find "$trash" -type f \( -name '*.elc' \) -exec rm -- {} +
 echo "Deleting empty directories..."
 find "$trash" -type d -empty -exec rmdir -- {} +
 
+echo "Deleting empty files..."
+count=$(find "$trash" -type f -empty | tee /dev/stderr | wc -l)
+find "$trash" -type f -empty -delete
+echo "Deleted $count empty files."
+
 # # Delete one third of very old files until there are fewer than 20 awp, delete
 # # them all.
 # echo "Deleting very old files (>90 days)..."
