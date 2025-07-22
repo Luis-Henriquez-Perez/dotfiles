@@ -14,7 +14,7 @@ undotinit() {
 
 enable_systemd_services() {
     # System services
-    # systemctl enable --now NetworkManager
+    systemctl enable --now NetworkManager systemd-timesyncd
     # systemctl enable --now gpg-agent
     # systemctl enable --now systemd-timesyncd
 
