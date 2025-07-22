@@ -9,6 +9,7 @@
 get_mail() {
     mbsync -a
     mu index
+    notmuch new
 }
 
 # open_notmuch_email() {
