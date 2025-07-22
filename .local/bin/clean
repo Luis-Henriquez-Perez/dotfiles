@@ -136,11 +136,6 @@ END {
     echo "Deleted $deleted_symlinks broken symlinks..."
 }
 
-# clean_dir() {
-#     pass
-#     # Move all backup and lock files into trash.
-# }
-
 case "$1" in
     "")
         clean_pacman_cache
