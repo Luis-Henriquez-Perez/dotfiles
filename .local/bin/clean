@@ -6,24 +6,66 @@
 
 trash="$HOME/Trash/"
 
+# clean_pacman_cache() {
+#     # Keep last N versions of each package in pacman cache (without using paccache)
+#     KEEP=3
+
+#     CACHE_DIR="/var/cache/pacman/pkg"
+
+#     cd "$CACHE_DIR" || exit 1
+
+#     # List all cached packages
+#     # Format: name-ver-rel.pkg.tar.zst
+#     for pkg in *.pkg.tar.*; do
+#         # Get package base name (e.g., "vim" from "vim-9.0.123-1-x86_64.pkg.tar.zst")
+#         base="$(echo "$pkg" | sed -E 's/-[^-]+-[^-]+-[^-]+\.pkg\.tar\..+//' )"
+#         echo "$base -> $pkg"
+#         # Get the version of the package and count the number of versions.  If there
+#         # are more than three versions the oldests so there are only three left.
+#         # echo "$pkg:$base" >> "$TMPFILE"
+#         # how to compare versions in shell?
+#     done
+# }
+
 clean_pacman_cache() {
     # Keep last N versions of each package in pacman cache (without using paccache)
     KEEP=3
-
     CACHE_DIR="/var/cache/pacman/pkg"
+    IGNORE_LIST=("emacs")
 
     cd "$CACHE_DIR" || exit 1
 
-    # List all cached packages
-    # Format: name-ver-rel.pkg.tar.zst
+    # Use associative array to group packages by base name
+    declare -A packages
+
     for pkg in *.pkg.tar.*; do
-        # Get package base name (e.g., "vim" from "vim-9.0.123-1-x86_64.pkg.tar.zst")
-        base="$(echo "$pkg" | sed -E 's/-[^-]+-[^-]+-[^-]+\.pkg\.tar\..+//' )"
-        echo "$base -> $pkg"
-        # Get the version of the package and count the number of versions.  If there
-        # are more than three versions the oldests so there are only three left.
-        # echo "$pkg:$base" >> "$TMPFILE"
-        # how to compare versions in shell?
+        # Extract base name: remove last 3 hyphen-separated fields
+        base=$(echo "$pkg" | sed -E 's/-[^-]+-[^-]+-[^-]+\.pkg\.tar\..+//' )
+
+        # Check if this package should be ignored
+        for ignore in "${IGNORE_LIST[@]}"; do
+            if [[ "$base" == "$ignore" ]]; then
+                continue 2  # skip this pkg
+            fi
+        done
+
+        packages["$base"]+=$'\n'"$pkg"
+    done
+
+    for base in "${!packages[@]}"; do
+        # Get all package versions for this base, sorted by modification time (newest first)
+        pkgs_sorted=$(echo "${packages[$base]}" | sed '/^$/d' | xargs -d '\n' ls -t 2>/dev/null)
+
+        # Keep only the first $KEEP lines, delete the rest
+        i=0
+        echo "$pkgs_sorted" | while IFS= read -r pkg; do
+            i=$((i + 1))
+            if [ "$i" -le "$KEEP" ]; then
+                continue
+            fi
+            echo "Deleting old cached version: $pkg"
+            # rm -f -- "$pkg"
+        done
     done
 }
 
@@ -119,17 +161,18 @@ END {
 #     # Move all backup and lock files into trash.
 # }
 
-case "$1" in
-    "")
-        # clean_pacman_cache
-        clean_trash
-        ;;
-    -p|--packages)
-        clean_pacman_cache
-        ;;
-    -t|--trash)
-        clean_trash
-        ;;
-    *)
-        ;;
-esac
+clean_pacman_cache
+# case "$1" in
+#     "")
+#         # clean_pacman_cache
+#         clean_trash
+#         ;;
+#     -p|--packages)
+#         clean_pacman_cache
+#         ;;
+#     -t|--trash)
+#         clean_trash
+#         ;;
+#     *)
+#         ;;
+# esac
