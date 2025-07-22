@@ -11,18 +11,18 @@ get_mail() {
     mu index
 }
 
-open_notmuch_email() {
-    emacsclient
-}
+# open_notmuch_email() {
+#     emacsclient
+# }
 
-open_mu4e_email() {
-    emacsclient --
-}
+# open_mu4e_email() {
+#     emacsclient --
+# }
 
 
 case "$1" in
     "")
-        switch_wallpaper
+        get_mail
         ;;
     -d|--download)
         get_mail
