@@ -24,8 +24,8 @@ enable_systemd_services() {
 
     # Timers
     systemctl --user enable --now switch_wallpaper.timer
-    systemctl --user enable --now download_email.timer
     systemctl --user enable --now download_wallpapers.timer
+    systemctl --user enable --now download_email.timer
     systemctl --user enable --now clean.timer
 }
 
