@@ -1,5 +1,0 @@
-[Unit]
-Description=Clean system
-
-[Service]
-ExecStart=%h/.local/bin/clean_system
