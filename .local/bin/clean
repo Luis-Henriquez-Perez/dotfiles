@@ -106,6 +106,10 @@ clean_trash() {
     echo "Deleted $deleted_symlinks broken symlinks..."
 }
 
+clean_dir() {
+    # Move all backup and lock files into trash.
+}
+
 case "$1" in
     "")
         # clean_pacman_cache
