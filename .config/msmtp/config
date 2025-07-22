@@ -15,7 +15,7 @@ passwordeval "pass email/luis@luishp.xyz | head -n 1"
 
 account gmail
 host smtp.gmail.com
-port 587
+port 465
 auth on
 from luishenriquezperez@gmail.com
 user luishenriquezperez@gmail.com
