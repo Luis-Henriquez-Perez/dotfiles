@@ -33,20 +33,26 @@ clean_trash() {
     # If the wallpaper count is over 100, delete the oldest ones so that the
     # count is 100.  I do not know about this rule.  It is rather arbitrary but
     # for now it is fine.
+    tempfile=$(mktemp)
     find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
         | sort -n \
-        | awk '
-    { files[NR] = $2 }
-    END {
-        total = NR
-        to_delete = int(total / 4)
-        print "Total wallpapers:", total > "/dev/stderr"
-        print "Deleting:", to_delete " wallpapers..." > "/dev/stderr"
+        | awk -v outfile="$tempfile" '
+{
+    files[NR] = $2
+}
+END {
+    total = NR
+    if (total > 100) {
+        to_delete = total - 100
+        print "Deleting ", to_delete, "wallpapers out of" , total > "/dev/stderr"
         for (i = 1; i <= to_delete; i++) print files[i]
+        print to_delete > outfile
+    } else {
+        print 0 > outfile
     }
-    ' \
+}' \
         | xargs -r rm --
-    echo "Deleted {count} wallpapers..."
+    rm -f "$tempfile"
 
     case "$(basename "$item")" in
         *wallhaven-*.jpg | *wallhaven-*.png)
@@ -109,13 +115,14 @@ clean_trash() {
     echo "Deleted $deleted_symlinks broken symlinks..."
 }
 
-clean_dir() {
-    # Move all backup and lock files into trash.
-}
+# clean_dir() {
+#     pass
+#     # Move all backup and lock files into trash.
+# }
 
 case "$1" in
     "")
-        clean_pacman_cache
+        # clean_pacman_cache
         clean_trash
         ;;
     -p|--packages)
