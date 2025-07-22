@@ -89,6 +89,7 @@ case "$1" in
         initialize_dotfiles
         ;;
     -s|--services)
+        sudo true
         enable_systemd_services
         ;;
     -i|--install)
