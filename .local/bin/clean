@@ -31,7 +31,8 @@ clean_trash() {
     echo "Cleaning the trash directory..."
 
     # If the wallpaper count is over 100, delete the oldest ones so that the
-    # count is 100.
+    # count is 100.  I do not know about this rule.  It is rather arbitrary but
+    # for now it is fine.
     find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
         | sort -n \
         | awk '
