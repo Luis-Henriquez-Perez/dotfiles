@@ -7,7 +7,16 @@ logfile        ~/.config/msmtp/msmtp.log
 
 account luishp
 host mail.privateemail.com
-from luis@luishp.xyz
 port 465
+auth on
+from luis@luishp.xyz
 user luis@luishp.xyz
 passwordeval "pass email/luis@luishp.xyz | head -n 1"
+
+account gmail
+host smtp.gmail.com
+port 587
+auth on
+from luishenriquezperez@gmail.com
+user luishenriquezperez@gmail.com
+passwordeval "pass email/luishenriquezperez@gmail.com | head -n 1"
