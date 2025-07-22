@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename: save
+# Filename: sync
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-12 11:36:08
 # Description: Save my system to external hard drive.
