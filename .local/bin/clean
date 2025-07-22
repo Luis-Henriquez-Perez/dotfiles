@@ -7,6 +7,7 @@
 trash="$HOME/Trash/"
 
 clean_pacman_cache() {
+    echo "Cleaning cache..."
     # Keep last N versions of each package in pacman cache (without using paccache)
     KEEP=3
     CACHE_DIR="/var/cache/pacman/pkg"
@@ -140,17 +141,15 @@ END {
 #     # Move all backup and lock files into trash.
 # }
 
-# case "$1" in
-#     "")
-#         # clean_pacman_cache
-#         clean_trash
-#         ;;
-#     -p|--packages)
-#         clean_pacman_cache
-#         ;;
-#     -t|--trash)
-#         clean_trash
-#         ;;
-#     *)
-#         ;;
-# esac
+case "$1" in
+    "")
+        clean_pacman_cache
+        clean_trash
+        ;;
+    -p|--packages)
+        clean_pacman_cache
+           ;;
+    -t|--trash)
+        clean_trash
+           ;;
+esac
