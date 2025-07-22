@@ -6,7 +6,7 @@
 # This includes downloading email and opening notmuch and mu4e via Emacs to my
 # email accounts.
 
-download_and_index_email() {
+get_mail() {
     mbsync -a
     mu index
 }
@@ -25,7 +25,7 @@ case "$1" in
         switch_wallpaper
         ;;
     -d|--download)
-        download_and_index_email
+        get_mail
         ;;
     *)
         echo "Usage: $0 {delete}"
