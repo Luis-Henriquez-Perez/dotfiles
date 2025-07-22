@@ -14,15 +14,16 @@ undotinit() {
 
 enable_systemd_services() {
     # System services
-    systemctl enable --now NetworkManager
-    systemctl enable --now gpg-agent
-    systemctl enable --now systemd-timesyncd
+    # systemctl enable --now NetworkManager
+    # systemctl enable --now gpg-agent
+    # systemctl enable --now systemd-timesyncd
 
     # User services
     # systemctl --user enable --now emacs
     # systemctl --user enable --now picom
 
     # Timers
+    echo "Enable systemd timers..."
     systemctl --user enable --now switch_wallpaper.timer
     systemctl --user enable --now download_wallpapers.timer
     systemctl --user enable --now download_email.timer
@@ -89,7 +90,6 @@ case "$1" in
         initialize_dotfiles
         ;;
     -s|--services)
-        sudo true
         enable_systemd_services
         ;;
     -i|--install)
