@@ -2,4 +2,4 @@
 Description=Download email
 
 [Service]
-ExecStart=%h/.local/bin/download_email
+ExecStart=%h/.local/bin/email
