@@ -84,6 +84,12 @@ initialize_dotfiles() {
     done
 }
 
+create_needed_dirs() {
+    echo "Creating mail directories."
+    mkdir -p ~/.mail/luis@luishp.xyz/
+    mkdir -p ~/.mail/luishenriquezperez@gmail.com/
+    mkdir -p ~/.mail/yadiraperez2029@gmail.com/
+}
 
 case "$1" in
     "")
