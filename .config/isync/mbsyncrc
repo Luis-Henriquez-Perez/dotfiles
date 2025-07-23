@@ -25,8 +25,8 @@ SubFolders Verbatim
 # The trailing "/" is important
 # Also note that these directories have to be created before running ~mbsync
 # -a~, otherwise this wont work.
-Path ~/.mail/luishp/
-Inbox ~/.mail/luishp/Inbox
+Path ~/.mail/luis@luishp.xyz/
+Inbox ~/.mail/luis@luishp.xyz/Inbox
 
 Channel luishp
 Far :luishp-remote:
@@ -55,8 +55,8 @@ Account gmail
 
 MaildirStore gmail-local
 SubFolders Verbatim
-Path ~/.mail/luishenriquezperez/
-Inbox ~/.mail/luishenriquezperez/Inbox
+Path ~/.mail/luishenriquezperez@gmail.com/
+Inbox ~/.mail/luishenriquezperez@gmail.com/Inbox
 
 Channel gmail
 Far :gmail-remote:
