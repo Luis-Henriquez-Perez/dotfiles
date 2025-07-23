@@ -3,19 +3,10 @@
 ## mbsync (isync)
 # https://brian-thompson.medium.com/setting-up-isync-mbsync-on-linux-e9fe10c692c0
 ### luis@luishp.xyz
-# This is the name that will refer to the account.
 IMAPAccount luishp
 Host mail.privateemail.com
 User luis@luishp.xyz
 PassCMD "pass email/luis@luishp.xyz"
-
-# Looks like I do not need this for now.  I keep getting an error that the
-# =SSLType= is not a valid keyword. I do not know.
-#SSLType None
-# The following line should work. If you get certificate errors, uncomment the two following lines and read the "Troubleshooting" section.
-#CertificateFile /etc/ssl/certs/ca-certificates.crt
-#CertificateFile ~/.cert/imap.gmail.com.pem
-#CertificateFile ~/.cert/Equifax_Secure_CA.pem
 
 IMAPStore luishp-remote
 Account luishp
@@ -66,7 +57,6 @@ Expunge Both
 SyncState *
 ### mom gmail
 IMAPAccount mom
-# Address to connect to
 Host imap.gmail.com
 User yadiraperez2029@gmail.com
 PassCMD "pass show email/yadiraperez@gmail.com | grep emailapp | awk -F': ' '{print $2}'"
@@ -76,7 +66,6 @@ Account mom
 
 MaildirStore mom-local
 SubFolders Verbatim
-# The trailing "/" is important
 Path ~/.mail/yadiraperez2029@gmail.com/
 Inbox ~/.mail/yadiraperez2029@gmail.com/Inbox
 
