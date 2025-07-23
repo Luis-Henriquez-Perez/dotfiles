@@ -64,42 +64,13 @@ Near :gmail-local:
 Create Both
 Expunge Both
 SyncState *
-### mom account
-# IMAPAccount mom
-# # Address to connect to
-# Host mail.privateemail.com
-# User .xyz
-# PassCMD "pass email/luis@mom.xyz"
-
-# IMAPStore mom-remote
-# Account mom
-
-# MaildirStore mom-local
-# SubFolders Verbatim
-# # The trailing "/" is important
-# Path ~/.mail/mom/
-# Inbox ~/.mail/mom/Inbox
-
-# Channel mom
-# Far :mom-remote:
-# Near :mom-local:
-# # Exclude everything under the internal [Gmail] folder, except the interesting folders
-# #Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
-# # Or include everything
-# #Patterns *
-# # Automatically create missing mailboxes, both locally and on the server
-# Create Both
-# # Sync the movement of messages between folders and deletions, add after making sure the sync works
-# Expunge Both
-# # Save the synchronization state files in the relevant directory
-# SyncState *
 ### mom gmail
 IMAPAccount mom
 # Address to connect to
 Host imap.gmail.com
 User yadiraperez2029@gmail.com
 PassCMD "pass email/yadiraperez2029@gmail.com"
-PassCMD "pass show email/yadiraperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
+PassCMD "pass show email/yadiraperez@gmail.com | grep emailapp | awk -F': ' '{print $2}'"
 
 IMAPStore mom-remote
 Account mom
