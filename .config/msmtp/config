@@ -20,6 +20,4 @@ auth on
 from luishenriquezperez@gmail.com
 user luishenriquezperez@gmail.com
 passwordeval "pass show email/luishenriquezperez@gmail.com | sed -n 's/^pythonapp: //p'"
-# tls_starttls off
 tls_starttls on
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
