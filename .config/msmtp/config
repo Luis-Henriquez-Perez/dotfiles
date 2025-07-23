@@ -21,3 +21,12 @@ from luishenriquezperez@gmail.com
 user luishenriquezperez@gmail.com
 passwordeval "pass show email/luishenriquezperez@gmail.com | sed -n 's/^pythonapp: //p'"
 tls_starttls on
+
+account mom
+host smtp.gmail.com
+port 587
+auth on
+from yadiraperez2029@gmail.com
+user yadiraperez2029@gmail.com
+passwordeval "pass show email/luishenriquezperez@gmail.com | sed -n 's/^pythonapp: //p'"
+tls_starttls on
