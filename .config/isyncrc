@@ -97,7 +97,7 @@ SyncState *
 IMAPAccount mom
 # Address to connect to
 Host imap.gmail.com
-User .xyz
+User yadiraperez2029@gmail.com
 PassCMD "pass email/yadiraperez2029@gmail.com"
 PassCMD "pass show email/yadiraperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
 
