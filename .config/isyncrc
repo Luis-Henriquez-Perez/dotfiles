@@ -52,13 +52,14 @@ Near :gmail-local:
 Create Both
 Expunge Both
 SyncState *
+
 ### yadiraperez2029@gmail.com
 IMAPAccount mom
 Host imap.gmail.com
 User yadiraperez2029@gmail.com
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
-PassCMD "pass show email/yadiraperez@gmail.com | grep emailapp | awk -F': ' '{print $2}'"
+PassCMD "pass show email/yadiraperez@gmail.com | grep email | awk -F': ' '{print $2}'"
 
 IMAPStore mom-remote
 Account mom
