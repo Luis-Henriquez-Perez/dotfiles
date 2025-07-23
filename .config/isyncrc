@@ -69,7 +69,6 @@ IMAPAccount mom
 # Address to connect to
 Host imap.gmail.com
 User yadiraperez2029@gmail.com
-PassCMD "pass email/yadiraperez2029@gmail.com"
 PassCMD "pass show email/yadiraperez@gmail.com | grep emailapp | awk -F': ' '{print $2}'"
 
 IMAPStore mom-remote
