@@ -73,6 +73,4 @@ Far :mom-remote:
 Near :mom-local:
 Create Both
 Expunge Both
-Create Both
-Expunge Both
 SyncState *
