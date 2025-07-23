@@ -99,7 +99,7 @@ IMAPAccount mom
 Host imap.gmail.com
 User .xyz
 PassCMD "pass email/yadiraperez2029@gmail.com"
-PassCMD "pass show email/luishenriquezperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
+PassCMD "pass show email/yadiraperez@gmail.com | grep pythonapp | awk -F': ' '{print $2}'"
 
 IMAPStore mom-remote
 Account mom
