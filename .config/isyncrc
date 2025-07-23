@@ -13,9 +13,6 @@ Account luishp
 
 MaildirStore luishp-local
 SubFolders Verbatim
-# The trailing "/" is important
-# Also note that these directories have to be created before running ~mbsync
-# -a~, otherwise this wont work.
 Path ~/.mail/luis@luishp.xyz/
 Inbox ~/.mail/luis@luishp.xyz/Inbox
 
