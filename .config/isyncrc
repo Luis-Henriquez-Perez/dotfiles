@@ -56,6 +56,8 @@ SyncState *
 IMAPAccount mom
 Host imap.gmail.com
 User yadiraperez2029@gmail.com
+TLSType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 PassCMD "pass show email/yadiraperez@gmail.com | grep emailapp | awk -F': ' '{print $2}'"
 
 IMAPStore mom-remote
@@ -69,13 +71,8 @@ Inbox ~/.mail/yadiraperez2029@gmail.com/Inbox
 Channel mom
 Far :mom-remote:
 Near :mom-local:
-# Exclude everything under the internal [Gmail] folder, except the interesting folders
-#Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
-# Or include everything
-#Patterns *
-# Automatically create missing mailboxes, both locally and on the server
 Create Both
-# Sync the movement of messages between folders and deletions, add after making sure the sync works
 Expunge Both
-# Save the synchronization state files in the relevant directory
+Create Both
+Expunge Both
 SyncState *
