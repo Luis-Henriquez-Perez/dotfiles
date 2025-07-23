@@ -15,13 +15,11 @@ passwordeval "pass email/luis@luishp.xyz | head -n 1"
 
 account gmail
 host smtp.gmail.com
-# port 465
 port 587
 auth on
 from luishenriquezperez@gmail.com
 user luishenriquezperez@gmail.com
 passwordeval "pass show email/luishenriquezperez@gmail.com | sed -n 's/^pythonapp: //p'"
-# passwordeval "pass email/luishenriquezperez@gmail.com | head -n 1"
 # tls_starttls off
 tls_starttls on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
