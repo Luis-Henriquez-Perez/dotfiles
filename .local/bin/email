@@ -8,9 +8,19 @@
 
 get_mail() {
     mbsync -a
-    mu index
     notmuch new
 }
+
+# block_spam() {
+#     BLOCKLIST="$HOME/.config/notmuch/spam-senders.txt"
+
+#     while IFS= read -r sender; do
+#         if [ -n "$sender" ]; then
+#             echo "Tagging spam from: $sender"
+#             notmuch tag +spam +deleted -inbox -- "from:$sender"
+#         fi
+#     done < "$BLOCKLIST"
+# }
 
 # open_notmuch_email() {
 #     emacsclient
