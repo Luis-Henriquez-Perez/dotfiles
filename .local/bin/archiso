@@ -1,0 +1,61 @@
+#!/bin/sh
+# Filename: archiso
+# Author: Luis M Henriquez <luis@luishp.xyz>
+# Created: 2025-07-24 20:41:05
+# Description: Download archiso and burn it to a usb.
+
+set -e
+
+ISO_URL="https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso"
+ISO_NAME="archlinux-x86_64.iso"
+ISO_SIG_URL="$ISO_URL.sig"
+SIG_NAME="$ISO_NAME.sig"
+KEY_ID="0xB7D453EC1A7484C3"  # Arch Linux Master Key
+
+download_iso() {
+    echo "Downloading latest Arch Linux ISO..."
+    curl -LO "$ISO_URL"
+    curl -LO "$ISO_SIG_URL"
+}
+
+verify_iso() {
+    echo "Importing Arch Linux Master Key..."
+    gpg --keyserver keyserver.ubuntu.com --recv-keys "$KEY_ID" || true
+    echo "Verifying ISO signature..."
+    gpg --verify "$SIG_NAME" "$ISO_NAME"
+}
+
+list_disks() {
+    echo "Available removable disks:"
+    lsblk -dpno NAME,SIZE,MODEL | grep -E "/dev/sd[b-z]"
+}
+
+prompt_for_usb() {
+    echo ""
+    read -rp "Enter the device path to write the ISO (e.g. /dev/sdX): " USB_DEV
+    if [ ! -b "$USB_DEV" ]; then
+        echo "Error: $USB_DEV is not a block device"
+        exit 1
+    fi
+    read -rp "Are you sure you want to erase $USB_DEV? [y/N]: " CONFIRM
+    if [ "$CONFIRM" != "y" ]; then
+        echo "Aborted."
+        exit 1
+    fi
+}
+
+burn_iso() {
+    echo "Writing ISO to $USB_DEV..."
+    sudo dd bs=4M if="$ISO_NAME" of="$USB_DEV" status=progress oflag=sync
+    echo "Done. You can now boot from $USB_DEV."
+}
+
+main() {
+    download_iso
+    verify_iso
+    list_disks
+    prompt_for_usb
+    burn_iso
+}
+
+main "$@"
