@@ -15,7 +15,9 @@ SIG_NAME="$DOWNLOAD_DIR/ISO_NAME.sig"
 KEY_ID="0xB7D453EC1A7484C3"  # Arch Linux Master Key
 
 download_iso() {
-    echo "Downloading latest Arch Linux ISO..."
+    echo "Downloading latest Arch Linux ISO to downloads directory..."
+    # [ -f "$ISO_NAME" ] || curl -Lo "$ISO_NAME" "$ISO_URL"
+    # [ -f "$SIG_NAME" ] || curl -Lo "$SIG_NAME" "$ISO_SIG_URL"
     curl -LO "$ISO_URL"
     curl -LO "$ISO_SIG_URL"
 }
