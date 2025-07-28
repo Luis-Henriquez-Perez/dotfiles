@@ -22,15 +22,6 @@ get_mirrors() {
         sort -u
 }
 
-download_iso() {
-    # TODO: webscrape the archlinux site and prompt me for download links.
-    echo "Downloading latest Arch Linux ISO to downloads directory..."
-    # [ -f "$ISO_NAME" ] || curl -Lo "$ISO_NAME" "$ISO_URL"
-    # [ -f "$SIG_NAME" ] || curl -Lo "$SIG_NAME" "$ISO_SIG_URL"
-    curl -LO "$ISO_URL"
-    curl -LO "$ISO_SIG_URL"
-}
-
 get_iso_links() {
     ISO_PAGE=$(curl -s "$MIRROR")
     ISO_FILE=$(echo "$ISO_PAGE" | grep -Eo 'archlinux-[0-9.]+-x86_64\.iso' | head -n1)
@@ -38,6 +29,15 @@ get_iso_links() {
 
     ISO_URL="$MIRROR$ISO_FILE"
     SIG_URL="$MIRROR$SIG_FILE"
+}
+
+download_iso() {
+    # TODO: webscrape the archlinux site and prompt me for download links.
+    echo "Downloading latest Arch Linux ISO to downloads directory..."
+    # [ -f "$ISO_NAME" ] || curl -Lo "$ISO_NAME" "$ISO_URL"
+    # [ -f "$SIG_NAME" ] || curl -Lo "$SIG_NAME" "$ISO_SIG_URL"
+    curl -LO "$ISO_URL"
+    curl -LO "$ISO_SIG_URL"
 }
 
 verify_iso() {
