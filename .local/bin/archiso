@@ -31,6 +31,15 @@ download_iso() {
     curl -LO "$ISO_SIG_URL"
 }
 
+get_iso_links() {
+    ISO_PAGE=$(curl -s "$MIRROR")
+    ISO_FILE=$(echo "$ISO_PAGE" | grep -Eo 'archlinux-[0-9.]+-x86_64\.iso' | head -n1)
+    SIG_FILE="$ISO_FILE.sig"
+
+    ISO_URL="$MIRROR$ISO_FILE"
+    SIG_URL="$MIRROR$SIG_FILE"
+}
+
 verify_iso() {
     echo "Importing Arch Linux Master Key..."
     gpg --keyserver keyserver.ubuntu.com --recv-keys "$KEY_ID" || true
