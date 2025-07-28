@@ -8,6 +8,7 @@ set -e
 
 DOWNLOAD_DIR="$HOME/Downloads"
 
+ARCHWIKI_DOWNLOAD_PAGE=https://archlinux.org/download/
 ISO_URL="https://mirror.adectra.com/archlinux/iso/2025.07.01/archlinux-2025.07.01-x86_64.iso"
 ISO_NAME="$DOWNLOAD_DIR/archlinux-x86_64.iso"
 ISO_SIG_URL="https://mirror.adectra.com/archlinux/iso/2025.07.01/archlinux-2025.07.01-x86_64.iso.sig"
@@ -15,6 +16,7 @@ SIG_NAME="$DOWNLOAD_DIR/ISO_NAME.sig"
 KEY_ID="0xB7D453EC1A7484C3"  # Arch Linux Master Key
 
 download_iso() {
+    # TODO: webscrape the archlinux site and prompt me for download links.
     echo "Downloading latest Arch Linux ISO to downloads directory..."
     # [ -f "$ISO_NAME" ] || curl -Lo "$ISO_NAME" "$ISO_URL"
     # [ -f "$SIG_NAME" ] || curl -Lo "$SIG_NAME" "$ISO_SIG_URL"
