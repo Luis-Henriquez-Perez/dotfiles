@@ -15,6 +15,13 @@ ISO_SIG_URL="https://mirror.adectra.com/archlinux/iso/2025.07.01/archlinux-2025.
 SIG_NAME="$DOWNLOAD_DIR/ISO_NAME.sig"
 KEY_ID="0xB7D453EC1A7484C3"  # Arch Linux Master Key
 
+get_mirrors() {
+    echo "Fetching mirror list from $BASE_URL..."
+    curl -s "$BASE_URL" |
+        grep -Eo 'https://[a-zA-Z0-9./_-]+/iso/[0-9.]+/' |
+        sort -u
+}
+
 download_iso() {
     # TODO: webscrape the archlinux site and prompt me for download links.
     echo "Downloading latest Arch Linux ISO to downloads directory..."
