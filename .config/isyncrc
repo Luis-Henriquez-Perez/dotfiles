@@ -19,6 +19,7 @@ Inbox ~/.mail/luis@luishp.xyz/Inbox
 Channel luishp
 Far :luishp-remote:
 Near :luishp-local:
+
 # Automatically create missing mailboxes, both locally and on the server
 Create Both
 # Sync the movement of messages between folders and deletions, add after making sure the sync works
