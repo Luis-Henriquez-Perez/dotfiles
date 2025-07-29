@@ -20,7 +20,8 @@ Channel luishp
 Far :luishp-remote:
 Near :luishp-local:
 # Automatically create missing mailboxes, both locally and on the server
-Create Both
+# Only create local folders, not remote ones.
+Create Near
 # Sync the movement of messages between folders and deletions, add after making sure the sync works
 Expunge Both
 # Save the synchronization state files in the relevant directory
@@ -46,7 +47,7 @@ Inbox ~/.mail/luishenriquezperez@gmail.com/Inbox
 Channel gmail
 Far :gmail-remote:
 Near :gmail-local:
-Create Both
+Create Near
 Expunge Both
 SyncState *
 Patterns *
@@ -70,7 +71,7 @@ Inbox ~/.mail/yadiraperez2029@gmail.com/Inbox
 Channel mom
 Far :mom-remote:
 Near :mom-local:
-Create Both
+Create Near
 Expunge Both
 SyncState *
 Patterns *
