@@ -50,24 +50,24 @@ Create Both
 Expunge Both
 SyncState *
 
-### yadiraperez2029@gmail.com
-IMAPAccount mom
-Host imap.gmail.com
-User yadiraperez2029@gmail.com
-TLSType IMAPS
-CertificateFile /etc/ssl/certs/ca-certificates.crt
-PassCMD "pass show email/yadiraperez2029@gmail.com | grep email | awk -F': ' '{print $2}'"
+# ### yadiraperez2029@gmail.com
+# IMAPAccount mom
+# Host imap.gmail.com
+# User yadiraperez2029@gmail.com
+# TLSType IMAPS
+# CertificateFile /etc/ssl/certs/ca-certificates.crt
+# PassCMD "pass show email/yadiraperez2029@gmail.com | grep email | awk -F': ' '{print $2}'"
 
-IMAPStore mom-remote
-Account mom
+# IMAPStore mom-remote
+# Account mom
 
-MaildirStore mom-local
-SubFolders Verbatim
-Path ~/.mail/yadiraperez2029@gmail.com/
-Inbox ~/.mail/yadiraperez2029@gmail.com/Inbox
-Channel mom
-Far :mom-remote:
-Near :mom-local:
-Create Both
-Expunge Both
-SyncState *
+# MaildirStore mom-local
+# SubFolders Verbatim
+# Path ~/.mail/yadiraperez2029@gmail.com/
+# Inbox ~/.mail/yadiraperez2029@gmail.com/Inbox
+# Channel mom
+# Far :mom-remote:
+# Near :mom-local:
+# Create Both
+# Expunge Both
+# SyncState *
