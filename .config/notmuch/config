@@ -13,6 +13,7 @@ other_email=yadiraperez2029@gmail.com
 #
 [database]
 path=/home/luis/.mail
+hook_dir=/home/luis/.config/notmuch/hooks/
 # Configuration for "notmuch new"
 #
 # The following options are supported here:
