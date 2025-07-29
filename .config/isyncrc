@@ -45,7 +45,6 @@ Inbox ~/.mail/luishenriquezperez@gmail.com/Inbox
 Channel gmail
 Far :gmail-remote:
 Near :gmail-local:
-
 Create Both
 Expunge Both
 SyncState *
