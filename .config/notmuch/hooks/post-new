@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Move deleted mail to Trash
+notmuch search --output=files tag:deleted | while read -r file; do
+  dir=$(dirname "$file")
+  trash_dir=$(echo "$dir" | sed 's|/cur$|/../Trash/cur|')
+  mkdir -p "$trash_dir"
+  mv "$file" "$trash_dir"
+done
