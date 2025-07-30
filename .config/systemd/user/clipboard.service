@@ -1,12 +1,12 @@
 [Unit]
-Description=Parcellite Clipboard Manager
+Description=Clipboard Manager Daemon (clipmenud)
 After=graphical-session.target
 
 [Service]
-ExecStart=/usr/bin/parcellite
+ExecStart=/usr/bin/clipmenud
 Restart=on-failure
-Environment=DISPLAY=:0
+Environment=DISPLAY=%u
 Environment=XAUTHORITY=%h/.Xauthority
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical-session.target
