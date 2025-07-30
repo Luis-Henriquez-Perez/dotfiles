@@ -20,15 +20,15 @@ enable_systemd_services() {
     # systemctl enable --now systemd-timesyncd
 
     # User services
-    # systemctl --user enable --now emacs
+    systemctl --user enable --now emacs
     # systemctl --user enable --now picom
 
     # Timers
-    echo "Enable systemd timers..."
-    systemctl --user enable --now switch_wallpaper.timer
-    systemctl --user enable --now download_wallpapers.timer
-    systemctl --user enable --now download_email.timer
-    systemctl --user enable --now clean.timer
+    # echo "Enable systemd timers..."
+    # systemctl --user enable --now switch_wallpaper.timer
+    # systemctl --user enable --now download_wallpapers.timer
+    # systemctl --user enable --now download_email.timer
+    # systemctl --user enable --now clean.timer
 }
 
 # Install packages from the package list.
