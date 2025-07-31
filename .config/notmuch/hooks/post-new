@@ -1,9 +1,17 @@
 #!/bin/sh
 
 # Move deleted mail to Trash
+# notmuch search --output=files tag:deleted | while read -r file; do
+#   dir=$(dirname "$file")
+#   # trash_dir=$(echo "$dir" | sed 's|/cur$|/../Trash/cur|')
+#   # mkdir -p "$trash_dir"
+#   echo "Applying to file...$file"
+#   # mv "$file" "$trash_dir"
+# done
+LOGFILE="$HOME/.cache/notmuch-hook.log"
+
+echo "[$(date)] Running post-new hook" >> "$LOGFILE"
+
 notmuch search --output=files tag:deleted | while read -r file; do
-  dir=$(dirname "$file")
-  trash_dir=$(echo "$dir" | sed 's|/cur$|/../Trash/cur|')
-  mkdir -p "$trash_dir"
-  mv "$file" "$trash_dir"
+  echo "[$(date)] Found deleted file: $file" >> "$LOGFILE"
 done
