@@ -5,14 +5,15 @@
 # Description: This file is run automatically when you run `startx`.
 # This file was influenced by Luke Smith's voidrice dotfiles.
 
-## xinitrc
+
 # https://wiki.archlinux.org/title/Xinit#xinitrc
 # https://wiki.archlinux.org/title/Xorg
-### load xprofile
+
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile" ]; then
 	. "${XDG_CONFIG_HOME:-$HOME/.config}/x11/xprofile"
 else
 	. "$HOME/.xprofile"
 fi
+
 # https://bbs.archlinux.org/viewtopic.php?id=139353
 exec awesome
