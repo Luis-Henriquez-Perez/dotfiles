@@ -5,4 +5,7 @@
 # Description: Start Emacs with .profile variables loaded.
 
 [ -f ~/.profile ] && . ~/.profile
-exec /usr/bin/emacs --fg-daemon
+exec /usr/bin/emacs \
+     --fg-daemon \
+     --theme=doom-monokai-classic \
+     --font="-ARRW-RecMonoSmCasual Nerd Font-regular-normal-normal-*-*-*-*-*-m-0-iso10646-1"
