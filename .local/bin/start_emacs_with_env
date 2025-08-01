@@ -9,4 +9,4 @@
 exec /usr/bin/emacs \
      --fg-daemon \
      --theme=doom-monokai-classic \
-     --font="-ARRW-RecMonoSmCasual Nerd Font-regular-normal-normal-*-*-*-*-*-m-0-iso10646-1"
+     --font="RecMonoSmCasual Nerd Font-12:style=Regular"
