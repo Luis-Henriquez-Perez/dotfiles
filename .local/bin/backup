@@ -1,0 +1,37 @@
+#!/bin/sh
+# Filename: backup
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-06-12 11:36:08
+# Description: Save my system to external hard drive.
+# This script is for automating the backing up of all my stuff so I can easily
+# setup the things I want on another machine.
+
+set -eu
+
+SOURCE={$1:-/}
+DEST="{$2:-/mnt/hardrive}/archlinux-root-$(date +%Y-%m-%d)"
+
+EXCLUDE_FILE="/tmp/git-tracked-excludes.txt"
+
+git -C "$HOME" ls-files | sed "s|^|$HOME/|" > "$EXCLUDE_FILE"
+
+find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
+
+mkdir -p "$DEST"
+
+rsync -aAxv --delete \
+      --dry-run \
+      --exclude="$HOME/.cache" \
+      --exclude="$HOME/Trash" \
+      --exclude=/tmp/* \
+      --exclude=/media/* \
+      --exclude=/run/* \
+      --exclude=/dev/* \
+      --exclude=/proc/* \
+      --exclude=/sys/* \
+      --exclude=/mnt/* \
+      --exclude=/swapfile \
+      # --exclude=/lost+found \
+      --exclude-from=$EXCLUDE_FILE \
+      --exclude="$HOME/.cache/*" \
+      "$SOURCE" "$DEST"
