@@ -13,8 +13,10 @@ DEST="{$2:-/mnt/hardrive}/archlinux-root-$(date +%Y-%m-%d)"
 
 EXCLUDE_FILE="/tmp/git-tracked-excludes.txt"
 
+# Exclude files that are already tracked by my bare git repo.
 git -C "$HOME" ls-files | sed "s|^|$HOME/|" > "$EXCLUDE_FILE"
 
+# Exclude any git repos.
 find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
 
 mkdir -p "$DEST"
