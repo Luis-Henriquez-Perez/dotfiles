@@ -13,20 +13,27 @@ DEST=${2:-/mnt/hardrive}/archlinux-root-$(date +%Y%m%d%M)
 
 EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
+: > "$EXCLUDE_FILE"
+
+echo "$HOME/.config/emacs/elpaca/" >> $EXCLUDE_FILE
+echo "$HOME/.config/emacs/elpa/" >> $EXCLUDE_FILE
+echo "$HOME/.mail/" >> $EXCLUDE_FILE
+echo "$HOME/.cache/" >> $EXCLUDE_FILE
+echo "$HOME/Downloads/" >> $EXCLUDE_FILE
+echo "$HOME/.local/share/" >> $EXCLUDE_FILE
+echo "$HOME/Trash/" >> $EXCLUDE_FILE
+
 # Exclude files that are already tracked by my bare git repo.
-git -C "$HOME" ls-files | sed "s|^|$HOME/|" > "$EXCLUDE_FILE"
+# git -C "$HOME" ls-files | sed "s|^|$HOME/|" >> "$EXCLUDE_FILE"
 
 # Exclude any git repos.
 # find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
 
 # mkdir -p "$DEST"
+cat "$EXCLUDE_FILE"
 
 rsync -aAxv --delete \
       --dry-run \
-      --exclude="$HOME/.mail" \
-      --exclude="$HOME/.cache" \
-      --exclude=Trash/* \
-      --exclude="$HOME/Downloads/" \
       --exclude=/tmp/* \
       --exclude=/media/* \
       --exclude=/run/* \
