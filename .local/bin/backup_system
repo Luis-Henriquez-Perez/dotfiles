@@ -17,6 +17,9 @@ EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
 echo "Downloads/"            >> $EXCLUDE_FILE
 echo "Trash/"                >> $EXCLUDE_FILE
+# I do not want duplicate copies of videos in my backups.  Therefore, I store
+# them separately.
+echo "Videos/"               >> $EXCLUDE_FILE
 echo ".mail/"                >> $EXCLUDE_FILE
 echo ".cache/"               >> $EXCLUDE_FILE
 echo ".git/"                 >> $EXCLUDE_FILE
@@ -34,6 +37,8 @@ git -C "$HOME" ls-files >> "$EXCLUDE_FILE"
 
 # mkdir -p "$DEST"
 # cat "$EXCLUDE_FILE"
+
+# Save videos separately.  I do not want to make duplicate copies of videos.
 
 rsync -aAxv --delete \
       --dry-run \
