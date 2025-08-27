@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename: backup
+# Filename: backup_system
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-12 11:36:08
 # Description: Save my system to external hard drive.
@@ -8,8 +8,8 @@
 
 set -eu
 
-SOURCE={$1:-/}
-DEST="{$2:-/mnt/hardrive}/archlinux-root-$(date +%Y-%m-%d)"
+SOURCE=${1:-/}
+DEST=${2:-/mnt/hardrive}/archlinux-root-$(date +%Y%m%d%M)
 
 EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
@@ -17,14 +17,16 @@ EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 git -C "$HOME" ls-files | sed "s|^|$HOME/|" > "$EXCLUDE_FILE"
 
 # Exclude any git repos.
-find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
+# find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
 
-mkdir -p "$DEST"
+# mkdir -p "$DEST"
 
 rsync -aAxv --delete \
       --dry-run \
+      --exclude="$HOME/.mail" \
       --exclude="$HOME/.cache" \
-      --exclude="$HOME/Trash" \
+      --exclude=Trash/* \
+      --exclude="$HOME/Downloads/" \
       --exclude=/tmp/* \
       --exclude=/media/* \
       --exclude=/run/* \
@@ -33,8 +35,8 @@ rsync -aAxv --delete \
       --exclude=/sys/* \
       --exclude=/mnt/* \
       --exclude=/swapfile \
-      --exclude="$HOME/Downloads/" \
+      --exclude=.git/ \
       --exclude=".cache" \
-      --exclude=/"lost+found" \
+      --exclude=/lost+found \
       --exclude-from=$EXCLUDE_FILE \
       "$SOURCE" "$DEST"
