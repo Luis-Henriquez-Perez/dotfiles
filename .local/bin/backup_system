@@ -8,42 +8,34 @@
 
 set -eu
 
-SOURCE=${1:-/}
-DEST=${2:-/mnt/hardrive}/archlinux-root-$(date +%Y%m%d%M)
+SOURCE=$HOME
+DEST=${1:-/mnt/hardrive}/archlinux-root-$(date +%Y%m%d%M)
 
 EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
 : > "$EXCLUDE_FILE"
 
-echo "$HOME/.config/emacs/elpaca/" >> $EXCLUDE_FILE
-echo "$HOME/.config/emacs/elpa/" >> $EXCLUDE_FILE
-echo "$HOME/.mail/" >> $EXCLUDE_FILE
-echo "$HOME/.cache/" >> $EXCLUDE_FILE
-echo "$HOME/Downloads/" >> $EXCLUDE_FILE
-echo "$HOME/.local/share/" >> $EXCLUDE_FILE
-echo "$HOME/Trash/" >> $EXCLUDE_FILE
+echo "Downloads/"            >> $EXCLUDE_FILE
+echo "Trash/"                >> $EXCLUDE_FILE
+echo ".mail/"                >> $EXCLUDE_FILE
+echo ".cache/"               >> $EXCLUDE_FILE
+echo ".git/"                 >> $EXCLUDE_FILE
+echo ".local/share/"         >> $EXCLUDE_FILE
+echo ".mozilla/"             >> $EXCLUDE_FILE
+echo ".config/chromium/"     >> $EXCLUDE_FILE
+echo ".config/emacs/elpaca/" >> $EXCLUDE_FILE
+echo ".config/emacs/elpa/"   >> $EXCLUDE_FILE
 
 # Exclude files that are already tracked by my bare git repo.
-# git -C "$HOME" ls-files | sed "s|^|$HOME/|" >> "$EXCLUDE_FILE"
+git -C "$HOME" ls-files >> "$EXCLUDE_FILE"
 
 # Exclude any git repos.
 # find "$HOME" -mindepth 2 -type d -name ".git" -exec dirname {} \; >> "$EXCLUDE_FILE"
 
 # mkdir -p "$DEST"
-cat "$EXCLUDE_FILE"
+# cat "$EXCLUDE_FILE"
 
 rsync -aAxv --delete \
       --dry-run \
-      --exclude=/tmp/* \
-      --exclude=/media/* \
-      --exclude=/run/* \
-      --exclude=/dev/* \
-      --exclude=/proc/* \
-      --exclude=/sys/* \
-      --exclude=/mnt/* \
-      --exclude=/swapfile \
-      --exclude=.git/ \
-      --exclude=".cache" \
-      --exclude=/lost+found \
       --exclude-from=$EXCLUDE_FILE \
       "$SOURCE" "$DEST"
