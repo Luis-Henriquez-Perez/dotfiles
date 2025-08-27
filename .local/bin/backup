@@ -11,7 +11,7 @@ set -eu
 SOURCE={$1:-/}
 DEST="{$2:-/mnt/hardrive}/archlinux-root-$(date +%Y-%m-%d)"
 
-EXCLUDE_FILE="/tmp/git-tracked-excludes.txt"
+EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
 # Exclude files that are already tracked by my bare git repo.
 git -C "$HOME" ls-files | sed "s|^|$HOME/|" > "$EXCLUDE_FILE"
@@ -33,7 +33,8 @@ rsync -aAxv --delete \
       --exclude=/sys/* \
       --exclude=/mnt/* \
       --exclude=/swapfile \
-      # --exclude=/lost+found \
+      --exclude="$HOME/Downloads/" \
+      --exclude=".cache" \
+      --exclude=/"lost+found" \
       --exclude-from=$EXCLUDE_FILE \
-      --exclude="$HOME/.cache/*" \
       "$SOURCE" "$DEST"
