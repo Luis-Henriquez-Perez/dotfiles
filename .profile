@@ -34,7 +34,7 @@ export BROWSER="qutebrowser"
 # the additional configuration and complexity.  I think it is superficial and
 # opinionated that he home directory is messy because of these files.
 # export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
-export PASSWORD_STORE_DIR="$XDG_DATA_HOME/.password-store"
+export PASSWORD_STORE_DIR="$HOME/.password-store"
 export LIBGL_ALWAYS_SOFTWARE=1
 # https://github.com/White-Oak/arch-setup-for-dummies/blob/master/setting-up-ssh-agent.md
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
