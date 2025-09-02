@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename: backup_system
+# Filename: backup_home
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
 # Created: 2025-06-12 11:36:08
 # Description: Save my system to external hard drive.
@@ -9,7 +9,7 @@
 set -eu
 
 SOURCE=$HOME
-DEST=${1:-/mnt/hardrive}/archlinux-root-$(date +%Y%m%d%M)
+DEST=${1:-/mnt/hardrive}/archlinux-home-$(date +%Y%m%d%M)
 
 EXCLUDE_FILE="/tmp/EXCLUDE_FILE"
 
