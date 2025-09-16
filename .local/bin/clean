@@ -1,69 +1,69 @@
 #!/bin/sh
-# Filename: clean_system
+# Filename: clean_trash
 # Author: Luis Henriquez-Perez <luis@luishp.xyz>
-# Created: 2025-06-30 09:22:54
-# Description: This is a script for cleaning my system.
+# Created: 2025-09-16 03:52:51
+# Description: Clean the trash directory.
+# Create an intermediate step before actually deleting the files.
+# Collect all the trash that needs to be removed into "trash bins" and delete
+# the trash bindings that are too old.  This extra step gives some time before
+# doing the undoable--actually deleting the files.
 
-TRASH="$HOME/Trash/"
-DEST="$HOME/Trash/To-Actually-Delete"
+set -eu
+
 DOWNLOADS_FOLDER="$HOME/Downloads/"
 
-clean_xdg_dir() {
-    find "$XDG_CONFIG_HOME" -type f -empty -exec rm -f {}
-    find "$XDG_CONFIG_HOME" -type d -empty -exec rm -f {}
+TRASH="$HOME/Trash"
 
-    find "$XDG_DATA_HOME" -type f -empty -exec rm -f {}
-    find "$XDG_DATA_HOME" -type d -empty -exec rm -f {}
-}
+echo "Clean the pacman cache..."
 
-clean_pacman_cache() {
-    paccache -m "$DEST" -k 1
-}
+paccache -r -k 1 --min-atime "14 days ago"
 
-clean_trash() {
-    # Create an intermediate step before actually deleting the file.
-    mkdir -p DEST
-    echo "Cleaning the trash directory..."
+echo "Cleaning $XDG_CONFIG_HOME..."
 
-    find "$TRASH" -type d -name __pycache__ -exec mv -t "$DEST" {}
+find "$XDG_CONFIG_HOME" -maxdepth 1 -type f -empty -exec rm -f {} \;
 
-    find "$TRASH" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec mv -t "$DEST" {}
+find "$XDG_CONFIG_HOME" -maxdepth 1 -type d -empty -exec rm -rf {} \;
 
-    find "$TRASH" -type f -name '*.elc' -exec mv -t "$DEST" {}
+echo "Cleaning $XDG_DATA_HOME..."
 
-    find "$TRASH" -type f -name '*.iso' -exec mv -t "$DEST" {}
+find "$XDG_DATA_HOME"  -maxdepth 1 -type f -empty -exec rm -f {} \;
 
-    find "$TRASH" -type f -name '*.rej' -exec mv -t "$DEST" {}
+find "$XDG_DATA_HOME" -maxdepth 1 -type d -empty -exec rm -rf {} \;
 
-    find "$TRASH" -type f -name '*.el' -exec mv -t "$DEST" {}
+echo "Cleaning downloads directory..."
 
-    find "$TRASH" -xtype l -exec mv -t "$DEST" {}
+find "$DOWNLOADS" -maxdepth 1 -type d -mtime +60 -exec rm -rf {} \;
 
-    find "$TRASH" -type f -mtime +90 -exec mv -t "$DEST" {}
+find "$DOWNLOADS" -maxdepth 1 -type f -mtime +60 -exec rm -f {} \;
 
-    find "$TRASH" -type f -empty -exec rm -f {}
+echo "Cleaning the trash directory..."
 
-    find "$TRASH" -type d -empty -exec rm -f {}
+find "$TRASH" -maxdepth 1 -type d -name '__pycache__' -exec rm -f {} \;
 
-    # Files whose names are just numbers are unlikely to be worth saving
-    # copies of the same file...
-}
+find "$TRASH" -maxdepth 1 -type f -name '*.pyo' -exec rm -f {} \;
 
-delete_orphans() {
-    echo "deleting orphan packages..."
-    sudo pacman -Rns $(pacman -Qdtq)
-}
+find "$TRASH" -maxdepth 1 -type f -name '*.pyc' -exec rm -f {} \;
 
-case "$1" in
-    "")
-        clean_pacman_cache
-        clean_trash
-        delete_orphans
-        ;;
-    -p|--packages)
-        clean_pacman_cache
-        ;;
-    -t|--trash)
-        clean_trash
-        ;;
-esac
+find "$TRASH" -maxdepth 1 -type f -name '*.iso' -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type f -name '*.rej' -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type f -mtime +10 -name '*.el' -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type f -name '*.elc' -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type d -mtime +10 -name '*.~*~' -exec rm -rf {} \;
+
+find "$TRASH" -maxdepth 1 -type f -mtime +10 -name '*.~*~' -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -xtype l -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type f -mtime +30 -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type d -mtime +30 -exec rm -rf {} \;
+
+find "$TRASH" -maxdepth 1 -type f -empty -exec rm -f {} \;
+
+find "$TRASH" -maxdepth 1 -type d -empty -exec rm -rf {} \;
+
+echo "Done cleaning trash!"

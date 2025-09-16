@@ -6,18 +6,24 @@
 
 set -eu
 
-TMPFILE=$(mktemp)
+# Make sure there is an internet connection before trying this.
+
+# TMPFILE=$(mktemp)
+BACKUP="/etc/pacman.d/mirrorlist$().backup"
+
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
 
 # Fetch mirrors with reflector
-reflector \
-    --country US,CA \
-    --latest 30 \
-    --protocol https \
-    --sort rate \
-    --download-timeout 15 \
-    --save "$TMPFILE"
+reflector --country US,CA \
+          --latest 20 \
+          --protocol https \
+          --sort rate \
+          --download-timeout 15 \
+          --save /etc/pacman.d/mirrorlist
 
-# Rank the mirrors and save final list
-rankmirrors "$TMPFILE" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
+# # Ensure $TMPFILE is not empty...
+rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirror
+# # Rank the mirrors and save final list.
+# rankmirrors "$TMPFILE" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
 
-rm -f "$TMPFILE"
+# rm -f "$TMPFILE"
