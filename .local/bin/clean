@@ -4,7 +4,7 @@
 # Created: 2025-06-30 09:22:54
 # Description: This is a script for cleaning my system.
 
-trash="$HOME/Trash/"
+TRASH="$HOME/Trash/"
 
 clean_pacman_cache() {
     echo "Cleaning cache..."
@@ -50,81 +50,30 @@ clean_pacman_cache() {
 }
 
 clean_trash() {
+    # Create an intermediate step before actually deleting the file.
+    DEST="$HOME/Trash/To-Actually-Delete"
+    mkdir -p DEST
     echo "Cleaning the trash directory..."
 
-    # If the wallpaper count is over 100, delete the oldest ones so that the
-    # count is 100.  I do not know about this rule.  It is rather arbitrary but
-    # for now it is fine.
-    tempfile=$(mktemp)
-    find "$trash" -type f \( -name '*wallhaven-*.jpg' -o -name '*wallhaven-*.png' \) -printf '%T@ %p\n' \
-        | sort -n \
-        | awk -v outfile="$tempfile" '
-{
-    files[NR] = $2
-}
-END {
-    total = NR
-    if (total > 100) {
-        to_delete = total - 100
-        print "Deleting ", to_delete, "wallpapers out of" , total > "/dev/stderr"
-        for (i = 1; i <= to_delete; i++) print files[i]
-        print to_delete > outfile
-    } else {
-        print 0 > outfile
-    }
-}' \
-        | xargs -r rm --
-    rm -f "$tempfile"
+    deleted_pycache=$(find "$TRASH" -type d -name __pycache__ -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-    local deleted_pycache=0
-    local deleted_pyc=0
-    local deleted_elc=0
-    local deleted_empty_dirs=0
-    local deleted_empty_files=0
-    local deleted_old=0
-    local deleted_iso=0
-    local deleted_symlinks=0
+    deleted_pyc=$(find "$TRASH" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-    for item in "$trash"/*; do
-        # Skip if the glob doesn't match anything
-        [ -e "$item" ] || continue
-        # Skip wallpapers, I handle that above.
-        case "$(basename "$item")" in
-            *wallhaven-*.jpg | *wallhaven-*.png)
-                continue
-                ;;
-        esac
+    deleted_elc=$(find "$TRASH" -type f -name '*.elc' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-        case "$item" in
-            */__pycache__)
-                rm -rf "$item" && ((deleted_pycache++))
-                ;;
+    deleted_iso=$(find "$TRASH" -type f -name '*.iso' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-            *.pyc|*.pyo)
-                rm -f "$item" && ((deleted_pyc++))
-                ;;
+    deleted_rej=$(find "$TRASH" -type f -name '*.rej' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-            *.elc)
-                rm -f "$item" && ((deleted_elc++))
-                ;;
+    deleted_symlinks=$(find "$TRASH" -xtype l -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-            *.iso)
-                rm -f "$item" && ((deleted_iso++))
-                ;;
+    deleted_old=$(find "$TRASH" -type f -mtime +90 -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
 
-            *)
-                if [ -L "$item" ] && [ ! -e "$item" ]; then
-                    rm -f "$item" && ((deleted_symlinks++))
-                elif [ -f "$item" ] && [ ! -s "$item" ]; then
-                    rm -f "$item" && ((deleted_empty_files++))
-                elif [ -d "$item" ] && [ -z "$(ls -A "$item")" ]; then
-                    rmdir "$item" && ((deleted_empty_dirs++))
-                elif [ -f "$item" ] && [ "$(find "$item" -mtime +90)" ]; then
-                    rm -f "$item" && ((deleted_old++))
-                fi
-                ;;
-        esac
-    done
+    # Empty files
+    deleted_empty_files=$(find "$TRASH" -type f -empty -exec rm -f {} + 2>/dev/null | wc -l)
+
+    # Empty dirs
+    deleted_empty_dirs=$(find "$TRASH" -type d -empty -exec rm -f {} + 2>/dev/null | wc -l)
 
     echo "Deleted $deleted_pycache __pycache__ directories..."
     echo "Deleted $deleted_pyc Python compiled files (.pyc, .pyo)..."
@@ -143,8 +92,8 @@ case "$1" in
         ;;
     -p|--packages)
         clean_pacman_cache
-           ;;
+        ;;
     -t|--trash)
         clean_trash
-           ;;
+        ;;
 esac
