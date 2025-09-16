@@ -6,11 +6,14 @@
 
 TRASH="$HOME/Trash/"
 DEST="$HOME/Trash/To-Actually-Delete"
-# CONFIG_DIR="$XD"
+DOWNLOADS_FOLDER="$HOME/Downloads/"
 
 clean_xdg_dir() {
     find "$XDG_CONFIG_HOME" -type f -empty -exec rm -f {}
     find "$XDG_CONFIG_HOME" -type d -empty -exec rm -f {}
+
+    find "$XDG_DATA_HOME" -type f -empty -exec rm -f {}
+    find "$XDG_DATA_HOME" -type d -empty -exec rm -f {}
 }
 
 clean_pacman_cache() {
@@ -22,34 +25,28 @@ clean_trash() {
     mkdir -p DEST
     echo "Cleaning the trash directory..."
 
-    deleted_pycache=$(find "$TRASH" -type d -name __pycache__ -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type d -name __pycache__ -exec mv -t "$DEST" {}
 
-    deleted_pyc=$(find "$TRASH" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f \( -name '*.pyc' -o -name '*.pyo' \) -exec mv -t "$DEST" {}
 
-    deleted_elc=$(find "$TRASH" -type f -name '*.elc' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -name '*.elc' -exec mv -t "$DEST" {}
 
-    deleted_iso=$(find "$TRASH" -type f -name '*.iso' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -name '*.iso' -exec mv -t "$DEST" {}
 
-    deleted_rej=$(find "$TRASH" -type f -name '*.rej' -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -name '*.rej' -exec mv -t "$DEST" {}
 
-    deleted_symlinks=$(find "$TRASH" -xtype l -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -name '*.el' -exec mv -t "$DEST" {}
 
-    deleted_old=$(find "$TRASH" -type f -mtime +90 -exec mv -t "$DEST" {} + 2>/dev/null | wc -l)
+    find "$TRASH" -xtype l -exec mv -t "$DEST" {}
 
-    # Empty files
-    deleted_empty_files=$(find "$TRASH" -type f -empty -exec rm -f {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -mtime +90 -exec mv -t "$DEST" {}
 
-    # Empty dirs
-    deleted_empty_dirs=$(find "$TRASH" -type d -empty -exec rm -f {} + 2>/dev/null | wc -l)
+    find "$TRASH" -type f -empty -exec rm -f {}
 
-    echo "Deleted $deleted_pycache __pycache__ directories..."
-    echo "Deleted $deleted_pyc Python compiled files (.pyc, .pyo)..."
-    echo "Deleted $deleted_elc elisp compiled files..."
-    echo "Deleted $deleted_empty_dirs empty directories..."
-    echo "Deleted $deleted_empty_files empty files..."
-    echo "Deleted $deleted_old very old files (over 90 days)..."
-    echo "Deleted $deleted_iso ISOs..."
-    echo "Deleted $deleted_symlinks broken symlinks..."
+    find "$TRASH" -type d -empty -exec rm -f {}
+
+    # Files whose names are just numbers are unlikely to be worth saving
+    # copies of the same file...
 }
 
 delete_orphans() {
