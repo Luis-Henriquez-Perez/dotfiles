@@ -1,0 +1,23 @@
+#!/bin/sh
+# Filename: update_mirrorlist
+# Author: Luis Henriquez-Perez <luis@luishp.xyz>
+# Created: 2025-09-15 05:41:08
+# Description: Update the mirrorlist.
+
+set -eu
+
+TMPFILE=$(mktemp)
+
+# Fetch mirrors with reflector
+reflector \
+    --country US,CA \
+    --latest 30 \
+    --protocol https \
+    --sort rate \
+    --download-timeout 15 \
+    --save "$TMPFILE"
+
+# Rank the mirrors and save final list
+rankmirrors "$TMPFILE" | sudo tee /etc/pacman.d/mirrorlist > /dev/null
+
+rm -f "$TMPFILE"
