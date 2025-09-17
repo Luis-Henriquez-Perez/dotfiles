@@ -9,8 +9,6 @@
 # I would like to start these services with systemd but I cannot figure out how
 # to properly start systemd services that depend on a graphical environment.
 
-pgrep -x picom >/dev/null || picom --config ~/.config/picom/picom.conf &
-
 wallpaper &
 
 setxkbmap -option caps:swapescape
